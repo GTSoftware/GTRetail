@@ -1,0 +1,180 @@
+/*
+ * Copyright 2014 GT Software.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ar.com.gtsoftware.model;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+/**
+ *
+ * @author rodrigo
+ */
+@Entity
+@Table(name = "fiscal_alicuotas_iva")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "FiscalAlicuotasIva.findAll", query = "SELECT f FROM FiscalAlicuotasIva f"),
+    @NamedQuery(name = "FiscalAlicuotasIva.findByIdAlicuotaIva", query = "SELECT f FROM FiscalAlicuotasIva f WHERE f.idAlicuotaIva = :idAlicuotaIva"),
+    @NamedQuery(name = "FiscalAlicuotasIva.findByNombreAlicuotaIva", query = "SELECT f FROM FiscalAlicuotasIva f WHERE f.nombreAlicuotaIva = :nombreAlicuotaIva"),
+    @NamedQuery(name = "FiscalAlicuotasIva.findByValorAlicuota", query = "SELECT f FROM FiscalAlicuotasIva f WHERE f.valorAlicuota = :valorAlicuota"),
+    @NamedQuery(name = "FiscalAlicuotasIva.findByGravarIva", query = "SELECT f FROM FiscalAlicuotasIva f WHERE f.gravarIva = :gravarIva"),
+    @NamedQuery(name = "FiscalAlicuotasIva.findByActivo", query = "SELECT f FROM FiscalAlicuotasIva f WHERE f.activo = :activo")})
+public class FiscalAlicuotasIva implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_alicuota_iva")
+    private Integer idAlicuotaIva;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 60)
+    @Column(name = "nombre_alicuota_iva")
+    private String nombreAlicuotaIva;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "valor_alicuota")
+    private BigDecimal valorAlicuota;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "gravar_iva")
+    private boolean gravarIva;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "activo")
+    private boolean activo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlicuotaIva")
+    private List<Productos> productosList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlicuotaIva")
+    private List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList;
+
+    public FiscalAlicuotasIva() {
+    }
+
+    public FiscalAlicuotasIva(Integer idAlicuotaIva) {
+        this.idAlicuotaIva = idAlicuotaIva;
+    }
+
+    public FiscalAlicuotasIva(Integer idAlicuotaIva, String nombreAlicuotaIva, BigDecimal valorAlicuota, boolean gravarIva, boolean activo) {
+        this.idAlicuotaIva = idAlicuotaIva;
+        this.nombreAlicuotaIva = nombreAlicuotaIva;
+        this.valorAlicuota = valorAlicuota;
+        this.gravarIva = gravarIva;
+        this.activo = activo;
+    }
+
+    public Integer getIdAlicuotaIva() {
+        return idAlicuotaIva;
+    }
+
+    public void setIdAlicuotaIva(Integer idAlicuotaIva) {
+        this.idAlicuotaIva = idAlicuotaIva;
+    }
+
+    public String getNombreAlicuotaIva() {
+        return nombreAlicuotaIva;
+    }
+
+    public void setNombreAlicuotaIva(String nombreAlicuotaIva) {
+        this.nombreAlicuotaIva = nombreAlicuotaIva;
+    }
+
+    public BigDecimal getValorAlicuota() {
+        return valorAlicuota;
+    }
+
+    public void setValorAlicuota(BigDecimal valorAlicuota) {
+        this.valorAlicuota = valorAlicuota;
+    }
+
+    public boolean getGravarIva() {
+        return gravarIva;
+    }
+
+    public void setGravarIva(boolean gravarIva) {
+        this.gravarIva = gravarIva;
+    }
+
+    public boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    @XmlTransient
+    public List<Productos> getProductosList() {
+        return productosList;
+    }
+
+    public void setProductosList(List<Productos> productosList) {
+        this.productosList = productosList;
+    }
+
+    @XmlTransient
+    public List<FiscalLibroIvaVentasLineas> getFiscalLibroIvaVentasLineasList() {
+        return fiscalLibroIvaVentasLineasList;
+    }
+
+    public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
+        this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idAlicuotaIva != null ? idAlicuotaIva.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof FiscalAlicuotasIva)) {
+            return false;
+        }
+        FiscalAlicuotasIva other = (FiscalAlicuotasIva) object;
+        if ((this.idAlicuotaIva == null && other.idAlicuotaIva != null) || (this.idAlicuotaIva != null && !this.idAlicuotaIva.equals(other.idAlicuotaIva))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ar.com.gtsoftware.model.FiscalAlicuotasIva[ idAlicuotaIva=" + idAlicuotaIva + " ]";
+    }
+    
+}

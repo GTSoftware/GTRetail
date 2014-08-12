@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>login?faces-redirect=true</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+            <redirect>1</redirect>
+        </navigation-case>
+    </navigation-rule>
+    <application>
+        <resource-bundle>
+            <base-name>ar.com.gtsoftware.Messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>ar.com.gtsoftware.version</base-name>
+            <var>version</var>
+        </resource-bundle>
+    </application>
+</faces-config>

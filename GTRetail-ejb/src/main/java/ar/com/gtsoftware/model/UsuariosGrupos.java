@@ -1,0 +1,143 @@
+/*
+ * Copyright 2014 GT Software.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ar.com.gtsoftware.model;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+/**
+ *
+ * @author rodrigo
+ */
+@Entity
+@Table(name = "usuarios_grupos")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "UsuariosGrupos.findAll", query = "SELECT u FROM UsuariosGrupos u"),
+    @NamedQuery(name = "UsuariosGrupos.findByIdGrupo", query = "SELECT u FROM UsuariosGrupos u WHERE u.idGrupo = :idGrupo"),
+    @NamedQuery(name = "UsuariosGrupos.findByNombreGrupo", query = "SELECT u FROM UsuariosGrupos u WHERE u.nombreGrupo = :nombreGrupo")})
+public class UsuariosGrupos implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_grupo")
+    private Integer idGrupo;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "nombre_grupo")
+    private String nombreGrupo;
+    @JoinTable(name = "usuarios_gruposx", joinColumns = {
+        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")})
+    @ManyToMany
+    private List<Usuarios> usuariosList;
+    @JoinTable(name = "privilegios_gruposx", joinColumns = {
+        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_privilegio", referencedColumnName = "id_privilegio")})
+    @ManyToMany
+    private List<Privilegios> privilegiosList;
+
+    public UsuariosGrupos() {
+    }
+
+    public UsuariosGrupos(Integer idGrupo) {
+        this.idGrupo = idGrupo;
+    }
+
+    public UsuariosGrupos(Integer idGrupo, String nombreGrupo) {
+        this.idGrupo = idGrupo;
+        this.nombreGrupo = nombreGrupo;
+    }
+
+    public Integer getIdGrupo() {
+        return idGrupo;
+    }
+
+    public void setIdGrupo(Integer idGrupo) {
+        this.idGrupo = idGrupo;
+    }
+
+    public String getNombreGrupo() {
+        return nombreGrupo;
+    }
+
+    public void setNombreGrupo(String nombreGrupo) {
+        this.nombreGrupo = nombreGrupo;
+    }
+
+    @XmlTransient
+    public List<Usuarios> getUsuariosList() {
+        return usuariosList;
+    }
+
+    public void setUsuariosList(List<Usuarios> usuariosList) {
+        this.usuariosList = usuariosList;
+    }
+
+    @XmlTransient
+    public List<Privilegios> getPrivilegiosList() {
+        return privilegiosList;
+    }
+
+    public void setPrivilegiosList(List<Privilegios> privilegiosList) {
+        this.privilegiosList = privilegiosList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idGrupo != null ? idGrupo.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UsuariosGrupos)) {
+            return false;
+        }
+        UsuariosGrupos other = (UsuariosGrupos) object;
+        if ((this.idGrupo == null && other.idGrupo != null) || (this.idGrupo != null && !this.idGrupo.equals(other.idGrupo))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ar.com.gtsoftware.model.UsuariosGrupos[ idGrupo=" + idGrupo + " ]";
+    }
+    
+}
