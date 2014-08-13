@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "negocioFormasPagoConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "negocioFormasPagoConverter")
 public class NegocioFormasPagoConverter implements Converter {
 
     @EJB

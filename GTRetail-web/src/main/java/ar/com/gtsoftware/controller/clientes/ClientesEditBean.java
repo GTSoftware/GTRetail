@@ -53,7 +53,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -85,6 +84,7 @@ public class ClientesEditBean implements Serializable {
     @EJB
     private UbicacionProvinciasFacade provinciasFacade;
     private Personas clienteActual;
+    private PersonasTelefonos telefonoActual = new PersonasTelefonos();
     private List<PersonasTelefonos> telefonosToRemove = new ArrayList<PersonasTelefonos>();
 
     /**
@@ -95,7 +95,6 @@ public class ClientesEditBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        Logger.getLogger(ClientesEditBean.class.getName()).log(Level.INFO, "Post Construct...EDIT", 0);
 
         String idPersona = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
@@ -126,7 +125,7 @@ public class ClientesEditBean implements Serializable {
                     clienteActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
                     clienteActual.setActivo(true);
                     clienteActual.setCliente(true);
-                    //clienteActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+                    clienteActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
                     personasFacade.create(clienteActual);
 
                 } else {
@@ -135,6 +134,7 @@ public class ClientesEditBean implements Serializable {
                 guardarTelefonos();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente guardado exitosamente."));
             }
+            clienteActual = personasFacade.find(clienteActual.getId());
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar:", e.getMessage()));
             Logger.getLogger(ClientesEditBean.class.getName()).log(Level.INFO, e.getMessage(), e);
@@ -157,13 +157,16 @@ public class ClientesEditBean implements Serializable {
         }
     }
 
-    public void nuevoTelefono() {
-        PersonasTelefonos pt = new PersonasTelefonos();
-        pt.setIdPersona(clienteActual);
-        if (clienteActual.getPersonasTelefonosList() == null) {
-            clienteActual.setPersonasTelefonosList(new ArrayList<PersonasTelefonos>());
+
+    public void grabarTelefono() {
+        if (telefonoActual != null) {
+            telefonoActual.setIdPersona(clienteActual);
+            if (clienteActual.getPersonasTelefonosList() == null) {
+                clienteActual.setPersonasTelefonosList(new ArrayList<PersonasTelefonos>());
+            }
+            clienteActual.getPersonasTelefonosList().add(telefonoActual);
         }
-        clienteActual.getPersonasTelefonosList().add(pt);
+        telefonoActual= new PersonasTelefonos();
     }
 
     public void borrarTelefono(PersonasTelefonos pt) {
@@ -191,6 +194,7 @@ public class ClientesEditBean implements Serializable {
         clienteActual.setDepto(FormatUtils.uppercase(clienteActual.getDepto()));
         clienteActual.setAltura(FormatUtils.uppercase(clienteActual.getAltura()));
         clienteActual.setPiso(FormatUtils.uppercase(clienteActual.getPiso()));
+        clienteActual.setEmail(FormatUtils.lowercase(clienteActual.getEmail()));
         if (clienteActual.getPersonasTelefonosList() != null) {
             for (PersonasTelefonos pt : clienteActual.getPersonasTelefonosList()) {
                 pt.setReferencia(FormatUtils.uppercase(pt.getReferencia()));
@@ -200,7 +204,7 @@ public class ClientesEditBean implements Serializable {
 
     private void validarCliente() throws Exception {
         try {
-            int documento = Integer.parseInt(clienteActual.getDocumento());
+            long documento = Long.parseLong(clienteActual.getDocumento());
             if (documento <= 0) {
                 throw new Exception("El documento debe ser un número positivo distinto de 0!");
             }
@@ -259,6 +263,14 @@ public class ClientesEditBean implements Serializable {
     public List<UbicacionLocalidades> getLocalidadesList() {
         LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
         return localidadesFacade.findBySearchFilter(lsf);
+    }
+
+    public PersonasTelefonos getTelefonoActual() {
+        return telefonoActual;
+    }
+
+    public void setTelefonoActual(PersonasTelefonos telefonoActual) {
+        this.telefonoActual = telefonoActual;
     }
 
 }

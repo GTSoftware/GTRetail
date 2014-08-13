@@ -28,4 +28,11 @@ public abstract class FormatUtils {
         return null;
     }
 
+    public static String lowercase(String s) {
+        if (s != null) {
+            return s.toLowerCase();
+        }
+        return null;
+    }
+
 }

@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.model.Cajas;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.inject.Named;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "cajasConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "cajasConverter")
 public class CajasConverter implements Converter {
 
     @EJB

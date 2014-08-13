@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
 import ar.com.gtsoftware.model.UbicacionLocalidades;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "ubicacionLocalidadesConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "ubicacionLocalidadesConverter")
 public class UbicacionLocalidadesConverter implements Converter {
 
     @EJB

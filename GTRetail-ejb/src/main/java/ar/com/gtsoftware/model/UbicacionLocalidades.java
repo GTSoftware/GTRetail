@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
@@ -48,6 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "UbicacionLocalidades.findByIdLocalidad", query = "SELECT u FROM UbicacionLocalidades u WHERE u.idLocalidad = :idLocalidad"),
     @NamedQuery(name = "UbicacionLocalidades.findByNombreLocalidad", query = "SELECT u FROM UbicacionLocalidades u WHERE u.nombreLocalidad = :nombreLocalidad")})
 public class UbicacionLocalidades implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +59,11 @@ public class UbicacionLocalidades implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "nombre_localidad")
     private String nombreLocalidad;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "codigo_postal")
+    private String codigoPostal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idLocalidad")
     private List<Bancos> bancosList;
     @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia")
@@ -143,6 +148,14 @@ public class UbicacionLocalidades implements Serializable {
         this.depositosList = depositosList;
     }
 
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -167,5 +180,5 @@ public class UbicacionLocalidades implements Serializable {
     public String toString() {
         return "ar.com.gtsoftware.model.UbicacionLocalidades[ idLocalidad=" + idLocalidad + " ]";
     }
-    
+
 }

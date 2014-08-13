@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.ContabilidadPlanCuentasFacade;
 import ar.com.gtsoftware.model.ContabilidadPlanCuentas;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.inject.Named;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "contabilidadPlanCuentasConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "contabilidadPlanCuentasConverter")
 public class ContabilidadPlanCuentasConverter implements Converter {
 
     @EJB

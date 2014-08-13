@@ -29,6 +29,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -43,6 +44,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @AttributeOverride(name = "id", column = @Column(name = "id_persona"))
 public class Personas extends BaseEntity {
 
+    @Column(name = "email", length = 100)
+    @Pattern(regexp = "^$|^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+            + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+    private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -93,9 +99,9 @@ public class Personas extends BaseEntity {
     private boolean proveedor;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<PersonasImagenes> personasImagenesList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idProveedor")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idProveedor")
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idPersona")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<Ventas> ventasList;
     @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia")
     @ManyToOne(optional = false)
@@ -120,12 +126,15 @@ public class Personas extends BaseEntity {
     private FiscalResponsabilidadesIva idResponsabilidadIva;
     @OneToMany(mappedBy = "idProveedorHabitual")
     private List<Productos> productosList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idPersona")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idPersona")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<PersonasTelefonos> personasTelefonosList;
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "idPersona")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<PersonasCuentaCorriente> personasCuentaCorrienteList;
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
+    @ManyToOne(optional = false)
+    private Sucursales idSucursal;
 
     public Personas() {
     }
@@ -365,6 +374,22 @@ public class Personas extends BaseEntity {
 
     public void setPersonasCuentaCorrienteList(List<PersonasCuentaCorriente> personasCuentaCorrienteList) {
         this.personasCuentaCorrienteList = personasCuentaCorrienteList;
+    }
+
+    public Sucursales getIdSucursal() {
+        return idSucursal;
+    }
+
+    public void setIdSucursal(Sucursales idSucursal) {
+        this.idSucursal = idSucursal;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

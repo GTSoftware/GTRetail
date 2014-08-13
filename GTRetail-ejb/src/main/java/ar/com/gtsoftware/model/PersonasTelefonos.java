@@ -29,6 +29,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -56,6 +57,7 @@ public class PersonasTelefonos implements Serializable {
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "numero")
+    //@Pattern(regexp = "(?<=\\s|:)\\(?(?:(0?[1-3]\\d{1,2})\\)?(?:\\s|-)?)?((?:\\d[\\d-]{5}|15[\\s\\d-]{7})\\d+)", message = "Número de teléfono no válido")
     private String numero;
     @Size(max = 100)
     @Column(name = "referencia")

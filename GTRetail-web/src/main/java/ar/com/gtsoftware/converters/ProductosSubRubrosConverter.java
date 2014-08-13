@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.ProductosSubRubrosFacade;
 import ar.com.gtsoftware.model.ProductosSubRubros;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "productosSubRubrosConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "productosSubRubrosConverter")
 public class ProductosSubRubrosConverter implements Converter {
 
     @EJB

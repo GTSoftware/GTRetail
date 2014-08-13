@@ -58,7 +58,7 @@ public class PersonasFacade extends AbstractFacade<Personas> {
             if (psf.getIdPersona() != null) {
                 p = cb.equal(persona.get(Personas_.id), psf.getIdPersona());
             }
-            if (psf.getTxt() != null) {
+            if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
                 for (String s : psf.getTxt().toUpperCase().split(" ")) {
 
                     Predicate p1 = cb.like(persona.get(Personas_.razonSocial), String.format("%%%s%%", s));
@@ -66,11 +66,11 @@ public class PersonasFacade extends AbstractFacade<Personas> {
                     Predicate p3 = cb.like(persona.get(Personas_.nombres), String.format("%%%s%%", s));
                     Predicate p4 = cb.like(persona.get(Personas_.nombreFantasia), String.format("%%%s%%", s));
                     Predicate p5 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", s));
-                    Predicate p6 = cb.equal(persona.get(Personas_.id), s);
+                    
                     if (p == null) {
-                        p = cb.or(p1, p2, p3, p4, p5, p6);
+                        p = cb.or(p1, p2, p3, p4, p5);
                     } else {
-                        p = cb.or(p, p1, p2, p3, p4, p5, p6);
+                        p = cb.or(p, p1, p2, p3, p4, p5);
                     }
                 }
             }

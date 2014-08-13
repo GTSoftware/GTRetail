@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.SucursalesFacade;
 import ar.com.gtsoftware.model.Sucursales;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "sucursalesConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "sucursalesConverter")
 public class SucursalesConverter implements Converter {
 
     @EJB
@@ -64,6 +64,6 @@ public class SucursalesConverter implements Converter {
             return null;
         }
         Sucursales sucursal = (Sucursales) value;
-        return sucursal.getIdSucursal().toString();
+        return sucursal.getId().toString();
     }
 }

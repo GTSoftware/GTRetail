@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -46,21 +46,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "sucursales")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Sucursales.findAll", query = "SELECT s FROM Sucursales s"),
-    @NamedQuery(name = "Sucursales.findByIdSucursal", query = "SELECT s FROM Sucursales s WHERE s.idSucursal = :idSucursal"),
-    @NamedQuery(name = "Sucursales.findByNombreSucursal", query = "SELECT s FROM Sucursales s WHERE s.nombreSucursal = :nombreSucursal"),
-    @NamedQuery(name = "Sucursales.findByDireccion", query = "SELECT s FROM Sucursales s WHERE s.direccion = :direccion"),
-    @NamedQuery(name = "Sucursales.findByTelefonoFijo", query = "SELECT s FROM Sucursales s WHERE s.telefonoFijo = :telefonoFijo"),
-    @NamedQuery(name = "Sucursales.findByFechaAlta", query = "SELECT s FROM Sucursales s WHERE s.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "Sucursales.findByActivo", query = "SELECT s FROM Sucursales s WHERE s.activo = :activo")})
-public class Sucursales implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_sucursal"))
+public class Sucursales extends BaseEntity {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_sucursal")
-    private Integer idSucursal;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -102,27 +92,21 @@ public class Sucursales implements Serializable {
     private UbicacionLocalidades idLocalidad;
     @OneToMany(mappedBy = "idSucursal")
     private List<Depositos> depositosList;
+    @OneToMany(mappedBy = "idSucursal")
+    private List<Personas> personasList;
 
     public Sucursales() {
     }
 
     public Sucursales(Integer idSucursal) {
-        this.idSucursal = idSucursal;
+        super(idSucursal);
     }
 
     public Sucursales(Integer idSucursal, String nombreSucursal, Date fechaAlta, boolean activo) {
-        this.idSucursal = idSucursal;
+        super(idSucursal);
         this.nombreSucursal = nombreSucursal;
         this.fechaAlta = fechaAlta;
         this.activo = activo;
-    }
-
-    public Integer getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Integer idSucursal) {
-        this.idSucursal = idSucursal;
     }
 
     public String getNombreSucursal() {
@@ -244,28 +228,8 @@ public class Sucursales implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idSucursal != null ? idSucursal.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Sucursales)) {
-            return false;
-        }
-        Sucursales other = (Sucursales) object;
-        if ((this.idSucursal == null && other.idSucursal != null) || (this.idSucursal != null && !this.idSucursal.equals(other.idSucursal))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Sucursales[ idSucursal=" + idSucursal + " ]";
+        return "ar.com.gtsoftware.model.Sucursales[ idSucursal=" + this.getId() + " ]";
     }
-    
+
 }

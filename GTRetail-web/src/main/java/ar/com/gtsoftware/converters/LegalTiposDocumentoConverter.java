@@ -18,18 +18,18 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.LegalTiposDocumentoFacade;
 import ar.com.gtsoftware.model.LegalTiposDocumento;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "legalTiposDocumentoConverter")
-@RequestScoped
+@Model
+@FacesConverter(value = "legalTiposDocumentoConverter")
 public class LegalTiposDocumentoConverter implements Converter {
 
     @EJB
