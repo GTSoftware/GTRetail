@@ -56,7 +56,7 @@ public class UbicacionLocalidadesFacade extends AbstractFacade<UbicacionLocalida
             cq.select(localidad);
             Predicate p = null;
             if (lsf.getIdLocalidad() != null) {
-                p = cb.equal(localidad.get(UbicacionLocalidades_.idLocalidad), lsf.getIdLocalidad());
+                p = cb.equal(localidad.get(UbicacionLocalidades_.id), lsf.getIdLocalidad());
             }
             if (lsf.getNombreLocalidad() != null) {
                 Predicate p1 = cb.like(localidad.get(UbicacionLocalidades_.nombreLocalidad), String.format("%%%s%%", lsf.getNombreLocalidad().toUpperCase()));

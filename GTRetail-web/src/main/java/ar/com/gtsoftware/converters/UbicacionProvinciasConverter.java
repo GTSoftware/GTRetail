@@ -64,6 +64,6 @@ public class UbicacionProvinciasConverter implements Converter {
             return null;
         }
         UbicacionProvincias provincia = (UbicacionProvincias) value;
-        return provincia.getIdProvincia().toString();
+        return provincia.getId().toString();
     }
 }

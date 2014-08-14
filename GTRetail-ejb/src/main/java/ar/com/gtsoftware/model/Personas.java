@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
@@ -42,8 +43,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "personas")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_persona"))
-public class Personas extends BaseEntity {
+public class Personas extends BaseEntity implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     @Column(name = "email", length = 100)
     @Pattern(regexp = "^$|^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"

@@ -64,6 +64,6 @@ public class UbicacionPaisesConverter implements Converter {
             return null;
         }
         UbicacionPaises pais = (UbicacionPaises) value;
-        return pais.getIdPais().toString();
+        return pais.getId().toString();
     }
 }

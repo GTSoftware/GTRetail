@@ -56,7 +56,7 @@ public class UbicacionPaisesFacade extends AbstractFacade<UbicacionPaises> {
             cq.select(pais);
             Predicate p = null;
             if (psf.getIdPais()!= null) {
-                p = cb.equal(pais.get(UbicacionPaises_.idPais), psf.getIdPais());
+                p = cb.equal(pais.get(UbicacionPaises_.id), psf.getIdPais());
             }
             if (psf.getNombrePais()!= null) {
                 Predicate p1 = cb.like(pais.get(UbicacionPaises_.nombrePais), String.format("%%%s%%", psf.getNombrePais().toUpperCase()));

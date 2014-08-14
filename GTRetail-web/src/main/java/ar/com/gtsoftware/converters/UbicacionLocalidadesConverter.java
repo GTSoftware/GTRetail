@@ -64,6 +64,6 @@ public class UbicacionLocalidadesConverter implements Converter {
             return null;
         }
         UbicacionLocalidades localidad = (UbicacionLocalidades) value;
-        return localidad.getIdLocalidad().toString();
+        return localidad.getId().toString();
     }
 }

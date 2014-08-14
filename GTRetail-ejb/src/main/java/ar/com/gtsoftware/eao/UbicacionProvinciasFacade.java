@@ -56,7 +56,7 @@ public class UbicacionProvinciasFacade extends AbstractFacade<UbicacionProvincia
             cq.select(provincia);
             Predicate p = null;
             if (psf.getIdProvincia()!= null) {
-                p = cb.equal(provincia.get(UbicacionProvincias_.idProvincia), psf.getIdProvincia());
+                p = cb.equal(provincia.get(UbicacionProvincias_.id), psf.getIdProvincia());
             }
             if (psf.getNombreProvincia()!= null) {
                 Predicate p1 = cb.like(provincia.get(UbicacionProvincias_.nombreProvincia), String.format("%%%s%%", psf.getNombreProvincia().toUpperCase()));
