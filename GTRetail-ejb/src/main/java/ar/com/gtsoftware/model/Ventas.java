@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,21 +42,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ventas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Ventas.findAll", query = "SELECT v FROM Ventas v"),
-    @NamedQuery(name = "Ventas.findByIdVenta", query = "SELECT v FROM Ventas v WHERE v.idVenta = :idVenta"),
-    @NamedQuery(name = "Ventas.findByFechaVenta", query = "SELECT v FROM Ventas v WHERE v.fechaVenta = :fechaVenta"),
-    @NamedQuery(name = "Ventas.findByTotal", query = "SELECT v FROM Ventas v WHERE v.total = :total"),
-    @NamedQuery(name = "Ventas.findBySaldo", query = "SELECT v FROM Ventas v WHERE v.saldo = :saldo"),
-    @NamedQuery(name = "Ventas.findByObservaciones", query = "SELECT v FROM Ventas v WHERE v.observaciones = :observaciones"),
-    @NamedQuery(name = "Ventas.findByAnulada", query = "SELECT v FROM Ventas v WHERE v.anulada = :anulada")})
-public class Ventas implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_venta"))
+public class Ventas extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_venta")
-    private Integer idVenta;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_venta")
@@ -99,6 +84,9 @@ public class Ventas implements Serializable {
     @JoinColumn(name = "id_condicion_venta", referencedColumnName = "id_condicion")
     @ManyToOne(optional = false)
     private NegocioCondicionesOperaciones idCondicionVenta;
+    @JoinColumn(name = "id_venta_estado", referencedColumnName = "id_estado")
+    @ManyToOne(optional = false)
+    private VentasEstados idVentasEstados;
     @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_factura")
     @ManyToOne
     private FiscalLibroIvaVentas idRegistroIva;
@@ -109,23 +97,15 @@ public class Ventas implements Serializable {
     }
 
     public Ventas(Integer idVenta) {
-        this.idVenta = idVenta;
+        super(idVenta);
     }
 
     public Ventas(Integer idVenta, Date fechaVenta, BigDecimal total, BigDecimal saldo, boolean anulada) {
-        this.idVenta = idVenta;
+        super(idVenta);
         this.fechaVenta = fechaVenta;
         this.total = total;
         this.saldo = saldo;
         this.anulada = anulada;
-    }
-
-    public Integer getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Integer idVenta) {
-        this.idVenta = idVenta;
     }
 
     public Date getFechaVenta() {
@@ -235,29 +215,17 @@ public class Ventas implements Serializable {
         this.ventasPagosLineasList = ventasPagosLineasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idVenta != null ? idVenta.hashCode() : 0);
-        return hash;
+    public VentasEstados getIdVentasEstados() {
+        return idVentasEstados;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Ventas)) {
-            return false;
-        }
-        Ventas other = (Ventas) object;
-        if ((this.idVenta == null && other.idVenta != null) || (this.idVenta != null && !this.idVenta.equals(other.idVenta))) {
-            return false;
-        }
-        return true;
+    public void setIdVentasEstados(VentasEstados idVentasEstados) {
+        this.idVentasEstados = idVentasEstados;
     }
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Ventas[ idVenta=" + idVenta + " ]";
+        return "ar.com.gtsoftware.model.Ventas[ idVenta=" + this.getId() + " ]";
     }
-    
+
 }
