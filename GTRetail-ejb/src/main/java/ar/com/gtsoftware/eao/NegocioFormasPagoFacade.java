@@ -13,20 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.NegocioFormasPago_;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
 public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -38,5 +45,31 @@ public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
     public NegocioFormasPagoFacade() {
         super(NegocioFormasPago.class);
     }
-    
+
+    public List<NegocioFormasPago> findFormasPagoVenta() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<NegocioFormasPago> cq = cb.createQuery(NegocioFormasPago.class);
+        Root<NegocioFormasPago> formaPago = cq.from(NegocioFormasPago.class);
+        cq.select(formaPago);
+        Predicate p = cb.equal(formaPago.get(NegocioFormasPago_.venta), true);
+        cq.where(p);
+        TypedQuery<NegocioFormasPago> q = em.createQuery(cq);
+
+        List<NegocioFormasPago> formasPagoList = q.getResultList();
+        return formasPagoList;
+    }
+
+    public List<NegocioFormasPago> findFormasPagoCompra() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<NegocioFormasPago> cq = cb.createQuery(NegocioFormasPago.class);
+        Root<NegocioFormasPago> formaPago = cq.from(NegocioFormasPago.class);
+        cq.select(formaPago);
+        Predicate p = cb.equal(formaPago.get(NegocioFormasPago_.compra), true);
+        cq.where(p);
+        TypedQuery<NegocioFormasPago> q = em.createQuery(cq);
+
+        List<NegocioFormasPago> formasPagoList = q.getResultList();
+        return formasPagoList;
+    }
+
 }

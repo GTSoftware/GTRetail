@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+            <ui:define name="content" >
+                <h:form id="formContenido">
+                    <p:panel id="cargaVentaPanel" header="#{msg.nuevaVenta}" >
+                        <!-- 
+                        <p:commandButton value="Presupuesto" action="#{impresionFacturasVentasBean.doMostrarVenta(nuevaVentaBean.ventaActual)}" ajax="false"/> 
+                        -->
+                        <p:wizard flowListener="#{nuevaVentaBean.onFlowProcess}" backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}">  
+
+                            <p:tab id="productosTab" title="#{msg.productos}">  
+
+                                <ui:include src="cargaProductos.xhtml" />
+
+                            </p:tab>
+
+                            <p:tab id="clienteTab" title="#{msg.cliente}">
+
+                                <ui:include src="cargaCliente.xhtml" />
+
+                            </p:tab>
+                            <p:tab id="pagoTab" title="#{msg.condicionesVentaPago}">
+                                
+                                <ui:include src="cargaPagos.xhtml" />
+                                
+                        </p:tab>
+                    </p:wizard>
+                </p:panel>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+

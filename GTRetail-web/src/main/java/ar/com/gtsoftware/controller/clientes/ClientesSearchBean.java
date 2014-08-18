@@ -21,8 +21,6 @@ import ar.com.gtsoftware.search.PersonasSearchFilter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ViewScoped;
@@ -31,7 +29,7 @@ import javax.faces.bean.ManagedBean;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "clientesSearchBean")
 @ViewScoped

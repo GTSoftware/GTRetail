@@ -31,7 +31,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
 public class PersonasFacade extends AbstractFacade<Personas> {

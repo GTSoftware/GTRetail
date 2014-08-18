@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -42,31 +37,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "productos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Productos.findAll", query = "SELECT p FROM Productos p"),
-    @NamedQuery(name = "Productos.findByIdProducto", query = "SELECT p FROM Productos p WHERE p.idProducto = :idProducto"),
-    @NamedQuery(name = "Productos.findByCodigoPropio", query = "SELECT p FROM Productos p WHERE p.codigoPropio = :codigoPropio"),
-    @NamedQuery(name = "Productos.findByDescripcion", query = "SELECT p FROM Productos p WHERE p.descripcion = :descripcion"),
-    @NamedQuery(name = "Productos.findByFechaAlta", query = "SELECT p FROM Productos p WHERE p.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "Productos.findByActivo", query = "SELECT p FROM Productos p WHERE p.activo = :activo"),
-    @NamedQuery(name = "Productos.findByCostoAdquisicionNeto", query = "SELECT p FROM Productos p WHERE p.costoAdquisicionNeto = :costoAdquisicionNeto"),
-    @NamedQuery(name = "Productos.findByUtilidad", query = "SELECT p FROM Productos p WHERE p.utilidad = :utilidad"),
-    @NamedQuery(name = "Productos.findByPrecioVenta", query = "SELECT p FROM Productos p WHERE p.precioVenta = :precioVenta"),
-    @NamedQuery(name = "Productos.findByStockTotal", query = "SELECT p FROM Productos p WHERE p.stockTotal = :stockTotal"),
-    @NamedQuery(name = "Productos.findByAnnosAmortizacion", query = "SELECT p FROM Productos p WHERE p.annosAmortizacion = :annosAmortizacion"),
-    @NamedQuery(name = "Productos.findByUbicacion", query = "SELECT p FROM Productos p WHERE p.ubicacion = :ubicacion")})
-public class Productos implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_producto"))
+public class Productos extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_producto")
-    private Integer idProducto;
+
     @Size(max = 100)
     @Column(name = "codigo_propio")
     private String codigoPropio;
@@ -146,25 +126,17 @@ public class Productos implements Serializable {
     }
 
     public Productos(Integer idProducto) {
-        this.idProducto = idProducto;
+        super(idProducto);
     }
 
     public Productos(Integer idProducto, Date fechaAlta, boolean activo, BigDecimal costoAdquisicionNeto, BigDecimal utilidad, BigDecimal stockTotal, int annosAmortizacion) {
-        this.idProducto = idProducto;
+        super(idProducto);
         this.fechaAlta = fechaAlta;
         this.activo = activo;
         this.costoAdquisicionNeto = costoAdquisicionNeto;
         this.utilidad = utilidad;
         this.stockTotal = stockTotal;
         this.annosAmortizacion = annosAmortizacion;
-    }
-
-    public Integer getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
     }
 
     public String getCodigoPropio() {
@@ -376,28 +348,8 @@ public class Productos implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idProducto != null ? idProducto.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Productos)) {
-            return false;
-        }
-        Productos other = (Productos) object;
-        if ((this.idProducto == null && other.idProducto != null) || (this.idProducto != null && !this.idProducto.equals(other.idProducto))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Productos[ idProducto=" + idProducto + " ]";
+        return "ar.com.gtsoftware.model.Productos[ idProducto=" + this.getId() + " ]";
     }
-    
+
 }

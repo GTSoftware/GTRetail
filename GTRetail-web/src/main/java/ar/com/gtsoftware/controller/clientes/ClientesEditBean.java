@@ -56,7 +56,7 @@ import javax.inject.Inject;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "clientesEditBean")
 @ViewScoped

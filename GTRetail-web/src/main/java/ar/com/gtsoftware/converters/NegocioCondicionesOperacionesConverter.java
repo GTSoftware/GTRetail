@@ -64,6 +64,6 @@ public class NegocioCondicionesOperacionesConverter implements Converter {
             return null;
         }
         NegocioCondicionesOperaciones condicionOperacion = (NegocioCondicionesOperaciones) value;
-        return condicionOperacion.getIdCondicion().toString();
+        return condicionOperacion.getId().toString();
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:panelGrid columns="2">
+        <h:outputLabel value="#{msg.totalPagar}" style="font-size: xx-large"/>
+        <h:outputLabel value="#{nuevaVentaBean.ventaActual.total}" style="font-size: xx-large">
+            <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+        </h:outputLabel>
+
+        <h:outputLabel value="#{msg.condicionVenta}" />
+        <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}" value="#{nuevaVentaBean.ventaActual.idCondicionVenta}" 
+                         converter="#{negocioCondicionesOperacionesConverter}" filter="true"  >
+            <f:selectItems value="#{nuevaVentaBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}" itemValue="#{cond}"/>
+
+        </p:selectOneMenu>
+        <h:outputLabel value="#{msg.formaPago}" />
+        <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}" value="#{nuevaVentaBean.pagoActual.idFormaPago}" 
+                         converter="#{negocioFormasPagoConverter}" filter="true"  >
+            <f:selectItems value="#{nuevaVentaBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}" itemValue="#{formaPago}"/>
+
+        </p:selectOneMenu>
+        <h:outputLabel value="#{msg.importePago}" />
+        <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" />
+
+        <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="ui-icon-plus" update="pagosTable"/>
+
+    </h:panelGrid>
+    <p:dataTable id="pagosTable" value="#{nuevaVentaBean.pagosVenta}" var="pago"
+                 rows="15"
+                 paginator="true"
+                 sortMode="multiple"
+                 emptyMessage="#{msg.pagosVacio}"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="10,15,30"
+                 resizableColumns="true">
+        <f:facet name="header" >
+            #{msg.pagosVenta}
+        </f:facet>
+        <p:column sortBy="#{pago.idFormaPago}" headerText="Forma de pago" style="text-align: left">
+            <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
+        </p:column>
+        <p:column sortBy="#{pago.importeTotalPagado}" headerText="Importe" style="text-align: right">
+            <h:outputText value="#{pago.importeTotalPagado}" >
+                <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
+            </h:outputText>
+        </p:column>
+        <p:column style="width: 50px">
+            <f:facet name="header">
+                #{msg.borrar}
+            </f:facet>
+            <p:commandButton icon="ui-icon-close" update="pagosTable" action="#{nuevaVentaBean.eliminarPago(pago)}" />
+        </p:column>
+        <p:columnGroup type="footer">
+            <p:row>  
+                <p:column colspan="1" footerText="Saldo:"  
+                          style="text-align:right; font-size: larger"  />  
+
+                <p:column footerText="\$#{nuevaVentaBean.ventaActual.saldo}" style=" font-size: xx-large" />  
+            </p:row>  
+        </p:columnGroup>
+    </p:dataTable>
+    <h:outputLabel value="#{msg.observaciones}" />
+    <br/>
+    <p:inputTextarea style="width: 100%" value="#{nuevaVentaBean.ventaActual.observaciones}" maxlength="1024" autoResize="true" />
+    <p:separator />
+    <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}"  />
+</html>

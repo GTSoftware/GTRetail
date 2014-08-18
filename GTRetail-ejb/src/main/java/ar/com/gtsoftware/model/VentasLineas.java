@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -37,27 +32,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "ventas_lineas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VentasLineas.findAll", query = "SELECT v FROM VentasLineas v"),
-    @NamedQuery(name = "VentasLineas.findByIdLineaVenta", query = "SELECT v FROM VentasLineas v WHERE v.idLineaVenta = :idLineaVenta"),
-    @NamedQuery(name = "VentasLineas.findByPrecioVentaUnitario", query = "SELECT v FROM VentasLineas v WHERE v.precioVentaUnitario = :precioVentaUnitario"),
-    @NamedQuery(name = "VentasLineas.findByCantidad", query = "SELECT v FROM VentasLineas v WHERE v.cantidad = :cantidad"),
-    @NamedQuery(name = "VentasLineas.findBySubTotal", query = "SELECT v FROM VentasLineas v WHERE v.subTotal = :subTotal"),
-    @NamedQuery(name = "VentasLineas.findByCostoNetoUnitario", query = "SELECT v FROM VentasLineas v WHERE v.costoNetoUnitario = :costoNetoUnitario"),
-    @NamedQuery(name = "VentasLineas.findByCostoBrutoUnitario", query = "SELECT v FROM VentasLineas v WHERE v.costoBrutoUnitario = :costoBrutoUnitario"),
-    @NamedQuery(name = "VentasLineas.findByCantidadEntregada", query = "SELECT v FROM VentasLineas v WHERE v.cantidadEntregada = :cantidadEntregada")})
-public class VentasLineas implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_venta"))
+public class VentasLineas extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_linea_venta")
-    private Integer idLineaVenta;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -99,25 +83,17 @@ public class VentasLineas implements Serializable {
     }
 
     public VentasLineas(Integer idLineaVenta) {
-        this.idLineaVenta = idLineaVenta;
+        super(idLineaVenta);
     }
 
     public VentasLineas(Integer idLineaVenta, BigDecimal precioVentaUnitario, BigDecimal cantidad, BigDecimal subTotal, BigDecimal costoNetoUnitario, BigDecimal costoBrutoUnitario, BigDecimal cantidadEntregada) {
-        this.idLineaVenta = idLineaVenta;
+        super(idLineaVenta);
         this.precioVentaUnitario = precioVentaUnitario;
         this.cantidad = cantidad;
         this.subTotal = subTotal;
         this.costoNetoUnitario = costoNetoUnitario;
         this.costoBrutoUnitario = costoBrutoUnitario;
         this.cantidadEntregada = cantidadEntregada;
-    }
-
-    public Integer getIdLineaVenta() {
-        return idLineaVenta;
-    }
-
-    public void setIdLineaVenta(Integer idLineaVenta) {
-        this.idLineaVenta = idLineaVenta;
     }
 
     public BigDecimal getPrecioVentaUnitario() {
@@ -202,28 +178,8 @@ public class VentasLineas implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idLineaVenta != null ? idLineaVenta.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VentasLineas)) {
-            return false;
-        }
-        VentasLineas other = (VentasLineas) object;
-        if ((this.idLineaVenta == null && other.idLineaVenta != null) || (this.idLineaVenta != null && !this.idLineaVenta.equals(other.idLineaVenta))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.VentasLineas[ idLineaVenta=" + idLineaVenta + " ]";
+        return "ar.com.gtsoftware.model.VentasLineas[ idLineaVenta=" + this.getId() + " ]";
     }
-    
+
 }

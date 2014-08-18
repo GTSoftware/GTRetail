@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -36,25 +31,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "negocio_condiciones_operaciones")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "NegocioCondicionesOperaciones.findAll", query = "SELECT n FROM NegocioCondicionesOperaciones n"),
-    @NamedQuery(name = "NegocioCondicionesOperaciones.findByIdCondicion", query = "SELECT n FROM NegocioCondicionesOperaciones n WHERE n.idCondicion = :idCondicion"),
-    @NamedQuery(name = "NegocioCondicionesOperaciones.findByNombreCondicion", query = "SELECT n FROM NegocioCondicionesOperaciones n WHERE n.nombreCondicion = :nombreCondicion"),
-    @NamedQuery(name = "NegocioCondicionesOperaciones.findByActivo", query = "SELECT n FROM NegocioCondicionesOperaciones n WHERE n.activo = :activo"),
-    @NamedQuery(name = "NegocioCondicionesOperaciones.findByVenta", query = "SELECT n FROM NegocioCondicionesOperaciones n WHERE n.venta = :venta"),
-    @NamedQuery(name = "NegocioCondicionesOperaciones.findByCompra", query = "SELECT n FROM NegocioCondicionesOperaciones n WHERE n.compra = :compra")})
-public class NegocioCondicionesOperaciones implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_condicion"))
+public class NegocioCondicionesOperaciones extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_condicion")
-    private Integer idCondicion;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -72,6 +58,10 @@ public class NegocioCondicionesOperaciones implements Serializable {
     @NotNull
     @Column(name = "compra")
     private boolean compra;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "pago_total")
+    private boolean pagoTotal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCondicionCompra")
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCondicionVenta")
@@ -81,23 +71,15 @@ public class NegocioCondicionesOperaciones implements Serializable {
     }
 
     public NegocioCondicionesOperaciones(Integer idCondicion) {
-        this.idCondicion = idCondicion;
+        super(idCondicion);
     }
 
     public NegocioCondicionesOperaciones(Integer idCondicion, String nombreCondicion, boolean activo, boolean venta, boolean compra) {
-        this.idCondicion = idCondicion;
+        super(idCondicion);
         this.nombreCondicion = nombreCondicion;
         this.activo = activo;
         this.venta = venta;
         this.compra = compra;
-    }
-
-    public Integer getIdCondicion() {
-        return idCondicion;
-    }
-
-    public void setIdCondicion(Integer idCondicion) {
-        this.idCondicion = idCondicion;
     }
 
     public String getNombreCondicion() {
@@ -150,29 +132,17 @@ public class NegocioCondicionesOperaciones implements Serializable {
         this.ventasList = ventasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCondicion != null ? idCondicion.hashCode() : 0);
-        return hash;
+    public boolean getPagoTotal() {
+        return pagoTotal;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof NegocioCondicionesOperaciones)) {
-            return false;
-        }
-        NegocioCondicionesOperaciones other = (NegocioCondicionesOperaciones) object;
-        if ((this.idCondicion == null && other.idCondicion != null) || (this.idCondicion != null && !this.idCondicion.equals(other.idCondicion))) {
-            return false;
-        }
-        return true;
+    public void setPagoTotal(boolean pagoTotal) {
+        this.pagoTotal = pagoTotal;
     }
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.NegocioCondicionesOperaciones[ idCondicion=" + idCondicion + " ]";
+        return "ar.com.gtsoftware.model.NegocioCondicionesOperaciones[ idCondicion=" + this.getId() + " ]";
     }
-    
+
 }
