@@ -16,13 +16,10 @@
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,9 +38,6 @@ public class VentasEstados extends BaseEntity implements Serializable {
     @NotNull
     @Column(name = "nombre_estado")
     private String nombreEstado;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVenta")
-    private List<Ventas> ventasList;
 
     public VentasEstados(Integer id) {
         super(id);
@@ -65,19 +59,9 @@ public class VentasEstados extends BaseEntity implements Serializable {
         this.nombreEstado = nombreEstado;
     }
 
-    public List<Ventas> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Ventas> ventasList) {
-        this.ventasList = ventasList;
-    }
-
     @Override
     public String toString() {
         return "ar.com.gtsoftware.model.VentasEstados[ id=" + this.getId() + " ]";
     }
-    
-    
 
 }

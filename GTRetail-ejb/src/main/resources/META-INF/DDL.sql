@@ -11,13 +11,13 @@ SET client_min_messages = warning;
 
 DROP DATABASE retail;
 --
--- Name: retail; Type: DATABASE; Schema: -; Owner: retail
+-- Name: retail; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE retail WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'es_ES.UTF-8' LC_CTYPE = 'es_ES.UTF-8';
+CREATE DATABASE retail WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'es_AR.UTF-8' LC_CTYPE = 'es_AR.UTF-8';
 
 
-ALTER DATABASE retail OWNER TO retail;
+ALTER DATABASE retail OWNER TO postgres;
 
 \connect retail
 
@@ -2238,7 +2238,11 @@ CREATE TABLE ventas_pagos (
     id_forma_pago integer NOT NULL,
     importe_total_pagado numeric(19,2),
     observaciones character varying(255),
-    id_movimiento_caja integer NOT NULL
+    id_movimiento_caja integer NOT NULL,
+    id_sucursal integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_persona integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -3821,7 +3825,7 @@ SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 1, false);
 -- Data for Name: ventas_pagos; Type: TABLE DATA; Schema: public; Owner: retail
 --
 
-COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagado, observaciones, id_movimiento_caja) FROM stdin;
+COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagado, observaciones, id_movimiento_caja, id_sucursal, id_usuario, id_persona, version) FROM stdin;
 \.
 
 
@@ -4694,11 +4698,35 @@ ALTER TABLE ONLY ventas
 
 
 --
+-- Name: fk_personas; Type: FK CONSTRAINT; Schema: public; Owner: retail
+--
+
+ALTER TABLE ONLY ventas_pagos
+    ADD CONSTRAINT fk_personas FOREIGN KEY (id_persona) REFERENCES personas(id_persona);
+
+
+--
 -- Name: fk_sucursal; Type: FK CONSTRAINT; Schema: public; Owner: retail
 --
 
 ALTER TABLE ONLY personas
     ADD CONSTRAINT fk_sucursal FOREIGN KEY (id_sucursal) REFERENCES sucursales(id_sucursal);
+
+
+--
+-- Name: fk_sucursal; Type: FK CONSTRAINT; Schema: public; Owner: retail
+--
+
+ALTER TABLE ONLY ventas_pagos
+    ADD CONSTRAINT fk_sucursal FOREIGN KEY (id_sucursal) REFERENCES sucursales(id_sucursal);
+
+
+--
+-- Name: fk_usuarios; Type: FK CONSTRAINT; Schema: public; Owner: retail
+--
+
+ALTER TABLE ONLY ventas_pagos
+    ADD CONSTRAINT fk_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario);
 
 
 --

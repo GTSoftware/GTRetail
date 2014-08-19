@@ -13,28 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,24 +38,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "ventas_pagos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VentasPagos.findAll", query = "SELECT v FROM VentasPagos v"),
-    @NamedQuery(name = "VentasPagos.findByIdPagoVenta", query = "SELECT v FROM VentasPagos v WHERE v.idPagoVenta = :idPagoVenta"),
-    @NamedQuery(name = "VentasPagos.findByFechaPago", query = "SELECT v FROM VentasPagos v WHERE v.fechaPago = :fechaPago"),
-    @NamedQuery(name = "VentasPagos.findByImporteTotalPagado", query = "SELECT v FROM VentasPagos v WHERE v.importeTotalPagado = :importeTotalPagado"),
-    @NamedQuery(name = "VentasPagos.findByObservaciones", query = "SELECT v FROM VentasPagos v WHERE v.observaciones = :observaciones")})
-public class VentasPagos implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_pago_venta"))
+public class VentasPagos extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_pago_venta")
-    private Integer idPagoVenta;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_pago")
@@ -79,25 +67,29 @@ public class VentasPagos implements Serializable {
     private CajasMovimientos idMovimientoCaja;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPagoVenta")
     private List<VentasPagosLineas> ventasPagosLineasList;
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false)
+    @ManyToOne(optional = false)
+    private Personas idPersona;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
+    @ManyToOne(optional = false)
+    private Usuarios idUsuario;
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", nullable = false)
+    @ManyToOne(optional = false)
+    private Sucursales idSucursal;
+
+    @Transient
+    private String item;
 
     public VentasPagos() {
     }
 
     public VentasPagos(Integer idPagoVenta) {
-        this.idPagoVenta = idPagoVenta;
+        super(idPagoVenta);
     }
 
     public VentasPagos(Integer idPagoVenta, Date fechaPago) {
-        this.idPagoVenta = idPagoVenta;
+        super(idPagoVenta);
         this.fechaPago = fechaPago;
-    }
-
-    public Integer getIdPagoVenta() {
-        return idPagoVenta;
-    }
-
-    public void setIdPagoVenta(Integer idPagoVenta) {
-        this.idPagoVenta = idPagoVenta;
     }
 
     public Date getFechaPago() {
@@ -149,29 +141,41 @@ public class VentasPagos implements Serializable {
         this.ventasPagosLineasList = ventasPagosLineasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idPagoVenta != null ? idPagoVenta.hashCode() : 0);
-        return hash;
+    public String getItem() {
+        return item;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VentasPagos)) {
-            return false;
-        }
-        VentasPagos other = (VentasPagos) object;
-        if ((this.idPagoVenta == null && other.idPagoVenta != null) || (this.idPagoVenta != null && !this.idPagoVenta.equals(other.idPagoVenta))) {
-            return false;
-        }
-        return true;
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public Personas getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(Personas idPersona) {
+        this.idPersona = idPersona;
+    }
+
+    public Usuarios getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Usuarios idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public Sucursales getIdSucursal() {
+        return idSucursal;
+    }
+
+    public void setIdSucursal(Sucursales idSucursal) {
+        this.idSucursal = idSucursal;
     }
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.VentasPagos[ idPagoVenta=" + idPagoVenta + " ]";
+        return "ar.com.gtsoftware.model.VentasPagos[ idPagoVenta=" + this.getId() + " ]";
     }
-    
+
 }
