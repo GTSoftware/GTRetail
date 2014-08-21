@@ -21,6 +21,7 @@ import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
+import ar.com.gtsoftware.eao.VentasEstadosFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
@@ -42,6 +43,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -90,12 +92,20 @@ public class NuevaVentaBean implements Serializable {
     public NuevaVentaBean() {
     }
 
+    @PostConstruct
+    public void init() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            initConversation();
+        }
+    }
+
     public String initConversation() {
 
         conversation.begin();
         productoSearchFilter = new ProductosSearchFilter();
         productoSearchFilter.setActivo(Boolean.TRUE);
-        personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+        personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, 
+                Boolean.TRUE, null);
         ventaActual = new Ventas();
         ventaActual.setAnulada(false);
         ventaActual.setSaldo(BigDecimal.ZERO);
@@ -112,7 +122,8 @@ public class NuevaVentaBean implements Serializable {
      */
     public void buscarProductoPorClave() {
         productoActual = null;
-        if (productoSearchFilter.getCodigoPropio() != null || productoSearchFilter.getIdProducto() != null) {
+        if (productoSearchFilter.getCodigoPropio() != null 
+                || productoSearchFilter.getIdProducto() != null) {
             List<Productos> productos = productosFacade.findBySearchFilter(productoSearchFilter);
             if (!productos.isEmpty()) {
                 productoActual = productos.get(0);
@@ -172,6 +183,8 @@ public class NuevaVentaBean implements Serializable {
         lineaActual.setCantidad(BigDecimal.ZERO);
         lineaActual.setSubTotal(BigDecimal.ZERO);
         productoActual = null;
+        productoSearchFilter.setIdProducto(null);
+        productoSearchFilter.setCodigoPropio(null);
     }
 
     private void calcularTotalVenta() {
@@ -283,7 +296,7 @@ public class NuevaVentaBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "Debe cargar un cliente!"));
             return false;
         }
-        if(ventaActual.getVentasLineasList()==null || ventaActual.getVentasLineasList().isEmpty()){
+        if (ventaActual.getVentasLineasList() == null || ventaActual.getVentasLineasList().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "Debe cargar productos!"));
             return false;
         }
@@ -315,6 +328,11 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
+    public String cancelar() {
+        endConversation();
+        return "/protected/ventas/index.xhtml";
+    }
+
     public void eliminarPago(VentasPagos pago) {
         int item = -1;
 
@@ -334,10 +352,6 @@ public class NuevaVentaBean implements Serializable {
         if (!conversation.isTransient()) {
             conversation.end();
         }
-    }
-
-    public String onFlowProcess(FlowEvent event) {
-        return event.getNewStep();
     }
 
     public ProductosSearchFilter getProductoSearchFilter() {

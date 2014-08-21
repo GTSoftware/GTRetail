@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
+import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -27,6 +33,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -38,5 +45,25 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
     public FiscalLibroIvaVentasFacade() {
         super(FiscalLibroIvaVentas.class);
     }
-    
+
+    public FiscalLibroIvaVentas findUltimaFactura(String letra, String puntoVenta) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<FiscalLibroIvaVentas> cq = cb.createQuery(FiscalLibroIvaVentas.class);
+        Root<FiscalLibroIvaVentas> registroIVA = cq.from(FiscalLibroIvaVentas.class);
+        cq.select(registroIVA);
+        Predicate p1 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.letraFactura), letra);
+        Predicate p2 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.puntoVentaFactura), puntoVenta);
+
+        cq.where(cb.and(p1, p2));
+        cq.orderBy(cb.desc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));
+        TypedQuery<FiscalLibroIvaVentas> q = em.createQuery(cq);
+        q.setMaxResults(1);
+        List<FiscalLibroIvaVentas> registroIVAList = q.getResultList();
+        if (!registroIVAList.isEmpty()) {
+            return registroIVAList.get(0);
+        }
+        return null;
+
+    }
+
 }

@@ -1088,7 +1088,7 @@ CREATE TABLE personas_cuenta_corriente (
     fecha_movimiento timestamp without time zone NOT NULL,
     importe_movimiento numeric(19,2) NOT NULL,
     descripcion_movimiento character varying(200) NOT NULL,
-    id_registro_contable integer NOT NULL
+    id_registro_contable integer
 );
 
 
@@ -2238,11 +2238,11 @@ CREATE TABLE ventas_pagos (
     id_forma_pago integer NOT NULL,
     importe_total_pagado numeric(19,2),
     observaciones character varying(255),
-    id_movimiento_caja integer NOT NULL,
     id_sucursal integer NOT NULL,
     id_usuario integer NOT NULL,
     id_persona integer NOT NULL,
-    version integer DEFAULT 0 NOT NULL
+    version integer DEFAULT 0 NOT NULL,
+    id_movimiento_caja integer
 );
 
 
@@ -2277,7 +2277,9 @@ CREATE TABLE ventas_pagos_lineas (
     id_linea_pago integer NOT NULL,
     id_pago_venta integer NOT NULL,
     id_venta integer NOT NULL,
-    importe numeric(19,2) NOT NULL
+    importe numeric(19,2) NOT NULL,
+    version integer DEFAULT 0 NOT NULL,
+    id_movimiento_caja integer
 );
 
 
@@ -3258,6 +3260,7 @@ COPY personas (id_persona, razon_social, apellidos, nombres, nombre_fantasia, id
 --
 
 COPY personas_cuenta_corriente (id_movimiento, id_persona, fecha_movimiento, importe_movimiento, descripcion_movimiento, id_registro_contable) FROM stdin;
+3	1	2014-08-21 02:05:37.039	-100.00	Venta Nro: 3	\N
 \.
 
 
@@ -3265,7 +3268,7 @@ COPY personas_cuenta_corriente (id_movimiento, id_persona, fecha_movimiento, imp
 -- Name: personas_cuenta_corriente_id_movimiento_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('personas_cuenta_corriente_id_movimiento_seq', 1, false);
+SELECT pg_catalog.setval('personas_cuenta_corriente_id_movimiento_seq', 3, true);
 
 
 --
@@ -3740,6 +3743,7 @@ SELECT pg_catalog.setval('usuarios_id_usuario_seq', 1, true);
 --
 
 COPY ventas (id_venta, fecha_venta, id_usuario, id_sucursal, total, id_condicion_venta, saldo, id_registro_iva, observaciones, anulada, id_persona, id_estado, version) FROM stdin;
+3	2014-08-21 02:05:36.946	1	1	100.00	1	100.00	\N	El cliente paga con $100	f	1	2	1
 \.
 
 
@@ -3803,7 +3807,7 @@ SELECT pg_catalog.setval('ventas_formas_pago_id_forma_pago_seq', 4, true);
 -- Name: ventas_id_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_id_venta_seq', 1, false);
+SELECT pg_catalog.setval('ventas_id_venta_seq', 3, true);
 
 
 --
@@ -3811,6 +3815,7 @@ SELECT pg_catalog.setval('ventas_id_venta_seq', 1, false);
 --
 
 COPY ventas_lineas (id_linea_venta, id_venta, id_producto, precio_venta_unitario, cantidad, sub_total, costo_neto_unitario, costo_bruto_unitario, cantidad_entregada, id_linea_venta_referencia, version) FROM stdin;
+3	3	2	12.50	8.00	100.00	12.00	12.00	0.00	\N	1
 \.
 
 
@@ -3818,14 +3823,15 @@ COPY ventas_lineas (id_linea_venta, id_venta, id_producto, precio_venta_unitario
 -- Name: ventas_lineas_id_linea_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 1, false);
+SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 3, true);
 
 
 --
 -- Data for Name: ventas_pagos; Type: TABLE DATA; Schema: public; Owner: retail
 --
 
-COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagado, observaciones, id_movimiento_caja, id_sucursal, id_usuario, id_persona, version) FROM stdin;
+COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagado, observaciones, id_sucursal, id_usuario, id_persona, version, id_movimiento_caja) FROM stdin;
+2	2014-08-21 02:05:36.946	1	100.00	\N	1	1	1	1	\N
 \.
 
 
@@ -3833,14 +3839,15 @@ COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagad
 -- Name: ventas_pagos_id_pago_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 1, false);
+SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 2, true);
 
 
 --
 -- Data for Name: ventas_pagos_lineas; Type: TABLE DATA; Schema: public; Owner: retail
 --
 
-COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe) FROM stdin;
+COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe, version, id_movimiento_caja) FROM stdin;
+1	2	3	100.00	1	\N
 \.
 
 
@@ -3848,7 +3855,7 @@ COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe) FROM 
 -- Name: ventas_pagos_lineas_id_linea_pago_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_pagos_lineas_id_linea_pago_seq', 1, false);
+SELECT pg_catalog.setval('ventas_pagos_lineas_id_linea_pago_seq', 1, true);
 
 
 --
@@ -4698,11 +4705,35 @@ ALTER TABLE ONLY ventas
 
 
 --
+-- Name: fk_id_movimiento_caja; Type: FK CONSTRAINT; Schema: public; Owner: retail
+--
+
+ALTER TABLE ONLY ventas_pagos_lineas
+    ADD CONSTRAINT fk_id_movimiento_caja FOREIGN KEY (id_movimiento_caja) REFERENCES cajas_movimientos(id_movimiento_caja);
+
+
+--
+-- Name: fk_id_movimiento_caja; Type: FK CONSTRAINT; Schema: public; Owner: retail
+--
+
+ALTER TABLE ONLY ventas_pagos
+    ADD CONSTRAINT fk_id_movimiento_caja FOREIGN KEY (id_movimiento_caja) REFERENCES cajas_movimientos(id_movimiento_caja);
+
+
+--
 -- Name: fk_personas; Type: FK CONSTRAINT; Schema: public; Owner: retail
 --
 
 ALTER TABLE ONLY ventas_pagos
     ADD CONSTRAINT fk_personas FOREIGN KEY (id_persona) REFERENCES personas(id_persona);
+
+
+--
+-- Name: fk_registro_contable; Type: FK CONSTRAINT; Schema: public; Owner: retail
+--
+
+ALTER TABLE ONLY personas_cuenta_corriente
+    ADD CONSTRAINT fk_registro_contable FOREIGN KEY (id_registro_contable) REFERENCES contabilidad_registro_contable(id_registro);
 
 
 --
@@ -4751,14 +4782,6 @@ ALTER TABLE ONLY legal_tipos_documento
 
 ALTER TABLE ONLY personas_cuenta_corriente
     ADD CONSTRAINT personas_cuenta_corriente_id_persona_fkey FOREIGN KEY (id_persona) REFERENCES personas(id_persona);
-
-
---
--- Name: personas_cuenta_corriente_id_registro_contable_fkey; Type: FK CONSTRAINT; Schema: public; Owner: retail
---
-
-ALTER TABLE ONLY personas_cuenta_corriente
-    ADD CONSTRAINT personas_cuenta_corriente_id_registro_contable_fkey FOREIGN KEY (id_registro_contable) REFERENCES contabilidad_registro_contable(id_registro);
 
 
 --
@@ -5223,14 +5246,6 @@ ALTER TABLE ONLY ventas_pagos_lineas
 
 ALTER TABLE ONLY ventas_pagos
     ADD CONSTRAINT ventas_pagos_id_forma_pago_fkey FOREIGN KEY (id_forma_pago) REFERENCES negocio_formas_pago(id_forma_pago);
-
-
---
--- Name: ventas_pagos_id_movimiento_caja_fkey; Type: FK CONSTRAINT; Schema: public; Owner: retail
---
-
-ALTER TABLE ONLY ventas_pagos
-    ADD CONSTRAINT ventas_pagos_id_movimiento_caja_fkey FOREIGN KEY (id_movimiento_caja) REFERENCES cajas_movimientos(id_movimiento_caja);
 
 
 --

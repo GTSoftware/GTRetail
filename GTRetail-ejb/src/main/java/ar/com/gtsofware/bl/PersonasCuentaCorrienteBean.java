@@ -44,6 +44,7 @@ public class PersonasCuentaCorrienteBean {
         cc.setFechaMovimiento(GregorianCalendar.getInstance().getTime());
         cc.setImporteMovimiento(importe);
         cc.setIdPersona(persona);
+        //cc.setIdRegistroContable(null);
         cuentaCorrienteFacade.create(cc);
     }
 

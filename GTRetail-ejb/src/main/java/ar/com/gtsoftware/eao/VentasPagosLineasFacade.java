@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.model.VentasPagosLineas;
+import ar.com.gtsoftware.model.VentasPagosLineas_;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
 public class VentasPagosLineasFacade extends AbstractFacade<VentasPagosLineas> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -38,5 +47,32 @@ public class VentasPagosLineasFacade extends AbstractFacade<VentasPagosLineas> {
     public VentasPagosLineasFacade() {
         super(VentasPagosLineas.class);
     }
-    
+
+    public List<VentasPagosLineas> findLineasPagosNoAcentadas(Ventas venta) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<VentasPagosLineas> cq = cb.createQuery(VentasPagosLineas.class);
+        Root<VentasPagosLineas> pagoLinea = cq.from(VentasPagosLineas.class);
+        cq.select(pagoLinea);
+        Predicate p1 = cb.equal(pagoLinea.get(VentasPagosLineas_.idVenta), venta);
+        Predicate p2 = cb.isNull(pagoLinea.get(VentasPagosLineas_.idCajasMovimientos));
+        cq.where(cb.and(p1, p2));
+        TypedQuery<VentasPagosLineas> q = em.createQuery(cq);
+        List<VentasPagosLineas> pagosLineasList = q.getResultList();
+        return pagosLineasList;
+
+    }
+
+    public List<VentasPagosLineas> findLineasPago(VentasPagos pago) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<VentasPagosLineas> cq = cb.createQuery(VentasPagosLineas.class);
+        Root<VentasPagosLineas> pagoLinea = cq.from(VentasPagosLineas.class);
+        cq.select(pagoLinea);
+        Predicate p1 = cb.equal(pagoLinea.get(VentasPagosLineas_.idPagoVenta), pago);
+
+        cq.where(p1);
+        TypedQuery<VentasPagosLineas> q = em.createQuery(cq);
+        List<VentasPagosLineas> pagosLineasList = q.getResultList();
+        return pagosLineasList;
+
+    }
 }

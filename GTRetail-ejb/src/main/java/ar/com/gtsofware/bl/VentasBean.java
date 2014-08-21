@@ -15,6 +15,7 @@
  */
 package ar.com.gtsofware.bl;
 
+import ar.com.gtsoftware.eao.VentasEstadosFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.eao.VentasPagosFacade;
 import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
@@ -47,30 +48,32 @@ public class VentasBean {
     private EntityManager em;
     @EJB
     private PersonasCuentaCorrienteBean cuentaCorrienteBean;
+    @EJB
+    private VentasEstadosFacade estadosFacade;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
     public void guardarVenta(Ventas venta, List<VentasPagos> pagos) throws Exception {
-        ventasFacade.create(venta);
-        em.flush();
-        for (VentasPagos pago : pagos) {
-            pago.setFechaPago(venta.getFechaVenta());
-            pago.setIdPersona(venta.getIdPersona());
-            pago.setIdUsuario(venta.getIdUsuario());
-            pago.setIdSucursal(venta.getIdSucursal());
-            pagosFacade.create(pago);
-            VentasPagosLineas lineaPago = new VentasPagosLineas();
-            lineaPago.setIdPagoVenta(pago);
-            lineaPago.setIdVenta(venta);
-            lineaPago.setImporte(pago.getImporteTotalPagado());
-            pagosLineasFacade.create(lineaPago);
+        if (venta.isNew()) { //TODO Evaluar para utilizar el mismo método en caso de una venta modificada
+            //TODO Parametrizar estado inicial de venta
+            venta.setIdVentasEstados(estadosFacade.find(2)); //Aceptada
+            ventasFacade.create(venta);
+            em.flush();
+            for (VentasPagos pago : pagos) {
+                pago.setFechaPago(venta.getFechaVenta());
+                pago.setIdPersona(venta.getIdPersona());
+                pago.setIdUsuario(venta.getIdUsuario());
+                pago.setIdSucursal(venta.getIdSucursal());
+                pagosFacade.create(pago);
+                VentasPagosLineas lineaPago = new VentasPagosLineas();
+                lineaPago.setIdPagoVenta(pago);
+                lineaPago.setIdVenta(venta);
+                lineaPago.setImporte(pago.getImporteTotalPagado());
+                pagosLineasFacade.create(lineaPago);
+            }
+            
+            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
         }
-
-        cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
-        //Registrar Venta
-        //Registrar pagos y líneas de pago
-        //Alterar cuenta corriente de cliente
-
     }
 
 }

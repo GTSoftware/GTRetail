@@ -25,6 +25,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -62,8 +63,17 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
         }
         return result;
     }
-    
-    public List<PersonasCuentaCorriente> getUltimosMovimientos(Personas persona){
-        return null;
+
+    public List<PersonasCuentaCorriente> getUltimosMovimientos(Personas persona) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<PersonasCuentaCorriente> cq = cb.createQuery(PersonasCuentaCorriente.class);
+        Root<PersonasCuentaCorriente> cuenta = cq.from(PersonasCuentaCorriente.class);
+        cq.select(cuenta);
+        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona.getId());
+        cq.where(p);
+        cq.orderBy(cb.desc(cuenta.get(PersonasCuentaCorriente_.fechaMovimiento)));
+        TypedQuery<PersonasCuentaCorriente> q = em.createQuery(cq);
+        q.setMaxResults(100);
+        return q.getResultList();
     }
 }

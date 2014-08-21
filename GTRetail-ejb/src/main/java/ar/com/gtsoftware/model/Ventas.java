@@ -84,7 +84,7 @@ public class Ventas extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_condicion_venta", referencedColumnName = "id_condicion")
     @ManyToOne(optional = false)
     private NegocioCondicionesOperaciones idCondicionVenta;
-    @JoinColumn(name = "id_venta_estado", referencedColumnName = "id_estado")
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
     @ManyToOne(optional = false)
     private VentasEstados idVentasEstados;
     @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_factura")

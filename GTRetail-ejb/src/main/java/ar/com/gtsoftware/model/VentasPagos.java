@@ -63,7 +63,7 @@ public class VentasPagos extends BaseEntity implements Serializable {
     @ManyToOne(optional = false)
     private NegocioFormasPago idFormaPago;
     @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private CajasMovimientos idMovimientoCaja;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPagoVenta")
     private List<VentasPagosLineas> ventasPagosLineasList;

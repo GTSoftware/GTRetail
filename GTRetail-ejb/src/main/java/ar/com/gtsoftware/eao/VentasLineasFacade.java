@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.model.VentasLineas_;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -27,6 +34,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class VentasLineasFacade extends AbstractFacade<VentasLineas> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -38,5 +46,16 @@ public class VentasLineasFacade extends AbstractFacade<VentasLineas> {
     public VentasLineasFacade() {
         super(VentasLineas.class);
     }
-    
+
+    public List<VentasLineas> findVentasLineas(Ventas venta) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<VentasLineas> cq = cb.createQuery(VentasLineas.class);
+        Root<VentasLineas> lineaVenta = cq.from(VentasLineas.class);
+        cq.select(lineaVenta);
+        Predicate p = cb.equal(lineaVenta.get(VentasLineas_.idVenta), venta);
+        cq.where(p);
+        TypedQuery<VentasLineas> q = em.createQuery(cq);
+        List<VentasLineas> lineasVentaList = q.getResultList();
+        return lineasVentaList;
+    }
 }

@@ -1,17 +1,28 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 GT Software.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.gtsoft.eao.bl;
+package ar.com.gtsofware.bl;
 
-import com.gtsoft.eao.VentasFacade;
-import com.gtsoft.eao.VentasPagosFacade;
-import com.gtsoft.eao.VentasPagosLineasFacade;
-import com.gtsoft.model.Cajas;
-import com.gtsoft.model.Usuarios;
-import com.gtsoft.model.Ventas;
-import com.gtsoft.model.VentasPagos;
-import com.gtsoft.model.VentasPagosLineas;
+import ar.com.gtsoftware.eao.VentasFacade;
+import ar.com.gtsoftware.eao.VentasPagosFacade;
+import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
+import ar.com.gtsoftware.model.Cajas;
+import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.model.VentasPagos;
+import ar.com.gtsoftware.model.VentasPagosLineas;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -37,7 +48,7 @@ public class CobranzaVentasBean {
     @EJB
     private CajaBean cajaBean;
     @EJB
-    private ClientesCuentaCorrienteBean clientesCuentaCorrienteBean;
+    private PersonasCuentaCorrienteBean clientesCuentaCorrienteBean;
     @EJB
     private VentasFacade ventasFacade;
     // Add business logic below. (Right-click in editor and choose
@@ -48,7 +59,7 @@ public class CobranzaVentasBean {
 
         List<SaldoPago> saldosPorPago = new ArrayList<>();
         for (VentasPagos pago : pagosAImputar) {
-            if (pago.getIdPagoVenta() == null) {
+            if (pago.getId()== null) {
                 pago.setFechaPago(GregorianCalendar.getInstance().getTime());
                 pagosFacade.create(pago);
             }
@@ -57,7 +68,7 @@ public class CobranzaVentasBean {
             saldo.setSaldoPago(pago.getImporteTotalPagado());
             saldosPorPago.add(saldo);
 
-            clientesCuentaCorrienteBean.registrarMovimientoCuenta(ventasAPagar.get(0).getIdCliente(), pago.getImporteTotalPagado(), "Cobranza de ventas");
+            clientesCuentaCorrienteBean.registrarMovimientoCuenta(ventasAPagar.get(0).getIdPersona(), pago.getImporteTotalPagado(), "Cobranza de ventas");
 
         }
 
@@ -82,7 +93,7 @@ public class CobranzaVentasBean {
                             sp.setSaldoPago(BigDecimal.ZERO);
                         }
                         ventasFacade.edit(v);
-                        if (sp.getPago().getIdPagoVenta() == null) {
+                        if (sp.getPago().getId() == null) {
                             VentasPagosLineas pagoLinea = new VentasPagosLineas();
                             pagoLinea.setIdVenta(v);
                             pagoLinea.setIdPagoVenta(sp.getPago());

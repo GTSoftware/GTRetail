@@ -4,16 +4,16 @@
  */
 package ar.com.gtsofware.bl;
 
-import com.gtsoft.eao.FiscalLibroIvaVentasFacade;
-import com.gtsoft.eao.FiscalLibroIvaVentasLineasFacade;
-import com.gtsoft.eao.VentasFacade;
-import com.gtsoft.eao.VentasLineasFacade;
-import com.gtsoft.model.FiscalAlicuotasIva;
-import com.gtsoft.model.FiscalLibroIvaVentas;
-import com.gtsoft.model.FiscalLibroIvaVentasLineas;
-import com.gtsoft.model.FiscalPeriodosFiscales;
-import com.gtsoft.model.Ventas;
-import com.gtsoft.model.VentasLineas;
+import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
+import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
+import ar.com.gtsoftware.eao.VentasFacade;
+import ar.com.gtsoftware.eao.VentasLineasFacade;
+import ar.com.gtsoftware.model.FiscalAlicuotasIva;
+import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
+import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.model.VentasLineas;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -49,10 +49,10 @@ public class FacturacionVentasBean {
 
         FiscalLibroIvaVentas registro = new FiscalLibroIvaVentas();
         //TODO Falta registrar contablemente el asiento de la factura
-        registro.setDocumento(venta.getIdCliente().getDocumento());
+        registro.setDocumento(venta.getIdPersona().getDocumento());
         registro.setFechaFactura(fechaFactura);
-        registro.setIdCliente(venta.getIdCliente());
-        registro.setIdResponsabilidadIva(venta.getIdCliente().getIdResponsabilidadIva());
+        registro.setIdPersona(venta.getIdPersona());
+        registro.setIdResponsabilidadIva(venta.getIdPersona().getIdResponsabilidadIva());
         registro.setIdPeriodoFiscal(periodoFiscal);
         registro.setLetraFactura(letraComprobante);
         registro.setNumeroFactura(numeroComprobante);
@@ -65,17 +65,18 @@ public class FacturacionVentasBean {
             registroLinea.setIdFactura(registro);
             FiscalAlicuotasIva alicuota = linea.getIdProducto().getIdAlicuotaIva();
             registroLinea.setIdAlicuotaIva(linea.getIdProducto().getIdAlicuotaIva());
-            BigDecimal importeIva;
-            BigDecimal netoGravado;
-            BigDecimal noGravado;
+            BigDecimal importeIva = BigDecimal.ZERO;
+            BigDecimal netoGravado = BigDecimal.ZERO;
+            BigDecimal noGravado = BigDecimal.ZERO;
             if (alicuota.getGravarIva()) {
                 importeIva = linea.getSubTotal().multiply(alicuota.getValorAlicuota().divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
                 netoGravado = linea.getSubTotal().subtract(importeIva).setScale(2, RoundingMode.HALF_UP);
                 noGravado = BigDecimal.ZERO;
             } else {
                 importeIva = BigDecimal.ZERO;
-                noGravado = linea.getSubTotal().multiply(alicuota.getValorAlicuota().divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
-                netoGravado = linea.getSubTotal().subtract(noGravado).setScale(2, RoundingMode.HALF_UP);
+                //noGravado = linea.getSubTotal().multiply(alicuota.getValorAlicuota().divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
+                //netoGravado = linea.getSubTotal().subtract(noGravado).setScale(2, RoundingMode.HALF_UP);
+                noGravado = linea.getSubTotal();//TODO Chequear que esto sea correcto
             }
             registroLinea.setImporteIva(importeIva);
             registroLinea.setNetoGravado(netoGravado);

@@ -46,7 +46,7 @@
             <h:outputText id="subTotalField" value="#{empty nuevaVentaBean.lineaActual ? 0 : nuevaVentaBean.lineaActual.subTotal}" style="text-align: right">
                 <f:convertNumber type="currency" currencySymbol="$" groupingUsed="true" />
             </h:outputText>
-            <p:commandButton icon="ui-icon-circle-arrow-s" update="panelInsertar,productosTable,:formContenido:formProductos:ivaTable" action="#{nuevaVentaBean.agregarLineaVenta()}" />
+            <p:commandButton icon="ui-icon-circle-arrow-s" update="@all" process="@this" action="#{nuevaVentaBean.agregarLineaVenta()}" />
         </h:panelGrid>
         <p:separator />
         <p:dataTable id="productosTable" value="#{nuevaVentaBean.ventaActual.ventasLineasList}" var="lineaVenta"
@@ -112,7 +112,7 @@
                 <f:facet name="header">
                     #{msg.borrar}
                 </f:facet>
-                <p:commandButton icon="ui-icon-close" update="productosTable,:formContenido:formProductos:ivaTable" action="#{nuevaVentaBean.eliminarLinea(lineaVenta)}">
+                <p:commandButton icon="ui-icon-close" process="@this" update="@all" action="#{nuevaVentaBean.eliminarLinea(lineaVenta)}">
 
                 </p:commandButton>
             </p:column>

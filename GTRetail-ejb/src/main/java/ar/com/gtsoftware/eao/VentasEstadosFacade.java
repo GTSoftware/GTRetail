@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsofware.bl;
 
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasLineas;
-import java.util.List;
+package ar.com.gtsoftware.eao;
+
+import ar.com.gtsoftware.model.VentasEstados;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-@LocalBean
-public class ContableBean {
+public class VentasEstadosFacade extends AbstractFacade<VentasEstados> {
+    @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
+    private EntityManager em;
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    public void registrarFacturaVenta(Ventas venta, List<VentasLineas> lineas){
-        
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
+
+    public VentasEstadosFacade() {
+        super(VentasEstados.class);
+    }
+    
 }
