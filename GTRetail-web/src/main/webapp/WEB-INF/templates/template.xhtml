@@ -21,8 +21,10 @@
                     <br/>
                     <p:outputLabel value="#{msg.bienvenido}"/>
                     <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" /> 
+                    
                     <p:spacer width="20"/>
-                    <p:commandLink value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
+                    <p:outputLabel value="#{msg.fecha}:"/>
+                    <p:clock mode="server" id="clock" />
                     <p:ajaxStatus  onstart="dlgLoad.show()" oncomplete="dlgLoad.hide()" onerror="dlgLoad.hide()" onsuccess="dlgLoad.hide()"/>  
                     <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)"> 
                         <h:panelGrid columns="1" >

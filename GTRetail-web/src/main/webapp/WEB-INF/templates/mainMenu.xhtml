@@ -6,6 +6,10 @@
     <h:form id="formMenu" >
         <p:menubar  style="height: fit-content"  autoDisplay="false">
 
+            <p:submenu label="#{msg.sistema}" icon="ui-icon-wrench" >
+                <p:menuitem value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
+            </p:submenu>
+            
             <p:submenu label="#{msg.archivo}" icon="ui-icon-folder-collapsed" >
 
 
