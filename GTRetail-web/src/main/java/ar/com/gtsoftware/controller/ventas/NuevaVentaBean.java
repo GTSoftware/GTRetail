@@ -183,8 +183,8 @@ public class NuevaVentaBean implements Serializable {
         lineaActual.setCantidad(BigDecimal.ZERO);
         lineaActual.setSubTotal(BigDecimal.ZERO);
         productoActual = null;
-        productoSearchFilter.setIdProducto(null);
-        productoSearchFilter.setCodigoPropio(null);
+        productoSearchFilter.setIdProducto(0);
+        productoSearchFilter.setCodigoPropio("");
     }
 
     private void calcularTotalVenta() {
@@ -311,7 +311,7 @@ public class NuevaVentaBean implements Serializable {
         return false;
     }
 
-    public void guardarVenta() {
+    public String guardarVenta() {
         if (validarVenta()) {
             ventaActual.setFechaVenta(GregorianCalendar.getInstance().getTime());
             ventaActual.setIdUsuario(authBackingBean.getUserLoggedIn());
@@ -321,11 +321,13 @@ public class NuevaVentaBean implements Serializable {
                 ventasBean.guardarVenta(ventaActual, pagos);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta", "Venta guardada exitosamente!"));
                 endConversation();
+                return "/protected/ventas/index";
             } catch (Exception ex) {
                 Logger.getLogger(NuevaVentaBean.class.getName()).log(Level.SEVERE, null, ex);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
             }
         }
+        return null;
     }
 
     public String cancelar() {

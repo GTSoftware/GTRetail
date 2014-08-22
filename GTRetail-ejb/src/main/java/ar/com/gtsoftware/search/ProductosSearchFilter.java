@@ -19,6 +19,7 @@ import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -28,6 +29,7 @@ public class ProductosSearchFilter extends SearchFilter {
 
     private String txt;
     private Integer idProducto;
+    @Size(max = 100)
     private String codigoPropio;
     private Boolean activo;
     private ProductosTiposProveeduria idTipoProveeduria;

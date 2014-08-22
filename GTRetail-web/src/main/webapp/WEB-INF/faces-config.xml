@@ -15,6 +15,10 @@
         </navigation-case>
     </navigation-rule>
     <application>
+        <locale-config>
+            <default-locale>es_AR</default-locale>
+        </locale-config>
+        
         <resource-bundle>
             <base-name>ar.com.gtsoftware.Messages</base-name>
             <var>msg</var>

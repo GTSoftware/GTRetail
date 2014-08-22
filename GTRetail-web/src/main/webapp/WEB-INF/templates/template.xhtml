@@ -17,7 +17,7 @@
         <div id="top" >
             <ui:insert name="top">
                 <h:form >
-                    <p:graphicImage library="images" name="logo.png" height="75" width="auto"/>
+                    <p:graphicImage library="images" name="logo.png" height="50" width="auto"/>
                     <br/>
                     <p:outputLabel value="#{msg.bienvenido}"/>
                     <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" /> 
@@ -34,6 +34,7 @@
                     </p:dialog>  
                     <p:growl autoUpdate="true" showDetail="true" showSummary="true" sticky="true"/>
                 </h:form>
+                
                 <ui:include src="mainMenu.xhtml" />
             </ui:insert>
         </div>
