@@ -10,27 +10,30 @@
     <p:fragment id="clienteFragment">
         <h:panelGrid id="clienteActualPanel" columns="2">
 
-            <p:outputLabel  value="#{msg.idCliente}"/>
+            <p:outputLabel for="idClienteField" value="#{msg.idCliente}"/>
 
             <p:inputText id="idClienteField" value="#{nuevaVentaBean.idCliente}" >
 
                 <f:convertNumber integerOnly="true" />
                 <f:validateLongRange minimum="0" />
 
-                <p:ajax   listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
+                <p:ajax  update="@parent"  listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
 
                 <p:commandButton icon="ui-icon-search"  
                                  update=":formContenido:busquedaPersonasDialog" 
                                  oncomplete="clientesDialog.show()"
                                  process="@none" />
 
+                <p:message id="idClienteMessage" for="idClienteField"/>
             </p:inputText>
-            <p:message id="idClienteMessage" for="idClienteField"/>
 
 
 
-            <p:outputLabel for='razonSocialField' value="#{msg.razonSocial}:"/>
-            <p:inputText id="razonSocialField" value="#{nuevaVentaBean.ventaActual.idPersona.razonSocial}"
+
+            <p:outputLabel for='razonSocialField' 
+                           value="#{msg.razonSocial}:"/>
+            <p:inputText id="razonSocialField" 
+                         value="#{nuevaVentaBean.ventaActual.idPersona.razonSocial}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.responsabilidadIVA}:"/>

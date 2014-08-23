@@ -24,8 +24,11 @@
             <f:selectItems value="#{nuevaVentaBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}" itemValue="#{formaPago}"/>
 
         </p:selectOneMenu>
-        <h:outputLabel value="#{msg.importePago}" />
-        <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" />
+        <h:outputLabel for="importePagoField" value="#{msg.importePago}" />
+        <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" >
+            <f:validateDoubleRange minimum="0" maximum="#{nuevaVentaBean.ventaActual.saldo}" />
+        </p:inputText>
+        <p:message for="importePagoField" />
 
         <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="ui-icon-plus" update="pagosTable"/>
 
