@@ -29,6 +29,10 @@
         <connection>scm:https://github.com/GTSoftware/GTRetail.git</connection>
         <developerConnection>scm:https://github.com/GTSoftware/GTRetail.git</developerConnection>
     </scm>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/GTSoftware/GTRetail/issues</url>
+    </issueManagement>
     <developers>
         <developer>
             <id>rodrigo</id>

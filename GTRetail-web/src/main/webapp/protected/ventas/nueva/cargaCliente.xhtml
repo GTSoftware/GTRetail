@@ -4,98 +4,81 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
 
-    <h:panelGrid id="clienteActualPanel" columns="2">
+    <p:fragment id="clienteFragment">
+        <h:panelGrid id="clienteActualPanel" columns="2">
 
-        <p:outputLabel value="#{msg.idCliente}"/>
-        <p:inputText id="idClienteField" value="#{nuevaVentaBean.idCliente}" >
-            <f:convertNumber integerOnly="true" />
-            <p:ajax  update="razonSocialField ivaField documentoField nombrePaisField nombreProvinciaField nombreLocalidadField direccionField" listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
-            <!--
-            <p:commandButton icon="ui-icon-search" action="nuevaVenta.xhtml" update=":formDialog:clientesDialog" oncomplete="clientesDialog.show()"
-                             process="@none" />
-            -->
-        </p:inputText>
+            <p:outputLabel  value="#{msg.idCliente}"/>
+
+            <p:inputText id="idClienteField" value="#{nuevaVentaBean.idCliente}" >
+
+                <f:convertNumber integerOnly="true" />
+                <f:validateLongRange minimum="0" />
+
+                <p:ajax   listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
+
+                <p:commandButton icon="ui-icon-search"  
+                                 update=":formContenido:busquedaPersonasDialog" 
+                                 oncomplete="clientesDialog.show()"
+                                 process="@none" />
+
+            </p:inputText>
+            <p:message id="idClienteMessage" for="idClienteField"/>
 
 
 
-        <p:outputLabel value="#{msg.razonSocial}"/>
-        <p:inputText id="razonSocialField" value="#{nuevaVentaBean.ventaActual.idPersona.razonSocial}" readonly="true"/>
-        <p:outputLabel value="#{msg.responsabilidadIVA}"/>
-        <p:inputText id="ivaField" value="#{nuevaVentaBean.ventaActual.idPersona.idResponsabilidadIva.nombreResponsabildiad}" readonly="true"/>
-        <p:outputLabel value="#{msg.documento}"/>
-        <p:inputText id="documentoField" value="#{nuevaVentaBean.ventaActual.idPersona.documento}" readonly="true"/>
-        <p:outputLabel value="#{msg.pais}"/>
-        <p:inputText id="nombrePaisField" value="#{nuevaVentaBean.ventaActual.idPersona.idPais.nombrePais}" readonly="true"/>
-        <p:outputLabel value="#{msg.provincia}"/>
-        <p:inputText id="nombreProvinciaField" value="#{nuevaVentaBean.ventaActual.idPersona.idProvincia.nombreProvincia}" readonly="true"/>
-        <p:outputLabel value="#{msg.localidad}"/>
-        <p:inputText id="nombreLocalidadField" value="#{nuevaVentaBean.ventaActual.idPersona.idLocalidad.nombreLocalidad}" readonly="true"/>
-        <p:outputLabel value="#{msg.direccion}"/>
-        <p:inputTextarea id="direccionField" value="#{nuevaVentaBean.ventaActual.idPersona.calle.concat(' ').concat(nuevaVentaBean.ventaActual.idPersona.altura)}" readonly="true"/>
+            <p:outputLabel for='razonSocialField' value="#{msg.razonSocial}:"/>
+            <p:inputText id="razonSocialField" value="#{nuevaVentaBean.ventaActual.idPersona.razonSocial}"
+                         readonly="true"/>
 
-    </h:panelGrid>
-    
-    <!--
-    <p:dialog header="Búsqueda de clientes"  widgetVar="clientesDialog" resizable="true" id="clientesDialog"  closeOnEscape="true"
-                              showEffect="fade" hideEffect="clip" modal="true"> 
+            <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
+            <p:inputText id="ivaField" value="#{nuevaVentaBean.ventaActual.idPersona.idResponsabilidadIva.nombreResponsabildiad}" 
+                         readonly="true"/>
 
-                        <h:panelGrid columns="3">
-                            <p:outputLabel value="Búsqueda:"/>
-                            <p:inputText id="cadenaBusquedaCliField" value="#{clientesBean.cadenaBusqueda}" size="50"/>
-                            <p:commandButton  action="#{clientesBean.doBuscarClientes()}" process="@this,cadenaBusquedaCliField" value="Buscar" update=":formDialog:clientesBusquedaTable" icon="ui-icon-search"/>
-                        </h:panelGrid>
+            <p:outputLabel value="#{msg.documento}:"/>
+            <p:inputText id="documentoField" value="#{nuevaVentaBean.ventaActual.idPersona.documento}" 
+                         readonly="true"/>
 
-                        <p:separator />
+            <p:outputLabel value="#{msg.pais}:"/>
+            <p:inputText id="nombrePaisField" value="#{nuevaVentaBean.ventaActual.idPersona.idPais.nombrePais}" 
+                         readonly="true"/>
 
-                        <h:panelGrid id="displayBusCli" columns="1" cellpadding="4" style="margin:0 auto;">  
+            <p:outputLabel value="#{msg.provincia}:"/>
+            <p:inputText id="nombreProvinciaField" value="#{nuevaVentaBean.ventaActual.idPersona.idProvincia.nombreProvincia}" 
+                         readonly="true"/>
 
-                            <p:dataTable id="clientesBusquedaTable" var="cli" value="#{clientesBean.clientesList}" 
-                                         rows="15"
-                                         paginator="true"
-                                         sortMode="multiple"
-                                         emptyMessage="No hay clientes que coincidan con los términos de búsqueda..." 
-                                         selectionMode="single"
-                                         selection="#{nuevaVentaBean.ventaActual.idCliente}" 
-                                         rowKey="#{cli.idCliente}"
-                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                                         rowsPerPageTemplate="10,15,30"
-                                         style="width: 100%"
-                                         resizableColumns="true"
-                                         scrollable="true" >  
+            <p:outputLabel value="#{msg.localidad}:"/>
+            <p:inputText id="nombreLocalidadField" value="#{nuevaVentaBean.ventaActual.idPersona.idLocalidad.nombreLocalidad}" 
+                         readonly="true"/>
 
-                                <p:ajax event="rowSelect" listener="#{nuevaVentaBean.doSetIdClienteBusqueda(cli.idCliente)}" />
-                                <p:column headerText="Id" style="width:24%">  
-                                    <h:outputText value="#{cli.idCliente}" />  
-                                </p:column>  
+            <p:outputLabel value="#{msg.direccion}:"/>
+            <p:inputTextarea id="direccionField" value="#{nuevaVentaBean.ventaActual.idPersona.calle.concat(' ').concat(nuevaVentaBean.ventaActual.idPersona.altura)}" 
+                             readonly="true"/>
 
-                                <p:column headerText="Razón social" style="width:24%">  
-                                    <h:outputText value="#{cli.razonSocial}" />  
-                                </p:column>  
+        </h:panelGrid>
+    </p:fragment>
 
-                                <p:column headerText="Documento" style="width:24%">  
-                                    <h:outputText value="#{cli.documento}" >
-                                        <f:convertNumber groupingUsed="true" type="number"/>
-                                    </h:outputText>  
-                                </p:column>  
-                                <p:column headerText="Dirección" style="width:24%">  
-                                    <h:outputText value="#{cli.direccion}" />
-                                </p:column>  
-                                <p:column headerText="Provincia" style="width:24%">  
-                                    <h:outputText value="#{cli.idProvincia.nombreProvincia}" />
-                                </p:column>  
-                                <p:column headerText="Localidad" style="width:24%">  
-                                    <h:outputText value="#{cli.idLocalidad.nombreLocalidad}" />
-                                </p:column>  
-                                <p:column headerText="Teléfono" style="width:24%">  
-                                    <h:outputText value="#{cli.telefonoFijo}" />
-                                </p:column>  
 
-                            </p:dataTable>    
-                            <p:commandButton value="OK" icon="ui-icon-check" oncomplete="clientesDialog.hide()" update=":formContenido:clienteActualPanel"/> 
+    <p:dialog id='busquedaPersonasDialog' 
+              header="#{msg.busquedaClientes}" 
+              widgetVar="clientesDialog"
+              resizable="true" 
+              closeOnEscape="true"
+              showEffect="fade" hideEffect="clip" modal="true"> 
 
-                        </h:panelGrid>                          
-                    </p:dialog>  
-    -->
+        <gtsoftware:busquedaPersonas personaSeleccionada="#{nuevaVentaBean.ventaActual.idPersona}"
+                                     textoBusqueda="#{clientesSearchBean.filter.txt}"
+                                     busquedaAction="#{clientesSearchBean.doSearch()}"
+                                     personasList="#{clientesSearchBean.clientesList}"
+                                     >
+        </gtsoftware:busquedaPersonas>
+        <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                         oncomplete="clientesDialog.hide()" 
+                         update=":formContenido:clienteFragment"/> 
+
+
+    </p:dialog>  
+
 </html>

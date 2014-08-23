@@ -17,9 +17,9 @@
             <p:panel id="panel" header="#{msg.loginHeader}" style="position: absolute;left: 50% ;margin-left: -150px;margin-top: 100px">
                 <p:focus context="panel"/>  
                 <h:panelGrid columns="2">
-                    <h:outputLabel for="j_username">#{msg.usuario}</h:outputLabel>
+                    <h:outputLabel for="j_username">#{msg.usuario}:</h:outputLabel>
                     <p:inputText id="j_username" required="true" value="" title="El nombre de usuario"/>
-                    <h:outputLabel for="j_password">#{msg.password}</h:outputLabel>
+                    <h:outputLabel for="j_password">#{msg.password}:</h:outputLabel>
                     <p:password id="j_password" required="true" value="" feedback="false" title="Su contraseña" />
                 </h:panelGrid>
                 <h:commandButton value="#{msg.logIn}" type="submit" title="#{msg.logInButtonTitle}"/>
