@@ -15,10 +15,10 @@
  */
 package ar.com.gtsoftware.search;
 
+import ar.com.gtsoftware.model.Depositos;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros;
-import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import javax.validation.constraints.Size;
 
 /**
@@ -32,16 +32,27 @@ public class ProductosSearchFilter extends SearchFilter {
     @Size(max = 100)
     private String codigoPropio;
     private Boolean activo;
-    private ProductosTiposProveeduria idTipoProveeduria;
+    private Boolean puedeComprarse;
+    private Boolean puedeVenderse;
     private ProductosSubRubros idSubRubro;
     private ProductosRubros idRubro;
     private Personas idProveedorHabitual;
+    private Depositos conStockEnDeposito;
+
+    public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse) {
+        this.activo = activo;
+        this.puedeComprarse = puedeComprarse;
+        this.puedeVenderse = puedeVenderse;
+    }
+
+    public ProductosSearchFilter() {
+    }
 
     @Override
     public boolean hasFilter() {
         return (txt != null && !txt.isEmpty()) || (idProducto != null) || (codigoPropio != null && !codigoPropio.isEmpty())
-                || (activo != null) || (idTipoProveeduria != null) || (idRubro != null) || (idSubRubro != null)
-                || (idProveedorHabitual != null);
+                || (activo != null) || (puedeComprarse != null) || (puedeVenderse != null) || (idRubro != null) || (idSubRubro != null)
+                || (idProveedorHabitual != null) || (conStockEnDeposito != null);
     }
 
     public String getTxt() {
@@ -76,12 +87,20 @@ public class ProductosSearchFilter extends SearchFilter {
         this.activo = activo;
     }
 
-    public ProductosTiposProveeduria getIdTipoProveeduria() {
-        return idTipoProveeduria;
+    public Boolean getPuedeComprarse() {
+        return puedeComprarse;
     }
 
-    public void setIdTipoProveeduria(ProductosTiposProveeduria idTipoProveeduria) {
-        this.idTipoProveeduria = idTipoProveeduria;
+    public void setPuedeComprarse(Boolean puedeComprarse) {
+        this.puedeComprarse = puedeComprarse;
+    }
+
+    public Boolean getPuedeVenderse() {
+        return puedeVenderse;
+    }
+
+    public void setPuedeVenderse(Boolean puedeVenderse) {
+        this.puedeVenderse = puedeVenderse;
     }
 
     public ProductosSubRubros getIdSubRubro() {
@@ -106,6 +125,14 @@ public class ProductosSearchFilter extends SearchFilter {
 
     public void setIdProveedorHabitual(Personas idProveedorHabitual) {
         this.idProveedorHabitual = idProveedorHabitual;
+    }
+
+    public Depositos getConStockEnDeposito() {
+        return conStockEnDeposito;
+    }
+
+    public void setConStockEnDeposito(Depositos conStockenDeposito) {
+        this.conStockEnDeposito = conStockenDeposito;
     }
 
 }

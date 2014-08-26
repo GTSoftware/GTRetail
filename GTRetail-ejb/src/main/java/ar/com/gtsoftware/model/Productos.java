@@ -18,22 +18,18 @@ package ar.com.gtsoftware.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -84,20 +80,6 @@ public class Productos extends BaseEntity implements Serializable {
     @Size(max = 20)
     @Column(name = "ubicacion")
     private String ubicacion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<StockMovimientos> stockMovimientosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<ProductosXCaracteristicas> productosXCaracteristicasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<ProductosImagenes> productosImagenesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<VentasCargosFijos> ventasCargosFijosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<VentasRemitosLineas> ventasRemitosLineasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<ProductosPorcentajes> productosPorcentajesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<VentasLineas> ventasLineasList;
     @JoinColumn(name = "id_tipo_unidad_venta", referencedColumnName = "id_tipo_unidad")
     @ManyToOne(optional = false)
     private ProductosTiposUnidades idTipoUnidadVenta;
@@ -119,8 +101,7 @@ public class Productos extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva")
     @ManyToOne(optional = false)
     private FiscalAlicuotasIva idAlicuotaIva;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private List<ProveedoresOrdenesCompraLineas> proveedoresOrdenesCompraLineasList;
+    
 
     public Productos() {
     }
@@ -219,69 +200,6 @@ public class Productos extends BaseEntity implements Serializable {
         this.ubicacion = ubicacion;
     }
 
-    @XmlTransient
-    public List<StockMovimientos> getStockMovimientosList() {
-        return stockMovimientosList;
-    }
-
-    public void setStockMovimientosList(List<StockMovimientos> stockMovimientosList) {
-        this.stockMovimientosList = stockMovimientosList;
-    }
-
-    @XmlTransient
-    public List<ProductosXCaracteristicas> getProductosXCaracteristicasList() {
-        return productosXCaracteristicasList;
-    }
-
-    public void setProductosXCaracteristicasList(List<ProductosXCaracteristicas> productosXCaracteristicasList) {
-        this.productosXCaracteristicasList = productosXCaracteristicasList;
-    }
-
-    @XmlTransient
-    public List<ProductosImagenes> getProductosImagenesList() {
-        return productosImagenesList;
-    }
-
-    public void setProductosImagenesList(List<ProductosImagenes> productosImagenesList) {
-        this.productosImagenesList = productosImagenesList;
-    }
-
-    @XmlTransient
-    public List<VentasCargosFijos> getVentasCargosFijosList() {
-        return ventasCargosFijosList;
-    }
-
-    public void setVentasCargosFijosList(List<VentasCargosFijos> ventasCargosFijosList) {
-        this.ventasCargosFijosList = ventasCargosFijosList;
-    }
-
-    @XmlTransient
-    public List<VentasRemitosLineas> getVentasRemitosLineasList() {
-        return ventasRemitosLineasList;
-    }
-
-    public void setVentasRemitosLineasList(List<VentasRemitosLineas> ventasRemitosLineasList) {
-        this.ventasRemitosLineasList = ventasRemitosLineasList;
-    }
-
-    @XmlTransient
-    public List<ProductosPorcentajes> getProductosPorcentajesList() {
-        return productosPorcentajesList;
-    }
-
-    public void setProductosPorcentajesList(List<ProductosPorcentajes> productosPorcentajesList) {
-        this.productosPorcentajesList = productosPorcentajesList;
-    }
-
-    @XmlTransient
-    public List<VentasLineas> getVentasLineasList() {
-        return ventasLineasList;
-    }
-
-    public void setVentasLineasList(List<VentasLineas> ventasLineasList) {
-        this.ventasLineasList = ventasLineasList;
-    }
-
     public ProductosTiposUnidades getIdTipoUnidadVenta() {
         return idTipoUnidadVenta;
     }
@@ -336,15 +254,6 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setIdAlicuotaIva(FiscalAlicuotasIva idAlicuotaIva) {
         this.idAlicuotaIva = idAlicuotaIva;
-    }
-
-    @XmlTransient
-    public List<ProveedoresOrdenesCompraLineas> getProveedoresOrdenesCompraLineasList() {
-        return proveedoresOrdenesCompraLineasList;
-    }
-
-    public void setProveedoresOrdenesCompraLineasList(List<ProveedoresOrdenesCompraLineas> proveedoresOrdenesCompraLineasList) {
-        this.proveedoresOrdenesCompraLineasList = proveedoresOrdenesCompraLineasList;
     }
 
     @Override

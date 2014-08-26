@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2014 GT Software.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <composite:interface>
+        <composite:attribute name="textoBusqueda"  type="java.lang.String" />
+        <composite:attribute name="productosList"   />
+        <composite:attribute name="productoSeleccionado" type="ar.com.gtsoftware.model.Productos" />
+        <composite:attribute name="busquedaAction" method-signature="void busquedaAction()" />
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form id="busquedaProductosForm" >
+            <p:fragment>
+                <h:panelGrid columns="3">
+                    <p:outputLabel value="#{msg.busqueda}"/>
+                    <p:inputText id="cadenaBusquedaProdField" 
+                                 value="#{cc.attrs.textoBusqueda}" 
+                                 size="50"/>
+                    <p:commandButton  action="#{cc.attrs.busquedaAction}" 
+                                      process="@this" 
+                                      value="#{msg.buscar}" 
+                                      update="productosBusquedaTable" 
+                                      icon="ui-icon-search"/>
+                </h:panelGrid>
+
+                <p:separator />
+
+
+
+                <p:dataTable id="productosBusquedaTable" var="pro" value="#{cc.attrs.productosList}" 
+                             rows="15"
+                             paginator="true"
+                             sortMode="multiple"
+                             emptyMessage="#{msg.busquedaSinResultados}" 
+                             selectionMode="single"
+                             selection="#{cc.attrs.productoSeleccionado}" 
+                             rowKey="#{pro.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="10,15,30"
+                             style="width: 100%"
+                             resizableColumns="true"
+                             scrollable="true" >
+
+                    <p:ajax event="rowSelect"  />
+
+                    <p:column style="width:5%">  
+                        <f:facet name="header">
+                            #{msg.id}
+                        </f:facet>
+                        <h:outputText value="#{pro.id}" />  
+                    </p:column>  
+
+                    <p:column  >  
+                        <f:facet name="header">
+                            #{msg.descripcion}
+                        </f:facet>
+                        <h:outputText value="#{pro.descripcion}" />  
+                    </p:column>  
+                    
+                    <p:column headerText="Stock" style="text-align: right">  
+                         <f:facet name="header">
+                            #{msg.stock}
+                        </f:facet>
+                        <h:outputText value="#{pro.stockTotal}" >
+                            <f:convertNumber groupingUsed="true" type="number"/>
+                        </h:outputText>  
+                    </p:column>  
+                    
+                    <p:column style="text-align: right; font-size: large; font-weight: bold ">  
+                        <f:facet name="header">
+                            #{msg.precioUnitario}
+                        </f:facet>
+                        <h:outputText value="#{pro.precioVenta}" >
+                            <f:convertNumber groupingUsed="true" type="currency"/>
+                        </h:outputText>  
+                    </p:column>
+                    <p:column  >  
+                        <f:facet name="header">
+                            #{msg.unidadVenta}
+                        </f:facet>
+                        <h:outputText value="#{pro.idTipoUnidadVenta.nombreUnidad}" />  
+                    </p:column>  
+                    <p:column  >  
+                        <f:facet name="header">
+                            #{msg.ubicacion}
+                        </f:facet>
+                        <h:outputText value="#{pro.ubicacion}" />  
+                    </p:column>  
+
+                </p:dataTable>
+            </p:fragment>
+        </h:form>
+    </composite:implementation>
+</html>
