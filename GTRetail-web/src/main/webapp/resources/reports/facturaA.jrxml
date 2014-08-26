@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaB" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="28" bottomMargin="5" uuid="e8835b76-6390-40c7-b780-e3961ae4b5d7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="com.gtsoft.model.*"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="idCliente" class="com.gtsoft.model.Clientes">
+		<fieldDescription><![CDATA[idCliente]]></fieldDescription>
+	</field>
+	<field name="idCondicionVenta" class="com.gtsoft.model.NegocioCondicionesOperaciones">
+		<fieldDescription><![CDATA[idCondicionVenta]]></fieldDescription>
+	</field>
+	<field name="idRegistroIva" class="com.gtsoft.model.FiscalLibroIvaVentas">
+		<fieldDescription><![CDATA[idRegistroIva]]></fieldDescription>
+	</field>
+	<field name="idSucursal" class="com.gtsoft.model.Sucursales">
+		<fieldDescription><![CDATA[idSucursal]]></fieldDescription>
+	</field>
+	<field name="idUsuario" class="com.gtsoft.model.Usuarios">
+		<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="ventasLineasList" class="java.util.List">
+		<fieldDescription><![CDATA[ventasLineasList]]></fieldDescription>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<fieldDescription><![CDATA[observaciones]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="403" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="175" width="555" height="158" uuid="846f5855-9b3e-42e2-8531-8062d0977a80"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["facturaB_lineas.jasper"]]></subreportExpression>
+			</subreport>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="343" y="365" width="212" height="20" uuid="0bc100cd-6725-490e-8a1a-27fe6d352793"/>
+				<textElement textAlignment="Right">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="365" width="343" height="20" uuid="03e61075-ab63-4f24-a24a-5f39c27e542d"/>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="333" width="343" height="29" uuid="015b4a17-663e-4afe-938c-997e18b43256"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ACLARACIÓN            D.N.I.
+FIRMADA LA PRESENTE CONFIRMA RECEPCIÓN DE MERCADERÍA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="343" y="364" width="212" height="1" uuid="c82120d0-e392-4ffe-8473-3e44b2941546"/>
+			</line>
+			<textField>
+				<reportElement x="75" y="82" width="283" height="20" uuid="aef6ea89-1076-4090-8f88-4d5c24621b30"/>
+				<textFieldExpression><![CDATA["["+$F{idCliente}.getIdCliente()+"] "+$F{idCliente}.getRazonSocial()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="102" width="283" height="20" uuid="9106efab-966d-4c54-9eb8-5d32a1e349e9"/>
+				<textFieldExpression><![CDATA[""+$F{idCliente}.getDireccion()+" "+$F{idCliente}.getIdLocalidad().getNombreLocalidad()+" "+$F{idCliente}.getIdProvincia().getNombreProvincia()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="122" width="283" height="20" uuid="534699ab-aff7-4463-91d4-e2bb071afd15"/>
+				<textFieldExpression><![CDATA[""+$F{idCliente}.getIdResponsabilidadIva().getNombreResponsabildiad()]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="434" y="82" width="121" height="20" uuid="cd691498-b4e0-493a-909d-1f3ab7eb2961"/>
+				<textFieldExpression><![CDATA[$F{idRegistroIva}.getFechaFactura()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="479" y="102" width="76" height="20" uuid="42dd0af4-ec7d-469d-86de-ea694761e8dd"/>
+				<textFieldExpression><![CDATA[$F{idCliente}.getDocumento()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="357" y="0" width="198" height="20" uuid="41e691cb-cf65-4ea4-8ebf-a640feb0f63c"/>
+				<textFieldExpression><![CDATA[$F{idRegistroIva}.getLetraFactura()+" "+$F{idRegistroIva}.getPuntoVentaFactura()+"-"+$F{idRegistroIva}.getNumeroFactura()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="155" width="159" height="20" uuid="5f81cbf3-9b8a-45c0-bb0a-c7ad250c0ae8"/>
+				<textFieldExpression><![CDATA[$F{idCondicionVenta}.getNombreCondicion()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="434" y="102" width="45" height="20" uuid="ab224b5b-eb86-40ba-9dc6-7b04af781ebf"/>
+				<textFieldExpression><![CDATA[$F{idCliente}.getIdTipoDocumento().getNombreTipoDocumento()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="426" y="333" width="29" height="20" uuid="9e76c27b-db6a-4bfe-a7e0-8052204ba181"/>
+				<text><![CDATA[IVA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="455" y="333" width="100" height="20" uuid="78c5ff90-a6a5-477a-898f-27e993eabc6f"/>
+				<textFieldExpression><![CDATA[$F{idRegistroIva}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

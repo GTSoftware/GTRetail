@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="presupuesto" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
+	<property name="ireport.zoom" value="1.331000000000001"/>
+	<property name="ireport.x" value="105"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="direccion_empresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="telefono_empresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="email_empresa" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cuit_empresa" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="idCondicionVenta" class="ar.com.gtsoftware.model.NegocioCondicionesOperaciones">
+		<fieldDescription><![CDATA[idCondicionVenta]]></fieldDescription>
+	</field>
+	<field name="idSucursal" class="ar.com.gtsoftware.model.Sucursales">
+		<fieldDescription><![CDATA[idSucursal]]></fieldDescription>
+	</field>
+	<field name="fechaVenta" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaVenta]]></fieldDescription>
+	</field>
+	<field name="idPersona" class="ar.com.gtsoftware.model.Personas">
+		<fieldDescription><![CDATA[idPersona]]></fieldDescription>
+	</field>
+	<field name="saldo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[saldo]]></fieldDescription>
+	</field>
+	<field name="id_1" class="java.lang.Integer">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="ventasPagosLineasList" class="java.util.List">
+		<fieldDescription><![CDATA[ventasPagosLineasList]]></fieldDescription>
+	</field>
+	<field name="ventasLineasList" class="java.util.List">
+		<fieldDescription><![CDATA[ventasLineasList]]></fieldDescription>
+	</field>
+	<field name="observaciones" class="java.lang.String">
+		<fieldDescription><![CDATA[observaciones]]></fieldDescription>
+	</field>
+	<field name="idRegistroIva" class="ar.com.gtsoftware.model.FiscalLibroIvaVentas">
+		<fieldDescription><![CDATA[idRegistroIva]]></fieldDescription>
+	</field>
+	<field name="anulada" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[anulada]]></fieldDescription>
+	</field>
+	<field name="idUsuario" class="ar.com.gtsoftware.model.Usuarios">
+		<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
+	</field>
+	<field name="ventasRemitosList" class="java.util.List">
+		<fieldDescription><![CDATA[ventasRemitosList]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="144" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="0" y="0" width="555" height="144" uuid="28e5fafc-45cb-4bf5-9a81-b0c76d03119f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="328" y="0" width="100" height="20" uuid="690c370e-181d-49a0-a286-10ad0e0332eb"/>
+				<text><![CDATA[Venta Nro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="105" width="44" height="20" uuid="7e7f1f5f-5755-4278-97a1-59ccbd864c0e"/>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="49" y="105" width="284" height="20" uuid="ce42804b-3822-4c27-847d-4072f15c4578"/>
+				<textFieldExpression><![CDATA[$F{idPersona}.getRazonSocial()+" - \""+$F{idPersona}.getNombreFantasia()+"\""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="428" y="0" width="127" height="20" uuid="2ff28c94-d486-4a4f-9e48-fc0503a60332"/>
+				<textFieldExpression><![CDATA[$F{id}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="328" y="20" width="100" height="20" uuid="c5e45c98-dfb7-44b6-829c-bca9f101868f"/>
+				<text><![CDATA[Fecha impresión:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h:mm a">
+				<reportElement x="428" y="20" width="127" height="20" uuid="d24ef876-2571-4b81-bd80-ad6bb64cdc31"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="266" y="0" width="23" height="40" uuid="e954d5f6-1565-42e0-8809-791e5164d1b1"/>
+				<textElement textAlignment="Center">
+					<font size="32" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="266" y="0" width="23" height="40" uuid="a4a400f8-8806-48cf-8371-ed45313d1300"/>
+			</rectangle>
+			<image onErrorType="Blank">
+				<reportElement x="5" y="0" width="178" height="60" uuid="21c2d15c-6ddd-4563-8c81-75fb0fc6f7ed"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="1" y="104" width="554" height="1" uuid="f8d88cd1-11a5-4ed7-8632-535fe81c62bd"/>
+			</line>
+			<textField>
+				<reportElement x="5" y="60" width="178" height="20" uuid="f640cb72-cc54-4c87-98fb-971974caf019"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{direccion_empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="80" width="100" height="20" uuid="716ab30a-8fed-494a-9894-a535481045bf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{telefono_empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="80" width="100" height="20" uuid="0f5e1c88-8339-49bb-a95e-47ba9864c8e3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{email_empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="345" y="105" width="26" height="20" uuid="8e8e7b1d-44ae-4dcb-adf6-b0cda409652c"/>
+				<text><![CDATA[IVA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="371" y="105" width="184" height="20" uuid="c787a72f-ea3a-43b5-bb54-c50b682cab1a"/>
+				<textFieldExpression><![CDATA[$F{idPersona}.getIdResponsabilidadIva().getNombreResponsabildiad()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="277" y="40" width="1" height="65" uuid="3bf5b3a5-4a6d-45ed-a054-40147fb54dd3"/>
+			</line>
+			<textField>
+				<reportElement x="307" y="60" width="100" height="20" uuid="deb92137-bb61-4089-b927-e242872c4811"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cuit_empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="283" y="60" width="24" height="20" uuid="d8eeea93-e959-42a5-bf7c-ebf67aea9cc6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CUIT:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="49" y="124" width="506" height="20" uuid="bea8e7f0-5751-4acf-a526-828ed35c9eec"/>
+				<textFieldExpression><![CDATA[$F{idPersona}.getCalle()+" "+$F{idPersona}.getAltura()+ " - "+$F{idPersona}.getIdLocalidad().getNombreLocalidad()+" - "+$F{idPersona}.getIdProvincia().getNombreProvincia()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="167">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="161" uuid="55ff1480-407e-487c-926f-34e77effe1cc"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["vistaVentas_lineas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="47" splitType="Stretch">
+			<textField>
+				<reportElement x="456" y="0" width="100" height="20" uuid="522e1e4b-c8fb-49f6-900e-7b35575c41a9"/>
+				<textFieldExpression><![CDATA[$F{idUsuario}.getNombreUsuario()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="356" y="0" width="100" height="20" uuid="f8dd3c61-b0c0-4507-b30f-0b52979006d0"/>
+				<text><![CDATA[Usuario:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="0" width="279" height="20" uuid="ee33d368-7358-4c30-8748-5862962c0020"/>
+				<text><![CDATA[*** COMPROBANTE NO VÁLIDO COMO FACTURA ***]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="20" width="343" height="20" uuid="70c5dc5d-dd9d-4a6b-837f-97fbeded524e"/>
+				<text><![CDATA[*** PRECIOS SUJETOS A MODIFICACION SIN PREVIO AVISO ***]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
