@@ -31,8 +31,6 @@ import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsofware.bl.VentasBean;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -52,13 +50,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
@@ -363,30 +354,7 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
-    /**
-     * Muestra la venta como PDF
-     *
-     * @throws IOException
-     * @throws JRException
-     */
-    public void doMostrarVenta() throws IOException, JRException {
-        List<Ventas> ventas = new ArrayList<>();
-        ventas.add(ventaActual);
-        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
-        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/vistaVenta.jasper");
-        //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
-        HashMap<String, Object> parameters = new HashMap<>();
-        //TODO Agregar parámetros de empresa y demás
-        //BufferedImage image = ImageIO.read(getClass().getResource(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png")));
-        //parameters.put("logo", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png"));
-        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
-        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
-        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
-        FacesContext.getCurrentInstance().responseComplete();
-    }
-
+    
     public ProductosSearchFilter getProductoSearchFilter() {
         return productoSearchFilter;
     }

@@ -10,9 +10,10 @@
             <ui:define name="content" >
                 <h:form id="formContenido">
                     <p:panel id="cargaVentaPanel" header="#{msg.nuevaVenta}" >
-                        
-                        <p:commandButton value="Presupuesto" action="#{nuevaVentaBean.doMostrarVenta()}" ajax="false"/> 
-                        
+
+                        <p:commandButton value="#{msg.presupuesto}" 
+                                         action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/> 
+
                         <p:wizard backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >  
 
                             <p:tab id="productosTab" title="#{msg.productos}">  

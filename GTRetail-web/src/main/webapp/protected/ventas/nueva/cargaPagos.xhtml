@@ -44,7 +44,7 @@
         <f:facet name="header" >
             #{msg.pagosVenta}
         </f:facet>
-        <p:column sortBy="#{pago.idFormaPago}" headerText="Forma de pago" style="text-align: left">
+        <p:column sortBy="#{pago.idFormaPago}" headerText="#{msg.formaPago}" style="text-align: left">
             <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
         </p:column>
         <p:column sortBy="#{pago.importeTotalPagado}" headerText="Importe" style="text-align: right">
@@ -60,7 +60,7 @@
         </p:column>
         <p:columnGroup type="footer">
             <p:row>  
-                <p:column colspan="1" footerText="Saldo:"  
+                <p:column colspan="1" footerText="#{msg.saldo}:"  
                           style="text-align:right; font-size: larger"  />  
 
                 <p:column footerText="\$#{nuevaVentaBean.ventaActual.saldo}" style=" font-size: xx-large" />  
@@ -71,6 +71,6 @@
     <br/>
     <p:inputTextarea style="width: 100%" value="#{nuevaVentaBean.ventaActual.observaciones}" maxlength="1024" autoResize="true" />
     <p:separator />
-    <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}"  />
+    <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}" immediate="true"  />
     <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" action="#{nuevaVentaBean.cancelar()}" immediate="true" ajax="false"  />
 </html>

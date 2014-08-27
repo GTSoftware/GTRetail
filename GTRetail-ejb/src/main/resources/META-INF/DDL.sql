@@ -3240,6 +3240,14 @@ COPY negocio_formas_pago (id_forma_pago, nombre_forma_pago, nombre_corto, venta,
 --
 
 COPY parametros (nombre_parametro, valor_parametro, descripcion_parametro) FROM stdin;
+empresa.nombre	Empresa de pruebas	Nombre de la empresa
+empresa.cuit	2024257715	CUIT de la empresa
+empresa.direccion	Av Falsa 123	Dirección de la empresa
+empresa.localidad	Springfield	Localidad de la empresa
+empresa.provincia	Chaco	Provincia de la empresa
+empresa.telefono.fijo	(0362) 412345	Teléfono fijo de la empresa
+empresa.email	a@a.com.ar	Email de la empresa
+empresa.razon.social	Pruebas SRL	Razón social de la empresa
 \.
 
 
@@ -3261,6 +3269,8 @@ COPY personas (id_persona, razon_social, apellidos, nombres, nombre_fantasia, id
 
 COPY personas_cuenta_corriente (id_movimiento, id_persona, fecha_movimiento, importe_movimiento, descripcion_movimiento, id_registro_contable) FROM stdin;
 3	1	2014-08-21 02:05:37.039	-100.00	Venta Nro: 3	\N
+4	1	2014-08-22 19:22:35.338	-150.00	Venta Nro: 4	\N
+5	1	2014-08-23 02:00:03.575	-37.50	Venta Nro: 5	\N
 \.
 
 
@@ -3268,7 +3278,7 @@ COPY personas_cuenta_corriente (id_movimiento, id_persona, fecha_movimiento, imp
 -- Name: personas_cuenta_corriente_id_movimiento_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('personas_cuenta_corriente_id_movimiento_seq', 3, true);
+SELECT pg_catalog.setval('personas_cuenta_corriente_id_movimiento_seq', 5, true);
 
 
 --
@@ -3744,6 +3754,8 @@ SELECT pg_catalog.setval('usuarios_id_usuario_seq', 1, true);
 
 COPY ventas (id_venta, fecha_venta, id_usuario, id_sucursal, total, id_condicion_venta, saldo, id_registro_iva, observaciones, anulada, id_persona, id_estado, version) FROM stdin;
 3	2014-08-21 02:05:36.946	1	1	100.00	1	100.00	\N	El cliente paga con $100	f	1	2	1
+4	2014-08-22 19:22:35.135	1	1	150.00	1	150.00	\N		f	1	2	1
+5	2014-08-23 02:00:03.361	1	1	37.50	1	37.50	\N	Test	f	1	2	1
 \.
 
 
@@ -3807,7 +3819,7 @@ SELECT pg_catalog.setval('ventas_formas_pago_id_forma_pago_seq', 4, true);
 -- Name: ventas_id_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_id_venta_seq', 3, true);
+SELECT pg_catalog.setval('ventas_id_venta_seq', 5, true);
 
 
 --
@@ -3816,6 +3828,9 @@ SELECT pg_catalog.setval('ventas_id_venta_seq', 3, true);
 
 COPY ventas_lineas (id_linea_venta, id_venta, id_producto, precio_venta_unitario, cantidad, sub_total, costo_neto_unitario, costo_bruto_unitario, cantidad_entregada, id_linea_venta_referencia, version) FROM stdin;
 3	3	2	12.50	8.00	100.00	12.00	12.00	0.00	\N	1
+4	4	2	12.50	8.00	100.00	12.00	12.00	0.00	\N	1
+5	4	2	12.50	4.00	50.00	12.00	12.00	0.00	\N	1
+6	5	2	12.50	3.00	37.50	12.00	12.00	0.00	\N	1
 \.
 
 
@@ -3823,7 +3838,7 @@ COPY ventas_lineas (id_linea_venta, id_venta, id_producto, precio_venta_unitario
 -- Name: ventas_lineas_id_linea_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 3, true);
+SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 6, true);
 
 
 --
@@ -3832,6 +3847,8 @@ SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 3, true);
 
 COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagado, observaciones, id_sucursal, id_usuario, id_persona, version, id_movimiento_caja) FROM stdin;
 2	2014-08-21 02:05:36.946	1	100.00	\N	1	1	1	1	\N
+3	2014-08-22 19:22:35.135	1	150.00	\N	1	1	1	1	\N
+4	2014-08-23 02:00:03.361	1	37.50	\N	1	1	1	1	\N
 \.
 
 
@@ -3839,7 +3856,7 @@ COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagad
 -- Name: ventas_pagos_id_pago_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 2, true);
+SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 4, true);
 
 
 --
@@ -3848,6 +3865,8 @@ SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 2, true);
 
 COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe, version, id_movimiento_caja) FROM stdin;
 1	2	3	100.00	1	\N
+2	3	4	150.00	1	\N
+3	4	5	37.50	1	\N
 \.
 
 
@@ -3855,7 +3874,7 @@ COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe, versi
 -- Name: ventas_pagos_lineas_id_linea_pago_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_pagos_lineas_id_linea_pago_seq', 1, true);
+SELECT pg_catalog.setval('ventas_pagos_lineas_id_linea_pago_seq', 3, true);
 
 
 --

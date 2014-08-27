@@ -7,6 +7,7 @@
         <p:menubar  style="height: fit-content"  autoDisplay="false">
 
             <p:submenu label="#{msg.sistema}" icon="ui-icon-wrench" >
+                <p:menuitem value="#{msg.parametros}" action="/protected/parametros/index?faces-redirect=true" ajax="false" immediate="true"/>
                 <p:menuitem value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
             </p:submenu>
             
