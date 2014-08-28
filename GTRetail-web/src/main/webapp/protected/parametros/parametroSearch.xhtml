@@ -14,9 +14,17 @@
                     <ui:include src="breadcrumb.xhtml" />
                 </ui:insert>
                 <h:form id="formContenido" >
-                    <!-- TODO Falta hacer panel de búsqueda... -->
-                    
-                    <p:dataTable id="parametrosTable" var="par" value="#{parametrosEditBean.parametrosList}" 
+
+
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
+                        <p:inputText id="textoBusquedaField" value="#{parametrosSearchBean.txt}" size="50"/>
+                        <p:commandButton  action="#{parametrosSearchBean.buscar()}" 
+                                          value="#{msg.buscar}" 
+                                          icon="ui-icon-search"
+                                          update="parametrosTable"/>
+                    </h:panelGrid>
+                    <p:dataTable id="parametrosTable" var="par" value="#{parametrosSearchBean.parametrosList}" 
                                  editable="true"
                                  rows="15"
                                  paginator="true"
@@ -28,13 +36,12 @@
                                  style="width: 100%"
                                  resizableColumns="true"
                                  scrollable="true" >
+
                         <f:facet name="header">
                             #{msg.parametros}
                         </f:facet>
 
-                        <p:ajax event="rowEdit" listener="#{parametrosEditBean.onRowEdit}" process="@this" />
-
-                        <p:column >
+                        <p:column sortBy="#{par.nombreParametro}" >
                             <f:facet name="header">
                                 #{msg.nombre}
                             </f:facet>
@@ -43,32 +50,33 @@
 
                         </p:column>
 
-                        <p:column >
+                        <p:column sortBy="#{par.valorParametro}" >
                             <f:facet name="header">
                                 #{msg.valor}
                             </f:facet>
-                            <p:cellEditor>
-                                <f:facet name="output">
-                                    <h:outputText value="#{par.valorParametro}" />
-                                </f:facet>
-                                <f:facet name="input">
-                                    <p:inputText value="#{par.valorParametro}" required="true" 
-                                                 maxlength="255" style="width:100%" label="#{msg.valor}"/>
-                                </f:facet>
-                            </p:cellEditor>
+
+                            <h:outputText value="#{par.valorParametro}" />
+
                         </p:column>
 
-                        <p:column >
+                        <p:column sortBy="#{par.descripcionParametro}" >
                             <f:facet name="header">
                                 #{msg.descripcion}
                             </f:facet>
 
                             <h:outputText value="#{par.descripcionParametro}" />
-                            
+
                         </p:column>
 
                         <p:column style="width:32px">
-                            <p:rowEditor />
+                            <f:facet name="header">
+                                #{msg.editar}
+                            </f:facet>
+                            <p:commandButton icon="ui-icon-pencil" action="parametroEdit" 
+                                             ajax="false" >
+                                <f:param name="nombreParametro" value="#{par.nombreParametro}" /> 
+                                
+                            </p:commandButton>
                         </p:column>
                     </p:dataTable>
 

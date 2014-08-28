@@ -17,13 +17,14 @@ package ar.com.gtsoftware.controller.parametros;
 
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -36,21 +37,46 @@ public class ParametrosEditBean {
     @EJB
     private ParametrosFacade parametrosFacade;
 
+    private Parametros parametroActual;
+
     /**
      * Creates a new instance of ParametrosEditBean
      */
     public ParametrosEditBean() {
     }
 
-    public List<Parametros> getParametrosList() {
-        return parametrosFacade.findAll();
+    @PostConstruct
+    public void init() {
+        String nombreParametro = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nombreParametro");
+        if (nombreParametro != null) {
+            parametroActual = parametrosFacade.findParametroByName(nombreParametro);
+            if (parametroActual == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Parámetro inexistente!", "Parámetro inexistente!"));
+                Logger.getLogger(ParametrosEditBean.class.getName()).log(Level.INFO, "Parámetro inexistente!");
+            }
+        }
+
     }
 
-    public void onRowEdit(RowEditEvent event) {
-        Parametros paramEditado = (Parametros) event.getObject();
-        parametrosFacade.edit(paramEditado);
-        FacesMessage msg = new FacesMessage("Parámetro editado con éxito: " + paramEditado.getNombreParametro(), paramEditado.getValorParametro());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+    public void edit() {
+        if (parametroActual != null) {
+            parametrosFacade.edit(parametroActual);
+            FacesMessage msg = new FacesMessage("Parámetro editado con éxito: " + parametroActual.getNombreParametro(),
+                    parametroActual.getValorParametro());
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void establecerParametro(Parametros param) {
+        this.parametroActual = param;
+    }
+
+    public Parametros getParametroActual() {
+        return parametroActual;
+    }
+
+    public void setParametroActual(Parametros parametroActual) {
+        this.parametroActual = parametroActual;
     }
 
 }

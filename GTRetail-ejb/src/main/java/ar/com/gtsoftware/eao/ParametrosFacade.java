@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Parametros_;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -46,6 +47,11 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
         super(Parametros.class);
     }
 
+    /**
+     * Busca el parámetro con exactamente el nombre especificado
+     * @param nombre
+     * @return 
+     */
     public Parametros findParametroByName(String nombre) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Parametros> cq = cb.createQuery(Parametros.class);
@@ -60,6 +66,28 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
             return paramList.get(0);
         }
         return null;
+    }
+
+    /**
+     * Busca los parámetros que coincidan con txt
+     * @param txt
+     * @return 
+     */
+    public List<Parametros> findParametros(String txt) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Parametros> cq = cb.createQuery(Parametros.class);
+        Root<Parametros> parametro = cq.from(Parametros.class);
+        cq.select(parametro);
+        Predicate p1 = cb.like(parametro.get(Parametros_.nombreParametro), String.format("%%%s%%", txt));
+        Predicate p2 = cb.like(parametro.get(Parametros_.descripcionParametro), String.format("%%%s%%", txt));
+        cq.where(cb.or(p1, p2));
+        TypedQuery<Parametros> q = em.createQuery(cq);
+
+        List<Parametros> paramList = q.getResultList();
+        if (!paramList.isEmpty()) {
+            return paramList;
+        }
+        return new ArrayList<>();
     }
 
 }
