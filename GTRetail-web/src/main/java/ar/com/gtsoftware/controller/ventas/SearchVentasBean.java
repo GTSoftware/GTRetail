@@ -35,7 +35,7 @@ public class SearchVentasBean {
 
     @EJB
     private VentasFacade ventasFacade;
-    private VentasSearchFilter filter = new VentasSearchFilter(UtilUI.getBeginOfToday(), UtilUI.getEndOfToday(), null);
+    private VentasSearchFilter filter = new VentasSearchFilter(UtilUI.getBeginOfToday(), UtilUI.getEndOfToday(), Boolean.FALSE);
     private List<Ventas> ventasList = new ArrayList<>();
 
     /**
