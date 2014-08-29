@@ -36,13 +36,15 @@ public class VentasSearchFilter extends SearchFilter {
     private Sucursales idSucursal;
     private Boolean facturada;
     private NegocioCondicionesOperaciones condicionVenta;
+    private Boolean conSaldo;
 
     @Override
     public boolean hasFilter() {
         return (idVenta != null) || (fechaVentaDesde != null) || (fechaVentaHasta != null)
                 || (anulada != null) || (idUsuario != null)
                 || (idSucursal != null) || (idPersona != null)
-                || (facturada != null) || (condicionVenta != null);
+                || (facturada != null) || (condicionVenta != null)
+                || (conSaldo != null);
     }
 
     public VentasSearchFilter() {
@@ -62,7 +64,7 @@ public class VentasSearchFilter extends SearchFilter {
         this.idVenta = idVenta;
     }
 
-    public Boolean isAnulada() {
+    public Boolean getAnulada() {
         return anulada;
     }
 
@@ -110,7 +112,7 @@ public class VentasSearchFilter extends SearchFilter {
         this.fechaVentaHasta = fechaVentaHasta;
     }
 
-    public Boolean isFacturada() {
+    public Boolean getFacturada() {
         return facturada;
     }
 
@@ -124,6 +126,14 @@ public class VentasSearchFilter extends SearchFilter {
 
     public void setCondicionVenta(NegocioCondicionesOperaciones condicionVenta) {
         this.condicionVenta = condicionVenta;
+    }
+
+    public Boolean getConSaldo() {
+        return conSaldo;
+    }
+
+    public void setConSaldo(Boolean conSaldo) {
+        this.conSaldo = conSaldo;
     }
 
 }

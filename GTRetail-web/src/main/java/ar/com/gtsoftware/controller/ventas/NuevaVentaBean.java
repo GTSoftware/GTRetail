@@ -76,7 +76,7 @@ public class NuevaVentaBean implements Serializable {
     private AuthBackingBean authBackingBean;
     private Ventas ventaActual;
     private ProductosSearchFilter productoSearchFilter;
-    private PersonasSearchFilter personasSearchFilter;
+    //private PersonasSearchFilter personasSearchFilter;
     private Productos productoActual;
     private VentasLineas lineaActual; //Linea temporal actual antes de asignarla a la venta
     private List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
@@ -93,27 +93,41 @@ public class NuevaVentaBean implements Serializable {
     @PostConstruct
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            initConversation();
+            if (conversation.isTransient()) {
+                conversation.begin();
+                productoSearchFilter = new ProductosSearchFilter();
+                productoSearchFilter.setActivo(Boolean.TRUE);
+                PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE,
+                        Boolean.TRUE, null);
+                ventaActual = new Ventas();
+                ventaActual.setAnulada(false);
+                ventaActual.setSaldo(BigDecimal.ZERO);
+                ventaActual.setTotal(BigDecimal.ZERO);
+                pagoActual = new VentasPagos();
+                inicializarLineaVenta();
+            }
         }
     }
 
-    public String initConversation() {
+    /*
+     public String initConversation() {
+     if (conversation.getId() == null || conversation.isTransient()) {
+     conversation.begin();
+     productoSearchFilter = new ProductosSearchFilter();
+     productoSearchFilter.setActivo(Boolean.TRUE);
+     PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE,
+     Boolean.TRUE, null);
+     ventaActual = new Ventas();
+     ventaActual.setAnulada(false);
+     ventaActual.setSaldo(BigDecimal.ZERO);
+     ventaActual.setTotal(BigDecimal.ZERO);
+     pagoActual = new VentasPagos();
+     inicializarLineaVenta();
+     }
 
-        conversation.begin();
-        productoSearchFilter = new ProductosSearchFilter();
-        productoSearchFilter.setActivo(Boolean.TRUE);
-        personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE,
-                Boolean.TRUE, null);
-        ventaActual = new Ventas();
-        ventaActual.setAnulada(false);
-        ventaActual.setSaldo(BigDecimal.ZERO);
-        ventaActual.setTotal(BigDecimal.ZERO);
-        pagoActual = new VentasPagos();
-        inicializarLineaVenta();
-
-        return "/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true";
-    }
-
+     return "/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true";
+     }
+     */
     /**
      * Realiza la búsqueda de productos si y solo si el id o el código están
      * seteados
@@ -354,7 +368,6 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
-    
     public ProductosSearchFilter getProductoSearchFilter() {
         return productoSearchFilter;
     }

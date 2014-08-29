@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+
+    <p:panel header="#{msg.ventasListado}">
+        <p:tabView>
+            <p:defaultCommand target="buscarButton"/>
+            <p:tab title="#{msg.busquedaBasica}">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                    <p:calendar id="fechaDesdeField" value="#{searchVentasBean.filter.fechaVentaDesde}" 
+                                pattern="dd/MM/yyyy hh:mm:ss" showButtonPanel="true" />
+
+                    <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                    <p:calendar id="fechaHastaField" value="#{searchVentasBean.filter.fechaVentaHasta}" 
+                                pattern="dd/MM/yyyy hh:mm:ss" showButtonPanel="true" />
+
+                    <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}" 
+                                     value="#{msg.buscar}" 
+                                     icon="ui-icon-search"/>
+                    <!-- <p:commandButton id="nuevoButton" action="edicionCliente.xhtml" value="#{msg.nuevo}" ajax="false" icon="ui-icon-plus" /> 
+                    -->
+
+                </h:panelGrid>
+            </p:tab>
+            
+            <p:tab title="#{msg.busquedaAvanzada}" >
+                #{msg.noImplementado}
+            </p:tab>
+        </p:tabView>
+
+        <h:panelGrid>
+
+            <p:dataTable id="ventasTable" value="#{searchVentasBean.ventasList}" var="venta"
+                         rows="15"
+                         paginator="true"
+                         sortMode="multiple"
+                         emptyMessage="#{msg.busquedaSinResultados}"
+                         rowKey="#{venta.id}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         rowsPerPageTemplate="10,15,30"
+                         style="width: 100%"
+                         resizableColumns="true"
+                         scrollable="true"
+                         >
+
+
+                <p:column sortBy="#{venta.id}" style="width: 2%">
+                    <f:facet name="header">
+                        #{msg.tablaId}
+                    </f:facet>
+                    <h:outputLabel value="#{venta.id}"/>
+                </p:column>
+                <p:column sortBy="#{venta.idSucursal.nombreSucursal}" >
+                    <f:facet name="header">
+                        #{msg.sucursal}
+                    </f:facet>
+                    <h:outputLabel value="#{venta.idSucursal.nombreSucursal}"/>
+                </p:column>
+
+                <p:column sortBy="#{venta.fechaVenta}" style="width: 5%">
+                    <f:facet name="header">
+                        #{msg.fecha}
+                    </f:facet>
+                    <h:outputLabel value="#{venta.fechaVenta}">
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                    </h:outputLabel>
+                </p:column>
+
+                <p:column sortBy="#{venta.idPersona.razonSocial}">
+                    <f:facet name="header">
+                        #{msg.tablaRazonSocial}
+                    </f:facet>
+                    <h:outputLabel value="#{venta.idPersona.razonSocial}"/>
+                </p:column>
+
+                <p:column sortBy="#{venta.idCondicionVenta.nombreCondicion}">
+                    <f:facet name="header">
+                        #{msg.condicionVenta}
+                    </f:facet>
+                    <h:outputLabel value="#{venta.idCondicionVenta.nombreCondicion}"/>
+                </p:column>
+
+                <p:column sortBy="#{venta.saldo}">
+                    <f:facet name="header">
+                        #{msg.saldo}
+                    </f:facet>
+                    <h:outputLabel value="#{venta.saldo}">
+                        <f:convertNumber groupingUsed="true" type="currency" />
+                    </h:outputLabel>
+                </p:column>
+                <p:column sortBy="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.numeroFactura}">
+                    <f:facet name="header">
+                        #{msg.factura}
+                    </f:facet>
+                    <h:outputLabel rendered="#{not empty venta.idRegistroIva}" 
+                                   value="#{venta.idRegistroIva.letraFactura}-#{venta.idRegistroIva.numeroFactura}" />
+
+                    <h:outputLabel rendered="#{empty venta.idRegistroIva}" 
+                                   value="#{msg.no}" />
+                </p:column>
+
+
+
+                <p:column >
+                    <f:facet name="header">
+                        #{msg.acciones}
+                    </f:facet>
+                    <p:commandButton icon="ui-icon-pencil"   ajax="false" >
+                        <f:param name="idVenta" value="#{venta.id}"/>
+                    </p:commandButton>
+
+                </p:column>
+
+
+            </p:dataTable>
+
+
+        </h:panelGrid>
+
+    </p:panel>
+
+</html>
