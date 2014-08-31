@@ -97,12 +97,12 @@
                             <f:convertNumber groupingUsed="true" type="currency" />
                         </h:outputLabel>
                     </p:column>
-                    <p:column sortBy="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.numeroFactura}">
+                    <p:column sortBy="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}">
                         <f:facet name="header">
                             #{msg.factura}
                         </f:facet>
                         <h:outputLabel rendered="#{not empty venta.idRegistroIva}" 
-                                       value="#{venta.idRegistroIva.letraFactura}-#{venta.idRegistroIva.numeroFactura}" />
+                                       value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
 
                         <h:outputLabel rendered="#{empty venta.idRegistroIva}" 
                                        value="#{msg.no}" />
@@ -112,9 +112,9 @@
 
                     <p:column style="width: 32px" >
                         <f:facet name="header">
-                            #{msg.acciones}
+                            #{msg.ver}
                         </f:facet>
-                        <p:commandButton icon="ui-icon-pencil"   ajax="false" >
+                        <p:commandButton icon="ui-icon-search" action="vista/verVenta"  ajax="false" >
                             <f:param name="idVenta" value="#{venta.id}"/>
                         </p:commandButton>
 

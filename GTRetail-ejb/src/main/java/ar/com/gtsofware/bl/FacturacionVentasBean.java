@@ -39,8 +39,19 @@ public class FacturacionVentasBean {
     @EJB
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    /**
+     * Registra la factura fiscalmente en el libro de IVA ventas
+     * para la venta en el período fiscal y con la fecha de factura
+     * pasados como parámetro
+     * 
+     * @param venta
+     * @param letraComprobante
+     * @param puntoVentaComprobante
+     * @param numeroComprobante
+     * @param periodoFiscal
+     * @param fechaFactura
+     * @throws Exception
+     */
     public void registrarFacturaVenta(Ventas venta, String letraComprobante,
             String puntoVentaComprobante,
             String numeroComprobante,
@@ -88,6 +99,13 @@ public class FacturacionVentasBean {
 
     }
 
+    /**
+     * Devuelve el próximo número de factura a utilizar para el punto de
+     * venta yt letras pasados como parámetro
+     * @param letra
+     * @param puntoVenta
+     * @return número de factura disponible
+     */
     public String obtenerProximoNumeroFactura(String letra, String puntoVenta) {
         FiscalLibroIvaVentas ultimaFactura = ivaVentasFacade.findUltimaFactura(letra, puntoVenta);
         if (ultimaFactura != null) {

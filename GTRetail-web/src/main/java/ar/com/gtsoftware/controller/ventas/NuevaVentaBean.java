@@ -102,6 +102,7 @@ public class NuevaVentaBean implements Serializable {
                 ventaActual.setAnulada(false);
                 ventaActual.setSaldo(BigDecimal.ZERO);
                 ventaActual.setTotal(BigDecimal.ZERO);
+                ventaActual.setIdUsuario(authBackingBean.getUserLoggedIn());
                 pagoActual = new VentasPagos();
                 inicializarLineaVenta();
             }
@@ -293,14 +294,15 @@ public class NuevaVentaBean implements Serializable {
             return false;
         }
         if (ventaActual.getIdCondicionVenta() != null) {
-            if (ventaActual.getIdCondicionVenta().getPagoTotal() && ventaActual.getSaldo().compareTo(BigDecimal.ZERO) == 0) {
-                return true;
-            } else if (!ventaActual.getIdCondicionVenta().getPagoTotal()) {
-                return true;
+            if(ventaActual.getIdCondicionVenta().getPagoTotal()){
+              if(ventaActual.getSaldo().compareTo(BigDecimal.ZERO) != 0 ){
+                  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El importe del pago debe cubrir el total de la venta!"));
+                  return false;
+              }  
             }
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El importe del pago debe cubrir el total de la venta!"));
-        return false;
+        
+        return true;
     }
 
     public String guardarVenta() {

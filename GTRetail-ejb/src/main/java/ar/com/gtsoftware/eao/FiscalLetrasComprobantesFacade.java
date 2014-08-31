@@ -17,9 +17,12 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
+import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -37,6 +40,17 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
 
     public FiscalLetrasComprobantesFacade() {
         super(FiscalLetrasComprobantes.class);
+    }
+    
+    public FiscalLetrasComprobantes findLetraComprobante(int idResponsabildiadEmisor, FiscalResponsabilidadesIva ivaReceptor) {
+        Query q = getEntityManager().createQuery("SELECT l FROM FiscalLetrasComprobantes l WHERE l.fiscalLetrasComprobantesPK.idResoponsabildiadIvaEmisor = :ivaEmisor AND l.fiscalLetrasComprobantesPK.idResoponsabildiadIvaReceptor = :ivaReceptor");
+        q.setParameter("ivaEmisor", idResponsabildiadEmisor);
+        q.setParameter("ivaReceptor", ivaReceptor.getIdResoponsabildiadIva());
+        List<FiscalLetrasComprobantes> lista = q.getResultList();
+        if (!lista.isEmpty()) {
+            return lista.get(0);
+        }
+        return null;
     }
     
 }

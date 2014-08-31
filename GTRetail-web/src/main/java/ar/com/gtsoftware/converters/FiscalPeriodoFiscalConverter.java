@@ -64,6 +64,6 @@ public class FiscalPeriodoFiscalConverter implements Converter {
             return null;
         }
         FiscalPeriodosFiscales sucursal = (FiscalPeriodosFiscales) value;
-        return sucursal.getIdPeriodoFiscal().toString();
+        return sucursal.getId().toString();
     }
 }

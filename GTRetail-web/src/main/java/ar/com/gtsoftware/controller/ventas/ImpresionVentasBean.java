@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.controller.ventas;
 
+import ar.com.gtsoftware.eao.ParametrosFacade;
+import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Ventas;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
@@ -40,15 +42,17 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ViewScoped
 public class ImpresionVentasBean {
 
+    @EJB
+    private ParametrosFacade parametrosFacade;
+
     /**
      * Creates a new instance of ImpresionVentasBean
      */
     public ImpresionVentasBean() {
     }
-    
-    
+
     /**
-     * Muestra la venta como PDF
+     * Muestra el presupuesto como PDF
      *
      * @param ventaActual
      * @throws IOException
@@ -61,7 +65,24 @@ public class ImpresionVentasBean {
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/vistaVenta.jasper");
         //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
         HashMap<String, Object> parameters = new HashMap<>();
-        //TODO Agregar parámetros de empresa y demás
+        parameters.putAll(cargarParametros());
+        //BufferedImage image = ImageIO.read(getClass().getResource(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png")));
+        //parameters.put("logo", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png"));
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
+        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+    public void imprimirFactura(Ventas ventaActual) throws IOException, JRException {
+        List<Ventas> ventas = new ArrayList<>();
+        ventas.add(ventaActual);
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura"+ventaActual.getIdRegistroIva().getLetraFactura()+".jasper");
+        //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.putAll(cargarParametros());
         //BufferedImage image = ImageIO.read(getClass().getResource(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png")));
         //parameters.put("logo", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png"));
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
@@ -72,4 +93,16 @@ public class ImpresionVentasBean {
         FacesContext.getCurrentInstance().responseComplete();
     }
 
+    /**
+     * Devuelve los parámetros para cargar en los reportes de impresión
+     * @return el HashMap con los parámetros
+     */
+    private HashMap<String, Object> cargarParametros() {
+        List<Parametros> paramList = parametrosFacade.findParametros("empresa");
+        HashMap<String, Object> result = new HashMap<>();
+        for (Parametros p : paramList) {
+            result.put(p.getNombreParametro(), p.getValorParametro());
+        }
+        return result;
+    }
 }

@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <!-- Contenido -->
+            <ui:define name="content">
+                <ui:insert >
+                    <ui:include src="breadcrumb.xhtml" />
+                </ui:insert>
+
+                <gtsoftware:vistaVenta 
+                    venta="#{verVentasBean.ventaActual}"
+                    lineasVenta="#{verVentasBean.lineasVenta}"
+                    >
+                </gtsoftware:vistaVenta>
+                <h:form id="opcionesForm" >
+                    <p:panel header="#{msg.acciones}">
+                        <p:commandButton value="#{msg.facturar}"
+                                         icon="ui-icon-printer"
+                                         rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
+                                         update="facturarDialog" 
+                                         oncomplete="facturarDialog.show()"
+                                         process="@none"
+                                         />
+                    </p:panel>
+
+                    <p:dialog header="#{msg.facturar}" 
+                              widgetVar="facturarDialog" 
+                              resizable="true"
+                              id="facturarDialog"
+                              rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
+                              closeOnEscape="true"
+                              showEffect="fade"
+                              hideEffect="clip" 
+                              modal="true"> 
+
+                        <p:outputLabel value="Letra factura:"/>
+                        <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
+                        
+                        <p:outputLabel value="Punto venta:"/>
+                        <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
+                            <f:validateLongRange minimum="1" maximum="9999" />
+                        </p:inputText>
+                        
+                        <p:outputLabel value="Número:"/>
+                        <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
+                            <f:validateLongRange minimum="1" maximum="99999999" />
+                        </p:inputText>
+
+                        <p:outputLabel value="#{msg.fecha}:"/>
+                        <p:calendar value="#{verVentasBean.fechaFactura}" navigator="true" pattern="dd/MM/yyyy HH:mm" />
+
+
+
+                        <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                                         oncomplete="facturarDialog.hide()" 
+                                         update="@all"
+                                         action="#{verVentasBean.registrarFactura()}"/> 
+                    </p:dialog>
+                    
+                    <p:commandButton value="#{msg.imprimirFactura}"
+                                         icon="ui-icon-printer"
+                                         rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
+                                         action="#{impresionVentasBean.imprimirFactura(verVentasBean.ventaActual)}"
+                                         ajax="false"
+                                         />
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+
+    </h:body>
+</html>
+

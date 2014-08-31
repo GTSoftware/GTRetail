@@ -105,7 +105,7 @@ public class FiscalLibroIvaVentas implements Serializable {
     @ManyToOne(optional = false)
     private FiscalPeriodosFiscales idPeriodoFiscal;
     @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private ContabilidadRegistroContable idRegistroContable;
 
     public FiscalLibroIvaVentas() {
