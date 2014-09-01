@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaB_lineas" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8ee54347-3d25-4c73-9f92-449488104ca3">
 	<property name="ireport.zoom" value="1.9487171000000019"/>
-	<property name="ireport.x" value="215"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[]]>
@@ -23,7 +23,7 @@
 	</field>
 	<columnHeader>
 		<band height="21">
-			<rectangle radius="10">
+			<rectangle radius="5">
 				<reportElement mode="Transparent" x="0" y="0" width="553" height="20" uuid="e75f267e-5da2-4678-9e27-a05153ef9c0e"/>
 			</rectangle>
 			<staticText>
@@ -56,14 +56,14 @@
 			</staticText>
 			<staticText>
 				<reportElement x="415" y="1" width="69" height="20" uuid="3c3c2816-5c6e-410e-8ad8-4db6ee7c539d"/>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Precio]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="485" y="1" width="68" height="20" uuid="c36e2831-9097-46ac-99f3-213b13a9bcba"/>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Sub-Total]]></text>

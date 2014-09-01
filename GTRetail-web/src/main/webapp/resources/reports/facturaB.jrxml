@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaB" pageWidth="595" pageHeight="425" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="28" bottomMargin="2" isIgnorePagination="true" uuid="e8835b76-6390-40c7-b780-e3961ae4b5d7">
 	<property name="ireport.zoom" value="1.771561000000002"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="268"/>
+	<property name="ireport.x" value="179"/>
+	<property name="ireport.y" value="28"/>
 	<import value="com.gtsoft.model.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -34,6 +34,7 @@
 	<field name="observaciones" class="java.lang.String">
 		<fieldDescription><![CDATA[observaciones]]></fieldDescription>
 	</field>
+	<field name="remitente" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -47,21 +48,21 @@
 			<textField pattern="¤ #,##0.00">
 				<reportElement x="343" y="379" width="212" height="16" uuid="0bc100cd-6725-490e-8a1a-27fe6d352793"/>
 				<textElement textAlignment="Right">
-					<font fontName="Nimbus Mono L" size="13" isBold="true"/>
+					<font fontName="DejaVu Sans Mono" size="13" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="338" width="343" height="20" uuid="03e61075-ab63-4f24-a24a-5f39c27e542d"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="369" width="343" height="26" uuid="015b4a17-663e-4afe-938c-997e18b43256"/>
 				<textElement textAlignment="Center">
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[FIRMA              ACLARACIÓN            D.N.I.
 RECEPCIÓN DE MERCADERÍA]]></text>
@@ -69,82 +70,82 @@ RECEPCIÓN DE MERCADERÍA]]></text>
 			<line>
 				<reportElement x="343" y="368" width="212" height="1" uuid="c82120d0-e392-4ffe-8473-3e44b2941546"/>
 			</line>
-			<textField>
-				<reportElement x="75" y="92" width="283" height="20" uuid="aef6ea89-1076-4090-8f88-4d5c24621b30"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="56" y="92" width="367" height="10" uuid="aef6ea89-1076-4090-8f88-4d5c24621b30"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["["+$F{idPersona}.getId()+"] "+$F{idPersona}.getRazonSocial()]]></textFieldExpression>
+				<textFieldExpression><![CDATA["["+$F{idPersona}.getId()+"] "+$F{idPersona}.getRazonSocial()+" - "+($F{idPersona}.getNombreFantasia() == null ? "" : $F{idPersona}.getNombreFantasia())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="75" y="112" width="283" height="20" uuid="9106efab-966d-4c54-9eb8-5d32a1e349e9"/>
+				<reportElement x="56" y="102" width="367" height="10" uuid="9106efab-966d-4c54-9eb8-5d32a1e349e9"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""+$F{idPersona}.getCalle()+" "+$F{idPersona}.getAltura()+" "+$F{idPersona}.getIdLocalidad().getNombreLocalidad()+" "+$F{idPersona}.getIdProvincia().getNombreProvincia()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="75" y="132" width="283" height="20" uuid="534699ab-aff7-4463-91d4-e2bb071afd15"/>
+				<reportElement x="56" y="112" width="302" height="10" uuid="534699ab-aff7-4463-91d4-e2bb071afd15"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[""+$F{idPersona}.getIdResponsabilidadIva().getNombreResponsabildiad()]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy HH:mm:ss">
+			<textField pattern="dd/MM/yyyy HH:mm:ss a">
 				<reportElement x="434" y="92" width="121" height="20" uuid="cd691498-b4e0-493a-909d-1f3ab7eb2961"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idRegistroIva}.getFechaFactura()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="479" y="112" width="76" height="20" uuid="42dd0af4-ec7d-469d-86de-ea694761e8dd"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idPersona}.getDocumento()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="357" y="0" width="198" height="13" uuid="41e691cb-cf65-4ea4-8ebf-a640feb0f63c"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8" isBold="false"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idRegistroIva}.getLetraFactura()+" "+$F{idRegistroIva}.getPuntoVentaFactura()+"-"+$F{idRegistroIva}.getNumeroFactura()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="75" y="163" width="159" height="20" uuid="5f81cbf3-9b8a-45c0-bb0a-c7ad250c0ae8"/>
+				<reportElement x="56" y="163" width="178" height="10" uuid="5f81cbf3-9b8a-45c0-bb0a-c7ad250c0ae8"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idCondicionVenta}.getNombreCondicion()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="434" y="112" width="45" height="20" uuid="ab224b5b-eb86-40ba-9dc6-7b04af781ebf"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="75" y="152" width="282" height="20" uuid="b7eb59ea-8f1b-4528-ba6e-3d5e35e171f2"/>
-				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA["REMITENTE"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="343" y="369" width="212" height="10" uuid="da73172e-153a-44af-871c-f44f90c2fbe6"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["IVA EN A 10.00"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="343" y="358" width="212" height="10" uuid="5ce7b4e1-e031-4a6b-ae23-3bee18445898"/>
 				<textElement>
-					<font fontName="Nimbus Mono L" size="8"/>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["SUBTOTAL"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="56" y="122" width="302" height="10" uuid="e1f49004-b2c0-4051-a083-5f6e7918f266"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{remitente}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -19,6 +19,7 @@ import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import ar.com.gtsoftware.utils.UtilUI;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -37,6 +38,9 @@ public class SearchVentasBean {
     private VentasFacade ventasFacade;
     private VentasSearchFilter filter = new VentasSearchFilter(UtilUI.getBeginOfToday(), UtilUI.getEndOfToday(), Boolean.FALSE);
     private List<Ventas> ventasList = new ArrayList<>();
+    private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
+    private BigDecimal totalVentas = BigDecimal.ZERO;
+    private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
 
     /**
      * Creates a new instance of SearchVentasBean
@@ -66,6 +70,38 @@ public class SearchVentasBean {
 
     public void setVentasList(List<Ventas> ventasList) {
         this.ventasList = ventasList;
+    }
+
+    public VentasFacade getVentasFacade() {
+        return ventasFacade;
+    }
+
+    public void setVentasFacade(VentasFacade ventasFacade) {
+        this.ventasFacade = ventasFacade;
+    }
+
+    public BigDecimal getTotalVentasFacturadas() {
+        return totalVentasFacturadas;
+    }
+
+    public void setTotalVentasFacturadas(BigDecimal totalVentasFacturadas) {
+        this.totalVentasFacturadas = totalVentasFacturadas;
+    }
+
+    public BigDecimal getTotalVentas() {
+        return totalVentas;
+    }
+
+    public void setTotalVentas(BigDecimal totalVentas) {
+        this.totalVentas = totalVentas;
+    }
+
+    public BigDecimal getTotalVentasSinFacturar() {
+        return totalVentasSinFacturar;
+    }
+
+    public void setTotalVentasSinFacturar(BigDecimal totalVentasSinFacturar) {
+        this.totalVentasSinFacturar = totalVentasSinFacturar;
     }
 
 }

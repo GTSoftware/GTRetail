@@ -64,6 +64,9 @@ public class Ventas extends BaseEntity implements Serializable {
     @Size(max = 1024)
     @Column(name = "observaciones")
     private String observaciones;
+    @Size(max = 100)
+    @Column(name = "remitente")
+    private String remitente;
     @Basic(optional = false)
     @NotNull
     @Column(name = "anulada")
@@ -226,6 +229,14 @@ public class Ventas extends BaseEntity implements Serializable {
     @Override
     public String toString() {
         return "ar.com.gtsoftware.model.Ventas[ idVenta=" + this.getId() + " ]";
+    }
+
+    public String getRemitente() {
+        return remitente;
+    }
+
+    public void setRemitente(String remitente) {
+        this.remitente = remitente;
     }
 
 }

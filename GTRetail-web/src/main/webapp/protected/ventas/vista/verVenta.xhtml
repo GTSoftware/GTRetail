@@ -15,19 +15,25 @@
                     <ui:include src="breadcrumb.xhtml" />
                 </ui:insert>
 
-                <gtsoftware:vistaVenta 
-                    venta="#{verVentasBean.ventaActual}"
-                    lineasVenta="#{verVentasBean.lineasVenta}"
-                    >
-                </gtsoftware:vistaVenta>
                 <h:form id="opcionesForm" >
                     <p:panel header="#{msg.acciones}">
                         <p:commandButton value="#{msg.facturar}"
-                                         icon="ui-icon-printer"
+                                         icon="ui-icon-print"
                                          rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
                                          update="facturarDialog" 
                                          oncomplete="facturarDialog.show()"
                                          process="@none"
+                                         />
+                        <p:commandButton value="#{msg.imprimirFactura}"
+                                         icon="ui-icon-print"
+                                         rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
+                                         action="#{impresionVentasBean.imprimirFactura(verVentasBean.ventaActual)}"
+                                         ajax="false"
+                                         />
+                        <p:commandButton value="#{msg.presupuesto}"
+                                         icon="ui-icon-print"
+                                         action="#{impresionVentasBean.imprimirPresupuesto(verVentasBean.ventaActual)}"
+                                         ajax="false"
                                          />
                     </p:panel>
 
@@ -43,12 +49,12 @@
 
                         <p:outputLabel value="Letra factura:"/>
                         <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
-                        
+
                         <p:outputLabel value="Punto venta:"/>
                         <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
                             <f:validateLongRange minimum="1" maximum="9999" />
                         </p:inputText>
-                        
+
                         <p:outputLabel value="Número:"/>
                         <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
                             <f:validateLongRange minimum="1" maximum="99999999" />
@@ -64,14 +70,17 @@
                                          update="@all"
                                          action="#{verVentasBean.registrarFactura()}"/> 
                     </p:dialog>
-                    
-                    <p:commandButton value="#{msg.imprimirFactura}"
-                                         icon="ui-icon-printer"
-                                         rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
-                                         action="#{impresionVentasBean.imprimirFactura(verVentasBean.ventaActual)}"
-                                         ajax="false"
-                                         />
+
+
                 </h:form>
+
+                <gtsoftware:vistaVenta 
+                    venta="#{verVentasBean.ventaActual}"
+                    lineasVenta="#{verVentasBean.lineasVenta}"
+                    >
+                </gtsoftware:vistaVenta>
+
+
 
             </ui:define>
 

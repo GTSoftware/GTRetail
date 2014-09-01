@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="presupuesto" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
 	<property name="ireport.zoom" value="1.331000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="77"/>
 	<parameter name="logo" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="empresa.direccion" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="empresa.telefono" class="java.lang.String" isForPrompting="false"/>
@@ -76,7 +76,7 @@
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="60" y="105" width="273" height="20" uuid="ce42804b-3822-4c27-847d-4072f15c4578"/>
-				<textFieldExpression><![CDATA[$F{idPersona}.getRazonSocial()+" - \""+$F{idPersona}.getNombreFantasia()+"\""]]></textFieldExpression>
+				<textFieldExpression><![CDATA["["+$F{idPersona}.getId()+"] "+$F{idPersona}.getRazonSocial()+" - \""+$F{idPersona}.getNombreFantasia()+"\""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="428" y="0" width="127" height="20" uuid="2ff28c94-d486-4a4f-9e48-fc0503a60332"/>
@@ -173,7 +173,7 @@
 				<reportElement x="328" y="40" width="100" height="20" uuid="d7de112a-0015-4765-85fd-12ce7cb4ec48"/>
 				<text><![CDATA[Fecha venta:]]></text>
 			</staticText>
-			<textField pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy HH:mm a" isBlankWhenNull="true">
 				<reportElement x="428" y="40" width="127" height="20" uuid="eb4786f3-f335-4897-b730-7cbd52541a3c"/>
 				<textFieldExpression><![CDATA[$F{fechaVenta}]]></textFieldExpression>
 			</textField>
@@ -195,7 +195,7 @@
 				<textFieldExpression><![CDATA[$F{idUsuario}.getNombreUsuario()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="356" y="0" width="100" height="20" uuid="f8dd3c61-b0c0-4507-b30f-0b52979006d0"/>
+				<reportElement x="405" y="0" width="51" height="20" uuid="f8dd3c61-b0c0-4507-b30f-0b52979006d0"/>
 				<text><![CDATA[Usuario:]]></text>
 			</staticText>
 			<staticText>

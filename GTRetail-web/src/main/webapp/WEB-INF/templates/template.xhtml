@@ -24,7 +24,7 @@
                     
                     <p:spacer width="20"/>
                     <p:outputLabel value="#{msg.fecha}:"/>
-                    <p:clock mode="server" id="clock" pattern="dd/MM/yyyy hh:mm:ss" />
+                    <p:clock mode="server" id="clock" pattern="dd/MM/yyyy hh:mm:ss a" />
                     <p:ajaxStatus  onstart="dlgLoad.show()" oncomplete="dlgLoad.hide()" onerror="dlgLoad.hide()" onsuccess="dlgLoad.hide()"/>  
                     <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)"> 
                         <h:panelGrid columns="1" >

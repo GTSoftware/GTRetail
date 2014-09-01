@@ -67,9 +67,11 @@
             </p:row>  
         </p:columnGroup>
     </p:dataTable>
-    <h:outputLabel value="#{msg.observaciones}" />
+    <h:outputLabel value="#{msg.observaciones}:" />
     <br/>
     <p:inputTextarea style="width: 100%" value="#{nuevaVentaBean.ventaActual.observaciones}" maxlength="1024" autoResize="true" />
+    <h:outputLabel value="#{msg.remitente}:" />
+    <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.remitente}" maxlength="100"  />
     <p:separator />
     <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}" immediate="true"  />
     <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" action="#{nuevaVentaBean.cancelar()}" immediate="true" ajax="false"  />

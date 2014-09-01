@@ -75,6 +75,7 @@ public class ImpresionVentasBean {
         JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
         FacesContext.getCurrentInstance().responseComplete();
     }
+    
     public void imprimirFactura(Ventas ventaActual) throws IOException, JRException {
         List<Ventas> ventas = new ArrayList<>();
         ventas.add(ventaActual);

@@ -30,9 +30,9 @@
                             <p:inputText id="razonSocialField" value="#{clientesEditBean.clienteActual.razonSocial}" maxlength="200" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 2}"/>
                             <p:message for="razonSocialField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 2}" />
 
-                            <h:outputLabel for="nombreFantasiaField" value="#{msg.nombreFantasia}" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 2}"/>
-                            <p:inputText id="nombreFantasiaField" value="#{clientesEditBean.clienteActual.nombreFantasia}" maxlength="200" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 2}"/>
-                            <p:message for="nombreFantasiaField"  rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 2}"/>
+                            <h:outputLabel for="nombreFantasiaField" value="#{msg.nombreFantasia}" />
+                            <p:inputText id="nombreFantasiaField" value="#{clientesEditBean.clienteActual.nombreFantasia}" maxlength="200" />
+                            <p:message for="nombreFantasiaField" />
 
                             <h:outputLabel for="apellidoField" value="#{msg.apellidos}" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 1}"/>
                             <p:inputText id="apellidoField" value="#{clientesEditBean.clienteActual.apellidos}" maxlength="50" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.idTipoPersoneria eq 1}"/>
