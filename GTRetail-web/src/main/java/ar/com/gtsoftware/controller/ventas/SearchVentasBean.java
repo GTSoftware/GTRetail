@@ -54,6 +54,22 @@ public class SearchVentasBean {
     public void search() {
         ventasList.clear();
         ventasList.addAll(ventasFacade.findBySearchFilter(filter));
+        calcularTotales();
+    }
+
+    private void calcularTotales() {
+        totalVentasFacturadas = BigDecimal.ZERO;
+        totalVentas = BigDecimal.ZERO;
+        totalVentasSinFacturar = BigDecimal.ZERO;
+
+        for (Ventas v : ventasList) {
+            totalVentas = totalVentas.add(v.getTotal());
+            if (v.getIdRegistroIva() != null) {
+                totalVentasFacturadas = totalVentasFacturadas.add(v.getTotal());
+            } else {
+                totalVentasSinFacturar = totalVentasSinFacturar.add(v.getTotal());
+            }
+        }
     }
 
     public VentasSearchFilter getFilter() {

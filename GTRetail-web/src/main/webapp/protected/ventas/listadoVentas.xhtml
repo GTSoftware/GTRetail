@@ -34,7 +34,7 @@
                             <p:commandButton icon="ui-icon-search"  
                                              update=":formContenido:busquedaPersonasDialog" 
                                              oncomplete="clientesDialog.show()"
-                                             process="@none" />
+                                             process="@this" />
                             <p:commandButton icon="ui-icon-close"  
                                              update=":formContenido:busquedaTab"
                                              action="#{searchVentasBean.filter.setIdPersona(null)}"
@@ -46,7 +46,7 @@
                     </h:panelGrid>
                     <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}" 
                                      value="#{msg.buscar}" 
-                                     update=":formContenido:ventasTable"
+                                     update=":formContenido:ventasTable :formContenido:totalesVentasPanel"
                                      icon="ui-icon-search"/>
                 </p:tab>
 
@@ -107,6 +107,14 @@
                         <h:outputLabel value="#{venta.idCondicionVenta.nombreCondicion}"/>
                     </p:column>
 
+                    <p:column sortBy="#{venta.total}">
+                        <f:facet name="header">
+                            #{msg.total}
+                        </f:facet>
+                        <h:outputLabel value="#{venta.total}">
+                            <f:convertNumber groupingUsed="true" type="currency" />
+                        </h:outputLabel>
+                    </p:column>
                     <p:column sortBy="#{venta.saldo}">
                         <f:facet name="header">
                             #{msg.saldo}
@@ -143,6 +151,25 @@
 
 
             </h:panelGrid>
+            <p:panel id="totalesVentasPanel" header="#{msg.totales}" >
+
+                <h:panelGrid columns="2" >
+                    <p:outputLabel value="#{msg.totalVentas}:" />
+                    <p:outputLabel value="#{searchVentasBean.totalVentas}" style="font-size: x-large; font-weight: bold" >
+                        <f:convertNumber groupingUsed="true" type="currency" />
+                    </p:outputLabel>
+
+                    <p:outputLabel value="#{msg.totalVentasSF}:" />
+                    <p:outputLabel value="#{searchVentasBean.totalVentasSinFacturar}" style="font-size: x-large; font-weight: bold" >
+                        <f:convertNumber groupingUsed="true" type="currency" />
+                    </p:outputLabel>
+
+                    <p:outputLabel value="#{msg.totalVentasF}:" />
+                    <p:outputLabel value="#{searchVentasBean.totalVentasFacturadas}" style="font-size: x-large; font-weight: bold" >
+                        <f:convertNumber groupingUsed="true" type="currency" />
+                    </p:outputLabel>
+                </h:panelGrid>
+            </p:panel>
 
             <p:dialog id='busquedaPersonasDialog' 
                       header="#{msg.busquedaClientes}" 
