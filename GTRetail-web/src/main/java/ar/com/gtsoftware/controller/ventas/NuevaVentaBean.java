@@ -133,11 +133,6 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
-    public void buscarProductos() {
-        List<Productos> productos = productosFacade.findBySearchFilter(productoSearchFilter);
-
-    }
-
     /**
      * Calcula el subtotal de la línea de venta
      */
@@ -176,7 +171,7 @@ public class NuevaVentaBean implements Serializable {
         lineaActual.setCantidad(BigDecimal.ZERO);
         lineaActual.setSubTotal(BigDecimal.ZERO);
         productoActual = null;
-        productoSearchFilter.setIdProducto(0);
+        productoSearchFilter.setIdProducto(null);
         productoSearchFilter.setCodigoPropio("");
     }
 

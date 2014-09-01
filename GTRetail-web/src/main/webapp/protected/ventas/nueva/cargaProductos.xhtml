@@ -33,7 +33,6 @@
                          value="#{nuevaVentaBean.productoSearchFilter.idProducto}" 
                          required="false" >
                 <f:convertNumber integerOnly="true" />
-                <f:validateLongRange minimum="0" />
                 <p:ajax  update="insertarPanel" 
                          listener="#{nuevaVentaBean.buscarProductoPorClave()}" />
 
