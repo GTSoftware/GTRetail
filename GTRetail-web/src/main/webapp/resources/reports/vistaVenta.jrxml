@@ -118,7 +118,7 @@
 				<textFieldExpression><![CDATA[$P{empresa.telefono}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="138" y="80" width="112" height="20" uuid="0f5e1c88-8339-49bb-a95e-47ba9864c8e3"/>
+				<reportElement x="138" y="80" width="128" height="20" uuid="0f5e1c88-8339-49bb-a95e-47ba9864c8e3"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>

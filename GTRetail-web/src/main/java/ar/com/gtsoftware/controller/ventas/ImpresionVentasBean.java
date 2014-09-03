@@ -75,12 +75,17 @@ public class ImpresionVentasBean {
         JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
         FacesContext.getCurrentInstance().responseComplete();
     }
-    
+
     public void imprimirFactura(Ventas ventaActual) throws IOException, JRException {
         List<Ventas> ventas = new ArrayList<>();
-        ventas.add(ventaActual);
+
+        String copias = parametrosFacade.findParametroByName("facturacion.preimreso.cantidad_copias").getValorParametro();
+        int cantCopias = Integer.parseInt(copias);
+        for (int i = 0; i < cantCopias; i++) {
+            ventas.add(ventaActual);
+        }
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
-        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura"+ventaActual.getIdRegistroIva().getLetraFactura()+".jasper");
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura" + ventaActual.getIdRegistroIva().getLetraFactura() + ".jasper");
         //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.putAll(cargarParametros());
@@ -96,6 +101,7 @@ public class ImpresionVentasBean {
 
     /**
      * Devuelve los parámetros para cargar en los reportes de impresión
+     *
      * @return el HashMap con los parámetros
      */
     private HashMap<String, Object> cargarParametros() {
