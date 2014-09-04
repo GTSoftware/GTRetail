@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaB" pageWidth="595" pageHeight="555" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="28" bottomMargin="0" isIgnorePagination="true" uuid="e8835b76-6390-40c7-b780-e3961ae4b5d7">
-	<property name="ireport.zoom" value="1.771561000000002"/>
-	<property name="ireport.x" value="179"/>
-	<property name="ireport.y" value="28"/>
+	<property name="ireport.zoom" value="1.4641000000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="309"/>
 	<import value="com.gtsoft.model.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -118,20 +118,6 @@ RECEPCIÓN DE MERCADERÍA]]></text>
 					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="343" y="388" width="212" height="14" uuid="da73172e-153a-44af-871c-f44f90c2fbe6"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["IVA EN A 10.00"]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="343" y="373" width="212" height="14" uuid="5ce7b4e1-e031-4a6b-ae23-3bee18445898"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["SUBTOTAL"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="56" y="142" width="302" height="14" uuid="e1f49004-b2c0-4051-a083-5f6e7918f266"/>

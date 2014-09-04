@@ -40,10 +40,9 @@ public class FacturacionVentasBean {
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
     /**
-     * Registra la factura fiscalmente en el libro de IVA ventas
-     * para la venta en el período fiscal y con la fecha de factura
-     * pasados como parámetro
-     * 
+     * Registra la factura fiscalmente en el libro de IVA ventas para la venta
+     * en el período fiscal y con la fecha de factura pasados como parámetro
+     *
      * @param venta
      * @param letraComprobante
      * @param puntoVentaComprobante
@@ -80,8 +79,12 @@ public class FacturacionVentasBean {
             BigDecimal netoGravado = BigDecimal.ZERO;
             BigDecimal noGravado = BigDecimal.ZERO;
             if (alicuota.getGravarIva()) {
-                importeIva = linea.getSubTotal().multiply(alicuota.getValorAlicuota().divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
-                netoGravado = linea.getSubTotal().subtract(importeIva).setScale(2, RoundingMode.HALF_UP);
+                //Importe*(1+alicuota/100)=Neto
+                BigDecimal coeficienteIVA = BigDecimal.ONE.add(alicuota.getValorAlicuota().divide(new BigDecimal(100)));
+                netoGravado = linea.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP);
+                importeIva = linea.getSubTotal().subtract(netoGravado);
+                importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
+                
                 noGravado = BigDecimal.ZERO;
             } else {
                 importeIva = BigDecimal.ZERO;
@@ -100,8 +103,9 @@ public class FacturacionVentasBean {
     }
 
     /**
-     * Devuelve el próximo número de factura a utilizar para el punto de
-     * venta yt letras pasados como parámetro
+     * Devuelve el próximo número de factura a utilizar para el punto de venta
+     * yt letras pasados como parámetro
+     *
      * @param letra
      * @param puntoVenta
      * @return número de factura disponible

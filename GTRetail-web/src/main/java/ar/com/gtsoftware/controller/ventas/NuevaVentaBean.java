@@ -196,12 +196,20 @@ public class NuevaVentaBean implements Serializable {
         HashMap<FiscalAlicuotasIva, BigDecimal> importe = new HashMap<>();
         for (VentasLineas vl : ventaActual.getVentasLineasList()) {
             FiscalAlicuotasIva alicuota = vl.getIdProducto().getIdAlicuotaIva();
-            //Importe*(alicuota/100)
-            BigDecimal importeIva = vl.getSubTotal().multiply(alicuota.getValorAlicuota().divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
-            if (importe.containsKey(alicuota)) {
-                importeIva = importeIva.add(importe.get(alicuota));
+            //Importe*(1+alicuota/100)=Neto
+            if (alicuota.getGravarIva()) {
+                //Importe*(1+alicuota/100)=Neto
+                BigDecimal coeficienteIVA = BigDecimal.ONE.add(alicuota.getValorAlicuota().divide(new BigDecimal(100)));
+                BigDecimal netoGravado = vl.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP);
+                BigDecimal importeIva = vl.getSubTotal().subtract(netoGravado);
+                importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
+
+                if (importe.containsKey(alicuota)) {
+                    importeIva = importeIva.add(importe.get(alicuota));
+                }
+                importe.put(alicuota, importeIva);
             }
-            importe.put(alicuota, importeIva);
+
         }
         for (Entry<FiscalAlicuotasIva, BigDecimal> i : importe.entrySet()) {
             ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue());
@@ -289,14 +297,14 @@ public class NuevaVentaBean implements Serializable {
             return false;
         }
         if (ventaActual.getIdCondicionVenta() != null) {
-            if(ventaActual.getIdCondicionVenta().getPagoTotal()){
-              if(ventaActual.getSaldo().compareTo(BigDecimal.ZERO) != 0 ){
-                  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El importe del pago debe cubrir el total de la venta!"));
-                  return false;
-              }  
+            if (ventaActual.getIdCondicionVenta().getPagoTotal()) {
+                if (ventaActual.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El importe del pago debe cubrir el total de la venta!"));
+                    return false;
+                }
             }
         }
-        
+
         return true;
     }
 
