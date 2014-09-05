@@ -14,6 +14,9 @@
             <redirect>1</redirect>
         </navigation-case>
     </navigation-rule>
+    <factory>
+        <exception-handler-factory>ar.com.gtsoftware.auth.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+    </factory>
     <application>
         <locale-config>
             <default-locale>es_AR</default-locale>

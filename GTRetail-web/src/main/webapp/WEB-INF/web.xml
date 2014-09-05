@@ -32,7 +32,7 @@
     </context-param>
     <session-config>
         <session-timeout>
-            30
+            60
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -40,7 +40,7 @@
     </welcome-file-list>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/login.xhtml</location>
+        <location>/resources/pages/vewExpired.xhtml</location>
     </error-page>
     <!-- Seguridad -->
     <login-config>
