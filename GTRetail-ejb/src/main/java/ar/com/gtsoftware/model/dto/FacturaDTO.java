@@ -36,6 +36,8 @@ public class FacturaDTO implements Serializable {
     private Long idFactura;
     private Date fechaFactura;
     private String numeroFactura;
+    private String documentoCliente;
+    private String razonSocialCliente;
     private BigDecimal netoGravado;
     private BigDecimal noGravado;
     private BigDecimal totalIva;
@@ -178,6 +180,7 @@ public class FacturaDTO implements Serializable {
 
     /**
      * Devuelve el total de la factura
+     *
      * @return
      */
     public BigDecimal getTotalFactura() {
@@ -186,10 +189,47 @@ public class FacturaDTO implements Serializable {
 
     /**
      * Establece el total de la factura
+     *
      * @param totalFactura
      */
     public void setTotalFactura(BigDecimal totalFactura) {
         this.totalFactura = totalFactura;
+    }
+
+    /**
+     * Devuelve el número de documento del cliente
+     *
+     * @return
+     */
+    public String getDocumentoCliente() {
+        return documentoCliente;
+    }
+
+    /**
+     * Establece el número de documento del cliente
+     *
+     * @param documentoCliente
+     */
+    public void setDocumentoCliente(String documentoCliente) {
+        this.documentoCliente = documentoCliente;
+    }
+
+    /**
+     * Devuelve la razón social del cliente
+     *
+     * @return
+     */
+    public String getRazonSocialCliente() {
+        return razonSocialCliente;
+    }
+
+    /**
+     * Establece la razón social del cliente
+     *
+     * @param razonSocialCliente
+     */
+    public void setRazonSocialCliente(String razonSocialCliente) {
+        this.razonSocialCliente = razonSocialCliente;
     }
 
     @Override

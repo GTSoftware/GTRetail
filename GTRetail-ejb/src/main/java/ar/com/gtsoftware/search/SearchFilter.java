@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.search;
 
 /**
+ * Clase abstracta que representa una agrupación de criterios de filtrado
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @since 1.0.0
+ * @version 1.0.0
  */
 public abstract class SearchFilter {
-   
-    
-    public boolean hasFilter(){
+
+    public boolean hasFilter() {
         return false;
     }
 
-
-    
-    
-    
 }

@@ -17,6 +17,8 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
+import ar.com.gtsoftware.search.IVAVentasSearchFilter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,8 +30,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @since 1.0.0
+ * @version 1.0.0
  */
 @Stateless
 public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas> {
@@ -46,6 +49,14 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
         super(FiscalLibroIvaVentas.class);
     }
 
+    /**
+     * Retorna la ultima factura registrada con la letra y el punto de venta
+     * pasados por parametro
+     *
+     * @param letra
+     * @param puntoVenta
+     * @return una factura
+     */
     public FiscalLibroIvaVentas findUltimaFactura(String letra, String puntoVenta) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<FiscalLibroIvaVentas> cq = cb.createQuery(FiscalLibroIvaVentas.class);
@@ -64,6 +75,37 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
         }
         return null;
 
+    }
+
+    /**
+     * Retorna la lista de facturas que corresponden con los criterios de
+     * filtrado
+     *
+     * @param ivavsf
+     * @return una lista de facturas
+     */
+    public List<FiscalLibroIvaVentas> findBySearchFilter(IVAVentasSearchFilter ivavsf) {
+        if (ivavsf.hasFilter()) {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<FiscalLibroIvaVentas> cq = cb.createQuery(FiscalLibroIvaVentas.class);
+            Root<FiscalLibroIvaVentas> registroIVA = cq.from(FiscalLibroIvaVentas.class);
+            cq.select(registroIVA);
+            Predicate p = null;
+            if (ivavsf.getPeriodo() != null) {
+                Predicate p1 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.idPeriodoFiscal), ivavsf.getPeriodo());
+                p = appendAndPredicate(cb, p1, p);
+            }
+            if (ivavsf.hasFechasDesdeHasta()) {
+                Predicate p1 = cb.between(registroIVA.get(FiscalLibroIvaVentas_.fechaFactura), ivavsf.getFechaDesde(), ivavsf.getFechaHasta());
+                p = appendAndPredicate(cb, p1, p);
+            }
+            cq.where(p);
+            cq.orderBy(cb.desc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));
+            TypedQuery<FiscalLibroIvaVentas> q = em.createQuery(cq);
+            List<FiscalLibroIvaVentas> registroIVAList = q.getResultList();
+            return registroIVAList;
+        }
+        return new ArrayList<>();
     }
 
 }
