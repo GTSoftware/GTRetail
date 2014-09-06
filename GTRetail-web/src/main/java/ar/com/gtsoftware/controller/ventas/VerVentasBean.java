@@ -94,6 +94,7 @@ public class VerVentasBean {
     
     public void registrarFactura() {
         try {
+            //TODO Fix para que seleccione el usuario dentro de los periodos activos
             FiscalPeriodosFiscales pf = periodosFiscalesFacade.findAll().get(0);
             facturacionBean.registrarFacturaVenta(ventaActual, letraComprobante, puntoVentaComprobante, numeroComprobante, pf, fechaFactura);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Factura registrada correctamente"));
