@@ -67,6 +67,9 @@ public class Ventas extends BaseEntity implements Serializable {
     @Size(max = 100)
     @Column(name = "remitente")
     private String remitente;
+    @Size(max = 100)
+    @Column(name = "nroremito")
+    private String nroRemito;
     @Basic(optional = false)
     @NotNull
     @Column(name = "anulada")
@@ -237,6 +240,14 @@ public class Ventas extends BaseEntity implements Serializable {
 
     public void setRemitente(String remitente) {
         this.remitente = remitente;
+    }
+
+    public String getNroRemito() {
+        return nroRemito;
+    }
+
+    public void setNroRemito(String nroRemito) {
+        this.nroRemito = nroRemito;
     }
 
 }
