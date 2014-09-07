@@ -28,8 +28,8 @@
         <url>https://github.com/GTSoftware/GTRetail</url>
         <connection>scm:git:git://github.com/GTSoftware/GTRetail.git</connection>
         <developerConnection>scm:git:git@github.com:GTSoftware/GTRetail.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/GTSoftware/GTRetail/issues</url>
@@ -83,20 +83,15 @@
             
         </plugins>
     </build>
-    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+    </dependencies>
     <reporting>
         <plugins>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>downloads-maven-plugin</artifactId>
-                <version>0.6</version>
-                <configuration>
-                    <description>Official ${project.name} build of the ${project.version} release</description>
-                    <override>true</override>
-                    <includeAttached>true</includeAttached>
-                    <server>github</server>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>

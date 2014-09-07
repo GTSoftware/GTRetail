@@ -15,12 +15,11 @@
  */
 package ar.com.gtsoftware.utils;
 
-import java.security.InvalidKeyException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -29,24 +28,20 @@ import org.apache.commons.codec.binary.Base64;
  */
 public abstract class HashUtils {
 
-    private static Logger log = Logger.getLogger(HashUtils.class.getName());
+    private static final Logger log = Logger.getLogger(HashUtils.class.getName());
 
     public static String getHash(String message) {
-
         try {
-            String secret = "rotatomel";
-
-            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
-            sha256_HMAC.init(secret_key);
-
-            String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(message.getBytes()));
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            sha.update(message.getBytes("UTF-8"));
+            byte[] digest = sha.digest();
+            String hash = Base64.encodeBase64String(digest);
             return hash;
+            
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            Logger.getLogger(HashUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        catch (NoSuchAlgorithmException | InvalidKeyException | IllegalStateException e) {
-            log.log(Level.SEVERE, e.getMessage());
-            return null;
-        }
+        return null;
     }
+
 }
