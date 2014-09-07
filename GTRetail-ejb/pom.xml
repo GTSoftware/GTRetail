@@ -4,7 +4,7 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <organization>
         <name>GT Software</name>
@@ -37,7 +37,7 @@
 
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail-ejb</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>ejb</packaging>
 
     <name>GTRetail-ejb</name>
