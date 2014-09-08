@@ -49,13 +49,15 @@
                               modal="true"> 
 
                         <!-- seleccion de periodo fiscal -->
-                        <!-- obtener nuevo numero si cambia el punto de venta -->
+                        
                         <p:outputLabel value="#{msg.leletraFactura}:"/>
                         <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
 
                         <p:outputLabel value="#{msg.puntoVenta}:"/>
                         <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
                             <f:validateLongRange minimum="1" maximum="9999" />
+                            <p:ajax  update="nroFacturaField" 
+                                     listener="#{verVentasBean.cargarNumeroComprobante()}" />
                         </p:inputText>
 
                         <p:outputLabel value="#{msg.numero}:"/>

@@ -67,7 +67,7 @@ public class VerVentasBean {
     private Date fechaFactura = UtilUI.getNow();
 
     /**
-     * Creates a new instance of ImpresionVentasBean
+     * Creates a new instance of VerVentasBean
      */
     public VerVentasBean() {
     }
@@ -92,7 +92,10 @@ public class VerVentasBean {
             }
         }
     }
-    
+
+    /**
+     * Registra la factura en el libro de IVA Ventas
+     */
     public void registrarFactura() {
         try {
             //TODO Fix para que seleccione el usuario dentro de los periodos activos
@@ -104,6 +107,13 @@ public class VerVentasBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
         }
 
+    }
+
+    /**
+     * Carga el nuevo número de comprobante para el punto de venta
+     */
+    public void cargarNumeroComprobante() {
+        numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(letraComprobante, puntoVentaComprobante);
     }
 
     public Ventas getVentaActual() {

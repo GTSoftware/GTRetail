@@ -25,8 +25,9 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
+ * COnverter para PeriodosFiscales
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "fiscalPeriodoFiscalConverter")
@@ -63,7 +64,7 @@ public class FiscalPeriodoFiscalConverter implements Converter {
         if (!value.getClass().equals(FiscalPeriodosFiscales.class)) {
             return null;
         }
-        FiscalPeriodosFiscales sucursal = (FiscalPeriodosFiscales) value;
-        return sucursal.getId().toString();
+        FiscalPeriodosFiscales periodoFiscal = (FiscalPeriodosFiscales) value;
+        return periodoFiscal.getId().toString();
     }
 }
