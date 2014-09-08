@@ -85,8 +85,9 @@ public class VerVentasBean {
                 Logger.getLogger(VerVentasBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
             } else {
                 lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
+                //Fix hardcode categoría IVA empresa
                 letraComprobante = letrasComprobantesFacade.findLetraComprobante(2, ventaActual.getIdPersona().getIdResponsabilidadIva()).getLetraComprobante();
-                puntoVentaComprobante = "0001"; //TODO Fix HARDCODE
+                puntoVentaComprobante = authBackingBean.getUserLoggedIn().getPuntoVenta();
                 numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(letraComprobante, puntoVentaComprobante);
             }
         }

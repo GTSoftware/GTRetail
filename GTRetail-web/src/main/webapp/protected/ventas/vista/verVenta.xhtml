@@ -35,6 +35,7 @@
                                          action="#{impresionVentasBean.imprimirPresupuesto(verVentasBean.ventaActual)}"
                                          ajax="false"
                                          />
+                        <!-- Botón de anular factura -->
                     </p:panel>
 
                     <p:dialog header="#{msg.facturar}" 
@@ -47,15 +48,17 @@
                               hideEffect="clip" 
                               modal="true"> 
 
-                        <p:outputLabel value="Letra factura:"/>
+                        <!-- seleccion de periodo fiscal -->
+                        <!-- obtener nuevo numero si cambia el punto de venta -->
+                        <p:outputLabel value="#{msg.leletraFactura}:"/>
                         <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
 
-                        <p:outputLabel value="Punto venta:"/>
+                        <p:outputLabel value="#{msg.puntoVenta}:"/>
                         <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
                             <f:validateLongRange minimum="1" maximum="9999" />
                         </p:inputText>
 
-                        <p:outputLabel value="Número:"/>
+                        <p:outputLabel value="#{msg.numero}:"/>
                         <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
                             <f:validateLongRange minimum="1" maximum="99999999" />
                         </p:inputText>

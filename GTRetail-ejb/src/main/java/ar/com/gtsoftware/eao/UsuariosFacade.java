@@ -56,7 +56,7 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
             cq.select(usuario);
             Predicate p = null;
             if (usuariosSearchFilter.getIdUsuario() != null) {
-                p = cb.equal(usuario.get(Usuarios_.idUsuario), usuariosSearchFilter.getIdUsuario());
+                p = cb.equal(usuario.get(Usuarios_.id), usuariosSearchFilter.getIdUsuario());
             }
             if (usuariosSearchFilter.getNombreUsuario() != null) {
                 Predicate p1 = cb.like(usuario.get(Usuarios_.nombreUsuario), String.format("%%%s%%", usuariosSearchFilter.getNombreUsuario().toLowerCase()));

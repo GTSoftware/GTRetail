@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Clase que representa las ventas que se realizan
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity

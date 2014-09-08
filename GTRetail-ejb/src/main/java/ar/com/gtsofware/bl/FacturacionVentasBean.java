@@ -65,8 +65,8 @@ public class FacturacionVentasBean {
         registro.setIdResponsabilidadIva(venta.getIdPersona().getIdResponsabilidadIva());
         registro.setIdPeriodoFiscal(periodoFiscal);
         registro.setLetraFactura(letraComprobante);
-        registro.setNumeroFactura(numeroComprobante);
-        registro.setPuntoVentaFactura(puntoVentaComprobante);
+        registro.setNumeroFactura(formatNumeroFactura(numeroComprobante));
+        registro.setPuntoVentaFactura(formatPuntoVenta(puntoVentaComprobante));
         registro.setTotalFactura(venta.getTotal());
         ivaVentasFacade.create(registro);
         List<VentasLineas> lineasVenta = ventasLineasFacade.findVentasLineas(venta);
@@ -84,7 +84,7 @@ public class FacturacionVentasBean {
                 netoGravado = linea.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP);
                 importeIva = linea.getSubTotal().subtract(netoGravado);
                 importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
-                
+
                 noGravado = BigDecimal.ZERO;
             } else {
                 importeIva = BigDecimal.ZERO;
@@ -103,8 +103,8 @@ public class FacturacionVentasBean {
     }
 
     /**
-     * Devuelve el próximo número de factura a utilizar para el punto de venta
-     * yt letras pasados como parámetro
+     * Devuelve el próximo número de factura a utilizar para el punto de venta y
+     * letra pasados como parámetro
      *
      * @param letra
      * @param puntoVenta
@@ -115,10 +115,32 @@ public class FacturacionVentasBean {
         if (ultimaFactura != null) {
             int nro = Integer.parseInt(ultimaFactura.getNumeroFactura());
             nro++;
-            String proxNum = String.valueOf("00000000" + nro);
-            proxNum = proxNum.substring(proxNum.length() - 8);
-            return proxNum;
+            return formatNumeroFactura(String.valueOf("00000000" + nro));
         }
         return "00000001";
+    }
+
+    /**
+     * Devuelve el número de factura con el formato de 8 dígitos
+     *
+     * @param nroFactura
+     * @return
+     */
+    private String formatNumeroFactura(String nroFactura) {
+        String proxNum = String.valueOf("00000000".concat(nroFactura));
+        proxNum = proxNum.substring(proxNum.length() - 8);
+        return proxNum;
+    }
+
+    /**
+     * Devuelve el número de punto de venta con el formato de 4 dígitos
+     *
+     * @param puntoVenta
+     * @return
+     */
+    private String formatPuntoVenta(String puntoVenta) {
+        String proxNum = String.valueOf("00000000".concat(puntoVenta));
+        proxNum = proxNum.substring(proxNum.length() - 4);
+        return proxNum;
     }
 }
