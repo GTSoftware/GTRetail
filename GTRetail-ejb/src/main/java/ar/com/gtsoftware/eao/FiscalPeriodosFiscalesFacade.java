@@ -13,20 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
 public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosFiscales> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -38,5 +45,18 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
     public FiscalPeriodosFiscalesFacade() {
         super(FiscalPeriodosFiscales.class);
     }
-    
+
+    public List<FiscalPeriodosFiscales> findVigentes() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<FiscalPeriodosFiscales> cq = cb.createQuery(FiscalPeriodosFiscales.class);
+        Root<FiscalPeriodosFiscales> producto = cq.from(FiscalPeriodosFiscales.class);
+        cq.select(producto);
+        Predicate p = cb.not(producto.get(FiscalPeriodosFiscales_.periodoCerrado));
+        cq.where(p);
+        TypedQuery<FiscalPeriodosFiscales> q = em.createQuery(cq);
+
+        List<FiscalPeriodosFiscales> productosList = q.getResultList();
+        return productosList;
+    }
+
 }
