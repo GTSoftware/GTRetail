@@ -14,6 +14,7 @@ import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsofware.bl.exceptions.ServiceException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -49,14 +50,18 @@ public class FacturacionVentasBean {
      * @param numeroComprobante
      * @param periodoFiscal
      * @param fechaFactura
-     * @throws Exception
+     * @throws ServiceException
      */
     public void registrarFacturaVenta(Ventas venta, String letraComprobante,
             String puntoVentaComprobante,
             String numeroComprobante,
             FiscalPeriodosFiscales periodoFiscal,
-            Date fechaFactura) throws Exception {
+            Date fechaFactura) throws ServiceException {
 
+        if (fechaFactura.after(periodoFiscal.getFechaFinPeriodo())
+                || fechaFactura.before(periodoFiscal.getFechaInicioPeriodo())) {
+            throw new ServiceException("La fecha de factura no puede estar fuera de las fechas que comprenden el período!");
+        }
         FiscalLibroIvaVentas registro = new FiscalLibroIvaVentas();
         //TODO Falta registrar contablemente el asiento de la factura
         registro.setDocumento(venta.getIdPersona().getDocumento());
@@ -143,4 +148,35 @@ public class FacturacionVentasBean {
         proxNum = proxNum.substring(proxNum.length() - 4);
         return proxNum;
     }
+
+    /**
+     * Anula la factura asociada a la venta pasada como parámetro
+     *
+     * @param venta
+     * @throws ServiceException
+     */
+    public void anularFactura(Ventas venta) throws ServiceException {
+        if (venta == null) {
+            throw new ServiceException("Venta nula!");
+        }
+        if (venta.getIdRegistroIva() == null) {
+            throw new ServiceException("Venta no facturada: ".concat(venta.toString()));
+        }
+        if (venta.getIdRegistroIva().getIdPeriodoFiscal().isPeriodoCerrado()) {
+            throw new ServiceException("Venta de un período cerrado: ".concat(venta.toString()));
+        }
+        venta.setAnulada(true);
+        FiscalLibroIvaVentas factura = venta.getIdRegistroIva();
+        factura.setTotalFactura(BigDecimal.ZERO);
+        factura.setAnulada(true);
+        for (FiscalLibroIvaVentasLineas lineaF : ivaVentasLineasFacade.getLineasFactura(factura)) {
+            lineaF.setImporteIva(BigDecimal.ZERO);
+            lineaF.setNetoGravado(BigDecimal.ZERO);
+            lineaF.setNoGravado(BigDecimal.ZERO);
+            ivaVentasLineasFacade.edit(lineaF);
+        }
+        ivaVentasFacade.edit(factura);
+        ventasFacade.edit(venta);
+    }
+
 }

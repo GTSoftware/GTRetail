@@ -25,6 +25,7 @@ import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.utils.UtilUI;
 import ar.com.gtsofware.bl.FacturacionVentasBean;
+import ar.com.gtsofware.bl.exceptions.ServiceException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +66,7 @@ public class VerVentasBean {
     private String puntoVentaComprobante = "0000";
     private String numeroComprobante = "00000000";
     private Date fechaFactura = UtilUI.getNow();
+    private FiscalPeriodosFiscales periodoSeleccionado;
 
     /**
      * Creates a new instance of VerVentasBean
@@ -98,15 +100,31 @@ public class VerVentasBean {
      */
     public void registrarFactura() {
         try {
-            //TODO Fix para que seleccione el usuario dentro de los periodos activos
-            FiscalPeriodosFiscales pf = periodosFiscalesFacade.findAll().get(0);
-            facturacionBean.registrarFacturaVenta(ventaActual, letraComprobante, puntoVentaComprobante, numeroComprobante, pf, fechaFactura);
+
+            facturacionBean.registrarFacturaVenta(ventaActual,
+                    letraComprobante,
+                    puntoVentaComprobante, numeroComprobante,
+                    periodoSeleccionado, fechaFactura);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Factura registrada correctamente"));
-        } catch (Exception ex) {
+        } catch (ServiceException ex) {
             Logger.getLogger(FacturacionVentasBean.class.getName()).log(Level.SEVERE, null, ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
         }
 
+    }
+
+    /**
+     * Anula la venta actual y su factura asociada
+     */
+    public void anularFactura() {
+        try {
+            facturacionBean.anularFactura(ventaActual);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Factura anulada correctamente"));
+
+        } catch (ServiceException ex) {
+            Logger.getLogger(VerVentasBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
+        }
     }
 
     /**
@@ -162,6 +180,18 @@ public class VerVentasBean {
 
     public void setFechaFactura(Date fechaFactura) {
         this.fechaFactura = fechaFactura;
+    }
+
+    public List<FiscalPeriodosFiscales> getPeriodosFiscalesList() {
+        return periodosFiscalesFacade.findPeriodosVigentes();
+    }
+
+    public FiscalPeriodosFiscales getPeriodoSeleccionado() {
+        return periodoSeleccionado;
+    }
+
+    public void setPeriodoSeleccionado(FiscalPeriodosFiscales periodoSeleccionado) {
+        this.periodoSeleccionado = periodoSeleccionado;
     }
 
 }

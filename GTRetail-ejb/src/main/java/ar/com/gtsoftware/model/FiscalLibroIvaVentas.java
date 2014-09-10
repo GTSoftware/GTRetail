@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -41,28 +36,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
+ * Clase que almacena la información de las facturas del libro de iva ventas
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "fiscal_libro_iva_ventas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "FiscalLibroIvaVentas.findAll", query = "SELECT f FROM FiscalLibroIvaVentas f"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByIdFactura", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.idFactura = :idFactura"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByFechaFactura", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.fechaFactura = :fechaFactura"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByDocumento", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.documento = :documento"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByLetraFactura", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.letraFactura = :letraFactura"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByPuntoVentaFactura", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.puntoVentaFactura = :puntoVentaFactura"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByNumeroFactura", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.numeroFactura = :numeroFactura"),
-    @NamedQuery(name = "FiscalLibroIvaVentas.findByTotalFactura", query = "SELECT f FROM FiscalLibroIvaVentas f WHERE f.totalFactura = :totalFactura")})
-public class FiscalLibroIvaVentas implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_factura"))
+public class FiscalLibroIvaVentas extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_factura")
-    private Integer idFactura;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_factura")
@@ -88,6 +73,9 @@ public class FiscalLibroIvaVentas implements Serializable {
     @Size(min = 1, max = 8)
     @Column(name = "numero_factura")
     private String numeroFactura;
+    @Basic(optional = false)
+    @Column(name = "anulada")
+    private boolean anulada;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total_factura")
     private BigDecimal totalFactura;
@@ -112,24 +100,16 @@ public class FiscalLibroIvaVentas implements Serializable {
     }
 
     public FiscalLibroIvaVentas(Integer idFactura) {
-        this.idFactura = idFactura;
+        super(idFactura);
     }
 
     public FiscalLibroIvaVentas(Integer idFactura, Date fechaFactura, String documento, String letraFactura, String puntoVentaFactura, String numeroFactura) {
-        this.idFactura = idFactura;
+        super(idFactura);
         this.fechaFactura = fechaFactura;
         this.documento = documento;
         this.letraFactura = letraFactura;
         this.puntoVentaFactura = puntoVentaFactura;
         this.numeroFactura = numeroFactura;
-    }
-
-    public Integer getIdFactura() {
-        return idFactura;
-    }
-
-    public void setIdFactura(Integer idFactura) {
-        this.idFactura = idFactura;
     }
 
     public Date getFechaFactura() {
@@ -189,15 +169,6 @@ public class FiscalLibroIvaVentas implements Serializable {
         this.ventasList = ventasList;
     }
 
-    @XmlTransient
-    public List<FiscalLibroIvaVentasLineas> getFiscalLibroIvaVentasLineasList() {
-        return fiscalLibroIvaVentasLineasList;
-    }
-
-    public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
-        this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
-    }
-
     public Personas getIdPersona() {
         return idPersona;
     }
@@ -230,29 +201,17 @@ public class FiscalLibroIvaVentas implements Serializable {
         this.idRegistroContable = idRegistroContable;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idFactura != null ? idFactura.hashCode() : 0);
-        return hash;
+    public boolean getAnulada() {
+        return anulada;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof FiscalLibroIvaVentas)) {
-            return false;
-        }
-        FiscalLibroIvaVentas other = (FiscalLibroIvaVentas) object;
-        if ((this.idFactura == null && other.idFactura != null) || (this.idFactura != null && !this.idFactura.equals(other.idFactura))) {
-            return false;
-        }
-        return true;
+    public void setAnulada(boolean anulada) {
+        this.anulada = anulada;
     }
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.FiscalLibroIvaVentas[ idFactura=" + idFactura + " ]";
+        return "ar.com.gtsoftware.model.FiscalLibroIvaVentas[ idFactura=" + this.getId() + " ]";
     }
-    
+
 }

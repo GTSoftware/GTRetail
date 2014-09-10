@@ -46,7 +46,7 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
         super(FiscalPeriodosFiscales.class);
     }
 
-    public List<FiscalPeriodosFiscales> findVigentes() {
+    public List<FiscalPeriodosFiscales> findPeriodosVigentes() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<FiscalPeriodosFiscales> cq = cb.createQuery(FiscalPeriodosFiscales.class);
         Root<FiscalPeriodosFiscales> producto = cq.from(FiscalPeriodosFiscales.class);

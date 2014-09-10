@@ -13,44 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.Basic;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Clase que almacena la información de el detalle de la factura para el libro
+ * de iva ventas
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "fiscal_libro_iva_ventas_lineas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "FiscalLibroIvaVentasLineas.findAll", query = "SELECT f FROM FiscalLibroIvaVentasLineas f"),
-    @NamedQuery(name = "FiscalLibroIvaVentasLineas.findByIdLineaLibro", query = "SELECT f FROM FiscalLibroIvaVentasLineas f WHERE f.idLineaLibro = :idLineaLibro"),
-    @NamedQuery(name = "FiscalLibroIvaVentasLineas.findByNetoGravado", query = "SELECT f FROM FiscalLibroIvaVentasLineas f WHERE f.netoGravado = :netoGravado"),
-    @NamedQuery(name = "FiscalLibroIvaVentasLineas.findByNoGravado", query = "SELECT f FROM FiscalLibroIvaVentasLineas f WHERE f.noGravado = :noGravado"),
-    @NamedQuery(name = "FiscalLibroIvaVentasLineas.findByImporteIva", query = "SELECT f FROM FiscalLibroIvaVentasLineas f WHERE f.importeIva = :importeIva")})
-public class FiscalLibroIvaVentasLineas implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_libro"))
+public class FiscalLibroIvaVentasLineas extends BaseEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_linea_libro")
-    private Integer idLineaLibro;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "neto_gravado")
     private BigDecimal netoGravado;
@@ -69,15 +57,7 @@ public class FiscalLibroIvaVentasLineas implements Serializable {
     }
 
     public FiscalLibroIvaVentasLineas(Integer idLineaLibro) {
-        this.idLineaLibro = idLineaLibro;
-    }
-
-    public Integer getIdLineaLibro() {
-        return idLineaLibro;
-    }
-
-    public void setIdLineaLibro(Integer idLineaLibro) {
-        this.idLineaLibro = idLineaLibro;
+        super(idLineaLibro);
     }
 
     public BigDecimal getNetoGravado() {
@@ -121,28 +101,8 @@ public class FiscalLibroIvaVentasLineas implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idLineaLibro != null ? idLineaLibro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof FiscalLibroIvaVentasLineas)) {
-            return false;
-        }
-        FiscalLibroIvaVentasLineas other = (FiscalLibroIvaVentasLineas) object;
-        if ((this.idLineaLibro == null && other.idLineaLibro != null) || (this.idLineaLibro != null && !this.idLineaLibro.equals(other.idLineaLibro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas[ idLineaLibro=" + idLineaLibro + " ]";
+        return "ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas[ idLineaLibro=" + this.getId() + " ]";
     }
-    
+
 }

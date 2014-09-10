@@ -35,7 +35,35 @@
                                          action="#{impresionVentasBean.imprimirPresupuesto(verVentasBean.ventaActual)}"
                                          ajax="false"
                                          />
-                        <!-- Botón de anular factura -->
+                        <p:commandButton value="#{msg.anularFactura}"
+                                         icon="ui-icon-cancel"
+                                         rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
+                                         onclick="confirmation.show()"
+                                         >
+
+                        </p:commandButton>
+
+                        <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}" 
+                                         appendToBody="true" 
+                                         message="#{msg.anularRealmente}"
+                                         showEffect="fade" hideEffect="explode">
+
+
+                            <p:commandButton value="#{msg.si}" 
+                                             oncomplete="confirmation.hide()" 
+                                             actionListener="#{verVentasBean.anularFactura()}"
+                                             immediate="true"
+                                             update="opcionesForm"
+                                             styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"
+                                             process="@this"/>
+
+                            <p:commandButton value="#{msg.no}" type="button" 
+                                             onclick="confirmation.hide()" 
+                                             styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close" />
+
+                        </p:confirmDialog>
                     </p:panel>
 
                     <p:dialog header="#{msg.facturar}" 
@@ -48,32 +76,43 @@
                               hideEffect="clip" 
                               modal="true"> 
 
-                        <!-- seleccion de periodo fiscal -->
-                        
-                        <p:outputLabel value="#{msg.leletraFactura}:"/>
-                        <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
+                        <h:panelGrid columns="2" >
 
-                        <p:outputLabel value="#{msg.puntoVenta}:"/>
-                        <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
-                            <f:validateLongRange minimum="1" maximum="9999" />
-                            <p:ajax  update="nroFacturaField" 
-                                     listener="#{verVentasBean.cargarNumeroComprobante()}" />
-                        </p:inputText>
+                            <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
+                            <p:selectOneMenu id="periodoFiscalField" required="true" 
+                                             requiredMessage="#{msg.campoRequerido}" 
+                                             value="#{verVentasBean.periodoSeleccionado}" 
+                                             converter="#{fiscalPeriodoFiscalConverter}">
+                                <f:selectItems value="#{verVentasBean.periodosFiscalesList}" 
+                                               var="periodo" itemLabel="#{periodo.nombrePeriodo}" 
+                                               itemValue="#{periodo}"/>
+                            </p:selectOneMenu>                         
 
-                        <p:outputLabel value="#{msg.numero}:"/>
-                        <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
-                            <f:validateLongRange minimum="1" maximum="99999999" />
-                        </p:inputText>
+                            <p:outputLabel for="letraFacturaField" value="#{msg.letraFactura}:"/>
+                            <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
 
-                        <p:outputLabel value="#{msg.fecha}:"/>
-                        <p:calendar value="#{verVentasBean.fechaFactura}" navigator="true" pattern="dd/MM/yyyy HH:mm" />
+                            <p:outputLabel for="pvFacturaField" value="#{msg.puntoVenta}:"/>
+                            <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
+                                <f:validateLongRange minimum="1" maximum="9999" />
+                                <p:ajax  update="nroFacturaField" 
+                                         listener="#{verVentasBean.cargarNumeroComprobante()}" />
+                            </p:inputText>
 
+                            <p:outputLabel for="nroFacturaField" value="#{msg.numero}:"/>
+                            <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
+                                <f:validateLongRange minimum="1" maximum="99999999" />
+                            </p:inputText>
 
+                            <p:outputLabel for="fechaFacturaField" value="#{msg.fecha}:"/>
+                            <p:calendar id="fechaFacturaField" value="#{verVentasBean.fechaFactura}" navigator="true" pattern="dd/MM/yyyy HH:mm" />
+
+                        </h:panelGrid>
 
                         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                                          oncomplete="facturarDialog.hide()" 
-                                         update="@all"
+                                         update="opcionesForm"
                                          action="#{verVentasBean.registrarFactura()}"/> 
+
                     </p:dialog>
 
 
