@@ -4,7 +4,7 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <organization>
         <name>GT Software</name>
@@ -37,7 +37,7 @@
 
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail-web</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>GTRetail-web</name>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>ar.com.gtsoftware</groupId>
             <artifactId>GTRetail-ejb</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
