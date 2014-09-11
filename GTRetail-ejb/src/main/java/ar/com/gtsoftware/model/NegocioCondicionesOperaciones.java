@@ -70,11 +70,11 @@ public class NegocioCondicionesOperaciones extends BaseEntity implements Seriali
     public NegocioCondicionesOperaciones() {
     }
 
-    public NegocioCondicionesOperaciones(Integer idCondicion) {
+    public NegocioCondicionesOperaciones(Long idCondicion) {
         super(idCondicion);
     }
 
-    public NegocioCondicionesOperaciones(Integer idCondicion, String nombreCondicion, boolean activo, boolean venta, boolean compra) {
+    public NegocioCondicionesOperaciones(Long idCondicion, String nombreCondicion, boolean activo, boolean venta, boolean compra) {
         super(idCondicion);
         this.nombreCondicion = nombreCondicion;
         this.activo = activo;

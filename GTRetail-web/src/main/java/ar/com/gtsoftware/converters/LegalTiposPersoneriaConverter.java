@@ -46,9 +46,9 @@ public class LegalTiposPersoneriaConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        Integer id;
+        Long id;
         try {
-            id = Integer.parseInt(value);
+            id = Long.parseLong(value);
         } catch (NumberFormatException e) {
             return null;
         }

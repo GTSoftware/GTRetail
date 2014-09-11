@@ -56,7 +56,7 @@ public class FiscalLibroIvaVentasLineas extends BaseEntity implements Serializab
     public FiscalLibroIvaVentasLineas() {
     }
 
-    public FiscalLibroIvaVentasLineas(Integer idLineaLibro) {
+    public FiscalLibroIvaVentasLineas(Long idLineaLibro) {
         super(idLineaLibro);
     }
 

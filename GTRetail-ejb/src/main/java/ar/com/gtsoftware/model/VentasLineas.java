@@ -85,11 +85,11 @@ public class VentasLineas extends BaseEntity implements Serializable {
     public VentasLineas() {
     }
 
-    public VentasLineas(Integer idLineaVenta) {
+    public VentasLineas(Long idLineaVenta) {
         super(idLineaVenta);
     }
 
-    public VentasLineas(Integer idLineaVenta, BigDecimal precioVentaUnitario, BigDecimal cantidad, BigDecimal subTotal, BigDecimal costoNetoUnitario, BigDecimal costoBrutoUnitario, BigDecimal cantidadEntregada) {
+    public VentasLineas(Long idLineaVenta, BigDecimal precioVentaUnitario, BigDecimal cantidad, BigDecimal subTotal, BigDecimal costoNetoUnitario, BigDecimal costoBrutoUnitario, BigDecimal cantidadEntregada) {
         super(idLineaVenta);
         this.precioVentaUnitario = precioVentaUnitario;
         this.cantidad = cantidad;

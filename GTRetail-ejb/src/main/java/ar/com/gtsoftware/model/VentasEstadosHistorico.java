@@ -64,13 +64,13 @@ public class VentasEstadosHistorico extends BaseEntity implements Serializable {
     public VentasEstadosHistorico() {
     }
 
-    public VentasEstadosHistorico(Integer id) {
+    public VentasEstadosHistorico(Long id) {
         super(id);
     }
 
     public VentasEstadosHistorico(Ventas idVenta, Date fechaCambio, 
             VentasEstados idEstadoAnterior, VentasEstados idEstadoActual, 
-            Usuarios idUsuario, Integer id) {
+            Usuarios idUsuario, Long id) {
         
         super(id);
         this.idVenta = idVenta;

@@ -68,11 +68,11 @@ public class UbicacionLocalidades extends BaseEntity implements Serializable {
     public UbicacionLocalidades() {
     }
 
-    public UbicacionLocalidades(Integer idLocalidad) {
+    public UbicacionLocalidades(Long idLocalidad) {
         super(idLocalidad);
     }
 
-    public UbicacionLocalidades(Integer idLocalidad, String nombreLocalidad) {
+    public UbicacionLocalidades(Long idLocalidad, String nombreLocalidad) {
         super(idLocalidad);
         this.nombreLocalidad = nombreLocalidad;
     }

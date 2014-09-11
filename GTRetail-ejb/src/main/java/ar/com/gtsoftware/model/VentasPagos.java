@@ -83,11 +83,11 @@ public class VentasPagos extends BaseEntity implements Serializable {
     public VentasPagos() {
     }
 
-    public VentasPagos(Integer idPagoVenta) {
+    public VentasPagos(Long idPagoVenta) {
         super(idPagoVenta);
     }
 
-    public VentasPagos(Integer idPagoVenta, Date fechaPago) {
+    public VentasPagos(Long idPagoVenta, Date fechaPago) {
         super(idPagoVenta);
         this.fechaPago = fechaPago;
     }

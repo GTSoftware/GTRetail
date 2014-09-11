@@ -57,11 +57,11 @@ public class VentasPagosLineas extends BaseEntity implements Serializable {
     public VentasPagosLineas() {
     }
 
-    public VentasPagosLineas(Integer idLineaPago) {
+    public VentasPagosLineas(Long idLineaPago) {
         super(idLineaPago);
     }
 
-    public VentasPagosLineas(Integer idLineaPago, BigDecimal importe) {
+    public VentasPagosLineas(Long idLineaPago, BigDecimal importe) {
         super(idLineaPago);
         this.importe = importe;
     }

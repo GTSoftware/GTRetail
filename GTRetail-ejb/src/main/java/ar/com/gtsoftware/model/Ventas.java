@@ -102,11 +102,11 @@ public class Ventas extends BaseEntity implements Serializable {
     public Ventas() {
     }
 
-    public Ventas(Integer idVenta) {
+    public Ventas(Long idVenta) {
         super(idVenta);
     }
 
-    public Ventas(Integer idVenta, Date fechaVenta, BigDecimal total, BigDecimal saldo, boolean anulada) {
+    public Ventas(Long idVenta, Date fechaVenta, BigDecimal total, BigDecimal saldo, boolean anulada) {
         super(idVenta);
         this.fechaVenta = fechaVenta;
         this.total = total;

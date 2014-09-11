@@ -39,14 +39,14 @@ public class VentasEstados extends BaseEntity implements Serializable {
     @Column(name = "nombre_estado")
     private String nombreEstado;
 
-    public VentasEstados(Integer id) {
+    public VentasEstados(Long id) {
         super(id);
     }
 
     public VentasEstados() {
     }
 
-    public VentasEstados(Integer id, String nombreEstado) {
+    public VentasEstados(Long id, String nombreEstado) {
         super(id);
         this.nombreEstado = nombreEstado;
     }

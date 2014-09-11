@@ -98,11 +98,11 @@ public class Sucursales extends BaseEntity {
     public Sucursales() {
     }
 
-    public Sucursales(Integer idSucursal) {
+    public Sucursales(Long idSucursal) {
         super(idSucursal);
     }
 
-    public Sucursales(Integer idSucursal, String nombreSucursal, Date fechaAlta, boolean activo) {
+    public Sucursales(Long idSucursal, String nombreSucursal, Date fechaAlta, boolean activo) {
         super(idSucursal);
         this.nombreSucursal = nombreSucursal;
         this.fechaAlta = fechaAlta;

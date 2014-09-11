@@ -99,11 +99,11 @@ public class FiscalLibroIvaVentas extends BaseEntity implements Serializable {
     public FiscalLibroIvaVentas() {
     }
 
-    public FiscalLibroIvaVentas(Integer idFactura) {
+    public FiscalLibroIvaVentas(Long idFactura) {
         super(idFactura);
     }
 
-    public FiscalLibroIvaVentas(Integer idFactura, Date fechaFactura, String documento, String letraFactura, String puntoVentaFactura, String numeroFactura) {
+    public FiscalLibroIvaVentas(Long idFactura, Date fechaFactura, String documento, String letraFactura, String puntoVentaFactura, String numeroFactura) {
         super(idFactura);
         this.fechaFactura = fechaFactura;
         this.documento = documento;

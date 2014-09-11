@@ -142,11 +142,11 @@ public class Personas extends BaseEntity implements Serializable {
     public Personas() {
     }
 
-    public Personas(Integer idPersona) {
+    public Personas(Long idPersona) {
         super(idPersona);
     }
 
-    public Personas(Integer idPersona, String razonSocial, String documento, Date fechaAlta, boolean activo, boolean cliente, boolean proveedor) {
+    public Personas(Long idPersona, String razonSocial, String documento, Date fechaAlta, boolean activo, boolean cliente, boolean proveedor) {
         super(idPersona);
         this.razonSocial = razonSocial;
         this.documento = documento;

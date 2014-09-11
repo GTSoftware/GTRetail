@@ -106,11 +106,11 @@ public class Productos extends BaseEntity implements Serializable {
     public Productos() {
     }
 
-    public Productos(Integer idProducto) {
+    public Productos(Long idProducto) {
         super(idProducto);
     }
 
-    public Productos(Integer idProducto, Date fechaAlta, boolean activo, BigDecimal costoAdquisicionNeto, BigDecimal utilidad, BigDecimal stockTotal, int annosAmortizacion) {
+    public Productos(Long idProducto, Date fechaAlta, boolean activo, BigDecimal costoAdquisicionNeto, BigDecimal utilidad, BigDecimal stockTotal, int annosAmortizacion) {
         super(idProducto);
         this.fechaAlta = fechaAlta;
         this.activo = activo;

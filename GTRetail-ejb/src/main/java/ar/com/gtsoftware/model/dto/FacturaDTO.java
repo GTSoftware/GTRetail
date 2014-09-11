@@ -120,7 +120,7 @@ public class FacturaDTO implements Serializable {
      *
      * @param netoGravado
      */
-    public void setNetoGravadoo(BigDecimal netoGravado) {
+    public void setNetoGravado(BigDecimal netoGravado) {
         this.netoGravado = netoGravado;
     }
 

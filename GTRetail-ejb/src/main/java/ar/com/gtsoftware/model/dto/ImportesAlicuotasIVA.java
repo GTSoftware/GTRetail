@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.controller.helper;
+package ar.com.gtsoftware.model.dto;
 
 
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;

@@ -101,7 +101,7 @@ public class Usuarios extends BaseEntity implements Serializable {
      *
      * @param idUsuario
      */
-    public Usuarios(Integer idUsuario) {
+    public Usuarios(Long idUsuario) {
         super(idUsuario);
     }
 
@@ -114,7 +114,7 @@ public class Usuarios extends BaseEntity implements Serializable {
      * @param password
      * @param fechaAlta
      */
-    public Usuarios(Integer idUsuario, String nombreUsuario, String login, String password, Date fechaAlta) {
+    public Usuarios(Long idUsuario, String nombreUsuario, String login, String password, Date fechaAlta) {
         super(idUsuario);
         this.nombreUsuario = nombreUsuario;
         this.login = login;

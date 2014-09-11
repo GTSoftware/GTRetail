@@ -67,11 +67,11 @@ public class FiscalPeriodosFiscales extends BaseEntity {
     public FiscalPeriodosFiscales() {
     }
 
-    public FiscalPeriodosFiscales(Integer idPeriodoFiscal) {
+    public FiscalPeriodosFiscales(Long idPeriodoFiscal) {
         super(idPeriodoFiscal);
     }
 
-    public FiscalPeriodosFiscales(Integer idPeriodoFiscal, String nombrePeriodo, Date fechaInicioPeriodo, Date fechaFinPeriodo) {
+    public FiscalPeriodosFiscales(Long idPeriodoFiscal, String nombrePeriodo, Date fechaInicioPeriodo, Date fechaFinPeriodo) {
         super(idPeriodoFiscal);
         this.nombrePeriodo = nombrePeriodo;
         this.fechaInicioPeriodo = fechaInicioPeriodo;
