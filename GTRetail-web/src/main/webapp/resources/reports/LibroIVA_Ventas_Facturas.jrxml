@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LibroIVA_Ventas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="658183c0-1e32-4007-bfe2-14dc13246571">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="facturasList" class="java.util.List">
+		<fieldDescription><![CDATA[facturasList]]></fieldDescription>
+	</field>
+	<field name="fechaDesde" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaDesde]]></fieldDescription>
+	</field>
+	<field name="fechaGeneracion" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaGeneracion]]></fieldDescription>
+	</field>
+	<field name="fechaHasta" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaHasta]]></fieldDescription>
+	</field>
+	<field name="importeTotal" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[importeTotal]]></fieldDescription>
+	</field>
+	<field name="importeTotalIVA" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[importeTotalIVA]]></fieldDescription>
+	</field>
+	<field name="totalesAlicuota" class="java.util.Map">
+		<fieldDescription><![CDATA[totalesAlicuota]]></fieldDescription>
+	</field>
+	<field name="totalesIVAResponsabilidad" class="java.util.Map">
+		<fieldDescription><![CDATA[totalesIVAResponsabilidad]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50"/>
+	</columnHeader>
+	<detail>
+		<band height="51" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="50"/>
+	</columnFooter>
+</jasperReport>
