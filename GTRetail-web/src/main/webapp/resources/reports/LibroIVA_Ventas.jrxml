@@ -99,7 +99,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch">
+		<band height="71" splitType="Stretch">
 			<textField pattern="¤ #,##0.00">
 				<reportElement x="94" y="20" width="100" height="20" uuid="5e9a2538-9b9b-4ceb-b366-3ed30b836b2c"/>
 				<textFieldExpression><![CDATA[$F{importeTotalIVA}]]></textFieldExpression>
@@ -116,6 +116,11 @@
 				<reportElement x="0" y="20" width="94" height="20" uuid="aec0613a-75e2-4fe0-a382-5179cf9488ed"/>
 				<text><![CDATA[IVA total:]]></text>
 			</staticText>
+			<subreport>
+				<reportElement x="214" y="0" width="341" height="71" uuid="d6f98c66-26e5-4fdf-a25e-8ea95cbec82c"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{totalesIVAResponsabilidad})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["LibroIVA_Ventas_Facturas_Responsabilidades.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>
