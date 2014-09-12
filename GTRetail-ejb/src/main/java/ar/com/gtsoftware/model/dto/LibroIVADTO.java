@@ -43,8 +43,8 @@ public class LibroIVADTO implements Serializable {
     private List<FacturaDTO> facturasList;
     private BigDecimal importeTotal;
     private BigDecimal importeTotalIVA;
-    private Map<FiscalResponsabilidadesIva, BigDecimal> totalesIVAResponsabilidad;
-    private Map<FiscalAlicuotasIva, BigDecimal> totalesAlicuota;
+    private List<ImportesResponsabilidad> totalesIVAResponsabilidad;
+    private List<ImportesAlicuotasIVA> totalesAlicuota;
 
     /**
      * Crea un nuevo Libro de IVA
@@ -174,20 +174,20 @@ public class LibroIVADTO implements Serializable {
     }
 
     /**
-     * Devuelve los totales de iva por responsabilidad de IVA
+     * Devuelve los totales por responsabilidad de IVA
      *
      * @return
      */
-    public Map<FiscalResponsabilidadesIva, BigDecimal> getTotalesIVAResponsabilidad() {
+    public List<ImportesResponsabilidad> getTotalesIVAResponsabilidad() {
         return totalesIVAResponsabilidad;
     }
 
     /**
-     * Establece los totales de iva por responsabilidad de IVA
+     * Establece los totales por responsabilidad de IVA
      *
      * @param totalesIVAResponsabilidad
      */
-    public void setTotalesIVAResponsabilidad(Map<FiscalResponsabilidadesIva, BigDecimal> totalesIVAResponsabilidad) {
+    public void setTotalesIVAResponsabilidad(List<ImportesResponsabilidad> totalesIVAResponsabilidad) {
         this.totalesIVAResponsabilidad = totalesIVAResponsabilidad;
     }
 
@@ -196,7 +196,7 @@ public class LibroIVADTO implements Serializable {
      *
      * @return
      */
-    public Map<FiscalAlicuotasIva, BigDecimal> getTotalesAlicuota() {
+    public List<ImportesAlicuotasIVA> getTotalesAlicuota() {
         return totalesAlicuota;
     }
 
@@ -205,7 +205,7 @@ public class LibroIVADTO implements Serializable {
      *
      * @param totalesAlicuota
      */
-    public void setTotalesAlicuota(Map<FiscalAlicuotasIva, BigDecimal> totalesAlicuota) {
+    public void setTotalesAlicuota(List<ImportesAlicuotasIVA> totalesAlicuota) {
         this.totalesAlicuota = totalesAlicuota;
     }
 

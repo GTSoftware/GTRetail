@@ -16,15 +16,17 @@
 package ar.com.gtsofware.bl;
 
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
+import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
-import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.dto.FacturaDTO;
 import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
+import ar.com.gtsoftware.model.dto.ImportesResponsabilidad;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
+import ar.com.gtsofware.bl.exceptions.ServiceException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,57 +48,130 @@ public class LibroIVAVentasBean {
 
     @EJB
     private FiscalLibroIvaVentasFacade ivaVentasFacade;
+    @EJB
+    private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
-    public LibroIVADTO obtenerLibroIVA(IVAVentasSearchFilter filter) {
-        LibroIVADTO libro = new LibroIVADTO(filter.getPeriodo().getFechaInicioPeriodo(),
-                filter.getPeriodo().getFechaFinPeriodo());
-        List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findBySearchFilter(filter);
-        //TODO recorrer lista
-        //Obtener lineas
-        //Acumular IVA
-        //Acumular por tipo de IVA
-        //Generar Factura DTO
-        //Retornar LibroIVADTO
-        List<FacturaDTO> facturasDTOList = new ArrayList<>();
-        List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
-        for (FiscalLibroIvaVentas factura : facturas) {
-            FacturaDTO facDTO = new FacturaDTO();
-            facDTO.setDocumentoCliente(factura.getDocumento());
-            facDTO.setFechaFactura(factura.getFechaFactura());
-            facDTO.setIdFactura(factura.getId());
-            facDTO.setRazonSocialCliente(factura.getIdPersona().getRazonSocial());
-            facDTO.setNumeroFactura(factura.getLetraFactura().concat(" ")
-                    .concat(factura.getPuntoVentaFactura())
-                    .concat(factura.getNumeroFactura()));
+    public LibroIVADTO obtenerLibroIVA(IVAVentasSearchFilter filter) throws ServiceException {
+        LibroIVADTO libro;
+        if (!filter.hasFilter()) {
+
+            throw new ServiceException("Filtro vacío!");
+
         }
 
-        return libro;
-    }
-/*
-    private void calcularIVA() {
-        HashMap<FiscalAlicuotasIva, BigDecimal> importe = new HashMap<>();
-        for (VentasLineas vl : ventaActual.getVentasLineasList()) {
-            FiscalAlicuotasIva alicuota = vl.getIdProducto().getIdAlicuotaIva();
-            //Importe*(1+alicuota/100)=Neto
-            if (alicuota.getGravarIva()) {
-                //Importe*(1+alicuota/100)=Neto
-                BigDecimal coeficienteIVA = BigDecimal.ONE.add(alicuota.getValorAlicuota().divide(new BigDecimal(100)));
-                BigDecimal netoGravado = vl.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP);
-                BigDecimal importeIva = vl.getSubTotal().subtract(netoGravado);
-                importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
+        if (filter.hasFechasDesdeHasta()) {
+            libro = new LibroIVADTO(filter.getFechaDesde(), filter.getFechaHasta());
+        } else {
+            libro = new LibroIVADTO(filter.getPeriodo().getFechaInicioPeriodo(),
+                    filter.getPeriodo().getFechaFinPeriodo());
+        }
+        List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findBySearchFilter(filter);
 
-                if (importe.containsKey(alicuota)) {
-                    importeIva = importeIva.add(importe.get(alicuota));
+        List<FacturaDTO> facturasDTOList = new ArrayList<>();
+        BigDecimal importeGeneralTotal = BigDecimal.ZERO;
+        BigDecimal totalGeneralIVA = BigDecimal.ZERO;
+        List<ImportesResponsabilidad> totalesResponsabildiad = new ArrayList<>();
+        List<ImportesAlicuotasIVA> totalAlicuotasIVAGeneral = new ArrayList<>();
+        for (FiscalLibroIvaVentas factura : facturas) {
+            List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
+
+            FacturaDTO facDTO = inicializarFacturaDTO(factura);
+
+            importeGeneralTotal = importeGeneralTotal.add(facDTO.getTotalFactura());
+            HashMap<FiscalAlicuotasIva, BigDecimal> ivaMap = new HashMap<>();
+            for (FiscalLibroIvaVentasLineas linea : ivaVentasLineasFacade.getLineasFactura(factura)) {
+                facDTO.setNetoGravado(facDTO.getNetoGravado().add(linea.getNetoGravado()));
+                facDTO.setNoGravado(facDTO.getNoGravado().add(linea.getNoGravado()));
+                facDTO.setTotalIva(facDTO.getTotalIva().add(linea.getImporteIva()));
+                FiscalAlicuotasIva alicuota = linea.getIdAlicuotaIva();
+
+                BigDecimal importeIva = linea.getImporteIva();
+                if (ivaMap.containsKey(alicuota)) {
+                    importeIva = importeIva.add(ivaMap.get(alicuota));
                 }
-                importe.put(alicuota, importeIva);
+                ivaMap.put(alicuota, importeIva);
+            }
+            for (Map.Entry<FiscalAlicuotasIva, BigDecimal> i : ivaMap.entrySet()) {
+                ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue());
+                importesIVA.add(imp);
+            }
+            facDTO.setTotalAlicuota(importesIVA);
+
+            totalGeneralIVA = totalGeneralIVA.add(facDTO.getTotalIva());
+            facturasDTOList.add(facDTO);
+            ImportesResponsabilidad acumuladorResponsabilidadFactura = new ImportesResponsabilidad(factura.getIdResponsabilidadIva(),
+                    facDTO.getTotalFactura(),
+                    facDTO.getTotalIva(),
+                    facDTO.getNetoGravado(),
+                    facDTO.getNoGravado());
+
+            if (totalesResponsabildiad.contains(acumuladorResponsabilidadFactura)) {
+                ImportesResponsabilidad importeRespExistente = totalesResponsabildiad.get(totalesResponsabildiad.indexOf(acumuladorResponsabilidadFactura));
+                importeRespExistente.setImporteTotal(importeRespExistente.getImporteTotal().add(acumuladorResponsabilidadFactura.getImporteTotal()));
+                importeRespExistente.setIvaTotal(importeRespExistente.getIvaTotal().add(acumuladorResponsabilidadFactura.getIvaTotal()));
+                importeRespExistente.setNetoGravadoTotal(importeRespExistente.getNetoGravadoTotal().add(acumuladorResponsabilidadFactura.getNetoGravadoTotal()));
+                importeRespExistente.setNoGravadoTotal(importeRespExistente.getNoGravadoTotal().add(acumuladorResponsabilidadFactura.getNoGravadoTotal()));
+
+            } else {
+                totalesResponsabildiad.add(acumuladorResponsabilidadFactura);
             }
 
+            //Totalizar IVA por alicuota general
+            totalizarAlicuotasIVAGeneral(totalAlicuotasIVAGeneral, importesIVA);
         }
-        for (Map.Entry<FiscalAlicuotasIva, BigDecimal> i : importe.entrySet()) {
-            ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue());
-            importesIVA.add(imp);
+
+        libro.setImporteTotal(importeGeneralTotal);
+        libro.setImporteTotalIVA(totalGeneralIVA);
+        libro.setTotalesIVAResponsabilidad(totalesResponsabildiad);
+        libro.setTotalesAlicuota(totalAlicuotasIVAGeneral);
+        libro.setFacturasList(facturasDTOList);
+        return libro;
+    }
+
+    /**
+     * Inicializa el DTO de factura
+     *
+     * @param facDTO
+     * @param factura
+     */
+    private FacturaDTO inicializarFacturaDTO(FiscalLibroIvaVentas factura) {
+        FacturaDTO facDTO = new FacturaDTO();
+        facDTO.setDocumentoCliente(factura.getDocumento());
+        facDTO.setFechaFactura(factura.getFechaFactura());
+        facDTO.setIdFactura(factura.getId());
+        facDTO.setRazonSocialCliente(factura.getIdPersona().getRazonSocial());
+        facDTO.setNumeroFactura(factura.getLetraFactura().concat(" ")
+                .concat(factura.getPuntoVentaFactura())
+                .concat(factura.getNumeroFactura()));
+        facDTO.setNetoGravado(BigDecimal.ZERO);
+        facDTO.setNoGravado(BigDecimal.ZERO);
+        facDTO.setTotalFactura(factura.getTotalFactura());
+        facDTO.setTotalIva(BigDecimal.ZERO);
+        return facDTO;
+    }
+
+    /**
+     * Genera la lista totalizadora general de importes de iva por alícuota
+     *
+     * @param totalAlicuotasIVAGeneral
+     * @param totalAlicuotasIVAFactura
+     */
+    private void totalizarAlicuotasIVAGeneral(List<ImportesAlicuotasIVA> totalAlicuotasIVAGeneral,
+            List<ImportesAlicuotasIVA> totalAlicuotasIVAFactura) {
+        if (totalAlicuotasIVAGeneral.isEmpty()) {
+            totalAlicuotasIVAGeneral.addAll(totalAlicuotasIVAFactura);
+        } else {
+            for (ImportesAlicuotasIVA ivaFactrura : totalAlicuotasIVAFactura) {
+                if (totalAlicuotasIVAGeneral.contains(ivaFactrura)) {
+                    ImportesAlicuotasIVA existente = totalAlicuotasIVAGeneral.get(totalAlicuotasIVAGeneral.indexOf(ivaFactrura));
+                    existente.setImporte(existente.getImporte().add(ivaFactrura.getImporte()));
+                } else {
+                    ImportesAlicuotasIVA nuevoIva = new ImportesAlicuotasIVA(ivaFactrura.getAlicuota(), ivaFactrura.getImporte());
+                    totalAlicuotasIVAGeneral.add(nuevoIva);
+                }
+            }
         }
 
     }
-    */ 
+
 }

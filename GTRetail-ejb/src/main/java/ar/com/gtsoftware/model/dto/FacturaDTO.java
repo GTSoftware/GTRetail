@@ -19,6 +19,7 @@ import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,7 +42,7 @@ public class FacturaDTO implements Serializable {
     private BigDecimal netoGravado;
     private BigDecimal noGravado;
     private BigDecimal totalIva;
-    private Map<FiscalAlicuotasIva, BigDecimal> totalAlicuota;
+    private List<ImportesAlicuotasIVA> totalAlicuota;
     private BigDecimal totalFactura;
 
     /**
@@ -165,7 +166,7 @@ public class FacturaDTO implements Serializable {
      *
      * @return totalAlicuota
      */
-    public Map<FiscalAlicuotasIva, BigDecimal> getTotalAlicuota() {
+    public List<ImportesAlicuotasIVA> getTotalAlicuota() {
         return totalAlicuota;
     }
 
@@ -174,7 +175,7 @@ public class FacturaDTO implements Serializable {
      *
      * @param totalAlicuota
      */
-    public void setTotalAlicuota(Map<FiscalAlicuotasIva, BigDecimal> totalAlicuota) {
+    public void setTotalAlicuota(List<ImportesAlicuotasIVA> totalAlicuota) {
         this.totalAlicuota = totalAlicuota;
     }
 
