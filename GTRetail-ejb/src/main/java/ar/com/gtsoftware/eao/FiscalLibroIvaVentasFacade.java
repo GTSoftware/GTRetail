@@ -100,7 +100,8 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
                 p = appendAndPredicate(cb, p1, p);
             }
             cq.where(p);
-            cq.orderBy(cb.desc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));
+            cq.orderBy(cb.asc(registroIVA.get(FiscalLibroIvaVentas_.fechaFactura)),
+                    cb.asc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));
             TypedQuery<FiscalLibroIvaVentas> q = em.createQuery(cq);
             List<FiscalLibroIvaVentas> registroIVAList = q.getResultList();
             return registroIVAList;
