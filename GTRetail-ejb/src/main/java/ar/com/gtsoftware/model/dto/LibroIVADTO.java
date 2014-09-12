@@ -15,14 +15,11 @@
  */
 package ar.com.gtsoftware.model.dto;
 
-import ar.com.gtsoftware.model.FiscalAlicuotasIva;
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**

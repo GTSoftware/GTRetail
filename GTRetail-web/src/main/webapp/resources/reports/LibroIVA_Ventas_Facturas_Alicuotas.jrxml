@@ -6,20 +6,11 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="importeTotal" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[importeTotal]]></fieldDescription>
+	<field name="alicuota" class="ar.com.gtsoftware.model.FiscalAlicuotasIva">
+		<fieldDescription><![CDATA[alicuota]]></fieldDescription>
 	</field>
-	<field name="ivaTotal" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[ivaTotal]]></fieldDescription>
-	</field>
-	<field name="netoGravadoTotal" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[netoGravadoTotal]]></fieldDescription>
-	</field>
-	<field name="noGravadoTotal" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[noGravadoTotal]]></fieldDescription>
-	</field>
-	<field name="responsabilidadIva" class="ar.com.gtsoftware.model.FiscalResponsabilidadesIva">
-		<fieldDescription><![CDATA[responsabilidadIva]]></fieldDescription>
+	<field name="importe" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[importe]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -27,52 +18,25 @@
 	<columnHeader>
 		<band height="21">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="78878321-4f06-4e7a-8aac-cc00686b63f3"/>
-				<text><![CDATA[responsabilidadIva]]></text>
+				<reportElement x="0" y="1" width="100" height="20" uuid="fce531d9-d07b-4a10-8721-d2a96cf452d3"/>
+				<text><![CDATA[Alicuota]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="103" y="1" width="100" height="20" uuid="88555332-3b23-4978-b0af-3bc7a0ef4354"/>
-				<text><![CDATA[Neto Gravado]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="205" y="1" width="100" height="20" uuid="7b1f9916-2ab7-4d23-9d7f-61cf2253b644"/>
-				<text><![CDATA[No Gravado]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="310" y="1" width="100" height="20" uuid="d8ce62ab-ecaa-4ed7-a0a0-6b522226cb8e"/>
-				<text><![CDATA[IVA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="413" y="1" width="100" height="20" uuid="59e3cc8b-33db-47e1-8dae-3144afce9ba2"/>
-				<text><![CDATA[Total]]></text>
+				<reportElement x="103" y="1" width="100" height="20" uuid="cd912caa-c9bd-477b-9fe4-25d7e2b5b5df"/>
+				<text><![CDATA[Importe]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="cc381baf-afa8-40dc-8453-9f62d509867d"/>
-				<textFieldExpression><![CDATA[""+$F{responsabilidadIva}.getNombreResponsabildiad()]]></textFieldExpression>
+				<reportElement x="0" y="0" width="100" height="20" uuid="f8764339-6674-4403-abd2-b1c1987505d4"/>
+				<textFieldExpression><![CDATA[""+$F{alicuota}.getNombreAlicuotaIva()]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="103" y="0" width="100" height="20" uuid="4d3e6aaf-667b-44f4-9839-f5c57df680d6"/>
+				<reportElement x="103" y="0" width="100" height="20" uuid="de1990d2-1af9-4eba-ba1a-e4bc3f5eba20"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{netoGravadoTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="205" y="0" width="100" height="20" uuid="7163e1cc-4daa-4b8c-808a-43fdc962fe9d"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{noGravadoTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="310" y="0" width="100" height="20" uuid="d45e9798-14ff-4f9e-979d-fd944c9a4553"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{ivaTotal}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="413" y="0" width="100" height="20" uuid="e6fdac5b-d097-41d6-a1be-67004f514d0b"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{importeTotal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
