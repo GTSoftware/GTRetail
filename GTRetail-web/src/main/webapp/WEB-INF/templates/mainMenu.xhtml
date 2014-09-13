@@ -26,6 +26,11 @@
                                 action="/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
                 </p:submenu>
+                <p:submenu label="#{msg.filscal}" >
+                    <p:menuitem value="#{msg.periodosFiscales}" 
+                                action="/protected/fiscal/periodosFiscales/periodosEdit.xhtml?faces-redirect=true" 
+                                immediate="true" ajax="false"/>
+                </p:submenu>
 
 
             </p:submenu>

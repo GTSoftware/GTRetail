@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <!-- Contenido -->
+            <ui:define name="content">
+                <ui:insert >
+                    <ui:include src="breadcrumb.xhtml" />
+                </ui:insert>
+                <!-- acá iría la parte de edición con los botones de guardar, nuevo y cerrar período -->
+                
+                <h:form id="formContenido" >
+                    <p:dataTable id="periodosTable" var="per" value="#{periodosFiscalesEditBean.periodosList}" 
+                                 editable="true"
+                                 rows="15"
+                                 paginator="true"
+                                 sortMode="multiple"
+                                 emptyMessage="#{msg.busquedaSinResultados}" 
+                                 rowKey="#{per.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="10,15,30"
+                                 style="width: 100%"
+                                 resizableColumns="true"
+                                 scrollable="true" >
+
+
+                        <p:column sortBy="#{per.id}" >
+                            <f:facet name="header">
+                                #{msg.id}
+                            </f:facet>
+
+                            <h:outputText value="#{per.id}" />
+
+                        </p:column>
+
+                        <p:column sortBy="#{per.nombrePeriodo}" >
+                            <f:facet name="header">
+                                #{msg.nombre}
+                            </f:facet>
+
+                            <h:outputText value="#{per.nombrePeriodo}" />
+
+                        </p:column>
+
+                        <p:column sortBy="#{per.fechaInicioPeriodo}" >
+                            <f:facet name="header">
+                                #{msg.fechaDesde}
+                            </f:facet>
+
+                            <h:outputText value="#{per.fechaInicioPeriodo}" />
+
+                        </p:column>
+                        <p:column sortBy="#{per.fechaFinPeriodo}" >
+                            <f:facet name="header">
+                                #{msg.fechaHasta}
+                            </f:facet>
+
+                            <h:outputText value="#{per.fechaFinPeriodo}" />
+
+                        </p:column>
+                        <p:column sortBy="#{per.periodoCerrado}" >
+                            <f:facet name="header">
+                                #{msg.cerrado}
+                            </f:facet>
+
+                            <h:outputText value="#{per.periodoCerrado ? msg.si : msg.no}" />
+
+                        </p:column>
+
+                        <p:column style="width:10%">
+                            <f:facet name="header">
+                                #{msg.acciones}
+                            </f:facet>
+                            <p:commandButton icon="ui-icon-pencil" 
+                                              >
+                                
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-cancel" 
+                                              >
+                                
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+
+    </h:body>
+</html>
+

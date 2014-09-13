@@ -57,6 +57,7 @@ public class PeriodosFiscalesEditBean {
         periodoActual = new FiscalPeriodosFiscales();
         periodoActual.setFechaInicioPeriodo(UtilUI.getDesde());
         periodoActual.setFechaFinPeriodo(UtilUI.getHasta());
+        periodoActual.setPeriodoCerrado(false);
     }
 
     public void guardarPeriodo() {
@@ -65,11 +66,7 @@ public class PeriodosFiscalesEditBean {
         } else {
             periodosFiscalesFacade.edit(periodoActual);
         }
-        periodoActual = new FiscalPeriodosFiscales();
-    }
-
-    public void eliminarPeriodo() {
-        //TODO capa de servicio para verificar si el periodo no tiene ventas asociadas
+        nuevoPeriodo();
     }
 
     public FiscalPeriodosFiscales getPeriodoActual() {
