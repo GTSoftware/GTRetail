@@ -25,7 +25,7 @@ import javax.validation.constraints.Size;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class ProductosSearchFilter extends SearchFilter {
+public class ProductosSearchFilter extends AbstractSearchFilter {
 
     private String txt;
     private Integer idProducto;

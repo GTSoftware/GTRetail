@@ -21,7 +21,7 @@ import ar.com.gtsoftware.model.LegalTiposDocumento;
  *
  * @author rodrigo
  */
-public class PersonasSearchFilter extends SearchFilter {
+public class PersonasSearchFilter extends AbstractSearchFilter {
 
     private String txt;
     private Integer idPersona;

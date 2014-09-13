@@ -15,14 +15,16 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 public abstract class AbstractFacade<T> {
 
@@ -71,6 +73,18 @@ public abstract class AbstractFacade<T> {
         cq.select(getEntityManager().getCriteriaBuilder().count(rt));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
+    }
+
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root) {
+        return null;
+    }
+
+    public List<T> findBySearchFilter(AbstractSearchFilter sf) {
+        return null;
+    }
+
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        return 0;
     }
 
     /**

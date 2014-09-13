@@ -21,7 +21,7 @@ import ar.com.gtsoftware.model.LegalTiposPersoneria;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class GenerosSearchFilter extends SearchFilter {
+public class GenerosSearchFilter extends AbstractSearchFilter {
 
     private Integer idGenero;
     private String nombreGenero;

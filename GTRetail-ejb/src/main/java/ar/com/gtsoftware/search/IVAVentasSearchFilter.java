@@ -26,7 +26,7 @@ import java.util.Date;
  * @since 1.0.0
  * @version 1.0.0
  */
-public class IVAVentasSearchFilter extends SearchFilter {
+public class IVAVentasSearchFilter extends AbstractSearchFilter {
 
     private FiscalPeriodosFiscales periodo;
     private Date fechaDesde;

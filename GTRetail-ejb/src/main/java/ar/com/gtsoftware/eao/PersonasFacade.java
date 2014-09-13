@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Personas_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,51 +49,14 @@ public class PersonasFacade extends AbstractFacade<Personas> {
         super(Personas.class);
     }
 
-    public List<Personas> findBySearchFilter(PersonasSearchFilter psf) {
+    @Override
+    public List<Personas> findBySearchFilter(AbstractSearchFilter psf) {
         if (psf.hasFilter()) {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Personas> cq = cb.createQuery(Personas.class);
             Root<Personas> persona = cq.from(Personas.class);
             cq.select(persona);
-            Predicate p = null;
-            if (psf.getIdPersona() != null) {
-                p = cb.equal(persona.get(Personas_.id), psf.getIdPersona());
-            }
-            if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
-                for (String s : psf.getTxt().toUpperCase().split(" ")) {
-
-                    Predicate p1 = cb.like(persona.get(Personas_.razonSocial), String.format("%%%s%%", s));
-                    Predicate p2 = cb.like(persona.get(Personas_.apellidos), String.format("%%%s%%", s));
-                    Predicate p3 = cb.like(persona.get(Personas_.nombres), String.format("%%%s%%", s));
-                    Predicate p4 = cb.like(persona.get(Personas_.nombreFantasia), String.format("%%%s%%", s));
-                    Predicate p5 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", s));
-                    
-                    if (p == null) {
-                        p = cb.or(p1, p2, p3, p4, p5);
-                    } else {
-                        p = cb.or(p, p1, p2, p3, p4, p5);
-                    }
-                }
-            }
-            if (psf.getDocumento() != null && psf.getIdTipoDocumento() != null) {
-                Predicate p1 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", psf.getDocumento()));
-                p = appendAndPredicate(cb, p, p1);
-                p1 = cb.equal(persona.get(Personas_.idTipoDocumento), psf.getIdTipoDocumento());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.isCliente() != null) {
-                Predicate p1 = cb.equal(persona.get(Personas_.cliente), psf.isCliente());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.isProveedor() != null) {
-                Predicate p1 = cb.equal(persona.get(Personas_.proveedor), psf.isProveedor());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.isActivo() != null) {
-                Predicate p1 = cb.equal(persona.get(Personas_.activo), psf.isActivo());
-                p = appendAndPredicate(cb, p, p1);
-            }
-
+            Predicate p = createWhereFromSearchFilter(psf, cb, persona);
             cq.where(p);
             TypedQuery<Personas> q = em.createQuery(cq);
 
@@ -101,4 +65,63 @@ public class PersonasFacade extends AbstractFacade<Personas> {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Personas> cq = cb.createQuery(Personas.class);
+        Root<Personas> persona = cq.from(Personas.class);
+        cq.select(persona);
+        Predicate p = createWhereFromSearchFilter(sf, cb, persona);
+        cq.where(p);
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Personas> persona) {
+
+        PersonasSearchFilter psf = (PersonasSearchFilter) sf;
+        Predicate p = null;
+        if (psf.getIdPersona() != null) {
+            p = cb.equal(persona.get(Personas_.id), psf.getIdPersona());
+        }
+        if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
+            for (String s : psf.getTxt().toUpperCase().split(" ")) {
+
+                Predicate p1 = cb.like(persona.get(Personas_.razonSocial), String.format("%%%s%%", s));
+                Predicate p2 = cb.like(persona.get(Personas_.apellidos), String.format("%%%s%%", s));
+                Predicate p3 = cb.like(persona.get(Personas_.nombres), String.format("%%%s%%", s));
+                Predicate p4 = cb.like(persona.get(Personas_.nombreFantasia), String.format("%%%s%%", s));
+                Predicate p5 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", s));
+
+                if (p == null) {
+                    p = cb.or(p1, p2, p3, p4, p5);
+                } else {
+                    p = cb.or(p, p1, p2, p3, p4, p5);
+                }
+            }
+        }
+        if (psf.getDocumento() != null && psf.getIdTipoDocumento() != null) {
+            Predicate p1 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", psf.getDocumento()));
+            p = appendAndPredicate(cb, p, p1);
+            p1 = cb.equal(persona.get(Personas_.idTipoDocumento), psf.getIdTipoDocumento());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.isCliente() != null) {
+            Predicate p1 = cb.equal(persona.get(Personas_.cliente), psf.isCliente());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.isProveedor() != null) {
+            Predicate p1 = cb.equal(persona.get(Personas_.proveedor), psf.isProveedor());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.isActivo() != null) {
+            Predicate p1 = cb.equal(persona.get(Personas_.activo), psf.isActivo());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
+
+    }
+
 }

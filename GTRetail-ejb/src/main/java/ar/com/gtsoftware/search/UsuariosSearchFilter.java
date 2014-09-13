@@ -21,7 +21,7 @@ import ar.com.gtsoftware.model.Sucursales;
  *
  * @author rodrigo
  */
-public class UsuariosSearchFilter extends SearchFilter {
+public class UsuariosSearchFilter extends AbstractSearchFilter {
 
     private Integer idUsuario;
 

@@ -19,7 +19,7 @@ package ar.com.gtsoftware.search;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class PaisesSearchFilter extends SearchFilter {
+public class PaisesSearchFilter extends AbstractSearchFilter {
 
     private Integer idPais;
     private String nombrePais;

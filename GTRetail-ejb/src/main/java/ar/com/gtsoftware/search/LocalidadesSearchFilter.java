@@ -21,7 +21,7 @@ import ar.com.gtsoftware.model.UbicacionProvincias;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class LocalidadesSearchFilter extends SearchFilter {
+public class LocalidadesSearchFilter extends AbstractSearchFilter {
 
     private Integer idLocalidad;
     private String nombreLocalidad;

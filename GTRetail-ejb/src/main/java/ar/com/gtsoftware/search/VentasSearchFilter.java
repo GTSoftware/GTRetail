@@ -25,7 +25,7 @@ import java.util.Date;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class VentasSearchFilter extends SearchFilter {
+public class VentasSearchFilter extends AbstractSearchFilter {
 
     private Integer idVenta;
     private Date fechaVentaDesde;

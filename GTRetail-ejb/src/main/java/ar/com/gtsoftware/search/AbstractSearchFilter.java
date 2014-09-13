@@ -22,7 +22,7 @@ package ar.com.gtsoftware.search;
  * @since 1.0.0
  * @version 1.0.0
  */
-public abstract class SearchFilter {
+public abstract class AbstractSearchFilter {
 
     public boolean hasFilter() {
         return false;

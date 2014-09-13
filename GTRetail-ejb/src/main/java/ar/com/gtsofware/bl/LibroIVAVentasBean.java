@@ -51,6 +51,13 @@ public class LibroIVAVentasBean {
     @EJB
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
+    /**
+     * Genera el libro de IVA ventas para el período establecido en el filter
+     *
+     * @param filter
+     * @return el libro de IVA
+     * @throws ServiceException
+     */
     public LibroIVADTO obtenerLibroIVA(IVAVentasSearchFilter filter) throws ServiceException {
         LibroIVADTO libro;
         if (!filter.hasFilter()) {
