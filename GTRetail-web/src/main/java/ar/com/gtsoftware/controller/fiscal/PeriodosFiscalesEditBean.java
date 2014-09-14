@@ -18,11 +18,12 @@ package ar.com.gtsoftware.controller.fiscal;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.utils.UtilUI;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -39,13 +40,11 @@ public class PeriodosFiscalesEditBean {
 
     private FiscalPeriodosFiscales periodoActual;
 
-    private List<FiscalPeriodosFiscales> periodosList = new ArrayList<>();
-
     /**
      * Creates a new instance of PeriodosFiscalesEditBean
      */
     public PeriodosFiscalesEditBean() {
-
+        nuevoPeriodo();
     }
 
     public void cerrarPeriodo() {
@@ -53,7 +52,7 @@ public class PeriodosFiscalesEditBean {
         guardarPeriodo();
     }
 
-    public void nuevoPeriodo() {
+    public final void nuevoPeriodo() {
         periodoActual = new FiscalPeriodosFiscales();
         periodoActual.setFechaInicioPeriodo(UtilUI.getDesde());
         periodoActual.setFechaFinPeriodo(UtilUI.getHasta());
@@ -67,6 +66,13 @@ public class PeriodosFiscalesEditBean {
             periodosFiscalesFacade.edit(periodoActual);
         }
         nuevoPeriodo();
+        FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                        "Exito!", "Se ha guardado exitosamente!"));
+    }
+
+    public void editarPeriodo(FiscalPeriodosFiscales pf) {
+        periodoActual = pf;
     }
 
     public FiscalPeriodosFiscales getPeriodoActual() {
@@ -78,11 +84,7 @@ public class PeriodosFiscalesEditBean {
     }
 
     public List<FiscalPeriodosFiscales> getPeriodosList() {
-        return periodosList;
-    }
-
-    public void setPeriodosList(List<FiscalPeriodosFiscales> periodosList) {
-        this.periodosList = periodosList;
+        return periodosFiscalesFacade.findAll();
     }
 
 }
