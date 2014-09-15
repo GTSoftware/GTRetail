@@ -99,6 +99,10 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
                 Predicate p1 = cb.between(registroIVA.get(FiscalLibroIvaVentas_.fechaFactura), ivavsf.getFechaDesde(), ivavsf.getFechaHasta());
                 p = appendAndPredicate(cb, p1, p);
             }
+            if (ivavsf.getAnuladas() != null) {
+                Predicate p1 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.anulada), ivavsf.getAnuladas());
+                p = appendAndPredicate(cb, p1, p);
+            }
             cq.where(p);
             cq.orderBy(cb.asc(registroIVA.get(FiscalLibroIvaVentas_.fechaFactura)),
                     cb.asc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));

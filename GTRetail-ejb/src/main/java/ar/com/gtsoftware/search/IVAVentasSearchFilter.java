@@ -31,10 +31,19 @@ public class IVAVentasSearchFilter extends AbstractSearchFilter {
     private FiscalPeriodosFiscales periodo;
     private Date fechaDesde;
     private Date fechaHasta;
+    private Boolean anuladas;
 
     @Override
     public boolean hasFilter() {
-        return (periodo != null) || (fechaDesde != null && fechaHasta != null);
+        return (periodo != null) || (fechaDesde != null && fechaHasta != null)
+                || (anuladas != null);
+    }
+
+    public IVAVentasSearchFilter() {
+    }
+
+    public IVAVentasSearchFilter(Boolean anuladas) {
+        this.anuladas = anuladas;
     }
 
     public FiscalPeriodosFiscales getPeriodo() {
@@ -63,6 +72,14 @@ public class IVAVentasSearchFilter extends AbstractSearchFilter {
 
     public boolean hasFechasDesdeHasta() {
         return (fechaDesde != null && fechaHasta != null) && (fechaDesde.compareTo(fechaHasta) <= 0);
+    }
+
+    public Boolean getAnuladas() {
+        return anuladas;
+    }
+
+    public void setAnuladas(Boolean anuladas) {
+        this.anuladas = anuladas;
     }
 
 }

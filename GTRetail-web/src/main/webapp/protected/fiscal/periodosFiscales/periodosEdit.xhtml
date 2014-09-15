@@ -37,16 +37,24 @@
 
                     </h:panelGrid>
 
+                    <p:commandButton value="#{msg.nuevo}" icon="ui-icon-document" 
+                                     action="#{periodosFiscalesEditBean.nuevoPeriodo()}" 
+                                     update=":formEdicion"
+                                     immediate="true"/>
+                    
                     <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" 
                                      action="#{periodosFiscalesEditBean.guardarPeriodo()}" 
                                      update=":formEdicion, :formResultados" />
+                    
                     <p:commandButton value="#{msg.cerrarPeriodo}" 
-                                     rendered="#{not periodosFiscalesEditBean.periodoActual.new}" 
+                                     rendered="#{not periodosFiscalesEditBean.periodoActual.new and 
+                                                 not periodosFiscalesEditBean.periodoActual.periodoCerrado}" 
                                      icon="ui-icon-close" 
                                      action="#{periodosFiscalesEditBean.cerrarPeriodo()}"
                                      update=":formEdicion, :formResultados" 
                                      />
                 </h:form>
+                <p:separator />
                 <h:form id="formResultados" >
                     <p:dataTable id="periodosTable" var="per" value="#{periodosFiscalesEditBean.periodosList}" 
                                  editable="true"
@@ -85,7 +93,9 @@
                                 #{msg.fechaDesde}
                             </f:facet>
 
-                            <h:outputText value="#{per.fechaInicioPeriodo}" />
+                            <h:outputText value="#{per.fechaInicioPeriodo}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                            </h:outputText>
 
                         </p:column>
                         <p:column sortBy="#{per.fechaFinPeriodo}" >
@@ -93,7 +103,9 @@
                                 #{msg.fechaHasta}
                             </f:facet>
 
-                            <h:outputText value="#{per.fechaFinPeriodo}" />
+                            <h:outputText value="#{per.fechaFinPeriodo}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                            </h:outputText>
 
                         </p:column>
                         <p:column sortBy="#{per.periodoCerrado}" >
