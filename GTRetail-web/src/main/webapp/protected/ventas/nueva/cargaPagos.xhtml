@@ -30,7 +30,7 @@
         </p:inputText>
         <p:message for="importePagoField" />
 
-        <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="ui-icon-plus" update="pagosTable"/>
+        <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="ui-icon-plus" update="pagosTable, importePagoField"/>
 
     </h:panelGrid>
     <p:dataTable id="pagosTable" value="#{nuevaVentaBean.pagos}" var="pago"
