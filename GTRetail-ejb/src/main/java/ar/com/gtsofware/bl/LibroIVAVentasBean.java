@@ -147,6 +147,9 @@ public class LibroIVAVentasBean {
         facDTO.setFechaFactura(factura.getFechaFactura());
         facDTO.setIdFactura(factura.getId());
         facDTO.setRazonSocialCliente(factura.getIdPersona().getRazonSocial());
+        if (factura.getAnulada()) {
+            facDTO.setRazonSocialCliente("NULA");
+        }
         facDTO.setNumeroFactura(factura.getLetraFactura().concat(" ")
                 .concat(factura.getPuntoVentaFactura()).concat("-")
                 .concat(factura.getNumeroFactura()));

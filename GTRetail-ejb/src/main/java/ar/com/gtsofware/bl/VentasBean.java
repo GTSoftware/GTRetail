@@ -56,7 +56,7 @@ public class VentasBean {
     public void guardarVenta(Ventas venta, List<VentasPagos> pagos) throws Exception {
         if (venta.isNew()) { //TODO Evaluar para utilizar el mismo método en caso de una venta modificada
             //TODO Parametrizar estado inicial de venta
-            venta.setIdVentasEstados(estadosFacade.find(2)); //Aceptada
+            venta.setIdVentasEstados(estadosFacade.find(2L)); //Aceptada
             ventasFacade.create(venta);
             em.flush();
             for (VentasPagos pago : pagos) {
@@ -71,7 +71,7 @@ public class VentasBean {
                 lineaPago.setImporte(pago.getImporteTotalPagado());
                 pagosLineasFacade.create(lineaPago);
             }
-            
+
             cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
         }
     }

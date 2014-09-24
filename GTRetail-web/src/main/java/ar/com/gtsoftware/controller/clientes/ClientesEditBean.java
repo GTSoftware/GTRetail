@@ -85,7 +85,7 @@ public class ClientesEditBean implements Serializable {
     private UbicacionProvinciasFacade provinciasFacade;
     private Personas clienteActual;
     private PersonasTelefonos telefonoActual = new PersonasTelefonos();
-    private List<PersonasTelefonos> telefonosToRemove = new ArrayList<PersonasTelefonos>();
+    private List<PersonasTelefonos> telefonosToRemove = new ArrayList<>();
 
     /**
      * Creates a new instance of ClientesEditBean
@@ -100,7 +100,7 @@ public class ClientesEditBean implements Serializable {
         if (idPersona == null) {
             nuevo();
         } else {
-            clienteActual = personasFacade.find(Integer.parseInt(idPersona));
+            clienteActual = personasFacade.find(Long.parseLong(idPersona));
             if (clienteActual == null) {
                 nuevo();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cliente inexistente!", "Cliente inexistente!"));

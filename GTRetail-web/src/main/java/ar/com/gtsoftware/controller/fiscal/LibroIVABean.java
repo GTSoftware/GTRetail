@@ -53,7 +53,7 @@ public class LibroIVABean {
     private LibroIVAVentasBean libroIVAVentasBean;
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
-    private IVAVentasSearchFilter ivaVentasFilter = new IVAVentasSearchFilter(false);
+    private IVAVentasSearchFilter ivaVentasFilter = new IVAVentasSearchFilter();
 
     public LibroIVABean() {
     }

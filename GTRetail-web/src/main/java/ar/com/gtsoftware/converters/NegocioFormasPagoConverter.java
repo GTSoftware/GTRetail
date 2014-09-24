@@ -46,9 +46,9 @@ public class NegocioFormasPagoConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        Long id;
+        Integer id;
         try {
-            id = Long.parseLong(value);
+            id = Integer.parseInt(value);
         } catch (NumberFormatException e) {
             return null;
         }

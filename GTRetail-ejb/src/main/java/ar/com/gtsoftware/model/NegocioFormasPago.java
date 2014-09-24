@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "negocio_formas_pago")

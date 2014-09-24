@@ -26,7 +26,7 @@
         </p:selectOneMenu>
         <h:outputLabel for="importePagoField" value="#{msg.importePago}" />
         <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" >
-            <f:validateDoubleRange minimum="0" maximum="#{nuevaVentaBean.ventaActual.saldo}" />
+            <f:validateDoubleRange minimum="0" maximum="#{nuevaVentaBean.ventaActual.saldo}" rendered="#{nuevaVentaBean.ventaActual.saldo gt 0}" />
         </p:inputText>
         <p:message for="importePagoField" />
 
@@ -72,10 +72,10 @@
     <p:inputTextarea style="width: 100%" value="#{nuevaVentaBean.ventaActual.observaciones}" maxlength="1024" autoResize="true" />
     <h:outputLabel value="#{msg.remitente}:" />
     <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.remitente}" maxlength="100"  />
-    
+
     <h:outputLabel value="#{msg.numeroRemito}:" />
     <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.nroRemito}" maxlength="100"  />
     <p:separator />
-    <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}" immediate="true"  />
+    <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}"  />
     <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" action="#{nuevaVentaBean.cancelar()}" immediate="true" ajax="false"  />
 </html>

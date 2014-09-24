@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -60,6 +61,8 @@ public class ImpresionVentasBean {
      */
     public void imprimirPresupuesto(Ventas ventaActual) throws IOException, JRException {
         List<Ventas> ventas = new ArrayList<>();
+        String copias = parametrosFacade.findParametroByName("presupuesto.impresion.cantidad_copias").getValorParametro();
+        int cantCopias = Integer.parseInt(copias);
         ventas.add(ventaActual);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/vistaVenta.jasper");
@@ -69,6 +72,12 @@ public class ImpresionVentasBean {
         //BufferedImage image = ImageIO.read(getClass().getResource(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png")));
         //parameters.put("logo", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png"));
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+
+        for (int i = 1; i < cantCopias; i++) {
+
+            jasperPrint.addPage(jasperPrint.getPages().get(0));
+
+        }
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
         ServletOutputStream servletStream = httpServletResponse.getOutputStream();

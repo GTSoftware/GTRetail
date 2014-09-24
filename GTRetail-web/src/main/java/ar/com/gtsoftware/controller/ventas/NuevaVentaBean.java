@@ -79,7 +79,7 @@ public class NuevaVentaBean implements Serializable {
     private Productos productoActual;
     private VentasLineas lineaActual; //Linea temporal actual antes de asignarla a la venta
     private List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
-    private Integer idCliente;
+    private Long idCliente;
     private VentasPagos pagoActual = new VentasPagos();
     private List<VentasPagos> pagos = new ArrayList<VentasPagos>();
 
@@ -393,11 +393,11 @@ public class NuevaVentaBean implements Serializable {
         this.importesIVA = importesIVA;
     }
 
-    public Integer getIdCliente() {
+    public Long getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
+    public void setIdCliente(Long idCliente) {
         this.idCliente = idCliente;
     }
 

@@ -80,7 +80,7 @@ public class VerVentasBean {
         if (idVenta == null) {
             //TODO error y fallo 
         } else {
-            ventaActual = ventasFacade.find(Integer.parseInt(idVenta));
+            ventaActual = ventasFacade.find(Long.parseLong(idVenta));
             if (ventaActual == null) {
                 //TODO Error!
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Venta inexistente!", "Venta inexistente!"));
