@@ -81,6 +81,7 @@
     </dependencies>
 
     <build>
+        <finalName>GTRetail-ejb</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

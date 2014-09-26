@@ -57,6 +57,21 @@
                 <configuration>
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <ejbModule>
+                            <groupId>ar.com.gtsoftware</groupId>
+                            <artifactId>GTRetail-ejb</artifactId>
+                            <uri>GTRetail-ejb.jar</uri>
+                        </ejbModule>
+
+                        <!-- Register GRC Web Application -->
+                        <webModule>
+                            <groupId>ar.com.gtsoftware</groupId>
+                            <artifactId>GTRetail-web</artifactId>
+                            <uri>GTRetail-web.war</uri>
+                            <contextRoot>/GTRetail</contextRoot>
+                        </webModule>
+                    </modules>
                 </configuration>
             </plugin>
         </plugins>
