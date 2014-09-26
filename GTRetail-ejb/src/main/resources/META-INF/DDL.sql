@@ -3111,10 +3111,12 @@ COPY fiscal_letras_comprobantes (id_resoponsabildiad_iva_emisor, id_resoponsabil
 --
 
 COPY fiscal_libro_iva_ventas (id_factura, fecha_factura, id_responsabilidad_iva, documento, letra_factura, punto_venta_factura, numero_factura, total_factura, id_periodo_fiscal, id_persona, id_registro_contable, anulada, version) FROM stdin;
-2	2014-08-30 17:02:00	1	99999999	B	0001	00000001	100.00	1	1	\N	f	0
-3	2014-08-30 17:12:00	1	99999999	B	0001	00000002	25.00	1	1	\N	f	0
 4	2014-08-30 19:08:00	1	12345677	B	0001	00001517	4897.53	1	7	\N	f	0
-5	2014-09-06 12:03:00	2	12345677	A	0002	00004474	412.38	1	7	\N	f	0
+5	2014-09-06 12:03:00	2	12345677	A	0002	00004474	0.00	1	7	\N	t	1
+6	2014-09-10 00:57:00	2	12345677	A	0002	00004475	0.00	1	7	\N	t	2
+3	2014-08-30 17:12:00	1	99999999	B	0001	00000002	0.00	1	1	\N	t	1
+2	2014-08-30 17:02:00	1	99999999	B	0001	00000001	0.00	1	1	\N	t	1
+7	2014-09-24 00:03:00	1	99999999	B	0001	00001518	62.50	1	1	\N	f	1
 \.
 
 
@@ -3122,7 +3124,7 @@ COPY fiscal_libro_iva_ventas (id_factura, fecha_factura, id_responsabilidad_iva,
 -- Name: fiscal_libro_iva_ventas_id_factura_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('fiscal_libro_iva_ventas_id_factura_seq', 5, true);
+SELECT pg_catalog.setval('fiscal_libro_iva_ventas_id_factura_seq', 7, true);
 
 
 --
@@ -3130,12 +3132,14 @@ SELECT pg_catalog.setval('fiscal_libro_iva_ventas_id_factura_seq', 5, true);
 --
 
 COPY fiscal_libro_iva_ventas_lineas (id_linea_libro, id_factura, id_alicuota_iva, neto_gravado, no_gravado, importe_iva, version) FROM stdin;
-1	2	1	79.00	0.00	21.00	0
-2	3	1	19.75	0.00	5.25	0
 3	4	1	3185.28	0.00	846.72	0
 4	4	1	683.77	0.00	181.76	0
-5	5	1	320.00	0.00	67.20	0
-6	5	1	20.81	0.00	4.37	0
+5	5	1	0.00	0.00	0.00	1
+6	5	1	0.00	0.00	0.00	1
+7	6	1	0.00	0.00	0.00	2
+2	3	1	0.00	0.00	0.00	1
+1	2	1	0.00	0.00	0.00	1
+8	7	1	51.65	0.00	10.85	1
 \.
 
 
@@ -3143,7 +3147,7 @@ COPY fiscal_libro_iva_ventas_lineas (id_linea_libro, id_factura, id_alicuota_iva
 -- Name: fiscal_libro_iva_ventas_lineas_id_linea_libro_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('fiscal_libro_iva_ventas_lineas_id_linea_libro_seq', 6, true);
+SELECT pg_catalog.setval('fiscal_libro_iva_ventas_lineas_id_linea_libro_seq', 8, true);
 
 
 --
@@ -3152,6 +3156,8 @@ SELECT pg_catalog.setval('fiscal_libro_iva_ventas_lineas_id_linea_libro_seq', 6,
 
 COPY fiscal_periodos_fiscales (id_periodo_fiscal, nombre_periodo, fecha_inicio_periodo, fecha_fin_periodo, version, periodo_cerrado) FROM stdin;
 1	Septiembre 2014	2014-09-01 00:00:00	2014-09-30 23:59:59	0	f
+2	2014-10	2014-10-01 12:00:00	2014-10-29 11:59:59	4	t
+3	2014-10	2014-10-01 12:00:00	2014-10-30 11:59:59	2	t
 \.
 
 
@@ -3159,7 +3165,7 @@ COPY fiscal_periodos_fiscales (id_periodo_fiscal, nombre_periodo, fecha_inicio_p
 -- Name: fiscal_periodos_fiscales_id_periodo_fiscal_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('fiscal_periodos_fiscales_id_periodo_fiscal_seq', 1, true);
+SELECT pg_catalog.setval('fiscal_periodos_fiscales_id_periodo_fiscal_seq', 3, true);
 
 
 --
@@ -3270,6 +3276,7 @@ empresa.nombre_fantasia	GT Software	El nombre de fantasía de la empresa
 empresa.localidad	Resistencia	Localidad de la empresa
 facturacion.preimreso.cantidad_copias	3	Cantidad de copias que debe imprimir el sistema para formularios preimpresos
 empresa.email	empresa@empresa.com	Email de la empresa
+presupuesto.impresion.cantidad_copias	2	Cantidad de copias que debe imprimir el  sistema para los presupuestos
 \.
 
 
@@ -3299,6 +3306,8 @@ COPY personas_cuenta_corriente (id_movimiento, id_persona, fecha_movimiento, imp
 9	7	2014-09-04 17:46:41.007	-3840.00	Venta Nro: 9	\N
 10	7	2014-09-06 12:02:53.357	-412.38	Venta Nro: 10	\N
 11	1	2014-09-06 12:28:51.443	-12.50	Venta Nro: 11	\N
+12	1	2014-09-23 23:41:35.025	-62.50	Venta Nro: 12	\N
+13	1	2014-09-24 00:13:52.468	-425.00	Venta Nro: 13	\N
 \.
 
 
@@ -3306,7 +3315,7 @@ COPY personas_cuenta_corriente (id_movimiento, id_persona, fecha_movimiento, imp
 -- Name: personas_cuenta_corriente_id_movimiento_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('personas_cuenta_corriente_id_movimiento_seq', 11, true);
+SELECT pg_catalog.setval('personas_cuenta_corriente_id_movimiento_seq', 13, true);
 
 
 --
@@ -3788,13 +3797,15 @@ SELECT pg_catalog.setval('usuarios_id_usuario_seq', 1, true);
 COPY ventas (id_venta, fecha_venta, id_usuario, id_sucursal, total, id_condicion_venta, saldo, id_registro_iva, observaciones, anulada, id_persona, id_estado, version, remitente, nroremito) FROM stdin;
 4	2014-08-22 19:22:35.135	1	1	150.00	1	150.00	\N		f	1	2	1	\N	\N
 5	2014-08-23 02:00:03.361	1	1	37.50	1	37.50	\N	Test	f	1	2	1	\N	\N
-3	2014-08-21 02:05:36.946	1	1	100.00	1	100.00	2	El cliente paga con $100	f	1	2	2	\N	\N
-6	2014-08-28 00:01:54.587	1	1	25.00	1	25.00	3		f	1	2	2	\N	\N
 7	2014-08-30 18:38:51.532	1	1	75.00	1	75.00	\N		f	7	2	1	\N	\N
 8	2014-08-30 19:08:03.19	1	1	4897.53	1	4897.53	4		f	7	2	2	\N	\N
-9	2014-09-04 17:46:40.823	1	1	3840.00	1	3840.00	\N		f	7	2	1		\N
 11	2014-09-06 12:28:51.338	1	1	12.50	1	12.50	\N	prueba	f	1	2	1	124	2228
-10	2014-09-06 12:02:53.236	1	1	412.38	1	412.38	5		f	7	2	2	PORTILLO	1163-1172
+10	2014-09-06 12:02:53.236	1	1	412.38	1	412.38	5		t	7	2	3	PORTILLO	1163-1172
+9	2014-09-04 17:46:40.823	1	1	3840.00	1	3840.00	6		t	7	2	3		\N
+6	2014-08-28 00:01:54.587	1	1	25.00	1	25.00	3		t	1	2	3	\N	\N
+3	2014-08-21 02:05:36.946	1	1	100.00	1	100.00	2	El cliente paga con $100	t	1	2	3	\N	\N
+12	2014-09-23 23:41:34.813	1	1	62.50	1	62.50	7	prueba	f	1	2	2	prueba	prueba
+13	2014-09-24 00:13:52.378	1	1	425.00	1	425.00	\N	Test	f	1	2	1	Pedro	32423
 \.
 
 
@@ -3858,7 +3869,7 @@ SELECT pg_catalog.setval('ventas_formas_pago_id_forma_pago_seq', 4, true);
 -- Name: ventas_id_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_id_venta_seq', 11, true);
+SELECT pg_catalog.setval('ventas_id_venta_seq', 13, true);
 
 
 --
@@ -3878,6 +3889,8 @@ COPY ventas_lineas (id_linea_venta, id_venta, id_producto, precio_venta_unitario
 12	10	8	38.7200	10.00	387.20	1.0000	1.0000	0.00	\N	1
 13	10	6	0.0109	2310.00	25.18	1.0000	1.0000	0.00	\N	1
 14	11	2	12.5000	1.00	12.50	12.0000	12.0000	0.00	\N	1
+15	12	2	12.5000	5.00	62.50	12.0000	12.0000	0.00	\N	1
+16	13	2	12.5000	34.00	425.00	12.0000	12.0000	0.00	\N	1
 \.
 
 
@@ -3885,7 +3898,7 @@ COPY ventas_lineas (id_linea_venta, id_venta, id_producto, precio_venta_unitario
 -- Name: ventas_lineas_id_linea_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 14, true);
+SELECT pg_catalog.setval('ventas_lineas_id_linea_venta_seq', 16, true);
 
 
 --
@@ -3902,6 +3915,8 @@ COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagad
 8	2014-09-04 17:46:40.823	1	3840.00	\N	1	1	7	1	\N
 9	2014-09-06 12:02:53.236	1	412.38	\N	1	1	7	1	\N
 10	2014-09-06 12:28:51.338	1	12.50	\N	1	1	1	1	\N
+11	2014-09-23 23:41:34.813	1	62.50	\N	1	1	1	1	\N
+12	2014-09-24 00:13:52.378	1	425.00	\N	1	1	1	1	\N
 \.
 
 
@@ -3909,7 +3924,7 @@ COPY ventas_pagos (id_pago_venta, fecha_pago, id_forma_pago, importe_total_pagad
 -- Name: ventas_pagos_id_pago_venta_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 10, true);
+SELECT pg_catalog.setval('ventas_pagos_id_pago_venta_seq', 12, true);
 
 
 --
@@ -3926,6 +3941,8 @@ COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe, versi
 7	8	9	3840.00	1	\N
 8	9	10	412.38	1	\N
 9	10	11	12.50	1	\N
+10	11	12	62.50	1	\N
+11	12	13	425.00	1	\N
 \.
 
 
@@ -3933,7 +3950,7 @@ COPY ventas_pagos_lineas (id_linea_pago, id_pago_venta, id_venta, importe, versi
 -- Name: ventas_pagos_lineas_id_linea_pago_seq; Type: SEQUENCE SET; Schema: public; Owner: retail
 --
 
-SELECT pg_catalog.setval('ventas_pagos_lineas_id_linea_pago_seq', 9, true);
+SELECT pg_catalog.setval('ventas_pagos_lineas_id_linea_pago_seq', 11, true);
 
 
 --
