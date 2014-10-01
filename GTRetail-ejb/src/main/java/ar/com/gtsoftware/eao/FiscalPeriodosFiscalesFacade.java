@@ -60,6 +60,7 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
         Predicate p1 = cb.between(cb.currentTimestamp(),
                 producto.get(FiscalPeriodosFiscales_.fechaInicioPeriodo),
                 producto.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
+        p = appendAndPredicate(cb, p, p1);
         cq.where(p);
         TypedQuery<FiscalPeriodosFiscales> q = em.createQuery(cq);
 
