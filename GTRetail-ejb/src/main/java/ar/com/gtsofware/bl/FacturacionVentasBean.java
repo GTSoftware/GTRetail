@@ -57,7 +57,12 @@ public class FacturacionVentasBean {
             String numeroComprobante,
             FiscalPeriodosFiscales periodoFiscal,
             Date fechaFactura) throws ServiceException {
-
+        if (periodoFiscal == null) {
+            throw new ServiceException("Periodo no puede nulo!");
+        }
+        if (fechaFactura == null) {
+            throw new ServiceException("Fecha de factura no puede ser nula!");
+        }
         if (fechaFactura.after(periodoFiscal.getFechaFinPeriodo())
                 || fechaFactura.before(periodoFiscal.getFechaInicioPeriodo())) {
             throw new ServiceException("La fecha de factura no puede estar fuera de las fechas que comprenden el período!");
