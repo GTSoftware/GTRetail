@@ -46,12 +46,20 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
         super(FiscalPeriodosFiscales.class);
     }
 
+    /**
+     * Retorna los períodos fiscales vigentes dentro de la fecha actual
+     *
+     * @return una lista con los períodos vigentes
+     */
     public List<FiscalPeriodosFiscales> findPeriodosVigentes() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<FiscalPeriodosFiscales> cq = cb.createQuery(FiscalPeriodosFiscales.class);
         Root<FiscalPeriodosFiscales> producto = cq.from(FiscalPeriodosFiscales.class);
         cq.select(producto);
         Predicate p = cb.not(producto.get(FiscalPeriodosFiscales_.periodoCerrado));
+        Predicate p1 = cb.between(cb.currentTimestamp(),
+                producto.get(FiscalPeriodosFiscales_.fechaInicioPeriodo),
+                producto.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
         cq.where(p);
         TypedQuery<FiscalPeriodosFiscales> q = em.createQuery(cq);
 
