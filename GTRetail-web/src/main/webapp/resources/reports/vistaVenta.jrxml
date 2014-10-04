@@ -58,13 +58,15 @@
 	<field name="ventasRemitosList" class="java.util.List">
 		<fieldDescription><![CDATA[ventasRemitosList]]></fieldDescription>
 	</field>
+	<field name="nroRemito" class="java.lang.String"/>
+	<field name="remitente" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="144" splitType="Stretch">
+		<band height="167" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement mode="Transparent" x="0" y="0" width="555" height="144" uuid="28e5fafc-45cb-4bf5-9a81-b0c76d03119f"/>
+				<reportElement mode="Transparent" x="0" y="0" width="555" height="167" uuid="28e5fafc-45cb-4bf5-9a81-b0c76d03119f"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="328" y="0" width="100" height="20" uuid="690c370e-181d-49a0-a286-10ad0e0332eb"/>
@@ -177,12 +179,28 @@
 				<reportElement x="428" y="40" width="127" height="20" uuid="eb4786f3-f335-4897-b730-7cbd52541a3c"/>
 				<textFieldExpression><![CDATA[$F{fechaVenta}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="5" y="144" width="66" height="20" uuid="fb7fdaff-a69f-442d-88a6-fe7167422048"/>
+				<text><![CDATA[Remitente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="71" y="144" width="179" height="20" uuid="8eb9eae9-efe0-49cf-80d8-97cf5dd8a331"/>
+				<textFieldExpression><![CDATA[$F{remitente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="262" y="144" width="45" height="20" uuid="16425a95-fa3e-4a81-9270-8df575c5f94d"/>
+				<text><![CDATA[Remito:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="307" y="144" width="248" height="20" uuid="841e2760-0038-4212-a1d3-81309c0a35a0"/>
+				<textFieldExpression><![CDATA[$F{nroRemito}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
 		<band height="167">
 			<subreport>
-				<reportElement x="0" y="0" width="555" height="161" uuid="55ff1480-407e-487c-926f-34e77effe1cc"/>
+				<reportElement x="0" y="0" width="555" height="167" uuid="55ff1480-407e-487c-926f-34e77effe1cc"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["vistaVentas_lineas.jasper"]]></subreportExpression>
 			</subreport>
