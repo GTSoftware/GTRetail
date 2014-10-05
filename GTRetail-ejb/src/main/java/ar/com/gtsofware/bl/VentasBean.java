@@ -22,6 +22,7 @@ import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.model.VentasPagosLineas;
+import ar.com.gtsofware.bl.exceptions.ServiceException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -74,6 +75,27 @@ public class VentasBean {
 
             cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
         }
+    }
+
+    /**
+     * Anula la venta pasada como parámetro y la devuelve de la cuenta corriente
+     * del cliente
+     *
+     * @param venta
+     * @throws ServiceException
+     */
+    public void anularVenta(Ventas venta) throws ServiceException {
+        if (venta == null) {
+            throw new ServiceException("Venta nula!");
+        }
+        if (venta.getAnulada()) {
+            throw new ServiceException("La venta ya fue anulada!");
+        }
+
+        venta.setAnulada(true);
+        cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(),
+                venta.getTotal(), "Anulación venta Nro: " + venta.getId());
+        ventasFacade.edit(venta);
     }
 
 }

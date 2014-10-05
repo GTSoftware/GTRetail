@@ -34,6 +34,8 @@ public class FacturacionVentasBean {
     @EJB
     private VentasFacade ventasFacade;
     @EJB
+    private VentasBean ventasBean;
+    @EJB
     private VentasLineasFacade ventasLineasFacade;
     @EJB
     private FiscalLibroIvaVentasFacade ivaVentasFacade;
@@ -170,7 +172,7 @@ public class FacturacionVentasBean {
         if (venta.getIdRegistroIva().getIdPeriodoFiscal().isPeriodoCerrado()) {
             throw new ServiceException("Venta de un período cerrado: ".concat(venta.toString()));
         }
-        venta.setAnulada(true);
+        
         FiscalLibroIvaVentas factura = venta.getIdRegistroIva();
         factura.setTotalFactura(BigDecimal.ZERO);
         factura.setAnulada(true);
@@ -181,7 +183,7 @@ public class FacturacionVentasBean {
             ivaVentasLineasFacade.edit(lineaF);
         }
         ivaVentasFacade.edit(factura);
-        ventasFacade.edit(venta);
+        ventasBean.anularVenta(venta);
     }
 
 }

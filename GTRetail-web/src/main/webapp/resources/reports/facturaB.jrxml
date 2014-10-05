@@ -139,7 +139,7 @@ RECEPCIÓN DE MERCADERÍA]]></text>
 				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="343" y="146" width="219" height="14" uuid="e36e0218-fa93-4474-9543-2690be8e891b"/>
+				<reportElement x="357" y="146" width="228" height="14" uuid="e36e0218-fa93-4474-9543-2690be8e891b"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
 				</textElement>

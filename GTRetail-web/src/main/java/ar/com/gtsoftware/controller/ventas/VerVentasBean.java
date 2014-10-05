@@ -25,6 +25,7 @@ import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.utils.UtilUI;
 import ar.com.gtsofware.bl.FacturacionVentasBean;
+import ar.com.gtsofware.bl.VentasBean;
 import ar.com.gtsofware.bl.exceptions.ServiceException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +52,8 @@ public class VerVentasBean {
     private List<VentasLineas> lineasVenta = new ArrayList<>();
     @EJB
     private VentasFacade ventasFacade;
+    @EJB
+    private VentasBean ventasBean;
     @EJB
     private VentasLineasFacade lineasFacade;
     @EJB
@@ -120,6 +123,20 @@ public class VerVentasBean {
         try {
             facturacionBean.anularFactura(ventaActual);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Factura anulada correctamente"));
+
+        } catch (ServiceException ex) {
+            Logger.getLogger(VerVentasBean.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
+        }
+    }
+
+    /**
+     * Anula la venta pasada por parámetro
+     */
+    public void anularVenta() {
+        try {
+            ventasBean.anularVenta(ventaActual);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Venta anulada correctamente"));
 
         } catch (ServiceException ex) {
             Logger.getLogger(VerVentasBean.class.getName()).log(Level.SEVERE, null, ex);
