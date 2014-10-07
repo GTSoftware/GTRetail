@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.771561000000002"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="467"/>
-	<import value="com.gtsoft.model.*"/>
+	<import value="ar.com.gtsoftware.model.*"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>

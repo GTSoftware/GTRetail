@@ -131,7 +131,7 @@ public class VerVentasBean {
     }
 
     /**
-     * Anula la venta pasada por parámetro
+     * Anula la venta pasada por parámetro y la factura si es que la tiene
      */
     public void anularVenta() {
         try {

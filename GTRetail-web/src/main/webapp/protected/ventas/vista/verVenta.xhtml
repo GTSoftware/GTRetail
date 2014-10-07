@@ -17,24 +17,30 @@
 
                 <h:form id="opcionesForm" >
                     <p:panel header="#{msg.acciones}">
-                        <p:commandButton value="#{msg.facturar}"
+                        <!-- Facturar-->
+                        <p:commandButton id="facturarButton"
+                                         value="#{msg.facturar}"
                                          icon="ui-icon-print"
                                          rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
-                                         update="facturarDialog" 
+                                         update=":facturarForm:facturarDialog" 
                                          oncomplete="facturarDialog.show()"
                                          process="@none"
                                          />
-                        <p:commandButton value="#{msg.imprimirFactura}"
+                        <!-- Imprimir factura -->
+                        <p:commandButton id="imprimirFacturaButton"
+                                         value="#{msg.imprimirFactura}"
                                          icon="ui-icon-print"
                                          rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
                                          action="#{impresionVentasBean.imprimirFactura(verVentasBean.ventaActual)}"
                                          ajax="false"
                                          />
+                        <!-- Imprimir presupuesto -->
                         <p:commandButton value="#{msg.presupuesto}"
                                          icon="ui-icon-print"
                                          action="#{impresionVentasBean.imprimirPresupuesto(verVentasBean.ventaActual)}"
                                          ajax="false"
                                          />
+                        <!-- Anular factura -->
                         <p:commandButton value="#{msg.anularFactura}"
                                          icon="ui-icon-cancel"
                                          rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
@@ -42,7 +48,15 @@
                                          >
 
                         </p:commandButton>
+                        <!-- Anular Venta -->
+                        <p:commandButton value="#{msg.anularVenta}"
+                                         icon="ui-icon-cancel"
+                                         rendered="#{verVentasBean.ventaActual.idRegistroIva eq null}"
+                                         onclick="confirmationAnularVenta.show()"
+                                         >
 
+                        </p:commandButton>
+                        <!-- Cuadro de confirmación para Anular factura -->
                         <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}" 
                                          appendToBody="true" 
                                          message="#{msg.anularRealmente}"
@@ -53,7 +67,7 @@
                                              oncomplete="confirmation.hide()" 
                                              actionListener="#{verVentasBean.anularFactura()}"
                                              immediate="true"
-                                             update="opcionesForm"
+                                             update=":opcionesForm"
                                              styleClass="ui-confirmdialog-yes"
                                              icon="ui-icon-check"
                                              process="@this"/>
@@ -64,8 +78,32 @@
                                              icon="ui-icon-close" />
 
                         </p:confirmDialog>
-                    </p:panel>
+                        <!-- Cuadro de confirmación para Anular Venta -->
+                        <p:confirmDialog widgetVar="confirmationAnularVenta" header="#{msg.confirmacion}" 
+                                         appendToBody="true" 
+                                         message="#{msg.anularRealmente}"
+                                         showEffect="fade" hideEffect="explode">
 
+
+                            <p:commandButton value="#{msg.si}" 
+                                             oncomplete="confirmationAnularVenta.hide()" 
+                                             actionListener="#{verVentasBean.anularVenta()}"
+                                             immediate="true"
+                                             update=":opcionesForm"
+                                             styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"
+                                             process="@this"/>
+
+                            <p:commandButton value="#{msg.no}" type="button" 
+                                             onclick="confirmationAnularVenta.hide()" 
+                                             styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close" />
+
+                        </p:confirmDialog>
+                    </p:panel>
+                </h:form>
+
+                <h:form id="facturarForm" >
                     <p:dialog header="#{msg.facturar}" 
                               widgetVar="facturarDialog" 
                               resizable="true"
@@ -110,7 +148,7 @@
 
                         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                                          oncomplete="facturarDialog.hide()" 
-                                         update="opcionesForm"
+                                         update=":opcionesForm"
                                          action="#{verVentasBean.registrarFactura()}"/> 
 
                     </p:dialog>
