@@ -53,7 +53,7 @@
             <p:inputText id="cantidadField" 
                          value="#{nuevaVentaBean.lineaActual.cantidad}" 
                          required="true" style="text-align: right" >
-                <f:convertNumber integerOnly="#{empty nuevaVentaBean.productoActual ? false : nuevaVentaBean.productoActual.idTipoUnidadVenta.cantidadEntera}" type="number" />
+                <!-- <f:convertNumber integerOnly="#{empty nuevaVentaBean.productoActual ? false : nuevaVentaBean.productoActual.idTipoUnidadVenta.cantidadEntera}" type="number" /> -->
                 <f:validateDoubleRange minimum="-9999999999999999999.9999" 
                                        maximum="9999999999999999999.9999" />
                 <p:ajax update="insertarPanel"
@@ -64,7 +64,7 @@
                           value="#{nuevaVentaBean.productoActual.idTipoUnidadVenta.nombreUnidad}"/>
 
             <p:inputText id="precioVentaField" 
-                         value="#{empty nuevaVentaBean.productoActual.precioVenta ? 0 : nuevaVentaBean.productoActual.precioVenta}" 
+                         value="#{empty nuevaVentaBean.productoActual ? 0 : nuevaVentaBean.productoActual.precioVenta}" 
                          readonly="#{empty nuevaVentaBean.productoActual.idTipoProveeduria.cambiarPrecioVenta ? true : !nuevaVentaBean.productoActual.idTipoProveeduria.cambiarPrecioVenta}" required="true" style="text-align: right">
                 <p:ajax update="insertarPanel" 
                         listener="#{nuevaVentaBean.calculatSubTotal()}" />  
@@ -227,7 +227,7 @@
         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                          oncomplete="productosDialog.hide()" 
                          update=":formContenido:insertarPanel"/> 
-                       
+
     </p:dialog> 
 
 
