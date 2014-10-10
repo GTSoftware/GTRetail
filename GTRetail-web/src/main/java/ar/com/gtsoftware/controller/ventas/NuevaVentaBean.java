@@ -58,10 +58,10 @@ import javax.inject.Named;
 @Named(value = "nuevaVentaBean")
 @ConversationScoped
 public class NuevaVentaBean implements Serializable {
-    
+
     @Inject
     private Conversation conversation;
-    
+
     @EJB
     private PersonasFacade clientesFacade;
     @EJB
@@ -81,14 +81,14 @@ public class NuevaVentaBean implements Serializable {
     private List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
     private Long idCliente;
     private VentasPagos pagoActual = new VentasPagos();
-    private List<VentasPagos> pagos = new ArrayList<VentasPagos>();
+    private List<VentasPagos> pagos = new ArrayList<>();
 
     /**
      * Creates a new instance of NuevaVentaBean
      */
     public NuevaVentaBean() {
     }
-    
+
     @PostConstruct
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -122,11 +122,11 @@ public class NuevaVentaBean implements Serializable {
                 productoActual = productos.get(0);
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha encontrado un producto con ese código!", ""));
-                
+
             }
         }
     }
-    
+
     public void buscarClientesPorClave() {
         if (idCliente != null) {
             ventaActual.setIdPersona(clientesFacade.find(idCliente));
@@ -142,9 +142,9 @@ public class NuevaVentaBean implements Serializable {
         } else {
             lineaActual.setSubTotal(BigDecimal.ZERO);
         }
-        
+
     }
-    
+
     public void agregarLineaVenta() {
         if (productoActual != null) {
             if (lineaActual.getSubTotal().compareTo(BigDecimal.ZERO) != 0) {
@@ -165,7 +165,7 @@ public class NuevaVentaBean implements Serializable {
             }
         }
     }
-    
+
     private void inicializarLineaVenta() {
         lineaActual = new VentasLineas();
         lineaActual.setCantidad(BigDecimal.ZERO);
@@ -174,7 +174,7 @@ public class NuevaVentaBean implements Serializable {
         productoSearchFilter.setIdProducto(null);
         productoSearchFilter.setCodigoPropio("");
     }
-    
+
     private void calcularTotalVenta() {
         BigDecimal total = BigDecimal.ZERO;
         if (ventaActual.getVentasLineasList() != null) {
@@ -203,19 +203,19 @@ public class NuevaVentaBean implements Serializable {
                 BigDecimal netoGravado = vl.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP);
                 BigDecimal importeIva = vl.getSubTotal().subtract(netoGravado);
                 importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
-                
+
                 if (importe.containsKey(alicuota)) {
                     importeIva = importeIva.add(importe.get(alicuota));
                 }
                 importe.put(alicuota, importeIva);
             }
-            
+
         }
         for (Entry<FiscalAlicuotasIva, BigDecimal> i : importe.entrySet()) {
             ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue());
             importesIVA.add(imp);
         }
-        
+
     }
 
     /**
@@ -234,7 +234,7 @@ public class NuevaVentaBean implements Serializable {
                     return false;
                 }
             }
-            
+
             return true;
         }
         return false;
@@ -247,9 +247,9 @@ public class NuevaVentaBean implements Serializable {
      */
     public void eliminarLinea(VentasLineas linea) {
         int item = -1;
-        
+
         for (int i = 0; i < ventaActual.getVentasLineasList().size(); i++) {
-            
+
             if (ventaActual.getVentasLineasList().get(i).getItem().equalsIgnoreCase(linea.getItem())) {
                 item = i;
             }
@@ -259,7 +259,7 @@ public class NuevaVentaBean implements Serializable {
             calcularTotalVenta();
         }
     }
-    
+
     public void doAgregarPago() {
         if (pagoActual.getIdFormaPago() != null) {
             if (pagoActual.getImporteTotalPagado().compareTo(ventaActual.getSaldo()) > 0) {
@@ -274,7 +274,7 @@ public class NuevaVentaBean implements Serializable {
         }
         calcularTotalPagado();
     }
-    
+
     private void calcularTotalPagado() {
         ventaActual.setSaldo(ventaActual.getTotal());
         BigDecimal sumaPagos = BigDecimal.ZERO;
@@ -283,7 +283,7 @@ public class NuevaVentaBean implements Serializable {
         }
         ventaActual.setSaldo(ventaActual.getTotal().subtract(sumaPagos));
     }
-    
+
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El usuario no tiene una sucursal configurada!"));
@@ -305,10 +305,10 @@ public class NuevaVentaBean implements Serializable {
                 }
             }
         }
-        
+
         return true;
     }
-    
+
     public String guardarVenta() {
         if (validarVenta()) {
             ventaActual.setFechaVenta(GregorianCalendar.getInstance().getTime());
@@ -327,17 +327,17 @@ public class NuevaVentaBean implements Serializable {
         }
         return null;
     }
-    
+
     public String cancelar() {
         endConversation();
         return "/protected/ventas/index.xhtml";
     }
-    
+
     public void eliminarPago(VentasPagos pago) {
         int item = -1;
-        
+
         for (int i = 0; i < pagos.size(); i++) {
-            
+
             if (pagos.get(i).getItem().equalsIgnoreCase(pago.getItem())) {
                 item = i;
             }
@@ -347,91 +347,91 @@ public class NuevaVentaBean implements Serializable {
             calcularTotalPagado();
         }
     }
-    
+
     public void endConversation() {
         if (!conversation.isTransient()) {
             conversation.end();
         }
     }
-    
+
     public ProductosSearchFilter getProductoSearchFilter() {
         return productoSearchFilter;
     }
-    
+
     public void setProductoSearchFilter(ProductosSearchFilter productoSearchFilter) {
         this.productoSearchFilter = productoSearchFilter;
     }
-    
+
     public Productos getProductoActual() {
         return productoActual;
     }
-    
+
     public void setProductoActual(Productos productoActual) {
         this.productoActual = productoActual;
     }
-    
+
     public VentasLineas getLineaActual() {
         return lineaActual;
     }
-    
+
     public void setLineaActual(VentasLineas lineaActual) {
         this.lineaActual = lineaActual;
     }
-    
+
     public Ventas getVentaActual() {
         return ventaActual;
     }
-    
+
     public void setVentaActual(Ventas ventaActual) {
         this.ventaActual = ventaActual;
     }
-    
+
     public List<ImportesAlicuotasIVA> getImportesIVA() {
         return importesIVA;
     }
-    
+
     public void setImportesIVA(List<ImportesAlicuotasIVA> importesIVA) {
         this.importesIVA = importesIVA;
     }
-    
+
     public Long getIdCliente() {
         return idCliente;
     }
-    
+
     public void setIdCliente(Long idCliente) {
         this.idCliente = idCliente;
     }
-    
+
     public List<NegocioCondicionesOperaciones> getCondicionesVentaList() {
         return condicionesOperacionesFacade.findAll();
     }
-    
+
     public List<NegocioFormasPago> getFormasPagoList() {
         return formasPagoFacade.findFormasPagoVenta();
     }
-    
+
     public VentasPagos getPagoActual() {
         return pagoActual;
     }
-    
+
     public void setPagoActual(VentasPagos pagoActual) {
         this.pagoActual = pagoActual;
     }
-    
+
     public List<VentasPagos> getPagos() {
         return pagos;
     }
-    
+
     public void setPagos(List<VentasPagos> pagos) {
         this.pagos = pagos;
     }
-    
+
     public Conversation getConversation() {
         return conversation;
     }
-    
+
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
     }
-    
+
 }
