@@ -204,6 +204,10 @@
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["vistaVentas_lineas.jasper"]]></subreportExpression>
 			</subreport>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="5" y="139" width="550" height="28" uuid="a5175927-8bfa-4816-93f6-0e3edb7b99dd"/>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>
