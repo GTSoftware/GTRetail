@@ -41,6 +41,9 @@
                                              />
 
                         </p:inputText>
+                        
+                        <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
+                        <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchVentasBean.filter.anulada}"/>
 
 
                     </h:panelGrid>
@@ -127,11 +130,13 @@
                         <f:facet name="header">
                             #{msg.factura}
                         </f:facet>
-                        <h:outputLabel rendered="#{not empty venta.idRegistroIva}" 
+                        <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}" 
                                        value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
 
-                        <h:outputLabel rendered="#{empty venta.idRegistroIva}" 
+                        <h:outputLabel rendered="#{empty venta.idRegistroIva and not venta.anulada}" 
                                        value="#{msg.no}" />
+                        <h:outputLabel rendered="#{venta.anulada}" 
+                                       value="#{msg.anulada}" />
                     </p:column>
 
 
