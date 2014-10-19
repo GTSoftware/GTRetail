@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ar.com.gtsofware.bl;
+package ar.com.gtsoftware.bl;
 
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
@@ -14,7 +14,7 @@ import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
-import ar.com.gtsofware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;

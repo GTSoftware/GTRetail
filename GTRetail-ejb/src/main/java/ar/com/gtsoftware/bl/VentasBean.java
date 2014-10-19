@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsofware.bl;
+package ar.com.gtsoftware.bl;
 
 import ar.com.gtsoftware.eao.VentasEstadosFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
@@ -22,7 +22,7 @@ import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.model.VentasPagosLineas;
-import ar.com.gtsofware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

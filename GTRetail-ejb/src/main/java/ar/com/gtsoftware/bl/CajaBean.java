@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsofware.bl;
+package ar.com.gtsoftware.bl;
 
 import ar.com.gtsoftware.eao.CajasCategoriasMovimientosFacade;
 import ar.com.gtsoftware.eao.CajasMovimientosFacade;

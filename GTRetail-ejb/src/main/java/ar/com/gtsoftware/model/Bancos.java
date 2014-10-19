@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -40,30 +34,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
+ * Clase que almacena la información de los bancos
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Entity
 @Table(name = "bancos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Bancos.findAll", query = "SELECT b FROM Bancos b"),
-    @NamedQuery(name = "Bancos.findByIdBanco", query = "SELECT b FROM Bancos b WHERE b.idBanco = :idBanco"),
-    @NamedQuery(name = "Bancos.findByRazonSocial", query = "SELECT b FROM Bancos b WHERE b.razonSocial = :razonSocial"),
-    @NamedQuery(name = "Bancos.findByDireccion", query = "SELECT b FROM Bancos b WHERE b.direccion = :direccion"),
-    @NamedQuery(name = "Bancos.findByTelefonoFijo", query = "SELECT b FROM Bancos b WHERE b.telefonoFijo = :telefonoFijo"),
-    @NamedQuery(name = "Bancos.findByCelular", query = "SELECT b FROM Bancos b WHERE b.celular = :celular"),
-    @NamedQuery(name = "Bancos.findByCuit", query = "SELECT b FROM Bancos b WHERE b.cuit = :cuit"),
-    @NamedQuery(name = "Bancos.findByFechaAlta", query = "SELECT b FROM Bancos b WHERE b.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "Bancos.findByActivo", query = "SELECT b FROM Bancos b WHERE b.activo = :activo"),
-    @NamedQuery(name = "Bancos.findByObservaciones", query = "SELECT b FROM Bancos b WHERE b.observaciones = :observaciones")})
-public class Bancos implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_banco"))
+public class Bancos extends BaseEntity {
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_banco")
-    private Integer idBanco;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -113,24 +97,11 @@ public class Bancos implements Serializable {
     public Bancos() {
     }
 
-    public Bancos(Integer idBanco) {
-        this.idBanco = idBanco;
-    }
-
-    public Bancos(Integer idBanco, String razonSocial, String cuit, Date fechaAlta, boolean activo) {
-        this.idBanco = idBanco;
+    public Bancos(String razonSocial, String cuit, Date fechaAlta, boolean activo) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.fechaAlta = fechaAlta;
         this.activo = activo;
-    }
-
-    public Integer getIdBanco() {
-        return idBanco;
-    }
-
-    public void setIdBanco(Integer idBanco) {
-        this.idBanco = idBanco;
     }
 
     public String getRazonSocial() {
@@ -239,28 +210,8 @@ public class Bancos implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idBanco != null ? idBanco.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Bancos)) {
-            return false;
-        }
-        Bancos other = (Bancos) object;
-        if ((this.idBanco == null && other.idBanco != null) || (this.idBanco != null && !this.idBanco.equals(other.idBanco))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Bancos[ idBanco=" + idBanco + " ]";
+        return "ar.com.gtsoftware.model.Bancos[ idBanco=" + this.getId() + " ]";
     }
-    
+
 }

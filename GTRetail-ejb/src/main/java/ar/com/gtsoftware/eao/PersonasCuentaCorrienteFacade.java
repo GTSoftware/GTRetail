@@ -19,7 +19,7 @@ import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente_;
 import ar.com.gtsoftware.model.Personas_;
-import ar.com.gtsofware.bl.PersonasCuentaCorrienteBean;
+import ar.com.gtsoftware.bl.PersonasCuentaCorrienteBean;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;

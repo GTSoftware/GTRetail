@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsofware.bl;
+package ar.com.gtsoftware.bl;
 
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
@@ -25,7 +25,7 @@ import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.model.dto.ImportesResponsabilidad;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
-import ar.com.gtsofware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -67,6 +67,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
+        <sonar.language>java</sonar.language>
     </properties>
     <build>
         <plugins>

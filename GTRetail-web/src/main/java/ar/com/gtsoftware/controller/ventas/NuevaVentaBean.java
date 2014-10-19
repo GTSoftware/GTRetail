@@ -30,7 +30,7 @@ import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsofware.bl.VentasBean;
+import ar.com.gtsoftware.bl.VentasBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
