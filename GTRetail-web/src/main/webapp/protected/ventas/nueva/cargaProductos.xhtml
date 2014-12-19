@@ -26,7 +26,7 @@
 
             <p:commandButton id="buscarProductosButton" icon="ui-icon-search"  
                              update=":formContenido:productosDialog" 
-                             oncomplete="productosDialog.show()"
+                             oncomplete="PF('productosDialog').show()"
                              process="@none" />
 
             <p:inputText id="idProductoField"

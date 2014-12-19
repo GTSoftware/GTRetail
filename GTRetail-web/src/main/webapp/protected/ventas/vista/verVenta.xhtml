@@ -23,7 +23,7 @@
                                          icon="ui-icon-print"
                                          rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
                                          update=":facturarForm:facturarDialog" 
-                                         oncomplete="facturarDialog.show()"
+                                         oncomplete="PF('facturarDialog').show()"
                                          process="@none"
                                          />
                         <!-- Imprimir factura -->
@@ -44,7 +44,7 @@
                         <p:commandButton value="#{msg.anularFactura}"
                                          icon="ui-icon-cancel"
                                          rendered="#{not empty verVentasBean.ventaActual.idRegistroIva}"
-                                         onclick="confirmation.show()"
+                                         onclick="PF('confirmation').show()"
                                          >
 
                         </p:commandButton>
@@ -52,13 +52,13 @@
                         <p:commandButton value="#{msg.anularVenta}"
                                          icon="ui-icon-cancel"
                                          rendered="#{verVentasBean.ventaActual.idRegistroIva eq null}"
-                                         onclick="confirmationAnularVenta.show()"
+                                         onclick="PF('confirmationAnularVenta').show()"
                                          >
 
                         </p:commandButton>
                         <!-- Cuadro de confirmación para Anular factura -->
                         <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}" 
-                                         appendToBody="true" 
+                                         appendTo="@(body)"
                                          message="#{msg.anularRealmente}"
                                          showEffect="fade" hideEffect="explode">
 
