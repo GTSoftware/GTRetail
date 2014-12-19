@@ -21,11 +21,11 @@
                     <br/>
                     <p:outputLabel value="#{msg.bienvenido}: "/>
                     <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" /> 
-                    
+
                     <p:spacer width="20"/>
                     <p:outputLabel value="#{msg.fecha}:"/>
                     <p:clock mode="server" id="clock" pattern="dd/MM/yyyy hh:mm:ss a" />
-                    <p:ajaxStatus  onstart="dlgLoad.show()" oncomplete="dlgLoad.hide()" onerror="dlgLoad.hide()" onsuccess="dlgLoad.hide()"/>  
+                    <p:ajaxStatus  onstart="PF('dlgLoad').show()" oncomplete="PF('dlgLoad').hide()" onerror="PF('dlgLoad').hide()" onsuccess="PF('dlgLoad').hide()"/>  
                     <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)"> 
                         <h:panelGrid columns="1" >
 
@@ -36,7 +36,7 @@
                     </p:dialog>  
                     <p:growl autoUpdate="true" showDetail="true" showSummary="true" sticky="true"/>
                 </h:form>
-                
+
                 <ui:include src="mainMenu.xhtml" />
             </ui:insert>
         </div>
