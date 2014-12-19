@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -66,6 +67,26 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
 
         List<FiscalPeriodosFiscales> productosList = q.getResultList();
         return productosList;
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalPeriodosFiscales> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<FiscalPeriodosFiscales> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(FiscalPeriodosFiscales entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

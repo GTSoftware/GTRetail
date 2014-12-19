@@ -17,9 +17,14 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -37,6 +42,26 @@ public class ProductosTiposUnidadesFacade extends AbstractFacade<ProductosTiposU
 
     public ProductosTiposUnidadesFacade() {
         super(ProductosTiposUnidades.class);
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosTiposUnidades> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ProductosTiposUnidades> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(ProductosTiposUnidades entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

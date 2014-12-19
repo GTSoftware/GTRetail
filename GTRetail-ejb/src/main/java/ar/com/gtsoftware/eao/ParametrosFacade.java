@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Parametros_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -88,6 +89,26 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
             return paramList;
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Parametros> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Parametros> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(Parametros entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

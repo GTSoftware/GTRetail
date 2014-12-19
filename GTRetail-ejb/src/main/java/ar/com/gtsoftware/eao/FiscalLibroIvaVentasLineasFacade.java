@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -66,5 +67,25 @@ public class FiscalLibroIvaVentasLineasFacade extends AbstractFacade<FiscalLibro
 
         List<FiscalLibroIvaVentasLineas> lineasFacturaList = q.getResultList();
         return lineasFacturaList;
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalLibroIvaVentasLineas> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<FiscalLibroIvaVentasLineas> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(FiscalLibroIvaVentasLineas entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

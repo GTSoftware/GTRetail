@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.model.Usuarios_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +78,25 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
             return usuariosList;
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Usuarios> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Usuarios> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(Usuarios entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

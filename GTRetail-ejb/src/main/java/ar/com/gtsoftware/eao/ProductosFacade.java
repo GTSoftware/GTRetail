@@ -20,6 +20,7 @@ import ar.com.gtsoftware.model.ProductosRubros_;
 import ar.com.gtsoftware.model.ProductosSubRubros_;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
 import ar.com.gtsoftware.model.Productos_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +117,26 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             return productosList;
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Productos> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Productos> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(Productos entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

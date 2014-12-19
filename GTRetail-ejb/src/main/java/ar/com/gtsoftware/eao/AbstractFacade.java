@@ -76,17 +76,11 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root) {
-        return null;
-    }
+    public abstract Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root);
 
-    public List<T> findBySearchFilter(AbstractSearchFilter sf) {
-        return null;
-    }
+    public abstract List<T> findBySearchFilter(AbstractSearchFilter sf);
 
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        return 0;
-    }
+    public abstract int countBySearchFilter(AbstractSearchFilter sf);
 
     /**
      * Retorna el OR entre los predicados pasados como parámetro
@@ -121,5 +115,12 @@ public abstract class AbstractFacade<T> {
         }
         return cb.and(p1, p2);
     }
+
+    /**
+     * Crea o edita la entidad pasada como parámetro según sea necesario
+     *
+     * @param entity
+     */
+    public abstract void createOrEdit(T entity);
 
 }

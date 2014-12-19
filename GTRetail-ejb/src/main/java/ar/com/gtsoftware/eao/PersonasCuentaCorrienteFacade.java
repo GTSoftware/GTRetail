@@ -18,8 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente_;
-import ar.com.gtsoftware.model.Personas_;
-import ar.com.gtsoftware.bl.PersonasCuentaCorrienteBean;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -75,5 +74,25 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
         TypedQuery<PersonasCuentaCorriente> q = em.createQuery(cq);
         q.setMaxResults(100);
         return q.getResultList();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<PersonasCuentaCorriente> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<PersonasCuentaCorriente> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(PersonasCuentaCorriente entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

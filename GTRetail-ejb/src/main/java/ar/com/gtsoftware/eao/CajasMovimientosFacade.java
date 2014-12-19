@@ -18,7 +18,9 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasMovimientos;
 import ar.com.gtsoftware.model.CajasMovimientos_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -58,6 +60,26 @@ public class CajasMovimientosFacade extends AbstractFacade<CajasMovimientos> {
             return BigDecimal.ZERO;
         }
         return result;
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<CajasMovimientos> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<CajasMovimientos> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(CajasMovimientos entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

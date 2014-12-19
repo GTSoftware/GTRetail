@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.UbicacionPaises;
 import ar.com.gtsoftware.model.UbicacionPaises_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,26 @@ public class UbicacionPaisesFacade extends AbstractFacade<UbicacionPaises> {
             return paisesList;
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<UbicacionPaises> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<UbicacionPaises> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(UbicacionPaises entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

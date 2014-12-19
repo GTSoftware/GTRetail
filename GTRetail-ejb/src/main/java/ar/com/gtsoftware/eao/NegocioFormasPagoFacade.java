@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.model.NegocioFormasPago_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -70,6 +71,26 @@ public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
 
         List<NegocioFormasPago> formasPagoList = q.getResultList();
         return formasPagoList;
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<NegocioFormasPago> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<NegocioFormasPago> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(NegocioFormasPago entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

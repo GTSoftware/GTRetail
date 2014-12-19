@@ -17,6 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.Ventas_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -116,5 +117,25 @@ public class VentasFacade extends AbstractFacade<Ventas> {
             return ventasList;
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Ventas> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Ventas> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(Ventas entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

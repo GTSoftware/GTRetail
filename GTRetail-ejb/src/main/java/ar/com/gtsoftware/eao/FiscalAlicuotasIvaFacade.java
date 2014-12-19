@@ -17,9 +17,14 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -37,6 +42,26 @@ public class FiscalAlicuotasIvaFacade extends AbstractFacade<FiscalAlicuotasIva>
 
     public FiscalAlicuotasIvaFacade() {
         super(FiscalAlicuotasIva.class);
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalAlicuotasIva> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<FiscalAlicuotasIva> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(FiscalAlicuotasIva entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

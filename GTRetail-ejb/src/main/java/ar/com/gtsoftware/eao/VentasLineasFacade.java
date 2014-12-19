@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.model.VentasLineas_;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -57,5 +58,25 @@ public class VentasLineasFacade extends AbstractFacade<VentasLineas> {
         TypedQuery<VentasLineas> q = em.createQuery(cq);
         List<VentasLineas> lineasVentaList = q.getResultList();
         return lineasVentaList;
+    }
+
+    @Override
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<VentasLineas> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<VentasLineas> findBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createOrEdit(VentasLineas entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
