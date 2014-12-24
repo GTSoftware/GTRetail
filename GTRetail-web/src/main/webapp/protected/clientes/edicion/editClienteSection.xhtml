@@ -6,6 +6,21 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
     <h:form id="editClienteForm">
+        <h:panelGrid columns="2" >
+            <p:commandButton id="guardarButton" 
+                             value="#{msg.guardar}" 
+                             icon="ui-icon-disk" 
+                             action="#{clientesEditBean.doGuardarCliente()}"
+                             update="@form" />
+
+            <p:commandButton id="cancelarButton" 
+                             value="#{msg.cancelar}" 
+                             icon="ui-icon-cancel" 
+                             action="/protected/clientes/index.xhtml?faces-redirect=true"
+                             immediate="true"
+                             ajax="false" />
+        </h:panelGrid>
+
 
         <p:tabView >
             <p:tab title="#{msg.datosFiliatorios}">
@@ -210,22 +225,6 @@
                 </h:form>
             </p:tab>
         </p:tabView>
-
-        <h:panelGrid columns="2" >
-            <p:commandButton id="guardarButton" 
-                             value="#{msg.guardar}" 
-                             icon="ui-icon-disk" 
-                             action="#{clientesEditBean.doGuardarCliente()}"
-                             update="@form" />
-
-            <p:commandButton id="cancelarButton" 
-                             value="#{msg.cancelar}" 
-                             icon="ui-icon-cancel" 
-                             action="/protected/clientes/index.xhtml?faces-redirect=true"
-                             immediate="true"
-                             ajax="false" />
-        </h:panelGrid>
-
 
     </h:form>
 </html>
