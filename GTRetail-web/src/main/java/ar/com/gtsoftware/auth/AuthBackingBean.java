@@ -55,10 +55,9 @@ public class AuthBackingBean implements Serializable {
         Principal usuP = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
 
         if (usuP != null) {
-            UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP.getName());
-            List<Usuarios> usuariosList = usuariosFacade.findBySearchFilter(sf);
-            if (!usuariosList.isEmpty()) {
-                return usuariosList.get(0);
+            Usuarios usuario = usuariosFacade.findByLogIn(usuP.getName());
+            if (usuario != null) {
+                return usuario;
             }
         }
         Usuarios usu = new Usuarios();

@@ -80,6 +80,24 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
         return new ArrayList<>();
     }
 
+    /**
+     * Retorna el usuario cuyo login coincida con el que se pasa por parámetro
+     *
+     * @param login
+     * @return
+     */
+    public Usuarios findByLogIn(String login) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Usuarios> cq = cb.createQuery(Usuarios.class);
+        Root<Usuarios> usuario = cq.from(Usuarios.class);
+        cq.select(usuario);
+        Predicate p = cb.equal(usuario.get(Usuarios_.login), login);
+        cq.where(p);
+        TypedQuery<Usuarios> q = em.createQuery(cq);
+        q.setMaxResults(1);
+        return q.getSingleResult();
+    }
+
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Usuarios> root) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -79,6 +79,10 @@
         </user-data-constraint>
     </security-constraint>
     
+    <security-role>
+        <role-name>ADMINISTRADORES</role-name>
+    </security-role>
+   
     <!-- Páginas de error -->
     <error-page>
         <error-code>404</error-code>

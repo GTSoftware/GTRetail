@@ -19,6 +19,7 @@ import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Ventas;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -41,7 +41,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 @ManagedBean(name = "impresionVentasBean")
 @ViewScoped
-public class ImpresionVentasBean {
+public class ImpresionVentasBean implements Serializable {
 
     @EJB
     private ParametrosFacade parametrosFacade;

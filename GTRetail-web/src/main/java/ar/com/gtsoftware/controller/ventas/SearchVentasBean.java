@@ -19,6 +19,7 @@ import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import ar.com.gtsoftware.utils.UtilUI;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "searchVentasBean")
 @ViewScoped
-public class SearchVentasBean {
+public class SearchVentasBean implements Serializable {
 
     @EJB
     private VentasFacade ventasFacade;

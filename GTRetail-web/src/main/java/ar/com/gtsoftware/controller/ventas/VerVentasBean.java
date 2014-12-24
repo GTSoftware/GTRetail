@@ -27,6 +27,7 @@ import ar.com.gtsoftware.utils.UtilUI;
 import ar.com.gtsoftware.bl.FacturacionVentasBean;
 import ar.com.gtsoftware.bl.VentasBean;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "verVentasBean")
 @ViewScoped
-public class VerVentasBean {
+public class VerVentasBean implements Serializable {
 
     private Ventas ventaActual;
     private List<VentasLineas> lineasVenta = new ArrayList<>();

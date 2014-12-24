@@ -5,12 +5,15 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <h:body>
-         
-        <ui:composition template="/WEB-INF/templates/template.xhtml">
-            <ui:define name="content">                
-                <ui:include src="breadcrumb.xhtml" />
-                <ui:include src="editClienteSection.xhtml" />
 
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+            <ui:define name="content">       
+                <ui:insert >
+                    <ui:include src="breadcrumb.xhtml" />
+                </ui:insert>
+                <ui:insert >
+                    <ui:include src="editClienteSection.xhtml" />
+                </ui:insert>
 
             </ui:define>
         </ui:composition>
