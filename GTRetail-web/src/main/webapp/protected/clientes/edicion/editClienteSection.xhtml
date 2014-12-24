@@ -221,8 +221,9 @@
             <p:commandButton id="cancelarButton" 
                              value="#{msg.cancelar}" 
                              icon="ui-icon-cancel" 
-                             action="#{clientesEditBean.volver()}"
-                             immediate="true" />
+                             action="/protected/clientes/index.xhtml?faces-redirect=true"
+                             immediate="true"
+                             ajax="false" />
         </h:panelGrid>
 
 

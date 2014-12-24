@@ -272,9 +272,5 @@ public class ClientesEditBean implements Serializable {
     public void setTelefonoActual(PersonasTelefonos telefonoActual) {
         this.telefonoActual = telefonoActual;
     }
-    
-    public String volver(){
-        return "/protected/clientes/index.xhtml?faces-redirect=true";
-    }
 
 }
