@@ -19,7 +19,7 @@ import ar.com.gtsoftware.model.Sucursales;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 public class UsuariosSearchFilter extends AbstractSearchFilter {
 
@@ -32,6 +32,8 @@ public class UsuariosSearchFilter extends AbstractSearchFilter {
     private String password;
     private Sucursales idSucursal;
 
+    private String text;
+
     public UsuariosSearchFilter() {
     }
 
@@ -42,7 +44,8 @@ public class UsuariosSearchFilter extends AbstractSearchFilter {
     @Override
     public boolean hasFilter() {
         return (idUsuario != null) || (nombreUsuario != null)
-                || (login != null) || (idSucursal != null) || (password != null);
+                || (login != null) || (idSucursal != null) || (password != null)
+                || (hasTextFilter());
     }
 
     public Integer getIdUsuario() {
@@ -83,6 +86,18 @@ public class UsuariosSearchFilter extends AbstractSearchFilter {
 
     public void setIdSucursal(Sucursales idSucursal) {
         this.idSucursal = idSucursal;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public boolean hasTextFilter() {
+        return text != null && !text.isEmpty();
     }
 
 }

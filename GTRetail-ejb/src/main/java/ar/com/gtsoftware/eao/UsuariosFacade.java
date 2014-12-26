@@ -32,7 +32,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
 public class UsuariosFacade extends AbstractFacade<Usuarios> {
@@ -70,6 +70,16 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
             if (usuariosSearchFilter.getPassword() != null) {
                 Predicate p1 = cb.equal(usuario.get(Usuarios_.password), usuariosSearchFilter.getPassword());
                 p = appendOrPredicate(cb, p, p1);
+            }
+            if (usuariosSearchFilter.hasTextFilter()) {
+                for (String s : usuariosSearchFilter.getText().toUpperCase().split(" ")) {
+
+                    Predicate p1 = cb.like(cb.upper(usuario.get(Usuarios_.login)), String.format("%%%s%%", s));
+                    Predicate p2 = cb.like(cb.upper(usuario.get(Usuarios_.nombreUsuario)), String.format("%%%s%%", s));
+
+                    p = appendOrPredicate(cb, p, p1);
+                    p = appendOrPredicate(cb, p, p2);
+                }
             }
             cq.where(p);
             TypedQuery<Usuarios> q = em.createQuery(cq);
@@ -115,6 +125,13 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
 
     @Override
     public void createOrEdit(Usuarios entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Usuarios usuarioExistente = find(entity.getLogin());
+
+        if (usuarioExistente != null) {
+            edit(entity);
+        } else {
+            create(entity);
+        }
+        getEntityManager().flush();
     }
 }
