@@ -7,6 +7,7 @@
         <p:menubar  style="height: fit-content"  autoDisplay="false">
 
             <p:submenu label="#{msg.sistema}" icon="ui-icon-wrench" >
+                <p:menuitem value="#{msg.cambiarClave}" action="/protected/user/changePassword.xhtml?faces-redirect=true"  ajax="false" immediate="true"/>
                 <p:menuitem value="#{msg.parametros}" action="/protected/parametros/parametroSearch?faces-redirect=true" ajax="false" immediate="true"/>
                 <p:menuitem value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
             </p:submenu>
@@ -21,7 +22,7 @@
                     <p:menuitem value="#{msg.ventasListado}" 
                                 action="/protected/ventas/index.xhtml?faces-redirect=true" 
                                 immediate="true" ajax="false"/>
-                    
+
                     <p:menuitem value="#{msg.ventasNueva}" 
                                 action="/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
