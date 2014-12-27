@@ -101,7 +101,9 @@ public class Productos extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva")
     @ManyToOne(optional = false)
     private FiscalAlicuotasIva idAlicuotaIva;
-    
+    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca")
+    @ManyToOne(optional = false)
+    private ProductosMarcas idMarca;
 
     public Productos() {
     }
@@ -254,6 +256,14 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setIdAlicuotaIva(FiscalAlicuotasIva idAlicuotaIva) {
         this.idAlicuotaIva = idAlicuotaIva;
+    }
+
+    public ProductosMarcas getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(ProductosMarcas idMarca) {
+        this.idMarca = idMarca;
     }
 
     @Override
