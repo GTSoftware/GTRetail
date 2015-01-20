@@ -89,7 +89,7 @@ public class NuevaVentaBean implements Serializable {
     public NuevaVentaBean() {
     }
 
-    @PostConstruct
+    
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             if (conversation.isTransient()) {
