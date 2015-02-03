@@ -71,27 +71,46 @@ public class NumberToLetterConverterTest {
         String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE  PESOS ";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
     }
 
     /**
      * Test of convertNumberToLetter method, of class NumberToLetterConverter.
      */
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testNegative() {
         System.out.println("testNegative");
         double number = -1;
         //String expResult = "MENOS UNO  PESOS ";
-        try {
-            String result = NumberToLetterConverter.convertNumberToLetter(number);
-            fail("No se deben poder convertir números negativos");
-        } catch (IllegalArgumentException e) {
-            
-        }
-        
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        fail("No se deben poder convertir números negativos");
+
     }
 
+    public void testUnCentavo() {
+        System.out.println("unCentavo");
+        double number = 0.01;
+        String expResult = "UN CENTAVO ";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testMaxNumber() {
+        System.out.println("testMaxNumber");
+        double number = 9999999;
+        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE  PESOS ";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testOutOfRange() {
+        System.out.println("testOutOfRange");
+        double number = 999999999.01;
+
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        fail("Número fuera de rango");
+
+    }
 }

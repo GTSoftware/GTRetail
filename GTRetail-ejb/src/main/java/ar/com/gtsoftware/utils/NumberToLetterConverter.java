@@ -47,17 +47,16 @@ public abstract class NumberToLetterConverter {
      */
     public static String convertNumberToLetter(double number)
             throws NumberFormatException {
-        String converted = new String();
+        StringBuilder converted = new StringBuilder();
 
         // Validamos que sea un numero legal
         if (number < 0) {
             throw new IllegalArgumentException("No puedo convertir números negativos");
         }
         double doubleNumber = Math.rint(number * 100) / 100;
-        if (doubleNumber > 999999999) {
-            throw new NumberFormatException(
-                    "El número es mayor que 999.999.999, "
-                    + "no es posible convertirlo");
+        if (doubleNumber > 9999999) {
+            throw new IllegalArgumentException(
+                    "El número es mayor que 9.999.999, no es posible convertirlo");
         }
 
         String splitNumber[] = String.valueOf(doubleNumber).replace('.', '#').split("#");
@@ -68,10 +67,11 @@ public abstract class NumberToLetterConverter {
                 + String.valueOf(getDigitAt(splitNumber[0], 7))
                 + String.valueOf(getDigitAt(splitNumber[0], 6)));
         if (millon == 1) {
-            converted = "UN MILLON ";
+            converted.append("UN MILLON ");
         }
         if (millon > 1) {
-            converted = convertNumber(String.valueOf(millon)) + "MILLONES ";
+            converted.append(convertNumber(String.valueOf(millon)))
+                    .append("MILLONES ");
         }
 
         // Descompone el trio de miles - ¡SGT!
@@ -80,10 +80,11 @@ public abstract class NumberToLetterConverter {
                 + String.valueOf(getDigitAt(splitNumber[0], 4))
                 + String.valueOf(getDigitAt(splitNumber[0], 3)));
         if (miles == 1) {
-            converted += "MIL ";
+            converted.append("MIL ");
         }
         if (miles > 1) {
-            converted += convertNumber(String.valueOf(miles)) + "MIL ";
+            converted.append(convertNumber(String.valueOf(miles)))
+                    .append("MIL ");
         }
 
         // Descompone el ultimo trio de unidades - ¡SGT!
@@ -92,17 +93,17 @@ public abstract class NumberToLetterConverter {
                 + String.valueOf(getDigitAt(splitNumber[0], 1))
                 + String.valueOf(getDigitAt(splitNumber[0], 0)));
         if (cientos == 1) {
-            converted += "UN";
+            converted.append("UN");
         }
 
         if (millon + miles + cientos == 0) {
-            converted += "CERO";
+            converted.append("CERO");
         }
         if (cientos > 1) {
-            converted += convertNumber(String.valueOf(cientos));
+            converted.append(convertNumber(String.valueOf(cientos)));
         }
 
-        converted += " PESOS ";
+        converted.append(" PESOS ");
 
         // Descompone los centavos
         int centavos = Integer.parseInt(String.valueOf(getDigitAt(
@@ -110,14 +111,15 @@ public abstract class NumberToLetterConverter {
                 + String.valueOf(getDigitAt(splitNumber[1], 1))
                 + String.valueOf(getDigitAt(splitNumber[1], 0)));
         if (centavos == 1) {
-            converted += " CON UN CENTAVO";
+            converted.append(" CON UN CENTAVO");
         }
         if (centavos > 1) {
-            converted += " CON " + convertNumber(String.valueOf(centavos))
-                    + "CENTAVOS";
+            converted.append(" CON ")
+                    .append(convertNumber(String.valueOf(centavos)))
+                    .append("CENTAVOS");
         }
 
-        return converted;
+        return converted.toString();
     }
 
     /**
@@ -132,36 +134,39 @@ public abstract class NumberToLetterConverter {
      */
     private static String convertNumber(String number) {
         if (number.length() > 3) {
-            throw new NumberFormatException(
-                    "La longitud máxima debe ser 3 digitos");
+            throw new IllegalArgumentException(
+                    "La longitud máxima debe ser 3 dígitos");
         }
 
-        String output = new String();
+        StringBuilder output = new StringBuilder();
         if (getDigitAt(number, 2) != 0) {
-            output = CENTENAS[getDigitAt(number, 2) - 1];
+            output.append(CENTENAS[getDigitAt(number, 2) - 1]);
         }
 
         int k = Integer.parseInt(String.valueOf(getDigitAt(number, 1))
                 + String.valueOf(getDigitAt(number, 0)));
 
         if (k <= 20) {
-            output += UNIDADES[k];
+            output.append(UNIDADES[k]);
         } else {
             if (k > 30 && getDigitAt(number, 0) != 0) {
-                output += DECENAS[getDigitAt(number, 1) - 2] + "Y "
-                        + UNIDADES[getDigitAt(number, 0)];
+                output.append(DECENAS[getDigitAt(number, 1) - 2])
+                        .append("Y ")
+                        .append(
+                                UNIDADES[getDigitAt(number, 0)]);
             } else {
-                output += DECENAS[getDigitAt(number, 1) - 2]
-                        + UNIDADES[getDigitAt(number, 0)];
+                output.append(DECENAS[getDigitAt(number, 1) - 2])
+                        .append(
+                                UNIDADES[getDigitAt(number, 0)]);
             }
         }
 
         // Caso especial con el 100
         if (getDigitAt(number, 2) == 1 && k == 0) {
-            output = "CIEN";
+            output.append("CIEN");
         }
 
-        return output;
+        return output.toString();
     }
 
     /**

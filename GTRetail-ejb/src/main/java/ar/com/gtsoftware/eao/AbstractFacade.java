@@ -29,7 +29,7 @@ import javax.persistence.criteria.Root;
  */
 public abstract class AbstractFacade<T> {
 
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -121,6 +121,6 @@ public abstract class AbstractFacade<T> {
      *
      * @param entity
      */
-    public abstract void createOrEdit(T entity);
+    public abstract void createOrEdit(T entity) ;
 
 }
