@@ -64,6 +64,6 @@ public class CajasConverter implements Converter {
             return null;
         }
         Cajas caja = (Cajas) value;
-        return caja.getIdCaja().toString();
+        return caja.getId().toString();
     }
 }

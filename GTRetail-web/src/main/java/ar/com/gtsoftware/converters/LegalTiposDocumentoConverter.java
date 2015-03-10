@@ -64,6 +64,6 @@ public class LegalTiposDocumentoConverter implements Converter {
             return null;
         }
         LegalTiposDocumento tipoDocumento = (LegalTiposDocumento) value;
-        return tipoDocumento.getIdTipoDocumento().toString();
+        return tipoDocumento.getId().toString();
     }
 }

@@ -143,20 +143,14 @@ public class ClientesEditBean implements Serializable {
 
     private void guardarTelefonos() {
         for (PersonasTelefonos pt : clienteActual.getPersonasTelefonosList()) {
-            if (pt.getIdTelefono() == null) {
-                telefonosFacade.create(pt);
-            } else {
-
-                telefonosFacade.edit(pt);
-            }
+            telefonosFacade.createOrEdit(pt);
         }
         for (PersonasTelefonos pt : telefonosToRemove) {
-            if (pt.getIdTelefono() != null) {
+            if (pt.getId() != null) {
                 telefonosFacade.remove(pt);
             }
         }
     }
-
 
     public void grabarTelefono() {
         if (telefonoActual != null) {
@@ -166,7 +160,7 @@ public class ClientesEditBean implements Serializable {
             }
             clienteActual.getPersonasTelefonosList().add(telefonoActual);
         }
-        telefonoActual= new PersonasTelefonos();
+        telefonoActual = new PersonasTelefonos();
     }
 
     public void borrarTelefono(PersonasTelefonos pt) {
@@ -174,7 +168,7 @@ public class ClientesEditBean implements Serializable {
         clienteActual.getPersonasTelefonosList().remove(pt);
     }
 
-    private String formatRazonSocial(String razonSocialCliente, String apellidos, String nombres, int tipoPersoneria) {
+    private String formatRazonSocial(String razonSocialCliente, String apellidos, String nombres, long tipoPersoneria) {
         String razonSocial = razonSocialCliente;
         if (tipoPersoneria == 1) {//Persona física
             razonSocial = apellidos.concat(", ").concat(nombres);
@@ -186,7 +180,7 @@ public class ClientesEditBean implements Serializable {
     private void formatDatosCliente() {
         clienteActual.setRazonSocial(formatRazonSocial(clienteActual.getRazonSocial(),
                 clienteActual.getApellidos(), clienteActual.getNombres(),
-                clienteActual.getIdTipoPersoneria().getIdTipoPersoneria()));
+                clienteActual.getIdTipoPersoneria().getId()));
         clienteActual.setCalle(FormatUtils.uppercase(clienteActual.getCalle()));
         clienteActual.setApellidos(FormatUtils.uppercase(clienteActual.getApellidos()));
         clienteActual.setNombres(FormatUtils.uppercase(clienteActual.getNombres()));
@@ -222,7 +216,7 @@ public class ClientesEditBean implements Serializable {
                 throw new Exception("Ya existe un cliente con ese número de documento!");
             }
         }
-        if (clienteActual.getIdTipoDocumento().getIdTipoDocumento() == 2 && !ValidadorCUIT.getValidate(clienteActual.getDocumento())) {
+        if (clienteActual.getIdTipoDocumento().getId() == 2 && !ValidadorCUIT.getValidate(clienteActual.getDocumento())) {
             throw new Exception("El número de CUIT ingresado no es válido!");
         }
     }

@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,12 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "parametros")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Parametros.findAll", query = "SELECT p FROM Parametros p"),
-    @NamedQuery(name = "Parametros.findByNombreParametro", query = "SELECT p FROM Parametros p WHERE p.nombreParametro = :nombreParametro"),
-    @NamedQuery(name = "Parametros.findByValorParametro", query = "SELECT p FROM Parametros p WHERE p.valorParametro = :valorParametro"),
-    @NamedQuery(name = "Parametros.findByDescripcionParametro", query = "SELECT p FROM Parametros p WHERE p.descripcionParametro = :descripcionParametro")})
-public class Parametros implements Serializable {
+public class Parametros extends GTEntity {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -117,5 +109,10 @@ public class Parametros implements Serializable {
     public String toString() {
         return "ar.com.gtsoftware.model.Parametros[ nombreParametro=" + nombreParametro + " ]";
     }
-    
+
+    @Override
+    public boolean isNew() {
+        return nombreParametro == null;
+    }
+
 }

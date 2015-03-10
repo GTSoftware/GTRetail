@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,19 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "personas_cuenta_corriente")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "PersonasCuentaCorriente.findAll", query = "SELECT p FROM PersonasCuentaCorriente p"),
-    @NamedQuery(name = "PersonasCuentaCorriente.findByIdMovimiento", query = "SELECT p FROM PersonasCuentaCorriente p WHERE p.idMovimiento = :idMovimiento"),
-    @NamedQuery(name = "PersonasCuentaCorriente.findByFechaMovimiento", query = "SELECT p FROM PersonasCuentaCorriente p WHERE p.fechaMovimiento = :fechaMovimiento"),
-    @NamedQuery(name = "PersonasCuentaCorriente.findByImporteMovimiento", query = "SELECT p FROM PersonasCuentaCorriente p WHERE p.importeMovimiento = :importeMovimiento"),
-    @NamedQuery(name = "PersonasCuentaCorriente.findByDescripcionMovimiento", query = "SELECT p FROM PersonasCuentaCorriente p WHERE p.descripcionMovimiento = :descripcionMovimiento")})
-public class PersonasCuentaCorriente implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_movimiento")
-    private Integer idMovimiento;
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento"))
+public class PersonasCuentaCorriente extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_movimiento")
@@ -81,23 +65,15 @@ public class PersonasCuentaCorriente implements Serializable {
     public PersonasCuentaCorriente() {
     }
 
-    public PersonasCuentaCorriente(Integer idMovimiento) {
-        this.idMovimiento = idMovimiento;
+    public PersonasCuentaCorriente(Long idMovimiento) {
+        super(idMovimiento);
     }
 
-    public PersonasCuentaCorriente(Integer idMovimiento, Date fechaMovimiento, BigDecimal importeMovimiento, String descripcionMovimiento) {
-        this.idMovimiento = idMovimiento;
+    public PersonasCuentaCorriente(Long idMovimiento, Date fechaMovimiento, BigDecimal importeMovimiento, String descripcionMovimiento) {
+        super(idMovimiento);
         this.fechaMovimiento = fechaMovimiento;
         this.importeMovimiento = importeMovimiento;
         this.descripcionMovimiento = descripcionMovimiento;
-    }
-
-    public Integer getIdMovimiento() {
-        return idMovimiento;
-    }
-
-    public void setIdMovimiento(Integer idMovimiento) {
-        this.idMovimiento = idMovimiento;
     }
 
     public Date getFechaMovimiento() {
@@ -140,29 +116,4 @@ public class PersonasCuentaCorriente implements Serializable {
         this.idRegistroContable = idRegistroContable;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idMovimiento != null ? idMovimiento.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PersonasCuentaCorriente)) {
-            return false;
-        }
-        PersonasCuentaCorriente other = (PersonasCuentaCorriente) object;
-        if ((this.idMovimiento == null && other.idMovimiento != null) || (this.idMovimiento != null && !this.idMovimiento.equals(other.idMovimiento))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.PersonasCuentaCorriente[ idMovimiento=" + idMovimiento + " ]";
-    }
-    
 }

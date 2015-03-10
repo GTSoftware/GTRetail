@@ -64,6 +64,6 @@ public class ProductosTiposUnidadesConverter implements Converter {
             return null;
         }
         ProductosTiposUnidades unidades = (ProductosTiposUnidades) value;
-        return unidades.getIdTipoUnidad().toString();
+        return unidades.getId().toString();
     }
 }

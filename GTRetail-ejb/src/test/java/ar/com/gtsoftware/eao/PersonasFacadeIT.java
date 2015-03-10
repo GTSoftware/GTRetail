@@ -77,7 +77,7 @@ public class PersonasFacadeIT {
         p.setDocumento("123456");
         p.setEmail("p@p.com");
         p.setFechaAlta(new Date());
-        p.setIdGenero(new LegalGeneros(1));
+        p.setIdGenero(new LegalGeneros(1L));
 
         facade.createOrEdit(p);
     }

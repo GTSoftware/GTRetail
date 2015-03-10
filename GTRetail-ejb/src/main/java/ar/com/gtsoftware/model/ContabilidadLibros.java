@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,18 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_libros")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadLibros.findAll", query = "SELECT c FROM ContabilidadLibros c"),
-    @NamedQuery(name = "ContabilidadLibros.findByIdLibro", query = "SELECT c FROM ContabilidadLibros c WHERE c.idLibro = :idLibro"),
-    @NamedQuery(name = "ContabilidadLibros.findByNombreLibro", query = "SELECT c FROM ContabilidadLibros c WHERE c.nombreLibro = :nombreLibro"),
-    @NamedQuery(name = "ContabilidadLibros.findByDescripcionLibro", query = "SELECT c FROM ContabilidadLibros c WHERE c.descripcionLibro = :descripcionLibro")})
-public class ContabilidadLibros implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_libro")
-    private Integer idLibro;
+@AttributeOverride(name = "id", column = @Column(name = "id_libro"))
+public class ContabilidadLibros extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -67,21 +52,14 @@ public class ContabilidadLibros implements Serializable {
     public ContabilidadLibros() {
     }
 
-    public ContabilidadLibros(Integer idLibro) {
-        this.idLibro = idLibro;
+    public ContabilidadLibros(Long idLibro) {
+        super(idLibro);
     }
 
-    public ContabilidadLibros(Integer idLibro, String nombreLibro) {
-        this.idLibro = idLibro;
+    public ContabilidadLibros(Long idLibro, String nombreLibro) {
+        super(idLibro);
+
         this.nombreLibro = nombreLibro;
-    }
-
-    public Integer getIdLibro() {
-        return idLibro;
-    }
-
-    public void setIdLibro(Integer idLibro) {
-        this.idLibro = idLibro;
     }
 
     public String getNombreLibro() {
@@ -109,29 +87,4 @@ public class ContabilidadLibros implements Serializable {
         this.contabilidadRegistroContableList = contabilidadRegistroContableList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idLibro != null ? idLibro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadLibros)) {
-            return false;
-        }
-        ContabilidadLibros other = (ContabilidadLibros) object;
-        if ((this.idLibro == null && other.idLibro != null) || (this.idLibro != null && !this.idLibro.equals(other.idLibro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadLibros[ idLibro=" + idLibro + " ]";
-    }
-    
 }

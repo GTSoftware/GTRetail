@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,17 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "bancos_tipos_cuenta")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "BancosTiposCuenta.findAll", query = "SELECT b FROM BancosTiposCuenta b"),
-    @NamedQuery(name = "BancosTiposCuenta.findByIdTipoCuentaBanco", query = "SELECT b FROM BancosTiposCuenta b WHERE b.idTipoCuentaBanco = :idTipoCuentaBanco"),
-    @NamedQuery(name = "BancosTiposCuenta.findByNombreTipoCuenta", query = "SELECT b FROM BancosTiposCuenta b WHERE b.nombreTipoCuenta = :nombreTipoCuenta")})
-public class BancosTiposCuenta implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_cuenta_banco")
-    private Integer idTipoCuentaBanco;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_cuenta_banco"))
+public class BancosTiposCuenta extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -63,21 +49,13 @@ public class BancosTiposCuenta implements Serializable {
     public BancosTiposCuenta() {
     }
 
-    public BancosTiposCuenta(Integer idTipoCuentaBanco) {
-        this.idTipoCuentaBanco = idTipoCuentaBanco;
+    public BancosTiposCuenta(Long idTipoCuentaBanco) {
+        super(idTipoCuentaBanco);
     }
 
-    public BancosTiposCuenta(Integer idTipoCuentaBanco, String nombreTipoCuenta) {
-        this.idTipoCuentaBanco = idTipoCuentaBanco;
+    public BancosTiposCuenta(Long idTipoCuentaBanco, String nombreTipoCuenta) {
+        super(idTipoCuentaBanco);
         this.nombreTipoCuenta = nombreTipoCuenta;
-    }
-
-    public Integer getIdTipoCuentaBanco() {
-        return idTipoCuentaBanco;
-    }
-
-    public void setIdTipoCuentaBanco(Integer idTipoCuentaBanco) {
-        this.idTipoCuentaBanco = idTipoCuentaBanco;
     }
 
     public String getNombreTipoCuenta() {
@@ -97,29 +75,4 @@ public class BancosTiposCuenta implements Serializable {
         this.bancosCuentasList = bancosCuentasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoCuentaBanco != null ? idTipoCuentaBanco.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BancosTiposCuenta)) {
-            return false;
-        }
-        BancosTiposCuenta other = (BancosTiposCuenta) object;
-        if ((this.idTipoCuentaBanco == null && other.idTipoCuentaBanco != null) || (this.idTipoCuentaBanco != null && !this.idTipoCuentaBanco.equals(other.idTipoCuentaBanco))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.BancosTiposCuenta[ idTipoCuentaBanco=" + idTipoCuentaBanco + " ]";
-    }
-    
 }

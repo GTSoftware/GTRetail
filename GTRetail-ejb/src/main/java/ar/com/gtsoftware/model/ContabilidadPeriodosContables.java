@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,19 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_periodos_contables")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadPeriodosContables.findAll", query = "SELECT c FROM ContabilidadPeriodosContables c"),
-    @NamedQuery(name = "ContabilidadPeriodosContables.findByIdPeriodoContable", query = "SELECT c FROM ContabilidadPeriodosContables c WHERE c.idPeriodoContable = :idPeriodoContable"),
-    @NamedQuery(name = "ContabilidadPeriodosContables.findByNombrePeriodo", query = "SELECT c FROM ContabilidadPeriodosContables c WHERE c.nombrePeriodo = :nombrePeriodo"),
-    @NamedQuery(name = "ContabilidadPeriodosContables.findByFechaInicioPeriodo", query = "SELECT c FROM ContabilidadPeriodosContables c WHERE c.fechaInicioPeriodo = :fechaInicioPeriodo"),
-    @NamedQuery(name = "ContabilidadPeriodosContables.findByFechaFinPeriodo", query = "SELECT c FROM ContabilidadPeriodosContables c WHERE c.fechaFinPeriodo = :fechaFinPeriodo")})
-public class ContabilidadPeriodosContables implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_periodo_contable")
-    private Integer idPeriodoContable;
+@AttributeOverride(name = "id", column = @Column(name = "id_periodo_contable"))
+public class ContabilidadPeriodosContables extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -77,23 +61,15 @@ public class ContabilidadPeriodosContables implements Serializable {
     public ContabilidadPeriodosContables() {
     }
 
-    public ContabilidadPeriodosContables(Integer idPeriodoContable) {
-        this.idPeriodoContable = idPeriodoContable;
+    public ContabilidadPeriodosContables(Long idPeriodoContable) {
+        super(idPeriodoContable);
     }
 
-    public ContabilidadPeriodosContables(Integer idPeriodoContable, String nombrePeriodo, Date fechaInicioPeriodo, Date fechaFinPeriodo) {
-        this.idPeriodoContable = idPeriodoContable;
+    public ContabilidadPeriodosContables(Long idPeriodoContable, String nombrePeriodo, Date fechaInicioPeriodo, Date fechaFinPeriodo) {
+        super(idPeriodoContable);
         this.nombrePeriodo = nombrePeriodo;
         this.fechaInicioPeriodo = fechaInicioPeriodo;
         this.fechaFinPeriodo = fechaFinPeriodo;
-    }
-
-    public Integer getIdPeriodoContable() {
-        return idPeriodoContable;
-    }
-
-    public void setIdPeriodoContable(Integer idPeriodoContable) {
-        this.idPeriodoContable = idPeriodoContable;
     }
 
     public String getNombrePeriodo() {
@@ -129,29 +105,4 @@ public class ContabilidadPeriodosContables implements Serializable {
         this.contabilidadRegistroContableList = contabilidadRegistroContableList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idPeriodoContable != null ? idPeriodoContable.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadPeriodosContables)) {
-            return false;
-        }
-        ContabilidadPeriodosContables other = (ContabilidadPeriodosContables) object;
-        if ((this.idPeriodoContable == null && other.idPeriodoContable != null) || (this.idPeriodoContable != null && !this.idPeriodoContable.equals(other.idPeriodoContable))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadPeriodosContables[ idPeriodoContable=" + idPeriodoContable + " ]";
-    }
-    
 }

@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,21 +36,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ventas_cargos_fijos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VentasCargosFijos.findAll", query = "SELECT v FROM VentasCargosFijos v"),
-    @NamedQuery(name = "VentasCargosFijos.findByIdCargoFijo", query = "SELECT v FROM VentasCargosFijos v WHERE v.idCargoFijo = :idCargoFijo"),
-    @NamedQuery(name = "VentasCargosFijos.findByFechaAlta", query = "SELECT v FROM VentasCargosFijos v WHERE v.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "VentasCargosFijos.findByActivo", query = "SELECT v FROM VentasCargosFijos v WHERE v.activo = :activo"),
-    @NamedQuery(name = "VentasCargosFijos.findByPorcentaje", query = "SELECT v FROM VentasCargosFijos v WHERE v.porcentaje = :porcentaje"),
-    @NamedQuery(name = "VentasCargosFijos.findByImporteCargo", query = "SELECT v FROM VentasCargosFijos v WHERE v.importeCargo = :importeCargo"),
-    @NamedQuery(name = "VentasCargosFijos.findByIdClasificacionCliente", query = "SELECT v FROM VentasCargosFijos v WHERE v.idClasificacionCliente = :idClasificacionCliente")})
-public class VentasCargosFijos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_cargo_fijo")
-    private Integer idCargoFijo;
+@AttributeOverride(name = "id", column = @Column(name = "id_cargo_fijo"))
+public class VentasCargosFijos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_alta")
@@ -86,25 +68,17 @@ public class VentasCargosFijos implements Serializable {
     public VentasCargosFijos() {
     }
 
-    public VentasCargosFijos(Integer idCargoFijo) {
-        this.idCargoFijo = idCargoFijo;
+    public VentasCargosFijos(Long idCargoFijo) {
+        super(idCargoFijo);
     }
 
-    public VentasCargosFijos(Integer idCargoFijo, Date fechaAlta, boolean activo, boolean porcentaje, BigDecimal importeCargo, int idClasificacionCliente) {
-        this.idCargoFijo = idCargoFijo;
+    public VentasCargosFijos(Long idCargoFijo, Date fechaAlta, boolean activo, boolean porcentaje, BigDecimal importeCargo, int idClasificacionCliente) {
+        super(idCargoFijo);
         this.fechaAlta = fechaAlta;
         this.activo = activo;
         this.porcentaje = porcentaje;
         this.importeCargo = importeCargo;
         this.idClasificacionCliente = idClasificacionCliente;
-    }
-
-    public Integer getIdCargoFijo() {
-        return idCargoFijo;
-    }
-
-    public void setIdCargoFijo(Integer idCargoFijo) {
-        this.idCargoFijo = idCargoFijo;
     }
 
     public Date getFechaAlta() {
@@ -155,29 +129,4 @@ public class VentasCargosFijos implements Serializable {
         this.idProducto = idProducto;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCargoFijo != null ? idCargoFijo.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VentasCargosFijos)) {
-            return false;
-        }
-        VentasCargosFijos other = (VentasCargosFijos) object;
-        if ((this.idCargoFijo == null && other.idCargoFijo != null) || (this.idCargoFijo != null && !this.idCargoFijo.equals(other.idCargoFijo))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.VentasCargosFijos[ idCargoFijo=" + idCargoFijo + " ]";
-    }
-    
 }

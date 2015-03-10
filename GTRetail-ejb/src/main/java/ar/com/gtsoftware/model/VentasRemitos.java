@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,19 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ventas_remitos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VentasRemitos.findAll", query = "SELECT v FROM VentasRemitos v"),
-    @NamedQuery(name = "VentasRemitos.findByIdRemito", query = "SELECT v FROM VentasRemitos v WHERE v.idRemito = :idRemito"),
-    @NamedQuery(name = "VentasRemitos.findByFechaRemito", query = "SELECT v FROM VentasRemitos v WHERE v.fechaRemito = :fechaRemito"),
-    @NamedQuery(name = "VentasRemitos.findByAnulado", query = "SELECT v FROM VentasRemitos v WHERE v.anulado = :anulado"),
-    @NamedQuery(name = "VentasRemitos.findByObservaciones", query = "SELECT v FROM VentasRemitos v WHERE v.observaciones = :observaciones")})
-public class VentasRemitos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_remito")
-    private Integer idRemito;
+@AttributeOverride(name = "id", column = @Column(name = "id_remito"))
+public class VentasRemitos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_remito")
@@ -86,22 +70,14 @@ public class VentasRemitos implements Serializable {
     public VentasRemitos() {
     }
 
-    public VentasRemitos(Integer idRemito) {
-        this.idRemito = idRemito;
+    public VentasRemitos(Long idRemito) {
+        super(idRemito);
     }
 
-    public VentasRemitos(Integer idRemito, Date fechaRemito, boolean anulado) {
-        this.idRemito = idRemito;
+    public VentasRemitos(Long idRemito, Date fechaRemito, boolean anulado) {
+        super(idRemito);
         this.fechaRemito = fechaRemito;
         this.anulado = anulado;
-    }
-
-    public Integer getIdRemito() {
-        return idRemito;
-    }
-
-    public void setIdRemito(Integer idRemito) {
-        this.idRemito = idRemito;
     }
 
     public Date getFechaRemito() {
@@ -161,29 +137,4 @@ public class VentasRemitos implements Serializable {
         this.idSucursal = idSucursal;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idRemito != null ? idRemito.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VentasRemitos)) {
-            return false;
-        }
-        VentasRemitos other = (VentasRemitos) object;
-        if ((this.idRemito == null && other.idRemito != null) || (this.idRemito != null && !this.idRemito.equals(other.idRemito))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.VentasRemitos[ idRemito=" + idRemito + " ]";
-    }
-    
 }

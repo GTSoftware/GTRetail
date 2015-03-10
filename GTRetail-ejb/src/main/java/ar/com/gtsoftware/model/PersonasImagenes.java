@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,18 +36,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "personas_imagenes")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "PersonasImagenes.findAll", query = "SELECT p FROM PersonasImagenes p"),
-    @NamedQuery(name = "PersonasImagenes.findByIdImagen", query = "SELECT p FROM PersonasImagenes p WHERE p.idImagen = :idImagen"),
-    @NamedQuery(name = "PersonasImagenes.findByFechaAlta", query = "SELECT p FROM PersonasImagenes p WHERE p.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "PersonasImagenes.findByObservaciones", query = "SELECT p FROM PersonasImagenes p WHERE p.observaciones = :observaciones")})
-public class PersonasImagenes implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_imagen")
-    private Integer idImagen;
+@AttributeOverride(name = "id", column = @Column(name = "id_imagen"))
+public class PersonasImagenes extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_alta")
@@ -72,21 +57,13 @@ public class PersonasImagenes implements Serializable {
     public PersonasImagenes() {
     }
 
-    public PersonasImagenes(Integer idImagen) {
-        this.idImagen = idImagen;
+    public PersonasImagenes(Long idImagen) {
+        super(idImagen);
     }
 
-    public PersonasImagenes(Integer idImagen, Date fechaAlta) {
-        this.idImagen = idImagen;
+    public PersonasImagenes(Long idImagen, Date fechaAlta) {
+        super(idImagen);
         this.fechaAlta = fechaAlta;
-    }
-
-    public Integer getIdImagen() {
-        return idImagen;
-    }
-
-    public void setIdImagen(Integer idImagen) {
-        this.idImagen = idImagen;
     }
 
     public Date getFechaAlta() {
@@ -121,29 +98,4 @@ public class PersonasImagenes implements Serializable {
         this.idPersona = idPersona;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idImagen != null ? idImagen.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PersonasImagenes)) {
-            return false;
-        }
-        PersonasImagenes other = (PersonasImagenes) object;
-        if ((this.idImagen == null && other.idImagen != null) || (this.idImagen != null && !this.idImagen.equals(other.idImagen))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.PersonasImagenes[ idImagen=" + idImagen + " ]";
-    }
-    
 }

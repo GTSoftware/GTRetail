@@ -64,6 +64,6 @@ public class LegalTiposPersoneriaConverter implements Converter {
             return null;
         }
         LegalTiposPersoneria tipoPersoneria = (LegalTiposPersoneria) value;
-        return tipoPersoneria.getIdTipoPersoneria().toString();
+        return tipoPersoneria.getId().toString();
     }
 }

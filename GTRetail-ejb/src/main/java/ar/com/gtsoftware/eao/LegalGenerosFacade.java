@@ -57,13 +57,13 @@ public class LegalGenerosFacade extends AbstractFacade<LegalGeneros> {
             cq.select(genero);
             Predicate p = null;
             if (gsf.getIdGenero() != null) {
-                p = cb.equal(genero.get(LegalGeneros_.idGenero), gsf.getIdGenero());
+                p = cb.equal(genero.get(LegalGeneros_.id), gsf.getIdGenero());
             }
             if (gsf.getIdTipoPersoneria() != null) {
                 Predicate p1 = cb.equal(genero.get(LegalGeneros_.idTipoPersoneria), gsf.getIdTipoPersoneria());
                 p = appendAndPredicate(cb, p, p1);
             }
-            
+
             //TODO Agregar las demás condiciones de filtrado
             cq.where(p);
             TypedQuery<LegalGeneros> q = em.createQuery(cq);

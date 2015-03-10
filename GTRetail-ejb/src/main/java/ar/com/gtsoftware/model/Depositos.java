@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,20 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "depositos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Depositos.findAll", query = "SELECT d FROM Depositos d"),
-    @NamedQuery(name = "Depositos.findByIdDeposito", query = "SELECT d FROM Depositos d WHERE d.idDeposito = :idDeposito"),
-    @NamedQuery(name = "Depositos.findByNombreDeposito", query = "SELECT d FROM Depositos d WHERE d.nombreDeposito = :nombreDeposito"),
-    @NamedQuery(name = "Depositos.findByDireccion", query = "SELECT d FROM Depositos d WHERE d.direccion = :direccion"),
-    @NamedQuery(name = "Depositos.findByFechaAlta", query = "SELECT d FROM Depositos d WHERE d.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "Depositos.findByActivo", query = "SELECT d FROM Depositos d WHERE d.activo = :activo")})
-public class Depositos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_deposito")
-    private Integer idDeposito;
+@AttributeOverride(name = "id", column = @Column(name = "id_deposito"))
+public class Depositos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -95,23 +78,15 @@ public class Depositos implements Serializable {
     public Depositos() {
     }
 
-    public Depositos(Integer idDeposito) {
-        this.idDeposito = idDeposito;
+    public Depositos(Long idDeposito) {
+        super(idDeposito);
     }
 
-    public Depositos(Integer idDeposito, String nombreDeposito, Date fechaAlta, boolean activo) {
-        this.idDeposito = idDeposito;
+    public Depositos(Long idDeposito, String nombreDeposito, Date fechaAlta, boolean activo) {
+        super(idDeposito);
         this.nombreDeposito = nombreDeposito;
         this.fechaAlta = fechaAlta;
         this.activo = activo;
-    }
-
-    public Integer getIdDeposito() {
-        return idDeposito;
-    }
-
-    public void setIdDeposito(Integer idDeposito) {
-        this.idDeposito = idDeposito;
     }
 
     public String getNombreDeposito() {
@@ -187,29 +162,4 @@ public class Depositos implements Serializable {
         this.idSucursal = idSucursal;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idDeposito != null ? idDeposito.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Depositos)) {
-            return false;
-        }
-        Depositos other = (Depositos) object;
-        if ((this.idDeposito == null && other.idDeposito != null) || (this.idDeposito != null && !this.idDeposito.equals(other.idDeposito))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Depositos[ idDeposito=" + idDeposito + " ]";
-    }
-    
 }

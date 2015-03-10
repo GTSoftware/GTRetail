@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,22 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "contabilidad_registro_contable_lineas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findAll", query = "SELECT c FROM ContabilidadRegistroContableLineas c"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByIdLineaRegistro", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.idLineaRegistro = :idLineaRegistro"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByDescripcionLinea", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.descripcionLinea = :descripcionLinea"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByCantidad", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.cantidad = :cantidad"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByUnidadMedida", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.unidadMedida = :unidadMedida"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByFechaVencimiento", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.fechaVencimiento = :fechaVencimiento"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByImporteDebe", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.importeDebe = :importeDebe"),
-    @NamedQuery(name = "ContabilidadRegistroContableLineas.findByImporteHaber", query = "SELECT c FROM ContabilidadRegistroContableLineas c WHERE c.importeHaber = :importeHaber")})
-public class ContabilidadRegistroContableLineas implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_linea_registro")
-    private Integer idLineaRegistro;
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_registro"))
+public class ContabilidadRegistroContableLineas extends BaseEntity {
+
     @Size(max = 1024)
     @Column(name = "descripcion_linea")
     private String descripcionLinea;
@@ -93,24 +74,16 @@ public class ContabilidadRegistroContableLineas implements Serializable {
     public ContabilidadRegistroContableLineas() {
     }
 
-    public ContabilidadRegistroContableLineas(Integer idLineaRegistro) {
-        this.idLineaRegistro = idLineaRegistro;
+    public ContabilidadRegistroContableLineas(Long idLineaRegistro) {
+        super(idLineaRegistro);
     }
 
-    public ContabilidadRegistroContableLineas(Integer idLineaRegistro, BigDecimal cantidad, Date fechaVencimiento, BigDecimal importeDebe, BigDecimal importeHaber) {
-        this.idLineaRegistro = idLineaRegistro;
+    public ContabilidadRegistroContableLineas(Long idLineaRegistro, BigDecimal cantidad, Date fechaVencimiento, BigDecimal importeDebe, BigDecimal importeHaber) {
+        super(idLineaRegistro);
         this.cantidad = cantidad;
         this.fechaVencimiento = fechaVencimiento;
         this.importeDebe = importeDebe;
         this.importeHaber = importeHaber;
-    }
-
-    public Integer getIdLineaRegistro() {
-        return idLineaRegistro;
-    }
-
-    public void setIdLineaRegistro(Integer idLineaRegistro) {
-        this.idLineaRegistro = idLineaRegistro;
     }
 
     public String getDescripcionLinea() {
@@ -177,29 +150,4 @@ public class ContabilidadRegistroContableLineas implements Serializable {
         this.idCuenta = idCuenta;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idLineaRegistro != null ? idLineaRegistro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadRegistroContableLineas)) {
-            return false;
-        }
-        ContabilidadRegistroContableLineas other = (ContabilidadRegistroContableLineas) object;
-        if ((this.idLineaRegistro == null && other.idLineaRegistro != null) || (this.idLineaRegistro != null && !this.idLineaRegistro.equals(other.idLineaRegistro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadRegistroContableLineas[ idLineaRegistro=" + idLineaRegistro + " ]";
-    }
-    
 }

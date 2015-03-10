@@ -64,6 +64,6 @@ public class StockMovimientosTiposConverter implements Converter {
             return null;
         }
         StockMovimientosTipos tipoMovimiento = (StockMovimientosTipos) value;
-        return tipoMovimiento.getIdTipoMovimiento().toString();
+        return tipoMovimiento.getId().toString();
     }
 }

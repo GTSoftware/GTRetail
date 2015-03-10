@@ -64,6 +64,6 @@ public class NegocioFormasPagoConverter implements Converter {
             return null;
         }
         NegocioFormasPago condicionOperacion = (NegocioFormasPago) value;
-        return condicionOperacion.getIdFormaPago().toString();
+        return condicionOperacion.getId().toString();
     }
 }

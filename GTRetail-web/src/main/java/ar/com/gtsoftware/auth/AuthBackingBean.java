@@ -17,11 +17,8 @@ package ar.com.gtsoftware.auth;
 
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -38,7 +35,9 @@ public class AuthBackingBean implements Serializable {
 
     @EJB
     private UsuariosFacade usuariosFacade;
-    private static Logger log = Logger.getLogger(AuthBackingBean.class.getName());
+
+    private Usuarios usuarioLogueado;
+    private static Logger LOG = Logger.getLogger(AuthBackingBean.class.getName());
 
     /**
      * Creates a new instance of AuthBackingBean
@@ -52,18 +51,22 @@ public class AuthBackingBean implements Serializable {
     }
 
     public Usuarios getUserLoggedIn() {
-        Principal usuP = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+        if (usuarioLogueado == null) {
+            Principal usuP = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
 
-        if (usuP != null) {
-            Usuarios usuario = usuariosFacade.findByLogIn(usuP.getName());
-            if (usuario != null) {
-                return usuario;
+            if (usuP != null) {
+                Usuarios usuario = usuariosFacade.findByLogIn(usuP.getName());
+                if (usuario != null) {
+                    usuarioLogueado = usuario;
+                    return usuario;
+                }
             }
-        }
-        Usuarios usu = new Usuarios();
-        usu.setNombreUsuario("ANONYMOUS");
+            Usuarios usu = new Usuarios();
+            usu.setNombreUsuario("ANONYMOUS");
 
-        return usu;
+            return usu;
+        }
+        return usuarioLogueado;
     }
     /*
      public boolean tienePrivilegio(Integer idPrivilegio) {

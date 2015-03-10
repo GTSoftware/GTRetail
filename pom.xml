@@ -47,7 +47,7 @@
                 <role>developer</role>
             </roles>
             <timezone>-3</timezone>
-      
+
         </developer>
         <developer>
             <id>rober</id>
@@ -81,7 +81,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <build>
 
         <plugins>
@@ -120,7 +120,26 @@
                     </execution>
                 </executions>
             </plugin>
-            
+            <!-- JRebel Plugin-->
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+                <version>1.1.5</version>
+                <configuration>
+                    <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
+                    <alwaysGenerate>true</alwaysGenerate>
+                    <showGenerated>true</showGenerated>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-rebel-xml</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -145,7 +164,7 @@
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
-        </dependency> 
+        </dependency>
     </dependencies>
     <reporting>
         <plugins>
@@ -171,16 +190,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10</version>
-                <configuration>                                                              
-                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>                         
-                    <docletArtifact>                                                         
-                        <groupId>org.umlgraph</groupId>                                      
-                        <artifactId>umlgraph</artifactId>                                    
-                        <version>5.6</version>                                               
-                    </docletArtifact>                                                        
-                    <additionalparam>-views -all</additionalparam>                           
-                    <useStandardDocletOptions>true</useStandardDocletOptions>                
-                </configuration>   
+                <configuration>
+                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                    <docletArtifact>
+                        <groupId>org.umlgraph</groupId>
+                        <artifactId>umlgraph</artifactId>
+                        <version>5.6</version>
+                    </docletArtifact>
+                    <additionalparam>-views -all</additionalparam>
+                    <useStandardDocletOptions>true</useStandardDocletOptions>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

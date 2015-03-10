@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,22 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "bancos_cuentas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "BancosCuentas.findAll", query = "SELECT b FROM BancosCuentas b"),
-    @NamedQuery(name = "BancosCuentas.findByIdCuentaBanco", query = "SELECT b FROM BancosCuentas b WHERE b.idCuentaBanco = :idCuentaBanco"),
-    @NamedQuery(name = "BancosCuentas.findByDescripcionCuenta", query = "SELECT b FROM BancosCuentas b WHERE b.descripcionCuenta = :descripcionCuenta"),
-    @NamedQuery(name = "BancosCuentas.findByNumeroCuenta", query = "SELECT b FROM BancosCuentas b WHERE b.numeroCuenta = :numeroCuenta"),
-    @NamedQuery(name = "BancosCuentas.findByNumeroSucursal", query = "SELECT b FROM BancosCuentas b WHERE b.numeroSucursal = :numeroSucursal"),
-    @NamedQuery(name = "BancosCuentas.findByCbu", query = "SELECT b FROM BancosCuentas b WHERE b.cbu = :cbu"),
-    @NamedQuery(name = "BancosCuentas.findByActivo", query = "SELECT b FROM BancosCuentas b WHERE b.activo = :activo"),
-    @NamedQuery(name = "BancosCuentas.findByFechaApertura", query = "SELECT b FROM BancosCuentas b WHERE b.fechaApertura = :fechaApertura")})
-public class BancosCuentas implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_cuenta_banco")
-    private Integer idCuentaBanco;
+@AttributeOverride(name = "id", column = @Column(name = "id_cuenta_banco"))
+public class BancosCuentas extends BaseEntity {
+
     @Size(max = 200)
     @Column(name = "descripcion_cuenta")
     private String descripcionCuenta;
@@ -98,22 +79,14 @@ public class BancosCuentas implements Serializable {
     public BancosCuentas() {
     }
 
-    public BancosCuentas(Integer idCuentaBanco) {
-        this.idCuentaBanco = idCuentaBanco;
+    public BancosCuentas(Long idCuentaBanco) {
+        super(idCuentaBanco);
     }
 
-    public BancosCuentas(Integer idCuentaBanco, String numeroCuenta, boolean activo) {
-        this.idCuentaBanco = idCuentaBanco;
+    public BancosCuentas(Long idCuentaBanco, String numeroCuenta, boolean activo) {
+        super(idCuentaBanco);
         this.numeroCuenta = numeroCuenta;
         this.activo = activo;
-    }
-
-    public Integer getIdCuentaBanco() {
-        return idCuentaBanco;
-    }
-
-    public void setIdCuentaBanco(Integer idCuentaBanco) {
-        this.idCuentaBanco = idCuentaBanco;
     }
 
     public String getDescripcionCuenta() {
@@ -197,29 +170,4 @@ public class BancosCuentas implements Serializable {
         this.bancosCuentaCorrienteList = bancosCuentaCorrienteList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCuentaBanco != null ? idCuentaBanco.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BancosCuentas)) {
-            return false;
-        }
-        BancosCuentas other = (BancosCuentas) object;
-        if ((this.idCuentaBanco == null && other.idCuentaBanco != null) || (this.idCuentaBanco != null && !this.idCuentaBanco.equals(other.idCuentaBanco))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.BancosCuentas[ idCuentaBanco=" + idCuentaBanco + " ]";
-    }
-    
 }

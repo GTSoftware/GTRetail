@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -39,17 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos_x_caracteristicas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ProductosXCaracteristicas.findAll", query = "SELECT p FROM ProductosXCaracteristicas p"),
-    @NamedQuery(name = "ProductosXCaracteristicas.findByIdCaracteristicaXProducto", query = "SELECT p FROM ProductosXCaracteristicas p WHERE p.idCaracteristicaXProducto = :idCaracteristicaXProducto"),
-    @NamedQuery(name = "ProductosXCaracteristicas.findByValorCaracteristica", query = "SELECT p FROM ProductosXCaracteristicas p WHERE p.valorCaracteristica = :valorCaracteristica")})
-public class ProductosXCaracteristicas implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_caracteristica_x_producto")
-    private Integer idCaracteristicaXProducto;
+@AttributeOverride(name = "id", column = @Column(name = "id_caracteristica_x_producto"))
+public class ProductosXCaracteristicas extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -65,21 +51,13 @@ public class ProductosXCaracteristicas implements Serializable {
     public ProductosXCaracteristicas() {
     }
 
-    public ProductosXCaracteristicas(Integer idCaracteristicaXProducto) {
-        this.idCaracteristicaXProducto = idCaracteristicaXProducto;
+    public ProductosXCaracteristicas(Long idCaracteristicaXProducto) {
+        super(idCaracteristicaXProducto);
     }
 
-    public ProductosXCaracteristicas(Integer idCaracteristicaXProducto, String valorCaracteristica) {
-        this.idCaracteristicaXProducto = idCaracteristicaXProducto;
+    public ProductosXCaracteristicas(Long idCaracteristicaXProducto, String valorCaracteristica) {
+        super(idCaracteristicaXProducto);
         this.valorCaracteristica = valorCaracteristica;
-    }
-
-    public Integer getIdCaracteristicaXProducto() {
-        return idCaracteristicaXProducto;
-    }
-
-    public void setIdCaracteristicaXProducto(Integer idCaracteristicaXProducto) {
-        this.idCaracteristicaXProducto = idCaracteristicaXProducto;
     }
 
     public String getValorCaracteristica() {
@@ -106,29 +84,4 @@ public class ProductosXCaracteristicas implements Serializable {
         this.idProducto = idProducto;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCaracteristicaXProducto != null ? idCaracteristicaXProducto.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductosXCaracteristicas)) {
-            return false;
-        }
-        ProductosXCaracteristicas other = (ProductosXCaracteristicas) object;
-        if ((this.idCaracteristicaXProducto == null && other.idCaracteristicaXProducto != null) || (this.idCaracteristicaXProducto != null && !this.idCaracteristicaXProducto.equals(other.idCaracteristicaXProducto))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ProductosXCaracteristicas[ idCaracteristicaXProducto=" + idCaracteristicaXProducto + " ]";
-    }
-    
 }

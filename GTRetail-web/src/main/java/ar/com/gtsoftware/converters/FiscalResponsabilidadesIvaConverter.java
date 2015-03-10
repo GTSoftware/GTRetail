@@ -64,6 +64,6 @@ public class FiscalResponsabilidadesIvaConverter implements Converter {
             return null;
         }
         FiscalResponsabilidadesIva responsabilidad = (FiscalResponsabilidadesIva) value;
-        return responsabilidad.getIdResoponsabildiadIva().toString();
+        return responsabilidad.getId().toString();
     }
 }

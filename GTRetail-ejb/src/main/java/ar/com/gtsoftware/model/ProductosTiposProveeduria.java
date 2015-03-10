@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,21 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "productos_tipos_proveeduria")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ProductosTiposProveeduria.findAll", query = "SELECT p FROM ProductosTiposProveeduria p"),
-    @NamedQuery(name = "ProductosTiposProveeduria.findByIdTipoProveeduria", query = "SELECT p FROM ProductosTiposProveeduria p WHERE p.idTipoProveeduria = :idTipoProveeduria"),
-    @NamedQuery(name = "ProductosTiposProveeduria.findByNombreTipoProveeduria", query = "SELECT p FROM ProductosTiposProveeduria p WHERE p.nombreTipoProveeduria = :nombreTipoProveeduria"),
-    @NamedQuery(name = "ProductosTiposProveeduria.findByPuedeComprarse", query = "SELECT p FROM ProductosTiposProveeduria p WHERE p.puedeComprarse = :puedeComprarse"),
-    @NamedQuery(name = "ProductosTiposProveeduria.findByPuedeVenderse", query = "SELECT p FROM ProductosTiposProveeduria p WHERE p.puedeVenderse = :puedeVenderse"),
-    @NamedQuery(name = "ProductosTiposProveeduria.findByControlStock", query = "SELECT p FROM ProductosTiposProveeduria p WHERE p.controlStock = :controlStock"),
-    @NamedQuery(name = "ProductosTiposProveeduria.findByCambiarPrecioVenta", query = "SELECT p FROM ProductosTiposProveeduria p WHERE p.cambiarPrecioVenta = :cambiarPrecioVenta")})
-public class ProductosTiposProveeduria implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_proveeduria")
-    private Integer idTipoProveeduria;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_proveeduria"))
+public class ProductosTiposProveeduria extends BaseEntity {
+
     @Size(max = 60)
     @Column(name = "nombre_tipo_proveeduria")
     private String nombreTipoProveeduria;
@@ -81,24 +63,16 @@ public class ProductosTiposProveeduria implements Serializable {
     public ProductosTiposProveeduria() {
     }
 
-    public ProductosTiposProveeduria(Integer idTipoProveeduria) {
-        this.idTipoProveeduria = idTipoProveeduria;
+    public ProductosTiposProveeduria(Long idTipoProveeduria) {
+        super(idTipoProveeduria);
     }
 
-    public ProductosTiposProveeduria(Integer idTipoProveeduria, boolean puedeComprarse, boolean puedeVenderse, boolean controlStock, boolean cambiarPrecioVenta) {
-        this.idTipoProveeduria = idTipoProveeduria;
+    public ProductosTiposProveeduria(Long idTipoProveeduria, boolean puedeComprarse, boolean puedeVenderse, boolean controlStock, boolean cambiarPrecioVenta) {
+        super(idTipoProveeduria);
         this.puedeComprarse = puedeComprarse;
         this.puedeVenderse = puedeVenderse;
         this.controlStock = controlStock;
         this.cambiarPrecioVenta = cambiarPrecioVenta;
-    }
-
-    public Integer getIdTipoProveeduria() {
-        return idTipoProveeduria;
-    }
-
-    public void setIdTipoProveeduria(Integer idTipoProveeduria) {
-        this.idTipoProveeduria = idTipoProveeduria;
     }
 
     public String getNombreTipoProveeduria() {
@@ -150,29 +124,4 @@ public class ProductosTiposProveeduria implements Serializable {
         this.productosList = productosList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoProveeduria != null ? idTipoProveeduria.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductosTiposProveeduria)) {
-            return false;
-        }
-        ProductosTiposProveeduria other = (ProductosTiposProveeduria) object;
-        if ((this.idTipoProveeduria == null && other.idTipoProveeduria != null) || (this.idTipoProveeduria != null && !this.idTipoProveeduria.equals(other.idTipoProveeduria))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ProductosTiposProveeduria[ idTipoProveeduria=" + idTipoProveeduria + " ]";
-    }
-    
 }

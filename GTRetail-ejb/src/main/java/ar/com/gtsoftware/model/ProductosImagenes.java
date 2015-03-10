@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,18 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos_imagenes")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ProductosImagenes.findAll", query = "SELECT p FROM ProductosImagenes p"),
-    @NamedQuery(name = "ProductosImagenes.findByIdImagen", query = "SELECT p FROM ProductosImagenes p WHERE p.idImagen = :idImagen"),
-    @NamedQuery(name = "ProductosImagenes.findByFechaAlta", query = "SELECT p FROM ProductosImagenes p WHERE p.fechaAlta = :fechaAlta"),
-    @NamedQuery(name = "ProductosImagenes.findByDescripcion", query = "SELECT p FROM ProductosImagenes p WHERE p.descripcion = :descripcion")})
-public class ProductosImagenes implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_imagen")
-    private Integer idImagen;
+@AttributeOverride(name = "id", column = @Column(name = "id_imagen"))
+public class ProductosImagenes extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_alta")
@@ -78,22 +63,14 @@ public class ProductosImagenes implements Serializable {
     public ProductosImagenes() {
     }
 
-    public ProductosImagenes(Integer idImagen) {
-        this.idImagen = idImagen;
+    public ProductosImagenes(Long idImagen) {
+        super(idImagen);
     }
 
-    public ProductosImagenes(Integer idImagen, Date fechaAlta, byte[] imagen) {
-        this.idImagen = idImagen;
+    public ProductosImagenes(Long idImagen, Date fechaAlta, byte[] imagen) {
+        super(idImagen);
         this.fechaAlta = fechaAlta;
         this.imagen = imagen;
-    }
-
-    public Integer getIdImagen() {
-        return idImagen;
-    }
-
-    public void setIdImagen(Integer idImagen) {
-        this.idImagen = idImagen;
     }
 
     public Date getFechaAlta() {
@@ -136,29 +113,4 @@ public class ProductosImagenes implements Serializable {
         this.idProducto = idProducto;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idImagen != null ? idImagen.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductosImagenes)) {
-            return false;
-        }
-        ProductosImagenes other = (ProductosImagenes) object;
-        if ((this.idImagen == null && other.idImagen != null) || (this.idImagen != null && !this.idImagen.equals(other.idImagen))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ProductosImagenes[ idImagen=" + idImagen + " ]";
-    }
-    
 }

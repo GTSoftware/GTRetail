@@ -15,10 +15,14 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -27,7 +31,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  * @param <T>
  */
-public abstract class AbstractFacade<T> {
+public abstract class AbstractFacade<T extends GTEntity> {
 
     private final Class<T> entityClass;
 
@@ -76,11 +80,38 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    public abstract Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root);
+    protected abstract Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root);
 
-    public abstract List<T> findBySearchFilter(AbstractSearchFilter sf);
+    public List<T> findBySearchFilter(AbstractSearchFilter sf) {
+        return findBySearchFilter(sf, 0, Integer.MAX_VALUE);
+    }
 
-    public abstract int countBySearchFilter(AbstractSearchFilter sf);
+    public List<T> findBySearchFilter(AbstractSearchFilter sf, int firstResult, int maxResults) {
+        if (sf.hasFilter()) {
+            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+            Root<T> root = cq.from(entityClass);
+            cq.select(root);
+            Predicate p = createWhereFromSearchFilter(sf, cb, root);
+            cq.where(p);
+            TypedQuery<T> q = getEntityManager().createQuery(cq);
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
+            List<T> personasList = q.getResultList();
+            return personasList;
+        }
+        return new ArrayList<>();
+    }
+
+    public int countBySearchFilter(AbstractSearchFilter sf) {
+        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
+        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        Predicate p = createWhereFromSearchFilter(sf, getEntityManager().getCriteriaBuilder(), rt);
+        cq.where(p);
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
 
     /**
      * Retorna el OR entre los predicados pasados como parámetro
@@ -121,6 +152,15 @@ public abstract class AbstractFacade<T> {
      *
      * @param entity
      */
-    public abstract void createOrEdit(T entity) ;
+    public void createOrEdit(T entity) {
+        if (entity == null) {
+            return;
+        }
+        if (entity.isNew()) {
+            create(entity);
+        } else {
+            edit(entity);
+        }
+    }
 
 }

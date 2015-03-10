@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -29,9 +28,8 @@ import javax.persistence.Version;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity extends GTEntity {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -64,6 +62,7 @@ public abstract class BaseEntity implements Serializable {
         this.version = version;
     }
 
+    @Override
     public boolean isNew() {
         return id == null;
     }

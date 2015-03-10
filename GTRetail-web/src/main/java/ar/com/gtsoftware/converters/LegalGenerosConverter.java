@@ -64,6 +64,6 @@ public class LegalGenerosConverter implements Converter {
             return null;
         }
         LegalGeneros genero = (LegalGeneros) value;
-        return genero.getIdGenero().toString();
+        return genero.getId().toString();
     }
 }

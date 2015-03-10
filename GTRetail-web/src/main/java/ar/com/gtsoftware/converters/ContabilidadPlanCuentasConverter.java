@@ -64,6 +64,6 @@ public class ContabilidadPlanCuentasConverter implements Converter {
             return null;
         }
         ContabilidadPlanCuentas cuenta = (ContabilidadPlanCuentas) value;
-        return cuenta.getIdCuenta().toString();
+        return cuenta.getId().toString();
     }
 }

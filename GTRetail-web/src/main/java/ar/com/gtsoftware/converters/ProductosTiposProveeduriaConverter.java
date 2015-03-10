@@ -64,6 +64,6 @@ public class ProductosTiposProveeduriaConverter implements Converter {
             return null;
         }
         ProductosTiposProveeduria tipoProveeduria = (ProductosTiposProveeduria) value;
-        return tipoProveeduria.getIdTipoProveeduria().toString();
+        return tipoProveeduria.getId().toString();
     }
 }

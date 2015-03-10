@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,17 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cajas_categorias_movimientos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "CajasCategoriasMovimientos.findAll", query = "SELECT c FROM CajasCategoriasMovimientos c"),
-    @NamedQuery(name = "CajasCategoriasMovimientos.findByIdCategoriaMovimiento", query = "SELECT c FROM CajasCategoriasMovimientos c WHERE c.idCategoriaMovimiento = :idCategoriaMovimiento"),
-    @NamedQuery(name = "CajasCategoriasMovimientos.findByNombreCategoriaMovimiento", query = "SELECT c FROM CajasCategoriasMovimientos c WHERE c.nombreCategoriaMovimiento = :nombreCategoriaMovimiento")})
-public class CajasCategoriasMovimientos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_categoria_movimiento")
-    private Integer idCategoriaMovimiento;
+@AttributeOverride(name = "id", column = @Column(name = "id_categoria_movimiento"))
+public class CajasCategoriasMovimientos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -63,21 +49,13 @@ public class CajasCategoriasMovimientos implements Serializable {
     public CajasCategoriasMovimientos() {
     }
 
-    public CajasCategoriasMovimientos(Integer idCategoriaMovimiento) {
-        this.idCategoriaMovimiento = idCategoriaMovimiento;
+    public CajasCategoriasMovimientos(Long idCategoriaMovimiento) {
+        super(idCategoriaMovimiento);
     }
 
-    public CajasCategoriasMovimientos(Integer idCategoriaMovimiento, String nombreCategoriaMovimiento) {
-        this.idCategoriaMovimiento = idCategoriaMovimiento;
+    public CajasCategoriasMovimientos(Long idCategoriaMovimiento, String nombreCategoriaMovimiento) {
+        super(idCategoriaMovimiento);
         this.nombreCategoriaMovimiento = nombreCategoriaMovimiento;
-    }
-
-    public Integer getIdCategoriaMovimiento() {
-        return idCategoriaMovimiento;
-    }
-
-    public void setIdCategoriaMovimiento(Integer idCategoriaMovimiento) {
-        this.idCategoriaMovimiento = idCategoriaMovimiento;
     }
 
     public String getNombreCategoriaMovimiento() {
@@ -97,29 +75,4 @@ public class CajasCategoriasMovimientos implements Serializable {
         this.cajasMovimientosList = cajasMovimientosList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCategoriaMovimiento != null ? idCategoriaMovimiento.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CajasCategoriasMovimientos)) {
-            return false;
-        }
-        CajasCategoriasMovimientos other = (CajasCategoriasMovimientos) object;
-        if ((this.idCategoriaMovimiento == null && other.idCategoriaMovimiento != null) || (this.idCategoriaMovimiento != null && !this.idCategoriaMovimiento.equals(other.idCategoriaMovimiento))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.CajasCategoriasMovimientos[ idCategoriaMovimiento=" + idCategoriaMovimiento + " ]";
-    }
-    
 }

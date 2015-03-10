@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,26 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_registro_contable")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadRegistroContable.findAll", query = "SELECT c FROM ContabilidadRegistroContable c"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByIdRegistro", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.idRegistro = :idRegistro"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByFechaProceso", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.fechaProceso = :fechaProceso"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByUsuario", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.usuario = :usuario"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByLetraComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.letraComprobante = :letraComprobante"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByPuntoVentaComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.puntoVentaComprobante = :puntoVentaComprobante"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByNumeroComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.numeroComprobante = :numeroComprobante"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByCuitEmisorComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.cuitEmisorComprobante = :cuitEmisorComprobante"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByCuitReceptorComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.cuitReceptorComprobante = :cuitReceptorComprobante"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByFechaComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.fechaComprobante = :fechaComprobante"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByFechaVencimiento", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.fechaVencimiento = :fechaVencimiento"),
-    @NamedQuery(name = "ContabilidadRegistroContable.findByConceptoComprobante", query = "SELECT c FROM ContabilidadRegistroContable c WHERE c.conceptoComprobante = :conceptoComprobante")})
-public class ContabilidadRegistroContable implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_registro")
-    private Integer idRegistro;
+@AttributeOverride(name = "id", column = @Column(name = "id_registro"))
+public class ContabilidadRegistroContable extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_proceso")
@@ -123,21 +100,13 @@ public class ContabilidadRegistroContable implements Serializable {
     public ContabilidadRegistroContable() {
     }
 
-    public ContabilidadRegistroContable(Integer idRegistro) {
-        this.idRegistro = idRegistro;
+    public ContabilidadRegistroContable(Long idRegistro) {
+        super(idRegistro);
     }
 
-    public ContabilidadRegistroContable(Integer idRegistro, Date fechaProceso) {
-        this.idRegistro = idRegistro;
+    public ContabilidadRegistroContable(Long idRegistro, Date fechaProceso) {
+        super(idRegistro);
         this.fechaProceso = fechaProceso;
-    }
-
-    public Integer getIdRegistro() {
-        return idRegistro;
-    }
-
-    public void setIdRegistro(Integer idRegistro) {
-        this.idRegistro = idRegistro;
     }
 
     public Date getFechaProceso() {
@@ -287,29 +256,4 @@ public class ContabilidadRegistroContable implements Serializable {
         this.personasCuentaCorrienteList = personasCuentaCorrienteList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idRegistro != null ? idRegistro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadRegistroContable)) {
-            return false;
-        }
-        ContabilidadRegistroContable other = (ContabilidadRegistroContable) object;
-        if ((this.idRegistro == null && other.idRegistro != null) || (this.idRegistro != null && !this.idRegistro.equals(other.idRegistro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadRegistroContable[ idRegistro=" + idRegistro + " ]";
-    }
-    
 }

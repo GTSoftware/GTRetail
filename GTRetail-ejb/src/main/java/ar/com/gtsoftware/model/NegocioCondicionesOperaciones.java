@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
@@ -37,9 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "negocio_condiciones_operaciones")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_condicion"))
-public class NegocioCondicionesOperaciones extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class NegocioCondicionesOperaciones extends BaseEntity {
 
     @Basic(optional = false)
     @NotNull

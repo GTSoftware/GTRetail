@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,18 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_tipos_cuenta")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadTiposCuenta.findAll", query = "SELECT c FROM ContabilidadTiposCuenta c"),
-    @NamedQuery(name = "ContabilidadTiposCuenta.findByIdTipoCuenta", query = "SELECT c FROM ContabilidadTiposCuenta c WHERE c.idTipoCuenta = :idTipoCuenta"),
-    @NamedQuery(name = "ContabilidadTiposCuenta.findByNombreTipo", query = "SELECT c FROM ContabilidadTiposCuenta c WHERE c.nombreTipo = :nombreTipo"),
-    @NamedQuery(name = "ContabilidadTiposCuenta.findByDescripcionTipo", query = "SELECT c FROM ContabilidadTiposCuenta c WHERE c.descripcionTipo = :descripcionTipo")})
-public class ContabilidadTiposCuenta implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_cuenta")
-    private Integer idTipoCuenta;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_cuenta"))
+public class ContabilidadTiposCuenta extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -67,21 +52,13 @@ public class ContabilidadTiposCuenta implements Serializable {
     public ContabilidadTiposCuenta() {
     }
 
-    public ContabilidadTiposCuenta(Integer idTipoCuenta) {
-        this.idTipoCuenta = idTipoCuenta;
+    public ContabilidadTiposCuenta(Long idTipoCuenta) {
+        super(idTipoCuenta);
     }
 
-    public ContabilidadTiposCuenta(Integer idTipoCuenta, String nombreTipo) {
-        this.idTipoCuenta = idTipoCuenta;
+    public ContabilidadTiposCuenta(Long idTipoCuenta, String nombreTipo) {
+        super(idTipoCuenta);
         this.nombreTipo = nombreTipo;
-    }
-
-    public Integer getIdTipoCuenta() {
-        return idTipoCuenta;
-    }
-
-    public void setIdTipoCuenta(Integer idTipoCuenta) {
-        this.idTipoCuenta = idTipoCuenta;
     }
 
     public String getNombreTipo() {
@@ -109,29 +86,4 @@ public class ContabilidadTiposCuenta implements Serializable {
         this.contabilidadPlanCuentasList = contabilidadPlanCuentasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoCuenta != null ? idTipoCuenta.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadTiposCuenta)) {
-            return false;
-        }
-        ContabilidadTiposCuenta other = (ContabilidadTiposCuenta) object;
-        if ((this.idTipoCuenta == null && other.idTipoCuenta != null) || (this.idTipoCuenta != null && !this.idTipoCuenta.equals(other.idTipoCuenta))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadTiposCuenta[ idTipoCuenta=" + idTipoCuenta + " ]";
-    }
-    
 }

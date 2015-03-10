@@ -64,6 +64,6 @@ public class ProductosSubRubrosConverter implements Converter {
             return null;
         }
         ProductosSubRubros subRubro = (ProductosSubRubros) value;
-        return subRubro.getIdSubRubro().toString();
+        return subRubro.getId().toString();
     }
 }
