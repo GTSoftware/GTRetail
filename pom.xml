@@ -61,15 +61,6 @@
             <timezone>-3</timezone>
         </developer>
     </developers>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
-        <sonar.language>java</sonar.language>
-        <arquillian.version>1.0.0.CR4</arquillian.version>
-    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -111,6 +102,9 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>failsafe-maven-plugin</artifactId>
                 <version>2.4.3-alpha-1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -241,4 +235,14 @@
         </profile>
 
     </profiles>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
+        <sonar.language>java</sonar.language>
+        <arquillian.version>1.0.0.CR4</arquillian.version>
+    </properties>
 </project>
