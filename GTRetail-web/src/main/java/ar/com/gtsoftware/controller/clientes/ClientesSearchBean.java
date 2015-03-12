@@ -18,14 +18,13 @@ package ar.com.gtsoftware.controller.clientes;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.ViewScoped;
 import javax.faces.bean.ManagedBean;
-
+import javax.faces.bean.ViewScoped;
+import javax.faces.model.DataModel;
 
 /**
  *
@@ -37,8 +36,8 @@ public class ClientesSearchBean implements Serializable {
 
     @EJB
     private PersonasFacade personasFacade;
-    private List<Personas> clientesList = new ArrayList<>();
     private Personas clienteActual;
+    private DataModel<Personas> dataModel;
 
     private PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
 
@@ -49,9 +48,10 @@ public class ClientesSearchBean implements Serializable {
     }
 
     @PostConstruct
-    private void init(){
-        //Logger.getLogger(ClientesSearchBean.class.getName()).log(Level.INFO, "Post Construct...", 0);
+    private void init() {
+
     }
+
     public PersonasSearchFilter getFilter() {
         return filter;
     }
@@ -61,16 +61,14 @@ public class ClientesSearchBean implements Serializable {
     }
 
     public void doSearch() {
-        clientesList.clear();
-        clientesList.addAll(personasFacade.findBySearchFilter(filter));
+        dataModel = null;
     }
 
-    public List<Personas> getClientesList() {
-        return clientesList;
-    }
-
-    public void setClientesList(List<Personas> clientesList) {
-        this.clientesList = clientesList;
+    public DataModel<Personas> getDataModel() {
+        if (dataModel == null) {
+            dataModel = new LazyEntityDataModel<>(personasFacade, filter);
+        }
+        return dataModel;
     }
 
     public Personas getClienteActual() {

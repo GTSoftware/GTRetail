@@ -186,11 +186,11 @@
                 <gtsoftware:busquedaPersonas personaSeleccionada="#{searchVentasBean.filter.idPersona}"
                                              textoBusqueda="#{clientesSearchBean.filter.txt}"
                                              busquedaAction="#{clientesSearchBean.doSearch()}"
-                                             personasList="#{clientesSearchBean.clientesList}"
+                                             personasList="#{clientesSearchBean.dataModel}"
                                              >
                 </gtsoftware:busquedaPersonas>
                 <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                                 oncomplete="clientesDialog.hide()"
+                                 oncomplete="PF('clientesDialog').hide()"
                                  update=":formContenido:busquedaTab"/>
 
 

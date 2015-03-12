@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
 import ar.com.gtsoftware.model.UbicacionPaises;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "ubicacionPaisesConverter")
-public class UbicacionPaisesConverter implements Converter {
+public class UbicacionPaisesConverter extends AbstractBaseEntityConverter<UbicacionPaises> {
 
     @EJB
     private UbicacionPaisesFacade ubicacionPaisesFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public UbicacionPaisesConverter() {
+    @Override
+    protected AbstractFacade<UbicacionPaises> getFacade() {
+        return ubicacionPaisesFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Long id;
-        try {
-            id = Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return ubicacionPaisesFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(UbicacionPaises.class)) {
-            return null;
-        }
-        UbicacionPaises pais = (UbicacionPaises) value;
-        return pais.getId().toString();
-    }
 }

@@ -19,8 +19,8 @@
 
                 <p:ajax  update="@parent"  listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
 
-                <p:commandButton icon="ui-icon-search"  
-                                 update=":formContenido:busquedaPersonasDialog" 
+                <p:commandButton icon="ui-icon-search"
+                                 update=":formContenido:busquedaPersonasDialog"
                                  oncomplete="PF('clientesDialog').show()"
                                  process="@none" />
 
@@ -30,58 +30,58 @@
 
 
 
-            <p:outputLabel for='razonSocialField' 
+            <p:outputLabel for='razonSocialField'
                            value="#{msg.razonSocial}:"/>
-            <p:inputText id="razonSocialField" 
+            <p:inputText id="razonSocialField"
                          value="#{nuevaVentaBean.ventaActual.idPersona.razonSocial}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
-            <p:inputText id="ivaField" value="#{nuevaVentaBean.ventaActual.idPersona.idResponsabilidadIva.nombreResponsabildiad}" 
+            <p:inputText id="ivaField" value="#{nuevaVentaBean.ventaActual.idPersona.idResponsabilidadIva.nombreResponsabildiad}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.documento}:"/>
-            <p:inputText id="documentoField" value="#{nuevaVentaBean.ventaActual.idPersona.documento}" 
+            <p:inputText id="documentoField" value="#{nuevaVentaBean.ventaActual.idPersona.documento}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.pais}:"/>
-            <p:inputText id="nombrePaisField" value="#{nuevaVentaBean.ventaActual.idPersona.idPais.nombrePais}" 
+            <p:inputText id="nombrePaisField" value="#{nuevaVentaBean.ventaActual.idPersona.idPais.nombrePais}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.provincia}:"/>
-            <p:inputText id="nombreProvinciaField" value="#{nuevaVentaBean.ventaActual.idPersona.idProvincia.nombreProvincia}" 
+            <p:inputText id="nombreProvinciaField" value="#{nuevaVentaBean.ventaActual.idPersona.idProvincia.nombreProvincia}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.localidad}:"/>
-            <p:inputText id="nombreLocalidadField" value="#{nuevaVentaBean.ventaActual.idPersona.idLocalidad.nombreLocalidad}" 
+            <p:inputText id="nombreLocalidadField" value="#{nuevaVentaBean.ventaActual.idPersona.idLocalidad.nombreLocalidad}"
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.direccion}:"/>
-            <p:inputTextarea id="direccionField" value="#{nuevaVentaBean.ventaActual.idPersona.calle.concat(' ').concat(nuevaVentaBean.ventaActual.idPersona.altura)}" 
+            <p:inputTextarea id="direccionField" value="#{nuevaVentaBean.ventaActual.idPersona.calle.concat(' ').concat(nuevaVentaBean.ventaActual.idPersona.altura)}"
                              readonly="true"/>
 
         </h:panelGrid>
     </p:fragment>
 
 
-    <p:dialog id='busquedaPersonasDialog' 
-              header="#{msg.busquedaClientes}" 
+    <p:dialog id='busquedaPersonasDialog'
+              header="#{msg.busquedaClientes}"
               widgetVar="clientesDialog"
-              resizable="true" 
+              resizable="true"
               closeOnEscape="true"
-              showEffect="fade" hideEffect="clip" modal="true"> 
+              showEffect="fade" hideEffect="clip" modal="true">
 
         <gtsoftware:busquedaPersonas personaSeleccionada="#{nuevaVentaBean.ventaActual.idPersona}"
                                      textoBusqueda="#{clientesSearchBean.filter.txt}"
                                      busquedaAction="#{clientesSearchBean.doSearch()}"
-                                     personasList="#{clientesSearchBean.clientesList}"
+                                     personasList="#{clientesSearchBean.dataModel}"
                                      >
         </gtsoftware:busquedaPersonas>
         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                         oncomplete="clientesDialog.hide()" 
-                         update=":formContenido:clienteFragment"/> 
+                         oncomplete="PF('clientesDialog').hide()"
+                         update=":formContenido:clienteFragment"/>
 
 
-    </p:dialog>  
+    </p:dialog>
 
 </html>

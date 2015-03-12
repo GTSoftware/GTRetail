@@ -16,12 +16,11 @@
                 <h:form id="formContenido">
                     <p:panel id="cargaVentaPanel" header="#{msg.nuevaVenta}" >
 
-                        <p:commandButton value="#{msg.presupuesto}" 
-                                         action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/> 
 
-                        <p:wizard backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >  
 
-                            <p:tab id="productosTab" title="#{msg.productos}">  
+                        <p:wizard backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >
+
+                            <p:tab id="productosTab" title="#{msg.productos}">
 
                                 <ui:include src="cargaProductos.xhtml" />
 
@@ -38,6 +37,8 @@
 
                             </p:tab>
                         </p:wizard>
+                        <p:commandButton value="#{msg.presupuesto}"
+                                         action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/> 
                     </p:panel>
                 </h:form>
 

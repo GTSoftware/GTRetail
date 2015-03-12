@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "negocioFormasPagoConverter")
-public class NegocioFormasPagoConverter implements Converter {
+public class NegocioFormasPagoConverter extends AbstractBaseEntityConverter<NegocioFormasPago> {
 
     @EJB
     private NegocioFormasPagoFacade negocioFormasPagoFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public NegocioFormasPagoConverter() {
+    @Override
+    protected AbstractFacade<NegocioFormasPago> getFacade() {
+        return negocioFormasPagoFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return negocioFormasPagoFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(NegocioFormasPago.class)) {
-            return null;
-        }
-        NegocioFormasPago condicionOperacion = (NegocioFormasPago) value;
-        return condicionOperacion.getId().toString();
-    }
 }

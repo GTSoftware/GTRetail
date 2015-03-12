@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.StockMovimientosTiposFacade;
 import ar.com.gtsoftware.model.StockMovimientosTipos;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "stockMovimientosTiposConverter")
-public class StockMovimientosTiposConverter implements Converter {
+public class StockMovimientosTiposConverter extends AbstractBaseEntityConverter<StockMovimientosTipos> {
 
     @EJB
     private StockMovimientosTiposFacade movimientosTiposFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public StockMovimientosTiposConverter() {
+    @Override
+    protected AbstractFacade<StockMovimientosTipos> getFacade() {
+        return movimientosTiposFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return movimientosTiposFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(StockMovimientosTipos.class)) {
-            return null;
-        }
-        StockMovimientosTipos tipoMovimiento = (StockMovimientosTipos) value;
-        return tipoMovimiento.getId().toString();
-    }
 }

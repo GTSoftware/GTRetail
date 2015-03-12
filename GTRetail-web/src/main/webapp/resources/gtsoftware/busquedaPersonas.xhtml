@@ -35,40 +35,40 @@ limitations under the License.
                 <h:panelGrid columns="3">
                     <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                     <p:inputText id="textoBusquedaField" value="#{cc.attrs.textoBusqueda}" size="50"/>
-                    <p:commandButton  action="#{cc.attrs.busquedaAction}" 
-                                      process="@this" 
-                                      value="#{msg.buscar}" 
+                    <p:commandButton  action="#{cc.attrs.busquedaAction}"
+                                      process="@this"
+                                      value="#{msg.buscar}"
                                       icon="ui-icon-search"
                                       update="personasTable"/>
                 </h:panelGrid>
 
                 <p:separator />
 
-                <p:dataTable id="personasTable" 
+                <p:dataTable id="personasTable"
                              var="persona"
-                             value="#{cc.attrs.personasList}" 
+                             value="#{cc.attrs.personasList}"
                              rows="15"
+                             lazy="true"
                              paginator="true"
                              selectionMode="single"
                              selection="#{cc.attrs.personaSeleccionada}"
-                             sortMode="multiple"
-                             emptyMessage="#{msg.busquedaSinResultados}" 
+                             emptyMessage="#{msg.busquedaSinResultados}"
                              rowKey="#{persona.id}"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="10,15,30"
                              style="width: 100%"
                              resizableColumns="true"
-                             scrollable="true" >  
+                             scrollable="true" >
 
                     <p:ajax event="rowSelect"  />
-                    <p:column style="text-align: left; width:5%">  
+                    <p:column style="text-align: left; width:5%">
                         <f:facet name="header">
                             #{msg.tablaId}
                         </f:facet>
-                        <h:outputText value="#{persona.id}" />  
-                    </p:column>  
+                        <h:outputText value="#{persona.id}" />
+                    </p:column>
 
-                    <p:column>  
+                    <p:column>
                         <f:facet name="header">
                             #{msg.razonSocial}
                         </f:facet>
@@ -80,33 +80,33 @@ limitations under the License.
                             #{msg.documento}
                         </f:facet>
                         <h:outputText value="#{persona.idTipoDocumento.nombreTipoDocumento} - #{persona.documento}" />
-                    </p:column>  
-                    <p:column>  
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">
                             #{msg.direccion}
                         </f:facet>
                         <h:outputText value="#{persona.calle} #{persona.altura} #{msg.piso}: #{persona.piso} #{msg.depto}: #{persona.depto}"  />
-                    </p:column>  
-                    <p:column>  
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">
                             #{msg.provincia}
                         </f:facet>
                         <h:outputText value="#{persona.idProvincia.nombreProvincia}" />
-                    </p:column>  
-                    <p:column>  
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">
                             #{msg.localidad}
                         </f:facet>
                         <h:outputText value="#{persona.idLocalidad.nombreLocalidad}" />
                     </p:column>
-                    <p:column>  
+                    <p:column>
                         <f:facet name="header">
                             #{msg.responsabilidadIVA}
                         </f:facet>
                         <h:outputText value="#{persona.idResponsabilidadIva.nombreResponsabildiad}" />
                     </p:column>
 
-                </p:dataTable>    
+                </p:dataTable>
             </p:fragment>
         </h:form>
     </composite:implementation>

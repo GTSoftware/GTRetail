@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.ProductosRubrosFacade;
 import ar.com.gtsoftware.model.ProductosRubros;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "productosRubrosConverter")
-public class ProductosRubrosConverter implements Converter {
+public class ProductosRubrosConverter extends AbstractBaseEntityConverter<ProductosRubros> {
 
     @EJB
     private ProductosRubrosFacade productosRubrosFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public ProductosRubrosConverter() {
+    @Override
+    protected AbstractFacade<ProductosRubros> getFacade() {
+        return productosRubrosFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return productosRubrosFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(ProductosRubros.class)) {
-            return null;
-        }
-        ProductosRubros rubro = (ProductosRubros) value;
-        return rubro.getId().toString();
-    }
 }

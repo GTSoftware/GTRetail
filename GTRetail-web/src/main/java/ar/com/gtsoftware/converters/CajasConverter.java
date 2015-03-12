@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.model.Cajas;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "cajasConverter")
-public class CajasConverter implements Converter {
+public class CajasConverter extends AbstractBaseEntityConverter<Cajas> {
 
     @EJB
     private CajasFacade cajasFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public CajasConverter() {
+    @Override
+    protected AbstractFacade<Cajas> getFacade() {
+        return cajasFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return cajasFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(Cajas.class)) {
-            return null;
-        }
-        Cajas caja = (Cajas) value;
-        return caja.getId().toString();
-    }
 }

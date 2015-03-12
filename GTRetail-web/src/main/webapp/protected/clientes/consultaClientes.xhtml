@@ -21,19 +21,20 @@
         </h:panelGrid>
         <h:panelGrid>
 
-            <p:dataTable id="clientesTable" value="#{clientesSearchBean.clientesList}" var="cliente"
+            <p:dataTable id="clientesTable" value="#{clientesSearchBean.dataModel}" var="cliente"
                          rows="15"
+                         lazy="true"
                          paginator="true"
-                         sortMode="multiple"
                          emptyMessage="#{msg.busquedaSinResultados}"
                          rowKey="#{cliente.id}"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10,15,30"
                          style="width: 100%"
                          selection="#{clientesSearchBean.clienteActual}"
                          selectionMode="single"
                          resizableColumns="true"
                          scrollable="true"
+                         liveResize="true"
                          >
 
 
