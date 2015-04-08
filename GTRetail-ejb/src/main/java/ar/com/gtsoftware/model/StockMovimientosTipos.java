@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,17 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "stock_movimientos_tipos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "StockMovimientosTipos.findAll", query = "SELECT s FROM StockMovimientosTipos s"),
-    @NamedQuery(name = "StockMovimientosTipos.findByIdTipoMovimiento", query = "SELECT s FROM StockMovimientosTipos s WHERE s.idTipoMovimiento = :idTipoMovimiento"),
-    @NamedQuery(name = "StockMovimientosTipos.findByNombreTipo", query = "SELECT s FROM StockMovimientosTipos s WHERE s.nombreTipo = :nombreTipo")})
-public class StockMovimientosTipos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_movimiento")
-    private Integer idTipoMovimiento;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento"))
+public class StockMovimientosTipos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -57,21 +43,13 @@ public class StockMovimientosTipos implements Serializable {
     public StockMovimientosTipos() {
     }
 
-    public StockMovimientosTipos(Integer idTipoMovimiento) {
-        this.idTipoMovimiento = idTipoMovimiento;
+    public StockMovimientosTipos(Long idTipoMovimiento) {
+        super(idTipoMovimiento);
     }
 
-    public StockMovimientosTipos(Integer idTipoMovimiento, String nombreTipo) {
-        this.idTipoMovimiento = idTipoMovimiento;
+    public StockMovimientosTipos(Long idTipoMovimiento, String nombreTipo) {
+        super(idTipoMovimiento);
         this.nombreTipo = nombreTipo;
-    }
-
-    public Integer getIdTipoMovimiento() {
-        return idTipoMovimiento;
-    }
-
-    public void setIdTipoMovimiento(Integer idTipoMovimiento) {
-        this.idTipoMovimiento = idTipoMovimiento;
     }
 
     public String getNombreTipo() {
@@ -82,29 +60,4 @@ public class StockMovimientosTipos implements Serializable {
         this.nombreTipo = nombreTipo;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoMovimiento != null ? idTipoMovimiento.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof StockMovimientosTipos)) {
-            return false;
-        }
-        StockMovimientosTipos other = (StockMovimientosTipos) object;
-        if ((this.idTipoMovimiento == null && other.idTipoMovimiento != null) || (this.idTipoMovimiento != null && !this.idTipoMovimiento.equals(other.idTipoMovimiento))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.StockMovimientosTipos[ idTipoMovimiento=" + idTipoMovimiento + " ]";
-    }
-    
 }

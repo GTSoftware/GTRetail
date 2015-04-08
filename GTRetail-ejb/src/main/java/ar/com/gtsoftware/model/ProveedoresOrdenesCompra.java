@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,21 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "proveedores_ordenes_compra")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findAll", query = "SELECT p FROM ProveedoresOrdenesCompra p"),
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findByIdOrdenCompra", query = "SELECT p FROM ProveedoresOrdenesCompra p WHERE p.idOrdenCompra = :idOrdenCompra"),
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findByFechaOrdenCompra", query = "SELECT p FROM ProveedoresOrdenesCompra p WHERE p.fechaOrdenCompra = :fechaOrdenCompra"),
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findByFechaEstimadaRecepcion", query = "SELECT p FROM ProveedoresOrdenesCompra p WHERE p.fechaEstimadaRecepcion = :fechaEstimadaRecepcion"),
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findByTotal", query = "SELECT p FROM ProveedoresOrdenesCompra p WHERE p.total = :total"),
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findByObservaciones", query = "SELECT p FROM ProveedoresOrdenesCompra p WHERE p.observaciones = :observaciones"),
-    @NamedQuery(name = "ProveedoresOrdenesCompra.findByAnulada", query = "SELECT p FROM ProveedoresOrdenesCompra p WHERE p.anulada = :anulada")})
-public class ProveedoresOrdenesCompra implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_orden_compra")
-    private Integer idOrdenCompra;
+@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra"))
+public class ProveedoresOrdenesCompra extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_orden_compra")
@@ -102,24 +84,16 @@ public class ProveedoresOrdenesCompra implements Serializable {
     public ProveedoresOrdenesCompra() {
     }
 
-    public ProveedoresOrdenesCompra(Integer idOrdenCompra) {
-        this.idOrdenCompra = idOrdenCompra;
+    public ProveedoresOrdenesCompra(Long idOrdenCompra) {
+        super(idOrdenCompra);
     }
 
-    public ProveedoresOrdenesCompra(Integer idOrdenCompra, Date fechaOrdenCompra, Date fechaEstimadaRecepcion, BigDecimal total, boolean anulada) {
-        this.idOrdenCompra = idOrdenCompra;
+    public ProveedoresOrdenesCompra(Long idOrdenCompra, Date fechaOrdenCompra, Date fechaEstimadaRecepcion, BigDecimal total, boolean anulada) {
+        super(idOrdenCompra);
         this.fechaOrdenCompra = fechaOrdenCompra;
         this.fechaEstimadaRecepcion = fechaEstimadaRecepcion;
         this.total = total;
         this.anulada = anulada;
-    }
-
-    public Integer getIdOrdenCompra() {
-        return idOrdenCompra;
-    }
-
-    public void setIdOrdenCompra(Integer idOrdenCompra) {
-        this.idOrdenCompra = idOrdenCompra;
     }
 
     public Date getFechaOrdenCompra() {
@@ -203,29 +177,4 @@ public class ProveedoresOrdenesCompra implements Serializable {
         this.proveedoresOrdenesCompraLineasList = proveedoresOrdenesCompraLineasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idOrdenCompra != null ? idOrdenCompra.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProveedoresOrdenesCompra)) {
-            return false;
-        }
-        ProveedoresOrdenesCompra other = (ProveedoresOrdenesCompra) object;
-        if ((this.idOrdenCompra == null && other.idOrdenCompra != null) || (this.idOrdenCompra != null && !this.idOrdenCompra.equals(other.idOrdenCompra))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ProveedoresOrdenesCompra[ idOrdenCompra=" + idOrdenCompra + " ]";
-    }
-    
 }

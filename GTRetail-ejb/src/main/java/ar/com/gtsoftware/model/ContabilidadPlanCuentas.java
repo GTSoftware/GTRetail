@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -43,20 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_plan_cuentas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadPlanCuentas.findAll", query = "SELECT c FROM ContabilidadPlanCuentas c"),
-    @NamedQuery(name = "ContabilidadPlanCuentas.findByIdCuenta", query = "SELECT c FROM ContabilidadPlanCuentas c WHERE c.idCuenta = :idCuenta"),
-    @NamedQuery(name = "ContabilidadPlanCuentas.findByNombreCuenta", query = "SELECT c FROM ContabilidadPlanCuentas c WHERE c.nombreCuenta = :nombreCuenta"),
-    @NamedQuery(name = "ContabilidadPlanCuentas.findByNumeroCuenta", query = "SELECT c FROM ContabilidadPlanCuentas c WHERE c.numeroCuenta = :numeroCuenta"),
-    @NamedQuery(name = "ContabilidadPlanCuentas.findByDescripcionCuenta", query = "SELECT c FROM ContabilidadPlanCuentas c WHERE c.descripcionCuenta = :descripcionCuenta"),
-    @NamedQuery(name = "ContabilidadPlanCuentas.findByCuentaRubro", query = "SELECT c FROM ContabilidadPlanCuentas c WHERE c.cuentaRubro = :cuentaRubro")})
-public class ContabilidadPlanCuentas implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_cuenta")
-    private Integer idCuenta;
+@AttributeOverride(name = "id", column = @Column(name = "id_cuenta"))
+public class ContabilidadPlanCuentas extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -86,22 +69,14 @@ public class ContabilidadPlanCuentas implements Serializable {
     public ContabilidadPlanCuentas() {
     }
 
-    public ContabilidadPlanCuentas(Integer idCuenta) {
-        this.idCuenta = idCuenta;
+    public ContabilidadPlanCuentas(Long idCuenta) {
+        super(idCuenta);
     }
 
-    public ContabilidadPlanCuentas(Integer idCuenta, String nombreCuenta, boolean cuentaRubro) {
-        this.idCuenta = idCuenta;
+    public ContabilidadPlanCuentas(Long idCuenta, String nombreCuenta, boolean cuentaRubro) {
+        super(idCuenta);
         this.nombreCuenta = nombreCuenta;
         this.cuentaRubro = cuentaRubro;
-    }
-
-    public Integer getIdCuenta() {
-        return idCuenta;
-    }
-
-    public void setIdCuenta(Integer idCuenta) {
-        this.idCuenta = idCuenta;
     }
 
     public String getNombreCuenta() {
@@ -170,29 +145,4 @@ public class ContabilidadPlanCuentas implements Serializable {
         this.idCuentaPadre = idCuentaPadre;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idCuenta != null ? idCuenta.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadPlanCuentas)) {
-            return false;
-        }
-        ContabilidadPlanCuentas other = (ContabilidadPlanCuentas) object;
-        if ((this.idCuenta == null && other.idCuenta != null) || (this.idCuenta != null && !this.idCuenta.equals(other.idCuenta))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadPlanCuentas[ idCuenta=" + idCuenta + " ]";
-    }
-    
 }

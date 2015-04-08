@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -26,8 +25,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Clase que almacena la información de el detalle de la factura para el libro
- * de iva ventas
+ * Clase que almacena la información de el detalle de la factura para el libro de iva ventas
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
@@ -35,9 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "fiscal_libro_iva_ventas_lineas")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_linea_libro"))
-public class FiscalLibroIvaVentasLineas extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class FiscalLibroIvaVentasLineas extends BaseEntity {
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "neto_gravado")

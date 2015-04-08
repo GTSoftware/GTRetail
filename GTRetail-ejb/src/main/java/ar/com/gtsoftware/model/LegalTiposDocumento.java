@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -43,19 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "legal_tipos_documento")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "LegalTiposDocumento.findAll", query = "SELECT l FROM LegalTiposDocumento l"),
-    @NamedQuery(name = "LegalTiposDocumento.findByIdTipoDocumento", query = "SELECT l FROM LegalTiposDocumento l WHERE l.idTipoDocumento = :idTipoDocumento"),
-    @NamedQuery(name = "LegalTiposDocumento.findByNombreTipoDocumento", query = "SELECT l FROM LegalTiposDocumento l WHERE l.nombreTipoDocumento = :nombreTipoDocumento"),
-    @NamedQuery(name = "LegalTiposDocumento.findByCantidadCaracteresMinimo", query = "SELECT l FROM LegalTiposDocumento l WHERE l.cantidadCaracteresMinimo = :cantidadCaracteresMinimo"),
-    @NamedQuery(name = "LegalTiposDocumento.findByCantidadCaracteresMaximo", query = "SELECT l FROM LegalTiposDocumento l WHERE l.cantidadCaracteresMaximo = :cantidadCaracteresMaximo")})
-public class LegalTiposDocumento implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_documento")
-    private Integer idTipoDocumento;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_documento"))
+public class LegalTiposDocumento extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -78,23 +62,15 @@ public class LegalTiposDocumento implements Serializable {
     public LegalTiposDocumento() {
     }
 
-    public LegalTiposDocumento(Integer idTipoDocumento) {
-        this.idTipoDocumento = idTipoDocumento;
+    public LegalTiposDocumento(Long idTipoDocumento) {
+        super(idTipoDocumento);
     }
 
-    public LegalTiposDocumento(Integer idTipoDocumento, String nombreTipoDocumento, int cantidadCaracteresMinimo, int cantidadCaracteresMaximo) {
-        this.idTipoDocumento = idTipoDocumento;
+    public LegalTiposDocumento(Long idTipoDocumento, String nombreTipoDocumento, int cantidadCaracteresMinimo, int cantidadCaracteresMaximo) {
+        super(idTipoDocumento);
         this.nombreTipoDocumento = nombreTipoDocumento;
         this.cantidadCaracteresMinimo = cantidadCaracteresMinimo;
         this.cantidadCaracteresMaximo = cantidadCaracteresMaximo;
-    }
-
-    public Integer getIdTipoDocumento() {
-        return idTipoDocumento;
-    }
-
-    public void setIdTipoDocumento(Integer idTipoDocumento) {
-        this.idTipoDocumento = idTipoDocumento;
     }
 
     public String getNombreTipoDocumento() {
@@ -138,29 +114,4 @@ public class LegalTiposDocumento implements Serializable {
         this.personasList = personasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoDocumento != null ? idTipoDocumento.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LegalTiposDocumento)) {
-            return false;
-        }
-        LegalTiposDocumento other = (LegalTiposDocumento) object;
-        if ((this.idTipoDocumento == null && other.idTipoDocumento != null) || (this.idTipoDocumento != null && !this.idTipoDocumento.equals(other.idTipoDocumento))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.LegalTiposDocumento[ idTipoDocumento=" + idTipoDocumento + " ]";
-    }
-    
 }

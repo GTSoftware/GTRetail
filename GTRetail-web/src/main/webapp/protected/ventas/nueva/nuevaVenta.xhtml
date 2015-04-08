@@ -5,18 +5,22 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
+
+
     <h:body>
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{nuevaVentaBean.init()}" />
+        </f:metadata>
         <ui:composition template="/WEB-INF/templates/template.xhtml">
             <ui:define name="content" >
                 <h:form id="formContenido">
                     <p:panel id="cargaVentaPanel" header="#{msg.nuevaVenta}" >
 
-                        <p:commandButton value="#{msg.presupuesto}" 
-                                         action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/> 
 
-                        <p:wizard backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >  
 
-                            <p:tab id="productosTab" title="#{msg.productos}">  
+                        <p:wizard backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >
+
+                            <p:tab id="productosTab" title="#{msg.productos}">
 
                                 <ui:include src="cargaProductos.xhtml" />
 
@@ -33,6 +37,8 @@
 
                             </p:tab>
                         </p:wizard>
+                        <p:commandButton value="#{msg.presupuesto}"
+                                         action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/> 
                     </p:panel>
                 </h:form>
 

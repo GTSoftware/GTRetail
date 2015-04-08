@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -43,17 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "productos_sub_rubros")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ProductosSubRubros.findAll", query = "SELECT p FROM ProductosSubRubros p"),
-    @NamedQuery(name = "ProductosSubRubros.findByIdSubRubro", query = "SELECT p FROM ProductosSubRubros p WHERE p.idSubRubro = :idSubRubro"),
-    @NamedQuery(name = "ProductosSubRubros.findByNombreSubRubro", query = "SELECT p FROM ProductosSubRubros p WHERE p.nombreSubRubro = :nombreSubRubro")})
-public class ProductosSubRubros implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_sub_rubro")
-    private Integer idSubRubro;
+@AttributeOverride(name = "id", column = @Column(name = "id_sub_rubro"))
+public class ProductosSubRubros extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -68,21 +54,13 @@ public class ProductosSubRubros implements Serializable {
     public ProductosSubRubros() {
     }
 
-    public ProductosSubRubros(Integer idSubRubro) {
-        this.idSubRubro = idSubRubro;
+    public ProductosSubRubros(Long idSubRubro) {
+        super(idSubRubro);
     }
 
-    public ProductosSubRubros(Integer idSubRubro, String nombreSubRubro) {
-        this.idSubRubro = idSubRubro;
+    public ProductosSubRubros(Long idSubRubro, String nombreSubRubro) {
+        super(idSubRubro);
         this.nombreSubRubro = nombreSubRubro;
-    }
-
-    public Integer getIdSubRubro() {
-        return idSubRubro;
-    }
-
-    public void setIdSubRubro(Integer idSubRubro) {
-        this.idSubRubro = idSubRubro;
     }
 
     public String getNombreSubRubro() {
@@ -110,29 +88,4 @@ public class ProductosSubRubros implements Serializable {
         this.productosList = productosList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idSubRubro != null ? idSubRubro.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductosSubRubros)) {
-            return false;
-        }
-        ProductosSubRubros other = (ProductosSubRubros) object;
-        if ((this.idSubRubro == null && other.idSubRubro != null) || (this.idSubRubro != null && !this.idSubRubro.equals(other.idSubRubro))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ProductosSubRubros[ idSubRubro=" + idSubRubro + " ]";
-    }
-    
 }

@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "productosTiposUnidades")
-public class ProductosTiposUnidadesConverter implements Converter {
+public class ProductosTiposUnidadesConverter extends AbstractBaseEntityConverter<ProductosTiposUnidades> {
 
     @EJB
     private ProductosTiposUnidadesFacade productosTiposUnidadesFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public ProductosTiposUnidadesConverter() {
+    @Override
+    protected AbstractFacade<ProductosTiposUnidades> getFacade() {
+        return productosTiposUnidadesFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return productosTiposUnidadesFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(ProductosTiposUnidades.class)) {
-            return null;
-        }
-        ProductosTiposUnidades unidades = (ProductosTiposUnidades) value;
-        return unidades.getIdTipoUnidad().toString();
-    }
 }

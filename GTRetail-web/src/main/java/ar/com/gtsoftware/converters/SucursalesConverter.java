@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.SucursalesFacade;
 import ar.com.gtsoftware.model.Sucursales;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "sucursalesConverter")
-public class SucursalesConverter implements Converter {
+public class SucursalesConverter extends AbstractBaseEntityConverter<Sucursales> {
 
     @EJB
     private SucursalesFacade sucursalesFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public SucursalesConverter() {
+    @Override
+    protected AbstractFacade<Sucursales> getFacade() {
+        return sucursalesFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Long id;
-        try {
-            id = Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return sucursalesFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(Sucursales.class)) {
-            return null;
-        }
-        Sucursales sucursal = (Sucursales) value;
-        return sucursal.getId().toString();
-    }
 }

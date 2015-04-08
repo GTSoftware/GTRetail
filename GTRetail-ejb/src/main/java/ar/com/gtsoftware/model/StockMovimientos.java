@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,23 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "stock_movimientos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "StockMovimientos.findAll", query = "SELECT s FROM StockMovimientos s"),
-    @NamedQuery(name = "StockMovimientos.findByIdMovimientoStock", query = "SELECT s FROM StockMovimientos s WHERE s.idMovimientoStock = :idMovimientoStock"),
-    @NamedQuery(name = "StockMovimientos.findByFechaMovimiento", query = "SELECT s FROM StockMovimientos s WHERE s.fechaMovimiento = :fechaMovimiento"),
-    @NamedQuery(name = "StockMovimientos.findByCantidadAnterior", query = "SELECT s FROM StockMovimientos s WHERE s.cantidadAnterior = :cantidadAnterior"),
-    @NamedQuery(name = "StockMovimientos.findByCantidadMovimiento", query = "SELECT s FROM StockMovimientos s WHERE s.cantidadMovimiento = :cantidadMovimiento"),
-    @NamedQuery(name = "StockMovimientos.findByCantidadActual", query = "SELECT s FROM StockMovimientos s WHERE s.cantidadActual = :cantidadActual"),
-    @NamedQuery(name = "StockMovimientos.findByIdTipoMovimiento", query = "SELECT s FROM StockMovimientos s WHERE s.idTipoMovimiento = :idTipoMovimiento"),
-    @NamedQuery(name = "StockMovimientos.findByObservacionesMovimiento", query = "SELECT s FROM StockMovimientos s WHERE s.observacionesMovimiento = :observacionesMovimiento"),
-    @NamedQuery(name = "StockMovimientos.findByCostoTotalMovimiento", query = "SELECT s FROM StockMovimientos s WHERE s.costoTotalMovimiento = :costoTotalMovimiento")})
-public class StockMovimientos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_movimiento_stock")
-    private Integer idMovimientoStock;
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_stock"))
+public class StockMovimientos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_movimiento")
@@ -102,26 +82,18 @@ public class StockMovimientos implements Serializable {
     public StockMovimientos() {
     }
 
-    public StockMovimientos(Integer idMovimientoStock) {
-        this.idMovimientoStock = idMovimientoStock;
+    public StockMovimientos(Long idMovimientoStock) {
+        super(idMovimientoStock);
     }
 
-    public StockMovimientos(Integer idMovimientoStock, Date fechaMovimiento, BigDecimal cantidadAnterior, BigDecimal cantidadMovimiento, BigDecimal cantidadActual, int idTipoMovimiento, BigDecimal costoTotalMovimiento) {
-        this.idMovimientoStock = idMovimientoStock;
+    public StockMovimientos(Long idMovimientoStock, Date fechaMovimiento, BigDecimal cantidadAnterior, BigDecimal cantidadMovimiento, BigDecimal cantidadActual, int idTipoMovimiento, BigDecimal costoTotalMovimiento) {
+        super(idMovimientoStock);
         this.fechaMovimiento = fechaMovimiento;
         this.cantidadAnterior = cantidadAnterior;
         this.cantidadMovimiento = cantidadMovimiento;
         this.cantidadActual = cantidadActual;
         this.idTipoMovimiento = idTipoMovimiento;
         this.costoTotalMovimiento = costoTotalMovimiento;
-    }
-
-    public Integer getIdMovimientoStock() {
-        return idMovimientoStock;
-    }
-
-    public void setIdMovimientoStock(Integer idMovimientoStock) {
-        this.idMovimientoStock = idMovimientoStock;
     }
 
     public Date getFechaMovimiento() {
@@ -204,29 +176,4 @@ public class StockMovimientos implements Serializable {
         this.idDepositoMovimiento = idDepositoMovimiento;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idMovimientoStock != null ? idMovimientoStock.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof StockMovimientos)) {
-            return false;
-        }
-        StockMovimientos other = (StockMovimientos) object;
-        if ((this.idMovimientoStock == null && other.idMovimientoStock != null) || (this.idMovimientoStock != null && !this.idMovimientoStock.equals(other.idMovimientoStock))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.StockMovimientos[ idMovimientoStock=" + idMovimientoStock + " ]";
-    }
-    
 }

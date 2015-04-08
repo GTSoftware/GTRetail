@@ -15,56 +15,28 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
- * COnverter para PeriodosFiscales
+ * Converter para PeriodosFiscales
  *
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "fiscalPeriodoFiscalConverter")
-public class FiscalPeriodoFiscalConverter implements Converter {
+public class FiscalPeriodoFiscalConverter extends AbstractBaseEntityConverter<FiscalPeriodosFiscales> {
 
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public FiscalPeriodoFiscalConverter() {
+    @Override
+    protected AbstractFacade<FiscalPeriodosFiscales> getFacade() {
+        return periodosFiscalesFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Long id;
-        try {
-            id = Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return periodosFiscalesFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(FiscalPeriodosFiscales.class)) {
-            return null;
-        }
-        FiscalPeriodosFiscales periodoFiscal = (FiscalPeriodosFiscales) value;
-        return periodoFiscal.getId().toString();
-    }
 }

@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,20 +37,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "bancos_cuenta_corriente")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "BancosCuentaCorriente.findAll", query = "SELECT b FROM BancosCuentaCorriente b"),
-    @NamedQuery(name = "BancosCuentaCorriente.findByIdMovimiento", query = "SELECT b FROM BancosCuentaCorriente b WHERE b.idMovimiento = :idMovimiento"),
-    @NamedQuery(name = "BancosCuentaCorriente.findByFechaMovimiento", query = "SELECT b FROM BancosCuentaCorriente b WHERE b.fechaMovimiento = :fechaMovimiento"),
-    @NamedQuery(name = "BancosCuentaCorriente.findByImporteMovimiento", query = "SELECT b FROM BancosCuentaCorriente b WHERE b.importeMovimiento = :importeMovimiento"),
-    @NamedQuery(name = "BancosCuentaCorriente.findByDescripcionMovimiento", query = "SELECT b FROM BancosCuentaCorriente b WHERE b.descripcionMovimiento = :descripcionMovimiento"),
-    @NamedQuery(name = "BancosCuentaCorriente.findByIdRegistroContable", query = "SELECT b FROM BancosCuentaCorriente b WHERE b.idRegistroContable = :idRegistroContable")})
-public class BancosCuentaCorriente implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_movimiento")
-    private Integer idMovimiento;
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento"))
+public class BancosCuentaCorriente extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_movimiento")
@@ -83,24 +66,16 @@ public class BancosCuentaCorriente implements Serializable {
     public BancosCuentaCorriente() {
     }
 
-    public BancosCuentaCorriente(Integer idMovimiento) {
-        this.idMovimiento = idMovimiento;
+    public BancosCuentaCorriente(Long idMovimiento) {
+        super(idMovimiento);
     }
 
-    public BancosCuentaCorriente(Integer idMovimiento, Date fechaMovimiento, BigDecimal importeMovimiento, String descripcionMovimiento, int idRegistroContable) {
-        this.idMovimiento = idMovimiento;
+    public BancosCuentaCorriente(Long idMovimiento, Date fechaMovimiento, BigDecimal importeMovimiento, String descripcionMovimiento, int idRegistroContable) {
+        super(idMovimiento);
         this.fechaMovimiento = fechaMovimiento;
         this.importeMovimiento = importeMovimiento;
         this.descripcionMovimiento = descripcionMovimiento;
         this.idRegistroContable = idRegistroContable;
-    }
-
-    public Integer getIdMovimiento() {
-        return idMovimiento;
-    }
-
-    public void setIdMovimiento(Integer idMovimiento) {
-        this.idMovimiento = idMovimiento;
     }
 
     public Date getFechaMovimiento() {
@@ -143,29 +118,4 @@ public class BancosCuentaCorriente implements Serializable {
         this.idCuentaBanco = idCuentaBanco;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idMovimiento != null ? idMovimiento.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BancosCuentaCorriente)) {
-            return false;
-        }
-        BancosCuentaCorriente other = (BancosCuentaCorriente) object;
-        if ((this.idMovimiento == null && other.idMovimiento != null) || (this.idMovimiento != null && !this.idMovimiento.equals(other.idMovimiento))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.BancosCuentaCorriente[ idMovimiento=" + idMovimiento + " ]";
-    }
-    
 }

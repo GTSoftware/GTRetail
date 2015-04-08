@@ -4,7 +4,7 @@
 
 
 --
--- Name: bancos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE bancos (
@@ -20,14 +20,15 @@ CREATE TABLE bancos (
     id_responsabilidad_iva integer NOT NULL,
     fecha_alta timestamp without time zone NOT NULL,
     activo boolean DEFAULT true NOT NULL,
-    observaciones character varying(1024)
+    observaciones character varying(1024),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.bancos OWNER TO retail;
 
 --
--- Name: bancos_cuenta_corriente; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_cuenta_corriente; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE bancos_cuenta_corriente (
@@ -36,7 +37,8 @@ CREATE TABLE bancos_cuenta_corriente (
     fecha_movimiento timestamp without time zone NOT NULL,
     importe_movimiento numeric(19,2) NOT NULL,
     descripcion_movimiento character varying(200) NOT NULL,
-    id_registro_contable integer NOT NULL
+    id_registro_contable integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -64,7 +66,7 @@ ALTER SEQUENCE bancos_cuenta_corriente_id_movimiento_seq OWNED BY bancos_cuenta_
 
 
 --
--- Name: bancos_cuentas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_cuentas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE bancos_cuentas (
@@ -77,7 +79,8 @@ CREATE TABLE bancos_cuentas (
     activo boolean NOT NULL,
     fecha_apertura timestamp without time zone,
     id_moneda integer NOT NULL,
-    id_tipo_cuenta_banco integer NOT NULL
+    id_tipo_cuenta_banco integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -126,12 +129,13 @@ ALTER SEQUENCE bancos_id_banco_seq OWNED BY bancos.id_banco;
 
 
 --
--- Name: bancos_tipos_cuenta; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_tipos_cuenta; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE bancos_tipos_cuenta (
     id_tipo_cuenta_banco integer NOT NULL,
-    nombre_tipo_cuenta character varying(60) NOT NULL
+    nombre_tipo_cuenta character varying(60) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -159,7 +163,7 @@ ALTER SEQUENCE bancos_tipos_cuenta_id_tipo_cuenta_banco_seq OWNED BY bancos_tipo
 
 
 --
--- Name: cajas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: cajas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE cajas (
@@ -167,19 +171,21 @@ CREATE TABLE cajas (
     nombre_caja character varying(60) NOT NULL,
     id_sucursal integer NOT NULL,
     fecha_alta timestamp without time zone NOT NULL,
-    activo boolean DEFAULT true NOT NULL
+    activo boolean DEFAULT true NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.cajas OWNER TO retail;
 
 --
--- Name: cajas_categorias_movimientos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: cajas_categorias_movimientos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE cajas_categorias_movimientos (
     id_categoria_movimiento integer NOT NULL,
-    nombre_categoria_movimiento character varying(100) NOT NULL
+    nombre_categoria_movimiento character varying(100) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -228,7 +234,7 @@ ALTER SEQUENCE cajas_id_caja_seq OWNED BY cajas.id_caja;
 
 
 --
--- Name: cajas_movimientos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: cajas_movimientos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE cajas_movimientos (
@@ -240,7 +246,8 @@ CREATE TABLE cajas_movimientos (
     id_categoria_movimiento integer NOT NULL,
     observaciones character varying(255),
     id_usuario integer NOT NULL,
-    id_caja integer NOT NULL
+    id_caja integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -268,13 +275,14 @@ ALTER SEQUENCE cajas_movimientos_id_movimiento_caja_seq OWNED BY cajas_movimient
 
 
 --
--- Name: contabilidad_libros; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_libros; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_libros (
     id_libro integer NOT NULL,
     nombre_libro character varying(100) NOT NULL,
-    descripcion_libro character varying(255)
+    descripcion_libro character varying(255),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -302,14 +310,15 @@ ALTER SEQUENCE contabilidad_libros_id_libro_seq OWNED BY contabilidad_libros.id_
 
 
 --
--- Name: contabilidad_monedas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_monedas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_monedas (
     id_moneda integer NOT NULL,
     nombre_moneda character varying(100) NOT NULL,
     nombre_corto_moneda character varying(10),
-    simbolo_moneda character varying(5)
+    simbolo_moneda character varying(5),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -337,14 +346,15 @@ ALTER SEQUENCE contabilidad_monedas_id_moneda_seq OWNED BY contabilidad_monedas.
 
 
 --
--- Name: contabilidad_periodos_contables; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_periodos_contables; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_periodos_contables (
     id_periodo_contable integer NOT NULL,
     nombre_periodo character varying(100) NOT NULL,
     fecha_inicio_periodo timestamp without time zone NOT NULL,
-    fecha_fin_periodo timestamp without time zone NOT NULL
+    fecha_fin_periodo timestamp without time zone NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -372,7 +382,7 @@ ALTER SEQUENCE contabilidad_periodos_contables_id_periodo_contable_seq OWNED BY 
 
 
 --
--- Name: contabilidad_plan_cuentas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_plan_cuentas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_plan_cuentas (
@@ -382,7 +392,8 @@ CREATE TABLE contabilidad_plan_cuentas (
     id_cuenta_padre integer,
     descripcion_cuenta character varying(2000),
     cuenta_rubro boolean NOT NULL,
-    id_tipo_cuenta integer DEFAULT 1 NOT NULL
+    id_tipo_cuenta integer DEFAULT 1 NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -410,7 +421,7 @@ ALTER SEQUENCE contabilidad_plan_cuentas_id_cuenta_seq OWNED BY contabilidad_pla
 
 
 --
--- Name: contabilidad_registro_contable; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_registro_contable; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_registro_contable (
@@ -429,7 +440,8 @@ CREATE TABLE contabilidad_registro_contable (
     id_periodo_contable integer,
     id_periodo_fiscal integer,
     concepto_comprobante character varying(2000),
-    id_tipo_operacion integer
+    id_tipo_operacion integer,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -457,7 +469,7 @@ ALTER SEQUENCE contabilidad_registro_contable_id_registro_seq OWNED BY contabili
 
 
 --
--- Name: contabilidad_registro_contable_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_registro_contable_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_registro_contable_lineas (
@@ -469,7 +481,8 @@ CREATE TABLE contabilidad_registro_contable_lineas (
     unidad_medida character varying(20),
     fecha_vencimiento timestamp without time zone NOT NULL,
     importe_debe numeric(19,2) NOT NULL,
-    importe_haber numeric(19,2) NOT NULL
+    importe_haber numeric(19,2) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -497,13 +510,14 @@ ALTER SEQUENCE contabilidad_registro_contable_lineas_id_linea_registro_seq OWNED
 
 
 --
--- Name: contabilidad_tipos_comprobantes; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_tipos_comprobantes; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_tipos_comprobantes (
     id_tipo_comprobante integer NOT NULL,
     nombre_tipo character varying(100) NOT NULL,
-    descripcion_tipo character varying(2000)
+    descripcion_tipo character varying(2000),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -531,13 +545,14 @@ ALTER SEQUENCE contabilidad_tipos_comprobantes_id_tipo_comprobante_seq OWNED BY 
 
 
 --
--- Name: contabilidad_tipos_cuenta; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_tipos_cuenta; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_tipos_cuenta (
     id_tipo_cuenta integer NOT NULL,
     nombre_tipo character varying(60) NOT NULL,
-    descripcion_tipo character varying(255)
+    descripcion_tipo character varying(255),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -565,13 +580,14 @@ ALTER SEQUENCE contabilidad_tipos_cuenta_id_tipo_cuenta_seq OWNED BY contabilida
 
 
 --
--- Name: contabilidad_tipos_operacion; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_tipos_operacion; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE contabilidad_tipos_operacion (
     id_tipo_operacion integer NOT NULL,
     nombre_tipo_operacion character varying(100) NOT NULL,
-    descripcion_tipo_operacion character varying(2000)
+    descripcion_tipo_operacion character varying(2000),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -599,7 +615,7 @@ ALTER SEQUENCE contabilidad_tipos_operacion_id_tipo_operacion_seq OWNED BY conta
 
 
 --
--- Name: depositos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: depositos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE depositos (
@@ -611,7 +627,8 @@ CREATE TABLE depositos (
     id_localidad integer NOT NULL,
     direccion character varying(500),
     fecha_alta timestamp without time zone NOT NULL,
-    activo boolean DEFAULT true NOT NULL
+    activo boolean DEFAULT true NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -639,7 +656,7 @@ ALTER SEQUENCE depositos_id_deposito_seq OWNED BY depositos.id_deposito;
 
 
 --
--- Name: fiscal_alicuotas_iva; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_alicuotas_iva; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE fiscal_alicuotas_iva (
@@ -647,7 +664,8 @@ CREATE TABLE fiscal_alicuotas_iva (
     nombre_alicuota_iva character varying(60) NOT NULL,
     valor_alicuota numeric(19,2) NOT NULL,
     gravar_iva boolean DEFAULT true NOT NULL,
-    activo boolean DEFAULT true NOT NULL
+    activo boolean DEFAULT true NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -675,20 +693,21 @@ ALTER SEQUENCE fiscal_alicuotas_iva_id_alicuota_iva_seq OWNED BY fiscal_alicuota
 
 
 --
--- Name: fiscal_letras_comprobantes; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_letras_comprobantes; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE fiscal_letras_comprobantes (
     id_resoponsabildiad_iva_emisor integer NOT NULL,
     id_resoponsabildiad_iva_receptor integer NOT NULL,
-    letra_comprobante character varying(1) NOT NULL
+    letra_comprobante character varying(1) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.fiscal_letras_comprobantes OWNER TO retail;
 
 --
--- Name: fiscal_libro_iva_ventas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_libro_iva_ventas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE fiscal_libro_iva_ventas (
@@ -732,7 +751,7 @@ ALTER SEQUENCE fiscal_libro_iva_ventas_id_factura_seq OWNED BY fiscal_libro_iva_
 
 
 --
--- Name: fiscal_libro_iva_ventas_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_libro_iva_ventas_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE fiscal_libro_iva_ventas_lineas (
@@ -770,7 +789,7 @@ ALTER SEQUENCE fiscal_libro_iva_ventas_lineas_id_linea_libro_seq OWNED BY fiscal
 
 
 --
--- Name: fiscal_periodos_fiscales; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_periodos_fiscales; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE fiscal_periodos_fiscales (
@@ -807,12 +826,13 @@ ALTER SEQUENCE fiscal_periodos_fiscales_id_periodo_fiscal_seq OWNED BY fiscal_pe
 
 
 --
--- Name: fiscal_responsabilidades_iva; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_responsabilidades_iva; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE fiscal_responsabilidades_iva (
     id_resoponsabildiad_iva integer NOT NULL,
-    nombre_responsabildiad character varying(60) NOT NULL
+    nombre_responsabildiad character varying(60) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -840,14 +860,15 @@ ALTER SEQUENCE fiscal_responsabilidades_iva_id_resoponsabildiad_iva_seq OWNED BY
 
 
 --
--- Name: legal_generos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: legal_generos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE legal_generos (
     id_genero integer NOT NULL,
     nombre_genero character varying(30) NOT NULL,
     simbolo character varying(1) NOT NULL,
-    id_tipo_personeria integer DEFAULT 1 NOT NULL
+    id_tipo_personeria integer DEFAULT 1 NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -875,7 +896,7 @@ ALTER SEQUENCE legal_generos_id_genero_seq OWNED BY legal_generos.id_genero;
 
 
 --
--- Name: legal_tipos_documento; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: legal_tipos_documento; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE legal_tipos_documento (
@@ -883,7 +904,8 @@ CREATE TABLE legal_tipos_documento (
     nombre_tipo_documento character varying(100) NOT NULL,
     cantidad_caracteres_minimo integer NOT NULL,
     cantidad_caracteres_maximo integer NOT NULL,
-    id_tipo_personeria integer DEFAULT 1 NOT NULL
+    id_tipo_personeria integer DEFAULT 1 NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -911,12 +933,13 @@ ALTER SEQUENCE legal_tipos_documento_id_tipo_documento_seq OWNED BY legal_tipos_
 
 
 --
--- Name: legal_tipos_personeria; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: legal_tipos_personeria; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE legal_tipos_personeria (
     id_tipo_personeria integer NOT NULL,
-    nombre_tipo character varying(100) NOT NULL
+    nombre_tipo character varying(100) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -944,7 +967,7 @@ ALTER SEQUENCE legal_tipos_personeria_id_tipo_personeria_seq OWNED BY legal_tipo
 
 
 --
--- Name: negocio_condiciones_operaciones; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: negocio_condiciones_operaciones; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE negocio_condiciones_operaciones (
@@ -961,7 +984,7 @@ CREATE TABLE negocio_condiciones_operaciones (
 ALTER TABLE public.negocio_condiciones_operaciones OWNER TO retail;
 
 --
--- Name: negocio_formas_pago; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: negocio_formas_pago; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE negocio_formas_pago (
@@ -969,14 +992,15 @@ CREATE TABLE negocio_formas_pago (
     nombre_forma_pago character varying(60) NOT NULL,
     nombre_corto character varying(10),
     venta boolean DEFAULT true NOT NULL,
-    compra boolean DEFAULT true NOT NULL
+    compra boolean DEFAULT true NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.negocio_formas_pago OWNER TO retail;
 
 --
--- Name: parametros; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: parametros; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE parametros (
@@ -989,7 +1013,7 @@ CREATE TABLE parametros (
 ALTER TABLE public.parametros OWNER TO retail;
 
 --
--- Name: personas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE personas (
@@ -1023,7 +1047,7 @@ CREATE TABLE personas (
 ALTER TABLE public.personas OWNER TO retail;
 
 --
--- Name: personas_cuenta_corriente; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_cuenta_corriente; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE personas_cuenta_corriente (
@@ -1032,7 +1056,8 @@ CREATE TABLE personas_cuenta_corriente (
     fecha_movimiento timestamp without time zone NOT NULL,
     importe_movimiento numeric(19,2) NOT NULL,
     descripcion_movimiento character varying(200) NOT NULL,
-    id_registro_contable integer
+    id_registro_contable integer,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1081,7 +1106,7 @@ ALTER SEQUENCE personas_id_persona_seq OWNED BY personas.id_persona;
 
 
 --
--- Name: personas_imagenes; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_imagenes; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE personas_imagenes (
@@ -1089,7 +1114,8 @@ CREATE TABLE personas_imagenes (
     id_persona integer NOT NULL,
     fecha_alta timestamp without time zone NOT NULL,
     id_tipo_imagen integer NOT NULL,
-    observaciones character varying(1024)
+    observaciones character varying(1024),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1117,14 +1143,15 @@ ALTER SEQUENCE personas_imagenes_id_imagen_seq OWNED BY personas_imagenes.id_ima
 
 
 --
--- Name: personas_telefonos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_telefonos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE personas_telefonos (
     id_telefono integer NOT NULL,
     id_persona integer NOT NULL,
     numero character varying(50) NOT NULL,
-    referencia character varying(100)
+    referencia character varying(100),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1152,13 +1179,14 @@ ALTER SEQUENCE personas_telefonos_id_telefono_seq OWNED BY personas_telefonos.id
 
 
 --
--- Name: personas_tipos_imagenes; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_tipos_imagenes; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE personas_tipos_imagenes (
     id_tipo_imagen integer NOT NULL,
     nombre_tipo character varying(60) NOT NULL,
-    descripcion_tipo character varying(200)
+    descripcion_tipo character varying(200),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1186,25 +1214,27 @@ ALTER SEQUENCE personas_tipos_imagenes_id_tipo_imagen_seq OWNED BY personas_tipo
 
 
 --
--- Name: privilegios; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: privilegios; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE privilegios (
     id_privilegio integer NOT NULL,
     nombre_privilegio character varying(100) NOT NULL,
-    descripcion_privilegio character varying(1024)
+    descripcion_privilegio character varying(1024),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.privilegios OWNER TO retail;
 
 --
--- Name: privilegios_gruposx; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: privilegios_gruposx; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE privilegios_gruposx (
     id_privilegio integer NOT NULL,
-    id_grupo integer NOT NULL
+    id_grupo integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1232,7 +1262,7 @@ ALTER SEQUENCE privilegios_id_privilegio_seq OWNED BY privilegios.id_privilegio;
 
 
 --
--- Name: productos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos (
@@ -1261,12 +1291,13 @@ CREATE TABLE productos (
 ALTER TABLE public.productos OWNER TO retail;
 
 --
--- Name: productos_caracteristicas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_caracteristicas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_caracteristicas (
     id_caracteristica integer NOT NULL,
-    nombre_caracteristica character varying(100) NOT NULL
+    nombre_caracteristica character varying(100) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1315,7 +1346,7 @@ ALTER SEQUENCE productos_id_producto_seq OWNED BY productos.id_producto;
 
 
 --
--- Name: productos_imagenes; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_imagenes; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_imagenes (
@@ -1324,7 +1355,8 @@ CREATE TABLE productos_imagenes (
     id_usuario integer NOT NULL,
     fecha_alta timestamp without time zone NOT NULL,
     descripcion character varying(200),
-    imagen bytea NOT NULL
+    imagen bytea NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1352,14 +1384,15 @@ ALTER SEQUENCE productos_imagenes_id_imagen_seq OWNED BY productos_imagenes.id_i
 
 
 --
--- Name: productos_porcentajes; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_porcentajes; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_porcentajes (
     id_porcentaje integer NOT NULL,
     id_producto integer NOT NULL,
     porcentaje numeric(19,2) NOT NULL,
-    descripcion_porcentaje character varying(60) NOT NULL
+    descripcion_porcentaje character varying(60) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1387,12 +1420,13 @@ ALTER SEQUENCE productos_porcentajes_id_porcentaje_seq OWNED BY productos_porcen
 
 
 --
--- Name: productos_rubros; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_rubros; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_rubros (
     id_rubro integer NOT NULL,
-    nombre_rubro character varying(100) NOT NULL
+    nombre_rubro character varying(100) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1420,13 +1454,14 @@ ALTER SEQUENCE productos_rubros_id_rubro_seq OWNED BY productos_rubros.id_rubro;
 
 
 --
--- Name: productos_sub_rubros; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_sub_rubros; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_sub_rubros (
     id_sub_rubro integer NOT NULL,
     id_rubro integer NOT NULL,
-    nombre_sub_rubro character varying(100) NOT NULL
+    nombre_sub_rubro character varying(100) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1454,7 +1489,7 @@ ALTER SEQUENCE productos_sub_rubros_id_sub_rubro_seq OWNED BY productos_sub_rubr
 
 
 --
--- Name: productos_tipos_proveeduria; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_tipos_proveeduria; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_tipos_proveeduria (
@@ -1463,7 +1498,8 @@ CREATE TABLE productos_tipos_proveeduria (
     puede_comprarse boolean NOT NULL,
     puede_venderse boolean NOT NULL,
     control_stock boolean NOT NULL,
-    cambiar_precio_venta boolean DEFAULT true NOT NULL
+    cambiar_precio_venta boolean DEFAULT true NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1491,13 +1527,14 @@ ALTER SEQUENCE productos_tipos_proveeduria_id_tipo_proveeduria_seq OWNED BY prod
 
 
 --
--- Name: productos_tipos_unidades; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_tipos_unidades; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_tipos_unidades (
     id_tipo_unidad integer NOT NULL,
     nombre_unidad character varying(60) NOT NULL,
-    cantidad_entera boolean NOT NULL
+    cantidad_entera boolean NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1525,14 +1562,15 @@ ALTER SEQUENCE productos_tipos_unidades_id_tipo_unidad_seq OWNED BY productos_ti
 
 
 --
--- Name: productos_x_caracteristicas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_x_caracteristicas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE productos_x_caracteristicas (
     id_caracteristica_x_producto integer NOT NULL,
     id_caracteristica integer NOT NULL,
     id_producto integer NOT NULL,
-    valor_caracteristica character varying(255) NOT NULL
+    valor_caracteristica character varying(255) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1560,7 +1598,7 @@ ALTER SEQUENCE productos_x_caracteristicas_id_caracteristica_x_producto_seq OWNE
 
 
 --
--- Name: proveedores_ordenes_compra; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: proveedores_ordenes_compra; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE proveedores_ordenes_compra (
@@ -1573,7 +1611,8 @@ CREATE TABLE proveedores_ordenes_compra (
     total numeric(19,2) NOT NULL,
     observaciones character varying(1024),
     anulada boolean DEFAULT false NOT NULL,
-    id_proveedor integer NOT NULL
+    id_proveedor integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1601,7 +1640,7 @@ ALTER SEQUENCE proveedores_ordenes_compra_id_orden_compra_seq OWNED BY proveedor
 
 
 --
--- Name: proveedores_ordenes_compra_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: proveedores_ordenes_compra_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE proveedores_ordenes_compra_lineas (
@@ -1611,7 +1650,8 @@ CREATE TABLE proveedores_ordenes_compra_lineas (
     precio_compra_unitario numeric(19,2) NOT NULL,
     cantidad numeric(19,2) NOT NULL,
     sub_total numeric(19,2) NOT NULL,
-    cantidad_recibida numeric(19,2)
+    cantidad_recibida numeric(19,2),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1639,7 +1679,7 @@ ALTER SEQUENCE proveedores_ordenes_compra_lineas_id_linea_seq OWNED BY proveedor
 
 
 --
--- Name: stock_movimientos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: stock_movimientos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE stock_movimientos (
@@ -1653,7 +1693,8 @@ CREATE TABLE stock_movimientos (
     observaciones_movimiento character varying(255),
     id_usuario integer NOT NULL,
     costo_total_movimiento numeric(19,2) NOT NULL,
-    id_deposito_movimiento integer NOT NULL
+    id_deposito_movimiento integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1681,12 +1722,13 @@ ALTER SEQUENCE stock_movimientos_id_movimiento_stock_seq OWNED BY stock_movimien
 
 
 --
--- Name: stock_movimientos_tipos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: stock_movimientos_tipos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE stock_movimientos_tipos (
     id_tipo_movimiento integer NOT NULL,
-    nombre_tipo character varying(60) NOT NULL
+    nombre_tipo character varying(60) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1714,7 +1756,7 @@ ALTER SEQUENCE stock_movimientos_tipos_id_tipo_movimiento_seq OWNED BY stock_mov
 
 
 --
--- Name: sucursales; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: sucursales; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE sucursales (
@@ -1755,7 +1797,7 @@ ALTER SEQUENCE sucursales_id_sucursal_seq OWNED BY sucursales.id_sucursal;
 
 
 --
--- Name: ubicacion_localidades; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ubicacion_localidades; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ubicacion_localidades (
@@ -1791,7 +1833,7 @@ ALTER SEQUENCE ubicacion_localidades_id_localidad_seq OWNED BY ubicacion_localid
 
 
 --
--- Name: ubicacion_paises; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ubicacion_paises; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ubicacion_paises (
@@ -1825,7 +1867,7 @@ ALTER SEQUENCE ubicacion_paises_id_pais_seq OWNED BY ubicacion_paises.id_pais;
 
 
 --
--- Name: ubicacion_provincias; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ubicacion_provincias; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ubicacion_provincias (
@@ -1860,7 +1902,7 @@ ALTER SEQUENCE ubicacion_provincias_id_provincia_seq OWNED BY ubicacion_provinci
 
 
 --
--- Name: usuarios; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE usuarios (
@@ -1878,7 +1920,7 @@ CREATE TABLE usuarios (
 ALTER TABLE public.usuarios OWNER TO retail;
 
 --
--- Name: usuarios_grupos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios_grupos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE usuarios_grupos (
@@ -1911,7 +1953,7 @@ ALTER SEQUENCE usuarios_grupos_id_grupo_seq OWNED BY usuarios_grupos.id_grupo;
 
 
 --
--- Name: usuarios_gruposx; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios_gruposx; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE usuarios_gruposx (
@@ -1959,7 +2001,7 @@ CREATE VIEW v_roles_usuarios AS
 ALTER TABLE public.v_roles_usuarios OWNER TO retail;
 
 --
--- Name: ventas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas (
@@ -1984,7 +2026,7 @@ CREATE TABLE ventas (
 ALTER TABLE public.ventas OWNER TO retail;
 
 --
--- Name: ventas_cargos_fijos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_cargos_fijos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_cargos_fijos (
@@ -1994,7 +2036,8 @@ CREATE TABLE ventas_cargos_fijos (
     porcentaje boolean NOT NULL,
     importe_cargo numeric(19,2) NOT NULL,
     id_producto integer NOT NULL,
-    id_clasificacion_cliente integer NOT NULL
+    id_clasificacion_cliente integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -2043,20 +2086,20 @@ ALTER SEQUENCE ventas_condiciones_id_condicion_venta_seq OWNED BY negocio_condic
 
 
 --
--- Name: ventas_estados; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_estados; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_estados (
     id_estado integer NOT NULL,
     nombre_estado character varying(20) NOT NULL,
-    version integer NOT NULL
+    version integer DEFAULT 0 NOT NULL
 );
 
 
 ALTER TABLE public.ventas_estados OWNER TO retail;
 
 --
--- Name: ventas_estados_historico; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_estados_historico; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_estados_historico (
@@ -2065,7 +2108,8 @@ CREATE TABLE ventas_estados_historico (
     fecha_cambio timestamp without time zone NOT NULL,
     id_estado_anterior integer NOT NULL,
     id_estado_actual integer NOT NULL,
-    id_usuario integer NOT NULL
+    id_usuario integer NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -2135,7 +2179,7 @@ ALTER SEQUENCE ventas_id_venta_seq OWNED BY ventas.id_venta;
 
 
 --
--- Name: ventas_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_lineas (
@@ -2177,7 +2221,7 @@ ALTER SEQUENCE ventas_lineas_id_linea_venta_seq OWNED BY ventas_lineas.id_linea_
 
 
 --
--- Name: ventas_pagos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_pagos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_pagos (
@@ -2218,7 +2262,7 @@ ALTER SEQUENCE ventas_pagos_id_pago_venta_seq OWNED BY ventas_pagos.id_pago_vent
 
 
 --
--- Name: ventas_pagos_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_pagos_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_pagos_lineas (
@@ -2255,7 +2299,7 @@ ALTER SEQUENCE ventas_pagos_lineas_id_linea_pago_seq OWNED BY ventas_pagos_linea
 
 
 --
--- Name: ventas_remitos; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_remitos; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_remitos (
@@ -2265,7 +2309,8 @@ CREATE TABLE ventas_remitos (
     id_sucursal integer NOT NULL,
     id_usuario integer NOT NULL,
     anulado boolean DEFAULT false NOT NULL,
-    observaciones character varying(255)
+    observaciones character varying(255),
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -2293,7 +2338,7 @@ ALTER SEQUENCE ventas_remitos_id_remito_seq OWNED BY ventas_remitos.id_remito;
 
 
 --
--- Name: ventas_remitos_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_remitos_lineas; Type: TABLE; Schema: public; Owner: retail; Tablespace:
 --
 
 CREATE TABLE ventas_remitos_lineas (
@@ -2301,7 +2346,8 @@ CREATE TABLE ventas_remitos_lineas (
     id_remito integer NOT NULL,
     id_producto integer NOT NULL,
     cantidad numeric(19,2) NOT NULL,
-    costo_neto_unitario numeric(19,2) NOT NULL
+    costo_neto_unitario numeric(19,2) NOT NULL,
+    version integer DEFAULT 0 NOT NULL
 );
 
 
@@ -2893,13 +2939,13 @@ SELECT pg_catalog.setval('contabilidad_tipos_comprobantes_id_tipo_comprobante_se
 -- Data for Name: contabilidad_tipos_cuenta; Type: TABLE DATA; Schema: public; Owner: retail
 --
 
-INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES 
+INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES
 (1,	'ACTIVO',null);
-INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES 
+INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES
 (2,	'PASIVO',null);
-INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES 
+INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES
 (3,	'PATRIMONIO NETO',null);
-INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES 
+INSERT INTO contabilidad_tipos_cuenta (id_tipo_cuenta, nombre_tipo, descripcion_tipo) VALUES
 (4,	'MOVIMIENTOS',null);
 
 
@@ -2932,13 +2978,13 @@ SELECT pg_catalog.setval('depositos_id_deposito_seq', 1, false);
 -- Data for Name: fiscal_alicuotas_iva; Type: TABLE DATA; Schema: public; Owner: retail
 --
 
-INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES 
+INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES
 (1,	'IVA 21%', 	21.00,	true,	true);
-INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES 
+INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES
 (2,	'IVA 10,5%',	10.50,	true,	true);
-INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES 
+INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES
 (3,	'IVA 27%',	27.00,	true,	true);
-INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES 
+INSERT INTO fiscal_alicuotas_iva (id_alicuota_iva, nombre_alicuota_iva, valor_alicuota, gravar_iva, activo) VALUES
 (4,	'IVA EXENTO',	0.00,	false,	true);
 
 
@@ -3065,7 +3111,7 @@ SELECT pg_catalog.setval('legal_tipos_documento_id_tipo_documento_seq', 2, true)
 
 INSERT INTO legal_tipos_personeria (id_tipo_personeria, nombre_tipo) VALUES
 (1,	'PERSONA FÍSICA');
-INSERT INTO legal_tipos_personeria (id_tipo_personeria, nombre_tipo) VALUES 
+INSERT INTO legal_tipos_personeria (id_tipo_personeria, nombre_tipo) VALUES
 (2,	'PERSONA JURÍDICA');
 
 
@@ -13714,7 +13760,7 @@ INSERT INTO ventas_estados (id_estado, nombre_estado, version) VALUES
 (4,	'ANULADA',	0);
 
 --
--- Name: bancos_cuenta_corriente_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_cuenta_corriente_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY bancos_cuenta_corriente
@@ -13722,7 +13768,7 @@ ALTER TABLE ONLY bancos_cuenta_corriente
 
 
 --
--- Name: bancos_cuentas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_cuentas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY bancos_cuentas
@@ -13730,7 +13776,7 @@ ALTER TABLE ONLY bancos_cuentas
 
 
 --
--- Name: bancos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY bancos
@@ -13738,7 +13784,7 @@ ALTER TABLE ONLY bancos
 
 
 --
--- Name: bancos_tipos_cuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: bancos_tipos_cuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY bancos_tipos_cuenta
@@ -13746,7 +13792,7 @@ ALTER TABLE ONLY bancos_tipos_cuenta
 
 
 --
--- Name: cajas_categorias_movimientos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: cajas_categorias_movimientos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY cajas_categorias_movimientos
@@ -13754,7 +13800,7 @@ ALTER TABLE ONLY cajas_categorias_movimientos
 
 
 --
--- Name: cajas_movimientos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: cajas_movimientos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY cajas_movimientos
@@ -13762,7 +13808,7 @@ ALTER TABLE ONLY cajas_movimientos
 
 
 --
--- Name: cajas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: cajas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY cajas
@@ -13770,7 +13816,7 @@ ALTER TABLE ONLY cajas
 
 
 --
--- Name: contabilidad_libros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_libros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_libros
@@ -13778,7 +13824,7 @@ ALTER TABLE ONLY contabilidad_libros
 
 
 --
--- Name: contabilidad_monedas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_monedas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_monedas
@@ -13786,7 +13832,7 @@ ALTER TABLE ONLY contabilidad_monedas
 
 
 --
--- Name: contabilidad_periodos_contables_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_periodos_contables_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_periodos_contables
@@ -13794,7 +13840,7 @@ ALTER TABLE ONLY contabilidad_periodos_contables
 
 
 --
--- Name: contabilidad_plan_cuentas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_plan_cuentas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_plan_cuentas
@@ -13802,7 +13848,7 @@ ALTER TABLE ONLY contabilidad_plan_cuentas
 
 
 --
--- Name: contabilidad_registro_contable_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_registro_contable_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_registro_contable_lineas
@@ -13810,7 +13856,7 @@ ALTER TABLE ONLY contabilidad_registro_contable_lineas
 
 
 --
--- Name: contabilidad_registro_contable_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_registro_contable_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_registro_contable
@@ -13818,7 +13864,7 @@ ALTER TABLE ONLY contabilidad_registro_contable
 
 
 --
--- Name: contabilidad_tipos_comprobantes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_tipos_comprobantes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_tipos_comprobantes
@@ -13826,7 +13872,7 @@ ALTER TABLE ONLY contabilidad_tipos_comprobantes
 
 
 --
--- Name: contabilidad_tipos_cuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_tipos_cuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_tipos_cuenta
@@ -13834,7 +13880,7 @@ ALTER TABLE ONLY contabilidad_tipos_cuenta
 
 
 --
--- Name: contabilidad_tipos_operacion_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: contabilidad_tipos_operacion_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY contabilidad_tipos_operacion
@@ -13842,7 +13888,7 @@ ALTER TABLE ONLY contabilidad_tipos_operacion
 
 
 --
--- Name: depositos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: depositos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY depositos
@@ -13850,7 +13896,7 @@ ALTER TABLE ONLY depositos
 
 
 --
--- Name: fiscal_alicuotas_iva_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_alicuotas_iva_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY fiscal_alicuotas_iva
@@ -13858,7 +13904,7 @@ ALTER TABLE ONLY fiscal_alicuotas_iva
 
 
 --
--- Name: fiscal_letras_comprobantes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_letras_comprobantes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY fiscal_letras_comprobantes
@@ -13866,7 +13912,7 @@ ALTER TABLE ONLY fiscal_letras_comprobantes
 
 
 --
--- Name: fiscal_libro_iva_ventas_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_libro_iva_ventas_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY fiscal_libro_iva_ventas_lineas
@@ -13874,7 +13920,7 @@ ALTER TABLE ONLY fiscal_libro_iva_ventas_lineas
 
 
 --
--- Name: fiscal_libro_iva_ventas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_libro_iva_ventas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY fiscal_libro_iva_ventas
@@ -13882,7 +13928,7 @@ ALTER TABLE ONLY fiscal_libro_iva_ventas
 
 
 --
--- Name: fiscal_periodos_fiscales_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_periodos_fiscales_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY fiscal_periodos_fiscales
@@ -13890,7 +13936,7 @@ ALTER TABLE ONLY fiscal_periodos_fiscales
 
 
 --
--- Name: fiscal_responsabilidades_iva_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: fiscal_responsabilidades_iva_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY fiscal_responsabilidades_iva
@@ -13898,7 +13944,7 @@ ALTER TABLE ONLY fiscal_responsabilidades_iva
 
 
 --
--- Name: legal_generos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: legal_generos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY legal_generos
@@ -13906,7 +13952,7 @@ ALTER TABLE ONLY legal_generos
 
 
 --
--- Name: legal_tipos_documento_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: legal_tipos_documento_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY legal_tipos_documento
@@ -13914,7 +13960,7 @@ ALTER TABLE ONLY legal_tipos_documento
 
 
 --
--- Name: legal_tipos_personeria_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: legal_tipos_personeria_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY legal_tipos_personeria
@@ -13922,7 +13968,7 @@ ALTER TABLE ONLY legal_tipos_personeria
 
 
 --
--- Name: parametros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: parametros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY parametros
@@ -13930,7 +13976,7 @@ ALTER TABLE ONLY parametros
 
 
 --
--- Name: personas_cuenta_corriente_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_cuenta_corriente_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY personas_cuenta_corriente
@@ -13938,7 +13984,7 @@ ALTER TABLE ONLY personas_cuenta_corriente
 
 
 --
--- Name: personas_imagenes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_imagenes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY personas_imagenes
@@ -13946,7 +13992,7 @@ ALTER TABLE ONLY personas_imagenes
 
 
 --
--- Name: personas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY personas
@@ -13954,7 +14000,7 @@ ALTER TABLE ONLY personas
 
 
 --
--- Name: personas_telefonos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_telefonos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY personas_telefonos
@@ -13962,7 +14008,7 @@ ALTER TABLE ONLY personas_telefonos
 
 
 --
--- Name: personas_tipos_imagenes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: personas_tipos_imagenes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY personas_tipos_imagenes
@@ -13970,7 +14016,7 @@ ALTER TABLE ONLY personas_tipos_imagenes
 
 
 --
--- Name: privilegios_gruposx_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: privilegios_gruposx_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY privilegios_gruposx
@@ -13978,7 +14024,7 @@ ALTER TABLE ONLY privilegios_gruposx
 
 
 --
--- Name: privilegios_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: privilegios_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY privilegios
@@ -13986,7 +14032,7 @@ ALTER TABLE ONLY privilegios
 
 
 --
--- Name: productos_caracteristicas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_caracteristicas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_caracteristicas
@@ -13994,7 +14040,7 @@ ALTER TABLE ONLY productos_caracteristicas
 
 
 --
--- Name: productos_imagenes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_imagenes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_imagenes
@@ -14002,7 +14048,7 @@ ALTER TABLE ONLY productos_imagenes
 
 
 --
--- Name: productos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos
@@ -14010,7 +14056,7 @@ ALTER TABLE ONLY productos
 
 
 --
--- Name: productos_porcentajes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_porcentajes_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_porcentajes
@@ -14018,7 +14064,7 @@ ALTER TABLE ONLY productos_porcentajes
 
 
 --
--- Name: productos_rubros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_rubros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_rubros
@@ -14026,7 +14072,7 @@ ALTER TABLE ONLY productos_rubros
 
 
 --
--- Name: productos_sub_rubros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_sub_rubros_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_sub_rubros
@@ -14034,7 +14080,7 @@ ALTER TABLE ONLY productos_sub_rubros
 
 
 --
--- Name: productos_tipos_proveeduria_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_tipos_proveeduria_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_tipos_proveeduria
@@ -14042,7 +14088,7 @@ ALTER TABLE ONLY productos_tipos_proveeduria
 
 
 --
--- Name: productos_tipos_unidades_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_tipos_unidades_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_tipos_unidades
@@ -14050,7 +14096,7 @@ ALTER TABLE ONLY productos_tipos_unidades
 
 
 --
--- Name: productos_x_caracteristicas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: productos_x_caracteristicas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_x_caracteristicas
@@ -14058,7 +14104,7 @@ ALTER TABLE ONLY productos_x_caracteristicas
 
 
 --
--- Name: proveedores_ordenes_compra_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: proveedores_ordenes_compra_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY proveedores_ordenes_compra_lineas
@@ -14066,7 +14112,7 @@ ALTER TABLE ONLY proveedores_ordenes_compra_lineas
 
 
 --
--- Name: proveedores_ordenes_compra_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: proveedores_ordenes_compra_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY proveedores_ordenes_compra
@@ -14074,7 +14120,7 @@ ALTER TABLE ONLY proveedores_ordenes_compra
 
 
 --
--- Name: stock_movimientos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: stock_movimientos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY stock_movimientos
@@ -14082,7 +14128,7 @@ ALTER TABLE ONLY stock_movimientos
 
 
 --
--- Name: stock_movimientos_tipos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: stock_movimientos_tipos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY stock_movimientos_tipos
@@ -14090,7 +14136,7 @@ ALTER TABLE ONLY stock_movimientos_tipos
 
 
 --
--- Name: sucursales_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: sucursales_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY sucursales
@@ -14098,7 +14144,7 @@ ALTER TABLE ONLY sucursales
 
 
 --
--- Name: ubicacion_localidades_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ubicacion_localidades_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ubicacion_localidades
@@ -14106,7 +14152,7 @@ ALTER TABLE ONLY ubicacion_localidades
 
 
 --
--- Name: ubicacion_paises_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ubicacion_paises_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ubicacion_paises
@@ -14114,7 +14160,7 @@ ALTER TABLE ONLY ubicacion_paises
 
 
 --
--- Name: ubicacion_provincias_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ubicacion_provincias_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ubicacion_provincias
@@ -14122,7 +14168,7 @@ ALTER TABLE ONLY ubicacion_provincias
 
 
 --
--- Name: unique_productos_x_caracteristicas; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: unique_productos_x_caracteristicas; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY productos_x_caracteristicas
@@ -14130,7 +14176,7 @@ ALTER TABLE ONLY productos_x_caracteristicas
 
 
 --
--- Name: usuarios_grupos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios_grupos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY usuarios_grupos
@@ -14138,7 +14184,7 @@ ALTER TABLE ONLY usuarios_grupos
 
 
 --
--- Name: usuarios_gruposx_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios_gruposx_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY usuarios_gruposx
@@ -14146,7 +14192,7 @@ ALTER TABLE ONLY usuarios_gruposx
 
 
 --
--- Name: usuarios_login_key; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios_login_key; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY usuarios
@@ -14154,7 +14200,7 @@ ALTER TABLE ONLY usuarios
 
 
 --
--- Name: usuarios_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: usuarios_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY usuarios
@@ -14162,7 +14208,7 @@ ALTER TABLE ONLY usuarios
 
 
 --
--- Name: ventas_cargos_fijos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_cargos_fijos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_cargos_fijos
@@ -14170,7 +14216,7 @@ ALTER TABLE ONLY ventas_cargos_fijos
 
 
 --
--- Name: ventas_condiciones_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_condiciones_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY negocio_condiciones_operaciones
@@ -14178,7 +14224,7 @@ ALTER TABLE ONLY negocio_condiciones_operaciones
 
 
 --
--- Name: ventas_estados_historico_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_estados_historico_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_estados_historico
@@ -14186,7 +14232,7 @@ ALTER TABLE ONLY ventas_estados_historico
 
 
 --
--- Name: ventas_estados_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_estados_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_estados
@@ -14194,7 +14240,7 @@ ALTER TABLE ONLY ventas_estados
 
 
 --
--- Name: ventas_formas_pago_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_formas_pago_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY negocio_formas_pago
@@ -14202,7 +14248,7 @@ ALTER TABLE ONLY negocio_formas_pago
 
 
 --
--- Name: ventas_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_lineas
@@ -14210,7 +14256,7 @@ ALTER TABLE ONLY ventas_lineas
 
 
 --
--- Name: ventas_pagos_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_pagos_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_pagos_lineas
@@ -14218,7 +14264,7 @@ ALTER TABLE ONLY ventas_pagos_lineas
 
 
 --
--- Name: ventas_pagos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_pagos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_pagos
@@ -14226,7 +14272,7 @@ ALTER TABLE ONLY ventas_pagos
 
 
 --
--- Name: ventas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas
@@ -14234,7 +14280,7 @@ ALTER TABLE ONLY ventas
 
 
 --
--- Name: ventas_remitos_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_remitos_lineas_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_remitos_lineas
@@ -14242,7 +14288,7 @@ ALTER TABLE ONLY ventas_remitos_lineas
 
 
 --
--- Name: ventas_remitos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace: 
+-- Name: ventas_remitos_pkey; Type: CONSTRAINT; Schema: public; Owner: retail; Tablespace:
 --
 
 ALTER TABLE ONLY ventas_remitos

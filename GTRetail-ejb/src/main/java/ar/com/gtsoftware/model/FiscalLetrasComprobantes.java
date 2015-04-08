@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,12 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_letras_comprobantes")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "FiscalLetrasComprobantes.findAll", query = "SELECT f FROM FiscalLetrasComprobantes f"),
-    @NamedQuery(name = "FiscalLetrasComprobantes.findByIdResoponsabildiadIvaEmisor", query = "SELECT f FROM FiscalLetrasComprobantes f WHERE f.fiscalLetrasComprobantesPK.idResoponsabildiadIvaEmisor = :idResoponsabildiadIvaEmisor"),
-    @NamedQuery(name = "FiscalLetrasComprobantes.findByIdResoponsabildiadIvaReceptor", query = "SELECT f FROM FiscalLetrasComprobantes f WHERE f.fiscalLetrasComprobantesPK.idResoponsabildiadIvaReceptor = :idResoponsabildiadIvaReceptor"),
-    @NamedQuery(name = "FiscalLetrasComprobantes.findByLetraComprobante", query = "SELECT f FROM FiscalLetrasComprobantes f WHERE f.letraComprobante = :letraComprobante")})
-public class FiscalLetrasComprobantes implements Serializable {
+public class FiscalLetrasComprobantes extends GTEntity {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected FiscalLetrasComprobantesPK fiscalLetrasComprobantesPK;
@@ -130,5 +122,10 @@ public class FiscalLetrasComprobantes implements Serializable {
     public String toString() {
         return "ar.com.gtsoftware.model.FiscalLetrasComprobantes[ fiscalLetrasComprobantesPK=" + fiscalLetrasComprobantesPK + " ]";
     }
-    
+
+    @Override
+    public boolean isNew() {
+        return fiscalLetrasComprobantesPK == null;
+    }
+
 }

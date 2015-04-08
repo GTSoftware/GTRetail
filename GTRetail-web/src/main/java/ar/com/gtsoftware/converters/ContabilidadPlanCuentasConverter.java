@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.ContabilidadPlanCuentasFacade;
 import ar.com.gtsoftware.model.ContabilidadPlanCuentas;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "contabilidadPlanCuentasConverter")
-public class ContabilidadPlanCuentasConverter implements Converter {
+public class ContabilidadPlanCuentasConverter extends AbstractBaseEntityConverter<ContabilidadPlanCuentas> {
 
     @EJB
     private ContabilidadPlanCuentasFacade contabilidadPlanCuentasFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public ContabilidadPlanCuentasConverter() {
+    @Override
+    protected AbstractFacade<ContabilidadPlanCuentas> getFacade() {
+        return contabilidadPlanCuentasFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return contabilidadPlanCuentasFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(ContabilidadPlanCuentas.class)) {
-            return null;
-        }
-        ContabilidadPlanCuentas cuenta = (ContabilidadPlanCuentas) value;
-        return cuenta.getIdCuenta().toString();
-    }
 }

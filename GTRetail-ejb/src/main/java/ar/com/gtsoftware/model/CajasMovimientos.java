@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,20 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cajas_movimientos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "CajasMovimientos.findAll", query = "SELECT c FROM CajasMovimientos c"),
-    @NamedQuery(name = "CajasMovimientos.findByIdMovimientoCaja", query = "SELECT c FROM CajasMovimientos c WHERE c.idMovimientoCaja = :idMovimientoCaja"),
-    @NamedQuery(name = "CajasMovimientos.findByFechaMovimiento", query = "SELECT c FROM CajasMovimientos c WHERE c.fechaMovimiento = :fechaMovimiento"),
-    @NamedQuery(name = "CajasMovimientos.findByImporteMovimiento", query = "SELECT c FROM CajasMovimientos c WHERE c.importeMovimiento = :importeMovimiento"),
-    @NamedQuery(name = "CajasMovimientos.findBySaldoAcumulado", query = "SELECT c FROM CajasMovimientos c WHERE c.saldoAcumulado = :saldoAcumulado"),
-    @NamedQuery(name = "CajasMovimientos.findByObservaciones", query = "SELECT c FROM CajasMovimientos c WHERE c.observaciones = :observaciones")})
-public class CajasMovimientos implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_movimiento_caja")
-    private Integer idMovimientoCaja;
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_caja"))
+public class CajasMovimientos extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_movimiento")
@@ -94,22 +77,14 @@ public class CajasMovimientos implements Serializable {
     public CajasMovimientos() {
     }
 
-    public CajasMovimientos(Integer idMovimientoCaja) {
-        this.idMovimientoCaja = idMovimientoCaja;
+    public CajasMovimientos(Long idMovimientoCaja) {
+        super(idMovimientoCaja);
     }
 
-    public CajasMovimientos(Integer idMovimientoCaja, Date fechaMovimiento, BigDecimal saldoAcumulado) {
-        this.idMovimientoCaja = idMovimientoCaja;
+    public CajasMovimientos(Long idMovimientoCaja, Date fechaMovimiento, BigDecimal saldoAcumulado) {
+        super(idMovimientoCaja);
         this.fechaMovimiento = fechaMovimiento;
         this.saldoAcumulado = saldoAcumulado;
-    }
-
-    public Integer getIdMovimientoCaja() {
-        return idMovimientoCaja;
-    }
-
-    public void setIdMovimientoCaja(Integer idMovimientoCaja) {
-        this.idMovimientoCaja = idMovimientoCaja;
     }
 
     public Date getFechaMovimiento() {
@@ -185,29 +160,4 @@ public class CajasMovimientos implements Serializable {
         this.idCaja = idCaja;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idMovimientoCaja != null ? idMovimientoCaja.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CajasMovimientos)) {
-            return false;
-        }
-        CajasMovimientos other = (CajasMovimientos) object;
-        if ((this.idMovimientoCaja == null && other.idMovimientoCaja != null) || (this.idMovimientoCaja != null && !this.idMovimientoCaja.equals(other.idMovimientoCaja))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.CajasMovimientos[ idMovimientoCaja=" + idMovimientoCaja + " ]";
-    }
-    
 }

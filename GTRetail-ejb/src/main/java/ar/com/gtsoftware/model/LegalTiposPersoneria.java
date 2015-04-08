@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,17 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "legal_tipos_personeria")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "LegalTiposPersoneria.findAll", query = "SELECT l FROM LegalTiposPersoneria l"),
-    @NamedQuery(name = "LegalTiposPersoneria.findByIdTipoPersoneria", query = "SELECT l FROM LegalTiposPersoneria l WHERE l.idTipoPersoneria = :idTipoPersoneria"),
-    @NamedQuery(name = "LegalTiposPersoneria.findByNombreTipo", query = "SELECT l FROM LegalTiposPersoneria l WHERE l.nombreTipo = :nombreTipo")})
-public class LegalTiposPersoneria implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_personeria")
-    private Integer idTipoPersoneria;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_personeria"))
+public class LegalTiposPersoneria extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -67,21 +53,13 @@ public class LegalTiposPersoneria implements Serializable {
     public LegalTiposPersoneria() {
     }
 
-    public LegalTiposPersoneria(Integer idTipoPersoneria) {
-        this.idTipoPersoneria = idTipoPersoneria;
+    public LegalTiposPersoneria(Long idTipoPersoneria) {
+        super(idTipoPersoneria);
     }
 
-    public LegalTiposPersoneria(Integer idTipoPersoneria, String nombreTipo) {
-        this.idTipoPersoneria = idTipoPersoneria;
+    public LegalTiposPersoneria(Long idTipoPersoneria, String nombreTipo) {
+        super(idTipoPersoneria);
         this.nombreTipo = nombreTipo;
-    }
-
-    public Integer getIdTipoPersoneria() {
-        return idTipoPersoneria;
-    }
-
-    public void setIdTipoPersoneria(Integer idTipoPersoneria) {
-        this.idTipoPersoneria = idTipoPersoneria;
     }
 
     public String getNombreTipo() {
@@ -119,29 +97,4 @@ public class LegalTiposPersoneria implements Serializable {
         this.personasList = personasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoPersoneria != null ? idTipoPersoneria.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LegalTiposPersoneria)) {
-            return false;
-        }
-        LegalTiposPersoneria other = (LegalTiposPersoneria) object;
-        if ((this.idTipoPersoneria == null && other.idTipoPersoneria != null) || (this.idTipoPersoneria != null && !this.idTipoPersoneria.equals(other.idTipoPersoneria))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.LegalTiposPersoneria[ idTipoPersoneria=" + idTipoPersoneria + " ]";
-    }
-    
 }

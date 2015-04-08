@@ -16,7 +16,7 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
+import ar.com.gtsoftware.bl.VentasBean;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
@@ -28,9 +28,9 @@ import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.model.VentasPagos;
+import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.bl.VentasBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -42,7 +42,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -89,7 +88,6 @@ public class NuevaVentaBean implements Serializable {
     public NuevaVentaBean() {
     }
 
-    @PostConstruct
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             if (conversation.isTransient()) {
@@ -110,8 +108,7 @@ public class NuevaVentaBean implements Serializable {
     }
 
     /**
-     * Realiza la búsqueda de productos si y solo si el id o el código están
-     * seteados
+     * Realiza la búsqueda de productos si y solo si el id o el código están seteados
      */
     public void buscarProductoPorClave() {
         productoActual = null;

@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,18 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "personas_tipos_imagenes")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "PersonasTiposImagenes.findAll", query = "SELECT p FROM PersonasTiposImagenes p"),
-    @NamedQuery(name = "PersonasTiposImagenes.findByIdTipoImagen", query = "SELECT p FROM PersonasTiposImagenes p WHERE p.idTipoImagen = :idTipoImagen"),
-    @NamedQuery(name = "PersonasTiposImagenes.findByNombreTipo", query = "SELECT p FROM PersonasTiposImagenes p WHERE p.nombreTipo = :nombreTipo"),
-    @NamedQuery(name = "PersonasTiposImagenes.findByDescripcionTipo", query = "SELECT p FROM PersonasTiposImagenes p WHERE p.descripcionTipo = :descripcionTipo")})
-public class PersonasTiposImagenes implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_imagen")
-    private Integer idTipoImagen;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_imagen"))
+public class PersonasTiposImagenes extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -67,21 +52,13 @@ public class PersonasTiposImagenes implements Serializable {
     public PersonasTiposImagenes() {
     }
 
-    public PersonasTiposImagenes(Integer idTipoImagen) {
-        this.idTipoImagen = idTipoImagen;
+    public PersonasTiposImagenes(Long idTipoImagen) {
+        super(idTipoImagen);
     }
 
-    public PersonasTiposImagenes(Integer idTipoImagen, String nombreTipo) {
-        this.idTipoImagen = idTipoImagen;
+    public PersonasTiposImagenes(Long idTipoImagen, String nombreTipo) {
+        super(idTipoImagen);
         this.nombreTipo = nombreTipo;
-    }
-
-    public Integer getIdTipoImagen() {
-        return idTipoImagen;
-    }
-
-    public void setIdTipoImagen(Integer idTipoImagen) {
-        this.idTipoImagen = idTipoImagen;
     }
 
     public String getNombreTipo() {
@@ -109,29 +86,4 @@ public class PersonasTiposImagenes implements Serializable {
         this.personasImagenesList = personasImagenesList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoImagen != null ? idTipoImagen.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PersonasTiposImagenes)) {
-            return false;
-        }
-        PersonasTiposImagenes other = (PersonasTiposImagenes) object;
-        if ((this.idTipoImagen == null && other.idTipoImagen != null) || (this.idTipoImagen != null && !this.idTipoImagen.equals(other.idTipoImagen))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.PersonasTiposImagenes[ idTipoImagen=" + idTipoImagen + " ]";
-    }
-    
 }

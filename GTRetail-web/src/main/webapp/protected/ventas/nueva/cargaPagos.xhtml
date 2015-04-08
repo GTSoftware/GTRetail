@@ -13,19 +13,19 @@
         </h:outputLabel>
 
         <h:outputLabel value="#{msg.condicionVenta}" />
-        <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}" value="#{nuevaVentaBean.ventaActual.idCondicionVenta}" 
+        <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}" value="#{nuevaVentaBean.ventaActual.idCondicionVenta}"
                          converter="#{negocioCondicionesOperacionesConverter}" filter="true"  >
             <f:selectItems value="#{nuevaVentaBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}" itemValue="#{cond}"/>
 
         </p:selectOneMenu>
         <h:outputLabel value="#{msg.formaPago}" />
-        <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}" value="#{nuevaVentaBean.pagoActual.idFormaPago}" 
+        <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}" value="#{nuevaVentaBean.pagoActual.idFormaPago}"
                          converter="#{negocioFormasPagoConverter}" filter="true"  >
             <f:selectItems value="#{nuevaVentaBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}" itemValue="#{formaPago}"/>
 
         </p:selectOneMenu>
         <h:outputLabel for="importePagoField" value="#{msg.importePago}" />
-        <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" >
+        <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" label="#{msg.importePago}">
             <f:validateDoubleRange minimum="0" maximum="#{nuevaVentaBean.ventaActual.saldo}" rendered="#{nuevaVentaBean.ventaActual.saldo gt 0}" />
         </p:inputText>
         <p:message for="importePagoField" />
@@ -59,12 +59,12 @@
             <p:commandButton icon="ui-icon-close" update="pagosTable" action="#{nuevaVentaBean.eliminarPago(pago)}" />
         </p:column>
         <p:columnGroup type="footer">
-            <p:row>  
-                <p:column colspan="1" footerText="#{msg.saldo}:"  
-                          style="text-align:right; font-size: larger"  />  
+            <p:row>
+                <p:column colspan="1" footerText="#{msg.saldo}:"
+                          style="text-align:right; font-size: larger"  />
 
-                <p:column footerText="\$#{nuevaVentaBean.ventaActual.saldo}" style=" font-size: xx-large" />  
-            </p:row>  
+                <p:column footerText="\$#{nuevaVentaBean.ventaActual.saldo}" style=" font-size: xx-large" />
+            </p:row>
         </p:columnGroup>
     </p:dataTable>
     <h:outputLabel value="#{msg.observaciones}:" />

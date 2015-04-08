@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,17 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "fiscal_responsabilidades_iva")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "FiscalResponsabilidadesIva.findAll", query = "SELECT f FROM FiscalResponsabilidadesIva f"),
-    @NamedQuery(name = "FiscalResponsabilidadesIva.findByIdResoponsabildiadIva", query = "SELECT f FROM FiscalResponsabilidadesIva f WHERE f.idResoponsabildiadIva = :idResoponsabildiadIva"),
-    @NamedQuery(name = "FiscalResponsabilidadesIva.findByNombreResponsabildiad", query = "SELECT f FROM FiscalResponsabilidadesIva f WHERE f.nombreResponsabildiad = :nombreResponsabildiad")})
-public class FiscalResponsabilidadesIva implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_resoponsabildiad_iva")
-    private Integer idResoponsabildiadIva;
+@AttributeOverride(name = "id", column = @Column(name = "id_resoponsabildiad_iva"))
+public class FiscalResponsabilidadesIva extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -71,21 +57,13 @@ public class FiscalResponsabilidadesIva implements Serializable {
     public FiscalResponsabilidadesIva() {
     }
 
-    public FiscalResponsabilidadesIva(Integer idResoponsabildiadIva) {
-        this.idResoponsabildiadIva = idResoponsabildiadIva;
+    public FiscalResponsabilidadesIva(Long idResoponsabildiadIva) {
+        super(idResoponsabildiadIva);
     }
 
-    public FiscalResponsabilidadesIva(Integer idResoponsabildiadIva, String nombreResponsabildiad) {
-        this.idResoponsabildiadIva = idResoponsabildiadIva;
+    public FiscalResponsabilidadesIva(Long idResoponsabildiadIva, String nombreResponsabildiad) {
+        super(idResoponsabildiadIva);
         this.nombreResponsabildiad = nombreResponsabildiad;
-    }
-
-    public Integer getIdResoponsabildiadIva() {
-        return idResoponsabildiadIva;
-    }
-
-    public void setIdResoponsabildiadIva(Integer idResoponsabildiadIva) {
-        this.idResoponsabildiadIva = idResoponsabildiadIva;
     }
 
     public String getNombreResponsabildiad() {
@@ -141,29 +119,4 @@ public class FiscalResponsabilidadesIva implements Serializable {
         this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idResoponsabildiadIva != null ? idResoponsabildiadIva.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof FiscalResponsabilidadesIva)) {
-            return false;
-        }
-        FiscalResponsabilidadesIva other = (FiscalResponsabilidadesIva) object;
-        if ((this.idResoponsabildiadIva == null && other.idResoponsabildiadIva != null) || (this.idResoponsabildiadIva != null && !this.idResoponsabildiadIva.equals(other.idResoponsabildiadIva))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.FiscalResponsabilidadesIva[ idResoponsabildiadIva=" + idResoponsabildiadIva + " ]";
-    }
-    
 }

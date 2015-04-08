@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,20 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "negocio_formas_pago")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "NegocioFormasPago.findAll", query = "SELECT n FROM NegocioFormasPago n"),
-    @NamedQuery(name = "NegocioFormasPago.findByIdFormaPago", query = "SELECT n FROM NegocioFormasPago n WHERE n.idFormaPago = :idFormaPago"),
-    @NamedQuery(name = "NegocioFormasPago.findByNombreFormaPago", query = "SELECT n FROM NegocioFormasPago n WHERE n.nombreFormaPago = :nombreFormaPago"),
-    @NamedQuery(name = "NegocioFormasPago.findByNombreCorto", query = "SELECT n FROM NegocioFormasPago n WHERE n.nombreCorto = :nombreCorto"),
-    @NamedQuery(name = "NegocioFormasPago.findByVenta", query = "SELECT n FROM NegocioFormasPago n WHERE n.venta = :venta"),
-    @NamedQuery(name = "NegocioFormasPago.findByCompra", query = "SELECT n FROM NegocioFormasPago n WHERE n.compra = :compra")})
-public class NegocioFormasPago implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_forma_pago")
-    private Integer idFormaPago;
+@AttributeOverride(name = "id", column = @Column(name = "id_forma_pago"))
+public class NegocioFormasPago extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -79,23 +62,15 @@ public class NegocioFormasPago implements Serializable {
     public NegocioFormasPago() {
     }
 
-    public NegocioFormasPago(Integer idFormaPago) {
-        this.idFormaPago = idFormaPago;
+    public NegocioFormasPago(Long idFormaPago) {
+        super(idFormaPago);
     }
 
-    public NegocioFormasPago(Integer idFormaPago, String nombreFormaPago, boolean venta, boolean compra) {
-        this.idFormaPago = idFormaPago;
+    public NegocioFormasPago(Long idFormaPago, String nombreFormaPago, boolean venta, boolean compra) {
+        super(idFormaPago);
         this.nombreFormaPago = nombreFormaPago;
         this.venta = venta;
         this.compra = compra;
-    }
-
-    public Integer getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(Integer idFormaPago) {
-        this.idFormaPago = idFormaPago;
     }
 
     public String getNombreFormaPago() {
@@ -148,29 +123,4 @@ public class NegocioFormasPago implements Serializable {
         this.cajasMovimientosList = cajasMovimientosList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idFormaPago != null ? idFormaPago.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof NegocioFormasPago)) {
-            return false;
-        }
-        NegocioFormasPago other = (NegocioFormasPago) object;
-        if ((this.idFormaPago == null && other.idFormaPago != null) || (this.idFormaPago != null && !this.idFormaPago.equals(other.idFormaPago))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.NegocioFormasPago[ idFormaPago=" + idFormaPago + " ]";
-    }
-    
 }

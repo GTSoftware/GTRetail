@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,19 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_monedas")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadMonedas.findAll", query = "SELECT c FROM ContabilidadMonedas c"),
-    @NamedQuery(name = "ContabilidadMonedas.findByIdMoneda", query = "SELECT c FROM ContabilidadMonedas c WHERE c.idMoneda = :idMoneda"),
-    @NamedQuery(name = "ContabilidadMonedas.findByNombreMoneda", query = "SELECT c FROM ContabilidadMonedas c WHERE c.nombreMoneda = :nombreMoneda"),
-    @NamedQuery(name = "ContabilidadMonedas.findByNombreCortoMoneda", query = "SELECT c FROM ContabilidadMonedas c WHERE c.nombreCortoMoneda = :nombreCortoMoneda"),
-    @NamedQuery(name = "ContabilidadMonedas.findBySimboloMoneda", query = "SELECT c FROM ContabilidadMonedas c WHERE c.simboloMoneda = :simboloMoneda")})
-public class ContabilidadMonedas implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_moneda")
-    private Integer idMoneda;
+@AttributeOverride(name = "id", column = @Column(name = "id_moneda"))
+public class ContabilidadMonedas extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -71,21 +55,13 @@ public class ContabilidadMonedas implements Serializable {
     public ContabilidadMonedas() {
     }
 
-    public ContabilidadMonedas(Integer idMoneda) {
-        this.idMoneda = idMoneda;
+    public ContabilidadMonedas(Long idMoneda) {
+        super(idMoneda);
     }
 
-    public ContabilidadMonedas(Integer idMoneda, String nombreMoneda) {
-        this.idMoneda = idMoneda;
+    public ContabilidadMonedas(Long idMoneda, String nombreMoneda) {
+        super(idMoneda);
         this.nombreMoneda = nombreMoneda;
-    }
-
-    public Integer getIdMoneda() {
-        return idMoneda;
-    }
-
-    public void setIdMoneda(Integer idMoneda) {
-        this.idMoneda = idMoneda;
     }
 
     public String getNombreMoneda() {
@@ -121,29 +97,4 @@ public class ContabilidadMonedas implements Serializable {
         this.bancosCuentasList = bancosCuentasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idMoneda != null ? idMoneda.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadMonedas)) {
-            return false;
-        }
-        ContabilidadMonedas other = (ContabilidadMonedas) object;
-        if ((this.idMoneda == null && other.idMoneda != null) || (this.idMoneda != null && !this.idMoneda.equals(other.idMoneda))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadMonedas[ idMoneda=" + idMoneda + " ]";
-    }
-    
 }

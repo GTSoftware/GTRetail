@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
@@ -34,6 +33,7 @@ import javax.persistence.criteria.Root;
  */
 @Stateless
 public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasComprobantes> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -45,11 +45,11 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
     public FiscalLetrasComprobantesFacade() {
         super(FiscalLetrasComprobantes.class);
     }
-    
+
     public FiscalLetrasComprobantes findLetraComprobante(int idResponsabildiadEmisor, FiscalResponsabilidadesIva ivaReceptor) {
         Query q = getEntityManager().createQuery("SELECT l FROM FiscalLetrasComprobantes l WHERE l.fiscalLetrasComprobantesPK.idResoponsabildiadIvaEmisor = :ivaEmisor AND l.fiscalLetrasComprobantesPK.idResoponsabildiadIvaReceptor = :ivaReceptor");
         q.setParameter("ivaEmisor", idResponsabildiadEmisor);
-        q.setParameter("ivaReceptor", ivaReceptor.getIdResoponsabildiadIva());
+        q.setParameter("ivaReceptor", ivaReceptor.getId());
         List<FiscalLetrasComprobantes> lista = q.getResultList();
         if (!lista.isEmpty()) {
             return lista.get(0);
@@ -76,5 +76,5 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
     public void createOrEdit(FiscalLetrasComprobantes entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

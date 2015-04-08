@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -43,18 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "legal_generos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "LegalGeneros.findAll", query = "SELECT l FROM LegalGeneros l"),
-    @NamedQuery(name = "LegalGeneros.findByIdGenero", query = "SELECT l FROM LegalGeneros l WHERE l.idGenero = :idGenero"),
-    @NamedQuery(name = "LegalGeneros.findByNombreGenero", query = "SELECT l FROM LegalGeneros l WHERE l.nombreGenero = :nombreGenero"),
-    @NamedQuery(name = "LegalGeneros.findBySimbolo", query = "SELECT l FROM LegalGeneros l WHERE l.simbolo = :simbolo")})
-public class LegalGeneros implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_genero")
-    private Integer idGenero;
+@AttributeOverride(name = "id", column = @Column(name = "id_genero"))
+public class LegalGeneros extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -74,22 +59,15 @@ public class LegalGeneros implements Serializable {
     public LegalGeneros() {
     }
 
-    public LegalGeneros(Integer idGenero) {
-        this.idGenero = idGenero;
+    public LegalGeneros(Long idGenero) {
+        super(idGenero);
     }
 
-    public LegalGeneros(Integer idGenero, String nombreGenero, String simbolo) {
-        this.idGenero = idGenero;
+    public LegalGeneros(Long idGenero, String nombreGenero, String simbolo) {
+        super(idGenero);
+
         this.nombreGenero = nombreGenero;
         this.simbolo = simbolo;
-    }
-
-    public Integer getIdGenero() {
-        return idGenero;
-    }
-
-    public void setIdGenero(Integer idGenero) {
-        this.idGenero = idGenero;
     }
 
     public String getNombreGenero() {
@@ -125,29 +103,4 @@ public class LegalGeneros implements Serializable {
         this.personasList = personasList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idGenero != null ? idGenero.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LegalGeneros)) {
-            return false;
-        }
-        LegalGeneros other = (LegalGeneros) object;
-        if ((this.idGenero == null && other.idGenero != null) || (this.idGenero != null && !this.idGenero.equals(other.idGenero))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.LegalGeneros[ idGenero=" + idGenero + " ]";
-    }
-    
 }

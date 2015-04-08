@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.LegalTiposPersoneriaFacade;
 import ar.com.gtsoftware.model.LegalTiposPersoneria;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "legalTiposPersoneriaConverter")
-public class LegalTiposPersoneriaConverter implements Converter {
+public class LegalTiposPersoneriaConverter extends AbstractBaseEntityConverter<LegalTiposPersoneria> {
 
     @EJB
     private LegalTiposPersoneriaFacade legalTiposPersoneriaFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public LegalTiposPersoneriaConverter() {
+    @Override
+    protected AbstractFacade<LegalTiposPersoneria> getFacade() {
+        return legalTiposPersoneriaFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Integer id;
-        try {
-            id = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return legalTiposPersoneriaFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(LegalTiposPersoneria.class)) {
-            return null;
-        }
-        LegalTiposPersoneria tipoPersoneria = (LegalTiposPersoneria) value;
-        return tipoPersoneria.getIdTipoPersoneria().toString();
-    }
 }

@@ -15,55 +15,27 @@
  */
 package ar.com.gtsoftware.converters;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Model
 @FacesConverter(value = "negocioCondicionesOperacionesConverter")
-public class NegocioCondicionesOperacionesConverter implements Converter {
+public class NegocioCondicionesOperacionesConverter extends AbstractBaseEntityConverter<NegocioCondicionesOperaciones> {
 
     @EJB
     private NegocioCondicionesOperacionesFacade negocioCondicionesOperacionesFacade;
 
-    /**
-     * Creates a new instance of UbicacionPaisesConverter
-     */
-    public NegocioCondicionesOperacionesConverter() {
+    @Override
+    protected AbstractFacade<NegocioCondicionesOperaciones> getFacade() {
+        return negocioCondicionesOperacionesFacade;
     }
 
-    @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        Long id;
-        try {
-            id = Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return negocioCondicionesOperacionesFacade.find(id);
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (!value.getClass().equals(NegocioCondicionesOperaciones.class)) {
-            return null;
-        }
-        NegocioCondicionesOperaciones condicionOperacion = (NegocioCondicionesOperaciones) value;
-        return condicionOperacion.getId().toString();
-    }
 }

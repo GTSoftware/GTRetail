@@ -18,14 +18,14 @@ package ar.com.gtsoftware.controller.ventas;
 import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.search.VentasSearchFilter;
+import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import ar.com.gtsoftware.utils.UtilUI;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.DataModel;
 
 /**
  *
@@ -38,7 +38,8 @@ public class SearchVentasBean implements Serializable {
     @EJB
     private VentasFacade ventasFacade;
     private VentasSearchFilter filter = new VentasSearchFilter(UtilUI.getBeginOfToday(), UtilUI.getEndOfToday(), Boolean.FALSE);
-    private List<Ventas> ventasList = new ArrayList<>();
+
+    private DataModel<Ventas> dataModel;
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
@@ -53,8 +54,7 @@ public class SearchVentasBean implements Serializable {
      * Realiza la búsqueda según el filtro establecido
      */
     public void search() {
-        ventasList.clear();
-        ventasList.addAll(ventasFacade.findBySearchFilter(filter));
+        dataModel = null;
         calcularTotales();
     }
 
@@ -62,15 +62,15 @@ public class SearchVentasBean implements Serializable {
         totalVentasFacturadas = BigDecimal.ZERO;
         totalVentas = BigDecimal.ZERO;
         totalVentasSinFacturar = BigDecimal.ZERO;
-
-        for (Ventas v : ventasList) {
-            totalVentas = totalVentas.add(v.getTotal());
-            if (v.getIdRegistroIva() != null) {
-                totalVentasFacturadas = totalVentasFacturadas.add(v.getTotal());
-            } else {
-                totalVentasSinFacturar = totalVentasSinFacturar.add(v.getTotal());
-            }
-        }
+        //TODO ir a la base de datos y obtener totales
+//        for (Ventas v : dataModel.iterator()) {
+//            totalVentas = totalVentas.add(v.getTotal());
+//            if (v.getIdRegistroIva() != null) {
+//                totalVentasFacturadas = totalVentasFacturadas.add(v.getTotal());
+//            } else {
+//                totalVentasSinFacturar = totalVentasSinFacturar.add(v.getTotal());
+//            }
+//        }
     }
 
     public VentasSearchFilter getFilter() {
@@ -79,14 +79,6 @@ public class SearchVentasBean implements Serializable {
 
     public void setFilter(VentasSearchFilter filter) {
         this.filter = filter;
-    }
-
-    public List<Ventas> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Ventas> ventasList) {
-        this.ventasList = ventasList;
     }
 
     public VentasFacade getVentasFacade() {
@@ -119,6 +111,13 @@ public class SearchVentasBean implements Serializable {
 
     public void setTotalVentasSinFacturar(BigDecimal totalVentasSinFacturar) {
         this.totalVentasSinFacturar = totalVentasSinFacturar;
+    }
+
+    public DataModel<Ventas> getDataModel() {
+        if (dataModel == null) {
+            dataModel = new LazyEntityDataModel<>(ventasFacade, filter);
+        }
+        return dataModel;
     }
 
 }

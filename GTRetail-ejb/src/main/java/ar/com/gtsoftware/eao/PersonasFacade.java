@@ -19,14 +19,11 @@ import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Personas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -51,35 +48,11 @@ public class PersonasFacade extends AbstractFacade<Personas> {
 
     @Override
     public List<Personas> findBySearchFilter(AbstractSearchFilter psf) {
-        if (psf.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Personas> cq = cb.createQuery(Personas.class);
-            Root<Personas> persona = cq.from(Personas.class);
-            cq.select(persona);
-            Predicate p = createWhereFromSearchFilter(psf, cb, persona);
-            cq.where(p);
-            TypedQuery<Personas> q = em.createQuery(cq);
-
-            List<Personas> personasList = q.getResultList();
-            return personasList;
-        }
-        return new ArrayList<>();
+        return findBySearchFilter(psf, 1, Integer.MAX_VALUE);
     }
 
     @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Personas> cq = cb.createQuery(Personas.class);
-        Root<Personas> persona = cq.from(Personas.class);
-        cq.select(persona);
-        Predicate p = createWhereFromSearchFilter(sf, cb, persona);
-        cq.where(p);
-        javax.persistence.Query q = getEntityManager().createQuery(cq);
-        return ((Long) q.getSingleResult()).intValue();
-    }
-
-    @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Personas> persona) {
+    protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Personas> persona) {
 
         PersonasSearchFilter psf = (PersonasSearchFilter) sf;
         Predicate p = null;
@@ -122,11 +95,6 @@ public class PersonasFacade extends AbstractFacade<Personas> {
         }
         return p;
 
-    }
-
-    @Override
-    public void createOrEdit(Personas entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

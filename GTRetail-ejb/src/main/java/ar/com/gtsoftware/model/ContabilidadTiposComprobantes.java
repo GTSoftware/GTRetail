@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,18 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_tipos_comprobantes")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ContabilidadTiposComprobantes.findAll", query = "SELECT c FROM ContabilidadTiposComprobantes c"),
-    @NamedQuery(name = "ContabilidadTiposComprobantes.findByIdTipoComprobante", query = "SELECT c FROM ContabilidadTiposComprobantes c WHERE c.idTipoComprobante = :idTipoComprobante"),
-    @NamedQuery(name = "ContabilidadTiposComprobantes.findByNombreTipo", query = "SELECT c FROM ContabilidadTiposComprobantes c WHERE c.nombreTipo = :nombreTipo"),
-    @NamedQuery(name = "ContabilidadTiposComprobantes.findByDescripcionTipo", query = "SELECT c FROM ContabilidadTiposComprobantes c WHERE c.descripcionTipo = :descripcionTipo")})
-public class ContabilidadTiposComprobantes implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_tipo_comprobante")
-    private Integer idTipoComprobante;
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_comprobante"))
+public class ContabilidadTiposComprobantes extends BaseEntity {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -67,21 +52,13 @@ public class ContabilidadTiposComprobantes implements Serializable {
     public ContabilidadTiposComprobantes() {
     }
 
-    public ContabilidadTiposComprobantes(Integer idTipoComprobante) {
-        this.idTipoComprobante = idTipoComprobante;
+    public ContabilidadTiposComprobantes(Long idTipoComprobante) {
+        super(idTipoComprobante);
     }
 
-    public ContabilidadTiposComprobantes(Integer idTipoComprobante, String nombreTipo) {
-        this.idTipoComprobante = idTipoComprobante;
+    public ContabilidadTiposComprobantes(Long idTipoComprobante, String nombreTipo) {
+        super(idTipoComprobante);
         this.nombreTipo = nombreTipo;
-    }
-
-    public Integer getIdTipoComprobante() {
-        return idTipoComprobante;
-    }
-
-    public void setIdTipoComprobante(Integer idTipoComprobante) {
-        this.idTipoComprobante = idTipoComprobante;
     }
 
     public String getNombreTipo() {
@@ -109,29 +86,4 @@ public class ContabilidadTiposComprobantes implements Serializable {
         this.contabilidadRegistroContableList = contabilidadRegistroContableList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTipoComprobante != null ? idTipoComprobante.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContabilidadTiposComprobantes)) {
-            return false;
-        }
-        ContabilidadTiposComprobantes other = (ContabilidadTiposComprobantes) object;
-        if ((this.idTipoComprobante == null && other.idTipoComprobante != null) || (this.idTipoComprobante != null && !this.idTipoComprobante.equals(other.idTipoComprobante))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.ContabilidadTiposComprobantes[ idTipoComprobante=" + idTipoComprobante + " ]";
-    }
-    
 }

@@ -17,11 +17,11 @@
                 <p:tab title="#{msg.busquedaBasica}">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
-                        <p:calendar id="fechaDesdeField" value="#{searchVentasBean.filter.fechaVentaDesde}" 
+                        <p:calendar id="fechaDesdeField" value="#{searchVentasBean.filter.fechaVentaDesde}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 
                         <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
-                        <p:calendar id="fechaHastaField" value="#{searchVentasBean.filter.fechaVentaHasta}" 
+                        <p:calendar id="fechaHastaField" value="#{searchVentasBean.filter.fechaVentaHasta}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 
                         <p:outputLabel value="#{msg.cliente}:" for="idClienteField"/>
@@ -31,24 +31,24 @@
                             <f:validateLongRange minimum="0" />
 
 
-                            <p:commandButton icon="ui-icon-search"  
-                                             update=":formContenido:busquedaPersonasDialog" 
+                            <p:commandButton icon="ui-icon-search"
+                                             update=":formContenido:busquedaPersonasDialog"
                                              oncomplete="PF('clientesDialog').show()"
                                              process="@this" />
-                            <p:commandButton icon="ui-icon-close"  
+                            <p:commandButton icon="ui-icon-close"
                                              update=":formContenido:busquedaTab"
                                              action="#{searchVentasBean.filter.setIdPersona(null)}"
                                              />
 
                         </p:inputText>
-                        
+
                         <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
                         <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchVentasBean.filter.anulada}"/>
 
 
                     </h:panelGrid>
-                    <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}" 
-                                     value="#{msg.buscar}" 
+                    <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}"
+                                     value="#{msg.buscar}"
                                      update=":formContenido:ventasTable :formContenido:totalesVentasPanel"
                                      icon="ui-icon-search"/>
                 </p:tab>
@@ -60,13 +60,13 @@
 
             <h:panelGrid>
 
-                <p:dataTable id="ventasTable" value="#{searchVentasBean.ventasList}" var="venta"
+                <p:dataTable id="ventasTable" value="#{searchVentasBean.dataModel}" var="venta"
                              rows="15"
+                             lazy="true"
                              paginator="true"
-                             sortMode="multiple"
                              emptyMessage="#{msg.busquedaSinResultados}"
                              rowKey="#{venta.id}"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="10,15,30"
                              style="width: 100%"
                              resizableColumns="true"
@@ -130,12 +130,12 @@
                         <f:facet name="header">
                             #{msg.factura}
                         </f:facet>
-                        <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}" 
+                        <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}"
                                        value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
 
-                        <h:outputLabel rendered="#{empty venta.idRegistroIva and not venta.anulada}" 
+                        <h:outputLabel rendered="#{empty venta.idRegistroIva and not venta.anulada}"
                                        value="#{msg.no}" />
-                        <h:outputLabel rendered="#{venta.anulada}" 
+                        <h:outputLabel rendered="#{venta.anulada}"
                                        value="#{msg.anulada}" />
                     </p:column>
 
@@ -176,25 +176,25 @@
                 </h:panelGrid>
             </p:panel>
 
-            <p:dialog id='busquedaPersonasDialog' 
-                      header="#{msg.busquedaClientes}" 
+            <p:dialog id='busquedaPersonasDialog'
+                      header="#{msg.busquedaClientes}"
                       widgetVar="clientesDialog"
-                      resizable="true" 
+                      resizable="true"
                       closeOnEscape="true"
-                      showEffect="fade" hideEffect="clip" modal="true"> 
+                      showEffect="fade" hideEffect="clip" modal="true">
 
                 <gtsoftware:busquedaPersonas personaSeleccionada="#{searchVentasBean.filter.idPersona}"
                                              textoBusqueda="#{clientesSearchBean.filter.txt}"
                                              busquedaAction="#{clientesSearchBean.doSearch()}"
-                                             personasList="#{clientesSearchBean.clientesList}"
+                                             personasList="#{clientesSearchBean.dataModel}"
                                              >
                 </gtsoftware:busquedaPersonas>
                 <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                                 oncomplete="clientesDialog.hide()" 
-                                 update=":formContenido:busquedaTab"/> 
+                                 oncomplete="PF('clientesDialog').hide()"
+                                 update=":formContenido:busquedaTab"/>
 
 
-            </p:dialog>  
+            </p:dialog>
 
         </p:panel>
     </h:form>

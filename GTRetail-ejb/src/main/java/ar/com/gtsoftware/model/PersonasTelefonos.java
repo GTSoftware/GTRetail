@@ -15,21 +15,15 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,19 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "personas_telefonos")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "PersonasTelefonos.findAll", query = "SELECT p FROM PersonasTelefonos p"),
-    @NamedQuery(name = "PersonasTelefonos.findByIdTelefono", query = "SELECT p FROM PersonasTelefonos p WHERE p.idTelefono = :idTelefono"),
-    @NamedQuery(name = "PersonasTelefonos.findByNumero", query = "SELECT p FROM PersonasTelefonos p WHERE p.numero = :numero"),
-    @NamedQuery(name = "PersonasTelefonos.findByReferencia", query = "SELECT p FROM PersonasTelefonos p WHERE p.referencia = :referencia")})
-public class PersonasTelefonos implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_telefono"))
+public class PersonasTelefonos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id_telefono")
-    private Integer idTelefono;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -71,21 +55,13 @@ public class PersonasTelefonos implements Serializable {
     public PersonasTelefonos() {
     }
 
-    public PersonasTelefonos(Integer idTelefono) {
-        this.idTelefono = idTelefono;
+    public PersonasTelefonos(Long idTelefono) {
+        super(idTelefono);
     }
 
-    public PersonasTelefonos(Integer idTelefono, String numero) {
-        this.idTelefono = idTelefono;
+    public PersonasTelefonos(Long idTelefono, String numero) {
+        super(idTelefono);
         this.numero = numero;
-    }
-
-    public Integer getIdTelefono() {
-        return idTelefono;
-    }
-
-    public void setIdTelefono(Integer idTelefono) {
-        this.idTelefono = idTelefono;
     }
 
     public String getNumero() {
@@ -118,31 +94,6 @@ public class PersonasTelefonos implements Serializable {
 
     public void setEliminado(boolean eliminado) {
         this.eliminado = eliminado;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idTelefono != null ? idTelefono.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PersonasTelefonos)) {
-            return false;
-        }
-        PersonasTelefonos other = (PersonasTelefonos) object;
-        if ((this.idTelefono == null && other.idTelefono != null) || (this.idTelefono != null && !this.idTelefono.equals(other.idTelefono))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.PersonasTelefonos[ idTelefono=" + idTelefono + " ]";
     }
 
 }

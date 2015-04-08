@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "fiscal_libro_iva_ventas")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_factura"))
-public class FiscalLibroIvaVentas extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class FiscalLibroIvaVentas extends BaseEntity {
 
     @Basic(optional = false)
     @NotNull
