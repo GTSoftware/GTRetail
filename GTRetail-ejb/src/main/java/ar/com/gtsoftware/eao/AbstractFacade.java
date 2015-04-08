@@ -97,8 +97,8 @@ public abstract class AbstractFacade<T extends GTEntity> {
             TypedQuery<T> q = getEntityManager().createQuery(cq);
             q.setMaxResults(maxResults);
             q.setFirstResult(firstResult);
-            List<T> personasList = q.getResultList();
-            return personasList;
+            List<T> resultList = q.getResultList();
+            return resultList;
         }
         return new ArrayList<>();
     }

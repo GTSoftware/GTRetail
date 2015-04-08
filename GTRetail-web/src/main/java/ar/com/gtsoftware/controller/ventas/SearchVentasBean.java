@@ -59,18 +59,9 @@ public class SearchVentasBean implements Serializable {
     }
 
     private void calcularTotales() {
-        totalVentasFacturadas = BigDecimal.ZERO;
-        totalVentas = BigDecimal.ZERO;
-        totalVentasSinFacturar = BigDecimal.ZERO;
-        //TODO ir a la base de datos y obtener totales
-//        for (Ventas v : dataModel.iterator()) {
-//            totalVentas = totalVentas.add(v.getTotal());
-//            if (v.getIdRegistroIva() != null) {
-//                totalVentasFacturadas = totalVentasFacturadas.add(v.getTotal());
-//            } else {
-//                totalVentasSinFacturar = totalVentasSinFacturar.add(v.getTotal());
-//            }
-//        }
+        totalVentasFacturadas = ventasFacade.calcularTotalVentasFacturadasBySearchFilter(filter);
+        totalVentas = ventasFacade.calcularTotalVentasBySearchFilter(filter);
+        totalVentasSinFacturar = ventasFacade.calcularTotalVentasSinFacturarBySearchFilter(filter);
     }
 
     public VentasSearchFilter getFilter() {

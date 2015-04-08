@@ -20,10 +20,14 @@ import ar.com.gtsoftware.model.Ventas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -106,4 +110,65 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         return p;
     }
 
+    /**
+     * Obtiene el total de ventas dado el filtro
+     * @param sf
+     * @return 
+     */
+    public BigDecimal calcularTotalVentasBySearchFilter(AbstractSearchFilter sf) {
+        if (sf.hasFilter()) {
+            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+            Root<Ventas> root = cq.from(Ventas.class);
+            cq.select(cb.sum(root.get(Ventas_.total)));
+            Predicate p = createWhereFromSearchFilter(sf, cb, root);
+            cq.where(p);
+            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+            return q.getSingleResult();
+
+        }
+        return BigDecimal.ZERO;
+    }
+    
+    /**
+     * Obtiene el total de ventas facturadas
+     * @param sf
+     * @return 
+     */
+    public BigDecimal calcularTotalVentasFacturadasBySearchFilter(AbstractSearchFilter sf) {
+        if (sf.hasFilter()) {
+            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+            Root<Ventas> root = cq.from(Ventas.class);
+            cq.select(cb.sum(root.get(Ventas_.total)));
+            Predicate p = createWhereFromSearchFilter(sf, cb, root);
+            p = appendAndPredicate(cb, cb.not(cb.isNull(root.get(Ventas_.idRegistroIva))), p);
+            cq.where(p);
+            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+            return q.getSingleResult();
+
+        }
+        return BigDecimal.ZERO;
+    }
+    
+    /**
+     * Obtiene el total de ventas sin facturar
+     * @param sf
+     * @return 
+     */
+    public BigDecimal calcularTotalVentasSinFacturarBySearchFilter(AbstractSearchFilter sf) {
+        if (sf.hasFilter()) {
+            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+            Root<Ventas> root = cq.from(Ventas.class);
+            cq.select(cb.sum(root.get(Ventas_.total)));
+            Predicate p = createWhereFromSearchFilter(sf, cb, root);
+            p = appendAndPredicate(cb, cb.isNull(root.get(Ventas_.idRegistroIva)), p);
+            cq.where(p);
+            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+            return q.getSingleResult();
+
+        }
+        return BigDecimal.ZERO;
+    }
 }
