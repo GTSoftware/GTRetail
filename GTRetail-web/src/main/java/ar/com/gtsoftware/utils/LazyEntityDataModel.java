@@ -18,6 +18,7 @@ package ar.com.gtsoftware.utils;
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.model.BaseEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 /**
@@ -70,11 +72,21 @@ public class LazyEntityDataModel<Entity extends BaseEntity>
         setRowCount(count);
         setPageSize(pageSize);
         if (count > 0) {
+            if (sortField != null) {
+                filter.clearSortFields();
+                SortField sof = new SortField(sortField, !sortOrder.equals(SortOrder.DESCENDING));
+                filter.addSortField(sof);
+            }
             resultsFromEao = facade.findBySearchFilter(filter, first, pageSize);
             return resultsFromEao;
 
         }
         return resultsFromEao;
+    }
+
+    @Override
+    public List<Entity> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override

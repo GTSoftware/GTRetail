@@ -17,12 +17,14 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -94,6 +96,19 @@ public abstract class AbstractFacade<T extends GTEntity> {
             cq.select(root);
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
             cq.where(p);
+            if (sf.hasOrderFields()) {
+                List<Order> orders = new ArrayList<>();
+                for (SortField sof : sf.getSortFields()) {
+                    Order ord;
+                    if (sof.isAscending()) {
+                        ord = cb.asc(root.get(sof.getFieldName()));
+                    } else {
+                        ord = cb.desc(root.get(sof.getFieldName()));
+                    }
+                    orders.add(ord);
+                }
+                cq.orderBy(orders);
+            }
             TypedQuery<T> q = getEntityManager().createQuery(cq);
             q.setMaxResults(maxResults);
             q.setFirstResult(firstResult);

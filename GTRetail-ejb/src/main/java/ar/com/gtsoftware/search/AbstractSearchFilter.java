@@ -15,6 +15,9 @@
  */
 package ar.com.gtsoftware.search;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Clase abstracta que representa una agrupación de criterios de filtrado
  *
@@ -24,8 +27,37 @@ package ar.com.gtsoftware.search;
  */
 public abstract class AbstractSearchFilter {
 
+    private List<SortField> sortFields;
+
     public boolean hasFilter() {
         return false;
+    }
+
+    public boolean hasOrderFields() {
+        return (sortFields != null && !sortFields.isEmpty());
+    }
+
+    public List<SortField> getSortFields() {
+        return sortFields;
+    }
+
+    /**
+     * Agrega un nuevo campo de ordenamiento
+     *
+     * @param sortField
+     */
+    public void addSortField(SortField sortField) {
+        if (sortFields == null) {
+            sortFields = new ArrayList<>();
+        }
+        sortFields.add(sortField);
+    }
+
+    /**
+     * Setea en nulo la lista de campos de ordenamiento
+     */
+    public void clearSortFields() {
+        sortFields = null;
     }
 
 }
