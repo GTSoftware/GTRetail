@@ -50,7 +50,7 @@ public class ProveedoresOrdenesCompraFacade extends AbstractFacade<ProveedoresOr
     }
 
     @Override
-    public List<ProveedoresOrdenesCompra> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<ProveedoresOrdenesCompra> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -66,7 +66,7 @@ public class VentasLineasFacade extends AbstractFacade<VentasLineas> {
     }
 
     @Override
-    public List<VentasLineas> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<VentasLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

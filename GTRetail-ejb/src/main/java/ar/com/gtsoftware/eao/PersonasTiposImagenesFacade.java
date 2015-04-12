@@ -50,7 +50,7 @@ public class PersonasTiposImagenesFacade extends AbstractFacade<PersonasTiposIma
     }
 
     @Override
-    public List<PersonasTiposImagenes> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<PersonasTiposImagenes> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

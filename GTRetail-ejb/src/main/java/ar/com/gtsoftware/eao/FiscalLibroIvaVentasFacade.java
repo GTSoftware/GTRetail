@@ -120,7 +120,7 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
     }
 
     @Override
-    public List<FiscalLibroIvaVentas> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<FiscalLibroIvaVentas> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

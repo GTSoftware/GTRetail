@@ -50,7 +50,7 @@ public class StockMovimientosTiposFacade extends AbstractFacade<StockMovimientos
     }
 
     @Override
-    public List<StockMovimientosTipos> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<StockMovimientosTipos> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

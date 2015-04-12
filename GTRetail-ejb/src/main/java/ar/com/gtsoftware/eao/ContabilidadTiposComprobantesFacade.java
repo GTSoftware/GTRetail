@@ -50,7 +50,7 @@ public class ContabilidadTiposComprobantesFacade extends AbstractFacade<Contabil
     }
 
     @Override
-    public List<ContabilidadTiposComprobantes> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<ContabilidadTiposComprobantes> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

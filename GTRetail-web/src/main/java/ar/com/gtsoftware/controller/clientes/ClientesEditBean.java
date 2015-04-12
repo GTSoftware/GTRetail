@@ -206,7 +206,7 @@ public class ClientesEditBean implements Serializable {
             throw new Exception("El documento debe ser un número!");
         }
         PersonasSearchFilter psf = new PersonasSearchFilter(clienteActual.getIdTipoDocumento(), clienteActual.getDocumento(), Boolean.TRUE, Boolean.TRUE, null);
-        List<Personas> result = personasFacade.findBySearchFilter(psf);
+        List<Personas> result = personasFacade.findAllBySearchFilter(psf);
         if (clienteActual.isNew()) {
             if (result != null && !result.isEmpty()) {
                 throw new Exception("Ya existe un cliente con ese número de documento!");

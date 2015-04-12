@@ -80,7 +80,7 @@ public class LegalGenerosFacade extends AbstractFacade<LegalGeneros> {
     }
 
     @Override
-    public List<LegalGeneros> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<LegalGeneros> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

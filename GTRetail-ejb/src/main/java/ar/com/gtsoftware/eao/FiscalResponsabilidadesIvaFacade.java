@@ -50,7 +50,7 @@ public class FiscalResponsabilidadesIvaFacade extends AbstractFacade<FiscalRespo
     }
 
     @Override
-    public List<FiscalResponsabilidadesIva> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<FiscalResponsabilidadesIva> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

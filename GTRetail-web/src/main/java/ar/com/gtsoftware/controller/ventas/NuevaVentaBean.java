@@ -24,6 +24,7 @@ import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
@@ -31,6 +32,7 @@ import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -42,25 +44,24 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@Named(value = "nuevaVentaBean")
-@ConversationScoped
+@ManagedBean(name = "nuevaVentaBean")
+@ViewScoped
 public class NuevaVentaBean implements Serializable {
 
-    @Inject
-    private Conversation conversation;
-
+//    @Inject
+//    private Conversation conversation;
     @EJB
     private PersonasFacade clientesFacade;
     @EJB
@@ -75,10 +76,11 @@ public class NuevaVentaBean implements Serializable {
     private AuthBackingBean authBackingBean;
     private Ventas ventaActual;
     private ProductosSearchFilter productoSearchFilter;
+    private PersonasSearchFilter personasSearchFilter;
     private Productos productoActual;
     private VentasLineas lineaActual; //Linea temporal actual antes de asignarla a la venta
     private List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
-    private Long idCliente;
+//    private Long idCliente;
     private VentasPagos pagoActual = new VentasPagos();
     private List<VentasPagos> pagos = new ArrayList<>();
 
@@ -88,23 +90,25 @@ public class NuevaVentaBean implements Serializable {
     public NuevaVentaBean() {
     }
 
+    @PostConstruct
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            if (conversation.isTransient()) {
-                conversation.begin();
-                productoSearchFilter = new ProductosSearchFilter();
-                productoSearchFilter.setActivo(Boolean.TRUE);
-                PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE,
-                        Boolean.TRUE, null);
-                ventaActual = new Ventas();
-                ventaActual.setAnulada(false);
-                ventaActual.setSaldo(BigDecimal.ZERO);
-                ventaActual.setTotal(BigDecimal.ZERO);
-                ventaActual.setIdUsuario(authBackingBean.getUserLoggedIn());
-                pagoActual = new VentasPagos();
-                inicializarLineaVenta();
-            }
+//            if (conversation.isTransient()) {
+//                conversation.begin();
+            productoSearchFilter = new ProductosSearchFilter();
+            productoSearchFilter.setActivo(Boolean.TRUE);
+            personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE,
+                    Boolean.TRUE, null);
+            personasSearchFilter.addSortField(new SortField("razonSocial", true));
+            ventaActual = new Ventas();
+            ventaActual.setAnulada(false);
+            ventaActual.setSaldo(BigDecimal.ZERO);
+            ventaActual.setTotal(BigDecimal.ZERO);
+            ventaActual.setIdUsuario(authBackingBean.getUserLoggedIn());
+            pagoActual = new VentasPagos();
+            inicializarLineaVenta();
         }
+//        }
     }
 
     /**
@@ -124,12 +128,11 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
-    public void buscarClientesPorClave() {
-        if (idCliente != null) {
-            ventaActual.setIdPersona(clientesFacade.find(idCliente));
-        }
-    }
-
+//    public void buscarClientesPorClave() {
+//        if (idCliente != null) {
+//            ventaActual.setIdPersona(clientesFacade.find(idCliente));
+//        }
+//    }
     /**
      * Calcula el subtotal de la línea de venta
      */
@@ -315,7 +318,7 @@ public class NuevaVentaBean implements Serializable {
                 ventaActual.setSaldo(ventaActual.getTotal());
                 ventasBean.guardarVenta(ventaActual, pagos);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta", "Venta guardada exitosamente!"));
-                endConversation();
+                //endConversation();
                 return "/protected/ventas/index";
             } catch (Exception ex) {
                 Logger.getLogger(NuevaVentaBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -326,7 +329,7 @@ public class NuevaVentaBean implements Serializable {
     }
 
     public String cancelar() {
-        endConversation();
+        //endConversation();
         return "/protected/ventas/index.xhtml";
     }
 
@@ -345,12 +348,16 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
-    public void endConversation() {
-        if (!conversation.isTransient()) {
-            conversation.end();
-        }
+    public List<Personas> findClientesByString(String query) {
+        personasSearchFilter.setTxt(query);
+        return clientesFacade.findBySearchFilter(personasSearchFilter, 0, 15);
     }
 
+//    public void endConversation() {
+//        if (!conversation.isTransient()) {
+//            conversation.end();
+//        }
+//    }
     public ProductosSearchFilter getProductoSearchFilter() {
         return productoSearchFilter;
     }
@@ -391,14 +398,12 @@ public class NuevaVentaBean implements Serializable {
         this.importesIVA = importesIVA;
     }
 
-    public Long getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
-    }
-
+//    public Long getIdCliente() {
+//        return idCliente;
+//    }
+//    public void setIdCliente(Long idCliente) {
+//        this.idCliente = idCliente;
+//    }
     public List<NegocioCondicionesOperaciones> getCondicionesVentaList() {
         return condicionesOperacionesFacade.findAll();
     }
@@ -423,12 +428,11 @@ public class NuevaVentaBean implements Serializable {
         this.pagos = pagos;
     }
 
-    public Conversation getConversation() {
-        return conversation;
-    }
-
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
-    }
-
+//    public Conversation getConversation() {
+//        return conversation;
+//    }
+//
+//    public void setConversation(Conversation conversation) {
+//        this.conversation = conversation;
+//    }
 }

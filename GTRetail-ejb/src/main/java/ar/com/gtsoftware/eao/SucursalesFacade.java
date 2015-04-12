@@ -50,7 +50,7 @@ public class SucursalesFacade extends AbstractFacade<Sucursales> {
     }
 
     @Override
-    public List<Sucursales> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Sucursales> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

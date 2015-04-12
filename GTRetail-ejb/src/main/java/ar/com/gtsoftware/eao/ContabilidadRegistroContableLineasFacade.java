@@ -50,7 +50,7 @@ public class ContabilidadRegistroContableLineasFacade extends AbstractFacade<Con
     }
 
     @Override
-    public List<ContabilidadRegistroContableLineas> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<ContabilidadRegistroContableLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

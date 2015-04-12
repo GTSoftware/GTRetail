@@ -125,7 +125,7 @@ public class ProductosFacade extends AbstractFacade<Productos> {
     }
 
     @Override
-    public List<Productos> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Productos> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

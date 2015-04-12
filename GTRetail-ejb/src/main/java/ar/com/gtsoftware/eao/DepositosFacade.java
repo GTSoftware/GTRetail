@@ -50,7 +50,7 @@ public class DepositosFacade extends AbstractFacade<Depositos> {
     }
 
     @Override
-    public List<Depositos> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Depositos> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

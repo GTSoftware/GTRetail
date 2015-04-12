@@ -50,7 +50,7 @@ public class NegocioCondicionesOperacionesFacade extends AbstractFacade<NegocioC
     }
 
     @Override
-    public List<NegocioCondicionesOperaciones> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<NegocioCondicionesOperaciones> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

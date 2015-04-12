@@ -63,7 +63,7 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
     }
 
     @Override
-    public List<FiscalLetrasComprobantes> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<FiscalLetrasComprobantes> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

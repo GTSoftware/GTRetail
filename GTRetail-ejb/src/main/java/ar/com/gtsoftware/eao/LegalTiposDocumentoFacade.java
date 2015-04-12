@@ -50,7 +50,7 @@ public class LegalTiposDocumentoFacade extends AbstractFacade<LegalTiposDocument
     }
 
     @Override
-    public List<LegalTiposDocumento> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<LegalTiposDocumento> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

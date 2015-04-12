@@ -114,7 +114,7 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
     }
 
     @Override
-    public List<Usuarios> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Usuarios> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

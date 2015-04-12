@@ -51,7 +51,7 @@ public class ProductosMarcasFacade extends AbstractFacade<ProductosMarcas> {
     }
 
     @Override
-    public List<ProductosMarcas> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<ProductosMarcas> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

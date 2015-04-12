@@ -50,7 +50,7 @@ public class BancosCuentaCorrienteFacade extends AbstractFacade<BancosCuentaCorr
     }
 
     @Override
-    public List<BancosCuentaCorriente> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<BancosCuentaCorriente> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

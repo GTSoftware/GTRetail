@@ -82,7 +82,7 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
     }
 
     @Override
-    public List<PersonasCuentaCorriente> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<PersonasCuentaCorriente> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

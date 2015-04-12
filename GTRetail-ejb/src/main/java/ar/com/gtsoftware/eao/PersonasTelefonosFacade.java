@@ -50,7 +50,7 @@ public class PersonasTelefonosFacade extends AbstractFacade<PersonasTelefonos> {
     }
 
     @Override
-    public List<PersonasTelefonos> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<PersonasTelefonos> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

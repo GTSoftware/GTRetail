@@ -50,7 +50,7 @@ public class CajasFacade extends AbstractFacade<Cajas> {
     }
 
     @Override
-    public List<Cajas> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Cajas> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

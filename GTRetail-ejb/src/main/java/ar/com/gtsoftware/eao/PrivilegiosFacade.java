@@ -50,7 +50,7 @@ public class PrivilegiosFacade extends AbstractFacade<Privilegios> {
     }
 
     @Override
-    public List<Privilegios> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Privilegios> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

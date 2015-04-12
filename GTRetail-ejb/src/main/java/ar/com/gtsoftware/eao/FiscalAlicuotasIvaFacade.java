@@ -50,7 +50,7 @@ public class FiscalAlicuotasIvaFacade extends AbstractFacade<FiscalAlicuotasIva>
     }
 
     @Override
-    public List<FiscalAlicuotasIva> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<FiscalAlicuotasIva> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

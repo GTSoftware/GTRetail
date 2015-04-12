@@ -79,7 +79,7 @@ public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
     }
 
     @Override
-    public List<NegocioFormasPago> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<NegocioFormasPago> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

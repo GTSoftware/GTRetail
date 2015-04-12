@@ -50,7 +50,7 @@ public class VentasCargosFijosFacade extends AbstractFacade<VentasCargosFijos> {
     }
 
     @Override
-    public List<VentasCargosFijos> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<VentasCargosFijos> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

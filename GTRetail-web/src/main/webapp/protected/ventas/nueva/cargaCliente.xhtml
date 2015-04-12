@@ -9,32 +9,40 @@
 
     <p:fragment id="clienteFragment">
         <h:panelGrid id="clienteActualPanel" columns="2">
+            <!--
+                        <p:outputLabel for="idClienteField" value="#{msg.idCliente}"/>
 
-            <p:outputLabel for="idClienteField" value="#{msg.idCliente}"/>
+                       <p:inputText id="idClienteField" value="#{nuevaVentaBean.idCliente}" >
 
-            <p:inputText id="idClienteField" value="#{nuevaVentaBean.idCliente}" >
+                            <f:convertNumber integerOnly="true" />
+                            <f:validateLongRange minimum="0" />
 
-                <f:convertNumber integerOnly="true" />
-                <f:validateLongRange minimum="0" />
+                            <p:ajax  update="@parent"  listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
 
-                <p:ajax  update="@parent"  listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
+                            <p:commandButton icon="ui-icon-search"
+                                             update=":formContenido:busquedaPersonasDialog"
+                                             oncomplete="PF('clientesDialog').show()"
+                                             process="@none" />
 
-                <p:commandButton icon="ui-icon-search"
-                                 update=":formContenido:busquedaPersonasDialog"
-                                 oncomplete="PF('clientesDialog').show()"
-                                 process="@none" />
-
-                <p:message id="idClienteMessage" for="idClienteField"/>
-            </p:inputText>
+                            <p:message id="idClienteMessage" for="idClienteField"/>
+                        </p:inputText>-->
 
 
 
 
             <p:outputLabel for='razonSocialField'
                            value="#{msg.razonSocial}:"/>
-            <p:inputText id="razonSocialField"
-                         value="#{nuevaVentaBean.ventaActual.idPersona.razonSocial}"
-                         readonly="true"/>
+            <p:autoComplete id="razonSocialField"
+                            value="#{nuevaVentaBean.ventaActual.idPersona}"
+                            completeMethod="#{nuevaVentaBean.findClientesByString}"
+                            var="cli" itemLabel="#{cli.razonSocial}"
+                            itemValue="#{cli}"
+                            converter="#{personasConverter}"
+                            forceSelection="true"
+                            minQueryLength="3"
+                            >
+                <p:ajax  update="@parent" />
+            </p:autoComplete>
 
             <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
             <p:inputText id="ivaField" value="#{nuevaVentaBean.ventaActual.idPersona.idResponsabilidadIva.nombreResponsabildiad}"

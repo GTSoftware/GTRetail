@@ -85,7 +85,7 @@ public abstract class AbstractFacade<T extends GTEntity> {
 
     protected abstract Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root);
 
-    public List<T> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<T> findAllBySearchFilter(AbstractSearchFilter sf) {
         return findBySearchFilter(sf, 0, Integer.MAX_VALUE);
     }
 

@@ -97,7 +97,7 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
     }
 
     @Override
-    public List<Parametros> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<Parametros> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

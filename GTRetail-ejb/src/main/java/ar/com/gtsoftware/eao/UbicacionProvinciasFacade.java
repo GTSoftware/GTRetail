@@ -84,7 +84,7 @@ public class UbicacionProvinciasFacade extends AbstractFacade<UbicacionProvincia
     }
 
     @Override
-    public List<UbicacionProvincias> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<UbicacionProvincias> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

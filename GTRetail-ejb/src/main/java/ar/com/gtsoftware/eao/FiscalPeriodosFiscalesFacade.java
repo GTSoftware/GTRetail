@@ -75,7 +75,7 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
     }
 
     @Override
-    public List<FiscalPeriodosFiscales> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<FiscalPeriodosFiscales> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

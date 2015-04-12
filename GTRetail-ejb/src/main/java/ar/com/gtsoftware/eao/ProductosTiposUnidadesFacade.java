@@ -50,7 +50,7 @@ public class ProductosTiposUnidadesFacade extends AbstractFacade<ProductosTiposU
     }
 
     @Override
-    public List<ProductosTiposUnidades> findBySearchFilter(AbstractSearchFilter sf) {
+    public List<ProductosTiposUnidades> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
