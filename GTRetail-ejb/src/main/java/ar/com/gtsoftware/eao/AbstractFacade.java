@@ -98,29 +98,7 @@ public abstract class AbstractFacade<T extends GTEntity> {
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
             cq.where(p);
             if (sf.hasOrderFields()) {
-                List<Order> orders = new ArrayList<>();
-                for (SortField sof : sf.getSortFields()) {
-                    Order ord;
-                    Path<Object> path;
-
-                    String[] fields = sof.getFieldName().split("\\.");
-                    if (fields.length != 0) {
-                        path = root.get(fields[0]);
-                        for (int i = 1; i < fields.length; i++) {
-                            path = path.get(fields[i]);
-                        }
-                    } else {
-                        path = root.get(sof.getFieldName());
-                    }
-                    if (sof.isAscending()) {
-
-                        ord = cb.asc(path);
-                    } else {
-                        ord = cb.desc(path);
-                    }
-                    orders.add(ord);
-                }
-                cq.orderBy(orders);
+                cq.orderBy(createOrderFromSearchFilter(sf, root, cb));
             }
             TypedQuery<T> q = getEntityManager().createQuery(cq);
             q.setMaxResults(maxResults);
@@ -129,6 +107,32 @@ public abstract class AbstractFacade<T extends GTEntity> {
             return resultList;
         }
         return new ArrayList<>();
+    }
+
+    protected List<Order> createOrderFromSearchFilter(AbstractSearchFilter sf, Root<T> root, CriteriaBuilder cb) {
+        List<Order> orders = new ArrayList<>();
+        for (SortField sof : sf.getSortFields()) {
+            Order ord;
+            Path<Object> path;
+
+            String[] fields = sof.getFieldName().split("\\.");
+            if (fields.length != 0) {
+                path = root.get(fields[0]);
+                for (int i = 1; i < fields.length; i++) {
+                    path = path.get(fields[i]);
+                }
+            } else {
+                path = root.get(sof.getFieldName());
+            }
+            if (sof.isAscending()) {
+
+                ord = cb.asc(path);
+            } else {
+                ord = cb.desc(path);
+            }
+            orders.add(ord);
+        }
+        return orders;
     }
 
     public int countBySearchFilter(AbstractSearchFilter sf) {
