@@ -25,6 +25,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -100,10 +101,22 @@ public abstract class AbstractFacade<T extends GTEntity> {
                 List<Order> orders = new ArrayList<>();
                 for (SortField sof : sf.getSortFields()) {
                     Order ord;
-                    if (sof.isAscending()) {
-                        ord = cb.asc(root.get(sof.getFieldName()));
+                    Path<Object> path;
+
+                    String[] fields = sof.getFieldName().split("\\.");
+                    if (fields.length != 0) {
+                        path = root.get(fields[0]);
+                        for (int i = 1; i < fields.length; i++) {
+                            path = path.get(fields[i]);
+                        }
                     } else {
-                        ord = cb.desc(root.get(sof.getFieldName()));
+                        path = root.get(sof.getFieldName());
+                    }
+                    if (sof.isAscending()) {
+
+                        ord = cb.asc(path);
+                    } else {
+                        ord = cb.desc(path);
                     }
                     orders.add(ord);
                 }

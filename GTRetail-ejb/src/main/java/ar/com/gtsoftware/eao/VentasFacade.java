@@ -20,8 +20,6 @@ import ar.com.gtsoftware.model.Ventas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -112,8 +110,9 @@ public class VentasFacade extends AbstractFacade<Ventas> {
 
     /**
      * Obtiene el total de ventas dado el filtro
+     *
      * @param sf
-     * @return 
+     * @return
      */
     public BigDecimal calcularTotalVentasBySearchFilter(AbstractSearchFilter sf) {
         if (sf.hasFilter()) {
@@ -129,11 +128,12 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         }
         return BigDecimal.ZERO;
     }
-    
+
     /**
      * Obtiene el total de ventas facturadas
+     *
      * @param sf
-     * @return 
+     * @return
      */
     public BigDecimal calcularTotalVentasFacturadasBySearchFilter(AbstractSearchFilter sf) {
         if (sf.hasFilter()) {
@@ -150,11 +150,12 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         }
         return BigDecimal.ZERO;
     }
-    
+
     /**
      * Obtiene el total de ventas sin facturar
+     *
      * @param sf
-     * @return 
+     * @return
      */
     public BigDecimal calcularTotalVentasSinFacturarBySearchFilter(AbstractSearchFilter sf) {
         if (sf.hasFilter()) {
