@@ -1,17 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Error 403</title>
-    </h:head>
-    <h:body>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="/WEB-INF/templates/error_tpl.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <p:separator/>
         <h:form>
-            <p:panel header="No posee acceso al recurso solicitado...">
-                <h:graphicImage value="/resources/images/you-shall-not-pass.jpg"/>
-            </p:panel>
+
+            <h1>No posee acceso al recurso solicitado...</h1>
+            <br/>
+            <legend>Si considera que ésto es un error y debería tener acceso, por favor contáctese con el área de atención al usuario.</legend>
+
         </h:form>
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>
 

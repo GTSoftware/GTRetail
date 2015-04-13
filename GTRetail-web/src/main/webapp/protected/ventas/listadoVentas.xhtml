@@ -24,23 +24,24 @@
                         <p:calendar id="fechaHastaField" value="#{searchVentasBean.filter.fechaVentaHasta}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 
-                        <p:outputLabel value="#{msg.cliente}:" for="idClienteField"/>
-                        <p:inputText id="idClienteField" value="#{searchVentasBean.filter.idPersona.razonSocial}" readonly="true" >
+                        <p:outputLabel value="#{msg.cliente}:" for="razonSocialField"/>
+                        <h:panelGroup >
+                            <p:autoComplete id="razonSocialField"
+                                            value="#{searchVentasBean.filter.idPersona}"
+                                            completeMethod="#{searchVentasBean.findClientesByString}"
+                                            var="cli" itemLabel="#{cli.razonSocial}"
+                                            itemValue="#{cli}"
+                                            converter="#{personasConverter}"
+                                            forceSelection="true"
+                                            minQueryLength="3"
+                                            >
 
-                            <f:convertNumber integerOnly="true" />
-                            <f:validateLongRange minimum="0" />
-
-
-                            <p:commandButton icon="ui-icon-search"
-                                             update=":formContenido:busquedaPersonasDialog"
+                            </p:autoComplete>
+                            <p:commandButton id="buscarClienteButton" icon="ui-icon-search"
+                                             update=":busquedaPersonasDialogForm:busquedaPersonasDialog"
                                              oncomplete="PF('clientesDialog').show()"
                                              process="@this" />
-                            <p:commandButton icon="ui-icon-close"
-                                             update=":formContenido:busquedaTab"
-                                             action="#{searchVentasBean.filter.setIdPersona(null)}"
-                                             />
-
-                        </p:inputText>
+                        </h:panelGroup>
 
                         <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
                         <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchVentasBean.filter.anulada}"/>
@@ -49,8 +50,9 @@
                     </h:panelGrid>
                     <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}"
                                      value="#{msg.buscar}"
-                                     update=":formContenido:ventasTable :formContenido:totalesVentasPanel"
-                                     icon="ui-icon-search"/>
+                                     update="@form"
+                                     icon="ui-icon-search"
+                                     />
                 </p:tab>
 
                 <p:tab title="#{msg.busquedaAvanzada}" >
@@ -66,30 +68,52 @@
                              paginator="true"
                              emptyMessage="#{msg.busquedaSinResultados}"
                              rowKey="#{venta.id}"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                              rowsPerPageTemplate="10,15,30"
                              style="width: 100%"
                              resizableColumns="true"
                              scrollable="true"
                              >
+                    <f:facet name="{Exporters}">
+                        <h:commandLink>
 
+                            <p:graphicImage library="images" name="excel.png" width="24"/>
+                            <p:dataExporter type="xls" target="ventasTable" fileName="ventas" />
+                        </h:commandLink>
 
-                    <p:column sortBy="#{venta.id}" style="width: 2%">
+                        <h:commandLink>
+                            <p:graphicImage library="images" name="pdf.png" width="24"/>
+                            <p:dataExporter type="pdf" target="ventasTable" fileName="ventas"/>
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="images" name="csv.png" width="24"/>
+                            <p:dataExporter type="csv" target="ventasTable" fileName="ventas" />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage library="images" name="xml.png" width="24"/>
+                            <p:dataExporter type="xml" target="ventasTable" fileName="ventas" />
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column  sortBy="#{venta.id}" style="width: 2%">
                         <f:facet name="header">
-                            #{msg.tablaId}
+                            <h:outputLabel value="#{msg.tablaId}" />
                         </f:facet>
                         <h:outputLabel value="#{venta.id}"/>
                     </p:column>
-                    <p:column sortBy="#{venta.idSucursal.nombreSucursal}" >
+
+                    <p:column  sortBy="#{venta.idSucursal.nombreSucursal}" >
                         <f:facet name="header">
-                            #{msg.sucursal}
+                            <h:outputLabel value="#{msg.sucursal}"/>
                         </f:facet>
                         <h:outputLabel value="#{venta.idSucursal.nombreSucursal}"/>
                     </p:column>
 
                     <p:column sortBy="#{venta.fechaVenta}" >
                         <f:facet name="header">
-                            #{msg.fecha}
+                            <h:outputLabel value="#{msg.fecha}"/>
                         </f:facet>
                         <h:outputLabel value="#{venta.fechaVenta}">
                             <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
@@ -98,21 +122,21 @@
 
                     <p:column sortBy="#{venta.idPersona.razonSocial}">
                         <f:facet name="header">
-                            #{msg.tablaRazonSocial}
+                            <h:outputLabel value="#{msg.tablaRazonSocial}"/>
                         </f:facet>
                         <h:outputLabel value="#{venta.idPersona.razonSocial}"/>
                     </p:column>
 
                     <p:column sortBy="#{venta.idCondicionVenta.nombreCondicion}">
                         <f:facet name="header">
-                            #{msg.condicionVenta}
+                            <h:outputLabel value="#{msg.condicionVenta}"/>
                         </f:facet>
                         <h:outputLabel value="#{venta.idCondicionVenta.nombreCondicion}"/>
                     </p:column>
 
                     <p:column sortBy="#{venta.total}">
                         <f:facet name="header">
-                            #{msg.total}
+                            <h:outputLabel value="#{msg.total}"/>
                         </f:facet>
                         <h:outputLabel value="#{venta.total}">
                             <f:convertNumber groupingUsed="true" type="currency" />
@@ -120,7 +144,7 @@
                     </p:column>
                     <p:column sortBy="#{venta.saldo}">
                         <f:facet name="header">
-                            #{msg.saldo}
+                            <h:outputLabel value="#{msg.saldo}"/>
                         </f:facet>
                         <h:outputLabel value="#{venta.saldo}">
                             <f:convertNumber groupingUsed="true" type="currency" />
@@ -128,7 +152,7 @@
                     </p:column>
                     <p:column sortBy="#{venta.idRegistroIva}">
                         <f:facet name="header">
-                            #{msg.factura}
+                            <h:outputLabel value="#{msg.factura}"/>
                         </f:facet>
                         <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}"
                                        value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
@@ -141,7 +165,7 @@
 
 
 
-                    <p:column style="width: 32px" >
+                    <p:column style="width: 32px" exportable="false" >
                         <f:facet name="header">
                             #{msg.ver}
                         </f:facet>
@@ -175,28 +199,33 @@
                     </p:outputLabel>
                 </h:panelGrid>
             </p:panel>
-
-            <p:dialog id='busquedaPersonasDialog'
-                      header="#{msg.busquedaClientes}"
-                      widgetVar="clientesDialog"
-                      resizable="true"
-                      closeOnEscape="true"
-                      showEffect="fade" hideEffect="clip" modal="true">
-
-                <gtsoftware:busquedaPersonas personaSeleccionada="#{searchVentasBean.filter.idPersona}"
-                                             textoBusqueda="#{clientesSearchBean.filter.txt}"
-                                             busquedaAction="#{clientesSearchBean.doSearch()}"
-                                             personasList="#{clientesSearchBean.dataModel}"
-                                             >
-                </gtsoftware:busquedaPersonas>
-                <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                                 oncomplete="PF('clientesDialog').hide()"
-                                 update=":formContenido:busquedaTab"/>
-
-
-            </p:dialog>
-
         </p:panel>
+    </h:form>
+    <h:form id="busquedaPersonasDialogForm">
+
+        <p:dialog id='busquedaPersonasDialog'
+                  header="#{msg.busquedaClientes}"
+                  widgetVar="clientesDialog"
+                  resizable="true"
+                  closeOnEscape="true"
+                  showEffect="fade" hideEffect="clip" modal="true"
+                  dynamic="true">
+
+            <gtsoftware:busquedaPersonas personaSeleccionada="#{searchVentasBean.filter.idPersona}"
+                                         textoBusqueda="#{clientesSearchBean.filter.txt}"
+                                         busquedaAction="#{clientesSearchBean.doSearch()}"
+                                         personasList="#{clientesSearchBean.dataModel}"
+                                         >
+            </gtsoftware:busquedaPersonas>
+            <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                             oncomplete="PF('clientesDialog').hide()"
+                             process="@this"
+                             update=":formContenido:busquedaTab"/>
+
+
+        </p:dialog>
+
+
     </h:form>
 
 </html>

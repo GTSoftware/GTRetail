@@ -23,14 +23,14 @@ public abstract class FormatUtils {
 
     public static String uppercase(String s) {
         if (s != null) {
-            return s.toUpperCase();
+            return s.toUpperCase().trim();
         }
         return null;
     }
 
     public static String lowercase(String s) {
         if (s != null) {
-            return s.toLowerCase();
+            return s.toLowerCase().trim();
         }
         return null;
     }

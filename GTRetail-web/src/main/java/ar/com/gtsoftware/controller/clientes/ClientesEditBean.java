@@ -21,7 +21,6 @@ import ar.com.gtsoftware.eao.LegalGenerosFacade;
 import ar.com.gtsoftware.eao.LegalTiposDocumentoFacade;
 import ar.com.gtsoftware.eao.LegalTiposPersoneriaFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.eao.PersonasTelefonosFacade;
 import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
 import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
 import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
@@ -67,8 +66,7 @@ public class ClientesEditBean implements Serializable {
 
     @EJB
     private PersonasFacade personasFacade;
-    @EJB
-    private PersonasTelefonosFacade telefonosFacade;
+
     @EJB
     private LegalTiposPersoneriaFacade legalTiposPersoneriaFacade;
     @EJB
@@ -85,7 +83,6 @@ public class ClientesEditBean implements Serializable {
     private UbicacionProvinciasFacade provinciasFacade;
     private Personas clienteActual;
     private PersonasTelefonos telefonoActual = new PersonasTelefonos();
-    private List<PersonasTelefonos> telefonosToRemove = new ArrayList<>();
 
     /**
      * Creates a new instance of ClientesEditBean
@@ -129,26 +126,16 @@ public class ClientesEditBean implements Serializable {
                     personasFacade.create(clienteActual);
 
                 } else {
+
                     personasFacade.edit(clienteActual);
                 }
-                guardarTelefonos();
+
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cliente guardado exitosamente."));
             }
             clienteActual = personasFacade.find(clienteActual.getId());
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar:", e.getMessage()));
             Logger.getLogger(ClientesEditBean.class.getName()).log(Level.INFO, e.getMessage(), e);
-        }
-    }
-
-    private void guardarTelefonos() {
-        for (PersonasTelefonos pt : clienteActual.getPersonasTelefonosList()) {
-            telefonosFacade.createOrEdit(pt);
-        }
-        for (PersonasTelefonos pt : telefonosToRemove) {
-            if (pt.getId() != null) {
-                telefonosFacade.remove(pt);
-            }
         }
     }
 
@@ -164,14 +151,14 @@ public class ClientesEditBean implements Serializable {
     }
 
     public void borrarTelefono(PersonasTelefonos pt) {
-        telefonosToRemove.add(pt);
+
         clienteActual.getPersonasTelefonosList().remove(pt);
     }
 
     private String formatRazonSocial(String razonSocialCliente, String apellidos, String nombres, long tipoPersoneria) {
         String razonSocial = razonSocialCliente;
         if (tipoPersoneria == 1) {//Persona física
-            razonSocial = apellidos.concat(", ").concat(nombres);
+            razonSocial = apellidos.trim().concat(", ").concat(nombres).trim();
         }
         razonSocial = razonSocial.toUpperCase();
         return razonSocial;

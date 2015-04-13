@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Error 404</title>
-    </h:head>
-    <h:body>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="/WEB-INF/templates/error_tpl.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <p:separator/>
         <h:form>
-            <p:panel header="Recurso no encontrado...">
-                <h:graphicImage value="/resources/images/error404.jpg"/>
-                <em>
-                    La página solicitada no está disponible, quizás quieras probar algo de lo siguiente:
-                </em>
-                <ul>
-                    <li>Recargar la página</li>
-                    <li>Revisa la URL si es que la escribiste a mano para ver si existe algún error</li>
-                </ul>
-            </p:panel>
+
+            <h1>El recurso solicitado no existe</h1>
+            <br/>
+            <legend>El recurso solicitado no existe en este servidor.</legend>
+
         </h:form>
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>

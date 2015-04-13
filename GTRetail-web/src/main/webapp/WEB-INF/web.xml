@@ -36,12 +36,9 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>protected/index.xhtml</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    <error-page>
-        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/resources/pages/vewExpired.xhtml?nocid=true</location>
-    </error-page>
+
     <!-- Seguridad -->
     <login-config>
         <auth-method>FORM</auth-method>
@@ -78,22 +75,38 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    
+
     <security-role>
         <role-name>ADMINISTRADORES</role-name>
     </security-role>
-   
+
     <!-- Páginas de error -->
     <error-page>
         <error-code>404</error-code>
-        <location>/resources/pages/404.xhtml</location>
+        <location>/resources/pages/404.xhtml?nocid=true</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/resources/pages/403.xhtml</location>
+        <location>/resources/pages/403.xhtml?nocid=true</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/resources/pages/500.xhtml</location>
+        <location>/resources/pages/error.xhtml?nocid=true</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/resources/pages/vewExpired.xhtml?nocid=true</location>
+    </error-page>
+    <error-page>
+        <exception-type>org.jboss.weld.context.BusyConversationException</exception-type>
+        <location>/resources/pages/error.xhtml?nocid=true</location>
+    </error-page>
+    <error-page>
+        <exception-type>org.jboss.weld.context.NonexistentConversationException</exception-type>
+        <location>/resources/pages/error.xhtml?nocid=true</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/resources/pages/error.xhtml?nocid=true</location>
     </error-page>
 </web-app>

@@ -1,0 +1,44 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <title>GTRetail - Error</title>
+    </h:head>
+
+    <h:body>
+        <h:outputStylesheet name="css/default.css" />
+
+        <div id="top" >
+            <ui:insert name="top">
+                <h:form >
+                    <h:commandLink action="/index/index.xhtml faces-redirect=true">
+                        <p:graphicImage library="images" name="logo.png" height="75" width="auto" />
+                    </h:commandLink>
+                    <br/>
+
+
+                </h:form>
+
+            </ui:insert>
+        </div>
+        <div>
+            <div id="content" class="right_content" >
+                <ui:insert name="content">Content</ui:insert>
+            </div>
+        </div>
+        <div>
+            <div id="footer" >
+                <p:separator/>
+                <h:outputLabel value="Version:  #{version.version} Build: #{version.build}" />
+            </div>
+        </div>
+
+    </h:body>
+
+</html>

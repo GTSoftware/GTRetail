@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="/WEB-INF/templates/error_tpl.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+
+        <p:separator/>
+
+        <div class="control-group">
+            <legend>
+                Ha ocurrido un error en la aplicación...
+            </legend>
+            <em>
+                Sin embargo, estas son algunas de las cosas que podría probar para solucionarlo:
+            </em>
+            <ul>
+                <li>Recargar la página</li>
+                <li>Volver a intentarlo más tarde.</li>
+                <li>Volver al <a href="#{request.contextPath}/index.html">inicio.</a></li>
+
+            </ul>
+
+            <br/>
+            <em>
+                Estamos trabajando para solucionar el problema lo mejor posible.
+            </em>
+            <br/>
+            <em>
+                Si el problema persiste por favor contáctese con el área de atención al usuario.
+            </em>
+        </div>
+    </ui:define>
+</ui:composition>

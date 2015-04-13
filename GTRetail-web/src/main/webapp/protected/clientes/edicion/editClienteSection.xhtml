@@ -22,7 +22,7 @@
         </h:panelGrid>
 
 
-        <p:tabView >
+        <p:tabView id="tabPersona">
             <p:tab title="#{msg.datosFiliatorios}">
                 <h:form id="formDatosFiliatorios">
                     <h:panelGrid id="grid" columns="3">
@@ -158,33 +158,17 @@
             <p:tab title="#{msg.contacto}" >
                 <h:form id="formContacto" >
 
-                    <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();" value="#{msg.nuevo}"  icon="ui-icon-plus"  />
+                    <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"
+                                     value="#{msg.nuevo}"  icon="ui-icon-plus"  />
 
-                    <p:dialog header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true" >
-                        <h:outputLabel  value="#{clientesEditBean.telefonoActual.idTelefono}" />
-                        <h:panelGrid id="gridTelefono" columns="3" >
-                            <h:outputLabel for="telefonoField" value="#{msg.telefonoNumero}"/>
-                            <p:inputMask id="telefonoField" value="#{clientesEditBean.telefonoActual.numero}" mask="(099?9) 999999?999"
-                                         required="true" maxlength="50" />
-                            <p:message for="telefonoField" />
 
-                            <h:outputLabel for="referenciaField" value="#{msg.telefonoReferencia}"/>
-                            <p:inputText id="referenciaField" value="#{clientesEditBean.telefonoActual.referencia}" maxlength="100"/>
-                            <p:message for="referenciaField" />
-
-                        </h:panelGrid>
-                        <p:separator />
-                        <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{clientesEditBean.grabarTelefono()}" update="telefonosTable" onsuccess="PF('dlgAddTelefono').hide();" />
-                        <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" onclick="PF('dlgAddTelefono').hide();" />
-                        <h:outputLabel  value="#{clientesEditBean.telefonoActual.idPersona}" />
-                    </p:dialog>
 
                     <p:dataTable id="telefonosTable" value="#{clientesEditBean.clienteActual.personasTelefonosList}" var="telefono"
                                  rows="15"
                                  paginator="true"
                                  sortMode="multiple"
                                  emptyMessage="#{msg.telefonosEmpty}"
-                                 rowKey="#{telefono.idTelefono}"
+                                 rowKey="#{telefono.id}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,15,30"
                                  style="width: 100%"
@@ -220,16 +204,42 @@
                             <f:facet name="header">
                                 #{msg.acciones}
                             </f:facet>
-
-                            <p:rowEditor />
-                            <p:commandButton icon="ui-icon-trash" action="#{clientesEditBean.borrarTelefono(telefono)}"  update="telefonosTable" />
-
+                            <h:panelGroup >
+                                <p:rowEditor />
+                                <p:commandButton icon="ui-icon-trash" action="#{clientesEditBean.borrarTelefono(telefono)}"
+                                                 update="telefonosTable" process="@this"/>
+                            </h:panelGroup>
                         </p:column>
                     </p:dataTable>
                 </h:form>
             </p:tab>
         </p:tabView>
 
+    </h:form>
+    <h:form id="addTelefonoForm" >
+        <p:dialog id="addTelefonoDialog" header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true" >
+            <h:outputLabel  value="#{clientesEditBean.telefonoActual.id}" />
+            <h:panelGrid id="gridTelefono" columns="3" >
+                <h:outputLabel for="telefonoField" value="#{msg.telefonoNumero}"/>
+                <p:inputMask id="telefonoField" value="#{clientesEditBean.telefonoActual.numero}" mask="(099?9) 999999?999"
+                             required="true" maxlength="50" />
+                <p:message for="telefonoField" />
+
+                <h:outputLabel for="referenciaField" value="#{msg.telefonoReferencia}"/>
+                <p:inputText id="referenciaField" value="#{clientesEditBean.telefonoActual.referencia}" maxlength="100"/>
+                <p:message for="referenciaField" />
+
+            </h:panelGrid>
+            <p:separator />
+            <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk"
+                             action="#{clientesEditBean.grabarTelefono()}"
+                             update=":editClienteForm:tabPersona:formContacto"
+                             onsuccess="PF('dlgAddTelefono').hide();"
+                             process="@form"/>
+
+            <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" onclick="PF('dlgAddTelefono').hide();" />
+            <h:outputLabel  value="#{clientesEditBean.telefonoActual.idPersona}" />
+        </p:dialog>
     </h:form>
 </html>
 

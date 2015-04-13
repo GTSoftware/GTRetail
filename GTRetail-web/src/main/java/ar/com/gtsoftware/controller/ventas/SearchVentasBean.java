@@ -15,13 +15,17 @@
  */
 package ar.com.gtsoftware.controller.ventas;
 
+import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
+import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import ar.com.gtsoftware.utils.UtilUI;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -38,7 +42,9 @@ public class SearchVentasBean implements Serializable {
     @EJB
     private VentasFacade ventasFacade;
     private VentasSearchFilter filter = new VentasSearchFilter(UtilUI.getBeginOfToday(), UtilUI.getEndOfToday(), Boolean.FALSE);
-
+    @EJB
+    private PersonasFacade clientesFacade;
+    private PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
     private DataModel<Ventas> dataModel;
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
@@ -55,13 +61,17 @@ public class SearchVentasBean implements Serializable {
      */
     public void search() {
         dataModel = null;
-        calcularTotales();
     }
 
     private void calcularTotales() {
         totalVentasFacturadas = ventasFacade.calcularTotalVentasFacturadasBySearchFilter(filter);
         totalVentas = ventasFacade.calcularTotalVentasBySearchFilter(filter);
         totalVentasSinFacturar = ventasFacade.calcularTotalVentasSinFacturarBySearchFilter(filter);
+    }
+
+    public List<Personas> findClientesByString(String query) {
+        personasSearchFilter.setTxt(query);
+        return clientesFacade.findBySearchFilter(personasSearchFilter, 0, 15);
     }
 
     public VentasSearchFilter getFilter() {
@@ -107,6 +117,7 @@ public class SearchVentasBean implements Serializable {
     public DataModel<Ventas> getDataModel() {
         if (dataModel == null) {
             dataModel = new LazyEntityDataModel<>(ventasFacade, filter);
+            calcularTotales();
         }
         return dataModel;
     }

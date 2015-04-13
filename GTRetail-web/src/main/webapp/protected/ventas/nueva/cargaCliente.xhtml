@@ -9,40 +9,28 @@
 
     <p:fragment id="clienteFragment">
         <h:panelGrid id="clienteActualPanel" columns="2">
-            <!--
-                        <p:outputLabel for="idClienteField" value="#{msg.idCliente}"/>
-
-                       <p:inputText id="idClienteField" value="#{nuevaVentaBean.idCliente}" >
-
-                            <f:convertNumber integerOnly="true" />
-                            <f:validateLongRange minimum="0" />
-
-                            <p:ajax  update="@parent"  listener="#{nuevaVentaBean.buscarClientesPorClave()}" />
-
-                            <p:commandButton icon="ui-icon-search"
-                                             update=":formContenido:busquedaPersonasDialog"
-                                             oncomplete="PF('clientesDialog').show()"
-                                             process="@none" />
-
-                            <p:message id="idClienteMessage" for="idClienteField"/>
-                        </p:inputText>-->
-
-
-
 
             <p:outputLabel for='razonSocialField'
                            value="#{msg.razonSocial}:"/>
-            <p:autoComplete id="razonSocialField"
-                            value="#{nuevaVentaBean.ventaActual.idPersona}"
-                            completeMethod="#{nuevaVentaBean.findClientesByString}"
-                            var="cli" itemLabel="#{cli.razonSocial}"
-                            itemValue="#{cli}"
-                            converter="#{personasConverter}"
-                            forceSelection="true"
-                            minQueryLength="3"
-                            >
-                <p:ajax  update="@parent" />
-            </p:autoComplete>
+            <h:panelGroup >
+                <p:autoComplete id="razonSocialField"
+                                value="#{nuevaVentaBean.ventaActual.idPersona}"
+                                completeMethod="#{nuevaVentaBean.findClientesByString}"
+                                var="cli" itemLabel="#{cli.razonSocial}"
+                                itemValue="#{cli}"
+                                converter="#{personasConverter}"
+                                forceSelection="true"
+                                minQueryLength="3"
+                                >
+                    <p:ajax process="@this"
+                            update="ivaField documentoField nombrePaisField nombreProvinciaField nombreLocalidadField direccionField" />
+
+                </p:autoComplete>
+                <p:commandButton icon="ui-icon-search"
+                                 update=":formContenido:busquedaPersonasDialog"
+                                 oncomplete="PF('clientesDialog').show()"
+                                 process="@none" />
+            </h:panelGroup>
 
             <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
             <p:inputText id="ivaField" value="#{nuevaVentaBean.ventaActual.idPersona.idResponsabilidadIva.nombreResponsabildiad}"
@@ -87,7 +75,8 @@
         </gtsoftware:busquedaPersonas>
         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                          oncomplete="PF('clientesDialog').hide()"
-                         update=":formContenido:clienteFragment"/>
+                         update=":formContenido:clienteFragment"
+                         process="@this"/>
 
 
     </p:dialog>

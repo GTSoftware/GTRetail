@@ -61,21 +61,21 @@ limitations under the License.
                              scrollable="true" >
 
                     <p:ajax event="rowSelect"  />
-                    <p:column style="text-align: left; width:5%">
+                    <p:column style="text-align: left; width:5%" sortBy="#{persona.id}" >
                         <f:facet name="header">
                             #{msg.tablaId}
                         </f:facet>
                         <h:outputText value="#{persona.id}" />
                     </p:column>
 
-                    <p:column>
+                    <p:column sortBy="#{persona.razonSocial}">
                         <f:facet name="header">
                             #{msg.razonSocial}
                         </f:facet>
                         <h:outputText value="#{persona.razonSocial}" />
                     </p:column>
 
-                    <p:column headerText="Documento" style="width:24%">
+                    <p:column headerText="Documento" style="width:24%" sortBy="#{persona.documento}">
                         <f:facet name="header">
                             #{msg.documento}
                         </f:facet>
