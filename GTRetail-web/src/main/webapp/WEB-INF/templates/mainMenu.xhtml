@@ -17,27 +17,29 @@
 
                 <p:submenu label="#{msg.clientes}" >
                     <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
-                </p:submenu>
-                <p:submenu label="#{msg.ventas}" >
-                    <p:menuitem value="#{msg.ventasListado}" 
-                                action="/protected/ventas/index.xhtml?faces-redirect=true" 
-                                immediate="true" ajax="false"/>
+                    <p:submenu label="#{msg.clientes}" >
+                        <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
+                    </p:submenu>
+                    <p:submenu label="#{msg.ventas}" >
+                        <p:menuitem value="#{msg.ventasListado}"
+                                    action="/protected/ventas/index.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
 
-                    <p:menuitem value="#{msg.ventasNueva}" 
-                                action="/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
-                </p:submenu>
-                <p:submenu label="#{msg.fiscal}" >
-                    <p:menuitem value="#{msg.periodosFiscales}" 
-                                action="/protected/fiscal/periodosFiscales/periodosEdit.xhtml?faces-redirect=true" 
-                                immediate="true" ajax="false"/>
-                    <p:menuitem value="#{msg.liborIVAVentas}" 
-                                action="/protected/fiscal/libros/ivaVentas.xhtml?faces-redirect=true" 
-                                immediate="true" ajax="false"/>
-                </p:submenu>
+                        <p:menuitem value="#{msg.ventasNueva}"
+                                    action="/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                    </p:submenu>
+                    <p:submenu label="#{msg.fiscal}" >
+                        <p:menuitem value="#{msg.periodosFiscales}"
+                                    action="/protected/fiscal/periodosFiscales/periodosEdit.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                        <p:menuitem value="#{msg.liborIVAVentas}"
+                                    action="/protected/fiscal/libros/ivaVentas.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                    </p:submenu>
 
 
-            </p:submenu>
+                </p:submenu>
 
 
         </p:menubar>

@@ -1,18 +1,23 @@
 package ar.com.gtsoftware.controller.productos;
 
-import ar.com.gtsoftware.eao.*;
-import ar.com.gtsoftware.model.*;
+import ar.com.gtsoftware.eao.FiscalAlicuotasIvaFacade;
+import ar.com.gtsoftware.eao.PersonasFacade;
+import ar.com.gtsoftware.eao.ProductosFacade;
+import ar.com.gtsoftware.eao.ProductosMarcasFacade;
+import ar.com.gtsoftware.eao.ProductosRubrosFacade;
+import ar.com.gtsoftware.eao.ProductosSubRubrosFacade;
+import ar.com.gtsoftware.eao.ProductosTiposProveeduriaFacade;
+import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
+import ar.com.gtsoftware.model.FiscalAlicuotasIva;
+import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosMarcas;
+import ar.com.gtsoftware.model.ProductosRubros;
+import ar.com.gtsoftware.model.ProductosSubRubros;
+import ar.com.gtsoftware.model.ProductosTiposProveeduria;
+import ar.com.gtsoftware.model.ProductosTiposUnidades;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
-
-
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,11 +25,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 /**
  * Created by fede on 26/12/14.
  */
-
 @ManagedBean(name = "productoEditBean")
 @ViewScoped
 public class ProductoEditBean implements Serializable {
@@ -41,8 +52,6 @@ public class ProductoEditBean implements Serializable {
     @EJB
     private ProductosSubRubrosFacade productosSubRubrosFacade;
 
-   
-
     @EJB
     private ProductosTiposUnidadesFacade productosTiposUnidadesFacade;
 
@@ -55,36 +64,35 @@ public class ProductoEditBean implements Serializable {
     @EJB
     private ProductosMarcasFacade productosMarcasFacade;
 
-
     private Productos productosActual;
     private List<ProductosMarcas> listMarcas = new ArrayList<>();
     private List<FiscalAlicuotasIva> listAlicuotaIVA = new ArrayList<>();
     private List<ProductosRubros> listRubros = new ArrayList<>();
     private List<ProductosSubRubros> listSubRubros = new ArrayList<>();
-    private List<ProductosTiposUnidades> listTipoUnidades=new ArrayList<>();
+    private List<ProductosTiposUnidades> listTipoUnidades = new ArrayList<>();
     private List<Personas> listProveedores = new ArrayList<>();
     private List<ProductosTiposProveeduria> listTipoProveeduria = new ArrayList<>();
 
     private ProductosRubros productosRubros = new ProductosRubros();
     private ProductosRubros productosRubrosNuevo = new ProductosRubros();
-    private ProductosTiposProveeduria tiposProveeduria=new ProductosTiposProveeduria();
-    private Personas proveedorHabitual=new Personas();
-    private ProductosMarcas productosMarcas=new ProductosMarcas();
+    private ProductosTiposProveeduria tiposProveeduria = new ProductosTiposProveeduria();
+    private Personas proveedorHabitual = new Personas();
+    private ProductosMarcas productosMarcas = new ProductosMarcas();
 
     private ProductosSubRubros productosSubRubrosNuevo = new ProductosSubRubros();
 
     @PostConstruct
-    public void init(){
+    public void init() {
         String idProducto = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idProducto");
-        if(idProducto==null){
+        if (idProducto == null) {
             nuevo();
-        }else{
+        } else {
             productosActual = productosFacade.find(Long.parseLong(idProducto));
-            if(productosActual == null){
+            if (productosActual == null) {
                 nuevo();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Producto inexistente!", "Producto inexistente!"));
                 Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, "Producto inexistente!");
-            }else {
+            } else {
                 productosRubros = productosRubrosFacade.find(productosActual.getIdRubro());
                 productosSubRubrosNuevo = productosSubRubrosFacade.find(productosActual.getIdSubRubro());
                 tiposProveeduria = productosTiposProveeduriaFacade.find(productosActual.getIdTipoProveeduria());
@@ -96,123 +104,119 @@ public class ProductoEditBean implements Serializable {
         listRubros.addAll(productosRubrosFacade.findAll());
         listMarcas.addAll(productosMarcasFacade.findAll());
         listTipoUnidades.addAll(productosTiposUnidadesFacade.findAll());
-        PersonasSearchFilter psf=new PersonasSearchFilter();
+        PersonasSearchFilter psf = new PersonasSearchFilter();
         psf.setProveedor(true);
-        listProveedores.addAll(personasFacade.findBySearchFilter(psf));
+        listProveedores.addAll(personasFacade.findAllBySearchFilter(psf));
         listTipoProveeduria.addAll(productosTiposProveeduriaFacade.findAll());
 
     }
 
-    public void valueChanged(ValueChangeEvent event){
+    public void valueChanged(ValueChangeEvent event) {
         listSubRubros.clear();
         productosRubros = (ProductosRubros) event.getNewValue();
 
         ProductoSubRubroSearchFilter psrsf = new ProductoSubRubroSearchFilter();
         psrsf.setProductosRubros(productosRubros);
-        listSubRubros.addAll(productosSubRubrosFacade.findBySearchFilter(psrsf));
+        listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(psrsf));
 
     }
 
-    public void nuevo(){
+    public void nuevo() {
         productosActual = new Productos();
 
     }
-    public void nuevoRubro(){
+
+    public void nuevoRubro() {
 
         productosRubrosNuevo = new ProductosRubros();
 
     }
 
-
-    public void doGuardarRubro(){
+    public void doGuardarRubro() {
 
         try {
             productosRubrosFacade.create(productosRubrosNuevo);
             listRubros.add(productosRubrosNuevo);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( "Exito al guardar", "Guardado.."));
-        }catch (Exception e){
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO,e.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
+        } catch (Exception e) {
+            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
 
         }
     }
 
-    public void nuevoSubRubro(){
+    public void nuevoSubRubro() {
         productosSubRubrosNuevo = new ProductosSubRubros();
         productosSubRubrosNuevo.setIdRubro(productosRubros);
 
     }
 
-    public void doGuardarSubRubro(){
-        try{
+    public void doGuardarSubRubro() {
+        try {
             productosSubRubrosFacade.create(productosSubRubrosNuevo);
             listSubRubros.add(productosSubRubrosNuevo);
 
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( "Exito al guardar", "Guardado.."));
-
-        }catch (Exception e){
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO,e.getMessage());
+        } catch (Exception e) {
+            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
 
         }
 
     }
 
-    public void nuevaMarca(){
+    public void nuevaMarca() {
         productosMarcas = new ProductosMarcas();
     }
 
-    public void doGuardarMarca(){
+    public void doGuardarMarca() {
 
         try {
 
             productosMarcasFacade.create(productosMarcas);
             listMarcas.add(productosMarcas);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( "Exito al guardar", "Guardado.."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
-        }catch (Exception e){
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO,e.getMessage());
+        } catch (Exception e) {
+            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
         }
 
     }
 
+    public void doGuardar() {
+        try {
 
+            if (productosActual.isNew()) {
 
-    public void doGuardar(){
-       try {
+                productosActual.setIdTipoProveeduria(tiposProveeduria);
 
-           if (productosActual.isNew()) {
+                productosActual.setActivo(true);
+                productosActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
 
-               productosActual.setIdTipoProveeduria(tiposProveeduria);
+                //calculo del precio de venta
+                BigDecimal iva = ((productosActual.getIdAlicuotaIva().getValorAlicuota().divide(BigDecimal.valueOf(100))).add(BigDecimal.valueOf(1)));
+                BigDecimal costo = productosActual.getCostoAdquisicionNeto();
+                BigDecimal utilidad = productosActual.getUtilidad().add(BigDecimal.valueOf(1));
+                productosActual.setPrecioVenta((iva.multiply(costo)).multiply(utilidad));
 
-               productosActual.setActivo(true);
-               productosActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
+                productosFacade.create(productosActual);
+                productosActual = new Productos();
+            } else {
+                productosActual.setIdTipoProveeduria(tiposProveeduria);
+                productosActual.setIdProveedorHabitual(proveedorHabitual);
+                productosFacade.edit(productosActual);
+                productosActual = productosFacade.find(productosActual.getId());
 
-               //calculo del precio de venta
-               BigDecimal iva = ((productosActual.getIdAlicuotaIva().getValorAlicuota().divide(BigDecimal.valueOf(100))).add(BigDecimal.valueOf(1)));
-               BigDecimal costo = productosActual.getCostoAdquisicionNeto();
-               BigDecimal utilidad = productosActual.getUtilidad().add(BigDecimal.valueOf(1));
-               productosActual.setPrecioVenta((iva.multiply(costo)).multiply(utilidad));
+            }
 
-               productosFacade.create(productosActual);
-               productosActual = new Productos();
-           } else {
-               productosActual.setIdTipoProveeduria(tiposProveeduria);
-               productosActual.setIdProveedorHabitual(proveedorHabitual);
-               productosFacade.edit(productosActual);
-               productosActual = productosFacade.find(productosActual.getId());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto guardado Exitosamente"));
 
-
-           }
-
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto guardado Exitosamente"));
-
-       }catch (Exception e){
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
-           Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO,e.getMessage());
-       }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
+            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
+        }
 
     }
 
