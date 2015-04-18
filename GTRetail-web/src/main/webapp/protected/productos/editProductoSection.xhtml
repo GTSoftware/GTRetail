@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:form id="editProductoForm">
+
+
+    <h:panelGrid id="grid" columns="3" >
+        <h:outputLabel for="codigoProductoField" value="#{msg.codigo}"  />
+        <p:inputText id="codigoProductoField" value="#{productoEditBean.productosActual.codigoPropio}"
+                     maxlength="100" required="true" requiredMessage="#{msg.ingresarValor}"
+                     style="width: 200px;"/>
+        <p:message for="codigoProductoField"/>
+
+        <h:outputLabel for="descripcionField" value="#{msg.descripcion}" style="padding-right: 42px;"/>
+        <p:inputText id="descripcionField" value="#{productoEditBean.productosActual.descripcion}" maxlength="200"
+                     required="true" requiredMessage="#{msg.ingresarDescripcion}" style="width: 200px;"/>
+        <p:message for="descripcionField"/>
+        </h:panelGrid>
+
+    <h:panelGrid id="gridRubros" columns="3"  >
+        <h:outputLabel for="rubroField" value="#{msg.productoRubro}" />
+        <p:selectOneMenu id="rubroField"  value="#{productoEditBean.productosActual.idRubro}"
+                         valueChangeListener="#{productoEditBean.valueChanged}" converter="#{productosRubrosConverter}"
+                         style="width: 200px;">
+
+            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+            <f:selectItems value="#{productoEditBean.listRubros}" var="rubro" itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
+            <p:ajax event="valueChange" render=":editProductoForm:gridRubros"
+                    update=":editProductoForm:gridRubros"  execute="@this"/>
+        </p:selectOneMenu>
+
+        <p:commandButton icon="ui-icon-plus" action="#{productoEditBean.nuevoRubro}" immediate="true" update=":nuevoRubroForm"
+                         oncomplete="PF('dlg2').show();" />
+
+
+
+        <h:outputLabel for="subRubroSelect" value="#{msg.productoSubRubro}" style="padding-right: 49px;"/>
+
+        <p:selectOneMenu id="subRubroSelect" value="#{productoEditBean.productosActual.idSubRubro}" required="true" converter="#{productosSubRubrosConverter}"
+                         style="width: 200px;">
+
+            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
+            <f:selectItems value="#{productoEditBean.listSubRubros}" var="subRubro" itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
+        </p:selectOneMenu>
+
+
+        <p:commandButton id="btnNuevoSubRubro" icon="ui-icon-plus" action="#{productoEditBean.nuevoSubRubro}" immediate="true"
+                         oncomplete="PF('dlgSubRubro').show();" update=":nuevoSubRubroForm"
+                         rendered="#{productoEditBean.productosRubros.nombreRubro ne null}"/>
+        <p:message for="subRubroSelect" rendered="#{productoEditBean.productosRubros.nombreRubro eq null}"/>
+
+    </h:panelGrid>
+
+
+    <h:panelGrid id="grid1" columns="3" >
+        <h:outputLabel for="marcaField" value="#{msg.marca}" />
+        <p:selectOneMenu id="marcaField" value="#{productoEditBean.productosActual.idMarca}"
+                         required="true" requiredMessage="#{msg.ingresarValor}" converter="#{productoMarcaConverter}"
+                style="width: 200px;">
+            <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
+            <f:selectItems value="#{productoEditBean.listMarcas}" var="marca" itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
+
+        </p:selectOneMenu>
+
+        <h:panelGrid id="marca" columns="2">
+
+        <p:commandButton id="btnNuevaMarca" icon="ui-icon-plus" action="#{productoEditBean.nuevaMarca}" immediate="true"
+                         oncomplete="PF('dlgNuevaMarca').show();" update=":nuevaMarca"
+                         />
+            <p:message for="marcaField"/>
+        </h:panelGrid>
+
+
+
+        <h:outputLabel for="tipoUnidadCompraSelect" value="#{msg.productoTipoUnidadCompra}"/>
+        <p:selectOneMenu id="tipoUnidadCompraSelect" value="#{productoEditBean.productosActual.idTipoUnidadCompra}"
+                         required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
+                         style="width: 200px;">
+
+            <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
+            <f:selectItems value="#{productoEditBean.listTipoUnidades}" var="tipoUnidad" itemLabel="#{tipoUnidad.nombreUnidad}"
+                           itemValue="#{tipoUnidad}"/>
+        </p:selectOneMenu>
+        <p:message for="tipoUnidadCompraSelect"/>
+
+        <h:outputLabel for="tipoUnidadVentaSelect" value="#{msg.productoTipoUnidadVenta}"/>
+        <p:selectOneMenu id="tipoUnidadVentaSelect" value="#{productoEditBean.productosActual.idTipoUnidadVenta}"
+                         required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
+                         style="width: 200px;">
+
+            <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
+            <f:selectItems value="#{productoEditBean.listTipoUnidades}" var="tipoUnidad" itemLabel="#{tipoUnidad.nombreUnidad}"
+                           itemValue="#{tipoUnidad}"/>
+        </p:selectOneMenu>
+        <p:message for="tipoUnidadCompraSelect"/>
+
+
+        <h:outputLabel for="costoAdquisicionField" value="#{msg.costoAdquisicion}" />
+        <p:inputText id="costoAdquisicionField" value="#{productoEditBean.productosActual.costoAdquisicionNeto}"
+                     style="width: 200px;"/>
+        <p:message for="costoAdquisicionField"/>
+
+
+        <h:outputLabel for="alicuotaIVAField" value="#{msg.alicuotaIVA}"/>
+        <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productosActual.idAlicuotaIva}" required="true"
+                         requiredMessage="#{msg.seleccionarValor}" converter="#{alicuotaIVAConverter}"
+                         style="width: 200px;">
+            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
+            <f:selectItems value="#{productoEditBean.listAlicuotaIVA}" var="alicuota" itemLabel="#{alicuota.nombreAlicuotaIva}" itemValue="#{alicuota}" />
+
+        </p:selectOneMenu>
+        <p:message for="alicuotaIVAField"/>
+
+        <h:outputLabel for="utilidadField" value="#{msg.productosUtilidad}"/>
+        <p:inputText id="utilidadField" value="#{productoEditBean.productosActual.utilidad}"
+                     style="width: 200px;">
+            <f:convertNumber maxFractionDigits="2"
+                             groupingUsed="true"
+                             maxIntegerDigits="3"
+                             type="percent"/>
+
+        </p:inputText>
+        <p:message for="utilidadField"/>
+
+
+        <h:outputLabel for="stockField" value="#{msg.stock}"/>
+        <p:inputText id="stockField" value="#{productoEditBean.productosActual.stockTotal}" required="true"
+                     requiredMessage="#{msg.ingresarValor}" style="width: 200px;">
+            <f:convertNumber  maxIntegerDigits="8"
+                             maxFractionDigits="2"/>
+        </p:inputText>
+        <p:message for="stockField"/>
+
+        <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}"/>
+        <p:selectOneMenu id="proveedorHabitualField" value="#{productoEditBean.productosActual.idProveedorHabitual}"
+                         converter="#{personasConverter}"
+                         style="width: 200px;" required="true" requiredMessage="#{msg.seleccionarUno}">
+            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+            <f:selectItems value="#{productoEditBean.listProveedores}" var="proveedor" itemLabel="#{proveedor.nombreFantasia}"
+                           itemValue="#{proveedor}"/>
+
+        </p:selectOneMenu>
+        <p:message for="proveedorHabitualField"/>
+
+
+        <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}"/>
+        <p:selectOneMenu id="tipoProveeduriaField" value="#{productoEditBean.tiposProveeduria}"
+                         required="true" requiredMessage="#{msg.seleccionarUno}" converter="#{productosTiposProveeduriaConverter}"
+                         style="width: 200px;">
+            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+            <f:selectItems value="#{productoEditBean.listTipoProveeduria}" var="tipoProd" itemLabel="#{tipoProd.nombreTipoProveeduria}"
+                           itemValue="#{tipoProd}"/>
+
+        </p:selectOneMenu>
+        <p:message for="tipoProveeduriaField"/>
+
+
+        <h:outputLabel for="ubicacionField" value="#{msg.ubicacion}"/>
+        <p:inputText id="ubicacionField" value="#{productoEditBean.productosActual.ubicacion}" style="width: 200px;"/>
+        <p:message for="ubicacionField"/>
+
+
+
+
+
+    </h:panelGrid>
+
+    <h:panelGrid columns="2" >
+        <p:commandButton id="guardarButton"
+                         value="#{msg.guardar}"
+                         icon="ui-icon-disk"
+                         action="#{productoEditBean.doGuardar}"
+                         update="@form"
+                         ajax="true"
+                         />
+
+        <p:commandButton id="cancelarButton"
+                         value="#{msg.cancelar}"
+                         icon="ui-icon-cancel"
+                         action="/protected/clientes/index.xhtml?faces-redirect=true"
+                         immediate="true"
+                         ajax="false" />
+    </h:panelGrid>
+</h:form>
+
+<h:form id="nuevoRubroForm">
+<p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlg2"  height="100">
+
+
+        <h:panelGrid columns="3">
+
+
+            <h:outputText for="descripcionRubroField" value="#{msg.productoRubro}" />
+            <p:inputText id="descripcionRubroField" value="#{productoEditBean.productosRubrosNuevo.nombreRubro}"
+                         required="true" requiredMessage="#{msg.ingresarValor}"/>
+            <p:message for="descripcionRubroField"/>
+        </h:panelGrid>
+        <h:panelGrid columns="2">
+            <p:commandButton  value="#{msg.guardar}"  action="#{productoEditBean.doGuardarRubro}"
+                              update=":editProductoForm:gridRubros" onclick="PF('dlg2').hide();" />
+
+
+
+        </h:panelGrid>
+</p:dialog>
+    </h:form>
+
+
+<h:form id="nuevoSubRubroForm">
+<p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlgSubRubro"  height="100">
+
+        <h:panelGrid columns="2">
+
+            <h:outputText for="descripcionRubro" value="#{msg.productoRubro}" />
+            <h:outputText  id="descripcionRubro" value="#{productoEditBean.productosSubRubrosNuevo.idRubro.nombreRubro}"
+                    />
+        </h:panelGrid>
+
+        <h:panelGrid columns="3" >
+
+            <h:outputText for="descripcionSubRubroField" value="#{msg.productoSubRubro}" />
+            <p:inputText id="descripcionSubRubroField" value="#{productoEditBean.productosSubRubrosNuevo.nombreSubRubro}"
+                         required="true" requiredMessage="#{msg.ingresarValor}"/>
+            <p:message for="descripcionSubRubroField"/>
+        </h:panelGrid>
+        <h:panelGrid columns="2">
+            <p:commandButton  value="#{msg.guardar}"  action="#{productoEditBean.doGuardarSubRubro}"
+                              update=":editProductoForm:gridRubros" onclick="PF('dlgSubRubro').hide();"/>
+
+        </h:panelGrid>
+</p:dialog>
+    </h:form>
+
+<h:form id="nuevaMarca">
+    <p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlgNuevaMarca"  height="100">
+
+
+
+        <h:panelGrid columns="3" >
+
+            <h:outputText for="nombreMarcaField" value="#{msg.marca}" />
+            <p:inputText id="nombreMarcaField" value="#{productoEditBean.productosMarcas.nombreMarca}"
+                         required="true" requiredMessage="#{msg.ingresarValor}"/>
+            <p:message for="nombreMarcaField"/>
+        </h:panelGrid>
+        <h:panelGrid columns="2">
+            <p:commandButton  value="#{msg.guardar}"  action="#{productoEditBean.doGuardarMarca}"
+                              update=":editProductoForm:marcaField" onclick="PF('dlgNuevaMarca').hide();"/>
+
+        </h:panelGrid>
+    </p:dialog>
+</h:form>
+
+
+</html>

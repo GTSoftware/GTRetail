@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+        <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <h:form id="form-body">
+            <p:defaultCommand target="buscarButton"/>
+            <p:panel header="#{msg.busquedaProductos}">
+            <h:panelGrid columns="6">
+                <p:outputLabel value="#{msg.idProducto}"/>
+                <p:inputText id="idProductoField" value="#{productosSearchBean.filter.codigoPropio}" size="5"/>
+                <p:outputLabel value="#{msg.busqueda}"/>
+                <p:inputText id="searchField" value="#{productosSearchBean.filter.txt}" size="50"/>
+                <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}" value="Buscar" update="productoTable" icon="ui-icon-search"/>
+                <p:commandButton id="nuevoButton" action="edicionProducto.xhtml" value="#{msg.nuevo}" ajax="false" icon="ui-icon-plus" />
+
+            </h:panelGrid>
+                <h:panelGrid>
+
+                <p:dataTable id="productoTable" value="#{productosSearchBean.productosList}" var="producto"
+                             rows="30"
+                             paginator="true"
+                             sortMode="multiple"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{producto.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,30"
+                             style="width: 100%"
+                             selection="#{productosSearchBean.productoActual}"
+                             selectionMode="single"
+                             resizableColumns="true"
+                             scrollable="true"> 
+
+                    <f:facet name="header" >
+                        #{msg.productoListado}
+                    </f:facet>
+
+                    <p:column sortBy="#{producto.codigoPropio}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.codigo}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.codigoPropio}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.idMarca.nombreMarca}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.marca}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idMarca.nombreMarca}"/>
+
+                    </p:column>
+
+                    <p:column sortBy="#{producto.descripcion}" style="width: 30%">
+                        <f:facet name="header">
+                            #{msg.descripcion}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.descripcion}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.idRubro.nombreRubro}" style="width: 15%">
+                        <f:facet name="header">
+                            #{msg.productoRubro}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idRubro.nombreRubro}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.idSubRubro.nombreSubRubro}" style="width: 15%">
+                        <f:facet name="header">
+                            #{msg.productoSubRubro}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.stockTotal}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.stock}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.stockTotal}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.costoAdquisicionNeto}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.costoAdquisicion}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.costoAdquisicionNeto}">
+                        <f:convertNumber type="currency" groupingUsed="true" currencySymbol="$"/>
+                        </h:outputLabel>
+                    </p:column>
+
+
+                    <p:column sortBy="#{producto.precioVenta}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.precioUnitario}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.precioVenta}">
+                            <f:convertNumber type="currency" groupingUsed="true"
+                                             currencySymbol="$ "/>
+                        </h:outputLabel>
+                    </p:column>
+                    <p:column sortBy="#{producto.ubicacion}" style="width: 5%">
+                    <f:facet name="header">
+                        #{msg.ubicacion}
+                    </f:facet>
+                    <h:outputLabel value="#{producto.ubicacion}"/>
+
+                </p:column>
+                    <p:column sortBy="#{producto.idTipoUnidadVenta.nombreUnidad}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.unidadVenta}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idTipoUnidadVenta.nombreUnidad}"/>
+
+                    </p:column>
+                    <p:column sortBy="#{producto.idProveedorHabitual.nombreFantasia}" style="width: 5%">
+                        <f:facet name="header">
+                            #{msg.proveedor}
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idProveedorHabitual.nombreFantasia}"/>
+
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </h:panelGrid>
+
+            </p:panel>
+        </h:form>
+        </ui:define>
+
+    </ui:composition>
+</h:body>
+</html>
