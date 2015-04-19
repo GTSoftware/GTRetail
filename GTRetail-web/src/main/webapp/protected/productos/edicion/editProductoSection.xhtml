@@ -64,7 +64,7 @@
             <h:outputLabel for="marcaField" value="#{msg.marca}" />
             <h:panelGroup >
                 <p:selectOneMenu id="marcaField" value="#{productoEditBean.productosActual.idMarca}"
-                                 required="true" requiredMessage="#{msg.ingresarValor}" converter="#{productoMarcaConverter}"
+                                 required="true" requiredMessage="#{msg.ingresarValor}" converter="#{productosMarcaConverter}"
                                  style="width: 200px;">
                     <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
                     <f:selectItems value="#{productoEditBean.listMarcas}" var="marca" itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
@@ -113,7 +113,7 @@
 
             <h:outputLabel for="alicuotaIVAField" value="#{msg.alicuotaIVA}"/>
             <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productosActual.idAlicuotaIva}" required="true"
-                             requiredMessage="#{msg.seleccionarValor}" converter="#{alicuotaIVAConverter}"
+                             requiredMessage="#{msg.seleccionarValor}" converter="#{fiscalAlicuotaIVAConverter}"
                              style="width: 200px;">
                 <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                 <f:selectItems value="#{productoEditBean.listAlicuotaIVA}" var="alicuota"
