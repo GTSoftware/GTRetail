@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosSubRubros;
+import ar.com.gtsoftware.model.ProductosSubRubros_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,6 +32,7 @@ import javax.persistence.criteria.Root;
  */
 @Stateless
 public class ProductosSubRubrosFacade extends AbstractFacade<ProductosSubRubros> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -46,22 +47,19 @@ public class ProductosSubRubrosFacade extends AbstractFacade<ProductosSubRubros>
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosSubRubros> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        ProductoSubRubroSearchFilter psf = (ProductoSubRubroSearchFilter) sf;
+        Predicate p = null;
+        if (psf.getDescripcion() != null) {
+            String s = psf.getDescripcion().toUpperCase();
+            p = cb.like(root.get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
+        }
+        if (psf.getProductosRubros() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosSubRubros_.idRubro), psf.getProductosRubros());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        return p;
+
     }
 
-    @Override
-    public List<ProductosSubRubros> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(ProductosSubRubros entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

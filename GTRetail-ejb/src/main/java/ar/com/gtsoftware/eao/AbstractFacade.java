@@ -95,8 +95,10 @@ public abstract class AbstractFacade<T extends GTEntity> {
             CriteriaQuery<T> cq = cb.createQuery(entityClass);
             Root<T> root = cq.from(entityClass);
             cq.select(root);
-            Predicate p = createWhereFromSearchFilter(sf, cb, root);
-            cq.where(p);
+            if (sf.hasFilter()) {
+                Predicate p = createWhereFromSearchFilter(sf, cb, root);
+                cq.where(p);
+            }
             if (sf.hasOrderFields()) {
                 cq.orderBy(createOrderFromSearchFilter(sf, root, cb));
             }
@@ -139,8 +141,10 @@ public abstract class AbstractFacade<T extends GTEntity> {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
         cq.select(getEntityManager().getCriteriaBuilder().count(rt));
-        Predicate p = createWhereFromSearchFilter(sf, getEntityManager().getCriteriaBuilder(), rt);
-        cq.where(p);
+        if (sf.hasFilter()) {
+            Predicate p = createWhereFromSearchFilter(sf, getEntityManager().getCriteriaBuilder(), rt);
+            cq.where(p);
+        }
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
