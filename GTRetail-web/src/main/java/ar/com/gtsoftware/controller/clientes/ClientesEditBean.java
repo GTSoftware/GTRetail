@@ -37,7 +37,6 @@ import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
-import ar.com.gtsoftware.utils.FormatUtils;
 import ar.com.gtsoftware.validators.ValidadorCUIT;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -158,9 +157,9 @@ public class ClientesEditBean implements Serializable {
     private String formatRazonSocial(String razonSocialCliente, String apellidos, String nombres, long tipoPersoneria) {
         String razonSocial = razonSocialCliente;
         if (tipoPersoneria == 1) {//Persona física
-            razonSocial = apellidos.trim().concat(", ").concat(nombres).trim();
+            razonSocial = apellidos.concat(", ").concat(nombres);
         }
-        razonSocial = razonSocial.toUpperCase();
+        //razonSocial = razonSocial.toUpperCase();
         return razonSocial;
     }
 
@@ -168,19 +167,19 @@ public class ClientesEditBean implements Serializable {
         clienteActual.setRazonSocial(formatRazonSocial(clienteActual.getRazonSocial(),
                 clienteActual.getApellidos(), clienteActual.getNombres(),
                 clienteActual.getIdTipoPersoneria().getId()));
-        clienteActual.setCalle(FormatUtils.uppercase(clienteActual.getCalle()));
-        clienteActual.setApellidos(FormatUtils.uppercase(clienteActual.getApellidos()));
-        clienteActual.setNombres(FormatUtils.uppercase(clienteActual.getNombres()));
-        clienteActual.setNombreFantasia(FormatUtils.uppercase(clienteActual.getNombreFantasia()));
-        clienteActual.setDepto(FormatUtils.uppercase(clienteActual.getDepto()));
-        clienteActual.setAltura(FormatUtils.uppercase(clienteActual.getAltura()));
-        clienteActual.setPiso(FormatUtils.uppercase(clienteActual.getPiso()));
-        clienteActual.setEmail(FormatUtils.lowercase(clienteActual.getEmail()));
-        if (clienteActual.getPersonasTelefonosList() != null) {
-            for (PersonasTelefonos pt : clienteActual.getPersonasTelefonosList()) {
-                pt.setReferencia(FormatUtils.uppercase(pt.getReferencia()));
-            }
-        }
+//        clienteActual.setCalle(FormatUtils.uppercase(clienteActual.getCalle()));
+//        clienteActual.setApellidos(FormatUtils.uppercase(clienteActual.getApellidos()));
+//        clienteActual.setNombres(FormatUtils.uppercase(clienteActual.getNombres()));
+//        clienteActual.setNombreFantasia(FormatUtils.uppercase(clienteActual.getNombreFantasia()));
+//        clienteActual.setDepto(FormatUtils.uppercase(clienteActual.getDepto()));
+//        clienteActual.setAltura(FormatUtils.uppercase(clienteActual.getAltura()));
+//        clienteActual.setPiso(FormatUtils.uppercase(clienteActual.getPiso()));
+//        clienteActual.setEmail(FormatUtils.lowercase(clienteActual.getEmail()));
+//        if (clienteActual.getPersonasTelefonosList() != null) {
+//            for (PersonasTelefonos pt : clienteActual.getPersonasTelefonosList()) {
+//                pt.setReferencia(FormatUtils.uppercase(pt.getReferencia()));
+//            }
+//        }
     }
 
     private void validarCliente() throws Exception {

@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.converters;
 
 import java.io.Serializable;
+import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
@@ -26,7 +27,8 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-@FacesConverter(forClass = String.class)
+@Model
+@FacesConverter(value = "stringFormatConverter")
 public class StringFormatConverter implements Serializable, javax.faces.convert.Converter {
 
     @Override

@@ -26,11 +26,11 @@
             <p:tab title="#{msg.datosFiliatorios}">
                 <h:form id="formDatosFiliatorios">
                     <h:panelGrid id="grid" columns="3">
-                        <h:outputLabel for="idClienteField" value="#{msg.idCliente}" />
+                        <h:outputLabel for="idClienteField" value="#{msg.idCliente}:" />
                         <h:outputLabel id="idClienteField" value="#{clientesEditBean.clienteActual.id}" />
                         <h:outputLabel />
 
-                        <h:outputLabel for="tipoPersoneriaField" value="#{msg.tipoPersoneria}" />
+                        <h:outputLabel for="tipoPersoneriaField" value="#{msg.tipoPersoneria}:" />
                         <p:selectOneMenu id="tipoPersoneriaField" required="true" requiredMessage="#{msg.tipoPersoneriaRequerido}" value="#{clientesEditBean.clienteActual.idTipoPersoneria}" converter="#{legalTiposPersoneriaConverter}"
                                          filter="true" filterMatchMode="contains">
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
@@ -40,27 +40,34 @@
                         </p:selectOneMenu>
                         <p:message for="tipoPersoneriaField" />
 
-                        <h:outputLabel for="razonSocialField" value="#{msg.razonSocial}"
-                                       rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"/>
+                        <h:outputLabel for="razonSocialField" value="#{msg.razonSocial}:"
+                                       rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"
+                                       converter="#{stringFormatConverter}"/>
                         <p:inputText id="razonSocialField" value="#{clientesEditBean.clienteActual.razonSocial}" maxlength="200"
                                      rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"/>
                         <p:message for="razonSocialField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}" />
 
-                        <h:outputLabel for="nombreFantasiaField" value="#{msg.nombreFantasia}" />
-                        <p:inputText id="nombreFantasiaField" value="#{clientesEditBean.clienteActual.nombreFantasia}" maxlength="200" />
+                        <h:outputLabel for="nombreFantasiaField" value="#{msg.nombreFantasia}:" />
+                        <p:inputText id="nombreFantasiaField" value="#{clientesEditBean.clienteActual.nombreFantasia}"
+                                     maxlength="200"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="nombreFantasiaField" />
 
-                        <h:outputLabel for="apellidoField" value="#{msg.apellidos}" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
-                        <p:inputText id="apellidoField" value="#{clientesEditBean.clienteActual.apellidos}" maxlength="50" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
+                        <h:outputLabel for="apellidoField" value="#{msg.apellidos}:"
+                                       rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
+                        <p:inputText id="apellidoField" value="#{clientesEditBean.clienteActual.apellidos}" maxlength="50" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="apellidoField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
 
-                        <h:outputLabel for="nombreField" value="#{msg.nombres}"
-                                       rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
+                        <h:outputLabel for="nombreField" value="#{msg.nombres}:"
+                                       rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"
+                                       converter="#{stringFormatConverter}"/>
                         <p:inputText id="nombreField" value="#{clientesEditBean.clienteActual.nombres}" maxlength="50"
-                                     rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
+                                     rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="nombreField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
 
-                        <h:outputLabel for="responsabilidadIVAField" value="#{msg.responsabilidadIVA}"/>
+                        <h:outputLabel for="responsabilidadIVAField" value="#{msg.responsabilidadIVA}:"/>
                         <p:selectOneMenu id="responsabilidadIVAField" required="true" requiredMessage="#{msg.responsabilidadIVARequerido}" value="#{clientesEditBean.clienteActual.idResponsabilidadIva}" converter="#{fiscalResponsabilidadesIvaConverter}">
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                             <f:selectItems value="#{clientesEditBean.responsabilidadesIVAList}"  var="responsabilidadIva" itemLabel="#{responsabilidadIva.nombreResponsabildiad}" itemValue="#{responsabilidadIva}"/>
@@ -68,27 +75,29 @@
                         <p:message for="responsabilidadIVAField" />
 
 
-                        <h:outputLabel for="generoField" value="#{msg.genero}" />
+                        <h:outputLabel for="generoField" value="#{msg.genero}:" />
                         <p:selectOneMenu id="generoField" required="true" requiredMessage="#{msg.generoRequerido}" value="#{clientesEditBean.clienteActual.idGenero}" converter="#{legalGenerosConverter}">
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                             <f:selectItems value="#{clientesEditBean.generosList}" var="genero" itemLabel="#{genero.nombreGenero.concat(' - ').concat(genero.simbolo)}" itemValue="#{genero}" />
                         </p:selectOneMenu>
                         <p:message for="generoField" />
 
-                        <h:outputLabel for="tipoDocumentoField" value="#{msg.tipoDocumento}" />
-                        <p:selectOneMenu id="tipoDocumentoField" required="true" requiredMessage="#{msg.tipoDocumentoRequerido}" value="#{clientesEditBean.clienteActual.idTipoDocumento}" converter="#{legalTiposDocumentoConverter}">
+                        <h:outputLabel for="tipoDocumentoField" value="#{msg.tipoDocumento}:" />
+                        <p:selectOneMenu id="tipoDocumentoField" required="true" requiredMessage="#{msg.tipoDocumentoRequerido}"
+                                         value="#{clientesEditBean.clienteActual.idTipoDocumento}"
+                                         converter="#{legalTiposDocumentoConverter}">
                             <f:selectItems value="#{clientesEditBean.tiposDocumentoList}" var="tipoDoc" itemLabel="#{tipoDoc.nombreTipoDocumento}" itemValue="#{tipoDoc}"/>
                         </p:selectOneMenu>
                         <p:message for="tipoDocumentoField" />
 
-                        <h:outputLabel for="nroDocField" value="#{msg.documento}" />
+                        <h:outputLabel for="nroDocField" value="#{msg.documento}:" />
                         <p:inputText  id="nroDocField" value="#{clientesEditBean.clienteActual.documento}" required="true" requiredMessage="#{msg.documentoRequerido}" maxlength="11" >
                             <f:validateLongRange minimum="1" maximum="99999999999" />
                         </p:inputText>
                         <p:message for="nroDocField" />
 
 
-                        <h:outputLabel for="paisField" value="#{msg.pais}" />
+                        <h:outputLabel for="paisField" value="#{msg.pais}:" />
                         <p:selectOneMenu id="paisField" required="true" requiredMessage="#{msg.paisRequerido}" value="#{clientesEditBean.clienteActual.idPais}" converter="#{ubicacionPaisesConverter}"
                                          filter="true"  filterMatchMode="contains">
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
@@ -99,7 +108,7 @@
                         <p:message for="paisField" />
 
 
-                        <h:outputLabel for="provinciaField" value="#{msg.provincia}" />
+                        <h:outputLabel for="provinciaField" value="#{msg.provincia}:" />
                         <p:selectOneMenu id="provinciaField" required="true" requiredMessage="#{msg.provinciaRequerido}" value="#{clientesEditBean.clienteActual.idProvincia}" converter="#{ubicacionProvinciasConverter}"
                                          filter="true" filterMatchMode="contains">
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
@@ -109,7 +118,7 @@
                         </p:selectOneMenu>
                         <p:message for="provinciaField" />
 
-                        <h:outputLabel for="localidadField" value="#{msg.localidad}" />
+                        <h:outputLabel for="localidadField" value="#{msg.localidad}:" />
                         <p:selectOneMenu id="localidadField" required="true" requiredMessage="#{msg.localidadRequerido}" value="#{clientesEditBean.clienteActual.idLocalidad}" converter="#{ubicacionLocalidadesConverter}"
                                          filter="true" filterMatchMode="contains">
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
@@ -117,38 +126,45 @@
                         </p:selectOneMenu>
                         <p:message for="localidadField" />
 
-                        <h:outputLabel for="calleField" value="#{msg.calle}"/>
-                        <p:inputText id="calleField" value="#{clientesEditBean.clienteActual.calle}" required="true" requiredMessage="#{msg.calleRequerido}" maxlength="100"/>
+                        <h:outputLabel for="calleField" value="#{msg.calle}:"/>
+                        <p:inputText id="calleField" value="#{clientesEditBean.clienteActual.calle}" required="true"
+                                     requiredMessage="#{msg.calleRequerido}" maxlength="100"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="calleField" />
 
-                        <h:outputLabel for="alturaField" value="#{msg.altura}"/>
-                        <p:inputText id="alturaField" value="#{clientesEditBean.clienteActual.altura}" />
+                        <h:outputLabel for="alturaField" value="#{msg.altura}:"/>
+                        <p:inputText id="alturaField" value="#{clientesEditBean.clienteActual.altura}"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="alturaField" />
 
-                        <h:outputLabel for="pisoField" value="#{msg.depto}"/>
-                        <p:inputText id="pisoField" value="#{clientesEditBean.clienteActual.piso}" />
+                        <h:outputLabel for="pisoField" value="#{msg.depto}:"/>
+                        <p:inputText id="pisoField" value="#{clientesEditBean.clienteActual.piso}"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="pisoField" />
 
-                        <h:outputLabel for="deptoField" value="#{msg.piso}"/>
-                        <p:inputText id="deptoField" value="#{clientesEditBean.clienteActual.depto}" />
+                        <h:outputLabel for="deptoField" value="#{msg.piso}:"/>
+                        <p:inputText id="deptoField" value="#{clientesEditBean.clienteActual.depto}"
+                                     converter="#{stringFormatConverter}"/>
                         <p:message for="deptoField" />
 
-                        <h:outputLabel for="emailField" value="#{msg.email}"/>
-                        <p:inputText id="emailField" value="#{clientesEditBean.clienteActual.email}" required="false" >
+                        <h:outputLabel for="emailField" value="#{msg.email}:" />
+                        <p:inputText id="emailField" value="#{clientesEditBean.clienteActual.email}"
+                                     required="false" >
                             <f:validateRegex pattern="^$|^[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                         </p:inputText>
                         <p:message for="emailField" />
 
 
-                        <h:outputLabel for="fechaAlta" value="#{msg.fechaAlta}" />
-                        <p:calendar id="fechaAlta"  value="#{clientesEditBean.clienteActual.fechaAlta}" readonly="true" required="false"/>
+                        <h:outputLabel for="fechaAlta" value="#{msg.fechaAlta}:" />
+                        <p:calendar id="fechaAlta"  value="#{clientesEditBean.clienteActual.fechaAlta}" readonly="true" required="false"
+                                    pattern="dd/MM/yyyy"/>
                         <p:message for="fechaAlta" />
 
-                        <h:outputLabel for="activoField" value="#{msg.activo}" />
+                        <h:outputLabel for="activoField" value="#{msg.activo}:" />
                         <p:selectBooleanCheckbox  id="activoField"  value="#{clientesEditBean.clienteActual.activo}"  disabled="true" required="false"/>
                         <p:message for="activoField" />
 
-                        <h:outputLabel for="sucursalField" value="#{msg.sucursal}" />
+                        <h:outputLabel for="sucursalField" value="#{msg.sucursal}:" />
                         <h:outputLabel id="sucursalField" value="#{clientesEditBean.clienteActual.idSucursal.nombreSucursal}" />
                         <h:outputLabel />
 
