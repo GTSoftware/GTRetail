@@ -18,9 +18,11 @@
                 <p:submenu label="#{msg.clientes}" >
                     <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
                 </p:submenu>
-<!--                <p:submenu label="#{msg.productos}" >
-                    <p:menuitem value="#{msg.busquedaProductos}" action="/protected/productos/consultarProductos.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
-                </p:submenu>-->
+                <p:submenu label="#{msg.productos}" >
+                    <p:menuitem value="#{msg.busquedaProductos}"
+                                action="/protected/productos/consultarProductos.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+                </p:submenu>
                 <p:submenu label="#{msg.ventas}" >
                     <p:menuitem value="#{msg.ventasListado}"
                                 action="/protected/ventas/index.xhtml?faces-redirect=true"
