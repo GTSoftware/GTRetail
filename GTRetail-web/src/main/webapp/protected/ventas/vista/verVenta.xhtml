@@ -22,7 +22,7 @@
                                          value="#{msg.facturar}"
                                          icon="ui-icon-print"
                                          rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
-                                         update=":facturarForm:facturarDialog" 
+                                         update=":facturarForm:facturarDialog"
                                          oncomplete="PF('facturarDialog').show()"
                                          process="@none"
                                          />
@@ -57,14 +57,14 @@
 
                         </p:commandButton>
                         <!-- Cuadro de confirmación para Anular factura -->
-                        <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}" 
+                        <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}"
                                          appendTo="@(body)"
                                          message="#{msg.anularRealmente}"
                                          showEffect="fade" hideEffect="explode">
 
 
-                            <p:commandButton value="#{msg.si}" 
-                                             oncomplete="confirmation.hide()" 
+                            <p:commandButton value="#{msg.si}"
+                                             oncomplete="confirmation.hide()"
                                              actionListener="#{verVentasBean.anularFactura()}"
                                              immediate="true"
                                              update=":opcionesForm"
@@ -72,21 +72,21 @@
                                              icon="ui-icon-check"
                                              process="@this"/>
 
-                            <p:commandButton value="#{msg.no}" type="button" 
-                                             onclick="confirmation.hide()" 
+                            <p:commandButton value="#{msg.no}" type="button"
+                                             onclick="PF('confirmation').hide()"
                                              styleClass="ui-confirmdialog-no"
                                              icon="ui-icon-close" />
 
                         </p:confirmDialog>
                         <!-- Cuadro de confirmación para Anular Venta -->
-                        <p:confirmDialog widgetVar="confirmationAnularVenta" header="#{msg.confirmacion}" 
+                        <p:confirmDialog widgetVar="confirmationAnularVenta" header="#{msg.confirmacion}"
                                          appendTo="@(body)"
                                          message="#{msg.anularRealmente}"
                                          showEffect="fade" hideEffect="explode">
 
 
-                            <p:commandButton value="#{msg.si}" 
-                                             oncomplete="confirmationAnularVenta.hide()" 
+                            <p:commandButton value="#{msg.si}"
+                                             oncomplete="confirmationAnularVenta.hide()"
                                              actionListener="#{verVentasBean.anularVenta()}"
                                              immediate="true"
                                              update=":opcionesForm"
@@ -94,8 +94,8 @@
                                              icon="ui-icon-check"
                                              process="@this"/>
 
-                            <p:commandButton value="#{msg.no}" type="button" 
-                                             onclick="confirmationAnularVenta.hide()" 
+                            <p:commandButton value="#{msg.no}" type="button"
+                                             onclick="PF('confirmationAnularVenta').hide()"
                                              styleClass="ui-confirmdialog-no"
                                              icon="ui-icon-close" />
 
@@ -104,27 +104,27 @@
                 </h:form>
 
                 <h:form id="facturarForm" >
-                    <p:dialog header="#{msg.facturar}" 
-                              widgetVar="facturarDialog" 
+                    <p:dialog header="#{msg.facturar}"
+                              widgetVar="facturarDialog"
                               resizable="true"
                               id="facturarDialog"
                               rendered="#{empty verVentasBean.ventaActual.idRegistroIva}"
                               closeOnEscape="true"
                               showEffect="fade"
-                              hideEffect="clip" 
-                              modal="true"> 
+                              hideEffect="clip"
+                              modal="true">
 
                         <h:panelGrid columns="2" >
 
                             <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
-                            <p:selectOneMenu id="periodoFiscalField" required="true" 
-                                             requiredMessage="#{msg.campoRequerido}" 
-                                             value="#{verVentasBean.periodoSeleccionado}" 
+                            <p:selectOneMenu id="periodoFiscalField" required="true"
+                                             requiredMessage="#{msg.campoRequerido}"
+                                             value="#{verVentasBean.periodoSeleccionado}"
                                              converter="#{fiscalPeriodoFiscalConverter}">
-                                <f:selectItems value="#{verVentasBean.periodosFiscalesList}" 
-                                               var="periodo" itemLabel="#{periodo.nombrePeriodo}" 
+                                <f:selectItems value="#{verVentasBean.periodosFiscalesList}"
+                                               var="periodo" itemLabel="#{periodo.nombrePeriodo}"
                                                itemValue="#{periodo}"/>
-                            </p:selectOneMenu>                         
+                            </p:selectOneMenu>
 
                             <p:outputLabel for="letraFacturaField" value="#{msg.letraFactura}:"/>
                             <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
@@ -132,7 +132,7 @@
                             <p:outputLabel for="pvFacturaField" value="#{msg.puntoVenta}:"/>
                             <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
                                 <f:validateLongRange minimum="1" maximum="9999" />
-                                <p:ajax  update="nroFacturaField" 
+                                <p:ajax  update="nroFacturaField"
                                          listener="#{verVentasBean.cargarNumeroComprobante()}" />
                             </p:inputText>
 
@@ -147,16 +147,16 @@
                         </h:panelGrid>
 
                         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                                         oncomplete="facturarDialog.hide()" 
+                                         oncomplete="PF('facturarDialog').hide()"
                                          update=":opcionesForm"
-                                         action="#{verVentasBean.registrarFactura()}"/> 
+                                         action="#{verVentasBean.registrarFactura()}"/>
 
                     </p:dialog>
 
 
                 </h:form>
 
-                <gtsoftware:vistaVenta 
+                <gtsoftware:vistaVenta
                     venta="#{verVentasBean.ventaActual}"
                     lineasVenta="#{verVentasBean.lineasVenta}"
                     >

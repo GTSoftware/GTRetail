@@ -6,6 +6,7 @@ import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosMarcasFacade;
 import ar.com.gtsoftware.eao.ProductosRubrosFacade;
 import ar.com.gtsoftware.eao.ProductosSubRubrosFacade;
+import ar.com.gtsoftware.eao.ProductosTiposPorcentajesFacade;
 import ar.com.gtsoftware.eao.ProductosTiposProveeduriaFacade;
 import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
@@ -14,10 +15,14 @@ import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosMarcas;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros;
+import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
 import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -64,6 +69,9 @@ public class ProductoEditBean implements Serializable {
     @EJB
     private ProductosMarcasFacade productosMarcasFacade;
 
+    @EJB
+    private ProductosTiposPorcentajesFacade tiposPorcentajesFacade;
+
     private Productos productosActual;
     private List<ProductosMarcas> listMarcas = new ArrayList<>();
     private List<FiscalAlicuotasIva> listAlicuotaIVA = new ArrayList<>();
@@ -72,12 +80,12 @@ public class ProductoEditBean implements Serializable {
     private List<ProductosTiposUnidades> listTipoUnidades = new ArrayList<>();
     private List<Personas> listProveedores = new ArrayList<>();
     private List<ProductosTiposProveeduria> listTipoProveeduria = new ArrayList<>();
+    private List<ProductosTiposPorcentajes> tiposPorcentajesList = new ArrayList<>();
 
     private ProductosRubros productosRubros = new ProductosRubros();
     private ProductosRubros productosRubrosNuevo = new ProductosRubros();
     private ProductosTiposProveeduria tiposProveeduria = new ProductosTiposProveeduria();
-    private Personas proveedorHabitual = new Personas();
-    private ProductosMarcas productosMarcas = new ProductosMarcas();
+    private ProductosMarcas nuevaMarca = new ProductosMarcas();
 
     private ProductosSubRubros productosSubRubrosNuevo = new ProductosSubRubros();
 
@@ -88,26 +96,31 @@ public class ProductoEditBean implements Serializable {
             nuevo();
         } else {
             productosActual = productosFacade.find(Long.parseLong(idProducto));
+            //TODO inicializar datos según producto existente
             if (productosActual == null) {
                 nuevo();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Producto inexistente!", "Producto inexistente!"));
                 Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, "Producto inexistente!");
-            } else {
-                productosRubros = productosRubrosFacade.find(productosActual.getIdRubro());
-                productosSubRubrosNuevo = productosSubRubrosFacade.find(productosActual.getIdSubRubro());
-                tiposProveeduria = productosTiposProveeduriaFacade.find(productosActual.getIdTipoProveeduria());
-                proveedorHabitual = personasFacade.find(productosActual.getIdProveedorHabitual());
+
             }
         }
-
         listAlicuotaIVA.addAll(fiscalAlicuotasIvaFacade.findAll());
-        listRubros.addAll(productosRubrosFacade.findAll());
-        listMarcas.addAll(productosMarcasFacade.findAll());
+        ProductoRubrosSearchFilter prsf = new ProductoRubrosSearchFilter();
+        prsf.addSortField(new SortField("nombreRubro", true));
+        listRubros.addAll(productosRubrosFacade.findAllBySearchFilter(prsf));
+
+        MarcasSearchFilter msf = new MarcasSearchFilter();
+        msf.addSortField(new SortField("nombreMarca", true));
+        listMarcas.addAll(productosMarcasFacade.findAllBySearchFilter(msf));
+
         listTipoUnidades.addAll(productosTiposUnidadesFacade.findAll());
         PersonasSearchFilter psf = new PersonasSearchFilter();
         psf.setProveedor(true);
+        psf.setActivo(true);
         listProveedores.addAll(personasFacade.findAllBySearchFilter(psf));
         listTipoProveeduria.addAll(productosTiposProveeduriaFacade.findAll());
+
+        tiposPorcentajesList.addAll(tiposPorcentajesFacade.findAll());
 
     }
 
@@ -117,6 +130,7 @@ public class ProductoEditBean implements Serializable {
 
         ProductoSubRubroSearchFilter psrsf = new ProductoSubRubroSearchFilter();
         psrsf.setProductosRubros(productosRubros);
+        psrsf.addSortField(new SortField("nombreSubRubro", true));
         listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(psrsf));
 
     }
@@ -166,16 +180,16 @@ public class ProductoEditBean implements Serializable {
 
     }
 
-    public void nuevaMarca() {
-        productosMarcas = new ProductosMarcas();
+    public void cargarNuevaMarca() {
+        nuevaMarca = new ProductosMarcas();
     }
 
     public void doGuardarMarca() {
 
         try {
 
-            productosMarcasFacade.create(productosMarcas);
-            listMarcas.add(productosMarcas);
+            productosMarcasFacade.create(nuevaMarca);
+            listMarcas.add(nuevaMarca);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
         } catch (Exception e) {
@@ -194,6 +208,7 @@ public class ProductoEditBean implements Serializable {
 
                 productosActual.setActivo(true);
                 productosActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
+                productosActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
 
                 //calculo del precio de venta
                 BigDecimal iva = ((productosActual.getIdAlicuotaIva().getValorAlicuota().divide(BigDecimal.valueOf(100))).add(BigDecimal.valueOf(1)));
@@ -205,7 +220,7 @@ public class ProductoEditBean implements Serializable {
                 productosActual = new Productos();
             } else {
                 productosActual.setIdTipoProveeduria(tiposProveeduria);
-                productosActual.setIdProveedorHabitual(proveedorHabitual);
+                productosActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
                 productosFacade.edit(productosActual);
                 productosActual = productosFacade.find(productosActual.getId());
 
@@ -316,19 +331,20 @@ public class ProductoEditBean implements Serializable {
         this.listTipoProveeduria = listTipoProveeduria;
     }
 
-    public Personas getProveedorHabitual() {
-        return proveedorHabitual;
+    public ProductosMarcas getNuevaMarca() {
+        return nuevaMarca;
     }
 
-    public void setProveedorHabitual(Personas proveedorHabitual) {
-        this.proveedorHabitual = proveedorHabitual;
+    public void setNuevaMarca(ProductosMarcas nuevaMarca) {
+        this.nuevaMarca = nuevaMarca;
     }
 
-    public ProductosMarcas getProductosMarcas() {
-        return productosMarcas;
+    public List<ProductosTiposPorcentajes> getTiposPorcentajesList() {
+        return tiposPorcentajesList;
     }
 
-    public void setProductosMarcas(ProductosMarcas productosMarcas) {
-        this.productosMarcas = productosMarcas;
+    public void setTiposPorcentajesList(List<ProductosTiposPorcentajes> tiposPorcentajesList) {
+        this.tiposPorcentajesList = tiposPorcentajesList;
     }
+
 }

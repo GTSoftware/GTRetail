@@ -15,30 +15,19 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.ProductosRubros;
-
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class ProductoSubRubroSearchFilter extends AbstractSearchFilter {
+public class ProductoRubrosSearchFilter extends AbstractSearchFilter {
 
-    private ProductosRubros productosRubros;
     private String descripcion;
 
-    public ProductoSubRubroSearchFilter() {
+    public ProductoRubrosSearchFilter() {
     }
 
     @Override
     public boolean hasFilter() {
-        return (productosRubros != null || (descripcion != null && !descripcion.isEmpty()));
-    }
-
-    public ProductosRubros getProductosRubros() {
-        return productosRubros;
-    }
-
-    public void setProductosRubros(ProductosRubros productosRubros) {
-        this.productosRubros = productosRubros;
+        return (descripcion != null && !descripcion.isEmpty());
     }
 
     public String getDescripcion() {

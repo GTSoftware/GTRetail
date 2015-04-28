@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.Ventas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
@@ -26,6 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -102,6 +104,15 @@ public class VentasFacade extends AbstractFacade<Ventas> {
             } else {
                 p1 = cb.isFalse(root.get(Ventas_.anulada));
             }
+
+            p = appendAndPredicate(cb, p1, p);
+        }
+        if (vsf.getNumeroFactura() != null) {
+            Predicate p1;
+            Expression<String> nroFactura = cb.concat(root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.letraFactura),
+                    root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.puntoVentaFactura));
+            nroFactura = cb.concat(nroFactura, root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.numeroFactura));
+            p1 = cb.like(nroFactura, String.format("%%%s%%", vsf.getNumeroFactura()));
 
             p = appendAndPredicate(cb, p1, p);
         }

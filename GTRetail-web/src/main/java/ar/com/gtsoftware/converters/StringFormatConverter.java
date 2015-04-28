@@ -18,7 +18,6 @@ package ar.com.gtsoftware.converters;
 import java.io.Serializable;
 import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 
@@ -34,7 +33,7 @@ public class StringFormatConverter implements Serializable, javax.faces.convert.
     @Override
     public Object getAsObject(FacesContext context, UIComponent cmp, String value) {
 
-        if (value != null && cmp instanceof HtmlInputText) {
+        if (value != null) {
             // trim the entered value in a HtmlInputText before doing validation/updating the model
             return value.trim().toUpperCase();
         }

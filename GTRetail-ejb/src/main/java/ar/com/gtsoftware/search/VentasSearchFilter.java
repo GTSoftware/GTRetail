@@ -37,6 +37,7 @@ public class VentasSearchFilter extends AbstractSearchFilter {
     private Boolean facturada;
     private NegocioCondicionesOperaciones condicionVenta;
     private Boolean conSaldo;
+    private String numeroFactura;
 
     @Override
     public boolean hasFilter() {
@@ -44,7 +45,8 @@ public class VentasSearchFilter extends AbstractSearchFilter {
                 || (anulada != null) || (idUsuario != null)
                 || (idSucursal != null) || (idPersona != null)
                 || (facturada != null) || (condicionVenta != null)
-                || (conSaldo != null);
+                || (conSaldo != null)
+                || (numeroFactura != null);
     }
 
     public VentasSearchFilter() {
@@ -134,6 +136,14 @@ public class VentasSearchFilter extends AbstractSearchFilter {
 
     public void setConSaldo(Boolean conSaldo) {
         this.conSaldo = conSaldo;
+    }
+
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 
 }

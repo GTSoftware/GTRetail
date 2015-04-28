@@ -15,37 +15,28 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.ProductosRubros;
-
 /**
+ *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class ProductoSubRubroSearchFilter extends AbstractSearchFilter {
+public class MarcasSearchFilter extends AbstractSearchFilter {
 
-    private ProductosRubros productosRubros;
-    private String descripcion;
+    private String nombreMarca;
 
-    public ProductoSubRubroSearchFilter() {
+    public MarcasSearchFilter() {
     }
 
     @Override
     public boolean hasFilter() {
-        return (productosRubros != null || (descripcion != null && !descripcion.isEmpty()));
+        return nombreMarca != null;
     }
 
-    public ProductosRubros getProductosRubros() {
-        return productosRubros;
+    public String getNombreMarca() {
+        return nombreMarca;
     }
 
-    public void setProductosRubros(ProductosRubros productosRubros) {
-        this.productosRubros = productosRubros;
+    public void setNombreMarca(String nombreMarca) {
+        this.nombreMarca = nombreMarca;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
 }

@@ -15,10 +15,8 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.ProductosMarcas;
-import ar.com.gtsoftware.model.ProductosMarcas_;
+import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.MarcasSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ProductosMarcasFacade extends AbstractFacade<ProductosMarcas> {
+public class ProductosTiposPorcentajesFacade extends AbstractFacade<ProductosTiposPorcentajes> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -41,20 +39,13 @@ public class ProductosMarcasFacade extends AbstractFacade<ProductosMarcas> {
         return em;
     }
 
-    public ProductosMarcasFacade() {
-        super(ProductosMarcas.class);
+    public ProductosTiposPorcentajesFacade() {
+        super(ProductosTiposPorcentajes.class);
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosMarcas> root) {
-        MarcasSearchFilter msf = (MarcasSearchFilter) sf;
-        Predicate p = null;
-        if (msf.getNombreMarca() != null) {
-            String s = msf.getNombreMarca().toUpperCase();
-            p = cb.like(root.get(ProductosMarcas_.nombreMarca), String.format("%%%s%%", s));
-        }
-
-        return p;
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosTiposPorcentajes> root) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

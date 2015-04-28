@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,61 +24,38 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "productos_porcentajes")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_porcentaje"))
+@AttributeOverride(name = "id", column = @Column(name = "id_producto_porcentaje"))
 public class ProductosPorcentajes extends BaseEntity {
 
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "porcentaje")
-    private BigDecimal porcentaje;
-    @Basic(optional = false)
+    @Column(name = "fecha_modificacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModificacion;
     @NotNull
-    @Size(min = 1, max = 60)
-    @Column(name = "descripcion_porcentaje")
-    private String descripcionPorcentaje;
+    @Column(name = "valor", nullable = false, precision = 19, scale = 4)
+    private BigDecimal valor;
+
+    @JoinColumn(name = "id_tipo_porcentaje", referencedColumnName = "id_tipo_porcentaje")
+    @ManyToOne(optional = false)
+    private ProductosTiposPorcentajes idTipoPorcentaje;
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     @ManyToOne(optional = false)
     private Productos idProducto;
 
     public ProductosPorcentajes() {
-    }
-
-    public ProductosPorcentajes(Long idPorcentaje) {
-        super(idPorcentaje);
-    }
-
-    public ProductosPorcentajes(Long idPorcentaje, BigDecimal porcentaje, String descripcionPorcentaje) {
-        super(idPorcentaje);
-        this.porcentaje = porcentaje;
-        this.descripcionPorcentaje = descripcionPorcentaje;
-    }
-
-    public BigDecimal getPorcentaje() {
-        return porcentaje;
-    }
-
-    public void setPorcentaje(BigDecimal porcentaje) {
-        this.porcentaje = porcentaje;
-    }
-
-    public String getDescripcionPorcentaje() {
-        return descripcionPorcentaje;
-    }
-
-    public void setDescripcionPorcentaje(String descripcionPorcentaje) {
-        this.descripcionPorcentaje = descripcionPorcentaje;
     }
 
     public Productos getIdProducto() {
@@ -86,6 +64,30 @@ public class ProductosPorcentajes extends BaseEntity {
 
     public void setIdProducto(Productos idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public Date getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(Date fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public ProductosTiposPorcentajes getIdTipoPorcentaje() {
+        return idTipoPorcentaje;
+    }
+
+    public void setIdTipoPorcentaje(ProductosTiposPorcentajes idTipoPorcentaje) {
+        this.idTipoPorcentaje = idTipoPorcentaje;
     }
 
 }

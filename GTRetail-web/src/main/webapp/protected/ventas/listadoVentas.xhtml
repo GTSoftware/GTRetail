@@ -43,9 +43,13 @@
                                              process="@this" />
                         </h:panelGroup>
 
+
+                        <h:outputLabel for="nroFacturaField" value="#{msg.factura}:" />
+                        <p:inputText  id="nroFacturaField"  value="#{searchVentasBean.filter.numeroFactura}"
+                                      converter="#{stringFormatConverter}"/>
+
                         <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
                         <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchVentasBean.filter.anulada}"/>
-
 
                     </h:panelGrid>
                     <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}"

@@ -23,7 +23,7 @@
                 <role>developer</role>
             </roles>
             <timezone>-3</timezone>
-      
+
         </developer>
     </developers>
     <licenses>
@@ -91,7 +91,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <!-- Build Configuration --> 
+    <!-- Build Configuration -->
     <build>
         <finalName>GTRetail-ejb</finalName>
         <plugins>

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosRubros;
+import ar.com.gtsoftware.model.ProductosRubros_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,10 +28,11 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
 public class ProductosRubrosFacade extends AbstractFacade<ProductosRubros> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -46,22 +47,15 @@ public class ProductosRubrosFacade extends AbstractFacade<ProductosRubros> {
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosRubros> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ProductoRubrosSearchFilter psf = (ProductoRubrosSearchFilter) sf;
+        Predicate p = null;
+        if (psf.getDescripcion() != null) {
+            String s = psf.getDescripcion().toUpperCase();
+            p = cb.like(root.get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
+        }
+
+        return p;
+
     }
 
-    @Override
-    public List<ProductosRubros> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(ProductosRubros entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

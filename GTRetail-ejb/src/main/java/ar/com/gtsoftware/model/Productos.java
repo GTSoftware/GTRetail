@@ -49,11 +49,19 @@ public class Productos extends BaseEntity implements Serializable {
     @Size(max = 200)
     @Column(name = "descripcion")
     private String descripcion;
+    @Size(max = 2048)
+    @Column(name = "observaciones")
+    private String observaciones;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha_ultima_modificacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaUltimaModificacion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "activo")
@@ -67,8 +75,13 @@ public class Productos extends BaseEntity implements Serializable {
     @NotNull
     @Column(name = "utilidad")
     private BigDecimal utilidad;
+    @NotNull
     @Column(name = "precio_venta")
     private BigDecimal precioVenta;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "costo_final", scale = 4, precision = 19)
+    private BigDecimal costoFinal;
     @Basic(optional = false)
     @NotNull
     @Column(name = "stock_total")
@@ -264,6 +277,30 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setIdMarca(ProductosMarcas idMarca) {
         this.idMarca = idMarca;
+    }
+
+    public Date getFechaUltimaModificacion() {
+        return fechaUltimaModificacion;
+    }
+
+    public void setFechaUltimaModificacion(Date fechaUltimaModificacion) {
+        this.fechaUltimaModificacion = fechaUltimaModificacion;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public BigDecimal getCostoFinal() {
+        return costoFinal;
+    }
+
+    public void setCostoFinal(BigDecimal costoFinal) {
+        this.costoFinal = costoFinal;
     }
 
     @Override

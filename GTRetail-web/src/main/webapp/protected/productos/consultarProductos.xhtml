@@ -125,6 +125,15 @@
                                     <h:outputLabel value="#{producto.idProveedorHabitual.nombreFantasia}"/>
 
                                 </p:column>
+                                <p:column style="width: 32px" exportable="false" >
+                                    <f:facet name="header">
+                                        #{msg.editar}
+                                    </f:facet>
+                                    <p:commandButton icon="ui-icon-pencil" action="edicion/edicionProducto"  ajax="false" >
+                                        <f:param name="idProducto" value="#{producto.id}"/>
+                                    </p:commandButton>
+
+                                </p:column>
 
 
                             </p:dataTable>

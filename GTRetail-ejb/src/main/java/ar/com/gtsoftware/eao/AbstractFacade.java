@@ -90,11 +90,12 @@ public abstract class AbstractFacade<T extends GTEntity> {
     }
 
     public List<T> findBySearchFilter(AbstractSearchFilter sf, int firstResult, int maxResults) {
-        if (sf.hasFilter()) {
-            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-            CriteriaQuery<T> cq = cb.createQuery(entityClass);
-            Root<T> root = cq.from(entityClass);
-            cq.select(root);
+//        if (sf.hasFilter()) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> root = cq.from(entityClass);
+        cq.select(root);
+        if (sf != null) {
             if (sf.hasFilter()) {
                 Predicate p = createWhereFromSearchFilter(sf, cb, root);
                 cq.where(p);
@@ -102,13 +103,14 @@ public abstract class AbstractFacade<T extends GTEntity> {
             if (sf.hasOrderFields()) {
                 cq.orderBy(createOrderFromSearchFilter(sf, root, cb));
             }
-            TypedQuery<T> q = getEntityManager().createQuery(cq);
-            q.setMaxResults(maxResults);
-            q.setFirstResult(firstResult);
-            List<T> resultList = q.getResultList();
-            return resultList;
         }
-        return new ArrayList<>();
+        TypedQuery<T> q = getEntityManager().createQuery(cq);
+        q.setMaxResults(maxResults);
+        q.setFirstResult(firstResult);
+        List<T> resultList = q.getResultList();
+        return resultList;
+//        }
+//        return new ArrayList<>();
     }
 
     protected List<Order> createOrderFromSearchFilter(AbstractSearchFilter sf, Root<T> root, CriteriaBuilder cb) {
