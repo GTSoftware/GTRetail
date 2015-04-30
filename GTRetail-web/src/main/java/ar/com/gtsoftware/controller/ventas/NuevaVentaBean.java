@@ -128,11 +128,6 @@ public class NuevaVentaBean implements Serializable {
         }
     }
 
-//    public void buscarClientesPorClave() {
-//        if (idCliente != null) {
-//            ventaActual.setIdPersona(clientesFacade.find(idCliente));
-//        }
-//    }
     /**
      * Calcula el subtotal de la línea de venta
      */
@@ -185,6 +180,7 @@ public class NuevaVentaBean implements Serializable {
         total = total.setScale(2, RoundingMode.HALF_UP);
         ventaActual.setTotal(total);
         ventaActual.setSaldo(total);
+        pagoActual.setImporteTotalPagado(total);
         calcularIVA();
     }
 
@@ -263,7 +259,8 @@ public class NuevaVentaBean implements Serializable {
     public void doAgregarPago() {
         if (pagoActual.getIdFormaPago() != null) {
             if (pagoActual.getImporteTotalPagado().compareTo(ventaActual.getSaldo()) > 0) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El monto del pago supera el saldo!"));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El monto del pago supera el saldo!"));
             } else {
                 UUID idOne = UUID.randomUUID();
                 pagoActual.setItem(String.valueOf(idOne));

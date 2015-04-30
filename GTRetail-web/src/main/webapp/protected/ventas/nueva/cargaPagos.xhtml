@@ -7,24 +7,24 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
     <h:panelGrid columns="2">
-        <h:outputLabel value="#{msg.totalPagar}" style="font-size: xx-large"/>
+        <h:outputLabel value="#{msg.totalPagar}:" style="font-size: xx-large"/>
         <h:outputLabel value="#{nuevaVentaBean.ventaActual.total}" style="font-size: xx-large">
             <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
         </h:outputLabel>
 
-        <h:outputLabel value="#{msg.condicionVenta}" />
+        <h:outputLabel value="#{msg.condicionVenta}:" />
         <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}" value="#{nuevaVentaBean.ventaActual.idCondicionVenta}"
                          converter="#{negocioCondicionesOperacionesConverter}" filter="true"  >
             <f:selectItems value="#{nuevaVentaBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}" itemValue="#{cond}"/>
 
         </p:selectOneMenu>
-        <h:outputLabel value="#{msg.formaPago}" />
+        <h:outputLabel value="#{msg.formaPago}:" />
         <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}" value="#{nuevaVentaBean.pagoActual.idFormaPago}"
                          converter="#{negocioFormasPagoConverter}" filter="true"  >
             <f:selectItems value="#{nuevaVentaBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}" itemValue="#{formaPago}"/>
 
         </p:selectOneMenu>
-        <h:outputLabel for="importePagoField" value="#{msg.importePago}" />
+        <h:outputLabel for="importePagoField" value="#{msg.importePago}:" />
         <p:inputText id="importePagoField" value="#{nuevaVentaBean.pagoActual.importeTotalPagado}" label="#{msg.importePago}">
             <f:validateDoubleRange minimum="0" maximum="#{nuevaVentaBean.ventaActual.saldo}" rendered="#{nuevaVentaBean.ventaActual.saldo gt 0}" />
         </p:inputText>
@@ -69,12 +69,13 @@
     </p:dataTable>
     <h:outputLabel value="#{msg.observaciones}:" />
     <br/>
-    <p:inputTextarea style="width: 100%" value="#{nuevaVentaBean.ventaActual.observaciones}" maxlength="1024" autoResize="true" />
+    <p:inputTextarea style="width: 100%" value="#{nuevaVentaBean.ventaActual.observaciones}" maxlength="1024" autoResize="true"
+                     converter="#{stringFormatConverter}"/>
     <h:outputLabel value="#{msg.remitente}:" />
-    <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.remitente}" maxlength="100"  />
+    <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.remitente}" maxlength="100" converter="#{stringFormatConverter}" />
 
     <h:outputLabel value="#{msg.numeroRemito}:" />
-    <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.nroRemito}" maxlength="100"  />
+    <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.nroRemito}" maxlength="100" converter="#{stringFormatConverter}" />
     <p:separator />
     <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}"  />
     <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" action="#{nuevaVentaBean.cancelar()}" immediate="true" ajax="false"  />

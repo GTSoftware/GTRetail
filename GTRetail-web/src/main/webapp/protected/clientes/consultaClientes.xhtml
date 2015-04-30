@@ -116,7 +116,7 @@
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.tablaDireccion}"/>
                     </f:facet>
-                    <h:outputLabel value="#{cliente.calle += ' ' += cliente.altura}" />
+                    <h:outputText value="#{cliente.calle} #{cliente.altura} #{msg.piso}: #{cliente.piso} #{msg.depto}: #{cliente.depto}"  />
                 </p:column>
 
                 <p:column sortBy="#{cliente.idResponsabilidadIva.nombreResponsabildiad}">

@@ -22,14 +22,14 @@
                                 forceSelection="true"
                                 minQueryLength="3"
                                 >
-                    <p:ajax event="blur" process="@this"
-                            update="ivaField documentoField nombrePaisField nombreProvinciaField nombreLocalidadField direccionField" />
+                    <p:ajax event="blur" process="clienteFragment"
+                            update="clienteFragment" />
 
                 </p:autoComplete>
                 <p:commandButton icon="ui-icon-search"
                                  update=":formContenido:busquedaPersonasDialog"
                                  oncomplete="PF('clientesDialog').show()"
-                                 process="@none" />
+                                 immediate="true" />
             </h:panelGroup>
 
             <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
@@ -53,7 +53,8 @@
                          readonly="true"/>
 
             <p:outputLabel value="#{msg.direccion}:"/>
-            <p:inputTextarea id="direccionField" value="#{nuevaVentaBean.ventaActual.idPersona.calle.concat(' ').concat(nuevaVentaBean.ventaActual.idPersona.altura)}"
+            <p:inputTextarea id="direccionField"
+                             value="#{nuevaVentaBean.ventaActual.idPersona.calle} #{nuevaVentaBean.ventaActual.idPersona.altura}"
                              readonly="true"/>
 
         </h:panelGrid>
@@ -65,6 +66,7 @@
               widgetVar="clientesDialog"
               resizable="true"
               closeOnEscape="true"
+              dynamic="true"
               showEffect="fade" hideEffect="clip" modal="true">
 
         <gtsoftware:busquedaPersonas personaSeleccionada="#{nuevaVentaBean.ventaActual.idPersona}"
