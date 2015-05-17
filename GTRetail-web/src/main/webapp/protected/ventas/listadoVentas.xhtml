@@ -100,7 +100,9 @@
                             <p:dataExporter type="xml" target="ventasTable" fileName="ventas" />
                         </h:commandLink>
                     </f:facet>
-
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
                     <p:column  sortBy="#{venta.id}" style="width: 2%">
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.tablaId}" />
@@ -179,6 +181,82 @@
 
                     </p:column>
 
+                    <p:rowExpansion>
+                        <p:dataTable id="productosTable" value="#{venta.ventasLineasList}" var="lineaVenta"
+
+                                     emptyMessage="#{msg.productosNoCargados}"
+                                     resizableColumns="true">
+
+                            <p:column style="text-align: right; width: 5%">
+                                <f:facet name="header">
+                                    #{msg.tablaId}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.id}" />
+                            </p:column>
+                            <p:column style="text-align: left; width: 5%">
+                                <f:facet name="header">
+                                    #{msg.codigo}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
+                            </p:column>
+                            <p:column style="text-align: left; width: 40%">
+                                <f:facet name="header">
+                                    #{msg.tablaDescripcion}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.descripcion}" />
+                            </p:column>
+                            <p:column style="text-align: right; width: 5%">
+                                <f:facet name="header">
+                                    #{msg.tablaCantidad}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.cantidad}" />
+                            </p:column>
+                            <p:column style="text-align: left; width: 5%">
+                                <f:facet name="header">
+                                    #{msg.tablaUnidad}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                            </p:column>
+                            <p:column style="text-align: right; width: 2%">
+                                <f:facet name="header">
+                                    #{msg.tablaIVA}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
+                                    <f:convertNumber  type="number" groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column style="text-align: right; width: 10%">
+                                <f:facet name="header">
+                                    #{msg.tablaPrecioUnitario}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.precioVenta}" >
+                                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column style="text-align: right; width: 10%">
+                                <f:facet name="header">
+                                    #{msg.tablaSubTotal}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.subTotal}" >
+                                    <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+
+
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="7" footerText="#{msg.total}"
+                                              style="text-align:right; font-size: larger"  />
+
+                                    <p:column footerText="\$#{venta.total}" style=" font-size: xx-large" />
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+                    </p:rowExpansion>
 
                 </p:dataTable>
 
