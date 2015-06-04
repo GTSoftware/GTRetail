@@ -179,7 +179,7 @@
 
 
 
-                    <p:dataTable id="telefonosTable" value="#{clientesEditBean.clienteActual.personasTelefonosList}" var="telefono"
+                    <p:dataTable id="telefonosTable" value="#{clientesEditBean.telefonos}" var="telefono"
                                  rows="15"
                                  paginator="true"
                                  sortMode="multiple"
@@ -242,7 +242,8 @@
                 <p:message for="telefonoField" />
 
                 <h:outputLabel for="referenciaField" value="#{msg.telefonoReferencia}"/>
-                <p:inputText id="referenciaField" value="#{clientesEditBean.telefonoActual.referencia}" maxlength="100"/>
+                <p:inputText id="referenciaField" value="#{clientesEditBean.telefonoActual.referencia}" maxlength="100"
+                             converter="#{stringFormatConverter}"/>
                 <p:message for="referenciaField" />
 
             </h:panelGrid>

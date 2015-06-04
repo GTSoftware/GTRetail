@@ -22,7 +22,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -49,8 +48,6 @@ public class PersonasTelefonos extends BaseEntity {
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @Transient
-    private boolean eliminado;
 
     public PersonasTelefonos() {
     }
@@ -86,14 +83,6 @@ public class PersonasTelefonos extends BaseEntity {
 
     public void setIdPersona(Personas idPersona) {
         this.idPersona = idPersona;
-    }
-
-    public boolean isEliminado() {
-        return eliminado;
-    }
-
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
     }
 
 }

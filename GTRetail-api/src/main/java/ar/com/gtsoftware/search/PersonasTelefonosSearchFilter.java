@@ -13,25 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.bl;
+package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasLineas;
-import java.util.List;
-import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
+import ar.com.gtsoftware.model.Personas;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-@Stateless
-@LocalBean
-public class ContableBean {
+public class PersonasTelefonosSearchFilter extends AbstractSearchFilter {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    public void registrarFacturaVenta(Ventas venta, List<VentasLineas> lineas){
-        
+    private Personas persona;
+
+    public PersonasTelefonosSearchFilter() {
     }
+
+    @Override
+    public boolean hasFilter() {
+        return persona != null;
+    }
+
+    public Personas getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Personas persona) {
+        this.persona = persona;
+    }
+
 }

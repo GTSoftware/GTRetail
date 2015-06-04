@@ -19,7 +19,7 @@ import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
-import ar.com.gtsoftware.bl.LibroIVAVentasBean;
+import ar.com.gtsoftware.bl.impl.LibroIVAVentasBean;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.io.IOException;
 import java.util.ArrayList;

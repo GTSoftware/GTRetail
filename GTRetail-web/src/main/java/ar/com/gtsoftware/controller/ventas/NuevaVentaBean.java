@@ -16,7 +16,7 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.bl.VentasBean;
+import ar.com.gtsoftware.bl.impl.VentasBean;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;

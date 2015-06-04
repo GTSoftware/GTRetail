@@ -16,7 +16,9 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.PersonasTelefonos;
+import ar.com.gtsoftware.model.PersonasTelefonos_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.PersonasTelefonosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -45,7 +47,13 @@ public class PersonasTelefonosFacade extends AbstractFacade<PersonasTelefonos> {
 
     @Override
     protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<PersonasTelefonos> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PersonasTelefonosSearchFilter psf = (PersonasTelefonosSearchFilter) sf;
+        Predicate p = null;
+        if (psf.getPersona() != null) {
+            p = cb.equal(root.get(PersonasTelefonos_.idPersona), psf.getPersona());
+        }
+
+        return p;
     }
 
 }

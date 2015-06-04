@@ -11,6 +11,7 @@
         <module>GTRetail-ear</module>
         <module>GTRetail-web</module>
         <module>GTRetail-ejb</module>
+        <module>GTRetail-api</module>
     </modules>
     <licenses>
         <license>

@@ -95,4 +95,23 @@ public class PersonasFacade extends AbstractFacade<Personas> {
 
     }
 
+    /**
+     * Devuelve true si ya existe una persona con ese tipo y número de documento y no es la persona pasada por parámetro
+     *
+     * @param persona
+     * @return
+     */
+    public boolean existePersonaRepetida(Personas persona) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        javax.persistence.criteria.CriteriaQuery cq = cb.createQuery();
+        javax.persistence.criteria.Root<Personas> rt = cq.from(Personas.class);
+        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        Predicate p = cb.notEqual(rt.get(Personas_.id), persona.getId());
+        p = appendAndPredicate(cb, p, cb.equal(rt.get(Personas_.idTipoDocumento), persona.getIdTipoDocumento()));
+        p = appendAndPredicate(cb, p, cb.equal(rt.get(Personas_.documento), persona.getDocumento()));
+        cq.where(p);
+        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue() > 0;
+    }
+
 }
