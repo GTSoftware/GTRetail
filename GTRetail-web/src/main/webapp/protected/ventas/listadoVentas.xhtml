@@ -203,7 +203,7 @@
                                 <f:facet name="header">
                                     #{msg.tablaDescripcion}
                                 </f:facet>
-                                <h:outputText value="#{lineaVenta.idProducto.descripcion}" />
+                                <h:outputText value="#{lineaVenta.descripcion}" />
                             </p:column>
                             <p:column style="text-align: right; width: 5%">
                                 <f:facet name="header">
@@ -230,7 +230,7 @@
                                 <f:facet name="header">
                                     #{msg.tablaPrecioUnitario}
                                 </f:facet>
-                                <h:outputText value="#{lineaVenta.idProducto.precioVenta}" >
+                                <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
                                     <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                                 </h:outputText>
                             </p:column>

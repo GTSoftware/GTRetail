@@ -28,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -79,8 +80,13 @@ public class VentasLineas extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     @ManyToOne(optional = false)
     private Productos idProducto;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "descripcion")
+    @Size(max = 200)
+    private String descripcion;
     @Transient
-    private String item; //Utlizado para identificar un item dentro de la linea cuando no se ha guardado
+    private Integer item; //Utlizado para identificar un item dentro de la linea cuando no se ha guardado
 
     public VentasLineas() {
     }
@@ -180,12 +186,20 @@ public class VentasLineas extends BaseEntity implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public String getItem() {
+    public Integer getItem() {
         return item;
     }
 
-    public void setItem(String item) {
+    public void setItem(Integer item) {
         this.item = item;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

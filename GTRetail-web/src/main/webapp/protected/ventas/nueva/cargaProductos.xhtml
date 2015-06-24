@@ -24,63 +24,63 @@
             <p:outputLabel value="#{msg.subTotal}:" for="subTotalField"/>
             <p:outputLabel value="#{msg.insertar}" for="insertarButton" />
 
-            <p:commandButton id="buscarProductosButton" icon="ui-icon-search"  
-                             update=":formContenido:productosDialog" 
+            <p:commandButton id="buscarProductosButton" icon="ui-icon-search"
+                             update=":formContenido:productosDialog"
                              oncomplete="PF('productosDialog').show()"
                              process="@none" />
 
             <p:inputText id="idProductoField"
-                         value="#{nuevaVentaBean.productoSearchFilter.idProducto}" 
+                         value="#{nuevaVentaBean.productoSearchFilter.idProducto}"
                          required="false" >
                 <f:convertNumber integerOnly="true" />
-                <p:ajax  update="insertarPanel" 
+                <p:ajax  update="insertarPanel"
                          listener="#{nuevaVentaBean.buscarProductoPorClave()}" />
 
             </p:inputText>
 
             <p:inputText id="codigoProductoField"
-                         value="#{nuevaVentaBean.productoSearchFilter.codigoPropio}" 
-                         required="false" 
+                         value="#{nuevaVentaBean.productoSearchFilter.codigoPropio}"
+                         required="false"
                          maxlength="100">
-                <p:ajax update="insertarPanel" 
+                <p:ajax update="insertarPanel"
                         listener="#{nuevaVentaBean.buscarProductoPorClave()}" />
             </p:inputText>
 
 
-            <p:inputText id="descripcionField" 
+            <p:inputText id="descripcionField"
                          value="#{empty nuevaVentaBean.productoActual.descripcion ? msg.ingreseCodigoProducto : nuevaVentaBean.productoActual.descripcion}" readonly="true" />
 
-            <p:inputText id="cantidadField" 
-                         value="#{nuevaVentaBean.lineaActual.cantidad}" 
+            <p:inputText id="cantidadField"
+                         value="#{nuevaVentaBean.lineaActual.cantidad}"
                          required="true" style="text-align: right" >
-                <!-- <f:convertNumber integerOnly="#{empty nuevaVentaBean.productoActual ? false : nuevaVentaBean.productoActual.idTipoUnidadVenta.cantidadEntera}" type="number" /> -->
-                <f:validateDoubleRange minimum="-9999999999999999999.9999" 
-                                       maximum="9999999999999999999.9999" />
+
+                <f:validateDoubleRange minimum="-9999999999999999999.99"
+                                       maximum="9999999999999999999.99" />
                 <p:ajax update="insertarPanel"
-                        listener="#{nuevaVentaBean.calculatSubTotal()}" />  
+                        listener="#{nuevaVentaBean.calculatSubTotal()}" />
             </p:inputText>
 
-            <h:outputText id="unidadVentaField" 
+            <h:outputText id="unidadVentaField"
                           value="#{nuevaVentaBean.productoActual.idTipoUnidadVenta.nombreUnidad}"/>
 
-            <p:inputText id="precioVentaField" 
-                         value="#{empty nuevaVentaBean.productoActual ? 0 : nuevaVentaBean.productoActual.precioVenta}" 
+            <p:inputText id="precioVentaField"
+                         value="#{empty nuevaVentaBean.productoActual ? 0 : nuevaVentaBean.productoActual.precioVenta}"
                          readonly="#{empty nuevaVentaBean.productoActual.idTipoProveeduria.cambiarPrecioVenta ? true : !nuevaVentaBean.productoActual.idTipoProveeduria.cambiarPrecioVenta}" required="true" style="text-align: right">
-                <p:ajax update="insertarPanel" 
-                        listener="#{nuevaVentaBean.calculatSubTotal()}" />  
-                <f:validateDoubleRange minimum="-9999999999999999999.9999" 
+                <p:ajax update="insertarPanel"
+                        listener="#{nuevaVentaBean.calculatSubTotal()}" />
+                <f:validateDoubleRange minimum="-9999999999999999999.9999"
                                        maximum="9999999999999999999.9999" />
             </p:inputText>
 
-            <h:outputText id="subTotalField" 
-                          value="#{empty nuevaVentaBean.lineaActual ? 0 : nuevaVentaBean.lineaActual.subTotal}" 
+            <h:outputText id="subTotalField"
+                          value="#{empty nuevaVentaBean.lineaActual ? 0 : nuevaVentaBean.lineaActual.subTotal}"
                           style="text-align: right">
                 <f:convertNumber type="currency" currencySymbol="$" groupingUsed="true" />
             </h:outputText>
 
-            <p:commandButton id="insertarButton" icon="ui-icon-circle-arrow-s" 
-                             update="insertarPanel, datosPanel" 
-                             process="@this" 
+            <p:commandButton id="insertarButton" icon="ui-icon-circle-arrow-s"
+                             update="insertarPanel, datosPanel"
+                             process="@this"
                              action="#{nuevaVentaBean.agregarLineaVenta()}" />
 
             <p:message for="idProductoField" />
@@ -118,7 +118,7 @@
                     <f:facet name="header">
                         #{msg.tablaDescripcion}
                     </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.descripcion}" />
+                    <h:outputText value="#{lineaVenta.descripcion}" />
                 </p:column>
                 <p:column style="text-align: right; width: 5%">
                     <f:facet name="header">
@@ -164,20 +164,20 @@
                         #{msg.borrar}
                     </f:facet>
                     <p:commandButton id="borrarItemButton"
-                                     icon="ui-icon-trash" 
-                                     process="@this" 
+                                     icon="ui-icon-trash"
+                                     process="@this"
                                      action="#{nuevaVentaBean.eliminarLinea(lineaVenta)}">
 
                     </p:commandButton>
                 </p:column>
 
                 <p:columnGroup type="footer">
-                    <p:row>  
-                        <p:column colspan="7" footerText="#{msg.total}"  
-                                  style="text-align:right; font-size: larger"  />  
+                    <p:row>
+                        <p:column colspan="7" footerText="#{msg.total}"
+                                  style="text-align:right; font-size: larger"  />
 
-                        <p:column footerText="\$#{nuevaVentaBean.ventaActual.total}" style=" font-size: xx-large" />  
-                    </p:row>  
+                        <p:column footerText="\$#{nuevaVentaBean.ventaActual.total}" style=" font-size: xx-large" />
+                    </p:row>
                 </p:columnGroup>
 
             </p:dataTable>
@@ -205,17 +205,29 @@
                     </h:outputText>
                 </p:column>
             </p:dataTable>
+            <h:panelGrid columns="3" >
+                <p:outputLabel value="#{msg.descuentoRecargo}:" />
+                <p:inputText id="descuentoRecargoField"
+                             value="#{nuevaVentaBean.descuentoRecargoGlobal}"
+                             required="false" >
+                    <f:validateDoubleRange minimum="-9999999999999999999.99"
+                                           maximum="9999999999999999999.99" />
+                </p:inputText>
+                <p:commandButton id="cargarDescuentoRecargoButton" icon="ui-icon-circle-plus"
+                                 action="#{nuevaVentaBean.doCargarDescuentoRecargoGlobal()}"
+                                 process="descuentoRecargoField" />
+            </h:panelGrid>
         </p:fragment>
     </p:panel>
 
-    <p:dialog header="#{msg.busquedaProductos}" 
-              widgetVar="productosDialog" 
+    <p:dialog header="#{msg.busquedaProductos}"
+              widgetVar="productosDialog"
               resizable="true"
-              id="productosDialog" 
+              id="productosDialog"
               closeOnEscape="true"
               showEffect="fade"
-              hideEffect="clip" 
-              modal="true"> 
+              hideEffect="clip"
+              modal="true">
 
         <gtsoftware:busquedaProductos productoSeleccionado="#{nuevaVentaBean.productoActual}"
                                       textoBusqueda="#{productosSearchBean.filter.txt}"
@@ -225,10 +237,10 @@
         </gtsoftware:busquedaProductos>
 
         <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                         oncomplete="productosDialog.hide()" 
-                         update=":formContenido:insertarPanel"/> 
+                         oncomplete="productosDialog.hide()"
+                         update=":formContenido:insertarPanel"/>
 
-    </p:dialog> 
+    </p:dialog>
 
 
 </html>

@@ -87,7 +87,7 @@ limitations under the License.
                     <f:facet name="header">
                         #{msg.tablaDescripcion}
                     </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.descripcion}" />
+                    <h:outputText value="#{lineaVenta.descripcion}" />
                 </p:column>
                 <p:column style="text-align: right; width: 5%">
                     <f:facet name="header">
@@ -114,7 +114,7 @@ limitations under the License.
                     <f:facet name="header">
                         #{msg.tablaPrecioUnitario}
                     </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.precioVenta}" >
+                    <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
                         <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                     </h:outputText>
                 </p:column>
@@ -131,12 +131,12 @@ limitations under the License.
 
 
                 <p:columnGroup type="footer">
-                    <p:row>  
-                        <p:column colspan="7" footerText="#{msg.total}"  
-                                  style="text-align:right; font-size: larger"  />  
+                    <p:row>
+                        <p:column colspan="7" footerText="#{msg.total}"
+                                  style="text-align:right; font-size: larger"  />
 
-                        <p:column footerText="\$#{cc.attrs.venta.total}" style=" font-size: xx-large" />  
-                    </p:row>  
+                        <p:column footerText="\$#{cc.attrs.venta.total}" style=" font-size: xx-large" />
+                    </p:row>
                 </p:columnGroup>
 
             </p:dataTable>

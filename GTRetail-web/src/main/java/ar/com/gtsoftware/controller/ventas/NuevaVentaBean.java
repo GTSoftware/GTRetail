@@ -19,11 +19,13 @@ import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.impl.VentasBean;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
+import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.Ventas;
@@ -42,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -60,8 +63,6 @@ import javax.inject.Inject;
 @ViewScoped
 public class NuevaVentaBean implements Serializable {
 
-//    @Inject
-//    private Conversation conversation;
     @EJB
     private PersonasFacade clientesFacade;
     @EJB
@@ -72,6 +73,8 @@ public class NuevaVentaBean implements Serializable {
     private NegocioFormasPagoFacade formasPagoFacade;
     @EJB
     private VentasBean ventasBean;
+    @EJB
+    private ParametrosFacade parametrosFacade;
     @Inject
     private AuthBackingBean authBackingBean;
     private Ventas ventaActual;
@@ -80,9 +83,11 @@ public class NuevaVentaBean implements Serializable {
     private Productos productoActual;
     private VentasLineas lineaActual; //Linea temporal actual antes de asignarla a la venta
     private List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
-//    private Long idCliente;
+
     private VentasPagos pagoActual = new VentasPagos();
     private List<VentasPagos> pagos = new ArrayList<>();
+    private BigDecimal descuentoRecargoGlobal;
+    private final AtomicInteger ai = new AtomicInteger(1);
 
     /**
      * Creates a new instance of NuevaVentaBean
@@ -152,8 +157,9 @@ public class NuevaVentaBean implements Serializable {
                 if (ventaActual.getVentasLineasList() == null) {
                     ventaActual.setVentasLineasList(new ArrayList<VentasLineas>());
                 }
-                UUID idOne = UUID.randomUUID();
-                lineaActual.setItem(String.valueOf(idOne));
+
+                lineaActual.setItem(ai.getAndIncrement());
+                lineaActual.setDescripcion(productoActual.getDescripcion());
                 ventaActual.getVentasLineasList().add(lineaActual);
                 calcularTotalVenta();
                 inicializarLineaVenta();
@@ -246,7 +252,7 @@ public class NuevaVentaBean implements Serializable {
 
         for (int i = 0; i < ventaActual.getVentasLineasList().size(); i++) {
 
-            if (ventaActual.getVentasLineasList().get(i).getItem().equalsIgnoreCase(linea.getItem())) {
+            if (ventaActual.getVentasLineasList().get(i).getItem().equals(linea.getItem())) {
                 item = i;
             }
         }
@@ -350,11 +356,6 @@ public class NuevaVentaBean implements Serializable {
         return clientesFacade.findBySearchFilter(personasSearchFilter, 0, 15);
     }
 
-//    public void endConversation() {
-//        if (!conversation.isTransient()) {
-//            conversation.end();
-//        }
-//    }
     public ProductosSearchFilter getProductoSearchFilter() {
         return productoSearchFilter;
     }
@@ -395,12 +396,6 @@ public class NuevaVentaBean implements Serializable {
         this.importesIVA = importesIVA;
     }
 
-//    public Long getIdCliente() {
-//        return idCliente;
-//    }
-//    public void setIdCliente(Long idCliente) {
-//        this.idCliente = idCliente;
-//    }
     public List<NegocioCondicionesOperaciones> getCondicionesVentaList() {
         return condicionesOperacionesFacade.findAll();
     }
@@ -425,11 +420,33 @@ public class NuevaVentaBean implements Serializable {
         this.pagos = pagos;
     }
 
-//    public Conversation getConversation() {
-//        return conversation;
-//    }
-//
-//    public void setConversation(Conversation conversation) {
-//        this.conversation = conversation;
-//    }
+    public BigDecimal getDescuentoRecargoGlobal() {
+        return descuentoRecargoGlobal;
+    }
+
+    public void setDescuentoRecargoGlobal(BigDecimal descuentoRecargoGlobal) {
+        this.descuentoRecargoGlobal = descuentoRecargoGlobal;
+    }
+
+    public void doCargarDescuentoRecargoGlobal() {
+        Parametros idProductoDescuento = parametrosFacade.findParametroByName("producto.descuento-recargo.codigo");
+        Productos productoDescuento = productosFacade.find(Long.parseLong(idProductoDescuento.getValorParametro()));
+        if (productoDescuento != null) {
+            if (ventaActual.getVentasLineasList() != null && !ventaActual.getVentasLineasList().isEmpty()) {
+                productoActual = productoDescuento;
+
+                productoActual.setPrecioVenta(ventaActual.getTotal());
+                lineaActual.setCantidad(descuentoRecargoGlobal.divide(new BigDecimal(100)));
+
+                String tipo = "DESCUENTO ";
+                if (descuentoRecargoGlobal.signum() > 0) {
+                    tipo = "RECARGO ";
+                }
+                productoActual.setDescripcion(tipo.concat(descuentoRecargoGlobal.toPlainString()).concat(" %"));
+                calculatSubTotal();
+                agregarLineaVenta();
+                descuentoRecargoGlobal = BigDecimal.ZERO;
+            }
+        }
+    }
 }
