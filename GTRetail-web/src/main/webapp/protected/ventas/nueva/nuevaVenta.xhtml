@@ -18,7 +18,7 @@
 
 
 
-                        <p:wizard backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >
+                        <p:wizard id="ventaWizard" backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >
 
 
 
@@ -39,7 +39,7 @@
 
                             </p:tab>
                         </p:wizard>
-                        <p:commandButton value="#{msg.presupuesto}"
+                        <p:commandButton id="presupuestoButton" value="#{msg.presupuesto}"
                                          action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/>
                     </p:panel>
                 </h:form>

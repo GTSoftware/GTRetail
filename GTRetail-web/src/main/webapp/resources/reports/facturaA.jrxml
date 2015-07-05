@@ -1,149 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaB" pageWidth="585" pageHeight="440" columnWidth="585" leftMargin="0" rightMargin="0" topMargin="14" bottomMargin="0" isIgnorePagination="true" uuid="e8835b76-6390-40c7-b780-e3961ae4b5d7">
-	<property name="ireport.zoom" value="1.771561000000002"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="467"/>
-	<import value="ar.com.gtsoftware.model.*"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<queryString>
+    <property name="ireport.zoom" value="1.771561000000002"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="467"/>
+    <import value="ar.com.gtsoftware.model.*"/>
+    <parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA[]]></defaultValueExpression>
+    </parameter>
+    <parameter name="facturacion.impresion.texto.linea1" class="java.lang.String" isForPrompting="false"/>
+    <parameter name="facturacion.impresion.texto.linea2" class="java.lang.String" isForPrompting="false"/>
+    <queryString>
 		<![CDATA[]]>
-	</queryString>
-	<field name="idPersona" class="ar.com.gtsoftware.model.Personas">
-		<fieldDescription><![CDATA[idPersona]]></fieldDescription>
-	</field>
-	<field name="idCondicionVenta" class="ar.com.gtsoftware.model.NegocioCondicionesOperaciones">
-		<fieldDescription><![CDATA[idCondicionVenta]]></fieldDescription>
-	</field>
-	<field name="idRegistroIva" class="ar.com.gtsoftware.model.FiscalLibroIvaVentas">
-		<fieldDescription><![CDATA[idRegistroIva]]></fieldDescription>
-	</field>
-	<field name="idSucursal" class="ar.com.gtsoftware.model.Sucursales">
-		<fieldDescription><![CDATA[idSucursal]]></fieldDescription>
-	</field>
-	<field name="idUsuario" class="ar.com.gtsoftware.model.Usuarios">
-		<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
-	</field>
-	<field name="total" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[total]]></fieldDescription>
-	</field>
-	<field name="ventasLineasList" class="java.util.List">
-		<fieldDescription><![CDATA[ventasLineasList]]></fieldDescription>
-	</field>
-	<field name="observaciones" class="java.lang.String">
-		<fieldDescription><![CDATA[observaciones]]></fieldDescription>
-	</field>
-	<field name="remitente" class="java.lang.String">
-		<fieldDescription><![CDATA[remitente]]></fieldDescription>
-	</field>
-	<field name="nroRemito" class="java.lang.String">
-		<fieldDescription><![CDATA[nroRemito]]></fieldDescription>
-	</field>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<detail>
-		<band height="426" splitType="Stretch">
-			<subreport>
-				<reportElement x="0" y="173" width="562" height="151" uuid="846f5855-9b3e-42e2-8531-8062d0977a80"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
-				<subreportExpression><![CDATA["facturaA_lineas.jasper"]]></subreportExpression>
-			</subreport>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="343" y="348" width="212" height="22" uuid="0bc100cd-6725-490e-8a1a-27fe6d352793"/>
-				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="13" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="344" width="221" height="26" uuid="015b4a17-663e-4afe-938c-997e18b43256"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[FIRMA   ACLARACIÓN     D.N.I.
+    </queryString>
+    <field name="idPersona" class="ar.com.gtsoftware.model.Personas">
+        <fieldDescription><![CDATA[idPersona]]></fieldDescription>
+    </field>
+    <field name="idCondicionVenta" class="ar.com.gtsoftware.model.NegocioCondicionesOperaciones">
+        <fieldDescription><![CDATA[idCondicionVenta]]></fieldDescription>
+    </field>
+    <field name="idRegistroIva" class="ar.com.gtsoftware.model.FiscalLibroIvaVentas">
+        <fieldDescription><![CDATA[idRegistroIva]]></fieldDescription>
+    </field>
+    <field name="idSucursal" class="ar.com.gtsoftware.model.Sucursales">
+        <fieldDescription><![CDATA[idSucursal]]></fieldDescription>
+    </field>
+    <field name="idUsuario" class="ar.com.gtsoftware.model.Usuarios">
+        <fieldDescription><![CDATA[idUsuario]]></fieldDescription>
+    </field>
+    <field name="total" class="java.math.BigDecimal">
+        <fieldDescription><![CDATA[total]]></fieldDescription>
+    </field>
+    <field name="ventasLineasList" class="java.util.List">
+        <fieldDescription><![CDATA[ventasLineasList]]></fieldDescription>
+    </field>
+    <field name="observaciones" class="java.lang.String">
+        <fieldDescription><![CDATA[observaciones]]></fieldDescription>
+    </field>
+    <field name="remitente" class="java.lang.String">
+        <fieldDescription><![CDATA[remitente]]></fieldDescription>
+    </field>
+    <field name="nroRemito" class="java.lang.String">
+        <fieldDescription><![CDATA[nroRemito]]></fieldDescription>
+    </field>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <detail>
+        <band height="426" splitType="Stretch">
+            <subreport>
+                <reportElement x="0" y="173" width="562" height="151" uuid="846f5855-9b3e-42e2-8531-8062d0977a80"/>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
+                <subreportExpression><![CDATA["facturaA_lineas.jasper"]]></subreportExpression>
+            </subreport>
+            <textField pattern="¤ #,##0.00">
+                <reportElement x="343" y="348" width="212" height="22" uuid="0bc100cd-6725-490e-8a1a-27fe6d352793"/>
+                <textElement textAlignment="Right">
+                    <font fontName="DejaVu Sans Mono" size="13" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="344" width="221" height="26" uuid="015b4a17-663e-4afe-938c-997e18b43256"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans Mono" size="10" isBold="false"/>
+                </textElement>
+                <text><![CDATA[FIRMA   ACLARACIÓN     D.N.I.
 RECEPCIÓN DE MERCADERÍA]]></text>
-			</staticText>
-			<line>
-				<reportElement x="343" y="324" width="212" height="1" uuid="c82120d0-e392-4ffe-8473-3e44b2941546"/>
-			</line>
-			<textField isBlankWhenNull="true">
-				<reportElement x="56" y="81" width="325" height="14" uuid="aef6ea89-1076-4090-8f88-4d5c24621b30"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["["+$F{idPersona}.getId()+"] "+$F{idPersona}.getRazonSocial()+" - "+($F{idPersona}.getNombreFantasia() == null ? "" : $F{idPersona}.getNombreFantasia())]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="56" y="95" width="325" height="14" uuid="9106efab-966d-4c54-9eb8-5d32a1e349e9"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[""+$F{idPersona}.getCalle()+" "+$F{idPersona}.getAltura()+" "+$F{idPersona}.getIdLocalidad().getNombreLocalidad()+" "+$F{idPersona}.getIdProvincia().getNombreProvincia()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="56" y="110" width="302" height="14" uuid="534699ab-aff7-4463-91d4-e2bb071afd15"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[""+$F{idPersona}.getIdResponsabilidadIva().getNombreResponsabildiad()]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy HH:mm:ss a">
-				<reportElement x="397" y="79" width="158" height="20" uuid="cd691498-b4e0-493a-909d-1f3ab7eb2961"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idRegistroIva}.getFechaFactura()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="442" y="110" width="120" height="14" uuid="42dd0af4-ec7d-469d-86de-ea694761e8dd"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idPersona}.getDocumento()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="357" y="0" width="198" height="14" uuid="41e691cb-cf65-4ea4-8ebf-a640feb0f63c"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idRegistroIva}.getLetraFactura()+" "+$F{idRegistroIva}.getPuntoVentaFactura()+"-"+$F{idRegistroIva}.getNumeroFactura()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="94" y="146" width="178" height="14" uuid="5f81cbf3-9b8a-45c0-bb0a-c7ad250c0ae8"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idCondicionVenta}.getNombreCondicion()]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="397" y="110" width="45" height="15" uuid="ab224b5b-eb86-40ba-9dc6-7b04af781ebf"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="56" y="125" width="301" height="14" uuid="e1f49004-b2c0-4051-a083-5f6e7918f266"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{remitente}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="310" width="343" height="34" uuid="c0262292-cf74-477a-b9ce-f20926aa27ab"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="357" y="146" width="228" height="14" uuid="e36e0218-fa93-4474-9543-2690be8e891b"/>
-				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nroRemito}]]></textFieldExpression>
-			</textField>
-		</band>
-	</detail>
+            </staticText>
+            <line>
+                <reportElement x="343" y="324" width="212" height="1" uuid="c82120d0-e392-4ffe-8473-3e44b2941546"/>
+            </line>
+            <textField isBlankWhenNull="true">
+                <reportElement x="56" y="81" width="325" height="14" uuid="aef6ea89-1076-4090-8f88-4d5c24621b30"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA["["+$F{idPersona}.getId()+"] "+$F{idPersona}.getRazonSocial()+" - "+($F{idPersona}.getNombreFantasia() == null ? "" : $F{idPersona}.getNombreFantasia())]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="56" y="95" width="325" height="14" uuid="9106efab-966d-4c54-9eb8-5d32a1e349e9"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[""+$F{idPersona}.getCalle()+" "+$F{idPersona}.getAltura()+" "+$F{idPersona}.getIdLocalidad().getNombreLocalidad()+" "+$F{idPersona}.getIdProvincia().getNombreProvincia()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="56" y="110" width="302" height="14" uuid="534699ab-aff7-4463-91d4-e2bb071afd15"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[""+$F{idPersona}.getIdResponsabilidadIva().getNombreResponsabildiad()]]></textFieldExpression>
+            </textField>
+            <textField pattern="dd/MM/yyyy HH:mm:ss a">
+                <reportElement x="397" y="79" width="158" height="20" uuid="cd691498-b4e0-493a-909d-1f3ab7eb2961"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{idRegistroIva}.getFechaFactura()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="442" y="110" width="120" height="14" uuid="42dd0af4-ec7d-469d-86de-ea694761e8dd"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{idPersona}.getDocumento()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="357" y="0" width="198" height="14" uuid="41e691cb-cf65-4ea4-8ebf-a640feb0f63c"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{idRegistroIva}.getLetraFactura()+" "+$F{idRegistroIva}.getPuntoVentaFactura()+"-"+$F{idRegistroIva}.getNumeroFactura()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="94" y="146" width="178" height="14" uuid="5f81cbf3-9b8a-45c0-bb0a-c7ad250c0ae8"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{idCondicionVenta}.getNombreCondicion()]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="397" y="110" width="45" height="15" uuid="ab224b5b-eb86-40ba-9dc6-7b04af781ebf"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="56" y="125" width="301" height="14" uuid="e1f49004-b2c0-4051-a083-5f6e7918f266"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{remitente}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="310" width="343" height="34" uuid="c0262292-cf74-477a-b9ce-f20926aa27ab"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="357" y="146" width="228" height="14" uuid="e36e0218-fa93-4474-9543-2690be8e891b"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{nroRemito}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="385" width="562" height="20" uuid="c912642d-6aab-4821-b832-df284fce12d9"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{facturacion.impresion.texto.linea1}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="405" width="562" height="20" uuid="0f401623-7e15-4e08-840a-72fb035d451c"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{facturacion.impresion.texto.linea2}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
 </jasperReport>

@@ -115,6 +115,8 @@ public class ImpresionVentasBean implements Serializable {
      */
     private HashMap<String, Object> cargarParametros() {
         List<Parametros> paramList = parametrosFacade.findParametros("empresa");
+        paramList.add(parametrosFacade.findParametroByName("facturacion.impresion.texto.linea1"));
+        paramList.add(parametrosFacade.findParametroByName("facturacion.impresion.texto.linea2"));
         HashMap<String, Object> result = new HashMap<>();
         for (Parametros p : paramList) {
             result.put(p.getNombreParametro(), p.getValorParametro());

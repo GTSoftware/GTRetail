@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.VentasEstadosFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.eao.VentasPagosFacade;
@@ -22,13 +23,10 @@ import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.model.VentasPagosLineas;
-import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -45,8 +43,7 @@ public class VentasBean {
     private VentasPagosFacade pagosFacade;
     @EJB
     private VentasPagosLineasFacade pagosLineasFacade;
-    @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
-    private EntityManager em;
+
     @EJB
     private PersonasCuentaCorrienteBean cuentaCorrienteBean;
     @EJB
@@ -59,7 +56,6 @@ public class VentasBean {
             //TODO Parametrizar estado inicial de venta
             venta.setIdVentasEstados(estadosFacade.find(2L)); //Aceptada
             ventasFacade.create(venta);
-            em.flush();
             for (VentasPagos pago : pagos) {
                 pago.setFechaPago(venta.getFechaVenta());
                 pago.setIdPersona(venta.getIdPersona());
@@ -78,8 +74,7 @@ public class VentasBean {
     }
 
     /**
-     * Anula la venta pasada como parámetro y la devuelve de la cuenta corriente
-     * del cliente
+     * Anula la venta pasada como parámetro y la devuelve de la cuenta corriente del cliente
      *
      * @param venta
      * @throws ServiceException

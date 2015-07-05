@@ -4,39 +4,39 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:form id="formMenu" >
-        <p:menubar  style="height: fit-content"  autoDisplay="false">
+        <p:menubar id="menuBar" style="height: fit-content"  autoDisplay="false">
 
-            <p:submenu label="#{msg.sistema}" icon="ui-icon-wrench" >
-                <p:menuitem value="#{msg.cambiarClave}" action="/protected/user/changePassword.xhtml?faces-redirect=true"  ajax="false" immediate="true"/>
-                <p:menuitem value="#{msg.parametros}" action="/protected/parametros/parametroSearch?faces-redirect=true" ajax="false" immediate="true"/>
-                <p:menuitem value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
+            <p:submenu id="sistemaSubMenu" label="#{msg.sistema}" icon="ui-icon-wrench" >
+                <p:menuitem id="cambiarClaveItem" value="#{msg.cambiarClave}" action="/protected/user/changePassword.xhtml?faces-redirect=true"  ajax="false" immediate="true"/>
+                <p:menuitem id="parametrosItem" value="#{msg.parametros}" action="/protected/parametros/parametroSearch?faces-redirect=true" ajax="false" immediate="true"/>
+                <p:menuitem id="salirItem" value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
             </p:submenu>
 
-            <p:submenu label="#{msg.archivo}" icon="ui-icon-folder-collapsed" >
+            <p:submenu id="archivoSubMenu" label="#{msg.archivo}" icon="ui-icon-folder-collapsed" >
 
 
-                <p:submenu label="#{msg.clientes}" >
+                <p:submenu id="clienteItem" label="#{msg.clientes}" >
                     <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
                 </p:submenu>
-                <p:submenu label="#{msg.productos}" >
-                    <p:menuitem value="#{msg.busquedaProductos}"
+                <p:submenu id="productosSubMenu" label="#{msg.productos}" >
+                    <p:menuitem id="busquedaProductosItem" value="#{msg.busquedaProductos}"
                                 action="/protected/productos/consultarProductos.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
                 </p:submenu>
-                <p:submenu label="#{msg.ventas}" >
-                    <p:menuitem value="#{msg.ventasListado}"
+                <p:submenu id="ventasSubMenu" label="#{msg.ventas}" >
+                    <p:menuitem id="listadoVentasItem" value="#{msg.ventasListado}"
                                 action="/protected/ventas/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
 
-                    <p:menuitem value="#{msg.ventasNueva}"
+                    <p:menuitem id="nuevaVentaItem" value="#{msg.ventasNueva}"
                                 action="/protected/ventas/nueva/nuevaVenta.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
                 </p:submenu>
-                <p:submenu label="#{msg.fiscal}" >
-                    <p:menuitem value="#{msg.periodosFiscales}"
+                <p:submenu id="fiscalItem" label="#{msg.fiscal}" >
+                    <p:menuitem id="periodosFiscalesItem" value="#{msg.periodosFiscales}"
                                 action="/protected/fiscal/periodosFiscales/periodosEdit.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
-                    <p:menuitem value="#{msg.liborIVAVentas}"
+                    <p:menuitem id="ivaVentasItem" value="#{msg.liborIVAVentas}"
                                 action="/protected/fiscal/libros/ivaVentas.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
                 </p:submenu>
