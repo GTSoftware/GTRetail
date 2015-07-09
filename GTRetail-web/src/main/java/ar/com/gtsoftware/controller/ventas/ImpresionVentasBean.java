@@ -66,11 +66,10 @@ public class ImpresionVentasBean implements Serializable {
         ventas.add(ventaActual);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/vistaVenta.jasper");
-        //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.putAll(cargarParametros());
-        //BufferedImage image = ImageIO.read(getClass().getResource(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png")));
-        //parameters.put("logo", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png"));
+
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 
         for (int i = 1; i < cantCopias; i++) {
@@ -95,11 +94,8 @@ public class ImpresionVentasBean implements Serializable {
         }
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura" + ventaActual.getIdRegistroIva().getLetraFactura() + ".jasper");
-        //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.putAll(cargarParametros());
-        //BufferedImage image = ImageIO.read(getClass().getResource(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png")));
-        //parameters.put("logo", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/logo_empresa.png"));
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
