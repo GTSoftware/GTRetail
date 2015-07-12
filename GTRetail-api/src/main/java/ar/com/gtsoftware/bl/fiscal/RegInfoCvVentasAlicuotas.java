@@ -66,7 +66,8 @@ public class RegInfoCvVentasAlicuotas implements Serializable {
     @Field(at = 43,
             length = 4,
             align = Align.RIGHT,
-            required = true)
+            required = true,
+            padding = '0')
     private Integer alicuota;
 
     @Field(at = 47,

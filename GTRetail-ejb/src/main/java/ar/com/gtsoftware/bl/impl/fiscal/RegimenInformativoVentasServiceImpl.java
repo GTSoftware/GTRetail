@@ -23,6 +23,7 @@ import ar.com.gtsoftware.bl.fiscal.ReginfoCvCabecera;
 import ar.com.gtsoftware.bl.fiscal.ReginfoCvVentasCbte;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
+import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
@@ -45,6 +46,9 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVentasService {
+
+    @EJB
+    private ParametrosFacade parametrosFacade;
 
     @EJB
     private FiscalLibroIvaVentasFacade ivaVentasFacade;
@@ -78,7 +82,7 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
         c.setTime(fiscalPeriodosFiscales.getFechaInicioPeriodo());
         cabecera.setAnioPeriodo(c.get(Calendar.YEAR));
         cabecera.setMesPeriodo(c.get(Calendar.MONTH) + 1);
-        cabecera.setCuitInformante(20342577157L);//Sacar de parametría
+        cabecera.setCuitInformante(Long.parseLong(parametrosFacade.findParametroByName("empresa.cuit").getValorParametro()));
         cabecera.setSecuencia(0);
         cabecera.setCreditoFiscalComputableGlobalOPorComprobante(ReginfoCvCabecera.POR_COMPROBANTE);
         cabecera.setImporteCreditoFiscalComputableContribSegSocyOtros(BigDecimal.ZERO);
@@ -114,7 +118,7 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
             //TODO ver el tema de las facturas a Consumidor Final de menos de 1000
             comprobante.setOtrosTributos(BigDecimal.ZERO);
             comprobante.setPercepcionANoCategorizados(BigDecimal.ZERO);
-            comprobante.setTipoComprobante(1);//TODO Sacar de la tabla, por ahora se puede cablear con un If
+            comprobante.setTipoComprobante(Integer.parseInt(factura.getCodigoTipoComprobante().getCodigoTipoComprobante()));
 
             for (FiscalLibroIvaVentasLineas linea : ivaVentasLineasFacade.getLineasFactura(factura)) {
 
