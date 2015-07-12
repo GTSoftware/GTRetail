@@ -24,6 +24,8 @@
         <class>ar.com.gtsoftware.model.FiscalLibroIvaVentas</class>
         <class>ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas</class>
         <class>ar.com.gtsoftware.model.FiscalPeriodosFiscales</class>
+        <class>ar.com.gtsoftware.model.FiscalMonedas</class>
+        <class>ar.com.gtsoftware.model.FiscalTiposComprobante</class>
         <class>ar.com.gtsoftware.model.FiscalResponsabilidadesIva</class>
         <class>ar.com.gtsoftware.model.LegalGeneros</class>
         <class>ar.com.gtsoftware.model.LegalTiposDocumento</class>

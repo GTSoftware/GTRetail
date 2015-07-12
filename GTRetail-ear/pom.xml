@@ -10,7 +10,7 @@
         <name>GT Software</name>
         <url>http://www.gtsoftware.com.ar</url>
     </organization>
-    
+
     <developers>
         <developer>
             <id>rodrigo</id>
@@ -24,10 +24,10 @@
                 <role>developer</role>
             </roles>
             <timezone>-3</timezone>
-      
+
         </developer>
     </developers>
-    
+
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail-ear</artifactId>
     <version>2.0.1-SNAPSHOT</version>
@@ -64,7 +64,7 @@
                             <uri>GTRetail-ejb.jar</uri>
                         </ejbModule>
 
-                        <!-- Register GRC Web Application -->
+                        <!-- Register Web Application -->
                         <webModule>
                             <groupId>ar.com.gtsoftware</groupId>
                             <artifactId>GTRetail-web</artifactId>
@@ -80,13 +80,13 @@
         <dependency>
             <groupId>ar.com.gtsoftware</groupId>
             <artifactId>GTRetail-ejb</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>ar.com.gtsoftware</groupId>
             <artifactId>GTRetail-web</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
     </dependencies>

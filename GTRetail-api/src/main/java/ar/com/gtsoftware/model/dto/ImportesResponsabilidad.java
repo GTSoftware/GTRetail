@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model.dto;
 
-import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -27,6 +26,8 @@ import java.util.Objects;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 public class ImportesResponsabilidad implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private FiscalResponsabilidadesIva responsabilidadIva;
     private BigDecimal importeTotal;

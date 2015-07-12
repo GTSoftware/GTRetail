@@ -4,8 +4,10 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
+import ar.com.gtsoftware.eao.FiscalTiposComprobanteFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.eao.VentasLineasFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
@@ -14,14 +16,13 @@ import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
-import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -41,10 +42,12 @@ public class FacturacionVentasBean {
     private FiscalLibroIvaVentasFacade ivaVentasFacade;
     @EJB
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
+    @EJB
+    private FiscalTiposComprobanteFacade fiscalTiposComprobanteFacade;
 
     /**
-     * Registra la factura fiscalmente en el libro de IVA ventas para la venta
-     * en el período fiscal y con la fecha de factura pasados como parámetro
+     * Registra la factura fiscalmente en el libro de IVA ventas para la venta en el período fiscal y con la fecha de
+     * factura pasados como parámetro
      *
      * @param venta
      * @param letraComprobante
@@ -80,6 +83,12 @@ public class FacturacionVentasBean {
         registro.setNumeroFactura(formatNumeroFactura(numeroComprobante));
         registro.setPuntoVentaFactura(formatPuntoVenta(puntoVentaComprobante));
         registro.setTotalFactura(venta.getTotal());
+        if (letraComprobante.equalsIgnoreCase("B")) {
+            registro.setCodigoTipoComprobante(fiscalTiposComprobanteFacade.find("006"));
+        } else {
+            registro.setCodigoTipoComprobante(fiscalTiposComprobanteFacade.find("001"));
+        }
+
         ivaVentasFacade.create(registro);
         List<VentasLineas> lineasVenta = ventasLineasFacade.findVentasLineas(venta);
         for (VentasLineas linea : lineasVenta) {
@@ -115,8 +124,7 @@ public class FacturacionVentasBean {
     }
 
     /**
-     * Devuelve el próximo número de factura a utilizar para el punto de venta y
-     * letra pasados como parámetro
+     * Devuelve el próximo número de factura a utilizar para el punto de venta y letra pasados como parámetro
      *
      * @param letra
      * @param puntoVenta
@@ -172,7 +180,7 @@ public class FacturacionVentasBean {
         if (venta.getIdRegistroIva().getIdPeriodoFiscal().isPeriodoCerrado()) {
             throw new ServiceException("Venta de un período cerrado: ".concat(venta.toString()));
         }
-        
+
         FiscalLibroIvaVentas factura = venta.getIdRegistroIva();
         factura.setTotalFactura(BigDecimal.ZERO);
         factura.setAnulada(true);

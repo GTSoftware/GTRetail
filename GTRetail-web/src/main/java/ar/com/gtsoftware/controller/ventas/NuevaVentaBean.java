@@ -214,7 +214,7 @@ public class NuevaVentaBean implements Serializable {
 
         }
         for (Entry<FiscalAlicuotasIva, BigDecimal> i : importe.entrySet()) {
-            ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue());
+            ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue(), BigDecimal.ZERO);
             importesIVA.add(imp);
         }
 

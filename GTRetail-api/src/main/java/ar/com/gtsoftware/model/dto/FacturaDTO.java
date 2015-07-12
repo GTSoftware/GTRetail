@@ -15,12 +15,10 @@
  */
 package ar.com.gtsoftware.model.dto;
 
-import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -88,8 +86,7 @@ public class FacturaDTO implements Serializable {
     }
 
     /**
-     * Devuelve el número de factura con el formato: Letra PuntoVenta-Numero Ej:
-     * B 0001-00000000
+     * Devuelve el número de factura con el formato: Letra PuntoVenta-Numero Ej: B 0001-00000000
      *
      * @return numeroFactura
      */
@@ -98,8 +95,7 @@ public class FacturaDTO implements Serializable {
     }
 
     /**
-     * Establece el número de factura. Debe estar en el formato Letra
-     * PuntoVenta-Numero
+     * Establece el número de factura. Debe estar en el formato Letra PuntoVenta-Numero
      *
      * @param numeroFactura
      */

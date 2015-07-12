@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "fiscal_responsabilidades_iva")
@@ -43,6 +43,9 @@ public class FiscalResponsabilidadesIva extends BaseEntity {
     @Size(min = 1, max = 60)
     @Column(name = "nombre_responsabildiad")
     private String nombreResponsabildiad;
+    @Basic(optional = true)
+    @Column(name = "fiscal_codigo_responsable")
+    private Integer fiscalCodigoResponsable;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fiscalResponsabilidadesIva")
     private List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fiscalResponsabilidadesIva1")
@@ -117,6 +120,24 @@ public class FiscalResponsabilidadesIva extends BaseEntity {
 
     public void setFiscalLibroIvaVentasList(List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList) {
         this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
+    }
+
+    /**
+     * Devuelve el código de responsabilidad para regímenes informativos
+     *
+     * @return
+     */
+    public Integer getFiscalCodigoResponsable() {
+        return fiscalCodigoResponsable;
+    }
+
+    /**
+     * Establece el código de responsabilidad para regímenes informativos
+     *
+     * @param fiscalCodigoResponsable
+     */
+    public void setFiscalCodigoResponsable(Integer fiscalCodigoResponsable) {
+        this.fiscalCodigoResponsable = fiscalCodigoResponsable;
     }
 
 }

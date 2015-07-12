@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "fiscal_alicuotas_iva")
@@ -57,6 +57,9 @@ public class FiscalAlicuotasIva extends BaseEntity {
     @NotNull
     @Column(name = "activo")
     private boolean activo;
+    @Basic(optional = true)
+    @Column(name = "fiscal_codigo_alicuota")
+    private Integer fiscalCodigoAlicuota;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlicuotaIva")
     private List<Productos> productosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlicuotaIva")
@@ -125,6 +128,24 @@ public class FiscalAlicuotasIva extends BaseEntity {
 
     public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
         this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
+    }
+
+    /**
+     * Devuelve el código de alícuota para regimenes informativos
+     *
+     * @return
+     */
+    public Integer getFiscalCodigoAlicuota() {
+        return fiscalCodigoAlicuota;
+    }
+
+    /**
+     * Establece el código de alícuota para regimenes informativos
+     *
+     * @param fiscalCodigoAlicuota
+     */
+    public void setFiscalCodigoAlicuota(Integer fiscalCodigoAlicuota) {
+        this.fiscalCodigoAlicuota = fiscalCodigoAlicuota;
     }
 
 }

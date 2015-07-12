@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "legal_tipos_documento")
@@ -53,6 +53,9 @@ public class LegalTiposDocumento extends BaseEntity {
     @NotNull
     @Column(name = "cantidad_caracteres_maximo")
     private int cantidadCaracteresMaximo;
+    @Basic(optional = true)
+    @Column(name = "fiscal_codigo_tipo_documento")
+    private Integer fiscalCodigoTipoDocumento;
     @JoinColumn(name = "id_tipo_personeria", referencedColumnName = "id_tipo_personeria")
     @ManyToOne(optional = false)
     private LegalTiposPersoneria idTipoPersoneria;
@@ -112,6 +115,24 @@ public class LegalTiposDocumento extends BaseEntity {
 
     public void setPersonasList(List<Personas> personasList) {
         this.personasList = personasList;
+    }
+
+    /**
+     * Devuelve el código fiscal para el tipo de documento
+     *
+     * @return
+     */
+    public Integer getFiscalCodigoTipoDocumento() {
+        return fiscalCodigoTipoDocumento;
+    }
+
+    /**
+     * Establece el código fiscal para el tipo de documento
+     *
+     * @param fiscalCodigoTipoDocumento
+     */
+    public void setFiscalCodigoTipoDocumento(Integer fiscalCodigoTipoDocumento) {
+        this.fiscalCodigoTipoDocumento = fiscalCodigoTipoDocumento;
     }
 
 }

@@ -160,6 +160,11 @@
             <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.beanio</groupId>
+            <artifactId>beanio</artifactId>
+            <version>2.1.0</version>
+        </dependency>
     </dependencies>
     <reporting>
         <plugins>

@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
@@ -25,12 +26,11 @@ import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.model.dto.ImportesResponsabilidad;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
-import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -80,29 +80,31 @@ public class LibroIVAVentasBean {
         List<ImportesResponsabilidad> totalesResponsabildiad = new ArrayList<>();
         List<ImportesAlicuotasIVA> totalAlicuotasIVAGeneral = new ArrayList<>();
         for (FiscalLibroIvaVentas factura : facturas) {
-            List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
+            Set<ImportesAlicuotasIVA> importesIVA = new HashSet<>();
 
             FacturaDTO facDTO = inicializarFacturaDTO(factura);
 
             importeGeneralTotal = importeGeneralTotal.add(facDTO.getTotalFactura());
-            HashMap<FiscalAlicuotasIva, BigDecimal> ivaMap = new HashMap<>();
+            //HashMap<FiscalAlicuotasIva, BigDecimal> ivaMap = new HashMap<>();
             for (FiscalLibroIvaVentasLineas linea : ivaVentasLineasFacade.getLineasFactura(factura)) {
                 facDTO.setNetoGravado(facDTO.getNetoGravado().add(linea.getNetoGravado()));
                 facDTO.setNoGravado(facDTO.getNoGravado().add(linea.getNoGravado()));
                 facDTO.setTotalIva(facDTO.getTotalIva().add(linea.getImporteIva()));
                 FiscalAlicuotasIva alicuota = linea.getIdAlicuotaIva();
 
-                BigDecimal importeIva = linea.getImporteIva();
-                if (ivaMap.containsKey(alicuota)) {
-                    importeIva = importeIva.add(ivaMap.get(alicuota));
+                ImportesAlicuotasIVA importeIva = new ImportesAlicuotasIVA(alicuota, linea.getImporteIva(), linea.getNetoGravado());
+                if (!importesIVA.add(importeIva)) {
+                    for (ImportesAlicuotasIVA imp : importesIVA) {
+                        if (imp.getAlicuota().equals(linea.getIdAlicuotaIva())) {
+                            imp.setImporteIva(imp.getImporteIva().add(linea.getImporteIva()));
+                            imp.setNetoGravado(imp.getNetoGravado().add(linea.getNetoGravado()));
+                        }
+                    }
                 }
-                ivaMap.put(alicuota, importeIva);
+
             }
-            for (Map.Entry<FiscalAlicuotasIva, BigDecimal> i : ivaMap.entrySet()) {
-                ImportesAlicuotasIVA imp = new ImportesAlicuotasIVA(i.getKey(), i.getValue());
-                importesIVA.add(imp);
-            }
-            facDTO.setTotalAlicuota(importesIVA);
+            ArrayList<ImportesAlicuotasIVA> alicuotasIvaList = new ArrayList<>(importesIVA);
+            facDTO.setTotalAlicuota(alicuotasIvaList);
 
             totalGeneralIVA = totalGeneralIVA.add(facDTO.getTotalIva());
             facturasDTOList.add(facDTO);
@@ -124,7 +126,7 @@ public class LibroIVAVentasBean {
             }
 
             //Totalizar IVA por alicuota general
-            totalizarAlicuotasIVAGeneral(totalAlicuotasIVAGeneral, importesIVA);
+            totalizarAlicuotasIVAGeneral(totalAlicuotasIVAGeneral, alicuotasIvaList);
         }
 
         libro.setImporteTotal(importeGeneralTotal);
@@ -174,9 +176,9 @@ public class LibroIVAVentasBean {
             for (ImportesAlicuotasIVA ivaFactrura : totalAlicuotasIVAFactura) {
                 if (totalAlicuotasIVAGeneral.contains(ivaFactrura)) {
                     ImportesAlicuotasIVA existente = totalAlicuotasIVAGeneral.get(totalAlicuotasIVAGeneral.indexOf(ivaFactrura));
-                    existente.setImporte(existente.getImporte().add(ivaFactrura.getImporte()));
+                    existente.setImporteIva(existente.getImporteIva().add(ivaFactrura.getImporteIva()));
                 } else {
-                    ImportesAlicuotasIVA nuevoIva = new ImportesAlicuotasIVA(ivaFactrura.getAlicuota(), ivaFactrura.getImporte());
+                    ImportesAlicuotasIVA nuevoIva = new ImportesAlicuotasIVA(ivaFactrura.getAlicuota(), ivaFactrura.getImporteIva(), ivaFactrura.getNetoGravado());
                     totalAlicuotasIVAGeneral.add(nuevoIva);
                 }
             }

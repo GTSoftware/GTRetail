@@ -43,6 +43,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ViewScoped
 public class ImpresionVentasBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @EJB
     private ParametrosFacade parametrosFacade;
 

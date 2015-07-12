@@ -45,6 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @AttributeOverride(name = "id", column = @Column(name = "id_factura"))
 public class FiscalLibroIvaVentas extends BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_factura")
@@ -76,6 +78,11 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total_factura")
     private BigDecimal totalFactura;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "codigo_tipo_comprobante", referencedColumnName = "codigo_tipo_comprobante")
+    private FiscalTiposComprobante codigoTipoComprobante;
+
     @OneToMany(mappedBy = "idRegistroIva")
     private List<Ventas> ventasList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFactura")
@@ -204,6 +211,22 @@ public class FiscalLibroIvaVentas extends BaseEntity {
 
     public void setAnulada(boolean anulada) {
         this.anulada = anulada;
+    }
+
+    public FiscalTiposComprobante getCodigoTipoComprobante() {
+        return codigoTipoComprobante;
+    }
+
+    public void setCodigoTipoComprobante(FiscalTiposComprobante codigoTipoComprobante) {
+        this.codigoTipoComprobante = codigoTipoComprobante;
+    }
+
+    public List<FiscalLibroIvaVentasLineas> getFiscalLibroIvaVentasLineasList() {
+        return fiscalLibroIvaVentasLineasList;
+    }
+
+    public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
+        this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
     }
 
     @Override

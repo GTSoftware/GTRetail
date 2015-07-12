@@ -15,25 +15,28 @@
  */
 package ar.com.gtsoftware.model.dto;
 
-
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Almacena el importe que se genera por cada alícuota de IVA
- * 
+ * Almacena el importeIva y el NetoGravado que se genera por cada alícuota de IVA
+ *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 public class ImportesAlicuotasIVA implements Serializable {
 
-    private FiscalAlicuotasIva alicuota;
-    private BigDecimal importe;
+    private static final long serialVersionUID = 2L;
 
-    public ImportesAlicuotasIVA(FiscalAlicuotasIva alicuota, BigDecimal importe) {
+    private FiscalAlicuotasIva alicuota;
+    private BigDecimal importeIva;
+    private BigDecimal netoGravado;
+
+    public ImportesAlicuotasIVA(FiscalAlicuotasIva alicuota, BigDecimal importeIva, BigDecimal netoGravado) {
         this.alicuota = alicuota;
-        this.importe = importe;
+        this.importeIva = importeIva;
+        this.netoGravado = netoGravado;
     }
 
     public FiscalAlicuotasIva getAlicuota() {
@@ -44,12 +47,20 @@ public class ImportesAlicuotasIVA implements Serializable {
         this.alicuota = alicuota;
     }
 
-    public BigDecimal getImporte() {
-        return importe;
+    public BigDecimal getImporteIva() {
+        return importeIva;
     }
 
-    public void setImporte(BigDecimal importe) {
-        this.importe = importe;
+    public void setImporteIva(BigDecimal importeIva) {
+        this.importeIva = importeIva;
+    }
+
+    public BigDecimal getNetoGravado() {
+        return netoGravado;
+    }
+
+    public void setNetoGravado(BigDecimal netoGravado) {
+        this.netoGravado = netoGravado;
     }
 
     @Override
