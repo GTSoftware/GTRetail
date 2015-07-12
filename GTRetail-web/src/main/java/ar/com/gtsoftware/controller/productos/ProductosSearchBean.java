@@ -26,7 +26,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -34,6 +33,8 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean(name = "productosSearchBean")
 @ViewScoped
 public class ProductosSearchBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private ProductosFacade productosFacade;
@@ -52,10 +53,9 @@ public class ProductosSearchBean implements Serializable {
     }
 
     @PostConstruct
-    private void init(){
+    private void init() {
         //Logger.getLogger(ClientesSearchBean.class.getName()).log(Level.INFO, "Post Construct...", 0);
     }
-    
 
     public void doSearch() {
         productosList.clear();

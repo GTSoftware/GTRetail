@@ -39,11 +39,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 /**
- * Created by fede on 26/12/14.
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "productoEditBean")
 @ViewScoped
 public class ProductoEditBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private ProductosFacade productosFacade;
@@ -72,7 +74,8 @@ public class ProductoEditBean implements Serializable {
     @EJB
     private ProductosTiposPorcentajesFacade tiposPorcentajesFacade;
 
-    private Productos productosActual;
+    private Productos productoActual;
+
     private List<ProductosMarcas> listMarcas = new ArrayList<>();
     private List<FiscalAlicuotasIva> listAlicuotaIVA = new ArrayList<>();
     private List<ProductosRubros> listRubros = new ArrayList<>();
@@ -82,12 +85,14 @@ public class ProductoEditBean implements Serializable {
     private List<ProductosTiposProveeduria> listTipoProveeduria = new ArrayList<>();
     private List<ProductosTiposPorcentajes> tiposPorcentajesList = new ArrayList<>();
 
-    private ProductosRubros productosRubros = new ProductosRubros();
     private ProductosRubros productosRubrosNuevo = new ProductosRubros();
     private ProductosTiposProveeduria tiposProveeduria = new ProductosTiposProveeduria();
     private ProductosMarcas nuevaMarca = new ProductosMarcas();
 
     private ProductosSubRubros productosSubRubrosNuevo = new ProductosSubRubros();
+    private final ProductoSubRubroSearchFilter subRubroSearchFilter = new ProductoSubRubroSearchFilter();
+
+    private static final Logger LOG = Logger.getLogger(ProductoEditBean.class.getName());
 
     @PostConstruct
     public void init() {
@@ -95,15 +100,20 @@ public class ProductoEditBean implements Serializable {
         if (idProducto == null) {
             nuevo();
         } else {
-            productosActual = productosFacade.find(Long.parseLong(idProducto));
-            //TODO inicializar datos según producto existente
-            if (productosActual == null) {
+            productoActual = productosFacade.find(Long.parseLong(idProducto));
+
+            if (productoActual == null) {
                 nuevo();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Producto inexistente!", "Producto inexistente!"));
-                Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, "Producto inexistente!");
+                LOG.log(Level.INFO, "Producto inexistente!");
 
             }
         }
+        initDatos();
+
+    }
+
+    private void initDatos() {
         listAlicuotaIVA.addAll(fiscalAlicuotasIvaFacade.findAll());
         ProductoRubrosSearchFilter prsf = new ProductoRubrosSearchFilter();
         prsf.addSortField(new SortField("nombreRubro", true));
@@ -117,26 +127,31 @@ public class ProductoEditBean implements Serializable {
         PersonasSearchFilter psf = new PersonasSearchFilter();
         psf.setProveedor(true);
         psf.setActivo(true);
+        psf.addSortField(new SortField("razonSocial", true));
         listProveedores.addAll(personasFacade.findAllBySearchFilter(psf));
+
         listTipoProveeduria.addAll(productosTiposProveeduriaFacade.findAll());
 
         tiposPorcentajesList.addAll(tiposPorcentajesFacade.findAll());
 
+        subRubroSearchFilter.addSortField(new SortField("nombreSubRubro", true));
+
+        if (productoActual != null) {
+            subRubroSearchFilter.setProductosRubros(productoActual.getIdRubro());
+            listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
+        }
     }
 
-    public void valueChanged(ValueChangeEvent event) {
+    public void cargarSubRubros(ValueChangeEvent event) {
         listSubRubros.clear();
-        productosRubros = (ProductosRubros) event.getNewValue();
+        subRubroSearchFilter.setProductosRubros((ProductosRubros) event.getNewValue());
 
-        ProductoSubRubroSearchFilter psrsf = new ProductoSubRubroSearchFilter();
-        psrsf.setProductosRubros(productosRubros);
-        psrsf.addSortField(new SortField("nombreSubRubro", true));
-        listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(psrsf));
+        listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
 
     }
 
     public void nuevo() {
-        productosActual = new Productos();
+        productoActual = new Productos();
 
     }
 
@@ -161,7 +176,7 @@ public class ProductoEditBean implements Serializable {
 
     public void nuevoSubRubro() {
         productosSubRubrosNuevo = new ProductosSubRubros();
-        productosSubRubrosNuevo.setIdRubro(productosRubros);
+        productosSubRubrosNuevo.setIdRubro(productoActual.getIdRubro());
 
     }
 
@@ -202,27 +217,25 @@ public class ProductoEditBean implements Serializable {
     public void doGuardar() {
         try {
 
-            if (productosActual.isNew()) {
+            if (productoActual.isNew()) {
 
-                productosActual.setIdTipoProveeduria(tiposProveeduria);
-
-                productosActual.setActivo(true);
-                productosActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
-                productosActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
+                productoActual.setActivo(true);
+                productoActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
+                productoActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
 
                 //calculo del precio de venta
-                BigDecimal iva = ((productosActual.getIdAlicuotaIva().getValorAlicuota().divide(BigDecimal.valueOf(100))).add(BigDecimal.valueOf(1)));
-                BigDecimal costo = productosActual.getCostoAdquisicionNeto();
-                BigDecimal utilidad = productosActual.getUtilidad().add(BigDecimal.valueOf(1));
-                productosActual.setPrecioVenta((iva.multiply(costo)).multiply(utilidad));
+                BigDecimal iva = ((productoActual.getIdAlicuotaIva().getValorAlicuota().divide(BigDecimal.valueOf(100))).add(BigDecimal.valueOf(1)));
+                BigDecimal costo = productoActual.getCostoAdquisicionNeto();
+                BigDecimal utilidad = productoActual.getUtilidad().add(BigDecimal.valueOf(1));
+                productoActual.setPrecioVenta((iva.multiply(costo)).multiply(utilidad));
 
-                productosFacade.create(productosActual);
-                productosActual = new Productos();
+                productosFacade.create(productoActual);
+                productoActual = new Productos();
             } else {
-                productosActual.setIdTipoProveeduria(tiposProveeduria);
-                productosActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
-                productosFacade.edit(productosActual);
-                productosActual = productosFacade.find(productosActual.getId());
+
+                productoActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
+                productosFacade.edit(productoActual);
+                productoActual = productosFacade.find(productoActual.getId());
 
             }
 
@@ -235,12 +248,12 @@ public class ProductoEditBean implements Serializable {
 
     }
 
-    public Productos getProductosActual() {
-        return productosActual;
+    public Productos getProductoActual() {
+        return productoActual;
     }
 
-    public void setProductosActual(Productos productosActual) {
-        this.productosActual = productosActual;
+    public void setProductoActual(Productos productoActual) {
+        this.productoActual = productoActual;
     }
 
     public List<FiscalAlicuotasIva> getListAlicuotaIVA() {
@@ -265,14 +278,6 @@ public class ProductoEditBean implements Serializable {
 
     public void setListSubRubros(List<ProductosSubRubros> listSubRubros) {
         this.listSubRubros = listSubRubros;
-    }
-
-    public ProductosRubros getProductosRubros() {
-        return productosRubros;
-    }
-
-    public void setProductosRubros(ProductosRubros productosRubros) {
-        this.productosRubros = productosRubros;
     }
 
     public ProductosSubRubros getProductosSubRubrosNuevo() {
