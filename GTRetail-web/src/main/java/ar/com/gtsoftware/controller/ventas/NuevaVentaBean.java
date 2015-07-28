@@ -63,6 +63,8 @@ import javax.inject.Inject;
 @ViewScoped
 public class NuevaVentaBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @EJB
     private PersonasFacade clientesFacade;
     @EJB
@@ -123,11 +125,12 @@ public class NuevaVentaBean implements Serializable {
         productoActual = null;
         if (productoSearchFilter.getCodigoPropio() != null
                 || productoSearchFilter.getIdProducto() != null) {
-            List<Productos> productos = productosFacade.findBySearchFilter(productoSearchFilter);
+            List<Productos> productos = productosFacade.findAllBySearchFilter(productoSearchFilter);
             if (!productos.isEmpty()) {
                 productoActual = productos.get(0);
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha encontrado un producto con ese código!", ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "No se ha encontrado un producto con ese código!", ""));
 
             }
         }
@@ -138,6 +141,7 @@ public class NuevaVentaBean implements Serializable {
      */
     public void calculatSubTotal() {
         if (validarCantidad()) {
+            productoActual.setPrecioVenta(productoActual.getPrecios().get(0).getPrecio());
             lineaActual.setSubTotal(lineaActual.getCantidad().multiply(productoActual.getPrecioVenta()).setScale(2, RoundingMode.HALF_UP));
         } else {
             lineaActual.setSubTotal(BigDecimal.ZERO);
@@ -434,7 +438,6 @@ public class NuevaVentaBean implements Serializable {
         if (productoDescuento != null) {
             if (ventaActual.getVentasLineasList() != null && !ventaActual.getVentasLineasList().isEmpty()) {
                 productoActual = productoDescuento;
-
                 productoActual.setPrecioVenta(ventaActual.getTotal());
                 lineaActual.setCantidad(descuentoRecargoGlobal.divide(new BigDecimal(100)));
 

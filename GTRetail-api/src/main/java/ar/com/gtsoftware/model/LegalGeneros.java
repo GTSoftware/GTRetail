@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "legal_generos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_genero"))
+@AttributeOverride(name = "id", column = @Column(name = "id_genero", columnDefinition = "serial"))
 public class LegalGeneros extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -50,7 +52,7 @@ public class LegalGeneros extends BaseEntity {
     @Size(min = 1, max = 1)
     @Column(name = "simbolo")
     private String simbolo;
-    @JoinColumn(name = "id_tipo_personeria", referencedColumnName = "id_tipo_personeria")
+    @JoinColumn(name = "id_tipo_personeria", referencedColumnName = "id_tipo_personeria", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private LegalTiposPersoneria idTipoPersoneria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGenero")

@@ -36,8 +36,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "fiscal_alicuotas_iva")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_alicuota_iva"))
+@AttributeOverride(name = "id", column = @Column(name = "id_alicuota_iva", columnDefinition = "serial"))
 public class FiscalAlicuotasIva extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

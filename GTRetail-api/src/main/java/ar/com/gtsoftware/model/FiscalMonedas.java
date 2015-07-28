@@ -40,7 +40,7 @@ public class FiscalMonedas extends GTEntity {
     @Basic(optional = false)
     @NotNull
     @Size(min = 3, max = 3)
-    @Column(name = "codigo_moneda")
+    @Column(name = "codigo_moneda", columnDefinition = "bpchar")
     private String codigoMoneda;
     @Size(max = 50)
     @Column(name = "nombre_moneda")
@@ -95,6 +95,21 @@ public class FiscalMonedas extends GTEntity {
     @Override
     public String toString() {
         return "FiscalMonedas{" + "codigoMoneda=" + codigoMoneda + ", nombreMoneda=" + nombreMoneda + '}';
+    }
+
+    @Override
+    public Object getId() {
+        return codigoMoneda;
+    }
+
+    @Override
+    public Object calculateId(String id) {
+        return id;
+    }
+
+    @Override
+    public String getStringId() {
+        return codigoMoneda;
     }
 
 }

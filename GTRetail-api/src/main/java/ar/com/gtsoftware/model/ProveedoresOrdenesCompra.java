@@ -41,8 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "proveedores_ordenes_compra")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra"))
+@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra", columnDefinition = "serial"))
 public class ProveedoresOrdenesCompra extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -66,16 +68,16 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
     @NotNull
     @Column(name = "anulada")
     private boolean anulada;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
-    @JoinColumn(name = "id_proveedor", referencedColumnName = "id_persona")
+    @JoinColumn(name = "id_proveedor", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idProveedor;
-    @JoinColumn(name = "id_condicion_compra", referencedColumnName = "id_condicion")
+    @JoinColumn(name = "id_condicion_compra", referencedColumnName = "id_condicion", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private NegocioCondicionesOperaciones idCondicionCompra;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenCompra")

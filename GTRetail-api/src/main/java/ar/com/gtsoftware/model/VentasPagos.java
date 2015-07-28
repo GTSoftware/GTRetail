@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -43,8 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ventas_pagos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_pago_venta"))
-public class VentasPagos extends BaseEntity implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_pago_venta", columnDefinition = "serial"))
+public class VentasPagos extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,21 +58,21 @@ public class VentasPagos extends BaseEntity implements Serializable {
     @Size(max = 255)
     @Column(name = "observaciones")
     private String observaciones;
-    @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago")
+    @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private NegocioFormasPago idFormaPago;
-    @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja")
+    @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private CajasMovimientos idMovimientoCaja;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPagoVenta")
     private List<VentasPagosLineas> ventasPagosLineasList;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false)
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", nullable = false)
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", nullable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
 

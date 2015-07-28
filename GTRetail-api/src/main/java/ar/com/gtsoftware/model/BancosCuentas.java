@@ -40,8 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "bancos_cuentas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_cuenta_banco"))
+@AttributeOverride(name = "id", column = @Column(name = "id_cuenta_banco", columnDefinition = "serial"))
 public class BancosCuentas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Size(max = 200)
     @Column(name = "descripcion_cuenta")
@@ -64,13 +66,13 @@ public class BancosCuentas extends BaseEntity {
     @Column(name = "fecha_apertura")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaApertura;
-    @JoinColumn(name = "id_moneda", referencedColumnName = "id_moneda")
+    @JoinColumn(name = "id_moneda", referencedColumnName = "id_moneda", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadMonedas idMoneda;
-    @JoinColumn(name = "id_tipo_cuenta_banco", referencedColumnName = "id_tipo_cuenta_banco")
+    @JoinColumn(name = "id_tipo_cuenta_banco", referencedColumnName = "id_tipo_cuenta_banco", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private BancosTiposCuenta idTipoCuentaBanco;
-    @JoinColumn(name = "id_banco", referencedColumnName = "id_banco")
+    @JoinColumn(name = "id_banco", referencedColumnName = "id_banco", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Bancos idBanco;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCuentaBanco")

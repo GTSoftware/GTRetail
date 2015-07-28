@@ -42,11 +42,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "personas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_persona"))
+@AttributeOverride(name = "id", column = @Column(name = "id_persona", columnDefinition = "serial"))
 public class Personas extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Column(name = "email", length = 100)
     @Pattern(regexp = "^$|^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
@@ -106,25 +106,25 @@ public class Personas extends BaseEntity implements Serializable {
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<Ventas> ventasList;
-    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia")
+    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
-    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
+    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionPaises idPais;
-    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad")
+    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionLocalidades idLocalidad;
-    @JoinColumn(name = "id_tipo_personeria", referencedColumnName = "id_tipo_personeria")
+    @JoinColumn(name = "id_tipo_personeria", referencedColumnName = "id_tipo_personeria", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private LegalTiposPersoneria idTipoPersoneria;
-    @JoinColumn(name = "id_tipo_documento", referencedColumnName = "id_tipo_documento")
+    @JoinColumn(name = "id_tipo_documento", referencedColumnName = "id_tipo_documento", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private LegalTiposDocumento idTipoDocumento;
-    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero")
+    @JoinColumn(name = "id_genero", referencedColumnName = "id_genero", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private LegalGeneros idGenero;
-    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva")
+    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
     @OneToMany(mappedBy = "idProveedorHabitual")
@@ -135,7 +135,7 @@ public class Personas extends BaseEntity implements Serializable {
     private List<PersonasTelefonos> personasTelefonosList;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<PersonasCuentaCorriente> personasCuentaCorrienteList;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
 

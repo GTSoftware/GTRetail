@@ -34,12 +34,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "ventas_pagos")
+@Table(name = "ventas_estados_historico")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_estado_historico"))
+@AttributeOverride(name = "id", column = @Column(name = "id_estado_historico", columnDefinition = "serial"))
 public class VentasEstadosHistorico extends BaseEntity implements Serializable {
 
-    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta")
+    private static final long serialVersionUID = 1L;
+
+    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Ventas idVenta;
 
@@ -49,15 +51,15 @@ public class VentasEstadosHistorico extends BaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCambio;
 
-    @JoinColumn(name = "id_estado_anterior", referencedColumnName = "id_estado")
+    @JoinColumn(name = "id_estado_anterior", referencedColumnName = "id_estado", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private VentasEstados idEstadoAnterior;
 
-    @JoinColumn(name = "id_estado_actual", referencedColumnName = "id_estado")
+    @JoinColumn(name = "id_estado_actual", referencedColumnName = "id_estado", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private VentasEstados idEstadoActual;
 
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
 
@@ -68,10 +70,10 @@ public class VentasEstadosHistorico extends BaseEntity implements Serializable {
         super(id);
     }
 
-    public VentasEstadosHistorico(Ventas idVenta, Date fechaCambio, 
-            VentasEstados idEstadoAnterior, VentasEstados idEstadoActual, 
+    public VentasEstadosHistorico(Ventas idVenta, Date fechaCambio,
+            VentasEstados idEstadoAnterior, VentasEstados idEstadoActual,
             Usuarios idUsuario, Long id) {
-        
+
         super(id);
         this.idVenta = idVenta;
         this.fechaCambio = fechaCambio;

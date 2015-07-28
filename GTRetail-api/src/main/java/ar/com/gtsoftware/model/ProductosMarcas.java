@@ -26,10 +26,12 @@ import javax.validation.constraints.Size;
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-@AttributeOverride(name = "id", column = @Column(name = "id_marca"))
+@AttributeOverride(name = "id", column = @Column(name = "id_marca", columnDefinition = "serial"))
 @Entity
 @Table(name = "productos_marcas")
 public class ProductosMarcas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @NotNull
     @Column(name = "nombre_marca", length = 100)

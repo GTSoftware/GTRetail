@@ -9,9 +9,9 @@
 
 
 
-    <p:panel id="insertarPanel" >
+    <h:panelGroup  id="insertarPanel" >
         <p:focus transient="true" context="insertarPanel"/>
-        <p:defaultCommand target="insertarButton" />
+
         <h:panelGrid  columns="9">
 
             <p:outputLabel value="#{msg.buscar}:" for="buscarProductosButton"/>
@@ -87,7 +87,7 @@
             <p:message for="cantidadField" />
             <p:message for="precioVentaField" />
         </h:panelGrid>
-    </p:panel>
+    </h:panelGroup>
 
     <p:separator />
 
@@ -232,7 +232,7 @@
         <gtsoftware:busquedaProductos productoSeleccionado="#{nuevaVentaBean.productoActual}"
                                       textoBusqueda="#{productosSearchBean.filter.txt}"
                                       busquedaAction="#{productosSearchBean.doSearch()}"
-                                      productosList="#{productosSearchBean.productosList}"
+                                      dataModel="#{productosSearchBean.dataModel}"
                                       >
         </gtsoftware:busquedaProductos>
 

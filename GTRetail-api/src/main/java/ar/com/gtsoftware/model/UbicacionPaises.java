@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ubicacion_paises")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_pais"))
+@AttributeOverride(name = "id", column = @Column(name = "id_pais", columnDefinition = "serial"))
 public class UbicacionPaises extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

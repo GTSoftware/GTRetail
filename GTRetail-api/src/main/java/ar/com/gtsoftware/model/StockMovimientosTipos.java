@@ -31,8 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "stock_movimientos_tipos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento"))
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento", columnDefinition = "serial"))
 public class StockMovimientosTipos extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

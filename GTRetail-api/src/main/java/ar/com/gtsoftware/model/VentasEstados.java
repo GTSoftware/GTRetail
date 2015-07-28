@@ -31,8 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ventas_estados")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_estado"))
+@AttributeOverride(name = "id", column = @Column(name = "id_estado", columnDefinition = "int4"))
 public class VentasEstados extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

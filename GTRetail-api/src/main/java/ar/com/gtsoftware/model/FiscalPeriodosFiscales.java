@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_periodos_fiscales")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_periodo_fiscal"))
+@AttributeOverride(name = "id", column = @Column(name = "id_periodo_fiscal", columnDefinition = "serial"))
 public class FiscalPeriodosFiscales extends BaseEntity {
 
     private static final long serialVersionUID = 1L;

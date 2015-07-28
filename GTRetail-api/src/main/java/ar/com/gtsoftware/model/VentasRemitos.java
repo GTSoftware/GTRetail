@@ -40,8 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ventas_remitos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_remito"))
+@AttributeOverride(name = "id", column = @Column(name = "id_remito", columnDefinition = "serial"))
 public class VentasRemitos extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -57,13 +59,13 @@ public class VentasRemitos extends BaseEntity {
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRemito")
     private List<VentasRemitosLineas> ventasRemitosLineasList;
-    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta")
+    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Ventas idVenta;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
 

@@ -43,10 +43,10 @@ public class FiscalLetrasComprobantes extends GTEntity {
     @Size(min = 1, max = 1)
     @Column(name = "letra_comprobante")
     private String letraComprobante;
-    @JoinColumn(name = "id_resoponsabildiad_iva_receptor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false)
+    @JoinColumn(name = "id_resoponsabildiad_iva_receptor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva fiscalResponsabilidadesIva;
-    @JoinColumn(name = "id_resoponsabildiad_iva_emisor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false)
+    @JoinColumn(name = "id_resoponsabildiad_iva_emisor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva fiscalResponsabilidadesIva1;
 
@@ -126,6 +126,30 @@ public class FiscalLetrasComprobantes extends GTEntity {
     @Override
     public boolean isNew() {
         return fiscalLetrasComprobantesPK == null;
+    }
+
+    @Override
+    public Object getId() {
+        return fiscalLetrasComprobantesPK;
+    }
+
+    @Override
+    public Object calculateId(String id) {
+        if (id != null) {
+            String[] pkStr = id.split("-");
+            if (pkStr.length == 2) {
+                return new FiscalLetrasComprobantesPK(Integer.parseInt(pkStr[0]), Integer.parseInt(pkStr[1]));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getStringId() {
+        if (fiscalLetrasComprobantesPK != null) {
+            return fiscalLetrasComprobantesPK.toString();
+        }
+        return null;
     }
 
 }

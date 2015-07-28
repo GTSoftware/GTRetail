@@ -62,12 +62,12 @@
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
-            <version>1.0.10</version>
+            <version>${primefaces-themes.version}</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>5.1</version>
+            <version>${primefaces.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

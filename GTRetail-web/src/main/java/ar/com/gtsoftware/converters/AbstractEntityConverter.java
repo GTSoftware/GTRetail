@@ -16,7 +16,9 @@
 package ar.com.gtsoftware.converters;
 
 import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.model.BaseEntity;
+import ar.com.gtsoftware.model.GTEntity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -27,20 +29,33 @@ import javax.faces.convert.Converter;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @param <T>
  */
-public abstract class AbstractBaseEntityConverter<T extends BaseEntity> implements Converter {
+public abstract class AbstractEntityConverter<T extends GTEntity> implements Converter {
+
+    private final Class<T> entityClass;
+
+    public AbstractEntityConverter(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    public AbstractEntityConverter() {
+        this.entityClass = null;
+    }
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        Long id;
+
         try {
-            id = Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
+            Object calculateId = entityClass.newInstance().calculateId(value);
+            if (calculateId != null) {
+                return getFacade().find(calculateId);
+            }
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(entityClass.getName()).log(Level.SEVERE, null, ex);
         }
-        return getFacade().find(id);
+        return null;
     }
 
     @Override
@@ -50,7 +65,7 @@ public abstract class AbstractBaseEntityConverter<T extends BaseEntity> implemen
         }
         try {
             T entity = (T) value;
-            return String.valueOf(entity.getId());
+            return entity.getStringId();
         } catch (ClassCastException ex) {
             return null;
         }

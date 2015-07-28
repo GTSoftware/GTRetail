@@ -42,7 +42,7 @@ public class FiscalTiposComprobante extends GTEntity {
     @Basic(optional = false)
     @NotNull
     @Size(min = 3, max = 3)
-    @Column(name = "codigo_tipo_comprobante")
+    @Column(name = "codigo_tipo_comprobante", columnDefinition = "bpchar")
     private String codigoTipoComprobante;
     @Size(max = 100)
     @Column(name = "denominacion_comprobante")
@@ -99,6 +99,21 @@ public class FiscalTiposComprobante extends GTEntity {
     @Override
     public String toString() {
         return "FiscalTiposComprobante{" + "codigoTipoComprobante=" + codigoTipoComprobante + ", denominacionComprobante=" + denominacionComprobante + '}';
+    }
+
+    @Override
+    public Object getId() {
+        return codigoTipoComprobante;
+    }
+
+    @Override
+    public Object calculateId(String id) {
+        return id;
+    }
+
+    @Override
+    public String getStringId() {
+        return codigoTipoComprobante;
     }
 
 }

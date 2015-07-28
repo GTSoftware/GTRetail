@@ -35,8 +35,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "negocio_formas_pago")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_forma_pago"))
+@AttributeOverride(name = "id", column = @Column(name = "id_forma_pago", columnDefinition = "serial"))
 public class NegocioFormasPago extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

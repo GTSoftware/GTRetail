@@ -22,14 +22,10 @@ import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
 import ar.com.gtsoftware.model.Productos_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -52,91 +48,62 @@ public class ProductosFacade extends AbstractFacade<Productos> {
         super(Productos.class);
     }
 
-    public List<Productos> findBySearchFilter(ProductosSearchFilter psf) {
-        if (psf.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Productos> cq = cb.createQuery(Productos.class);
-            Root<Productos> producto = cq.from(Productos.class);
-            cq.select(producto);
-            Predicate p = null;
-            if (psf.getIdProducto() != null) {
-                p = cb.equal(producto.get(Productos_.id), psf.getIdProducto());
-            }
-            if (psf.getCodigoPropio() != null && !psf.getCodigoPropio().isEmpty()) {
-                p = cb.equal(producto.get(Productos_.codigoPropio), psf.getCodigoPropio());
-            }
-            if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
-                for (String s : psf.getTxt().toUpperCase().split(" ")) {
-
-                    Predicate p1 = cb.like(producto.get(Productos_.descripcion), String.format("%%%s%%", s));
-                    Predicate p2 = cb.like(producto.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
-                    Predicate p3 = cb.like(producto.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
-                    Predicate p4 = cb.like(producto.get(Productos_.codigoPropio), String.format("%%%s%%", s));
-                    Predicate p5 = cb.like(producto.get(Productos_.ubicacion), String.format("%%%s%%", s));
-
-                    if (p == null) {
-                        p = cb.or(p1, p2, p3, p4, p5);
-                    } else {
-                        p = cb.or(p, p1, p2, p3, p4, p5);
-                    }
-                }
-            }
-            if (psf.getIdProveedorHabitual() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.idProveedorHabitual), psf.getIdProveedorHabitual());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.getPuedeComprarse() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.puedeComprarse), psf.getPuedeComprarse());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.getPuedeVenderse() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.puedeVenderse), psf.getPuedeVenderse());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.getIdRubro() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.idRubro), psf.getIdRubro());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.getIdSubRubro() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.idSubRubro), psf.getIdSubRubro());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.isActivo() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.activo), psf.isActivo());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (psf.getConStockEnDeposito() != null) {
-                Predicate p1 = cb.equal(producto.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock), Boolean.FALSE);
-                //TODO Or existe que ese producto tiene stock > 0 en el deposito del filtro
-            }
-
-            cq.where(p);
-            TypedQuery<Productos> q = em.createQuery(cq);
-
-            List<Productos> productosList = q.getResultList();
-            return productosList;
-        }
-        return new ArrayList<>();
-    }
-
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Productos> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        ProductosSearchFilter psf = (ProductosSearchFilter) sf;
+        Predicate p = null;
+        if (psf.getIdProducto() != null) {
+            p = cb.equal(root.get(Productos_.id), psf.getIdProducto());
+        }
+        if (psf.getCodigoPropio() != null && !psf.getCodigoPropio().isEmpty()) {
+            p = cb.equal(root.get(Productos_.codigoPropio), psf.getCodigoPropio());
+        }
+        if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
+            for (String s : psf.getTxt().toUpperCase().split(" ")) {
 
-    @Override
-    public List<Productos> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+                Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format("%%%s%%", s));
+                Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
+                Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
+                Predicate p4 = cb.like(root.get(Productos_.codigoPropio), String.format("%%%s%%", s));
+                Predicate p5 = cb.like(root.get(Productos_.ubicacion), String.format("%%%s%%", s));
 
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+                if (p == null) {
+                    p = cb.or(p1, p2, p3, p4, p5);
+                } else {
+                    p = cb.or(p, p1, p2, p3, p4, p5);
+                }
+            }
+        }
+        if (psf.getIdProveedorHabitual() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.idProveedorHabitual), psf.getIdProveedorHabitual());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getPuedeComprarse() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.puedeComprarse), psf.getPuedeComprarse());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getPuedeVenderse() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.puedeVenderse), psf.getPuedeVenderse());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getIdRubro() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.idRubro), psf.getIdRubro());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getIdSubRubro() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.idSubRubro), psf.getIdSubRubro());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.isActivo() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.activo), psf.isActivo());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getConStockEnDeposito() != null) {
+            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock), Boolean.FALSE);
+            //TODO Or existe que ese producto tiene stock > 0 en el deposito del filtro
+        }
+        return p;
 
-    @Override
-    public void createOrEdit(Productos entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

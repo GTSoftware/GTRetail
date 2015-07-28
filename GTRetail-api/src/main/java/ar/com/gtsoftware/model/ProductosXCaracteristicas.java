@@ -33,18 +33,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos_x_caracteristicas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_caracteristica_x_producto"))
+@AttributeOverride(name = "id", column = @Column(name = "id_caracteristica_x_producto", columnDefinition = "serial"))
 public class ProductosXCaracteristicas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "valor_caracteristica")
     private String valorCaracteristica;
-    @JoinColumn(name = "id_caracteristica", referencedColumnName = "id_caracteristica")
+    @JoinColumn(name = "id_caracteristica", referencedColumnName = "id_caracteristica", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ProductosCaracteristicas idCaracteristica;
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
 

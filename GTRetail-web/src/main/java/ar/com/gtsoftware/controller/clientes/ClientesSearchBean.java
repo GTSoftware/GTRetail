@@ -34,6 +34,8 @@ import javax.faces.model.DataModel;
 @ViewScoped
 public class ClientesSearchBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @EJB
     private PersonasFacade personasFacade;
     private Personas clienteActual;

@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,9 @@ import java.util.List;
  * @since 1.0.0
  * @version 1.0.0
  */
-public abstract class AbstractSearchFilter {
+public abstract class AbstractSearchFilter implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<SortField> sortFields;
 

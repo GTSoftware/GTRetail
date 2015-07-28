@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "bancos_cuenta_corriente")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento"))
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento", columnDefinition = "serial"))
 public class BancosCuentaCorriente extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -59,7 +61,7 @@ public class BancosCuentaCorriente extends BaseEntity {
     @NotNull
     @Column(name = "id_registro_contable")
     private int idRegistroContable;
-    @JoinColumn(name = "id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
+    @JoinColumn(name = "id_cuenta_banco", referencedColumnName = "id_cuenta_banco", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private BancosCuentas idCuentaBanco;
 

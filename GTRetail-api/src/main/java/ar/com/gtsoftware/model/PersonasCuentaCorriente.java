@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "personas_cuenta_corriente")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento"))
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento", columnDefinition = "serial"))
 public class PersonasCuentaCorriente extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -55,10 +57,10 @@ public class PersonasCuentaCorriente extends BaseEntity {
     @Size(min = 1, max = 200)
     @Column(name = "descripcion_movimiento")
     private String descripcionMovimiento;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro")
+    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private ContabilidadRegistroContable idRegistroContable;
 

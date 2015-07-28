@@ -33,8 +33,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ventas_remitos_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_remito"))
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_remito", columnDefinition = "serial"))
 public class VentasRemitosLineas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
@@ -45,10 +47,10 @@ public class VentasRemitosLineas extends BaseEntity {
     @NotNull
     @Column(name = "costo_neto_unitario")
     private BigDecimal costoNetoUnitario;
-    @JoinColumn(name = "id_remito", referencedColumnName = "id_remito")
+    @JoinColumn(name = "id_remito", referencedColumnName = "id_remito", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private VentasRemitos idRemito;
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
 

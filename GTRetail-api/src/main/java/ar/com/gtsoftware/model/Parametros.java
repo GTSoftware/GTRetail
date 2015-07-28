@@ -115,4 +115,19 @@ public class Parametros extends GTEntity {
         return nombreParametro == null;
     }
 
+    @Override
+    public Object getId() {
+        return nombreParametro;
+    }
+
+    @Override
+    public Object calculateId(String id) {
+        return id;
+    }
+
+    @Override
+    public String getStringId() {
+        return nombreParametro;
+    }
+
 }

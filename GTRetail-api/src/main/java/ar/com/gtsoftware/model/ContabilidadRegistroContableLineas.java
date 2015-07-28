@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "contabilidad_registro_contable_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_registro"))
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_registro", columnDefinition = "serial"))
 public class ContabilidadRegistroContableLineas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Size(max = 1024)
     @Column(name = "descripcion_linea")
@@ -64,10 +66,10 @@ public class ContabilidadRegistroContableLineas extends BaseEntity {
     @NotNull
     @Column(name = "importe_haber")
     private BigDecimal importeHaber;
-    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro")
+    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadRegistroContable idRegistroContable;
-    @JoinColumn(name = "id_cuenta", referencedColumnName = "id_cuenta")
+    @JoinColumn(name = "id_cuenta", referencedColumnName = "id_cuenta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadPlanCuentas idCuenta;
 

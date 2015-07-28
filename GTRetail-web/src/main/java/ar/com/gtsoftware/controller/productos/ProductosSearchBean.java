@@ -16,15 +16,24 @@
 package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.eao.ProductosFacade;
+import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
+import ar.com.gtsoftware.eao.ProductosPreciosFacade;
 import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosListasPrecios;
+import ar.com.gtsoftware.model.ProductosPrecios;
+import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
+import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.DataModel;
 
 /**
  *
@@ -38,9 +47,17 @@ public class ProductosSearchBean implements Serializable {
 
     @EJB
     private ProductosFacade productosFacade;
+    @EJB
+    private ProductosListasPreciosFacade listasPreciosFacade;
+    @EJB
+    private ProductosPreciosFacade preciosFacade;
     private List<Productos> productosList = new ArrayList<>();
     private Productos productoActual;
+    private ProductosListasPrecios listaSeleccionada;
+    private DataModel<Productos> dataModel;
+    private ProductosPreciosSearchFilter preciosSF;
 
+    private List<ProductosListasPrecios> listasPrecio;
     /**
      * Por defecto creamos un filtro para productos a la venta activos
      */
@@ -52,14 +69,21 @@ public class ProductosSearchBean implements Serializable {
     public ProductosSearchBean() {
     }
 
-    @PostConstruct
-    private void init() {
-        //Logger.getLogger(ClientesSearchBean.class.getName()).log(Level.INFO, "Post Construct...", 0);
+    public DataModel<Productos> getDataModel() {
+        if (!filter.hasOrderFields()) {
+            filter.addSortField(new SortField("descripcion", true));
+        }
+        if (listaSeleccionada == null) {
+            listaSeleccionada = getListasPrecio().get(0);
+        }
+        if (dataModel == null) {
+            dataModel = new LazyEntityDataModel<>(productosFacade, filter);
+        }
+        return dataModel;
     }
 
     public void doSearch() {
-        productosList.clear();
-        productosList.addAll(productosFacade.findBySearchFilter(filter));
+        dataModel = null;
     }
 
     public List<Productos> getProductosList() {
@@ -86,4 +110,33 @@ public class ProductosSearchBean implements Serializable {
         this.filter = filter;
     }
 
+    public List<ProductosListasPrecios> getListasPrecio() {
+        if (listasPrecio == null) {
+            ProductosListasPreciosSearchFilter sf = new ProductosListasPreciosSearchFilter();
+            sf.setActiva(true);
+            sf.addSortField(new SortField("id", true));
+            listasPrecio = listasPreciosFacade.findAllBySearchFilter(sf);
+        }
+        return listasPrecio;
+    }
+
+    public ProductosListasPrecios getListaSeleccionada() {
+        return listaSeleccionada;
+    }
+
+    public void setListaSeleccionada(ProductosListasPrecios listaSeleccionada) {
+        this.listaSeleccionada = listaSeleccionada;
+    }
+
+    public BigDecimal getPrecio(Productos producto) {
+        if (preciosSF == null) {
+            preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
+        }
+        preciosSF.setProducto(producto);
+        List<ProductosPrecios> precio = preciosFacade.findBySearchFilter(preciosSF, 0, 1);
+        if (precio.isEmpty()) {
+            return null;
+        }
+        return precio.get(0).getPrecio();
+    }
 }

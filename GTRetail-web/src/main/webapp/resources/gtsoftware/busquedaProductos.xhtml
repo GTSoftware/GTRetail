@@ -23,10 +23,12 @@ limitations under the License.
       xmlns:p="http://primefaces.org/ui">
 
     <composite:interface>
+
         <composite:attribute name="textoBusqueda"  type="java.lang.String" />
-        <composite:attribute name="productosList"   />
+        <composite:attribute name="dataModel"   />
         <composite:attribute name="productoSeleccionado" type="ar.com.gtsoftware.model.Productos" />
         <composite:attribute name="busquedaAction" method-signature="void busquedaAction()" />
+
     </composite:interface>
 
     <composite:implementation>
@@ -48,19 +50,20 @@ limitations under the License.
 
 
 
-                <p:dataTable id="productosBusquedaTable" var="pro" value="#{cc.attrs.productosList}"
+                <p:dataTable id="productosBusquedaTable" var="pro" value="#{cc.attrs.dataModel}"
                              rows="5"
+                             lazy="true"
                              paginator="true"
-                             sortMode="multiple"
                              emptyMessage="#{msg.busquedaSinResultados}"
                              selectionMode="single"
                              selection="#{cc.attrs.productoSeleccionado}"
                              rowKey="#{pro.id}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="5,10,15,30"
+                             rowsPerPageTemplate="5,10,15,30,100"
                              style="width: 100%"
                              resizableColumns="true"
-                             scrollable="true" >
+                             scrollable="true"
+                             sortMode="single">
 
                     <p:ajax event="rowSelect"  />
 
@@ -82,7 +85,7 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.stock}
                         </f:facet>
-                        <h:outputText value="#{pro.stockTotal}" >
+                        <h:outputText value="0" >
                             <f:convertNumber groupingUsed="true" type="number"/>
                         </h:outputText>
                     </p:column>
@@ -91,8 +94,9 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.precioUnitario}
                         </f:facet>
-                        <h:outputText value="#{pro.precioVenta}" >
-                            <f:convertNumber groupingUsed="true" type="currency"/>
+                        <h:outputText value="#{pro.precios.get(0).precio}" style="font-size: medium; font-weight: bold">
+                            <f:convertNumber groupingUsed="true" type="currency"
+                                             currencySymbol="$"/>
                         </h:outputText>
                     </p:column>
                     <p:column  >

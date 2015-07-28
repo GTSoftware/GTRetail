@@ -36,8 +36,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "usuarios_grupos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_grupo"))
+@AttributeOverride(name = "id", column = @Column(name = "id_grupo", columnDefinition = "serial"))
 public class UsuariosGrupos extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -45,13 +47,13 @@ public class UsuariosGrupos extends BaseEntity {
     @Column(name = "nombre_grupo")
     private String nombreGrupo;
     @JoinTable(name = "usuarios_gruposx", joinColumns = {
-        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")})
+        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo", columnDefinition = "int4")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")})
     @ManyToMany
     private List<Usuarios> usuariosList;
     @JoinTable(name = "privilegios_gruposx", joinColumns = {
-        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_privilegio", referencedColumnName = "id_privilegio")})
+        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo", columnDefinition = "int4")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_privilegio", referencedColumnName = "id_privilegio", columnDefinition = "int4")})
     @ManyToMany
     private List<Privilegios> privilegiosList;
 

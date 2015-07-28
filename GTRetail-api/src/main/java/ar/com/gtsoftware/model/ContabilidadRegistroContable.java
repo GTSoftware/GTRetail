@@ -40,8 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_registro_contable")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_registro"))
+@AttributeOverride(name = "id", column = @Column(name = "id_registro", columnDefinition = "serial"))
 public class ContabilidadRegistroContable extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -77,19 +79,19 @@ public class ContabilidadRegistroContable extends BaseEntity {
     private String conceptoComprobante;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRegistroContable")
     private List<ContabilidadRegistroContableLineas> contabilidadRegistroContableLineasList;
-    @JoinColumn(name = "id_periodo_fiscal", referencedColumnName = "id_periodo_fiscal")
+    @JoinColumn(name = "id_periodo_fiscal", referencedColumnName = "id_periodo_fiscal", columnDefinition = "int4")
     @ManyToOne
     private FiscalPeriodosFiscales idPeriodoFiscal;
-    @JoinColumn(name = "id_tipo_operacion", referencedColumnName = "id_tipo_operacion")
+    @JoinColumn(name = "id_tipo_operacion", referencedColumnName = "id_tipo_operacion", columnDefinition = "int4")
     @ManyToOne
     private ContabilidadTiposOperacion idTipoOperacion;
-    @JoinColumn(name = "id_tipo_comprobante", referencedColumnName = "id_tipo_comprobante")
+    @JoinColumn(name = "id_tipo_comprobante", referencedColumnName = "id_tipo_comprobante", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadTiposComprobantes idTipoComprobante;
-    @JoinColumn(name = "id_periodo_contable", referencedColumnName = "id_periodo_contable")
+    @JoinColumn(name = "id_periodo_contable", referencedColumnName = "id_periodo_contable", columnDefinition = "int4")
     @ManyToOne
     private ContabilidadPeriodosContables idPeriodoContable;
-    @JoinColumn(name = "id_libro", referencedColumnName = "id_libro")
+    @JoinColumn(name = "id_libro", referencedColumnName = "id_libro", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadLibros idLibro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRegistroContable")

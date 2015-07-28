@@ -16,7 +16,9 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosPorcentajes;
+import ar.com.gtsoftware.model.ProductosPorcentajes_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.ProductosPorcentajesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -45,7 +47,18 @@ public class ProductosPorcentajesFacade extends AbstractFacade<ProductosPorcenta
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosPorcentajes> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ProductosPorcentajesSearchFilter psf = (ProductosPorcentajesSearchFilter) sf;
+        Predicate p = null;
+        if (psf.getProducto() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idProducto), psf.getProducto());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getTipoPorcentaje() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idTipoPorcentaje), psf.getTipoPorcentaje());
+            p = appendAndPredicate(cb, p, p1);
+
+        }
+        return p;
     }
 
 }

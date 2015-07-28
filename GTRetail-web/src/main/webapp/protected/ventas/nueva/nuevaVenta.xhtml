@@ -14,34 +14,34 @@
         <ui:composition template="/WEB-INF/templates/template.xhtml">
             <ui:define name="content" >
                 <h:form id="formContenido">
-                    <p:panel id="cargaVentaPanel" header="#{msg.nuevaVenta}" >
 
 
 
-                        <p:wizard id="ventaWizard" backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >
+
+                    <p:wizard id="ventaWizard" backLabel="#{msg.anterior}" nextLabel="#{msg.siguiente}" >
 
 
 
-                            <p:tab id="clienteTab" title="#{msg.cliente}">
+                        <p:tab id="clienteTab" title="#{msg.cliente}">
 
-                                <ui:include src="cargaCliente.xhtml" />
+                            <ui:include src="cargaCliente.xhtml" />
 
-                            </p:tab>
+                        </p:tab>
 
-                            <p:tab id="productosTab" title="#{msg.productos}">
+                        <p:tab id="productosTab" title="#{msg.productos}">
 
-                                <ui:include src="cargaProductos.xhtml" />
+                            <ui:include src="cargaProductos.xhtml" />
 
-                            </p:tab>
-                            <p:tab id="pagoTab" title="#{msg.condicionesVentaPago}">
+                        </p:tab>
+                        <p:tab id="pagoTab" title="#{msg.condicionesVentaPago}">
 
-                                <ui:include src="cargaPagos.xhtml" />
+                            <ui:include src="cargaPagos.xhtml" />
 
-                            </p:tab>
-                        </p:wizard>
-                        <p:commandButton id="presupuestoButton" value="#{msg.presupuesto}"
-                                         action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/>
-                    </p:panel>
+                        </p:tab>
+                    </p:wizard>
+                    <p:commandButton id="presupuestoButton" value="#{msg.presupuesto}"
+                                     action="#{impresionVentasBean.imprimirPresupuesto(nuevaVentaBean.ventaActual)}" ajax="false"/>
+
                 </h:form>
 
             </ui:define>

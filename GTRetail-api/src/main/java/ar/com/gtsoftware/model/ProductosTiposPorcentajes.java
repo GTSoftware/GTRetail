@@ -31,8 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos_tipos_porcentajes")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_porcentaje"))
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_porcentaje", columnDefinition = "serial"))
 public class ProductosTiposPorcentajes extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

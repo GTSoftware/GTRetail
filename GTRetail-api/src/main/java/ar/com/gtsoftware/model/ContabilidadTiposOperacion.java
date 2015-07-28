@@ -34,8 +34,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_tipos_operacion")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_operacion"))
+@AttributeOverride(name = "id", column = @Column(name = "id_tipo_operacion", columnDefinition = "serial"))
 public class ContabilidadTiposOperacion extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

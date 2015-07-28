@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ventas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_venta"))
+@AttributeOverride(name = "id", column = @Column(name = "id_venta", columnDefinition = "serial"))
 public class Ventas extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,22 +81,22 @@ public class Ventas extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVenta")
     @OrderColumn(name = "item")
     private List<VentasLineas> ventasLineasList;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @JoinColumn(name = "id_condicion_venta", referencedColumnName = "id_condicion")
+    @JoinColumn(name = "id_condicion_venta", referencedColumnName = "id_condicion", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private NegocioCondicionesOperaciones idCondicionVenta;
-    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private VentasEstados idVentasEstados;
-    @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_factura")
+    @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_factura", columnDefinition = "int4")
     @ManyToOne
     private FiscalLibroIvaVentas idRegistroIva;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVenta")

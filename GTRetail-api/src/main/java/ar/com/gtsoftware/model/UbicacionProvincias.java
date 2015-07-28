@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "ubicacion_provincias")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_provincia"))
+@AttributeOverride(name = "id", column = @Column(name = "id_provincia", columnDefinition = "serial"))
 public class UbicacionProvincias extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public class UbicacionProvincias extends BaseEntity implements Serializable {
     private List<Bancos> bancosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProvincia")
     private List<UbicacionLocalidades> ubicacionLocalidadesList;
-    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
+    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionPaises idPais;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProvincia")

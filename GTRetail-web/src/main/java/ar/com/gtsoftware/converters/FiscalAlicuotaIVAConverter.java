@@ -29,10 +29,14 @@ import javax.faces.convert.FacesConverter;
  */
 @Model
 @FacesConverter(value = "fiscalAlicuotaIVAConverter")
-public class FiscalAlicuotaIVAConverter extends AbstractBaseEntityConverter<FiscalAlicuotasIva> {
+public class FiscalAlicuotaIVAConverter extends AbstractEntityConverter<FiscalAlicuotasIva> {
 
     @EJB
     private FiscalAlicuotasIvaFacade alicuotasIvaFacade;
+
+    public FiscalAlicuotaIVAConverter() {
+        super(FiscalAlicuotasIva.class);
+    }
 
     @Override
     protected AbstractFacade<FiscalAlicuotasIva> getFacade() {

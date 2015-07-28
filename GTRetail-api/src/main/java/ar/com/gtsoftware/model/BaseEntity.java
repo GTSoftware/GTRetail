@@ -21,7 +21,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 /**
  *
@@ -30,14 +29,13 @@ import javax.persistence.Version;
 @MappedSuperclass
 public abstract class BaseEntity extends GTEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-
-    @Version
-    private Integer version;
 
     public BaseEntity(Long id) {
         this.id = id;
@@ -46,20 +44,13 @@ public abstract class BaseEntity extends GTEntity {
     public BaseEntity() {
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @Override
@@ -85,6 +76,26 @@ public abstract class BaseEntity extends GTEntity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String getStringId() {
+        if (id != null) {
+            return id.toString();
+        }
+        return null;
+    }
+
+    @Override
+    public Object calculateId(String id) {
+        if (id != null) {
+            try {
+                return Long.parseLong(id);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
     }
 
 }

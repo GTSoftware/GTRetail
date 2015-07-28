@@ -28,10 +28,14 @@ import javax.faces.convert.FacesConverter;
  */
 @Model
 @FacesConverter(value = "stockMovimientosTiposConverter")
-public class StockMovimientosTiposConverter extends AbstractBaseEntityConverter<StockMovimientosTipos> {
+public class StockMovimientosTiposConverter extends AbstractEntityConverter<StockMovimientosTipos> {
 
     @EJB
     private StockMovimientosTiposFacade movimientosTiposFacade;
+
+    public StockMovimientosTiposConverter() {
+        super(StockMovimientosTipos.class);
+    }
 
     @Override
     protected AbstractFacade<StockMovimientosTipos> getFacade() {

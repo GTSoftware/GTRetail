@@ -28,10 +28,14 @@ import javax.faces.convert.FacesConverter;
  */
 @Model
 @FacesConverter(value = "legalTiposDocumentoConverter")
-public class LegalTiposDocumentoConverter extends AbstractBaseEntityConverter<LegalTiposDocumento> {
+public class LegalTiposDocumentoConverter extends AbstractEntityConverter<LegalTiposDocumento> {
 
     @EJB
     private LegalTiposDocumentoFacade legalTiposDocumentoFacade;
+
+    public LegalTiposDocumentoConverter() {
+        super(LegalTiposDocumento.class);
+    }
 
     @Override
     protected AbstractFacade<LegalTiposDocumento> getFacade() {

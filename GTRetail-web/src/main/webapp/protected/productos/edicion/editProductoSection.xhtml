@@ -8,241 +8,420 @@
 
     <h:form id="editProductoForm">
 
-        <p:panel id="editProductoPanel" header="#{msg.productosEdicion}" >
-            <p:tabView id="editProductoTabView" >
 
-                <p:tab title="Datos básicos" >
-                    <h:panelGrid id="datosBasicosGrid" columns="3" >
-                        <h:outputLabel for="idProductoField" value="#{msg.id}:"  />
-                        <h:outputText id="idProductoField" value="#{productoEditBean.productoActual.id}"  />
-                        <h:outputLabel/>
+        <p:tabView id="editProductoTabView" >
 
-                        <h:outputLabel for="codigoProductoField" value="#{msg.codigo}:"  />
-                        <p:inputText id="codigoProductoField" value="#{productoEditBean.productoActual.codigoPropio}"
-                                     maxlength="100" required="true" requiredMessage="#{msg.ingresarValor}"
-                                     label="#{msg.codigo}"/>
-                        <p:message for="codigoProductoField"/>
+            <p:tab title="Datos básicos" >
+                <h:panelGrid id="datosBasicosGrid" columns="3" >
+                    <h:outputLabel for="idProductoField" value="#{msg.id}:"  />
+                    <h:outputText id="idProductoField" value="#{productoEditBean.productoActual.id}"  />
+                    <h:outputLabel/>
 
-                        <h:outputLabel for="descripcionField" value="#{msg.descripcion}:" />
-                        <p:inputText id="descripcionField" value="#{productoEditBean.productoActual.descripcion}"
-                                     maxlength="200"
-                                     size="100"
-                                     required="true" requiredMessage="#{msg.ingresarDescripcion}"
-                                     converter="#{stringFormatConverter}"
-                                     label="#{msg.descripcion}"/>
-                        <p:message for="descripcionField"/>
+                    <h:outputLabel for="codigoProductoField" value="#{msg.codigo}:"  />
+                    <p:inputText id="codigoProductoField" value="#{productoEditBean.productoActual.codigoPropio}"
+                                 maxlength="100" required="true" requiredMessage="#{msg.ingresarValor}"
+                                 label="#{msg.codigo}"/>
+                    <p:message for="codigoProductoField"/>
 
-                        <h:outputLabel for="observacionesField" value="#{msg.observaciones}:" />
-                        <p:inputTextarea id="observacionesField" value="#{productoEditBean.productoActual.observaciones}"
-                                         maxlength="2048"
-                                         autoResize="true"
-                                         label="#{msg.observaciones}"/>
-                        <p:message for="observacionesField"/>
+                    <h:outputLabel for="descripcionField" value="#{msg.descripcion}:" />
+                    <p:inputText id="descripcionField" value="#{productoEditBean.productoActual.descripcion}"
+                                 maxlength="200"
+                                 size="100"
+                                 required="true" requiredMessage="#{msg.ingresarDescripcion}"
+                                 converter="#{stringFormatConverter}"
+                                 label="#{msg.descripcion}"/>
+                    <p:message for="descripcionField"/>
 
-                        <h:outputLabel for="activoField" value="#{msg.activo}:" />
-                        <p:selectBooleanCheckbox  id="activoField"  value="#{productoEditBean.productoActual.activo}"
-                                                  required="false"/>
-                        <p:message for="activoField" />
-                    </h:panelGrid>
-                </p:tab>
-                <p:tab title="Clasificación" >
-                    <h:panelGrid id="clasificacionGrid" columns="3" >
-                        <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
-                        <p:selectOneMenu id="tipoProveeduriaField" value="#{productoEditBean.productoActual.idTipoProveeduria}"
-                                         required="true" requiredMessage="#{msg.seleccionarUno}"
-                                         converter="#{productosTiposProveeduriaConverter}"
+                    <h:outputLabel for="observacionesField" value="#{msg.observaciones}:" />
+                    <p:inputTextarea id="observacionesField" value="#{productoEditBean.productoActual.observaciones}"
+                                     maxlength="2048"
+                                     autoResize="true"
+                                     label="#{msg.observaciones}"/>
+                    <p:message for="observacionesField"/>
+
+                    <h:outputLabel for="activoField" value="#{msg.activo}:" />
+                    <p:selectBooleanCheckbox  id="activoField"  value="#{productoEditBean.productoActual.activo}"
+                                              required="false"/>
+                    <p:message for="activoField" />
+                </h:panelGrid>
+            </p:tab>
+
+            <!--Clasificación-->
+            <p:tab title="Clasificación" >
+                <h:panelGrid id="clasificacionGrid" columns="3" >
+                    <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
+                    <p:selectOneMenu id="tipoProveeduriaField" value="#{productoEditBean.productoActual.idTipoProveeduria}"
+                                     required="true" requiredMessage="#{msg.seleccionarUno}"
+                                     converter="#{productosTiposProveeduriaConverter}"
+                                     >
+                        <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+
+                        <f:selectItems value="#{productoEditBean.listTipoProveeduria}" var="tipoProd" itemLabel="#{tipoProd.nombreTipoProveeduria}"
+                                       itemValue="#{tipoProd}"/>
+
+                    </p:selectOneMenu>
+                    <p:message for="tipoProveeduriaField"/>
+
+
+
+
+                    <h:outputLabel for="rubroField" value="#{msg.productoRubro}:" />
+                    <h:panelGroup >
+                        <p:selectOneMenu id="rubroField"  value="#{productoEditBean.productoActual.idRubro}"
+                                         valueChangeListener="#{productoEditBean.cargarSubRubros}" converter="#{productosRubrosConverter}"
+                                         label="#{msg.productoRubro}"
                                          >
-                            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
 
-                            <f:selectItems value="#{productoEditBean.listTipoProveeduria}" var="tipoProd" itemLabel="#{tipoProd.nombreTipoProveeduria}"
-                                           itemValue="#{tipoProd}"/>
+                            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+                            <f:selectItems value="#{productoEditBean.listRubros}" var="rubro" itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
+                            <p:ajax event="valueChange"
+                                    update=":editProductoForm:editProductoTabView:subRubroPanelGroup"  process="@this"/>
+                        </p:selectOneMenu>
+
+
+                        <p:commandButton icon="ui-icon-plus" action="#{productoEditBean.nuevoRubro}"
+                                         immediate="true" update=":nuevoRubroForm"
+                                         oncomplete="PF('dlg2').show();" />
+                    </h:panelGroup>
+                    <p:message for="rubroField"/>
+
+
+                    <h:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:" />
+                    <h:panelGroup id="subRubroPanelGroup">
+
+                        <p:selectOneMenu id="subRubroField" value="#{productoEditBean.productoActual.idSubRubro}"
+                                         required="true" converter="#{productosSubRubrosConverter}"
+                                         requiredMessage="#{msg.seleccionarUno}"
+                                         label="#{msg.productoSubRubro}"
+                                         >
+
+                            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}" />
+                            <f:selectItems value="#{productoEditBean.listSubRubros}" var="subRubro"
+                                           itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
+                        </p:selectOneMenu>
+
+
+                        <p:commandButton id="btnNuevoSubRubro" icon="ui-icon-plus" action="#{productoEditBean.nuevoSubRubro}" immediate="true"
+                                         oncomplete="PF('dlgSubRubro').show();" update=":nuevoSubRubroForm"
+                                         rendered="#{productoEditBean.productoActual.idRubro ne null}"/>
+                    </h:panelGroup>
+                    <p:message for="subRubroField"/>
+
+
+                    <h:outputLabel for="marcaField" value="#{msg.marca}:" />
+                    <h:panelGroup >
+                        <p:selectOneMenu id="marcaField" value="#{productoEditBean.productoActual.idMarca}"
+                                         required="true" requiredMessage="#{msg.ingresarValor}"
+                                         converter="#{productosMarcasConverter}"
+                                         label="#{msg.marca}">
+                            <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
+                            <f:selectItems value="#{productoEditBean.listMarcas}" var="marca" itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
 
                         </p:selectOneMenu>
-                        <p:message for="tipoProveeduriaField"/>
 
 
 
-
-                        <h:outputLabel for="rubroField" value="#{msg.productoRubro}:" />
-                        <h:panelGroup >
-                            <p:selectOneMenu id="rubroField"  value="#{productoEditBean.productoActual.idRubro}"
-                                             valueChangeListener="#{productoEditBean.cargarSubRubros}" converter="#{productosRubrosConverter}"
-                                             label="#{msg.productoRubro}"
-                                             >
-
-                                <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
-                                <f:selectItems value="#{productoEditBean.listRubros}" var="rubro" itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
-                                <p:ajax event="valueChange"
-                                        update=":editProductoForm:editProductoTabView:subRubroPanelGroup"  process="@this"/>
-                            </p:selectOneMenu>
+                        <p:commandButton id="btnNuevaMarca" icon="ui-icon-plus" action="#{productoEditBean.cargarNuevaMarca}" immediate="true"
+                                         oncomplete="PF('dlgNuevaMarca').show();" update=":nuevaMarca"
+                                         />
+                    </h:panelGroup>
+                    <p:message for="marcaField"/>
 
 
-                            <p:commandButton icon="ui-icon-plus" action="#{productoEditBean.nuevoRubro}"
-                                             immediate="true" update=":nuevoRubroForm"
-                                             oncomplete="PF('dlg2').show();" />
-                        </h:panelGroup>
-                        <p:message for="rubroField"/>
 
+                    <h:outputLabel for="tipoUnidadCompraSelect" value="#{msg.productoTipoUnidadCompra}:"/>
+                    <p:selectOneMenu id="tipoUnidadCompraSelect" value="#{productoEditBean.productoActual.idTipoUnidadCompra}"
+                                     required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
+                                     label="#{msg.productoTipoUnidadCompra}">
 
-                        <h:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:" />
-                        <h:panelGroup id="subRubroPanelGroup">
+                        <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
+                        <f:selectItems value="#{productoEditBean.listTipoUnidades}" var="tipoUnidad" itemLabel="#{tipoUnidad.nombreUnidad}"
+                                       itemValue="#{tipoUnidad}"/>
+                    </p:selectOneMenu>
+                    <p:message for="tipoUnidadCompraSelect"/>
 
-                            <p:selectOneMenu id="subRubroField" value="#{productoEditBean.productoActual.idSubRubro}"
-                                             required="true" converter="#{productosSubRubrosConverter}"
-                                             requiredMessage="#{msg.seleccionarUno}"
-                                             label="#{msg.productoSubRubro}"
-                                             >
+                    <h:outputLabel for="tipoUnidadVentaSelect" value="#{msg.productoTipoUnidadVenta}:"/>
+                    <p:selectOneMenu id="tipoUnidadVentaSelect" value="#{productoEditBean.productoActual.idTipoUnidadVenta}"
+                                     required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
+                                     label="#{msg.productoTipoUnidadVenta}">
 
-                                <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
-                                <f:selectItems value="#{productoEditBean.listSubRubros}" var="subRubro"
-                                               itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
-                            </p:selectOneMenu>
+                        <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
+                        <f:selectItems value="#{productoEditBean.listTipoUnidades}" var="tipoUnidad" itemLabel="#{tipoUnidad.nombreUnidad}"
+                                       itemValue="#{tipoUnidad}"/>
+                    </p:selectOneMenu>
+                    <p:message for="tipoUnidadCompraSelect"/>
 
+                    <h:outputLabel for="ubicacionField" value="#{msg.ubicacion}:"/>
+                    <p:inputText id="ubicacionField" value="#{productoEditBean.productoActual.ubicacion}"
+                                 converter="#{stringFormatConverter}"/>
+                    <p:message for="ubicacionField"/>
+                </h:panelGrid>
+            </p:tab>
 
-                            <p:commandButton id="btnNuevoSubRubro" icon="ui-icon-plus" action="#{productoEditBean.nuevoSubRubro}" immediate="true"
-                                             oncomplete="PF('dlgSubRubro').show();" update=":nuevoSubRubroForm"
-                                             rendered="#{productoEditBean.productoActual.idRubro ne null}"/>
-                        </h:panelGroup>
-                        <p:message for="subRubroField"/>
-
-
-                        <h:outputLabel for="marcaField" value="#{msg.marca}:" />
-                        <h:panelGroup >
-                            <p:selectOneMenu id="marcaField" value="#{productoEditBean.productoActual.idMarca}"
+            <!--Precios-->
+            <p:tab title="Precios">
+                <p:fragment id="preciosFragment" autoUpdate="true"  >
+                    <h:panelGrid id="precioGrid" columns="2" columnClasses="top-aligned-columns" >
+                        <h:panelGroup id="pgCostos" >
+                            <h:panelGrid  columns="3" columnClasses="top-aligned-columns" >
+                                <h:outputLabel for="costoAdquisicionField" value="#{msg.costoAdquisicion}:" />
+                                <p:inputText id="costoAdquisicionField" value="#{productoEditBean.productoActual.costoAdquisicionNeto}"
                                              required="true" requiredMessage="#{msg.ingresarValor}"
-                                             converter="#{productosMarcasConverter}"
-                                             label="#{msg.marca}">
-                                <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
-                                <f:selectItems value="#{productoEditBean.listMarcas}" var="marca" itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
+                                             style="text-align: right"
+                                             label="#{msg.costoAdquisicion}">
 
-                            </p:selectOneMenu>
+                                    <p:ajax event="blur" listener="#{productoEditBean.actualizarPrecios()}"
+                                            update=":editProductoForm:editProductoTabView:precioGrid"/>
+                                    <f:validateDoubleRange minimum="-9999999999999999999.9999"
+                                                           maximum="9999999999999999999.9999" />
+                                </p:inputText>
+                                <p:message for="costoAdquisicionField"/>
 
 
+                                <h:outputLabel for="alicuotaIVAField" value="#{msg.alicuotaIVA}:"/>
+                                <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productoActual.idAlicuotaIva}" required="true"
+                                                 requiredMessage="#{msg.seleccionarValor}" converter="#{fiscalAlicuotaIVAConverter}"
+                                                 label="#{msg.alicuotaIVA}">
+                                    <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}" />
+                                    <f:selectItems value="#{productoEditBean.listAlicuotaIVA}" var="alicuota"
+                                                   itemLabel="#{alicuota.nombreAlicuotaIva}" itemValue="#{alicuota}" />
 
-                            <p:commandButton id="btnNuevaMarca" icon="ui-icon-plus" action="#{productoEditBean.cargarNuevaMarca}" immediate="true"
-                                             oncomplete="PF('dlgNuevaMarca').show();" update=":nuevaMarca"
-                                             />
+                                    <p:ajax event="valueChange" listener="#{productoEditBean.actualizarPrecios()}"
+                                            update="preciosFragment"
+                                            process="@this"/>
+
+                                </p:selectOneMenu>
+                                <p:message for="alicuotaIVAField"/>
+
+                                <h:outputLabel for="costoFinalField" value="#{msg.costoFinal}:" />
+                                <p:inputText id="costoFinalField" value="#{productoEditBean.productoActual.costoFinal}"
+                                             readonly="true"
+                                             style="text-align: right"
+                                             label="#{msg.costoFinal}">
+                                    <f:convertNumber groupingUsed="true" maxFractionDigits="4" type="number"/>
+                                </p:inputText>
+                                <p:message for="costoFinalField"/>
+                            </h:panelGrid>
+
                         </h:panelGroup>
-                        <p:message for="marcaField"/>
+                        <h:panelGroup id="pgPrecios" >
+                            <p:remoteCommand name="onCellEdit" update="@this " />
+                            <h:panelGrid  columns="2" >
+
+
+                                <h:outputLabel for="porcentajesTable" value="#{msg.porcentajes}:"/>
+
+                                <p:commandButton id="addPorcentajeButton"
+                                                 icon="ui-icon-plus"
+                                                 action="#{productoEditBean.addPorcentaje()}"
+                                                 update="@this"
+                                                 ajax="true"
+                                                 />
+
+                                <h:outputLabel />
+
+                                <p:dataTable id="porcentajesTable"
+                                             var="porcentaje"
+                                             value="#{productoEditBean.productoActual.porcentajes}"
+                                             sortMode="single"
+                                             emptyMessage="#{msg.busquedaSinResultados}"
+                                             rowKey="#{porcentaje.id}"
+                                             style="width: 100%"
+                                             resizableColumns="true"
+                                             scrollable="true"
+                                             editable="true"
+                                             editMode="cell"> 
+
+                                    <p:ajax event="cellEdit"
+                                            listener="#{productoEditBean.actualizarPrecios()}"
+                                            oncomplete="onCellEdit()"
+                                            />
+
+                                    <p:column  >
+                                        <f:facet name="header">
+                                            Nombre
+                                        </f:facet>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{porcentaje.idTipoPorcentaje.nombreTipo}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{porcentaje.idTipoPorcentaje}"
+                                                                 converter="#{productosTiposPorcentajesConverter}"
+                                                                 style="width:100%">
+
+                                                    <f:selectItems value="#{productoEditBean.tiposPorcentajesList}"
+                                                                   var="tipoPorcentaje" itemLabel="#{tipoPorcentaje.nombreTipo}"
+                                                                   itemValue="#{tipoPorcentaje}" />
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column  >
+                                        <f:facet name="header">
+                                            Porcentaje
+                                        </f:facet>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{porcentaje.valor}" /></f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="porcentajeValorField" value="#{porcentaje.valor}" style="width:96%"/>
+                                            </f:facet>
+                                        </p:cellEditor>
+
+                                    </p:column>
+
+                                    <p:column  exportable="false" style="width: 50px">
+                                        <f:facet name="header">
+                                            #{msg.borrar}
+                                        </f:facet>
+                                        <p:commandButton id="borrarPorcentajeButton"
+                                                         icon="ui-icon-trash"
+                                                         process="@this"
+                                                         action="#{productoEditBean.removePorcentaje(porcentaje)}">
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
 
 
 
-                        <h:outputLabel for="tipoUnidadCompraSelect" value="#{msg.productoTipoUnidadCompra}:"/>
-                        <p:selectOneMenu id="tipoUnidadCompraSelect" value="#{productoEditBean.productoActual.idTipoUnidadCompra}"
-                                         required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
-                                         label="#{msg.productoTipoUnidadCompra}">
+                                <h:outputLabel for="preciosTable" value="#{msg.precioVenta}:"/>
 
-                            <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
-                            <f:selectItems value="#{productoEditBean.listTipoUnidades}" var="tipoUnidad" itemLabel="#{tipoUnidad.nombreUnidad}"
-                                           itemValue="#{tipoUnidad}"/>
-                        </p:selectOneMenu>
-                        <p:message for="tipoUnidadCompraSelect"/>
 
-                        <h:outputLabel for="tipoUnidadVentaSelect" value="#{msg.productoTipoUnidadVenta}:"/>
-                        <p:selectOneMenu id="tipoUnidadVentaSelect" value="#{productoEditBean.productoActual.idTipoUnidadVenta}"
-                                         required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
-                                         label="#{msg.productoTipoUnidadVenta}">
+                                <h:selectOneMenu id="listaPreciosSelect" value="#{productoEditBean.listaSeleccionada}"
+                                                 converter="#{productosListasPreciosConverter}"
+                                                 style="width:100%">
 
-                            <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
-                            <f:selectItems value="#{productoEditBean.listTipoUnidades}" var="tipoUnidad" itemLabel="#{tipoUnidad.nombreUnidad}"
-                                           itemValue="#{tipoUnidad}"/>
-                        </p:selectOneMenu>
-                        <p:message for="tipoUnidadCompraSelect"/>
+                                    <f:selectItems value="#{productoEditBean.listasPrecios}"
+                                                   var="lista" itemLabel="#{lista.nombreLista}"
+                                                   itemValue="#{lista}" />
+                                </h:selectOneMenu>
 
-                        <h:outputLabel for="ubicacionField" value="#{msg.ubicacion}:"/>
-                        <p:inputText id="ubicacionField" value="#{productoEditBean.productoActual.ubicacion}"
-                                     converter="#{stringFormatConverter}"/>
-                        <p:message for="ubicacionField"/>
+                                <h:outputLabel />
+
+                                <p:commandButton id="addPrecioButton"
+                                                 icon="ui-icon-plus"
+                                                 action="#{productoEditBean.addLista()}"
+                                                 update=":editProductoForm:editProductoTabView:pgPrecios"
+                                                 ajax="true"
+                                                 process="listaPreciosSelect"
+                                                 />
+                                <h:outputLabel />
+
+                                <p:dataTable id="preciosTable" value="#{productoEditBean.productoActual.precios}"
+                                             var="precio"
+                                             sortMode="single"
+                                             emptyMessage="#{msg.campoRequerido}"
+                                             rowKey="#{precio.idPrecio}"
+                                             style="width: 100%"
+                                             resizableColumns="true"
+                                             scrollable="true"
+                                             editable="true"
+                                             editMode="cell"> 
+
+                                    <p:ajax event="cellEdit" listener="#{productoEditBean.actualizarPrecios()}"
+                                            oncomplete="onCellEdit()" />
+
+                                    <p:column  >
+                                        <f:facet name="header">
+                                            #{msg.listaPrecio}
+                                        </f:facet>
+                                        <h:outputLabel value="#{precio.idListaPrecios.nombreLista}"/>
+                                    </p:column>
+                                    <p:column  >
+                                        <f:facet name="header">
+                                            #{msg.utilidad} %
+                                        </f:facet>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{precio.utilidad}" /></f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="utilidadField" value="#{precio.utilidad}" style="width:96%"/></f:facet>
+                                        </p:cellEditor>
+
+                                    </p:column>
+                                    <p:column  >
+                                        <f:facet name="header">
+                                            #{msg.neto}
+                                        </f:facet>
+                                        <h:outputLabel value="#{precio.neto}"  >
+                                            <f:convertNumber type="currency" groupingUsed="true"
+                                                             currencySymbol="$ "/>
+                                        </h:outputLabel>
+                                    </p:column>
+                                    <p:column  >
+                                        <f:facet name="header">
+                                            #{msg.precio}
+                                        </f:facet>
+                                        <h:outputLabel value="#{precio.precio}"  style="font-size: medium; font-weight: bold">
+                                            <f:convertNumber type="currency" groupingUsed="true"
+                                                             currencySymbol="$ "/>
+                                        </h:outputLabel>
+                                    </p:column>
+
+                                    <p:column  exportable="false" style="width: 50px">
+                                        <f:facet name="header">
+                                            #{msg.borrar}
+                                        </f:facet>
+                                        <p:commandButton id="borrarPrecioButton"
+                                                         icon="ui-icon-trash"
+                                                         process="@this"
+                                                         action="#{productoEditBean.removePrecio(precio)}"
+                                                         >
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+
+                            </h:panelGrid>
+
+                        </h:panelGroup>
+
                     </h:panelGrid>
-                </p:tab>
-                <p:tab title="Precio">
-                    <h:panelGrid id="precioGrid" columns="3" >
+                </p:fragment>
+            </p:tab>
 
-                        <h:outputLabel for="costoAdquisicionField" value="#{msg.costoAdquisicion}:" />
-                        <p:inputText id="costoAdquisicionField" value="#{productoEditBean.productoActual.costoAdquisicionNeto}"
-                                     required="true" requiredMessage="#{msg.ingresarValor}"
-                                     style="text-align: right"
-                                     label="#{msg.costoAdquisicion}">
-                            <f:convertNumber groupingUsed="true" maxFractionDigits="4" type="number"/>
-                        </p:inputText>
-                        <p:message for="costoAdquisicionField"/>
+            <!--Proveedor-->
+            <p:tab title="Proveedor">
+                <h:panelGrid id="proveedorGrid" columns="3" >
 
-                        <!--Aca iría una lista desplegable con el tipo de porcentaje y un input para el valor -->
 
-                        <h:outputLabel for="alicuotaIVAField" value="#{msg.alicuotaIVA}:"/>
-                        <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productoActual.idAlicuotaIva}" required="true"
-                                         requiredMessage="#{msg.seleccionarValor}" converter="#{fiscalAlicuotaIVAConverter}"
-                                         label="#{msg.alicuotaIVA}">
-                            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
-                            <f:selectItems value="#{productoEditBean.listAlicuotaIVA}" var="alicuota"
-                                           itemLabel="#{alicuota.nombreAlicuotaIva}" itemValue="#{alicuota}" />
+                    <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
+                    <p:selectOneMenu id="proveedorHabitualField" value="#{productoEditBean.productoActual.idProveedorHabitual}"
+                                     converter="#{personasConverter}"
+                                     required="false" requiredMessage="#{msg.seleccionarUno}">
+                        <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+                        <f:selectItems value="#{productoEditBean.listProveedores}" var="proveedor"
+                                       itemLabel="#{proveedor.nombreFantasia}"
+                                       itemValue="#{proveedor}"/>
 
-                        </p:selectOneMenu>
-                        <p:message for="alicuotaIVAField"/>
+                    </p:selectOneMenu>
+                    <p:message for="proveedorHabitualField"/>
 
-                        <h:outputLabel for="utilidadField" value="#{msg.productosUtilidad}:"/>
-                        <p:inputText id="utilidadField" value="#{productoEditBean.productoActual.utilidad}"
-                                     label="#{msg.productosUtilidad}"
-                                     style="text-align: right">
-                            <f:convertNumber maxFractionDigits="4"
-                                             groupingUsed="true"
-                                             type="number"/>
+                </h:panelGrid>
+            </p:tab>
+        </p:tabView>
 
-                        </p:inputText>
-                        <p:message for="utilidadField"/>
+        <h:panelGrid columns="2" >
+            <p:commandButton id="guardarButton"
+                             value="#{msg.guardar}"
+                             icon="ui-icon-disk"
+                             action="#{productoEditBean.doGuardar}"
+                             update="@form"
+                             ajax="true"
+                             />
 
-                        <h:outputLabel for="precioVentaField" value="#{msg.precioVenta}:" />
-                        <p:inputText id="precioVentaField" value="#{productoEditBean.productoActual.precioVenta}"
-                                     required="true" requiredMessage="#{msg.ingresarValor}"
-                                     label="#{msg.precioVenta}"
-                                     style="text-align: right"/>
-                        <p:message for="precioVentaField"/>
-                    </h:panelGrid>
-                </p:tab>
-                <p:tab title="Proveedor y stock">
-                    <h:panelGrid id="proveedorGrid" columns="3" >
-                        <h:outputLabel for="stockField" value="#{msg.stock}:"/>
-                        <p:inputText id="stockField" value="#{productoEditBean.productoActual.stockTotal}" required="true"
-                                     requiredMessage="#{msg.ingresarValor}" >
-                            <f:convertNumber  maxIntegerDigits="8"
-                                              maxFractionDigits="2"/>
-                        </p:inputText>
-                        <p:message for="stockField"/>
+            <p:commandButton id="cancelarButton"
+                             value="#{msg.cancelar}"
+                             icon="ui-icon-cancel"
+                             action="/protected/productos/consultarProductos.xhtml?faces-redirect=true"
+                             immediate="true"
+                             ajax="false" />
+        </h:panelGrid>
 
-                        <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
-                        <p:selectOneMenu id="proveedorHabitualField" value="#{productoEditBean.productoActual.idProveedorHabitual}"
-                                         converter="#{personasConverter}"
-                                         required="false" requiredMessage="#{msg.seleccionarUno}">
-                            <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
-                            <f:selectItems value="#{productoEditBean.listProveedores}" var="proveedor"
-                                           itemLabel="#{proveedor.nombreFantasia}"
-                                           itemValue="#{proveedor}"/>
 
-                        </p:selectOneMenu>
-                        <p:message for="proveedorHabitualField"/>
-
-                    </h:panelGrid>
-                </p:tab>
-            </p:tabView>
-
-            <h:panelGrid columns="2" >
-                <p:commandButton id="guardarButton"
-                                 value="#{msg.guardar}"
-                                 icon="ui-icon-disk"
-                                 action="#{productoEditBean.doGuardar}"
-                                 update="@form"
-                                 ajax="true"
-                                 />
-
-                <p:commandButton id="cancelarButton"
-                                 value="#{msg.cancelar}"
-                                 icon="ui-icon-cancel"
-                                 action="/protected/productos/consultarProductos.xhtml?faces-redirect=true"
-                                 immediate="true"
-                                 ajax="false" />
-            </h:panelGrid>
-
-        </p:panel>
     </h:form>
 
     <h:form id="nuevoRubroForm">
@@ -269,7 +448,7 @@
 
 
     <h:form id="nuevoSubRubroForm">
-        <p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlgSubRubro"  height="100">
+        <p:dialog modal="true" header="#{msg.nuevoSubRubro}" widgetVar="dlgSubRubro"  height="100">
 
             <h:panelGrid columns="2">
 
@@ -295,7 +474,7 @@
     </h:form>
 
     <h:form id="nuevaMarca">
-        <p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlgNuevaMarca"  height="100">
+        <p:dialog modal="true" header="#{msg.nuevaMarca}" widgetVar="dlgNuevaMarca"  height="100">
 
 
 

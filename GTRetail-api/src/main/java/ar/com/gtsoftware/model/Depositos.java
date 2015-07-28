@@ -40,8 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "depositos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_deposito"))
+@AttributeOverride(name = "id", column = @Column(name = "id_deposito", columnDefinition = "serial"))
 public class Depositos extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -62,16 +64,16 @@ public class Depositos extends BaseEntity {
     private boolean activo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDepositoMovimiento")
     private List<StockMovimientos> stockMovimientosList;
-    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia")
+    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
-    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
+    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionPaises idPais;
-    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad")
+    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionLocalidades idLocalidad;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne
     private Sucursales idSucursal;
 

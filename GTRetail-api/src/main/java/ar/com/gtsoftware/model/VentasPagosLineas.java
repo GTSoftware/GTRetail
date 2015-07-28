@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
@@ -34,8 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ventas_pagos_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_pago"))
-public class VentasPagosLineas extends BaseEntity implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_pago", columnDefinition = "serial"))
+public class VentasPagosLineas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,13 +43,13 @@ public class VentasPagosLineas extends BaseEntity implements Serializable {
     @NotNull
     @Column(name = "importe")
     private BigDecimal importe;
-    @JoinColumn(name = "id_pago_venta", referencedColumnName = "id_pago_venta")
+    @JoinColumn(name = "id_pago_venta", referencedColumnName = "id_pago_venta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private VentasPagos idPagoVenta;
-    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta")
+    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Ventas idVenta;
-    @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja")
+    @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private CajasMovimientos idCajasMovimientos;
 

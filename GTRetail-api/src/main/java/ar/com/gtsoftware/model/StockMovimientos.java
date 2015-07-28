@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "stock_movimientos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_stock"))
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_stock", columnDefinition = "serial"))
 public class StockMovimientos extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -69,13 +71,13 @@ public class StockMovimientos extends BaseEntity {
     @NotNull
     @Column(name = "costo_total_movimiento")
     private BigDecimal costoTotalMovimiento;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
-    @JoinColumn(name = "id_deposito_movimiento", referencedColumnName = "id_deposito")
+    @JoinColumn(name = "id_deposito_movimiento", referencedColumnName = "id_deposito", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Depositos idDepositoMovimiento;
 

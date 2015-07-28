@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "contabilidad_plan_cuentas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_cuenta"))
+@AttributeOverride(name = "id", column = @Column(name = "id_cuenta", columnDefinition = "serial"))
 public class ContabilidadPlanCuentas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -57,12 +59,12 @@ public class ContabilidadPlanCuentas extends BaseEntity {
     private boolean cuentaRubro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCuenta")
     private List<ContabilidadRegistroContableLineas> contabilidadRegistroContableLineasList;
-    @JoinColumn(name = "id_tipo_cuenta", referencedColumnName = "id_tipo_cuenta")
+    @JoinColumn(name = "id_tipo_cuenta", referencedColumnName = "id_tipo_cuenta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadTiposCuenta idTipoCuenta;
     @OneToMany(mappedBy = "idCuentaPadre")
     private List<ContabilidadPlanCuentas> contabilidadPlanCuentasList;
-    @JoinColumn(name = "id_cuenta_padre", referencedColumnName = "id_cuenta")
+    @JoinColumn(name = "id_cuenta_padre", referencedColumnName = "id_cuenta", columnDefinition = "int4")
     @ManyToOne
     private ContabilidadPlanCuentas idCuentaPadre;
 

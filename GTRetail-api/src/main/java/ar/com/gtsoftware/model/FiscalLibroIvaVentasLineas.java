@@ -32,8 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_libro_iva_ventas_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_libro"))
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_libro", columnDefinition = "serial"))
 public class FiscalLibroIvaVentasLineas extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "neto_gravado")
@@ -42,10 +44,10 @@ public class FiscalLibroIvaVentasLineas extends BaseEntity {
     private BigDecimal noGravado;
     @Column(name = "importe_iva")
     private BigDecimal importeIva;
-    @JoinColumn(name = "id_factura", referencedColumnName = "id_factura")
+    @JoinColumn(name = "id_factura", referencedColumnName = "id_factura", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalLibroIvaVentas idFactura;
-    @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva")
+    @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalAlicuotasIva idAlicuotaIva;
 

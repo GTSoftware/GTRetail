@@ -34,8 +34,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "privilegios")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_privilegio"))
+@AttributeOverride(name = "id", column = @Column(name = "id_privilegio", columnDefinition = "serial"))
 public class Privilegios extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

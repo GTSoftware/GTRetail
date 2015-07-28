@@ -28,10 +28,14 @@ import javax.faces.convert.FacesConverter;
  */
 @Model
 @FacesConverter(value = "personasConverter")
-public class PersonasConverter extends AbstractBaseEntityConverter<Personas> {
+public class PersonasConverter extends AbstractEntityConverter<Personas> {
 
     @EJB
     private PersonasFacade personasFacade;
+
+    public PersonasConverter() {
+        super(Personas.class);
+    }
 
     @Override
     protected AbstractFacade<Personas> getFacade() {

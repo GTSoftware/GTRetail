@@ -2,3 +2,6 @@
     font-size: 12px;
 }
 
+.top-aligned-columns td{
+    vertical-align: top;
+}

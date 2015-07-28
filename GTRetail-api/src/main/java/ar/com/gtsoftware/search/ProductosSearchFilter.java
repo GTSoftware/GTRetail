@@ -17,6 +17,7 @@ package ar.com.gtsoftware.search;
 
 import ar.com.gtsoftware.model.Depositos;
 import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros;
 import javax.validation.constraints.Size;
@@ -38,6 +39,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private ProductosRubros idRubro;
     private Personas idProveedorHabitual;
     private Depositos conStockEnDeposito;
+    private ProductosListasPrecios listaPrecio;
 
     public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse) {
         this.activo = activo;
@@ -52,7 +54,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     public boolean hasFilter() {
         return (txt != null && !txt.isEmpty()) || (idProducto != null) || (codigoPropio != null && !codigoPropio.isEmpty())
                 || (activo != null) || (puedeComprarse != null) || (puedeVenderse != null) || (idRubro != null) || (idSubRubro != null)
-                || (idProveedorHabitual != null) || (conStockEnDeposito != null);
+                || (idProveedorHabitual != null) || (conStockEnDeposito != null) || (listaPrecio != null);
     }
 
     public String getTxt() {
@@ -133,6 +135,14 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
 
     public void setConStockEnDeposito(Depositos conStockenDeposito) {
         this.conStockEnDeposito = conStockenDeposito;
+    }
+
+    public ProductosListasPrecios getListaPrecio() {
+        return listaPrecio;
+    }
+
+    public void setListaPrecio(ProductosListasPrecios listaPrecio) {
+        this.listaPrecio = listaPrecio;
     }
 
 }

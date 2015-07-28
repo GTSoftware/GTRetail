@@ -22,20 +22,30 @@
                             <p:inputText id="idProductoField" value="#{productosSearchBean.filter.codigoPropio}" size="5"/>
                             <p:outputLabel value="#{msg.busqueda}"/>
                             <p:inputText id="searchField" value="#{productosSearchBean.filter.txt}" size="50"/>
+                            <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
+                                             required="true" requiredMessage="#{msg.seleccionarUno}"
+                                             converter="#{productosListasPreciosConverter}"
+                                             >
+
+                                <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
+                                               itemValue="#{lista}"/>
+
+                            </p:selectOneMenu>
                             <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}" value="Buscar" update="productoTable" icon="ui-icon-search"/>
                             <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml" value="#{msg.nuevo}" ajax="false" icon="ui-icon-plus" />
 
                         </h:panelGrid>
                         <h:panelGrid>
 
-                            <p:dataTable id="productoTable" value="#{productosSearchBean.productosList}" var="producto"
+                            <p:dataTable id="productoTable" value="#{productosSearchBean.dataModel}" var="producto"
                                          rows="30"
+                                         lazy="true"
                                          paginator="true"
-                                         sortMode="multiple"
+                                         sortMode="single"
                                          emptyMessage="#{msg.busquedaSinResultados}"
                                          rowKey="#{producto.id}"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,15,30"
+                                         rowsPerPageTemplate="10,15,30,100"
                                          style="width: 100%"
                                          selection="#{productosSearchBean.productoActual}"
                                          selectionMode="single"
@@ -79,12 +89,7 @@
                                     </f:facet>
                                     <h:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
                                 </p:column>
-                                <p:column sortBy="#{producto.stockTotal}" style="width: 5%">
-                                    <f:facet name="header">
-                                        #{msg.stock}
-                                    </f:facet>
-                                    <h:outputLabel value="#{producto.stockTotal}"/>
-                                </p:column>
+
                                 <p:column sortBy="#{producto.costoAdquisicionNeto}" style="width: 5%">
                                     <f:facet name="header">
                                         #{msg.costoAdquisicion}
@@ -95,11 +100,11 @@
                                 </p:column>
 
 
-                                <p:column sortBy="#{producto.precioVenta}" style="width: 5%">
+                                <p:column sortBy="#{productosSearchBean.getPrecio(producto)}" style="width: 5%">
                                     <f:facet name="header">
                                         #{msg.precioUnitario}
                                     </f:facet>
-                                    <h:outputLabel value="#{producto.precioVenta}">
+                                    <h:outputLabel value="#{productosSearchBean.getPrecio(producto)}" style="font-size: medium; font-weight: bold">
                                         <f:convertNumber type="currency" groupingUsed="true"
                                                          currencySymbol="$ "/>
                                     </h:outputLabel>

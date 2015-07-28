@@ -16,15 +16,21 @@
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 /**
  * Superclase para todas las entidades del sistema
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
+@MappedSuperclass
 public abstract class GTEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Version
+    private Integer version;
 
     /**
      * Determina si la entidad es nueva o no
@@ -32,4 +38,35 @@ public abstract class GTEntity implements Serializable {
      * @return
      */
     public abstract boolean isNew();
+
+    /**
+     * Retorna el objeto que es la clave de la entidad
+     *
+     * @return
+     */
+    public abstract Object getId();
+
+    /**
+     * Retorna un objeto clave primaria a partir de la representación en String del Id
+     *
+     * @param id
+     * @return
+     */
+    public abstract Object calculateId(String id);
+
+    /**
+     * Retorna la representación en String del ID de la clase que puede ser vuelta a convertir en ID
+     *
+     * @return
+     */
+    public abstract String getStringId();
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
 }

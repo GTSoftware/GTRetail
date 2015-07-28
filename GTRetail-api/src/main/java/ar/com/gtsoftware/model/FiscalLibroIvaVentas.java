@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "fiscal_libro_iva_ventas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_factura"))
+@AttributeOverride(name = "id", column = @Column(name = "id_factura", columnDefinition = "serial"))
 public class FiscalLibroIvaVentas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -80,23 +80,23 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     private BigDecimal totalFactura;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "codigo_tipo_comprobante", referencedColumnName = "codigo_tipo_comprobante")
+    @JoinColumn(name = "codigo_tipo_comprobante", referencedColumnName = "codigo_tipo_comprobante", columnDefinition = "bpchar")
     private FiscalTiposComprobante codigoTipoComprobante;
 
     @OneToMany(mappedBy = "idRegistroIva")
     private List<Ventas> ventasList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFactura")
     private List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva")
+    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
-    @JoinColumn(name = "id_periodo_fiscal", referencedColumnName = "id_periodo_fiscal")
+    @JoinColumn(name = "id_periodo_fiscal", referencedColumnName = "id_periodo_fiscal", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalPeriodosFiscales idPeriodoFiscal;
-    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro")
+    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private ContabilidadRegistroContable idRegistroContable;
 

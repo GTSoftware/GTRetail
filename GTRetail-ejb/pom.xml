@@ -48,18 +48,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.2.6.Final</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>1.3.0.Final</version>
-            <scope>provided</scope>
-        </dependency>
+       
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -82,6 +71,7 @@
             <artifactId>GTRetail-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

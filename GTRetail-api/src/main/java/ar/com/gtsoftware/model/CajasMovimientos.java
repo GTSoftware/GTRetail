@@ -41,8 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cajas_movimientos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_caja"))
+@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_caja", columnDefinition = "serial"))
 public class CajasMovimientos extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -61,16 +63,16 @@ public class CajasMovimientos extends BaseEntity {
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMovimientoCaja")
     private List<VentasPagos> ventasPagosList;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago")
+    @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private NegocioFormasPago idFormaPago;
-    @JoinColumn(name = "id_categoria_movimiento", referencedColumnName = "id_categoria_movimiento")
+    @JoinColumn(name = "id_categoria_movimiento", referencedColumnName = "id_categoria_movimiento", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private CajasCategoriasMovimientos idCategoriaMovimiento;
-    @JoinColumn(name = "id_caja", referencedColumnName = "id_caja")
+    @JoinColumn(name = "id_caja", referencedColumnName = "id_caja", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Cajas idCaja;
 

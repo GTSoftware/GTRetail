@@ -37,15 +37,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "productos_sub_rubros")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_sub_rubro"))
+@AttributeOverride(name = "id", column = @Column(name = "id_sub_rubro", columnDefinition = "serial"))
 public class ProductosSubRubros extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nombre_sub_rubro")
     private String nombreSubRubro;
-    @JoinColumn(name = "id_rubro", referencedColumnName = "id_rubro")
+    @JoinColumn(name = "id_rubro", referencedColumnName = "id_rubro", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ProductosRubros idRubro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSubRubro")

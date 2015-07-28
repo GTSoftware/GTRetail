@@ -29,10 +29,14 @@ import javax.faces.convert.FacesConverter;
  */
 @Model
 @FacesConverter(value = "fiscalPeriodoFiscalConverter")
-public class FiscalPeriodoFiscalConverter extends AbstractBaseEntityConverter<FiscalPeriodosFiscales> {
+public class FiscalPeriodoFiscalConverter extends AbstractEntityConverter<FiscalPeriodosFiscales> {
 
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
+
+    public FiscalPeriodoFiscalConverter() {
+        super(FiscalPeriodosFiscales.class);
+    }
 
     @Override
     protected AbstractFacade<FiscalPeriodosFiscales> getFacade() {

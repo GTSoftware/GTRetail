@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "bancos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_banco"))
+@AttributeOverride(name = "id", column = @Column(name = "id_banco", columnDefinition = "serial"))
 public class Bancos extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -81,16 +81,16 @@ public class Bancos extends BaseEntity {
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanco")
     private List<BancosCuentas> bancosCuentasList;
-    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia")
+    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
-    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
+    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionPaises idPais;
-    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad")
+    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionLocalidades idLocalidad;
-    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva")
+    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
 

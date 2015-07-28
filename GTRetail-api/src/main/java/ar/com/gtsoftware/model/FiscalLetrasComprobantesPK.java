@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
@@ -28,6 +27,8 @@ import javax.validation.constraints.NotNull;
  */
 @Embeddable
 public class FiscalLetrasComprobantesPK implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_resoponsabildiad_iva_emisor")
@@ -87,7 +88,7 @@ public class FiscalLetrasComprobantesPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.FiscalLetrasComprobantesPK[ idResoponsabildiadIvaEmisor=" + idResoponsabildiadIvaEmisor + ", idResoponsabildiadIvaReceptor=" + idResoponsabildiadIvaReceptor + " ]";
+        return String.format("%s-%s", idResoponsabildiadIvaEmisor, idResoponsabildiadIvaReceptor);
     }
-    
+
 }

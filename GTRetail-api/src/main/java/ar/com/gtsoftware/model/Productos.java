@@ -18,18 +18,24 @@ package ar.com.gtsoftware.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.eclipse.persistence.annotations.JoinFetch;
 
 /**
  *
@@ -38,7 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_producto"))
+@AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
 public class Productos extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,23 +75,14 @@ public class Productos extends BaseEntity implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "costo_adquisicion_neto")
+    @Column(name = "costo_adquisicion_neto", scale = 4, precision = 19)
     private BigDecimal costoAdquisicionNeto;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "utilidad")
-    private BigDecimal utilidad;
-    @NotNull
-    @Column(name = "precio_venta")
-    private BigDecimal precioVenta;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "costo_final", scale = 4, precision = 19)
     private BigDecimal costoFinal;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "stock_total")
-    private BigDecimal stockTotal;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "annos_amortizacion")
@@ -93,30 +90,48 @@ public class Productos extends BaseEntity implements Serializable {
     @Size(max = 20)
     @Column(name = "ubicacion")
     private String ubicacion;
-    @JoinColumn(name = "id_tipo_unidad_venta", referencedColumnName = "id_tipo_unidad")
+    @JoinColumn(name = "id_tipo_unidad_venta", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private ProductosTiposUnidades idTipoUnidadVenta;
-    @JoinColumn(name = "id_tipo_unidad_compra", referencedColumnName = "id_tipo_unidad")
+    @JoinColumn(name = "id_tipo_unidad_compra", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private ProductosTiposUnidades idTipoUnidadCompra;
-    @JoinColumn(name = "id_tipo_proveeduria", referencedColumnName = "id_tipo_proveeduria")
+    @JoinColumn(name = "id_tipo_proveeduria", referencedColumnName = "id_tipo_proveeduria", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private ProductosTiposProveeduria idTipoProveeduria;
-    @JoinColumn(name = "id_sub_rubro", referencedColumnName = "id_sub_rubro")
+    @JoinColumn(name = "id_sub_rubro", referencedColumnName = "id_sub_rubro", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private ProductosSubRubros idSubRubro;
-    @JoinColumn(name = "id_rubro", referencedColumnName = "id_rubro")
+    @JoinColumn(name = "id_rubro", referencedColumnName = "id_rubro", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private ProductosRubros idRubro;
-    @JoinColumn(name = "id_proveedor_habitual", referencedColumnName = "id_persona")
+    @JoinColumn(name = "id_proveedor_habitual", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne
     private Personas idProveedorHabitual;
-    @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva")
+    @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private FiscalAlicuotasIva idAlicuotaIva;
-    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca")
+    @JoinColumn(name = "id_marca", referencedColumnName = "id_marca", columnDefinition = "int4")
     @ManyToOne(optional = false)
+    @JoinFetch
     private ProductosMarcas idMarca;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
+    @OrderBy(value = "idListaPrecios")
+    private List<ProductosPrecios> precios;
+
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductosPorcentajes> porcentajes;
+
+    @Transient
+    private BigDecimal precioVenta;
 
     public Productos() {
     }
@@ -125,13 +140,12 @@ public class Productos extends BaseEntity implements Serializable {
         super(idProducto);
     }
 
-    public Productos(Long idProducto, Date fechaAlta, boolean activo, BigDecimal costoAdquisicionNeto, BigDecimal utilidad, BigDecimal stockTotal, int annosAmortizacion) {
+    public Productos(Long idProducto, Date fechaAlta, boolean activo, BigDecimal costoAdquisicionNeto, int annosAmortizacion) {
         super(idProducto);
         this.fechaAlta = fechaAlta;
         this.activo = activo;
         this.costoAdquisicionNeto = costoAdquisicionNeto;
-        this.utilidad = utilidad;
-        this.stockTotal = stockTotal;
+
         this.annosAmortizacion = annosAmortizacion;
     }
 
@@ -173,30 +187,6 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setCostoAdquisicionNeto(BigDecimal costoAdquisicionNeto) {
         this.costoAdquisicionNeto = costoAdquisicionNeto;
-    }
-
-    public BigDecimal getUtilidad() {
-        return utilidad;
-    }
-
-    public void setUtilidad(BigDecimal utilidad) {
-        this.utilidad = utilidad;
-    }
-
-    public BigDecimal getPrecioVenta() {
-        return precioVenta;
-    }
-
-    public void setPrecioVenta(BigDecimal precioVenta) {
-        this.precioVenta = precioVenta;
-    }
-
-    public BigDecimal getStockTotal() {
-        return stockTotal;
-    }
-
-    public void setStockTotal(BigDecimal stockTotal) {
-        this.stockTotal = stockTotal;
     }
 
     public int getAnnosAmortizacion() {
@@ -301,6 +291,30 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setCostoFinal(BigDecimal costoFinal) {
         this.costoFinal = costoFinal;
+    }
+
+    public List<ProductosPrecios> getPrecios() {
+        return precios;
+    }
+
+    public void setPrecios(List<ProductosPrecios> precios) {
+        this.precios = precios;
+    }
+
+    public BigDecimal getPrecioVenta() {
+        return precioVenta;
+    }
+
+    public void setPrecioVenta(BigDecimal precioVenta) {
+        this.precioVenta = precioVenta;
+    }
+
+    public List<ProductosPorcentajes> getPorcentajes() {
+        return porcentajes;
+    }
+
+    public void setPorcentajes(List<ProductosPorcentajes> porcentajes) {
+        this.porcentajes = porcentajes;
     }
 
     @Override

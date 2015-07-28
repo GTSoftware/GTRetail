@@ -16,7 +16,7 @@
 package ar.com.gtsoftware.utils;
 
 import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.model.BaseEntity;
+import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import java.io.Serializable;
@@ -35,11 +35,12 @@ import org.primefaces.model.SortOrder;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @param <Entity>
  */
-public class LazyEntityDataModel<Entity extends BaseEntity>
+public class LazyEntityDataModel<Entity extends GTEntity>
         extends LazyDataModel<Entity>
         implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(LazyEntityDataModel.class.getName());
+    private static final long serialVersionUID = 1L;
 
     private AbstractFacade<Entity> facade;
     private AbstractSearchFilter filter;
@@ -99,8 +100,7 @@ public class LazyEntityDataModel<Entity extends BaseEntity>
     }
 
     @Override
-    public Object getRowKey(Entity dto
-    ) {
+    public Object getRowKey(Entity dto) {
         return String.valueOf(dto.getId());
     }
 
@@ -131,8 +131,7 @@ public class LazyEntityDataModel<Entity extends BaseEntity>
     }
 
     @Override
-    public void setPageSize(int pageSize
-    ) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -147,14 +146,12 @@ public class LazyEntityDataModel<Entity extends BaseEntity>
     }
 
     @Override
-    public void setRowIndex(int rowIndex
-    ) {
+    public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
     }
 
     @Override
-    public void setRowCount(int rowCount
-    ) {
+    public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
     }
 
@@ -164,8 +161,7 @@ public class LazyEntityDataModel<Entity extends BaseEntity>
     }
 
     @Override
-    public void setWrappedData(Object list
-    ) {
+    public void setWrappedData(Object list) {
         this.resultsFromEao = (List<Entity>) list;
     }
 

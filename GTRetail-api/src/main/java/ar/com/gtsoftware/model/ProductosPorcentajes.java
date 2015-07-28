@@ -36,8 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos_porcentajes")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_producto_porcentaje"))
+@AttributeOverride(name = "id", column = @Column(name = "id_producto_porcentaje", columnDefinition = "serial"))
 public class ProductosPorcentajes extends BaseEntity {
+
+    private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -48,10 +50,11 @@ public class ProductosPorcentajes extends BaseEntity {
     @Column(name = "valor", nullable = false, precision = 19, scale = 4)
     private BigDecimal valor;
 
-    @JoinColumn(name = "id_tipo_porcentaje", referencedColumnName = "id_tipo_porcentaje")
+    @JoinColumn(name = "id_tipo_porcentaje", referencedColumnName = "id_tipo_porcentaje", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ProductosTiposPorcentajes idTipoPorcentaje;
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
 
