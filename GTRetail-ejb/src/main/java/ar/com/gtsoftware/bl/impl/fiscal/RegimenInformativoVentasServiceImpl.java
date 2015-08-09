@@ -56,6 +56,8 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+    private static final BigDecimal MONTO_MAXIMO_SIN_IDENTIFICAR = new BigDecimal(1000);
+    private static final int CODIGO_DOCUMENTO_SIN_IDENTIFICAR = 99;
 
     @Override
     public RegimenInformativoDTO generarRegimenInformativo(FiscalPeriodosFiscales fiscalPeriodosFiscales) throws ServiceException {
@@ -101,6 +103,10 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
             comprobante.setCodigoMoneda("PES");//Sacara de tabla, Agregar en la tabla de ventas
             comprobante.setTipoCambio(BigDecimal.ONE);//1 Por defecto
             comprobante.setCodigoDocumentoComprador(factura.getIdPersona().getIdTipoDocumento().getFiscalCodigoTipoDocumento());
+            if (factura.getTotalFactura().compareTo(MONTO_MAXIMO_SIN_IDENTIFICAR) < 0) {
+                comprobante.setCodigoDocumentoComprador(CODIGO_DOCUMENTO_SIN_IDENTIFICAR);
+            }
+
             comprobante.setDenominacionComprador(factura.getIdPersona().getRazonSocial());
             comprobante.setNumeroIdentificacionComprador(Long.parseLong(factura.getIdPersona().getDocumento()));
 
@@ -115,7 +121,7 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
             comprobante.setNumeroComprobante(Long.parseLong(factura.getNumeroFactura()));
             comprobante.setPuntoVenta(Integer.parseInt(factura.getPuntoVentaFactura()));
             comprobante.setNumeroComprobanteHasta(comprobante.getNumeroComprobante());
-            //TODO ver el tema de las facturas a Consumidor Final de menos de 1000
+
             comprobante.setOtrosTributos(BigDecimal.ZERO);
             comprobante.setPercepcionANoCategorizados(BigDecimal.ZERO);
             comprobante.setTipoComprobante(Integer.parseInt(factura.getCodigoTipoComprobante().getCodigoTipoComprobante()));
