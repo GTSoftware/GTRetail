@@ -10,11 +10,13 @@
 
 
     <h:panelGroup  id="insertarPanel" >
-        <p:focus transient="true" context="insertarPanel"/>
+        <p:focus transient="true" context="insertarPanel" for="cantidadField" />
+        <p:defaultCommand target="insertarButton" />
 
-        <h:panelGrid  columns="9">
+        <h:panelGrid  columns="10">
 
             <p:outputLabel value="#{msg.buscar}:" for="buscarProductosButton"/>
+            <p:outputLabel value="#{msg.listaPrecio}:" for="listaField"/>
             <p:outputLabel value="#{msg.idProducto}:" for="idProductoField"/>
             <p:outputLabel value="#{msg.codigo}:" for="codigoProductoField"/>
             <p:outputLabel value="#{msg.descripcion}:" for="descripcionField"/>
@@ -25,9 +27,19 @@
             <p:outputLabel value="#{msg.insertar}" for="insertarButton" />
 
             <p:commandButton id="buscarProductosButton" icon="ui-icon-search"
-                             update=":formContenido:productosDialog"
+
                              oncomplete="PF('productosDialog').show()"
                              process="@none" />
+
+            <p:selectOneMenu id="listaField" value="#{nuevaVentaBean.listaSeleccionada}"
+                             required="true" requiredMessage="#{msg.seleccionarUno}"
+                             converter="#{productosListasPreciosConverter}"
+                             >
+
+                <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
+                               itemValue="#{lista}"/>
+
+            </p:selectOneMenu>
 
             <p:inputText id="idProductoField"
                          value="#{nuevaVentaBean.productoSearchFilter.idProducto}"
@@ -47,8 +59,8 @@
             </p:inputText>
 
 
-            <p:inputText id="descripcionField"
-                         value="#{empty nuevaVentaBean.productoActual.descripcion ? msg.ingreseCodigoProducto : nuevaVentaBean.productoActual.descripcion}" readonly="true" />
+            <p:inputTextarea id="descripcionField"
+                             value="#{nuevaVentaBean.lineaActual.descripcion}" readonly="true" />
 
             <p:inputText id="cantidadField"
                          value="#{nuevaVentaBean.lineaActual.cantidad}"
@@ -61,11 +73,11 @@
             </p:inputText>
 
             <h:outputText id="unidadVentaField"
-                          value="#{nuevaVentaBean.productoActual.idTipoUnidadVenta.nombreUnidad}"/>
+                          value="#{nuevaVentaBean.lineaActual.idProducto.idTipoUnidadVenta.nombreUnidad}"/>
 
             <p:inputText id="precioVentaField"
-                         value="#{empty nuevaVentaBean.productoActual ? 0 : nuevaVentaBean.productoActual.precioVenta}"
-                         readonly="#{empty nuevaVentaBean.productoActual.idTipoProveeduria.cambiarPrecioVenta ? true : !nuevaVentaBean.productoActual.idTipoProveeduria.cambiarPrecioVenta}" required="true" style="text-align: right">
+                         value="#{empty nuevaVentaBean.lineaActual.idProducto ? 0 : nuevaVentaBean.lineaActual.precioVentaUnitario}"
+                         readonly="#{empty nuevaVentaBean.lineaActual.idProducto.idTipoProveeduria.cambiarPrecioVenta ? true : !nuevaVentaBean.lineaActual.idProducto.idTipoProveeduria.cambiarPrecioVenta}" required="true" style="text-align: right">
                 <p:ajax update="insertarPanel"
                         listener="#{nuevaVentaBean.calculatSubTotal()}" />
                 <f:validateDoubleRange minimum="-9999999999999999999.9999"
@@ -80,7 +92,7 @@
 
             <p:commandButton id="insertarButton" icon="ui-icon-circle-arrow-s"
                              update="insertarPanel, datosPanel"
-                             process="@this"
+                             process="insertarPanel"
                              action="#{nuevaVentaBean.agregarLineaVenta()}" />
 
             <p:message for="idProductoField" />
@@ -220,27 +232,8 @@
         </p:fragment>
     </p:panel>
 
-    <p:dialog header="#{msg.busquedaProductos}"
-              widgetVar="productosDialog"
-              resizable="true"
-              id="productosDialog"
-              closeOnEscape="true"
-              showEffect="fade"
-              hideEffect="clip"
-              modal="true">
+    <ui:include src="buscarProdDlg.xhtml" />
 
-        <gtsoftware:busquedaProductos productoSeleccionado="#{nuevaVentaBean.productoActual}"
-                                      textoBusqueda="#{productosSearchBean.filter.txt}"
-                                      busquedaAction="#{productosSearchBean.doSearch()}"
-                                      dataModel="#{productosSearchBean.dataModel}"
-                                      >
-        </gtsoftware:busquedaProductos>
-
-        <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                         oncomplete="productosDialog.hide()"
-                         update=":formContenido:insertarPanel"/>
-
-    </p:dialog>
 
 
 </html>

@@ -1,43 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-Copyright 2014 GT Software.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
 
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
-    <composite:interface>
-
-        <composite:attribute name="textoBusqueda"  type="java.lang.String" />
-        <composite:attribute name="dataModel"   />
-        <composite:attribute name="productoSeleccionado" type="ar.com.gtsoftware.model.Productos" />
-        <composite:attribute name="busquedaAction" method-signature="void busquedaAction()" />
-
-    </composite:interface>
-
-    <composite:implementation>
-        <h:form id="busquedaProductosForm" >
+    <h:form id="busquedaProductosForm" >
+        <p:dialog header="#{msg.busquedaProductos}"
+                  widgetVar="productosDialog"
+                  resizable="true"
+                  id="productosDialog"
+                  closeOnEscape="true"
+                  showEffect="fade"
+                  hideEffect="clip"
+                  modal="true">
             <p:fragment>
                 <h:panelGrid columns="4">
                     <p:outputLabel value="#{msg.busqueda}"/>
                     <p:inputText id="cadenaBusquedaProdField"
-                                 value="#{cc.attrs.textoBusqueda}"
+                                 value="#{productosSearchBean.filter.txt}"
                                  size="50"/>
                     <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
                                      required="true" requiredMessage="#{msg.seleccionarUno}"
@@ -48,7 +29,7 @@ limitations under the License.
                                        itemValue="#{lista}"/>
 
                     </p:selectOneMenu>
-                    <p:commandButton  action="#{cc.attrs.busquedaAction}"
+                    <p:commandButton  action="#{productosSearchBean.doSearch()}"
                                       process="@this"
                                       value="#{msg.buscar}"
                                       update="productosBusquedaTable"
@@ -59,13 +40,13 @@ limitations under the License.
 
 
 
-                <p:dataTable id="productosBusquedaTable" var="pro" value="#{cc.attrs.dataModel}"
+                <p:dataTable id="productosBusquedaTable" var="pro" value="#{productosSearchBean.dataModel}"
                              rows="5"
                              lazy="true"
                              paginator="true"
                              emptyMessage="#{msg.busquedaSinResultados}"
                              selectionMode="single"
-                             selection="#{cc.attrs.productoSeleccionado}"
+                             selection="#{nuevaVentaBean.lineaActual.idProducto}"
                              rowKey="#{pro.id}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,15,30,100"
@@ -103,7 +84,8 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.precioUnitario}
                         </f:facet>
-                        <h:outputText value="#{pro.precios.get(0).precio}" style="font-size: medium; font-weight: bold">
+                        <h:outputText value="#{productosSearchBean.getPrecio(pro)}"
+                                      style="font-size: medium; font-weight: bold">
                             <f:convertNumber groupingUsed="true" type="currency"
                                              currencySymbol="$"/>
                         </h:outputText>
@@ -123,6 +105,11 @@ limitations under the License.
 
                 </p:dataTable>
             </p:fragment>
-        </h:form>
-    </composite:implementation>
+            <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                             oncomplete="PF('productosDialog').hide()"
+                             update=":formContenido:insertarPanel"
+                             actionListener="#{nuevaVentaBean.lineaActual.setPrecioVentaUnitario(productosSearchBean.getPrecio(nuevaVentaBean.lineaActual.idProducto))}"/>
+        </p:dialog>
+    </h:form>
 </html>
+

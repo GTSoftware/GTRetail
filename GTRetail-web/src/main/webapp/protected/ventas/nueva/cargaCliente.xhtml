@@ -26,8 +26,7 @@
                             update="clienteFragment" />
 
                 </p:autoComplete>
-                <p:commandButton icon="ui-icon-search"
-                                 update=":formContenido:busquedaPersonasDialog"
+                <p:commandButton id="buscarPersonasButton" icon="ui-icon-search"
                                  oncomplete="PF('clientesDialog').show()"
                                  immediate="true" />
             </h:panelGroup>
@@ -60,27 +59,27 @@
         </h:panelGrid>
     </p:fragment>
 
+    <h:form id="buscarPersonasForm" >
+        <p:dialog id='busquedaPersonasDialog'
+                  header="#{msg.busquedaClientes}"
+                  widgetVar="clientesDialog"
+                  resizable="true"
+                  closeOnEscape="true"
+                  dynamic="true"
+                  showEffect="fade" hideEffect="clip" modal="true">
 
-    <p:dialog id='busquedaPersonasDialog'
-              header="#{msg.busquedaClientes}"
-              widgetVar="clientesDialog"
-              resizable="true"
-              closeOnEscape="true"
-              dynamic="true"
-              showEffect="fade" hideEffect="clip" modal="true">
-
-        <gtsoftware:busquedaPersonas personaSeleccionada="#{nuevaVentaBean.ventaActual.idPersona}"
-                                     textoBusqueda="#{clientesSearchBean.filter.txt}"
-                                     busquedaAction="#{clientesSearchBean.doSearch()}"
-                                     personasList="#{clientesSearchBean.dataModel}"
-                                     >
-        </gtsoftware:busquedaPersonas>
-        <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                         oncomplete="PF('clientesDialog').hide()"
-                         update=":formContenido:clienteFragment"
-                         process="@this"/>
+            <gtsoftware:busquedaPersonas personaSeleccionada="#{nuevaVentaBean.ventaActual.idPersona}"
+                                         textoBusqueda="#{clientesSearchBean.filter.txt}"
+                                         busquedaAction="#{clientesSearchBean.doSearch()}"
+                                         personasList="#{clientesSearchBean.dataModel}"
+                                         >
+            </gtsoftware:busquedaPersonas>
+            <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                             oncomplete="PF('clientesDialog').hide()"
+                             update=":formContenido:clienteFragment"
+                             process="@this"/>
 
 
-    </p:dialog>
-
+        </p:dialog>
+    </h:form>
 </html>

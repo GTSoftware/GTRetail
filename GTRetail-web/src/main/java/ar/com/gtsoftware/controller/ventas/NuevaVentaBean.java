@@ -22,19 +22,24 @@ import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
+import ar.com.gtsoftware.eao.ProductosPreciosFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosListasPrecios;
+import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -77,6 +82,8 @@ public class NuevaVentaBean implements Serializable {
     private VentasBean ventasBean;
     @EJB
     private ParametrosFacade parametrosFacade;
+    @EJB
+    private ProductosPreciosFacade preciosFacade;
     @Inject
     private AuthBackingBean authBackingBean;
     private Ventas ventaActual;
@@ -85,6 +92,8 @@ public class NuevaVentaBean implements Serializable {
     private Productos productoActual;
     private VentasLineas lineaActual; //Linea temporal actual antes de asignarla a la venta
     private List<ImportesAlicuotasIVA> importesIVA = new ArrayList<>();
+    private ProductosListasPrecios listaSeleccionada;
+    private ProductosPreciosSearchFilter preciosSF;
 
     private VentasPagos pagoActual = new VentasPagos();
     private List<VentasPagos> pagos = new ArrayList<>();
@@ -99,7 +108,7 @@ public class NuevaVentaBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (!FacesContext.getCurrentInstance().isPostback()) {
+        if (!JSFUtil.isPostback()) {
 //            if (conversation.isTransient()) {
 //                conversation.begin();
             productoSearchFilter = new ProductosSearchFilter();
@@ -128,9 +137,11 @@ public class NuevaVentaBean implements Serializable {
             List<Productos> productos = productosFacade.findAllBySearchFilter(productoSearchFilter);
             if (!productos.isEmpty()) {
                 productoActual = productos.get(0);
+                lineaActual.setIdProducto(productoActual);
+                lineaActual.setPrecioVentaUnitario(getPrecio(productoActual));
+                lineaActual.setDescripcion(productoActual.getDescripcion());
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                        "No se ha encontrado un producto con ese código!", ""));
+                JSFUtil.addErrorMessage("No se ha encontrado un producto con ese código.");
 
             }
         }
@@ -141,8 +152,8 @@ public class NuevaVentaBean implements Serializable {
      */
     public void calculatSubTotal() {
         if (validarCantidad()) {
-            productoActual.setPrecioVenta(productoActual.getPrecios().get(0).getPrecio());
-            lineaActual.setSubTotal(lineaActual.getCantidad().multiply(productoActual.getPrecioVenta()).setScale(2, RoundingMode.HALF_UP));
+
+            lineaActual.setSubTotal(lineaActual.getCantidad().multiply(lineaActual.getPrecioVentaUnitario()).setScale(2, RoundingMode.HALF_UP));
         } else {
             lineaActual.setSubTotal(BigDecimal.ZERO);
         }
@@ -155,8 +166,8 @@ public class NuevaVentaBean implements Serializable {
                 lineaActual.setCantidadEntregada(BigDecimal.ZERO);
                 lineaActual.setIdProducto(productoActual);
                 lineaActual.setIdVenta(ventaActual);
-                lineaActual.setPrecioVentaUnitario(productoActual.getPrecioVenta());
-                lineaActual.setCostoBrutoUnitario(productoActual.getCostoAdquisicionNeto());
+                //lineaActual.setPrecioVentaUnitario(getPrecio(productoActual));
+                lineaActual.setCostoBrutoUnitario(productoActual.getCostoFinal());
                 lineaActual.setCostoNetoUnitario(productoActual.getCostoAdquisicionNeto());
                 if (ventaActual.getVentasLineasList() == null) {
                     ventaActual.setVentasLineasList(new ArrayList<VentasLineas>());
@@ -173,7 +184,7 @@ public class NuevaVentaBean implements Serializable {
 
     private void inicializarLineaVenta() {
         lineaActual = new VentasLineas();
-        lineaActual.setCantidad(BigDecimal.ZERO);
+        lineaActual.setCantidad(null);
         lineaActual.setSubTotal(BigDecimal.ZERO);
         productoActual = null;
         productoSearchFilter.setIdProducto(null);
@@ -236,7 +247,7 @@ public class NuevaVentaBean implements Serializable {
             }
             if (productoActual.getIdTipoUnidadVenta().getCantidadEntera()) {
                 if (lineaActual.getCantidad().scale() != 0) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "La cantidad debe ser un valor entero!", ""));
+                    JSFUtil.addErrorMessage("La cantidad debe ser un valor entero!");
                     return false;
                 }
             }
@@ -293,21 +304,21 @@ public class NuevaVentaBean implements Serializable {
 
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El usuario no tiene una sucursal configurada!"));
+            JSFUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
             return false;
         }
         if (ventaActual.getIdPersona() == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "Debe cargar un cliente!"));
+            JSFUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
         if (ventaActual.getVentasLineasList() == null || ventaActual.getVentasLineasList().isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "Debe cargar productos!"));
+            JSFUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
         if (ventaActual.getIdCondicionVenta() != null) {
             if (ventaActual.getIdCondicionVenta().getPagoTotal()) {
                 if (ventaActual.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El importe del pago debe cubrir el total de la venta!"));
+                    JSFUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
                 }
             }
@@ -324,12 +335,12 @@ public class NuevaVentaBean implements Serializable {
             try {
                 ventaActual.setSaldo(ventaActual.getTotal());
                 ventasBean.guardarVenta(ventaActual, pagos);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta", "Venta guardada exitosamente!"));
+                JSFUtil.addInfoMessage("Operación guardada exitosamente!");
                 //endConversation();
                 return "/protected/ventas/index";
             } catch (Exception ex) {
                 Logger.getLogger(NuevaVentaBean.class.getName()).log(Level.SEVERE, null, ex);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
+                JSFUtil.addErrorMessage(ex.getMessage());
             }
         }
         return null;
@@ -451,5 +462,25 @@ public class NuevaVentaBean implements Serializable {
                 descuentoRecargoGlobal = BigDecimal.ZERO;
             }
         }
+    }
+
+    public ProductosListasPrecios getListaSeleccionada() {
+        return listaSeleccionada;
+    }
+
+    public void setListaSeleccionada(ProductosListasPrecios listaSeleccionada) {
+        this.listaSeleccionada = listaSeleccionada;
+    }
+
+    public BigDecimal getPrecio(Productos producto) {
+        if (preciosSF == null) {
+            preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
+        }
+        preciosSF.setProducto(producto);
+        List<ProductosPrecios> precio = preciosFacade.findBySearchFilter(preciosSF, 0, 1);
+        if (precio.isEmpty()) {
+            return null;
+        }
+        return precio.get(0).getPrecio();
     }
 }

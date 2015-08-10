@@ -181,10 +181,20 @@ public class Productos extends BaseEntity implements Serializable {
         this.activo = activo;
     }
 
+    /**
+     * El costo con el cual figura el producto en la lista del proveedor
+     *
+     * @return
+     */
     public BigDecimal getCostoAdquisicionNeto() {
         return costoAdquisicionNeto;
     }
 
+    /**
+     * El costo con el cual figura el producto en la lista del proveedor
+     *
+     * @param costoAdquisicionNeto
+     */
     public void setCostoAdquisicionNeto(BigDecimal costoAdquisicionNeto) {
         this.costoAdquisicionNeto = costoAdquisicionNeto;
     }
@@ -285,10 +295,20 @@ public class Productos extends BaseEntity implements Serializable {
         this.observaciones = observaciones;
     }
 
+    /**
+     * El costo luego de haber aplicado todos los descuentos y recargos
+     *
+     * @return
+     */
     public BigDecimal getCostoFinal() {
         return costoFinal;
     }
 
+    /**
+     * El costo luego de haber aplicado todos los descuentos y recargos
+     *
+     * @param costoFinal
+     */
     public void setCostoFinal(BigDecimal costoFinal) {
         this.costoFinal = costoFinal;
     }

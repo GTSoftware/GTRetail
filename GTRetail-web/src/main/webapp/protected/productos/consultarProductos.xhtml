@@ -132,10 +132,16 @@
                                 </p:column>
                                 <p:column style="width: 32px" exportable="false" >
                                     <f:facet name="header">
-                                        #{msg.editar}
+                                        #{msg.acciones}
                                     </f:facet>
-                                    <p:commandButton icon="ui-icon-pencil" action="edicion/edicionProducto"  ajax="false" >
+                                    <p:commandButton icon="ui-icon-pencil" action="edicion/edicionProducto"  ajax="false"
+                                                     title="Editar">
                                         <f:param name="idProducto" value="#{producto.id}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-copy" action="edicion/edicionProducto"  ajax="false"
+                                                     title="Copiar">
+                                        <f:param name="idProducto" value="#{producto.id}"/>
+                                        <f:param name="duplicar" value="1"/>
                                     </p:commandButton>
 
                                 </p:column>

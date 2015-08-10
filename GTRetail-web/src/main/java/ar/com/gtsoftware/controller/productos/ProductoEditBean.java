@@ -114,16 +114,20 @@ public class ProductoEditBean implements Serializable {
     public void init() {
 
         String idProducto = JSFUtil.getRequestParameterMap().get("idProducto");
+        String duplicar = JSFUtil.getRequestParameterMap().get("duplicar");
         if (idProducto == null) {
             nuevo();
         } else {
             productoActual = productosFacade.find(Long.parseLong(idProducto));
 
             if (productoActual == null) {
-                nuevo();
-                JSFUtil.addErrorMessage("Producto inexistente!");
-                LOG.log(Level.INFO, "Producto inexistente!");
+                LOG.log(Level.SEVERE, "Producto inexistente!");
+                throw new RuntimeException("Producto inexistente!");
 
+            }
+            if (duplicar != null && duplicar.equals("1")) {
+                productoActual.setId(null);
+                //TODO ver como duplicar todos los datos
             }
         }
         initDatos();
@@ -229,7 +233,7 @@ public class ProductoEditBean implements Serializable {
 
         } catch (Exception e) {
             Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
+            JSFUtil.addErrorMessage("Error al guardar!");
         }
 
     }
@@ -258,11 +262,11 @@ public class ProductoEditBean implements Serializable {
 
             }
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producto guardado Exitosamente"));
+            JSFUtil.addInfoMessage("Producto guardado Exitosamente");
 
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
             Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
