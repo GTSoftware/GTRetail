@@ -122,7 +122,7 @@ public class Productos extends BaseEntity implements Serializable {
     @JoinFetch
     private ProductosMarcas idMarca;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "idProducto")
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
