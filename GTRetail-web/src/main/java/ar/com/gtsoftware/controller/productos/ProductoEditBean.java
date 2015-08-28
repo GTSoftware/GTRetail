@@ -176,7 +176,8 @@ public class ProductoEditBean implements Serializable {
 
     public void nuevo() {
         productoActual = new Productos();
-
+        productoActual.setPrecios(new ArrayList<ProductosPrecios>());
+        productoActual.setPorcentajes(new ArrayList<ProductosPorcentajes>());
     }
 
     public void nuevoRubro() {
@@ -275,19 +276,22 @@ public class ProductoEditBean implements Serializable {
         BigDecimal costoAdquisicionNeto = productoActual.getCostoAdquisicionNeto();
         BigDecimal costoFinal = costoAdquisicionNeto;
         BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN).add(BigDecimal.ONE);
-
-        for (ProductosPorcentajes pp : productoActual.getPorcentajes()) {
-            if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
-                costoFinal = costoFinal.add(costoFinal.multiply(pp.getValor().divide(CIEN)));
-            } else {
-                costoFinal = costoFinal.add(pp.getValor());
+        if(productoActual.getPorcentajes() != null) {
+            for (ProductosPorcentajes pp : productoActual.getPorcentajes()) {
+                if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
+                    costoFinal = costoFinal.add(costoFinal.multiply(pp.getValor().divide(CIEN)));
+                } else {
+                    costoFinal = costoFinal.add(pp.getValor());
+                }
             }
         }
         productoActual.setCostoFinal(costoFinal);
-        for (ProductosPrecios p : productoActual.getPrecios()) {
-            BigDecimal utilidad = p.getUtilidad().divide(CIEN);
-            p.setNeto(costoFinal.add(costoFinal.multiply(utilidad)));
-            p.setPrecio(p.getNeto().multiply(coeficienteIVA).setScale(2, RoundingMode.HALF_UP));
+        if(productoActual.getPrecios() !=null) {
+            for (ProductosPrecios p : productoActual.getPrecios()) {
+                BigDecimal utilidad = p.getUtilidad().divide(CIEN);
+                p.setNeto(costoFinal.add(costoFinal.multiply(utilidad)));
+                p.setPrecio(p.getNeto().multiply(coeficienteIVA).setScale(2, RoundingMode.HALF_UP));
+            }
         }
     }
 
