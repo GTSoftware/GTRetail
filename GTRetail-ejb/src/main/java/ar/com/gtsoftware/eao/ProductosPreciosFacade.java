@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios_;
-import ar.com.gtsoftware.model.pk.ProductosPreciosPK_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import javax.ejb.Stateless;
@@ -52,12 +51,12 @@ public class ProductosPreciosFacade extends AbstractFacade<ProductosPrecios> {
         Predicate p = null;
 
         if (psf.getProducto() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idPrecio).get(ProductosPreciosPK_.idProducto), psf.getProducto().getId());
+            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idProducto), psf.getProducto());
             p = appendAndPredicate(cb, p, p1);
         }
 
         if (psf.getLista() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idPrecio).get(ProductosPreciosPK_.idListaPrecio), psf.getLista().getId());
+            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idListaPrecios), psf.getLista());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

@@ -47,6 +47,10 @@ public class ProductosListasPrecios extends BaseEntity {
     public ProductosListasPrecios() {
     }
 
+    public ProductosListasPrecios(Long id) {
+        super(id);
+    }
+
     public String getNombreLista() {
         return nombreLista;
     }

@@ -22,7 +22,6 @@ import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
-import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
@@ -276,7 +275,7 @@ public class ProductoEditBean implements Serializable {
         BigDecimal costoAdquisicionNeto = productoActual.getCostoAdquisicionNeto();
         BigDecimal costoFinal = costoAdquisicionNeto;
         BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN).add(BigDecimal.ONE);
-        if(productoActual.getPorcentajes() != null) {
+        if (productoActual.getPorcentajes() != null) {
             for (ProductosPorcentajes pp : productoActual.getPorcentajes()) {
                 if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
                     costoFinal = costoFinal.add(costoFinal.multiply(pp.getValor().divide(CIEN)));
@@ -286,7 +285,7 @@ public class ProductoEditBean implements Serializable {
             }
         }
         productoActual.setCostoFinal(costoFinal);
-        if(productoActual.getPrecios() !=null) {
+        if (productoActual.getPrecios() != null) {
             for (ProductosPrecios p : productoActual.getPrecios()) {
                 BigDecimal utilidad = p.getUtilidad().divide(CIEN);
                 p.setNeto(costoFinal.add(costoFinal.multiply(utilidad)));
@@ -313,7 +312,7 @@ public class ProductoEditBean implements Serializable {
         }
         if (!listaExistente) {
             ProductosPrecios pp = new ProductosPrecios();
-            pp.setIdPrecio(new ProductosPreciosPK(productoActual.getId(), listaSeleccionada.getId()));
+
             pp.setIdProducto(productoActual);
             pp.setIdListaPrecios(listaSeleccionada);
             productoActual.getPrecios().add(pp);

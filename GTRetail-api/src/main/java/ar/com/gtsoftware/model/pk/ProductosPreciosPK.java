@@ -15,55 +15,80 @@
  */
 package ar.com.gtsoftware.model.pk;
 
+import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosListasPrecios;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-@Embeddable
 public class ProductosPreciosPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "id_producto", columnDefinition = "int4")
-    private Long idProducto;
-
-    @Column(name = "id_lista_precio", columnDefinition = "int4")
-    private Long idListaPrecio;
+//    @Column(name = "id_producto", columnDefinition = "int4")
+//    private Long idProducto;
+//    @ManyToOne
+//    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, insertable = false, columnDefinition = "int4")
+    private Productos idProducto;
+//    @Column(name = "id_lista_precio", columnDefinition = "int4")
+//    private Long idListaPrecio;
+//    @ManyToOne
+//    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false, insertable = false,
+//            columnDefinition = "int4")
+    private ProductosListasPrecios idListaPrecios;
 
     public ProductosPreciosPK() {
     }
 
-    public ProductosPreciosPK(Long idProducto, Long idListaPrecio) {
+    public ProductosPreciosPK(Productos idProducto, ProductosListasPrecios idListaPrecios) {
         this.idProducto = idProducto;
-        this.idListaPrecio = idListaPrecio;
+        this.idListaPrecios = idListaPrecios;
     }
 
-    public Long getIdProducto() {
+    public Productos getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Long idProducto) {
+    public void setIdProducto(Productos idProducto) {
         this.idProducto = idProducto;
     }
 
-    public Long getIdListaPrecio() {
-        return idListaPrecio;
+    public ProductosListasPrecios getIdListaPrecios() {
+        return idListaPrecios;
     }
 
-    public void setIdListaPrecio(Long idListaPrecio) {
-        this.idListaPrecio = idListaPrecio;
+//    public ProductosPreciosPK(Long idProducto, Long idListaPrecio) {
+//        this.idProducto = idProducto;
+//        this.idListaPrecio = idListaPrecio;
+//    }
+//
+//    public Long getIdProducto() {
+//        return idProducto;
+//    }
+//
+//    public void setIdProducto(Long idProducto) {
+//        this.idProducto = idProducto;
+//    }
+//
+//    public Long getIdListaPrecio() {
+//        return idListaPrecio;
+//    }
+//
+//    public void setIdListaPrecio(Long idListaPrecio) {
+//        this.idListaPrecio = idListaPrecio;
+//    }
+    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
+        this.idListaPrecios = idListaPrecios;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 97 * hash + Objects.hashCode(this.idProducto);
-        hash = 97 * hash + Objects.hashCode(this.idListaPrecio);
+        hash = 97 * hash + Objects.hashCode(this.idListaPrecios);
         return hash;
     }
 
@@ -79,7 +104,7 @@ public class ProductosPreciosPK implements Serializable {
         if (!Objects.equals(this.idProducto, other.idProducto)) {
             return false;
         }
-        if (!Objects.equals(this.idListaPrecio, other.idListaPrecio)) {
+        if (!Objects.equals(this.idListaPrecios, other.idListaPrecios)) {
             return false;
         }
         return true;
@@ -87,7 +112,7 @@ public class ProductosPreciosPK implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s-%s", idProducto, idListaPrecio);
+        return String.format("%s-%s", idProducto.getStringId(), idListaPrecios.getStringId());
     }
 
 }

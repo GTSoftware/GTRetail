@@ -19,9 +19,10 @@ import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -38,18 +39,16 @@ public class ProductosPrecios extends GTEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
-    private ProductosPreciosPK idPrecio;
-
-    @ManyToOne
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, insertable = false, columnDefinition = "int4")
+    @Id
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, columnDefinition = "int4")
     private Productos idProducto;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false, insertable = false,
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false,
             columnDefinition = "int4")
     private ProductosListasPrecios idListaPrecios;
-
     @Basic(optional = false)
     @Column(name = "utilidad", scale = 4, precision = 8)
     private BigDecimal utilidad;
@@ -64,14 +63,10 @@ public class ProductosPrecios extends GTEntity {
 
     @Override
     public boolean isNew() {
-        return idPrecio == null;
+        return idProducto == null && idListaPrecios == null;
     }
 
     public ProductosPrecios() {
-    }
-
-    public ProductosPrecios(ProductosPreciosPK idPrecio) {
-        this.idPrecio = idPrecio;
     }
 
     public Productos getIdProducto() {
@@ -106,14 +101,6 @@ public class ProductosPrecios extends GTEntity {
         this.precio = precio;
     }
 
-    public ProductosPreciosPK getIdPrecio() {
-        return idPrecio;
-    }
-
-    public void setIdPrecio(ProductosPreciosPK idPrecio) {
-        this.idPrecio = idPrecio;
-    }
-
     public BigDecimal getNeto() {
         return neto;
     }
@@ -125,7 +112,8 @@ public class ProductosPrecios extends GTEntity {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.idPrecio);
+        hash = 59 * hash + Objects.hashCode(this.idProducto);
+        hash = 59 * hash + Objects.hashCode(this.idListaPrecios);
         return hash;
     }
 
@@ -138,24 +126,32 @@ public class ProductosPrecios extends GTEntity {
             return false;
         }
         final ProductosPrecios other = (ProductosPrecios) obj;
-        if (!Objects.equals(this.idPrecio, other.idPrecio)) {
+        if (!Objects.equals(this.idProducto, other.idProducto)) {
+            return false;
+        }
+        if (!Objects.equals(this.idListaPrecios, other.idListaPrecios)) {
             return false;
         }
         return true;
     }
 
     @Override
-    public Object getId() {
-        return idPrecio;
+    public ProductosPreciosPK getId() {
+        if (isNew()) {
+            return null;
+        }
+        return new ProductosPreciosPK(idProducto, idListaPrecios);
     }
 
     @Override
-    public Object calculateId(String id) {
+    public ProductosPreciosPK calculateId(String id) {
 
         if (id != null) {
             String[] pkStr = id.split("-");
             if (pkStr.length == 2) {
-                return new ProductosPreciosPK(Long.parseLong(pkStr[0]), Long.parseLong(pkStr[1]));
+                ProductosPreciosPK pk = new ProductosPreciosPK();
+                pk.setIdProducto(new Productos(Long.parseLong(pkStr[0])));
+                pk.setIdListaPrecios(new ProductosListasPrecios(Long.parseLong(pkStr[1])));
             }
         }
         return null;
@@ -163,10 +159,10 @@ public class ProductosPrecios extends GTEntity {
 
     @Override
     public String getStringId() {
-        if (idPrecio != null) {
-            return idPrecio.toString();
+        if (isNew()) {
+            return null;
         }
-        return null;
+        return new ProductosPreciosPK(idProducto, idListaPrecios).toString();
     }
 
 }
