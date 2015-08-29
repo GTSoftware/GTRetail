@@ -130,7 +130,7 @@
                                     <h:outputLabel value="#{producto.idProveedorHabitual.nombreFantasia}"/>
 
                                 </p:column>
-                                <p:column style="width: 32px" exportable="false" >
+                                <p:column style="width: 50px" exportable="false" >
                                     <f:facet name="header">
                                         #{msg.acciones}
                                     </f:facet>
@@ -139,7 +139,7 @@
                                         <f:param name="idProducto" value="#{producto.id}"/>
                                     </p:commandButton>
                                     <p:commandButton icon="ui-icon-copy" action="edicion/edicionProducto"  ajax="false"
-                                                     title="Copiar">
+                                                     title="Duplicar">
                                         <f:param name="idProducto" value="#{producto.id}"/>
                                         <f:param name="duplicar" value="1"/>
                                     </p:commandButton>

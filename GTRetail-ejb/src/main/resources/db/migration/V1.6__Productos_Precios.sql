@@ -27,6 +27,7 @@ utilidad numeric(8,4) not null,
 neto numeric(19,4) not null,
 precio numeric(19,4) not null,
 version integer not null default 0,
+fecha_modificacion timestamp not null DEFAULT current_timestamp,
 PRIMARY KEY (id_producto, id_lista_precio));
 
 --Establecer los precios antiguos en la lista de precios CONTADO

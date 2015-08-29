@@ -17,6 +17,7 @@ package ar.com.gtsoftware.model;
 
 import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -25,7 +26,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -60,6 +66,12 @@ public class ProductosPrecios extends GTEntity {
     @Basic(optional = false)
     @Column(name = "neto", scale = 4, precision = 19)
     private BigDecimal neto;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha_modificacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModificacion;
 
     @Override
     public boolean isNew() {
@@ -165,4 +177,17 @@ public class ProductosPrecios extends GTEntity {
         return new ProductosPreciosPK(idProducto, idListaPrecios).toString();
     }
 
+    public Date getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(Date fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
+
+    @PreUpdate
+    @PrePersist
+    protected void onUpdate() {
+        fechaModificacion = new Date();
+    }
 }

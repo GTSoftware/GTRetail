@@ -28,6 +28,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -342,4 +344,13 @@ public class Productos extends BaseEntity implements Serializable {
         return "ar.com.gtsoftware.model.Productos[ idProducto=" + this.getId() + " ]";
     }
 
+    @PrePersist
+    protected void onCreate() {
+        fechaAlta = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fechaUltimaModificacion = new Date();
+    }
 }

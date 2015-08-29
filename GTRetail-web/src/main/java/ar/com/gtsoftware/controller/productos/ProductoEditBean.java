@@ -34,7 +34,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,6 +102,7 @@ public class ProductoEditBean implements Serializable {
     private ProductosTiposProveeduria tiposProveeduria = new ProductosTiposProveeduria();
     private ProductosMarcas nuevaMarca = new ProductosMarcas();
     private ProductosListasPrecios listaSeleccionada;
+    private ProductosTiposPorcentajes tipoPorcentajeSeleccionado;
 
     private ProductosSubRubros productosSubRubrosNuevo = new ProductosSubRubros();
     private final ProductoSubRubroSearchFilter subRubroSearchFilter = new ProductoSubRubroSearchFilter();
@@ -177,6 +177,7 @@ public class ProductoEditBean implements Serializable {
         productoActual = new Productos();
         productoActual.setPrecios(new ArrayList<ProductosPrecios>());
         productoActual.setPorcentajes(new ArrayList<ProductosPorcentajes>());
+        productoActual.setActivo(true);
     }
 
     public void nuevoRubro() {
@@ -243,27 +244,12 @@ public class ProductoEditBean implements Serializable {
 
             if (productoActual.isNew()) {
 
-                productoActual.setActivo(true);
-                productoActual.setFechaAlta(GregorianCalendar.getInstance().getTime());
-                productoActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
                 actualizarPrecios();
-                //calculo del precio de venta
-//                BigDecimal iva = ((productoActual.getIdAlicuotaIva().getValorAlicuota().divide(BigDecimal.valueOf(100))).add(BigDecimal.valueOf(1)));
-//                BigDecimal costo = productoActual.getCostoAdquisicionNeto();
-//                BigDecimal utilidad = productoActual.getUtilidad().add(BigDecimal.valueOf(1));
-//                productoActual.setPrecioVenta((iva.multiply(costo)).multiply(utilidad));
-                productosFacade.create(productoActual);
-                productoActual = new Productos();
-            } else {
-
-                productoActual.setFechaUltimaModificacion(GregorianCalendar.getInstance().getTime());
-                productosFacade.edit(productoActual);
-                productoActual = productosFacade.find(productoActual.getId());
 
             }
-
+            productosFacade.createOrEdit(productoActual);
             JSFUtil.addInfoMessage("Producto guardado Exitosamente");
-
+            productoActual = productosFacade.find(productoActual.getId());
         } catch (Exception e) {
             Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
@@ -295,12 +281,14 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void addPorcentaje() {
-        ProductosPorcentajes pp = new ProductosPorcentajes();
-        pp.setIdProducto(productoActual);
-        pp.setIdTipoPorcentaje(tiposPorcentajesList.get(0));
-        pp.setValor(BigDecimal.ZERO);
-        pp.setFechaModificacion(UtilUI.getNow());
-        productoActual.getPorcentajes().add(pp);
+        if (tipoPorcentajeSeleccionado != null) {
+            ProductosPorcentajes pp = new ProductosPorcentajes();
+            pp.setIdProducto(productoActual);
+            pp.setIdTipoPorcentaje(tipoPorcentajeSeleccionado);
+            pp.setValor(BigDecimal.ZERO);
+            pp.setFechaModificacion(UtilUI.getNow());
+            productoActual.getPorcentajes().add(pp);
+        }
     }
 
     public void addLista() {
@@ -447,6 +435,14 @@ public class ProductoEditBean implements Serializable {
 
     public void setListaSeleccionada(ProductosListasPrecios listaSeleccionada) {
         this.listaSeleccionada = listaSeleccionada;
+    }
+
+    public ProductosTiposPorcentajes getTipoPorcentajeSeleccionado() {
+        return tipoPorcentajeSeleccionado;
+    }
+
+    public void setTipoPorcentajeSeleccionado(ProductosTiposPorcentajes tipoPorcentajeSeleccionado) {
+        this.tipoPorcentajeSeleccionado = tipoPorcentajeSeleccionado;
     }
 
 }

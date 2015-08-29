@@ -9,6 +9,16 @@
     <h:form id="editProductoForm">
 
 
+        <h:panelGrid id="fechasGrid" columns="2" >
+            <h:outputLabel value="#{msg.fechaAlta}:" />
+            <h:outputLabel value="#{productoEditBean.productoActual.fechaAlta}">
+                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+            </h:outputLabel>
+            <h:outputLabel value="#{msg.fechaModificacion}:" />
+            <h:outputLabel value="#{productoEditBean.productoActual.fechaUltimaModificacion}">
+                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+            </h:outputLabel>
+        </h:panelGrid>
         <p:tabView id="editProductoTabView" >
 
             <p:tab title="Datos básicos" >
@@ -43,6 +53,7 @@
                     <p:selectBooleanCheckbox  id="activoField"  value="#{productoEditBean.productoActual.activo}"
                                               required="false"/>
                     <p:message for="activoField" />
+
                 </h:panelGrid>
             </p:tab>
 
@@ -206,10 +217,24 @@
                         </h:panelGroup>
                         <h:panelGroup id="pgPrecios" >
                             <p:remoteCommand name="onCellEdit" update="@this " />
+
+
                             <h:panelGrid  columns="2" >
 
-
                                 <h:outputLabel for="porcentajesTable" value="#{msg.porcentajes}:"/>
+
+
+
+                                <h:selectOneMenu id="porcentajeSelect" value="#{productoEditBean.tipoPorcentajeSeleccionado}"
+                                                 converter="#{productosTiposPorcentajesConverter}"
+                                                 style="width:100%">
+
+                                    <f:selectItems value="#{productoEditBean.tiposPorcentajesList}"
+                                                   var="lista" itemLabel="#{lista.nombreTipo}"
+                                                   itemValue="#{lista}" />
+                                </h:selectOneMenu>
+
+                                <h:outputLabel />
 
                                 <p:commandButton id="addPorcentajeButton"
                                                  icon="ui-icon-plus"
@@ -271,6 +296,14 @@
 
                                     </p:column>
 
+                                    <p:column >
+                                        <f:facet name="header">
+                                            #{msg.fechaModificacion}
+                                        </f:facet>
+                                        <h:outputLabel value="#{porcentaje.fechaModificacion}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                                        </h:outputLabel>
+                                    </p:column>
                                     <p:column  exportable="false" style="width: 50px">
                                         <f:facet name="header">
                                             #{msg.borrar}
@@ -359,7 +392,14 @@
                                                              currencySymbol="$ "/>
                                         </h:outputLabel>
                                     </p:column>
-
+                                    <p:column >
+                                        <f:facet name="header">
+                                            #{msg.fechaModificacion}
+                                        </f:facet>
+                                        <h:outputLabel value="#{precio.fechaModificacion}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                                        </h:outputLabel>
+                                    </p:column>
                                     <p:column  exportable="false" style="width: 50px">
                                         <f:facet name="header">
                                             #{msg.borrar}
@@ -401,6 +441,9 @@
                     <p:message for="proveedorHabitualField"/>
 
                 </h:panelGrid>
+            </p:tab>
+            <p:tab title="Existencias">
+
             </p:tab>
         </p:tabView>
 
