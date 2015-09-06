@@ -56,3 +56,9 @@ alter table productos alter column costo_adquisicion_neto type numeric(19,4);
 alter table fiscal_tipos_comprobante add column version integer not null default 0;
 
 alter table parametros add column version integer not null default 0;
+
+alter table productos
+drop column ubicacion;
+
+alter table productos
+add column unidades_compra_unidades_venta numeric(19,2) not null default 1;

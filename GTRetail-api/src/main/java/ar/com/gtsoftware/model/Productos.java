@@ -34,6 +34,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -89,9 +90,11 @@ public class Productos extends BaseEntity implements Serializable {
     @NotNull
     @Column(name = "annos_amortizacion")
     private int annosAmortizacion;
-    @Size(max = 20)
-    @Column(name = "ubicacion")
-    private String ubicacion;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "unidades_compra_unidades_venta")
+    @Min(0)
+    private BigDecimal unidadesCompraUnidadesVenta;
     @JoinColumn(name = "id_tipo_unidad_venta", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
     @JoinFetch
@@ -209,12 +212,12 @@ public class Productos extends BaseEntity implements Serializable {
         this.annosAmortizacion = annosAmortizacion;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public BigDecimal getUnidadesCompraUnidadesVenta() {
+        return unidadesCompraUnidadesVenta;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setUnidadesCompraUnidadesVenta(BigDecimal unidadesCompraUnidadesVenta) {
+        this.unidadesCompraUnidadesVenta = unidadesCompraUnidadesVenta;
     }
 
     public ProductosTiposUnidades getIdTipoUnidadVenta() {
@@ -347,6 +350,7 @@ public class Productos extends BaseEntity implements Serializable {
     @PrePersist
     protected void onCreate() {
         fechaAlta = new Date();
+        fechaUltimaModificacion = fechaAlta;
     }
 
     @PreUpdate

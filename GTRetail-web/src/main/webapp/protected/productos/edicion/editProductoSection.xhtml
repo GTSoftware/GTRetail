@@ -90,9 +90,9 @@
                         </p:selectOneMenu>
 
 
-                        <p:commandButton icon="ui-icon-plus" action="#{productoEditBean.nuevoRubro}"
+<!--                        <p:commandButton icon="ui-icon-plus" action="#{productoEditBean.nuevoRubro}"
                                          immediate="true" update=":nuevoRubroForm"
-                                         oncomplete="PF('dlg2').show();" />
+                                         oncomplete="PF('dlg2').show();" />-->
                     </h:panelGroup>
                     <p:message for="rubroField"/>
 
@@ -112,9 +112,9 @@
                         </p:selectOneMenu>
 
 
-                        <p:commandButton id="btnNuevoSubRubro" icon="ui-icon-plus" action="#{productoEditBean.nuevoSubRubro}" immediate="true"
+<!--                        <p:commandButton id="btnNuevoSubRubro" icon="ui-icon-plus" action="#{productoEditBean.nuevoSubRubro}" immediate="true"
                                          oncomplete="PF('dlgSubRubro').show();" update=":nuevoSubRubroForm"
-                                         rendered="#{productoEditBean.productoActual.idRubro ne null}"/>
+                                         rendered="#{productoEditBean.productoActual.idRubro ne null}"/>-->
                     </h:panelGroup>
                     <p:message for="subRubroField"/>
 
@@ -132,9 +132,9 @@
 
 
 
-                        <p:commandButton id="btnNuevaMarca" icon="ui-icon-plus" action="#{productoEditBean.cargarNuevaMarca}" immediate="true"
+<!--                        <p:commandButton id="btnNuevaMarca" icon="ui-icon-plus" action="#{productoEditBean.cargarNuevaMarca}" immediate="true"
                                          oncomplete="PF('dlgNuevaMarca').show();" update=":nuevaMarca"
-                                         />
+                                         />-->
                     </h:panelGroup>
                     <p:message for="marcaField"/>
 
@@ -162,10 +162,13 @@
                     </p:selectOneMenu>
                     <p:message for="tipoUnidadCompraSelect"/>
 
-                    <h:outputLabel for="ubicacionField" value="#{msg.ubicacion}:"/>
-                    <p:inputText id="ubicacionField" value="#{productoEditBean.productoActual.ubicacion}"
-                                 converter="#{stringFormatConverter}"/>
-                    <p:message for="ubicacionField"/>
+                    <h:outputLabel for="unidadCompraVentaField" value="#{msg.unidadCompraUnidadVenta}:"/>
+                    <p:inputText id="unidadCompraVentaField" value="#{productoEditBean.productoActual.unidadesCompraUnidadesVenta}"
+                                 title="1 Unidad de compra son X unidades de venta">
+                        <f:validateDoubleRange minimum="0"
+                                               maximum="9999999999999999999.99" />
+                    </p:inputText>
+                    <p:message for="unidadCompraVentaField"/>
                 </h:panelGrid>
             </p:tab>
 

@@ -65,12 +65,11 @@ public class ProductosFacade extends AbstractFacade<Productos> {
                 Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
                 Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
                 Predicate p4 = cb.like(root.get(Productos_.codigoPropio), String.format("%%%s%%", s));
-                Predicate p5 = cb.like(root.get(Productos_.ubicacion), String.format("%%%s%%", s));
 
                 if (p == null) {
-                    p = cb.or(p1, p2, p3, p4, p5);
+                    p = cb.or(p1, p2, p3, p4);
                 } else {
-                    p = cb.or(p, p1, p2, p3, p4, p5);
+                    p = cb.or(p, p1, p2, p3, p4);
                 }
             }
         }

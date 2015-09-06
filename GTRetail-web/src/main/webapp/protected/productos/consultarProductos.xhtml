@@ -109,13 +109,7 @@
                                                          currencySymbol="$ "/>
                                     </h:outputLabel>
                                 </p:column>
-                                <p:column sortBy="#{producto.ubicacion}" style="width: 5%">
-                                    <f:facet name="header">
-                                        #{msg.ubicacion}
-                                    </f:facet>
-                                    <h:outputLabel value="#{producto.ubicacion}"/>
 
-                                </p:column>
                                 <p:column sortBy="#{producto.idTipoUnidadVenta.nombreUnidad}" style="width: 5%">
                                     <f:facet name="header">
                                         #{msg.unidadVenta}

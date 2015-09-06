@@ -19,7 +19,11 @@ import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,6 +32,10 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -38,6 +46,8 @@ public abstract class AbstractFacade<T extends GTEntity> {
 
     private final Class<T> entityClass;
 
+    private static final Logger LOG = Logger.getLogger(AbstractFacade.class.getName());
+
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
@@ -45,11 +55,13 @@ public abstract class AbstractFacade<T extends GTEntity> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
+        constraintViolationsDetected(entity);
         getEntityManager().persist(entity);
         getEntityManager().flush();
     }
 
     public void edit(T entity) {
+        constraintViolationsDetected(entity);
         getEntityManager().merge(entity);
         getEntityManager().flush();
 
@@ -95,7 +107,7 @@ public abstract class AbstractFacade<T extends GTEntity> {
     }
 
     public List<T> findBySearchFilter(AbstractSearchFilter sf, int firstResult, int maxResults) {
-//        if (sf.hasFilter()) {
+
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         Root<T> root = cq.from(entityClass);
@@ -114,8 +126,7 @@ public abstract class AbstractFacade<T extends GTEntity> {
         q.setFirstResult(firstResult);
         List<T> resultList = q.getResultList();
         return resultList;
-//        }
-//        return new ArrayList<>();
+
     }
 
     protected List<Order> createOrderFromSearchFilter(AbstractSearchFilter sf, Root<T> root, CriteriaBuilder cb) {
@@ -206,4 +217,19 @@ public abstract class AbstractFacade<T extends GTEntity> {
         }
     }
 
+    private boolean constraintViolationsDetected(T entity) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
+        if (constraintViolations.size() > 0) {
+            Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
+            while (iterator.hasNext()) {
+                ConstraintViolation<T> cv = iterator.next();
+                LOG.log(Level.SEVERE, "{0}.{1} {2}", new Object[]{cv.getRootBeanClass().getName(), cv.getPropertyPath(), cv.getMessage()});
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

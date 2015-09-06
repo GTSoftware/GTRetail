@@ -177,6 +177,7 @@ public class ProductoEditBean implements Serializable {
         productoActual = new Productos();
         productoActual.setPrecios(new ArrayList<ProductosPrecios>());
         productoActual.setPorcentajes(new ArrayList<ProductosPorcentajes>());
+        productoActual.setUnidadesCompraUnidadesVenta(BigDecimal.ONE);
         productoActual.setActivo(true);
     }
 
@@ -193,8 +194,8 @@ public class ProductoEditBean implements Serializable {
             listRubros.add(productosRubrosNuevo);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
         } catch (Exception e) {
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
+            LOG.log(Level.SEVERE, e.getMessage());
+            JSFUtil.addErrorMessage("Error al guardar");
 
         }
     }
@@ -213,8 +214,8 @@ public class ProductoEditBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
         } catch (Exception e) {
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
+            LOG.log(Level.SEVERE, e.getMessage());
+            JSFUtil.addErrorMessage("Error al guardar");
 
         }
 
@@ -233,8 +234,8 @@ public class ProductoEditBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
         } catch (Exception e) {
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar!");
+            LOG.log(Level.SEVERE, e.getMessage());
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
@@ -251,7 +252,7 @@ public class ProductoEditBean implements Serializable {
             JSFUtil.addInfoMessage("Producto guardado Exitosamente");
             productoActual = productosFacade.find(productoActual.getId());
         } catch (Exception e) {
-            Logger.getLogger(ProductoEditBean.class.getName()).log(Level.INFO, e.getMessage());
+            LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
         }
 
