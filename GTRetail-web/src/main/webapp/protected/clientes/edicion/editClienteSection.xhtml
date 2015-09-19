@@ -24,7 +24,7 @@
 
         <p:tabView id="tabPersona">
             <p:tab title="#{msg.datosFiliatorios}">
-                <h:form id="formDatosFiliatorios">
+
                     <h:panelGrid id="grid" columns="3">
                         <h:outputLabel for="idClienteField" value="#{msg.idCliente}:" />
                         <h:outputLabel id="idClienteField" value="#{clientesEditBean.clienteActual.id}" />
@@ -33,10 +33,13 @@
                         <h:outputLabel for="tipoPersoneriaField" value="#{msg.tipoPersoneria}:" />
                         <p:selectOneMenu id="tipoPersoneriaField" required="true" requiredMessage="#{msg.tipoPersoneriaRequerido}" value="#{clientesEditBean.clienteActual.idTipoPersoneria}" converter="#{legalTiposPersoneriaConverter}"
                                          filter="true" filterMatchMode="contains">
+                            <p:ajax event="valueChange"
+                                    update="@form"
+                                    process="@this"
+                                    />
                             <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                             <f:selectItems value="#{clientesEditBean.tiposPersoneriaList}" var="personeria" itemLabel="#{personeria.nombreTipo}" itemValue="#{personeria}"/>
-                            <p:ajax update="grid"
-                                    process="@this" />
+
                         </p:selectOneMenu>
                         <p:message for="tipoPersoneriaField" />
 
@@ -44,7 +47,8 @@
                                        rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"
                                        converter="#{stringFormatConverter}"/>
                         <p:inputText id="razonSocialField" value="#{clientesEditBean.clienteActual.razonSocial}" maxlength="200"
-                                     rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"/>
+                                     rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"
+                                converter="#{stringFormatConverter}"/>
                         <p:message for="razonSocialField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}" />
 
                         <h:outputLabel for="nombreFantasiaField" value="#{msg.nombreFantasia}:" />
@@ -170,10 +174,10 @@
                         <h:outputLabel />
 
                     </h:panelGrid>
-                </h:form>
+
             </p:tab>
             <p:tab title="#{msg.contacto}" >
-                <h:form id="formContacto" >
+
 
                     <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"
                                      value="#{msg.nuevo}"  icon="ui-icon-plus"  />
@@ -228,7 +232,7 @@
                             </h:panelGroup>
                         </p:column>
                     </p:dataTable>
-                </h:form>
+
             </p:tab>
         </p:tabView>
 
@@ -237,21 +241,21 @@
         <p:dialog id="addTelefonoDialog" header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true" >
             <h:outputLabel  value="#{clientesEditBean.telefonoActual.id}" />
             <h:panelGrid id="gridTelefono" columns="3" >
-                <h:outputLabel for="telefonoField" value="#{msg.telefonoNumero}"/>
-                <p:inputMask id="telefonoField" value="#{clientesEditBean.telefonoActual.numero}" mask="(099?9) 999999?999"
+                <h:outputLabel for="telefonoValueField" value="#{msg.telefonoNumero}"/>
+                <p:inputMask id="telefonoValueField" value="#{clientesEditBean.telefonoActual.numero}" mask="(099?9) 999999?999"
                              required="true" maxlength="50" />
-                <p:message for="telefonoField" />
+                <p:message for="telefonoValueField" />
 
-                <h:outputLabel for="referenciaField" value="#{msg.telefonoReferencia}"/>
-                <p:inputText id="referenciaField" value="#{clientesEditBean.telefonoActual.referencia}" maxlength="100"
+                <h:outputLabel for="referenciaValueField" value="#{msg.telefonoReferencia}"/>
+                <p:inputText id="referenciaValueField" value="#{clientesEditBean.telefonoActual.referencia}" maxlength="100"
                              converter="#{stringFormatConverter}"/>
-                <p:message for="referenciaField" />
+                <p:message for="referenciaValueField" />
 
             </h:panelGrid>
             <p:separator />
             <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk"
                              action="#{clientesEditBean.grabarTelefono()}"
-                             update=":editClienteForm:tabPersona:formContacto"
+                             update=":editClienteForm:tabPersona:telefonosTable"
                              onsuccess="PF('dlgAddTelefono').hide();"
                              process="@form"/>
 
