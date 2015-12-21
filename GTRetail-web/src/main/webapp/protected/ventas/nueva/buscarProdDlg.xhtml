@@ -71,14 +71,7 @@
                         <h:outputText value="#{pro.descripcion}" />
                     </p:column>
 
-                    <p:column headerText="Stock" style="text-align: right">
-                        <f:facet name="header">
-                            #{msg.stock}
-                        </f:facet>
-                        <h:outputText value="0" >
-                            <f:convertNumber groupingUsed="true" type="number"/>
-                        </h:outputText>
-                    </p:column>
+
 
                     <p:column style="text-align: right; font-size: large; font-weight: bold ">
                         <f:facet name="header">
@@ -96,7 +89,14 @@
                         </f:facet>
                         <h:outputText value="#{pro.idTipoUnidadVenta.nombreUnidad}" />
                     </p:column>
-
+                    <p:column headerText="#{msg.stock}" style="text-align: right">
+                        <f:facet name="header">
+                            #{msg.stock}
+                        </f:facet>
+                        <h:outputText value="#{pro.stockActual}" >
+                            <f:convertNumber groupingUsed="true" type="number"/>
+                        </h:outputText>
+                    </p:column>
 
                 </p:dataTable>
             </p:fragment>

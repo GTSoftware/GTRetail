@@ -103,7 +103,7 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.precioUnitario}
                         </f:facet>
-                        <h:outputText value="#{pro.precios.get(0).precio}" style="font-size: medium; font-weight: bold">
+                        <h:outputText value="#{productosSearchBean.getPrecio(producto)}" style="font-size: medium; font-weight: bold">
                             <f:convertNumber groupingUsed="true" type="currency"
                                              currencySymbol="$"/>
                         </h:outputText>
@@ -121,6 +121,14 @@ limitations under the License.
                         <h:outputText value="#{pro.ubicacion}" />
                     </p:column>
 
+                    <p:column headerText="#{msg.stock}" style="text-align: right; width: 5%" >
+                        <f:facet name="header">
+                            #{msg.stock}
+                        </f:facet>
+                        <h:outputText value="#{pro.stockActual}" >
+                            <f:convertNumber groupingUsed="true" type="number"/>
+                        </h:outputText>
+                    </p:column>
                 </p:dataTable>
             </p:fragment>
         </h:form>

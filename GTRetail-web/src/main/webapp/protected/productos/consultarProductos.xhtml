@@ -117,6 +117,16 @@
                                     <h:outputLabel value="#{producto.idTipoUnidadVenta.nombreUnidad}"/>
 
                                 </p:column>
+
+                                <p:column headerText="#{msg.stock}" style="text-align: right; width: 5%" >
+                                    <f:facet name="header">
+                                        #{msg.stock}
+                                    </f:facet>
+                                    <h:outputText value="#{producto.stockActual}" >
+                                        <f:convertNumber groupingUsed="true" type="number"/>
+                                    </h:outputText>
+                                </p:column>
+
                                 <p:column sortBy="#{producto.idProveedorHabitual.nombreFantasia}" style="width: 5%">
                                     <f:facet name="header">
                                         #{msg.proveedor}
