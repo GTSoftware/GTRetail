@@ -184,7 +184,7 @@ public class NuevaVentaBean implements Serializable {
 
     private void inicializarLineaVenta() {
         lineaActual = new VentasLineas();
-        lineaActual.setCantidad(null);
+        lineaActual.setCantidad(BigDecimal.ONE);
         lineaActual.setSubTotal(BigDecimal.ZERO);
         productoActual = null;
         productoSearchFilter.setIdProducto(null);

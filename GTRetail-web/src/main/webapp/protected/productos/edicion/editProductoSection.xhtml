@@ -49,6 +49,13 @@
                                      label="#{msg.observaciones}"/>
                     <p:message for="observacionesField"/>
 
+                    <h:outputLabel for="ubicacionField" value="#{msg.ubicacion}:" />
+                    <p:inputText id="ubicacionField" value="#{productoEditBean.productoActual.ubicacion}"
+                                 maxlength="60"
+                                 converter="#{stringFormatConverter}"
+                                 label="#{msg.descripcion}"/>
+                    <p:message for="ubicacionField"/>
+
                     <h:outputLabel for="activoField" value="#{msg.activo}:" />
                     <p:selectBooleanCheckbox  id="activoField"  value="#{productoEditBean.productoActual.activo}"
                                               required="false"/>
@@ -446,7 +453,23 @@
                 </h:panelGrid>
             </p:tab>
             <p:tab title="Existencias">
+                <h:panelGrid id="existenciasGrid" columns="3" >
+                    <h:outputLabel for="stockMinimoField" value="#{msg.stockMinimo}:"  />
+                    <p:inputText id="stockMinimoField" value="#{productoEditBean.productoActual.stockMinimo}"
+                                 label="#{msg.stockMinimo}">
+                        <f:validateDoubleRange minimum="0"
+                                               maximum="9999999999999999999.99" />
+                    </p:inputText>
+                    <p:message for="stockMinimoField"/>
 
+                    <h:outputLabel for="stockActualField" value="#{msg.stockActual}:"  />
+                    <p:inputText id="stockActualField" value="#{productoEditBean.productoActual.stockActual}"
+                                 label="#{msg.stockActual}">
+                        <f:validateDoubleRange
+                            maximum="9999999999999999999.99" />
+                    </p:inputText>
+                    <p:message for="stockActualField"/>
+                </h:panelGrid>
             </p:tab>
         </p:tabView>
 

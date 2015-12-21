@@ -41,8 +41,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.eclipse.persistence.annotations.JoinFetch;
 
 /**
+ * Clase que representa a un producto
  *
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "productos")
@@ -50,7 +51,7 @@ import org.eclipse.persistence.annotations.JoinFetch;
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
 public class Productos extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Size(max = 100)
     @Column(name = "codigo_propio")
@@ -134,6 +135,20 @@ public class Productos extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductosPorcentajes> porcentajes;
+
+    @Size(max = 60)
+    @Column(name = "ubicacion")
+    private String ubicacion;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "stock_minimo", scale = 2, precision = 19)
+    private BigDecimal stockMinimo;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "stock_actual", scale = 2, precision = 19)
+    private BigDecimal stockActual;
 
     @Transient
     private BigDecimal precioVenta;
@@ -342,9 +357,33 @@ public class Productos extends BaseEntity implements Serializable {
         this.porcentajes = porcentajes;
     }
 
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public BigDecimal getStockMinimo() {
+        return stockMinimo;
+    }
+
+    public void setStockMinimo(BigDecimal stockMinimo) {
+        this.stockMinimo = stockMinimo;
+    }
+
+    public BigDecimal getStockActual() {
+        return stockActual;
+    }
+
+    public void setStockActual(BigDecimal stockActual) {
+        this.stockActual = stockActual;
+    }
+
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Productos[ idProducto=" + this.getId() + " ]";
+        return String.format("ar.com.gtsoftware.model.Productos[ idProducto= %s ]", this.getId());
     }
 
     @PrePersist
