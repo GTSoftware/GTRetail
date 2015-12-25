@@ -22,6 +22,9 @@
                     <p:menuitem id="busquedaProductosItem" value="#{msg.busquedaProductos}"
                                 action="/protected/productos/consultarProductos.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
+                    <p:menuitem id="actualizacionMasivaPreciosItem" value="#{msg.actualizacionMasivaPrecios}"
+                                action="/protected/productos/precios/actualizarPrecios.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
                 </p:submenu>
                 <p:submenu id="ventasSubMenu" label="#{msg.ventas}" >
                     <p:menuitem id="listadoVentasItem" value="#{msg.ventasListado}"
