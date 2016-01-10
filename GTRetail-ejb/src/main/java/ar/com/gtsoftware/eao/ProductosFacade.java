@@ -64,17 +64,19 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             p = cb.equal(root.get(Productos_.codigoPropio), psf.getCodigoPropio());
         }
         if (!StringUtils.isEmpty(psf.getTxt())) {
+            Predicate pTxt = null;
+            Predicate pCod = cb.like(root.get(Productos_.codigoPropio), String.format(STARTS_WITH, psf.getTxt()));
+            pTxt = appendOrPredicate(cb, pTxt, pCod);
 
             for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
-                Predicate pTxt = null;
+
                 Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format(LIKE, s));
                 Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format(LIKE, s));
                 Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format(LIKE, s));
-                Predicate p4 = cb.like(root.get(Productos_.codigoPropio), String.format(STARTS_WITH, s));
+
                 pTxt = appendOrPredicate(cb, pTxt, p1);
                 pTxt = appendOrPredicate(cb, pTxt, p2);
                 pTxt = appendOrPredicate(cb, pTxt, p3);
-                pTxt = appendOrPredicate(cb, pTxt, p4);
 
                 if (StringUtils.isNumeric(s)) {
                     Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(s));
