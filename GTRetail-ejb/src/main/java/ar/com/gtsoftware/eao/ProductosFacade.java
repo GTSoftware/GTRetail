@@ -37,6 +37,9 @@ import org.apache.commons.lang3.StringUtils;
 @Stateless
 public class ProductosFacade extends AbstractFacade<Productos> {
 
+    private static final String WORDS = "\\W";
+    private static final String LIKE = "%%%s%%";
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -61,17 +64,17 @@ public class ProductosFacade extends AbstractFacade<Productos> {
         }
         if (!StringUtils.isEmpty(psf.getTxt())) {
 
-            for (String s : psf.getTxt().toUpperCase().split("\\W")) {
+            for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
                 Predicate pTxt = null;
-                Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format("%%%s%%", s));
-                Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
-                Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
+                Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format(LIKE, s));
+                Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format(LIKE, s));
+                Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format(LIKE, s));
                 pTxt = appendOrPredicate(cb, pTxt, p1);
                 pTxt = appendOrPredicate(cb, pTxt, p2);
                 pTxt = appendOrPredicate(cb, pTxt, p3);
 
                 if (StringUtils.isNumeric(s)) {
-                    Predicate pCod = cb.like(root.get(Productos_.codigoPropio), String.format("%%%s%%", s));
+                    Predicate pCod = cb.like(root.get(Productos_.codigoPropio), String.format(LIKE, s));
                     Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(s));
                     pTxt = appendOrPredicate(cb, pTxt, pCod);
                     pTxt = appendOrPredicate(cb, pTxt, pId);
@@ -85,7 +88,8 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getPuedeComprarse() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.puedeComprarse), psf.getPuedeComprarse());
+            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.puedeComprarse),
+                    psf.getPuedeComprarse());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getPuedeVenderse() != null) {
