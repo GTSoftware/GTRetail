@@ -170,12 +170,13 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Retorna el OR entre los predicados pasados como parámetro
      *
-     * @param cb
-     * @param p1
-     * @param p2
+     * @param cb el criteria builder
+     * @param p1 el predicado 1
+     * @param p2 el predicado 2
      * @return un predicado que une a p1 y p2 mediante un OR
      */
     protected Predicate appendOrPredicate(CriteriaBuilder cb, Predicate p1, Predicate p2) {
+        validateAppendArguments(cb, p1, p2);
         if (p1 == null) {
             return p2;
         } else if (p2 == null) {
@@ -187,18 +188,35 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Retorna el AND entre los predicados pasados como parámetro
      *
-     * @param cb
-     * @param p1
-     * @param p2
+     * @param cb el criteria builder
+     * @param p1 el predicado 1
+     * @param p2 el predicado 2
      * @return un predicado que une a p1 y p2 mediante un AND
      */
     protected Predicate appendAndPredicate(CriteriaBuilder cb, Predicate p1, Predicate p2) {
+        validateAppendArguments(cb, p1, p2);
         if (p1 == null) {
             return p2;
         } else if (p2 == null) {
             return p1;
         }
         return cb.and(p1, p2);
+    }
+
+    /**
+     * Método que valida los parámetros que reciben los métodos de append.
+     *
+     * @param cb el criteria builder
+     * @param p1 el predicado 1
+     * @param p2 el predicado 2
+     */
+    private void validateAppendArguments(CriteriaBuilder cb, Predicate p1, Predicate p2) {
+        if (cb == null) {
+            throw new IllegalArgumentException("El CriteriaBuilder no puede ser null.");
+        }
+        if (p1 == null && p2 == null) {
+            throw new IllegalArgumentException("Al menos unos de los predicados debe estar establecido.");
+        }
     }
 
     /**
