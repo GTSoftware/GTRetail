@@ -160,11 +160,7 @@
             <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.beanio</groupId>
-            <artifactId>beanio</artifactId>
-            <version>2.1.0</version>
-        </dependency>
+
     </dependencies>
     <reporting>
         <plugins>
@@ -258,5 +254,7 @@
         <dom4j.version>2.0.0-RC1</dom4j.version>
         <primefaces.version>5.3</primefaces.version>
         <primefaces-themes.version>1.0.10</primefaces-themes.version>
+        <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
+        <beanio.version>2.1.0</beanio.version>
     </properties>
 </project>
