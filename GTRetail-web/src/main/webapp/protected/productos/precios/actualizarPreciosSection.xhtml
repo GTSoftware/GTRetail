@@ -25,7 +25,103 @@
         </p:panel>
 
         <p:panel header="#{msg.filtros}">
+            <h:panelGrid id="clasificacionGrid" columns="3" >
+                <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
+                <p:selectOneMenu id="tipoProveeduriaField" value="#{productosPreciosBean.filter.idTipoProveeduria}"
+
+                                 converter="#{productosTiposProveeduriaConverter}"
+                                 >
+                    <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
+
+                    <f:selectItems value="#{productosPreciosBean.tiposProveeduriaList}" var="tipoProd"
+                                   itemLabel="#{tipoProd.nombreTipoProveeduria}"
+                                   itemValue="#{tipoProd}"/>
+
+                </p:selectOneMenu>
+                <p:message for="tipoProveeduriaField"/>
+
+                <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
+                <p:selectOneMenu id="proveedorHabitualField" value="#{productosPreciosBean.filter.idProveedorHabitual}"
+                                 converter="#{personasConverter}"
+                                 required="false" requiredMessage="#{msg.seleccionarUno}"
+                                 filter="true"
+                                 filterMatchMode="contains">
+                    <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
+                    <f:selectItems value="#{productosPreciosBean.proveedoresList}" var="proveedor"
+                                   itemLabel="#{proveedor.nombreFantasia + ' - ' + proveedor.razonSocial}"
+                                   itemValue="#{proveedor}"/>
+
+                </p:selectOneMenu>
+                <p:message for="proveedorHabitualField"/>
+
+                <h:outputLabel for="rubroField" value="#{msg.productoRubro}:" />
+                <h:panelGroup >
+                    <p:selectOneMenu id="rubroField"  value="#{productosPreciosBean.filter.idRubro}"
+
+                                     converter="#{productosRubrosConverter}"
+                                     label="#{msg.productoRubro}"
+                                     >
+
+                        <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
+                        <f:selectItems value="#{productosPreciosBean.rubrosList}" var="rubro"
+                                       itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
+                        <p:ajax event="valueChange"
+                                update=":actualizarPreciosForm:subRubroPanelGroup"  process="@this"/>
+                    </p:selectOneMenu>
+
+
+                </h:panelGroup>
+                <p:message for="rubroField"/>
+
+
+                <h:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:" />
+                <h:panelGroup id="subRubroPanelGroup">
+
+                    <p:selectOneMenu id="subRubroField" value="#{productosPreciosBean.filter.idSubRubro}"
+                                     required="false" converter="#{productosSubRubrosConverter}"
+                                     requiredMessage="#{msg.seleccionarUno}"
+                                     label="#{msg.productoSubRubro}"
+                                     >
+
+                        <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}" />
+                        <f:selectItems value="#{productosPreciosBean.subRubrosList}" var="subRubro"
+                                       itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
+                    </p:selectOneMenu>
+
+
+                </h:panelGroup>
+                <p:message for="subRubroField"/>
+
+
+                <h:outputLabel for="marcaField" value="#{msg.marca}:" />
+                <h:panelGroup >
+                    <p:selectOneMenu id="marcaField" value="#{productosPreciosBean.filter.idMarca}"
+                                     required="flase" requiredMessage="#{msg.ingresarValor}"
+                                     converter="#{productosMarcasConverter}"
+                                     label="#{msg.marca}">
+                        <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}"/>
+                        <f:selectItems value="#{productosPreciosBean.marcasList}" var="marca"
+                                       itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
+
+                    </p:selectOneMenu>
+
+                </h:panelGroup>
+                <p:message for="marcaField"/>
+
+                <h:outputLabel for="txtField" value="#{msg.terminosBusqueda}:"  />
+                <p:inputText id="txtField" value="#{productosPreciosBean.filter.txt}"
+                             label="#{msg.terminosBusqueda}"/>
+                <p:message for="txtField"/>
+            </h:panelGrid>
+            <p:commandButton id="aplicarFiltrosButton"
+                             value="#{msg.aplicarFiltros}"
+                             icon="ui-icon-search"
+                             update="@form"
+                             ajax="true"
+                             />
         </p:panel>
+        <h:outputLabel for="cantProd" value="#{msg.cantidadProductosEditar}:"  />
+        <h:outputLabel id="cantProd"  value="#{productosPreciosBean.cantidadProductosAEditar}"  />
     </h:form>
 
 

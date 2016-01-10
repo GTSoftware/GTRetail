@@ -18,8 +18,10 @@ package ar.com.gtsoftware.search;
 import ar.com.gtsoftware.model.Depositos;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
+import ar.com.gtsoftware.model.ProductosMarcas;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros;
+import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import javax.validation.constraints.Size;
 
 /**
@@ -27,6 +29,8 @@ import javax.validation.constraints.Size;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 public class ProductosSearchFilter extends AbstractSearchFilter {
+
+    private static final long serialVersionUID = 1L;
 
     private String txt;
     private Integer idProducto;
@@ -40,6 +44,8 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private Personas idProveedorHabitual;
     private Depositos conStockEnDeposito;
     private ProductosListasPrecios listaPrecio;
+    private ProductosTiposProveeduria idTipoProveeduria;
+    private ProductosMarcas idMarca;
 
     public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse) {
         this.activo = activo;
@@ -54,7 +60,8 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     public boolean hasFilter() {
         return (txt != null && !txt.isEmpty()) || (idProducto != null) || (codigoPropio != null && !codigoPropio.isEmpty())
                 || (activo != null) || (puedeComprarse != null) || (puedeVenderse != null) || (idRubro != null) || (idSubRubro != null)
-                || (idProveedorHabitual != null) || (conStockEnDeposito != null) || (listaPrecio != null);
+                || (idProveedorHabitual != null) || (conStockEnDeposito != null) || (listaPrecio != null) || (idTipoProveeduria != null)
+                || (idMarca != null);
     }
 
     public String getTxt() {
@@ -143,6 +150,22 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
 
     public void setListaPrecio(ProductosListasPrecios listaPrecio) {
         this.listaPrecio = listaPrecio;
+    }
+
+    public ProductosTiposProveeduria getIdTipoProveeduria() {
+        return idTipoProveeduria;
+    }
+
+    public void setIdTipoProveeduria(ProductosTiposProveeduria idTipoProveeduria) {
+        this.idTipoProveeduria = idTipoProveeduria;
+    }
+
+    public ProductosMarcas getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(ProductosMarcas idMarca) {
+        this.idMarca = idMarca;
     }
 
 }
