@@ -33,6 +33,8 @@ import javax.inject.Named;
 @SessionScoped
 public class AuthBackingBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @EJB
     private UsuariosFacade usuariosFacade;
 
