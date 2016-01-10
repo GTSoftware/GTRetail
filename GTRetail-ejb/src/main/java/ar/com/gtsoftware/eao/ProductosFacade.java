@@ -39,6 +39,7 @@ public class ProductosFacade extends AbstractFacade<Productos> {
 
     private static final String WORDS = "\\W";
     private static final String LIKE = "%%%s%%";
+    private static final String STARTS_WITH = "%s%%";
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -69,7 +70,7 @@ public class ProductosFacade extends AbstractFacade<Productos> {
                 Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format(LIKE, s));
                 Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format(LIKE, s));
                 Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format(LIKE, s));
-                Predicate p4 = cb.like(root.get(Productos_.codigoPropio), String.format(LIKE, s));
+                Predicate p4 = cb.like(root.get(Productos_.codigoPropio), String.format(STARTS_WITH, s));
                 pTxt = appendOrPredicate(cb, pTxt, p1);
                 pTxt = appendOrPredicate(cb, pTxt, p2);
                 pTxt = appendOrPredicate(cb, pTxt, p3);
