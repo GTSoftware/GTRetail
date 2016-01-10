@@ -28,6 +28,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -55,23 +56,28 @@ public class ProductosFacade extends AbstractFacade<Productos> {
         if (psf.getIdProducto() != null) {
             p = cb.equal(root.get(Productos_.id), psf.getIdProducto());
         }
-        if (psf.getCodigoPropio() != null && !psf.getCodigoPropio().isEmpty()) {
+        if (!StringUtils.isEmpty(psf.getCodigoPropio())) {
             p = cb.equal(root.get(Productos_.codigoPropio), psf.getCodigoPropio());
         }
-        if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
-            for (String s : psf.getTxt().toUpperCase().split(" ")) {
+        if (!StringUtils.isEmpty(psf.getTxt())) {
+            Predicate pTxt = null;
+            for (String s : psf.getTxt().toUpperCase().split("\\w")) {
 
                 Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format("%%%s%%", s));
                 Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
                 Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
-                Predicate p4 = cb.like(root.get(Productos_.codigoPropio), String.format("%%%s%%", s));
+                pTxt = appendOrPredicate(cb, pTxt, p1);
+                pTxt = appendOrPredicate(cb, pTxt, p2);
+                pTxt = appendOrPredicate(cb, pTxt, p3);
 
-                if (p == null) {
-                    p = cb.or(p1, p2, p3, p4);
-                } else {
-                    p = cb.or(p, p1, p2, p3, p4);
+                if (StringUtils.isNumeric(s)) {
+                    Predicate pCod = cb.like(root.get(Productos_.codigoPropio), String.format("%%%s%%", s));
+                    Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(s));
+                    pTxt = appendOrPredicate(cb, pTxt, pCod);
+                    pTxt = appendOrPredicate(cb, pTxt, pId);
                 }
             }
+            p = appendAndPredicate(cb, p, pTxt);
         }
         if (psf.getIdProveedorHabitual() != null) {
             Predicate p1 = cb.equal(root.get(Productos_.idProveedorHabitual), psf.getIdProveedorHabitual());
@@ -98,7 +104,7 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getConStockEnDeposito() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock), Boolean.FALSE);
+            Predicate p1 = cb.isTrue(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
             //TODO Or existe que ese producto tiene stock > 0 en el deposito del filtro
         }
         return p;
