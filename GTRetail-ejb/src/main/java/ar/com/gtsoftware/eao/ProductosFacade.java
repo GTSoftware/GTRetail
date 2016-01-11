@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosMarcas_;
 import ar.com.gtsoftware.model.ProductosRubros_;
 import ar.com.gtsoftware.model.ProductosSubRubros_;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
@@ -40,7 +41,6 @@ public class ProductosFacade extends AbstractFacade<Productos> {
 
     private static final String WORDS = "\\W";
     private static final String LIKE = "%%%s%%";
-    private static final String STARTS_WITH = "%s%%";
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -65,19 +65,22 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             p = cb.equal(root.get(Productos_.codigoPropio), psf.getCodigoPropio());
         }
         if (!StringUtils.isEmpty(psf.getTxt())) {
-            Predicate pTxt = null;
-            Predicate pCod = cb.like(root.get(Productos_.codigoPropio), String.format(STARTS_WITH, psf.getTxt()));
-            pTxt = appendOrPredicate(cb, pTxt, pCod);
 
             for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
+                Predicate pTxt = null;
+                String likeS = String.format(LIKE, s);
 
-                Predicate p1 = cb.like(root.get(Productos_.descripcion), String.format(LIKE, s));
-                Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), String.format(LIKE, s));
-                Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), String.format(LIKE, s));
+                Predicate p1 = cb.like(root.get(Productos_.descripcion), likeS);
+                Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), likeS);
+                Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), likeS);
+                Predicate p4 = cb.like(root.get(Productos_.idMarca).get(ProductosMarcas_.nombreMarca), likeS);
+                Predicate pCod = cb.like(root.get(Productos_.codigoPropio), likeS);
 
+                pTxt = appendOrPredicate(cb, pTxt, pCod);
                 pTxt = appendOrPredicate(cb, pTxt, p1);
                 pTxt = appendOrPredicate(cb, pTxt, p2);
                 pTxt = appendOrPredicate(cb, pTxt, p3);
+                pTxt = appendOrPredicate(cb, pTxt, p4);
 
                 if (StringUtils.isNumeric(s)) {
                     Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(s));

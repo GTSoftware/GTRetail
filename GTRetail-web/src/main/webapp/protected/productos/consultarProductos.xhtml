@@ -18,10 +18,21 @@
                     <p:defaultCommand target="buscarButton"/>
                     <p:panel header="#{msg.busquedaProductos}">
                         <h:panelGrid columns="6">
-                            <p:outputLabel value="#{msg.idProducto}"/>
-                            <p:inputText id="idProductoField" value="#{productosSearchBean.filter.codigoPropio}" size="5"/>
-                            <p:outputLabel value="#{msg.busqueda}"/>
-                            <p:inputText id="searchField" value="#{productosSearchBean.filter.txt}" size="50"/>
+
+                            <p:outputLabel for="searchField" value="#{msg.busqueda}:"/>
+<!--                            <p:inputText id="searchField" value="#{productosSearchBean.filter.txt}" size="50"/>-->
+
+
+                            <p:autoComplete id="searchField" value="#{productosSearchBean.filter.txt}"
+                                            completeMethod="#{productosSearchBean.autocompleteProductos}"
+                                            var="prod" itemLabel="#{prod.descripcion}" itemValue="#{prod.descripcion}"
+                                            forceSelection="false"
+                                            queryDelay="1000"
+                                            minQueryLength="3"
+                                            size="50"
+                                            autoHighlight="false"
+                                            />
+
                             <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
                                              required="true" requiredMessage="#{msg.seleccionarUno}"
                                              converter="#{productosListasPreciosConverter}"

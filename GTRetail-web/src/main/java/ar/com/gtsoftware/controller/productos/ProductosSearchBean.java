@@ -28,7 +28,6 @@ import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -51,7 +50,7 @@ public class ProductosSearchBean implements Serializable {
     private ProductosListasPreciosFacade listasPreciosFacade;
     @EJB
     private ProductosPreciosFacade preciosFacade;
-    private List<Productos> productosList = new ArrayList<>();
+
     private Productos productoActual;
     private ProductosListasPrecios listaSeleccionada;
     private DataModel<Productos> dataModel;
@@ -86,12 +85,9 @@ public class ProductosSearchBean implements Serializable {
         dataModel = null;
     }
 
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
+    public List<Productos> autocompleteProductos(String query) {
+        filter.setTxt(query);
+        return productosFacade.findBySearchFilter(filter, 0, 5);
     }
 
     public Productos getProductoActual() {
