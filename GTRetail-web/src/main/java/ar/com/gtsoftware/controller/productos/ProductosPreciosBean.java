@@ -22,7 +22,10 @@ import ar.com.gtsoftware.eao.ProductosRubrosFacade;
 import ar.com.gtsoftware.eao.ProductosSubRubrosFacade;
 import ar.com.gtsoftware.eao.ProductosTiposProveeduriaFacade;
 import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosMarcas;
+import ar.com.gtsoftware.model.ProductosPorcentajes;
+import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
@@ -33,6 +36,8 @@ import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -48,8 +53,10 @@ import javax.inject.Named;
 public class ProductosPreciosBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final BigDecimal CIEN = new BigDecimal(100);
 
     private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, null);
+    private BigDecimal porcentajeCosto = BigDecimal.ZERO;
     private List<ProductosTiposProveeduria> tiposProveeduriaList;
     private List<Personas> proveedoresList;
     private List<ProductosRubros> rubrosList;
@@ -138,4 +145,42 @@ public class ProductosPreciosBean implements Serializable {
     public int getCantidadProductosAEditar() {
         return productosFacade.countBySearchFilter(filter);
     }
+
+    public void actualizarPrecios() {
+        List<Productos> productos = productosFacade.findAllBySearchFilter(filter);
+        for (Productos producto : productos) {
+            BigDecimal costoAdquisicionNeto = producto.getCostoAdquisicionNeto();
+            costoAdquisicionNeto = costoAdquisicionNeto.add(costoAdquisicionNeto.multiply(porcentajeCosto.divide(CIEN)));
+            producto.setCostoAdquisicionNeto(costoAdquisicionNeto);
+            BigDecimal costoFinal = costoAdquisicionNeto;
+            BigDecimal coeficienteIVA = producto.getIdAlicuotaIva().getValorAlicuota().divide(CIEN).add(BigDecimal.ONE);
+            if (producto.getPorcentajes() != null) {
+                for (ProductosPorcentajes pp : producto.getPorcentajes()) {
+                    if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
+                        costoFinal = costoFinal.add(costoFinal.multiply(pp.getValor().divide(CIEN)));
+                    } else {
+                        costoFinal = costoFinal.add(pp.getValor());
+                    }
+                }
+            }
+            producto.setCostoFinal(costoFinal);
+            if (producto.getPrecios() != null) {
+                for (ProductosPrecios pp : producto.getPrecios()) {
+                    BigDecimal utilidad = pp.getUtilidad().divide(CIEN);
+                    pp.setNeto(costoFinal.add(costoFinal.multiply(utilidad)));
+                    pp.setPrecio(pp.getNeto().multiply(coeficienteIVA).setScale(2, RoundingMode.HALF_UP));
+                }
+            }
+            productosFacade.edit(producto);
+        }
+    }
+
+    public BigDecimal getPorcentajeCosto() {
+        return porcentajeCosto;
+    }
+
+    public void setPorcentajeCosto(BigDecimal porcentajeCosto) {
+        this.porcentajeCosto = porcentajeCosto;
+    }
+
 }

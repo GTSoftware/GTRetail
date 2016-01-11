@@ -12,16 +12,23 @@
 
             <h:panelGrid columns="3">
                 <p:outputLabel for="porcentajeCostoField" value="#{msg.porcentaje}:" />
-                <p:inputText id="porcentajeCostoField" value="1"
+                <p:inputText id="porcentajeCostoField" value="#{productosPreciosBean.porcentajeCosto}"
                              style="text-align: right"
-                             label="#{msg.porcentaje}">
-
+                             label="#{msg.porcentaje}"
+                             title="Ingrese un valor positivo para sumar el porcentaje al costo y uno negativo para restar el porcentaje del costo.">
 
                     <f:validateDoubleRange minimum="-9999999999999999999.9999"
                                            maximum="9999999999999999999.9999" />
                 </p:inputText>
                 <p:message for="porcentajeCostoField"/>
             </h:panelGrid>
+            <p:commandButton id="aplicarCambios"
+                             value="#{msg.aplicarCambios}"
+                             action="#{productosPreciosBean.actualizarPrecios}"
+                             icon="ui-icon-check"
+                             update="@form"
+                             ajax="true"
+                             />
         </p:panel>
 
         <p:panel header="#{msg.filtros}">
@@ -110,7 +117,7 @@
 
                 <h:outputLabel for="txtField" value="#{msg.terminosBusqueda}:"  />
                 <p:inputText id="txtField" value="#{productosPreciosBean.filter.txt}"
-                             label="#{msg.terminosBusqueda}"/>
+                             label="#{msg.terminosBusqueda}" size="100"/>
                 <p:message for="txtField"/>
             </h:panelGrid>
             <p:commandButton id="aplicarFiltrosButton"
