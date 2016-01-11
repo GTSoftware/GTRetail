@@ -35,6 +35,7 @@ import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
 import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -173,6 +174,7 @@ public class ProductosPreciosBean implements Serializable {
             }
             productosFacade.edit(producto);
         }
+        JSFUtil.addInfoMessage("Productos actualizados exitosamente.");
     }
 
     public BigDecimal getPorcentajeCosto() {

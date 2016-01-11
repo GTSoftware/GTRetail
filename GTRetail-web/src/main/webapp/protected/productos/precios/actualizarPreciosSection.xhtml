@@ -8,28 +8,7 @@
 
     <h:form id="actualizarPreciosForm">
         <!-- Permitir actualizar el costo en un porcentaje y armar la parte de filtros primero -->
-        <p:panel header="#{msg.actualizarCosto}">
 
-            <h:panelGrid columns="3">
-                <p:outputLabel for="porcentajeCostoField" value="#{msg.porcentaje}:" />
-                <p:inputText id="porcentajeCostoField" value="#{productosPreciosBean.porcentajeCosto}"
-                             style="text-align: right"
-                             label="#{msg.porcentaje}"
-                             title="Ingrese un valor positivo para sumar el porcentaje al costo y uno negativo para restar el porcentaje del costo.">
-
-                    <f:validateDoubleRange minimum="-9999999999999999999.9999"
-                                           maximum="9999999999999999999.9999" />
-                </p:inputText>
-                <p:message for="porcentajeCostoField"/>
-            </h:panelGrid>
-            <p:commandButton id="aplicarCambios"
-                             value="#{msg.aplicarCambios}"
-                             action="#{productosPreciosBean.actualizarPrecios}"
-                             icon="ui-icon-check"
-                             update="@form"
-                             ajax="true"
-                             />
-        </p:panel>
 
         <p:panel header="#{msg.filtros}">
             <h:panelGrid id="clasificacionGrid" columns="3" >
@@ -126,9 +105,33 @@
                              update="@form"
                              ajax="true"
                              />
+
+            <h:outputLabel for="cantProd" value="#{msg.cantidadProductosEditar}:"  />
+            <h:outputLabel id="cantProd"  value="#{productosPreciosBean.cantidadProductosAEditar}"  />
         </p:panel>
-        <h:outputLabel for="cantProd" value="#{msg.cantidadProductosEditar}:"  />
-        <h:outputLabel id="cantProd"  value="#{productosPreciosBean.cantidadProductosAEditar}"  />
+
+        <p:panel header="#{msg.actualizarCosto}">
+
+            <h:panelGrid columns="3">
+                <p:outputLabel for="porcentajeCostoField" value="#{msg.porcentaje}:" />
+                <p:inputText id="porcentajeCostoField" value="#{productosPreciosBean.porcentajeCosto}"
+                             style="text-align: right"
+                             label="#{msg.porcentaje}"
+                             title="Ingrese un valor positivo para sumar el porcentaje al costo y uno negativo para restar el porcentaje del costo.">
+
+                    <f:validateDoubleRange minimum="-9999999999999999999.9999"
+                                           maximum="9999999999999999999.9999" />
+                </p:inputText>
+                <p:message for="porcentajeCostoField"/>
+            </h:panelGrid>
+            <p:commandButton id="aplicarCambios"
+                             value="#{msg.aplicarCambios}"
+                             action="#{productosPreciosBean.actualizarPrecios}"
+                             icon="ui-icon-check"
+                             update="@form"
+                             ajax="true"
+                             />
+        </p:panel>
     </h:form>
 
 
