@@ -46,6 +46,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private ProductosListasPrecios listaPrecio;
     private ProductosTiposProveeduria idTipoProveeduria;
     private ProductosMarcas idMarca;
+    private Boolean conStock;
 
     public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse) {
         this.activo = activo;
@@ -61,7 +62,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
         return (txt != null && !txt.isEmpty()) || (idProducto != null) || (codigoPropio != null && !codigoPropio.isEmpty())
                 || (activo != null) || (puedeComprarse != null) || (puedeVenderse != null) || (idRubro != null) || (idSubRubro != null)
                 || (idProveedorHabitual != null) || (conStockEnDeposito != null) || (listaPrecio != null) || (idTipoProveeduria != null)
-                || (idMarca != null);
+                || (idMarca != null) || (conStock != null);
     }
 
     public String getTxt() {
@@ -166,6 +167,14 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
 
     public void setIdMarca(ProductosMarcas idMarca) {
         this.idMarca = idMarca;
+    }
+
+    public Boolean getConStock() {
+        return conStock;
+    }
+
+    public void setConStock(Boolean conStock) {
+        this.conStock = conStock;
     }
 
 }

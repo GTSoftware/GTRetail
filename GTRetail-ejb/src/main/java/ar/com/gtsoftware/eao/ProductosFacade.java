@@ -22,6 +22,7 @@ import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
 import ar.com.gtsoftware.model.Productos_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import java.math.BigDecimal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -111,17 +112,22 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             Predicate p1 = cb.equal(root.get(Productos_.activo), psf.isActivo());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.getConStockEnDeposito() != null) {
-            Predicate p1 = cb.isTrue(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
-            //TODO Or existe que ese producto tiene stock > 0 en el deposito del filtro
-            p = appendAndPredicate(cb, p, p1);
-        }
+        //TODO para cuando se implemente el stock por depósito
+//        if (psf.getConStockEnDeposito() != null) {
+//            Predicate p1 = cb.isTrue(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
+//
+//            p = appendAndPredicate(cb, p, p1);
+//        }
         if (psf.getIdTipoProveeduria() != null) {
             Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria), psf.getIdTipoProveeduria());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getIdMarca() != null) {
             Predicate p1 = cb.equal(root.get(Productos_.idMarca), psf.getIdMarca());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getConStock() != null) {
+            Predicate p1 = cb.gt(root.get(Productos_.stockActual), BigDecimal.ZERO);
             p = appendAndPredicate(cb, p, p1);
         }
         return p;
