@@ -60,7 +60,7 @@ public class ProductosSearchBean implements Serializable {
     /**
      * Por defecto creamos un filtro para productos a la venta activos
      */
-    private ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE);
+    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE, Boolean.TRUE);
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -100,10 +100,6 @@ public class ProductosSearchBean implements Serializable {
 
     public ProductosSearchFilter getFilter() {
         return filter;
-    }
-
-    public void setFilter(ProductosSearchFilter filter) {
-        this.filter = filter;
     }
 
     public List<ProductosListasPrecios> getListasPrecio() {

@@ -130,8 +130,10 @@ public class ProductosFacade extends AbstractFacade<Productos> {
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getConStock() != null) {
-            Predicate p1 = cb.gt(root.get(Productos_.stockActual), BigDecimal.ZERO);
-            p = appendAndPredicate(cb, p, p1);
+            if (psf.getConStock()) {
+                Predicate p1 = cb.gt(root.get(Productos_.stockActual), BigDecimal.ZERO);
+                p = appendAndPredicate(cb, p, p1);
+            }
         }
         return p;
 
