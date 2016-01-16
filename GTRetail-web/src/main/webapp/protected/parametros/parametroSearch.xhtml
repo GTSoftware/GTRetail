@@ -21,7 +21,7 @@
                         <p:inputText id="textoBusquedaField" value="#{parametrosSearchBean.txt}" size="50"/>
                         <p:commandButton  action="#{parametrosSearchBean.buscar()}" 
                                           value="#{msg.buscar}" 
-                                          icon="ui-icon-search"
+                                          icon="fa fa-fw fa-search"
                                           update="parametrosTable"/>
                     </h:panelGrid>
                     <p:dataTable id="parametrosTable" var="par" value="#{parametrosSearchBean.parametrosList}" 
@@ -72,7 +72,7 @@
                             <f:facet name="header">
                                 #{msg.editar}
                             </f:facet>
-                            <p:commandButton icon="ui-icon-pencil" action="parametroEdit" 
+                            <p:commandButton icon="fa fa-fw fa-edit" action="parametroEdit" 
                                              ajax="false" >
                                 <f:param name="nombreParametro" value="#{par.nombreParametro}" /> 
                                 

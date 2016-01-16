@@ -30,7 +30,7 @@
         </p:inputText>
         <p:message for="importePagoField" />
 
-        <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="ui-icon-plus" update="pagosTable, importePagoField"/>
+        <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="fa fa-fw fa-plus" update="pagosTable, importePagoField"/>
 
     </h:panelGrid>
     <p:dataTable id="pagosTable" value="#{nuevaVentaBean.pagos}" var="pago"
@@ -77,6 +77,6 @@
     <h:outputLabel value="#{msg.numeroRemito}:" />
     <p:inputText style="width: 100%" value="#{nuevaVentaBean.ventaActual.nroRemito}" maxlength="100" converter="#{stringFormatConverter}" />
     <p:separator />
-    <p:commandButton id="guardarButton" value="#{msg.guardar}" icon="ui-icon-disk" action="#{nuevaVentaBean.guardarVenta()}"  />
+    <p:commandButton id="guardarButton" value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{nuevaVentaBean.guardarVenta()}"  />
     <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="ui-icon-cancel" action="#{nuevaVentaBean.cancelar()}" immediate="true" ajax="false"  />
 </html>

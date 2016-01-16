@@ -42,8 +42,8 @@
                                                itemValue="#{lista}"/>
 
                             </p:selectOneMenu>
-                            <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}" value="Buscar" update="productoTable" icon="ui-icon-search"/>
-                            <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml" value="#{msg.nuevo}" ajax="false" icon="ui-icon-plus" />
+                            <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}" value="Buscar" update="productoTable" icon="fa fa-fw fa-search"/>
+                            <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus" />
 
                         </h:panelGrid>
                         <h:panelGrid>
@@ -172,7 +172,7 @@
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.acciones}"/>
                                     </f:facet>
-                                    <p:commandButton icon="ui-icon-pencil" action="edicion/edicionProducto"  ajax="false"
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionProducto"  ajax="false"
                                                      title="Editar">
                                         <f:param name="idProducto" value="#{producto.id}"/>
                                     </p:commandButton>

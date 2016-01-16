@@ -42,7 +42,7 @@
                                      update=":formEdicion"
                                      immediate="true"/>
                     
-                    <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk" 
+                    <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" 
                                      action="#{periodosFiscalesEditBean.guardarPeriodo()}" 
                                      update=":formEdicion, :formResultados" />
                     
@@ -121,7 +121,7 @@
                             <f:facet name="header">
                                 #{msg.acciones}
                             </f:facet>
-                            <p:commandButton icon="ui-icon-pencil" 
+                            <p:commandButton icon="fa fa-fw fa-edit" 
                                              action="#{periodosFiscalesEditBean.editarPeriodo(per)}"
                                              process="@this"
                                              update=":formEdicion">

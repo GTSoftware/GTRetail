@@ -37,14 +37,14 @@ limitations under the License.
                              action="#{usuariosSearchBean.findUsuarios()}"
                              update="@form"
                              ajax="true"
-                             icon="ui-icon-search"/>
+                             icon="fa fa-fw fa-search"/>
 
             <p:commandButton id="nuevoButton"
                              value="#{msg.nuevo}"
                              action="edicion/index.xhtml"
                              ajax="false"
                              immediate="true"
-                             icon="ui-icon-plus"/>
+                             icon="fa fa-fw fa-plus"/>
         </h:panelGrid>
 
 
@@ -98,7 +98,7 @@ limitations under the License.
                 <p:commandButton id="editarButton"
                                  action="edicion/index.xhtml"
                                  ajax="false"
-                                 icon="ui-icon-pencil">
+                                 icon="fa fa-fw fa-edit">
                     <f:param name="login" value="#{item.login}"/>
 
                 </p:commandButton>

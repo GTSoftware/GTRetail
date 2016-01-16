@@ -7,9 +7,12 @@
         <p:menubar id="menuBar" style="height: fit-content"  autoDisplay="false">
 
             <p:submenu id="sistemaSubMenu" label="#{msg.sistema}" icon="ui-icon-wrench" >
-                <p:menuitem id="cambiarClaveItem" value="#{msg.cambiarClave}" action="/protected/user/changePassword.xhtml?faces-redirect=true"  ajax="false" immediate="true"/>
-                <p:menuitem id="parametrosItem" value="#{msg.parametros}" action="/protected/parametros/parametroSearch?faces-redirect=true" ajax="false" immediate="true"/>
-                <p:menuitem id="salirItem" value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false" immediate="true"/>
+                <p:menuitem id="cambiarClaveItem" value="#{msg.cambiarClave}"
+                            action="/protected/user/changePassword.xhtml?faces-redirect=true"  ajax="false" immediate="true"/>
+                <p:menuitem id="parametrosItem" value="#{msg.parametros}"
+                            action="/protected/parametros/parametroSearch?faces-redirect=true" ajax="false" immediate="true"/>
+                <p:menuitem id="salirItem" value="#{msg.salir}" action="#{authBackingBean.logout}" ajax="false"
+                            immediate="true" icon="fa-power-off"/>
             </p:submenu>
 
             <p:submenu id="archivoSubMenu" label="#{msg.archivo}" icon="ui-icon-folder-collapsed" >
@@ -50,6 +53,11 @@
                                 immediate="true" ajax="false"/>
                 </p:submenu>
 
+                <p:submenu id="clasificadoresSubMenu" label="#{msg.clasificadores}" >
+                    <p:menuitem id="marcasItem" value="#{msg.marcas}"
+                                action="/protected/archivos/marcas/marcaSearch.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+                </p:submenu>
 
             </p:submenu>
 

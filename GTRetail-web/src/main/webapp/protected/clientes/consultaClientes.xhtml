@@ -15,8 +15,8 @@
             <p:inputText id="idClienteField" value="#{clientesSearchBean.filter.idPersona}" size="5"/>
             <p:outputLabel value="#{msg.busqueda}"/>
             <p:inputText id="searchField" value="#{clientesSearchBean.filter.txt}" size="50"/>
-            <p:commandButton id="buscarButton" action="#{clientesSearchBean.doSearch()}" value="Buscar" update="clientesTable" icon="ui-icon-search"/>
-            <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false" icon="ui-icon-plus" />
+            <p:commandButton id="buscarButton" action="#{clientesSearchBean.doSearch()}" value="Buscar" update="clientesTable" icon="fa fa-fw fa-search"/>
+            <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus" />
 
         </h:panelGrid>
         <h:panelGrid>
@@ -137,7 +137,7 @@
                         #{msg.acciones}
                     </f:facet>
                     <p:commandButton id="editarClienteButton"
-                                     icon="ui-icon-pencil" action="edicion/index.xhtml"  ajax="false" >
+                                     icon="fa fa-fw fa-edit" action="edicion/index.xhtml"  ajax="false" >
                         <f:param name="idPersona" value="#{cliente.id}"/>
                     </p:commandButton>
 

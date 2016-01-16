@@ -9,7 +9,7 @@
         <h:panelGrid columns="2" >
             <p:commandButton id="guardarButton"
                              value="#{msg.guardar}"
-                             icon="ui-icon-disk"
+                             icon="fa fa-fw fa-save"
                              action="#{clientesEditBean.doGuardarCliente()}"
                              update="@form" />
 
@@ -180,7 +180,7 @@
 
 
                     <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"
-                                     value="#{msg.nuevo}"  icon="ui-icon-plus"  />
+                                     value="#{msg.nuevo}"  icon="fa fa-fw fa-plus"  />
 
 
 
@@ -253,7 +253,7 @@
 
             </h:panelGrid>
             <p:separator />
-            <p:commandButton value="#{msg.guardar}" icon="ui-icon-disk"
+            <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"
                              action="#{clientesEditBean.grabarTelefono()}"
                              update=":editClienteForm:tabPersona:telefonosTable"
                              onsuccess="PF('dlgAddTelefono').hide();"

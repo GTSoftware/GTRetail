@@ -37,7 +37,7 @@
                                             >
 
                             </p:autoComplete>
-                            <p:commandButton id="buscarClienteButton" icon="ui-icon-search"
+                            <p:commandButton id="buscarClienteButton" icon="fa fa-fw fa-search"
                                              update=":busquedaPersonasDialogForm:busquedaPersonasDialog"
                                              oncomplete="PF('clientesDialog').show()"
                                              process="@this" />
@@ -55,7 +55,7 @@
                     <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}"
                                      value="#{msg.buscar}"
                                      update="@form"
-                                     icon="ui-icon-search"
+                                     icon="fa fa-fw fa-search"
                                      />
                 </p:tab>
 
@@ -175,7 +175,7 @@
                         <f:facet name="header">
                             #{msg.ver}
                         </f:facet>
-                        <p:commandButton icon="ui-icon-search" action="vista/verVenta"  ajax="false" >
+                        <p:commandButton icon="fa fa-fw fa-search" action="vista/verVenta"  ajax="false" >
                             <f:param name="idVenta" value="#{venta.id}"/>
                         </p:commandButton>
 
