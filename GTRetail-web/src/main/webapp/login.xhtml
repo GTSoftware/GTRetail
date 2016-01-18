@@ -15,11 +15,10 @@
 
         <form method="POST" action="j_security_check">
             <div class="ui-grid ui-grid-responsive">
-                <p:graphicImage value="/resources/images/logo.png" style="height: 70px;position: absolute;left: 50% ;margin-left: -150px;margin-top: 10px"/>
-                <p:panel id="panel" header="#{msg.loginHeader}"
-                         style="position: absolute;left: 50% ;margin-left: -150px;margin-top: 100px">
+                <p:graphicImage value="/resources/images/logo.png" />
+                <p:panel id="panel" header="#{msg.loginHeader}">
                     <p:focus context="panel"/>
-                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
                         <h:outputLabel for="j_username">#{msg.usuario}:</h:outputLabel>
                         <p:inputText id="j_username" required="true" value="" title="El nombre de usuario"/>
                         <h:outputLabel for="j_password">#{msg.password}:</h:outputLabel>
