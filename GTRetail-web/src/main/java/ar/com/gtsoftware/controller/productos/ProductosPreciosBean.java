@@ -31,9 +31,9 @@ import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
-import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
+import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
@@ -110,7 +110,7 @@ public class ProductosPreciosBean implements Serializable {
 
     public List<ProductosRubros> getRubrosList() {
         if (rubrosList == null) {
-            ProductoRubrosSearchFilter prsf = new ProductoRubrosSearchFilter();
+            RubrosSearchFilter prsf = new RubrosSearchFilter();
             prsf.addSortField(new SortField("nombreRubro", true));
             rubrosList = new ArrayList<>();
             rubrosList.addAll(productosRubrosFacade.findAllBySearchFilter(prsf));
@@ -123,7 +123,7 @@ public class ProductosPreciosBean implements Serializable {
             subRubrosList = new ArrayList<>();
         }
         if (filter.getIdRubro() != null) {
-            ProductoSubRubroSearchFilter subRubroSearchFilter = new ProductoSubRubroSearchFilter();
+            SubRubroSearchFilter subRubroSearchFilter = new SubRubroSearchFilter();
             subRubroSearchFilter.setProductosRubros(filter.getIdRubro());
             subRubroSearchFilter.addSortField(new SortField("nombreSubRubro", true));
             subRubrosList.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));

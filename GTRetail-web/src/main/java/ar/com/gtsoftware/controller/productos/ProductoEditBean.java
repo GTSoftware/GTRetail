@@ -24,9 +24,9 @@ import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
-import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
+import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
+import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.UtilUI;
@@ -105,7 +105,7 @@ public class ProductoEditBean implements Serializable {
     private ProductosTiposPorcentajes tipoPorcentajeSeleccionado;
 
     private ProductosSubRubros productosSubRubrosNuevo = new ProductosSubRubros();
-    private final ProductoSubRubroSearchFilter subRubroSearchFilter = new ProductoSubRubroSearchFilter();
+    private final SubRubroSearchFilter subRubroSearchFilter = new SubRubroSearchFilter();
 
     private static final Logger LOG = Logger.getLogger(ProductoEditBean.class.getName());
 
@@ -135,7 +135,7 @@ public class ProductoEditBean implements Serializable {
 
     private void initDatos() {
         listAlicuotaIVA.addAll(fiscalAlicuotasIvaFacade.findAll());
-        ProductoRubrosSearchFilter prsf = new ProductoRubrosSearchFilter();
+        RubrosSearchFilter prsf = new RubrosSearchFilter();
         prsf.addSortField(new SortField("nombreRubro", true));
         listRubros.addAll(productosRubrosFacade.findAllBySearchFilter(prsf));
 

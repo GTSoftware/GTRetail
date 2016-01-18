@@ -16,25 +16,33 @@
 package ar.com.gtsoftware.search;
 
 /**
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ *
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-public class ProductoRubrosSearchFilter extends AbstractSearchFilter {
+public class RubrosSearchFilter extends AbstractSearchFilter {
 
-    private String descripcion;
+    private static final long serialVersionUID = 1L;
 
-    public ProductoRubrosSearchFilter() {
+    private String nombreRubro;
+
+    public RubrosSearchFilter() {
+    }
+
+    public RubrosSearchFilter(String nombreMarca) {
+        this.nombreRubro = nombreMarca;
     }
 
     @Override
     public boolean hasFilter() {
-        return (descripcion != null && !descripcion.isEmpty());
+        return nombreRubro != null;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombreRubro() {
+        return nombreRubro;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombreRubro(String nombreRubro) {
+        this.nombreRubro = nombreRubro;
     }
+
 }

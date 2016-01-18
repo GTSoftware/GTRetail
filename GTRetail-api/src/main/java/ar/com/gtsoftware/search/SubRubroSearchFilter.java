@@ -18,19 +18,25 @@ package ar.com.gtsoftware.search;
 import ar.com.gtsoftware.model.ProductosRubros;
 
 /**
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-public class ProductoSubRubroSearchFilter extends AbstractSearchFilter {
+public class SubRubroSearchFilter extends AbstractSearchFilter {
+
+    private static final long serialVersionUID = 1L;
 
     private ProductosRubros productosRubros;
-    private String descripcion;
+    private String nombreSubRubro;
 
-    public ProductoSubRubroSearchFilter() {
+    public SubRubroSearchFilter() {
+    }
+
+    public SubRubroSearchFilter(String nombreSubRubro) {
+        this.nombreSubRubro = nombreSubRubro;
     }
 
     @Override
     public boolean hasFilter() {
-        return (productosRubros != null || (descripcion != null && !descripcion.isEmpty()));
+        return (productosRubros != null || (nombreSubRubro != null && !nombreSubRubro.isEmpty()));
     }
 
     public ProductosRubros getProductosRubros() {
@@ -41,11 +47,11 @@ public class ProductoSubRubroSearchFilter extends AbstractSearchFilter {
         this.productosRubros = productosRubros;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getNombreSubRubro() {
+        return nombreSubRubro;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombreSubRubro(String nombreSubRubro) {
+        this.nombreSubRubro = nombreSubRubro;
     }
 }

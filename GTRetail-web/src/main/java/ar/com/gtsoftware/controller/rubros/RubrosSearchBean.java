@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.controller.unidades;
+package ar.com.gtsoftware.controller.rubros;
 
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
-import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.eao.ProductosRubrosFacade;
+import ar.com.gtsoftware.model.ProductosRubros;
+import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.search.UnidadesSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -30,53 +29,39 @@ import javax.faces.bean.ViewScoped;
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-@ManagedBean(name = "unidadesSearchBean")
+@ManagedBean(name = "rubrosSearchBean")
 @ViewScoped
-public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidades> {
+public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private ProductosTiposUnidadesFacade facade;
+    private ProductosRubrosFacade facade;
 
-    private ProductosTiposUnidades unidad;
-
-    private final UnidadesSearchFilter filter = new UnidadesSearchFilter("%");
+    private final RubrosSearchFilter filter = new RubrosSearchFilter("%");
 
     /**
      * Creates a new instance of ParametrosEditBean
      */
-    public UnidadesSearchBean() {
+    public RubrosSearchBean() {
     }
 
     @Override
-    public UnidadesSearchFilter getFilter() {
+    public RubrosSearchFilter getFilter() {
         return filter;
     }
 
     @Override
-    protected AbstractFacade<ProductosTiposUnidades> getFacade() {
+    protected AbstractFacade<ProductosRubros> getFacade() {
         return facade;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("nombreUnidad", true));
+            filter.addSortField(new SortField("nombreRubro", true));
         }
 
     }
 
-    public ProductosTiposUnidades getUnidad() {
-        return unidad;
-    }
-
-    public void setUnidad(ProductosTiposUnidades unidad) {
-        this.unidad = unidad;
-    }
-
-    public void deleteUnidad() {
-        facade.remove(unidad);
-        JSFUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
-    }
 }

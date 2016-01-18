@@ -18,8 +18,11 @@ package ar.com.gtsoftware.controller.search;
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.model.DataModel;
 
 /**
@@ -31,8 +34,11 @@ import javax.faces.model.DataModel;
 public abstract class AbstractSearchBean<T extends GTEntity> implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(AbstractSearchBean.class.getName());
 
     protected DataModel<T> dataModel;
+
+    protected T elemento;
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -58,4 +64,23 @@ public abstract class AbstractSearchBean<T extends GTEntity> implements Serializ
         }
         return dataModel;
     }
+
+    public T getElemento() {
+        return elemento;
+    }
+
+    public void setElemento(T elemento) {
+        this.elemento = elemento;
+    }
+
+    public void deleteElemento() {
+        try {
+            getFacade().remove(elemento);
+            JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("elementoEliminado"));
+        } catch (Exception e) {
+            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("errorEliminarElemento"));
+            LOG.log(Level.INFO, null, e);
+        }
+    }
+
 }

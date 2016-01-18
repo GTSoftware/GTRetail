@@ -18,21 +18,21 @@
 
                     <h:panelGrid columns="4">
                         <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                        <p:inputText id="textoBusquedaField" value="#{unidadesSearchBean.filter.nombreUnidad}" size="50"/>
-                        <p:commandButton  action="#{unidadesSearchBean.doSearch()}"
+                        <p:inputText id="textoBusquedaField" value="#{rubrosSearchBean.filter.nombreRubro}" size="50"/>
+                        <p:commandButton  action="#{rubrosSearchBean.doSearch()}"
                                           value="#{msg.buscar}"
                                           icon="fa fa-fw fa-search"
-                                          update="unidadesTable"/>
+                                          update="rubrosTable"/>
                         <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
                                          icon="fa fa-fw fa-plus" />
                     </h:panelGrid>
-                    <p:dataTable id="unidadesTable" var="unidad" value="#{unidadesSearchBean.dataModel}"
+                    <p:dataTable id="rubrosTable" var="rubro" value="#{rubrosSearchBean.dataModel}"
                                  rows="30"
                                  lazy="true"
                                  paginator="true"
                                  sortMode="single"
                                  emptyMessage="#{msg.busquedaSinResultados}"
-                                 rowKey="#{unidad.id}"
+                                 rowKey="#{rubro.id}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                  rowsPerPageTemplate="10,15,30,100"
                                  style="width: 100%"
@@ -44,77 +44,80 @@
                             <h:commandLink>
 
                                 <p:graphicImage library="images" name="excel.png" width="24"/>
-                                <p:dataExporter type="xls" target="unidadesTable" fileName="unidades" />
+                                <p:dataExporter type="xls" target="rubrosTable" fileName="rubros" />
                             </h:commandLink>
 
                             <h:commandLink>
                                 <p:graphicImage library="images" name="pdf.png" width="24"/>
-                                <p:dataExporter type="pdf" target="unidadesTable" fileName="unidades"/>
+                                <p:dataExporter type="pdf" target="rubrosTable" fileName="rubros"/>
                             </h:commandLink>
 
                             <h:commandLink>
                                 <p:graphicImage library="images" name="csv.png" width="24"/>
-                                <p:dataExporter type="csv" target="unidadesTable" fileName="unidades" />
+                                <p:dataExporter type="csv" target="rubrosTable" fileName="rubros" />
                             </h:commandLink>
 
                             <h:commandLink>
                                 <p:graphicImage library="images" name="xml.png" width="24"/>
-                                <p:dataExporter type="xml" target="unidadesTable" fileName="unidades" />
+                                <p:dataExporter type="xml" target="rubrosTable" fileName="rubros" />
                             </h:commandLink>
                         </f:facet>
 
                         <f:facet name="header">
-                            #{msg.unidades}
+                            #{msg.rubros}
                         </f:facet>
 
-                        <p:column sortBy="#{unidad.id}" >
+                        <p:column sortBy="#{rubro.id}" >
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.id}"/>
                             </f:facet>
 
-                            <h:outputText value="#{unidad.id}" />
+                            <h:outputText value="#{rubro.id}" />
 
                         </p:column>
 
-                        <p:column sortBy="#{unidad.nombreUnidad}" >
+                        <p:column sortBy="#{rubro.nombreRubro}" >
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.nombre}"/>
                             </f:facet>
 
-                            <h:outputText value="#{unidad.nombreUnidad}" />
+                            <h:outputText value="#{rubro.nombreRubro}" />
 
                         </p:column>
-                        <p:column  >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.cantidadEntera}"/>
-                            </f:facet>
 
-                            <h:outputText rendered="#{unidad.cantidadEntera}" value="#{msg.si}" />
-                            <h:outputText rendered="#{not unidad.cantidadEntera}" value="#{msg.no}" />
-
-                        </p:column>
 
                         <p:column style="width:64px" exportable="false">
                             <f:facet name="header">
                                 #{msg.editar}
                             </f:facet>
-                            <p:commandButton icon="fa fa-fw fa-edit" action="unidadEdit"
+                            <p:commandButton icon="fa fa-fw fa-edit" action="rubroEdit"
                                              ajax="false" >
-                                <f:param name="idUnidad" value="#{unidad.id}" />
+                                <f:param name="idRubro" value="#{rubro.id}" />
 
                             </p:commandButton>
                             <p:commandButton icon="fa fa-fw fa-trash"
-                                             action="#{unidadesSearchBean.setElemento(unidad)}"
+                                             action="#{rubrosSearchBean.setElemento(rubro)}"
                                              onclick="PF('dlgEliminar').show();" >
 
 
                             </p:commandButton>
                         </p:column>
+                        <p:column style="width:32px" exportable="false">
+                            <f:facet name="header">
+                                #{msg.subRubros}
+                            </f:facet>
+                            <p:commandButton icon="fa fa-fw fa-eye" action="subrubroSearch"
+                                             ajax="false" >
+                                <f:param name="idRubro" value="#{rubro.id}" />
+
+                            </p:commandButton>
+
+                        </p:column>
                     </p:dataTable>
-                    <p:dialog header="Eliminar #{unidadesSearchBean.elemento.nombreUnidad}?" widgetVar="dlgEliminar"
+                    <p:dialog header="Eliminar #{rubrosSearchBean.elemento.nombreRubro}?" widgetVar="dlgEliminar"
                               modal="true" height="auto">
                         <h:panelGrid columns="2" >
-                            <p:commandButton id="yesButton" action="#{unidadesSearchBean.deleteElemento()}"
+                            <p:commandButton id="yesButton" action="#{rubrosSearchBean.deleteElemento()}"
                                              value="#{msg.si}" ajax="false"
                                              icon="fa fa-fw fa-check-square" />
 
@@ -123,7 +126,6 @@
                                              icon="fa fa-fw fa-ban" onclick="PF('dlgEliminar').hide();" />
                         </h:panelGrid>
                     </p:dialog>
-
                 </h:form>
             </ui:define>
 

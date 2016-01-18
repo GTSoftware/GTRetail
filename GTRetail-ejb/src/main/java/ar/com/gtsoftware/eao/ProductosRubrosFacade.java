@@ -18,7 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.ProductosRubros;
 import ar.com.gtsoftware.model.ProductosRubros_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
+import ar.com.gtsoftware.search.RubrosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,7 +28,7 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Stateless
 public class ProductosRubrosFacade extends AbstractFacade<ProductosRubros> {
@@ -47,13 +47,12 @@ public class ProductosRubrosFacade extends AbstractFacade<ProductosRubros> {
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosRubros> root) {
-        ProductoRubrosSearchFilter psf = (ProductoRubrosSearchFilter) sf;
+        RubrosSearchFilter psf = (RubrosSearchFilter) sf;
         Predicate p = null;
-        if (psf.getDescripcion() != null) {
-            String s = psf.getDescripcion().toUpperCase();
+        if (psf.getNombreRubro() != null) {
+            String s = psf.getNombreRubro().toUpperCase();
             p = cb.like(root.get(ProductosRubros_.nombreRubro), String.format("%%%s%%", s));
         }
-
         return p;
 
     }
