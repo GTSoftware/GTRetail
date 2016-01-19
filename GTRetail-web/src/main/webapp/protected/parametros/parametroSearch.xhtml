@@ -16,26 +16,30 @@
                 <h:form id="formContenido" >
 
 
-                    <h:panelGrid columns="3">
+                    <p:panelGrid layout="grid"
+                                 styleClass="ui-panelgrid-blank" columns="3"
+                                 columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1">
                         <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                        <p:inputText id="textoBusquedaField" value="#{parametrosSearchBean.txt}" size="50"/>
-                        <p:commandButton  action="#{parametrosSearchBean.buscar()}" 
-                                          value="#{msg.buscar}" 
+                        <p:inputText id="textoBusquedaField" value="#{parametrosSearchBean.txt}" />
+                        <p:commandButton  action="#{parametrosSearchBean.buscar()}"
+                                          value="#{msg.buscar}"
                                           icon="fa fa-fw fa-search"
                                           update="parametrosTable"/>
-                    </h:panelGrid>
-                    <p:dataTable id="parametrosTable" var="par" value="#{parametrosSearchBean.parametrosList}" 
+                    </p:panelGrid >
+
+                    <p:dataTable id="parametrosTable" var="par" value="#{parametrosSearchBean.parametrosList}"
                                  editable="true"
                                  rows="15"
                                  paginator="true"
                                  sortMode="multiple"
-                                 emptyMessage="#{msg.busquedaSinResultados}" 
+                                 emptyMessage="#{msg.busquedaSinResultados}"
                                  rowKey="#{par.nombreParametro}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,15,30"
                                  style="width: 100%"
                                  resizableColumns="true"
-                                 scrollable="true" >
+                                 scrollable="true"
+                                 reflow="true">
 
                         <f:facet name="header">
                             #{msg.parametros}
@@ -72,10 +76,10 @@
                             <f:facet name="header">
                                 #{msg.editar}
                             </f:facet>
-                            <p:commandButton icon="fa fa-fw fa-edit" action="parametroEdit" 
+                            <p:commandButton icon="fa fa-fw fa-edit" action="parametroEdit"
                                              ajax="false" >
-                                <f:param name="nombreParametro" value="#{par.nombreParametro}" /> 
-                                
+                                <f:param name="nombreParametro" value="#{par.nombreParametro}" />
+
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

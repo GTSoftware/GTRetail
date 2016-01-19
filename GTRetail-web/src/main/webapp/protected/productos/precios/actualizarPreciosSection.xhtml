@@ -11,7 +11,7 @@
 
 
         <p:panel header="#{msg.filtros}">
-            <h:panelGrid id="clasificacionGrid" columns="3" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clasificacionGrid" columns="3" >
                 <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
                 <p:selectOneMenu id="tipoProveeduriaField" value="#{productosPreciosBean.filter.idTipoProveeduria}"
 
@@ -98,7 +98,7 @@
                 <p:inputText id="txtField" value="#{productosPreciosBean.filter.txt}"
                              label="#{msg.terminosBusqueda}" size="100"/>
                 <p:message for="txtField"/>
-            </h:panelGrid>
+            </p:panelGrid >
             <p:commandButton id="aplicarFiltrosButton"
                              value="#{msg.aplicarFiltros}"
                              icon="fa fa-fw fa-search"
@@ -112,7 +112,7 @@
 
         <p:panel header="#{msg.actualizarCosto}">
 
-            <h:panelGrid columns="3">
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
                 <p:outputLabel for="porcentajeCostoField" value="#{msg.porcentaje}:" />
                 <p:inputText id="porcentajeCostoField" value="#{productosPreciosBean.porcentajeCosto}"
                              style="text-align: right"
@@ -123,7 +123,7 @@
                                            maximum="9999999999999999999.9999" />
                 </p:inputText>
                 <p:message for="porcentajeCostoField"/>
-            </h:panelGrid>
+            </p:panelGrid >
             <p:commandButton id="aplicarCambios"
                              value="#{msg.aplicarCambios}"
                              action="#{productosPreciosBean.actualizarPrecios}"

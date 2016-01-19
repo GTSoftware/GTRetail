@@ -17,57 +17,58 @@
                 </ui:insert>
                 <!-- acá iría la parte de edición con los botones de guardar, nuevo y cerrar período -->
                 <h:form id="formEdicion" >
-                    <h:panelGrid id="grid" columns="3">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3">
 
                         <h:outputLabel for="nombrePeriodoField" value="#{msg.nombre}:" />
-                        <p:inputText id="nombrePeriodoField" 
+                        <p:inputText id="nombrePeriodoField"
                                      value="#{periodosFiscalesEditBean.periodoActual.nombrePeriodo}"
                                      maxlength="100" required="true" requiredMessage="#{msg.campoRequerido}"/>
                         <p:message for="nombrePeriodoField"  />
 
                         <h:outputLabel for="fechaDesdeField" value="#{msg.fechaDesde}:" />
-                        <p:calendar id="fechaDesdeField" value="#{periodosFiscalesEditBean.periodoActual.fechaInicioPeriodo}" 
+                        <p:calendar id="fechaDesdeField" value="#{periodosFiscalesEditBean.periodoActual.fechaInicioPeriodo}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" required="true" />
                         <p:message for="fechaDesdeField"  />
 
                         <h:outputLabel for="fechaHastaField" value="#{msg.fechaHasta}:" />
-                        <p:calendar id="fechaHastaField" value="#{periodosFiscalesEditBean.periodoActual.fechaFinPeriodo}" 
+                        <p:calendar id="fechaHastaField" value="#{periodosFiscalesEditBean.periodoActual.fechaFinPeriodo}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" required="true" />
                         <p:message for="fechaHastaField"  />
 
-                    </h:panelGrid>
+                    </p:panelGrid >
 
-                    <p:commandButton value="#{msg.nuevo}" icon="ui-icon-document" 
-                                     action="#{periodosFiscalesEditBean.nuevoPeriodo()}" 
+                    <p:commandButton value="#{msg.nuevo}" icon="ui-icon-document"
+                                     action="#{periodosFiscalesEditBean.nuevoPeriodo()}"
                                      update=":formEdicion"
                                      immediate="true"/>
-                    
-                    <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" 
-                                     action="#{periodosFiscalesEditBean.guardarPeriodo()}" 
+
+                    <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"
+                                     action="#{periodosFiscalesEditBean.guardarPeriodo()}"
                                      update=":formEdicion, :formResultados" />
-                    
-                    <p:commandButton value="#{msg.cerrarPeriodo}" 
-                                     rendered="#{not periodosFiscalesEditBean.periodoActual.new and 
-                                                 not periodosFiscalesEditBean.periodoActual.periodoCerrado}" 
-                                     icon="ui-icon-close" 
+
+                    <p:commandButton value="#{msg.cerrarPeriodo}"
+                                     rendered="#{not periodosFiscalesEditBean.periodoActual.new and
+                                                 not periodosFiscalesEditBean.periodoActual.periodoCerrado}"
+                                     icon="ui-icon-close"
                                      action="#{periodosFiscalesEditBean.cerrarPeriodo()}"
-                                     update=":formEdicion, :formResultados" 
+                                     update=":formEdicion, :formResultados"
                                      />
                 </h:form>
                 <p:separator />
                 <h:form id="formResultados" >
-                    <p:dataTable id="periodosTable" var="per" value="#{periodosFiscalesEditBean.periodosList}" 
+                    <p:dataTable id="periodosTable" var="per" value="#{periodosFiscalesEditBean.periodosList}"
                                  editable="true"
                                  rows="15"
                                  paginator="true"
                                  sortMode="multiple"
-                                 emptyMessage="#{msg.busquedaSinResultados}" 
+                                 emptyMessage="#{msg.busquedaSinResultados}"
                                  rowKey="#{per.id}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="10,15,30"
                                  style="width: 100%"
                                  resizableColumns="true"
-                                 scrollable="true" >
+                                 scrollable="true"
+                                 reflow="true">
 
 
                         <p:column sortBy="#{per.id}" >
@@ -121,7 +122,7 @@
                             <f:facet name="header">
                                 #{msg.acciones}
                             </f:facet>
-                            <p:commandButton icon="fa fa-fw fa-edit" 
+                            <p:commandButton icon="fa fa-fw fa-edit"
                                              action="#{periodosFiscalesEditBean.editarPeriodo(per)}"
                                              process="@this"
                                              update=":formEdicion">

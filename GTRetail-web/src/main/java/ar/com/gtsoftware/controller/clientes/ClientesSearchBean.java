@@ -15,16 +15,16 @@
  */
 package ar.com.gtsoftware.controller.clientes;
 
+import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.utils.LazyEntityDataModel;
-import java.io.Serializable;
-import javax.annotation.PostConstruct;
+import ar.com.gtsoftware.search.SortField;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.DataModel;
 
 /**
  *
@@ -32,16 +32,14 @@ import javax.faces.model.DataModel;
  */
 @ManagedBean(name = "clientesSearchBean")
 @ViewScoped
-public class ClientesSearchBean implements Serializable {
+public class ClientesSearchBean extends AbstractSearchBean<Personas> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private PersonasFacade personasFacade;
-    private Personas clienteActual;
-    private DataModel<Personas> dataModel;
+    private PersonasFacade facade;
 
-    private PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
 
     /**
      * Creates a new instance of ClientesSearchBean
@@ -49,36 +47,21 @@ public class ClientesSearchBean implements Serializable {
     public ClientesSearchBean() {
     }
 
-    @PostConstruct
-    private void init() {
-
+    @Override
+    protected AbstractFacade<Personas> getFacade() {
+        return facade;
     }
 
-    public PersonasSearchFilter getFilter() {
-        return filter;
-    }
-
-    public void setFilter(PersonasSearchFilter filter) {
-        this.filter = filter;
-    }
-
-    public void doSearch() {
-        dataModel = null;
-    }
-
-    public DataModel<Personas> getDataModel() {
-        if (dataModel == null) {
-            dataModel = new LazyEntityDataModel<>(personasFacade, filter);
+    @Override
+    protected void prepareSearchFilter() {
+        if (!filter.hasOrderFields()) {
+            filter.addSortField(new SortField("razonSocial", true));
         }
-        return dataModel;
     }
 
-    public Personas getClienteActual() {
-        return clienteActual;
-    }
-
-    public void setClienteActual(Personas clienteActual) {
-        this.clienteActual = clienteActual;
+    @Override
+    public AbstractSearchFilter getFilter() {
+        return filter;
     }
 
 }

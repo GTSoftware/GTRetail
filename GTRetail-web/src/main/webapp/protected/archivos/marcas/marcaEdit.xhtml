@@ -18,7 +18,7 @@
                 <h:form id="formContenido" >
                     <p:panel header="Editar marca" >
 
-                        <h:panelGrid id="grid" columns="3">
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3">
 
                             <h:outputLabel for="idField" value="#{msg.id}:" />
                             <h:outputLabel id="idField" value="#{marcasEditBean.marcaActual.id}" />
@@ -32,7 +32,7 @@
                                          converter="#{stringFormatConverter}"/>
                             <p:message for="nombreField"  />
 
-                        </h:panelGrid>
+                        </p:panelGrid >
                     </p:panel>
                     <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{marcasEditBean.doGuardar()}"
                                      update="@form" />

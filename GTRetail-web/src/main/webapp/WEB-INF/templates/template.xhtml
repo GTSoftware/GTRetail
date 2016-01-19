@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?> 
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -16,26 +16,26 @@
     <h:body>
 
         <h:outputStylesheet name="css/default.css" />
-        <div id="top" >
+        <div id="top" class="ui-fluid" >
             <ui:insert name="top">
                 <h:form >
                     <p:graphicImage library="images" name="logo.png" height="50" width="auto"/>
                     <br/>
                     <p:outputLabel value="#{msg.bienvenido}: "/>
-                    <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" /> 
+                    <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" />
 
                     <p:spacer width="20"/>
                     <p:outputLabel value="#{msg.fecha}:"/>
                     <p:clock mode="server" id="clock" pattern="dd/MM/yyyy hh:mm:ss a" />
-                    <p:ajaxStatus  onstart="PF('dlgLoad').show()" oncomplete="PF('dlgLoad').hide()" onerror="PF('dlgLoad').hide()" onsuccess="PF('dlgLoad').hide()"/>  
-                    <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)"> 
-                        <h:panelGrid columns="1" >
+                    <p:ajaxStatus  onstart="PF('dlgLoad').show()" oncomplete="PF('dlgLoad').hide()" onerror="PF('dlgLoad').hide()" onsuccess="PF('dlgLoad').hide()"/>
+                    <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)">
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="1" >
 
                             <p:graphicImage library="images" name="ajax-loader-bar.gif" />
                             <br/>
                             #{msg.cargando}
-                        </h:panelGrid>
-                    </p:dialog>  
+                        </p:panelGrid >
+                    </p:dialog>
                     <p:growl autoUpdate="true" showDetail="true" showSummary="true" sticky="true"/>
                 </h:form>
 
@@ -46,12 +46,12 @@
 
 
 
-            <div id="content" class="right_content" >
+            <div id="content" class="ui-fluid"  >
                 <ui:insert name="content">Content</ui:insert>
             </div>
         </div>
         <div>
-            <div id="footer" >
+            <div id="footer" class="ui-fluid" >
                 <p:separator/>
                 <h:outputLabel value="Version:  #{version.version} Build: #{version.build}" />
             </div>

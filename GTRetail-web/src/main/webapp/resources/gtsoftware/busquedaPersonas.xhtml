@@ -32,7 +32,7 @@ limitations under the License.
     <composite:implementation>
         <h:form id="busquedaPersonasForm" >
             <p:fragment>
-                <h:panelGrid columns="3">
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
                     <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                     <p:inputText id="textoBusquedaField" value="#{cc.attrs.textoBusqueda}" size="50"/>
                     <p:commandButton  action="#{cc.attrs.busquedaAction}"
@@ -40,7 +40,7 @@ limitations under the License.
                                       value="#{msg.buscar}"
                                       icon="fa fa-fw fa-search"
                                       update="personasTable"/>
-                </h:panelGrid>
+                </p:panelGrid >
 
                 <p:separator />
 
@@ -58,7 +58,8 @@ limitations under the License.
                              rowsPerPageTemplate="5,10,15,30"
                              style="width: 100%"
                              resizableColumns="true"
-                             scrollable="true" >
+                             scrollable="true"
+                             reflow="true">
 
                     <p:ajax event="rowSelect"  />
                     <p:column style="text-align: left; width:5%" sortBy="#{persona.id}" >

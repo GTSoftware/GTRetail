@@ -16,7 +16,7 @@
                 <h:form id="formContenido" >
 
 
-                    <h:panelGrid columns="4">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4">
                         <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                         <p:inputText id="textoBusquedaField" value="#{rubrosSearchBean.filter.nombreRubro}" size="50"/>
                         <p:commandButton  action="#{rubrosSearchBean.doSearch()}"
@@ -25,7 +25,7 @@
                                           update="rubrosTable"/>
                         <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
                                          icon="fa fa-fw fa-plus" />
-                    </h:panelGrid>
+                    </p:panelGrid >
                     <p:dataTable id="rubrosTable" var="rubro" value="#{rubrosSearchBean.dataModel}"
                                  rows="30"
                                  lazy="true"
@@ -37,7 +37,8 @@
                                  rowsPerPageTemplate="10,15,30,100"
                                  style="width: 100%"
                                  resizableColumns="true"
-                                 scrollable="true" >
+                                 scrollable="true"
+                                 reflow="true">
 
 
                         <f:facet name="{Exporters}">
@@ -95,12 +96,7 @@
                                 <f:param name="idRubro" value="#{rubro.id}" />
 
                             </p:commandButton>
-                            <p:commandButton icon="fa fa-fw fa-trash"
-                                             action="#{rubrosSearchBean.setElemento(rubro)}"
-                                             onclick="PF('dlgEliminar').show();" >
 
-
-                            </p:commandButton>
                         </p:column>
                         <p:column style="width:32px" exportable="false">
                             <f:facet name="header">
@@ -114,18 +110,7 @@
 
                         </p:column>
                     </p:dataTable>
-                    <p:dialog header="Eliminar #{rubrosSearchBean.elemento.nombreRubro}?" widgetVar="dlgEliminar"
-                              modal="true" height="auto">
-                        <h:panelGrid columns="2" >
-                            <p:commandButton id="yesButton" action="#{rubrosSearchBean.deleteElemento()}"
-                                             value="#{msg.si}" ajax="false"
-                                             icon="fa fa-fw fa-check-square" />
 
-                            <p:commandButton id="noButton"
-                                             value="#{msg.no}" ajax="false"
-                                             icon="fa fa-fw fa-ban" onclick="PF('dlgEliminar').hide();" />
-                        </h:panelGrid>
-                    </p:dialog>
                 </h:form>
             </ui:define>
 

@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
 
-    <h:panelGrid columns="2">
+    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
         <h:outputLabel value="#{msg.totalPagar}:" style="font-size: xx-large"/>
         <h:outputLabel value="#{nuevaVentaBean.ventaActual.total}" style="font-size: xx-large">
             <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
@@ -32,7 +32,7 @@
 
         <p:commandButton value="#{msg.agregarPago}" action="#{nuevaVentaBean.doAgregarPago()}" icon="fa fa-fw fa-plus" update="pagosTable, importePagoField"/>
 
-    </h:panelGrid>
+    </p:panelGrid >
     <p:dataTable id="pagosTable" value="#{nuevaVentaBean.pagos}" var="pago"
                  rows="5"
                  paginator="true"
@@ -40,7 +40,8 @@
                  emptyMessage="#{msg.pagosVacio}"
                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                  rowsPerPageTemplate="5,10,15,30"
-                 resizableColumns="true">
+                 resizableColumns="true"
+                 reflow="true">
         <f:facet name="header" >
             #{msg.pagosVenta}
         </f:facet>

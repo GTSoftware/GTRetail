@@ -34,7 +34,7 @@ limitations under the License.
     <composite:implementation>
         <h:form id="busquedaProductosForm" >
             <p:fragment>
-                <h:panelGrid columns="4">
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4">
                     <p:outputLabel value="#{msg.busqueda}"/>
                     <p:inputText id="cadenaBusquedaProdField"
                                  value="#{cc.attrs.textoBusqueda}"
@@ -53,7 +53,7 @@ limitations under the License.
                                       value="#{msg.buscar}"
                                       update="productosBusquedaTable"
                                       icon="fa fa-fw fa-search"/>
-                </h:panelGrid>
+                </p:panelGrid >
 
                 <p:separator />
 
@@ -72,7 +72,8 @@ limitations under the License.
                              style="width: 100%"
                              resizableColumns="true"
                              scrollable="true"
-                             sortMode="single">
+                             sortMode="single"
+                             reflow="true">
 
                     <p:ajax event="rowSelect"  />
 

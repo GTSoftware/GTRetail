@@ -24,7 +24,7 @@ limitations under the License.
 
     <h:form id="searchUserForm">
         <p:messages id="msgField"/>
-        <h:panelGrid columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
             <p:outputLabel value="#{msg.terminosBusqueda}:" for="txtBusField"/>
 
             <p:inputText id="txtBusField"
@@ -45,14 +45,14 @@ limitations under the License.
                              ajax="false"
                              immediate="true"
                              icon="fa fa-fw fa-plus"/>
-        </h:panelGrid>
+        </p:panelGrid >
 
 
         <p:separator/>
 
 
-        <p:dataTable id="tablaUsuarios" 
-                     rendered="#{usuariosSearchBean.usuariosList ne null}" 
+        <p:dataTable id="tablaUsuarios"
+                     rendered="#{usuariosSearchBean.usuariosList ne null}"
                      value="#{usuariosSearchBean.usuariosList}"
                      var="item"
                      rows="15"
@@ -64,7 +64,7 @@ limitations under the License.
                      style="width: 100%"
                      resizableColumns="true"
                      scrollable="true"
-                     >
+                     reflow="true" >
             <f:facet name="header">
                 <h:outputText value="#{msg.listadoUsuarios}"/>
             </f:facet>

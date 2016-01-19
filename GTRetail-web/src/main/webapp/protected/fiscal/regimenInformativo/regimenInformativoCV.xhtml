@@ -17,7 +17,7 @@
                 </ui:insert>
 
                 <h:form id="formBusqueda" >
-                    <h:panelGrid columns="2" >
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
                         <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
                         <p:selectOneMenu id="periodoFiscalField" required="true"
                                          requiredMessage="#{msg.campoRequerido}"
@@ -27,7 +27,7 @@
                                            var="periodo" itemLabel="#{periodo.nombrePeriodo}"
                                            itemValue="#{periodo}"/>
                         </p:selectOneMenu>
-                    </h:panelGrid>
+                    </p:panelGrid >
                     <p:commandButton id="generarButton" action="#{regimenInformativoBean.generarRI()}"
                                      value="#{msg.generar}"
                                      ajax="false"

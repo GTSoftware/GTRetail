@@ -9,7 +9,7 @@
     <h:form id="editProductoForm">
 
 
-        <h:panelGrid id="fechasGrid" columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="fechasGrid" columns="2" >
             <h:outputLabel value="#{msg.fechaAlta}:" />
             <h:outputLabel value="#{productoEditBean.productoActual.fechaAlta}">
                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
@@ -18,11 +18,11 @@
             <h:outputLabel value="#{productoEditBean.productoActual.fechaUltimaModificacion}">
                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
             </h:outputLabel>
-        </h:panelGrid>
+        </p:panelGrid >
         <p:tabView id="editProductoTabView" >
 
             <p:tab title="Datos básicos" >
-                <h:panelGrid id="datosBasicosGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="datosBasicosGrid" columns="3" >
                     <h:outputLabel for="idProductoField" value="#{msg.id}:"  />
                     <h:outputText id="idProductoField" value="#{productoEditBean.productoActual.id}"  />
                     <h:outputLabel/>
@@ -61,12 +61,12 @@
                                               required="false"/>
                     <p:message for="activoField" />
 
-                </h:panelGrid>
+                </p:panelGrid >
             </p:tab>
 
             <!--Clasificación-->
             <p:tab title="Clasificación" >
-                <h:panelGrid id="clasificacionGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clasificacionGrid" columns="3" >
                     <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
                     <p:selectOneMenu id="tipoProveeduriaField" value="#{productoEditBean.productoActual.idTipoProveeduria}"
                                      required="true" requiredMessage="#{msg.seleccionarUno}"
@@ -176,15 +176,15 @@
                                                maximum="9999999999999999999.99" />
                     </p:inputText>
                     <p:message for="unidadCompraVentaField"/>
-                </h:panelGrid>
+                </p:panelGrid >
             </p:tab>
 
             <!--Precios-->
             <p:tab title="Precios">
                 <p:fragment id="preciosFragment" autoUpdate="true"  >
-                    <h:panelGrid id="precioGrid" columns="2" columnClasses="top-aligned-columns" >
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="precioGrid" columns="2" columnClasses="top-aligned-columns" >
                         <h:panelGroup id="pgCostos" >
-                            <h:panelGrid  columns="3" columnClasses="top-aligned-columns" >
+                            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="3" columnClasses="top-aligned-columns" >
                                 <h:outputLabel for="costoAdquisicionField" value="#{msg.costoAdquisicion}:" />
                                 <p:inputText id="costoAdquisicionField" value="#{productoEditBean.productoActual.costoAdquisicionNeto}"
                                              required="true" requiredMessage="#{msg.ingresarValor}"
@@ -222,14 +222,14 @@
                                     <f:convertNumber groupingUsed="true" maxFractionDigits="4" type="number"/>
                                 </p:inputText>
                                 <p:message for="costoFinalField"/>
-                            </h:panelGrid>
+                            </p:panelGrid >
 
                         </h:panelGroup>
                         <h:panelGroup id="pgPrecios" >
                             <p:remoteCommand name="onCellEdit" update="@this " />
 
 
-                            <h:panelGrid  columns="2" >
+                            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="2" >
 
                                 <h:outputLabel for="porcentajesTable" value="#{msg.porcentajes}:"/>
 
@@ -265,7 +265,8 @@
                                              resizableColumns="true"
                                              scrollable="true"
                                              editable="true"
-                                             editMode="cell"> 
+                                             editMode="cell"
+                                             reflow="true"> 
 
                                     <p:ajax event="cellEdit"
                                             listener="#{productoEditBean.actualizarPrecios()}"
@@ -425,17 +426,17 @@
                                 </p:dataTable>
 
 
-                            </h:panelGrid>
+                            </p:panelGrid >
 
                         </h:panelGroup>
 
-                    </h:panelGrid>
+                    </p:panelGrid >
                 </p:fragment>
             </p:tab>
 
             <!--Proveedor-->
             <p:tab title="Proveedor">
-                <h:panelGrid id="proveedorGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="proveedorGrid" columns="3" >
 
 
                     <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
@@ -450,10 +451,10 @@
                     </p:selectOneMenu>
                     <p:message for="proveedorHabitualField"/>
 
-                </h:panelGrid>
+                </p:panelGrid >
             </p:tab>
             <p:tab title="Existencias">
-                <h:panelGrid id="existenciasGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="existenciasGrid" columns="3" >
                     <h:outputLabel for="stockMinimoField" value="#{msg.stockMinimo}:"  />
                     <p:inputText id="stockMinimoField" value="#{productoEditBean.productoActual.stockMinimo}"
                                  label="#{msg.stockMinimo}">
@@ -469,11 +470,11 @@
                             maximum="9999999999999999999.99" />
                     </p:inputText>
                     <p:message for="stockActualField"/>
-                </h:panelGrid>
+                </p:panelGrid >
             </p:tab>
         </p:tabView>
 
-        <h:panelGrid columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
             <p:commandButton id="guardarButton"
                              value="#{msg.guardar}"
                              icon="fa fa-fw fa-save"
@@ -485,10 +486,10 @@
             <p:commandButton id="cancelarButton"
                              value="#{msg.cancelar}"
                              icon="ui-icon-cancel"
-                             action="/protected/productos/consultarProductos.xhtml?faces-redirect=true"
+                             action="/protected/productos/index.xhtml?faces-redirect=true"
                              immediate="true"
                              ajax="false" />
-        </h:panelGrid>
+        </p:panelGrid >
 
 
     </h:form>
@@ -497,21 +498,21 @@
         <p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlg2"  height="100">
 
 
-            <h:panelGrid columns="3">
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
 
 
                 <h:outputLabel for="descripcionRubroField" value="#{msg.productoRubro}:" />
                 <p:inputText id="descripcionRubroField" value="#{productoEditBean.productosRubrosNuevo.nombreRubro}"
                              required="true" requiredMessage="#{msg.ingresarValor}"/>
                 <p:message for="descripcionRubroField"/>
-            </h:panelGrid>
-            <h:panelGrid columns="2">
+            </p:panelGrid >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
                 <p:commandButton  value="#{msg.guardar}"  action="#{productoEditBean.doGuardarRubro}"
                                   update=":editProductoForm:editProductoTabView:rubroField" onclick="PF('dlg2').hide();" />
 
 
 
-            </h:panelGrid>
+            </p:panelGrid >
         </p:dialog>
     </h:form>
 
@@ -519,26 +520,26 @@
     <h:form id="nuevoSubRubroForm">
         <p:dialog modal="true" header="#{msg.nuevoSubRubro}" widgetVar="dlgSubRubro"  height="100">
 
-            <h:panelGrid columns="2">
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
 
                 <h:outputLabel for="descripcionRubro" value="#{msg.productoRubro}:" />
                 <h:outputText  id="descripcionRubro" value="#{productoEditBean.productosSubRubrosNuevo.idRubro.nombreRubro}"
                                />
-            </h:panelGrid>
+            </p:panelGrid >
 
-            <h:panelGrid columns="3" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
 
                 <h:outputLabel for="descripcionSubRubroField" value="#{msg.productoSubRubro}:" />
                 <p:inputText id="descripcionSubRubroField" value="#{productoEditBean.productosSubRubrosNuevo.nombreSubRubro}"
                              required="true" requiredMessage="#{msg.ingresarValor}"
                              converter="#{stringFormatConverter}"/>
                 <p:message for="descripcionSubRubroField"/>
-            </h:panelGrid>
-            <h:panelGrid columns="2">
+            </p:panelGrid >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
                 <p:commandButton  value="#{msg.guardar}"  action="#{productoEditBean.doGuardarSubRubro}"
                                   update=":editProductoForm:editProductoTabView:subRubroField" onclick="PF('dlgSubRubro').hide();"/>
 
-            </h:panelGrid>
+            </p:panelGrid >
         </p:dialog>
     </h:form>
 
@@ -547,19 +548,19 @@
 
 
 
-            <h:panelGrid columns="3" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
 
                 <h:outputLabel for="nombreMarcaField" value="#{msg.marca}:" />
                 <p:inputText id="nombreMarcaField" value="#{productoEditBean.nuevaMarca.nombreMarca}"
                              required="true" requiredMessage="#{msg.ingresarValor}"
                              converter="#{stringFormatConverter}"/>
                 <p:message for="nombreMarcaField"/>
-            </h:panelGrid>
-            <h:panelGrid columns="2">
+            </p:panelGrid >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
                 <p:commandButton  value="#{msg.guardar}"  action="#{productoEditBean.doGuardarMarca}"
                                   update=":editProductoForm:editProductoTabView:marcaField" onclick="PF('dlgNuevaMarca').hide();"/>
 
-            </h:panelGrid>
+            </p:panelGrid >
         </p:dialog>
     </h:form>
 

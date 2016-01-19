@@ -20,7 +20,7 @@
                 <h:form id="form-body">
                     <p:defaultCommand target="buscarButton"/>
                     <p:panel header="#{msg.busquedaProductos}">
-                        <h:panelGrid columns="6">
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="6">
 
                             <p:outputLabel for="searchField" value="#{msg.busqueda}:"/>
 
@@ -51,8 +51,8 @@
                                              value="Buscar" update="productoTable" icon="fa fa-fw fa-search"/>
 
 
-                        </h:panelGrid>
-                        <h:panelGrid>
+                        </p:panelGrid >
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank">
 
                             <p:dataTable id="productoTable" value="#{productosSearchBean.dataModel}" var="producto"
                                          rows="30"
@@ -67,7 +67,8 @@
                                          selection="#{productosSearchBean.productoActual}"
                                          selectionMode="single"
                                          resizableColumns="true"
-                                         scrollable="true"> 
+                                         scrollable="true"
+                                         reflow="true"> 
 
                                 <f:facet name="{Exporters}">
                                     <h:commandLink>
@@ -180,7 +181,7 @@
 
                             </p:dataTable>
 
-                        </h:panelGrid>
+                        </p:panelGrid >
 
                     </p:panel>
                 </h:form>

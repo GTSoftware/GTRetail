@@ -10,144 +10,147 @@
     <h:form id="buscarClienteForm">
 
         <p:defaultCommand target="buscarButton"/>
-        <h:panelGrid columns="6">
-            <p:outputLabel value="#{msg.idCliente}"/>
-            <p:inputText id="idClienteField" value="#{clientesSearchBean.filter.idPersona}" size="5"/>
-            <p:outputLabel value="#{msg.busqueda}"/>
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="6"
+                     columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1">
+            <p:outputLabel value="#{msg.idCliente}:"/>
+            <p:inputText id="idClienteField" value="#{clientesSearchBean.filter.idPersona}" />
+            <p:outputLabel value="#{msg.busqueda}:"/>
             <p:inputText id="searchField" value="#{clientesSearchBean.filter.txt}" size="50"/>
             <p:commandButton id="buscarButton" action="#{clientesSearchBean.doSearch()}" value="Buscar" update="clientesTable" icon="fa fa-fw fa-search"/>
             <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus" />
 
-        </h:panelGrid>
-        <h:panelGrid>
+        </p:panelGrid >
 
-            <p:dataTable id="clientesTable" value="#{clientesSearchBean.dataModel}" var="cliente"
-                         rows="15"
-                         lazy="true"
-                         paginator="true"
-                         emptyMessage="#{msg.busquedaSinResultados}"
-                         rowKey="#{cliente.id}"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                         rowsPerPageTemplate="10,15,30,100"
-                         style="width: 100%"
-                         selection="#{clientesSearchBean.clienteActual}"
-                         selectionMode="single"
-                         resizableColumns="true"
-                         scrollable="true"
-                         liveResize="true"
-                         >
 
-                <f:facet name="{Exporters}">
-                    <h:commandLink>
+        <p:dataTable id="clientesTable" value="#{clientesSearchBean.dataModel}" var="cliente"
+                     rows="15"
+                     lazy="true"
+                     paginator="true"
+                     emptyMessage="#{msg.busquedaSinResultados}"
+                     rowKey="#{cliente.id}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                     rowsPerPageTemplate="10,15,30,100"
+                     style="width: 100%"
 
-                        <p:graphicImage library="images" name="excel.png" width="24"/>
-                        <p:dataExporter type="xls" target="clientesTable" fileName="clientes" />
-                    </h:commandLink>
+                     resizableColumns="true"
+                     scrollable="true"
+                     reflow="true" >
 
-                    <h:commandLink>
-                        <p:graphicImage library="images" name="pdf.png" width="24"/>
-                        <p:dataExporter type="pdf" target="clientesTable" fileName="clientes"/>
-                    </h:commandLink>
+            <f:facet name="{Exporters}">
+                <h:commandLink>
 
-                    <h:commandLink>
-                        <p:graphicImage library="images" name="csv.png" width="24"/>
-                        <p:dataExporter type="csv" target="clientesTable" fileName="clientes" />
-                    </h:commandLink>
+                    <p:graphicImage library="images" name="excel.png" width="24"/>
+                    <p:dataExporter type="xls" target="clientesTable" fileName="clientes" />
+                </h:commandLink>
 
-                    <h:commandLink>
-                        <p:graphicImage library="images" name="xml.png" width="24"/>
-                        <p:dataExporter type="xml" target="clientesTable" fileName="clientes" />
-                    </h:commandLink>
+                <h:commandLink>
+                    <p:graphicImage library="images" name="pdf.png" width="24"/>
+                    <p:dataExporter type="pdf" target="clientesTable" fileName="clientes"/>
+                </h:commandLink>
+
+                <h:commandLink>
+                    <p:graphicImage library="images" name="csv.png" width="24"/>
+                    <p:dataExporter type="csv" target="clientesTable" fileName="clientes" />
+                </h:commandLink>
+
+                <h:commandLink>
+                    <p:graphicImage library="images" name="xml.png" width="24"/>
+                    <p:dataExporter type="xml" target="clientesTable" fileName="clientes" />
+                </h:commandLink>
+            </f:facet>
+
+            <f:facet name="header" >
+                #{msg.clientesListado}
+            </f:facet>
+
+            <p:column sortBy="#{cliente.id}" style="width: 2%">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaId}"/>
                 </f:facet>
-
-                <f:facet name="header" >
-                    #{msg.clientesListado}
+                <h:outputLabel value="#{cliente.id}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.razonSocial}" style="width: 20%">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaRazonSocial}"/>
                 </f:facet>
+                <h:outputLabel value="#{cliente.razonSocial}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.nombreFantasia}" style="width: 20%">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaNombreFantasia}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.nombreFantasia}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.idTipoDocumento.nombreTipoDocumento}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaTipoDoc}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.idTipoDocumento.nombreTipoDocumento}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.documento}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaDocumento}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.documento}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.idProvincia}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaProvincia}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.idProvincia.nombreProvincia}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.idLocalidad.nombreLocalidad}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaLocalidad}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.idLocalidad.nombreLocalidad}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.idSucursal.nombreSucursal}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaSucursal}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.idSucursal.nombreSucursal}"/>
+            </p:column>
+            <p:column >
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaDireccion}"/>
+                </f:facet>
+                <h:outputText value="#{cliente.calle} #{cliente.altura} #{msg.piso}: #{cliente.piso} #{msg.depto}: #{cliente.depto}"  />
+            </p:column>
 
-                <p:column sortBy="#{cliente.id}" style="width: 2%">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaId}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.id}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.razonSocial}" style="width: 20%">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaRazonSocial}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.razonSocial}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.nombreFantasia}" style="width: 20%">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaNombreFantasia}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.nombreFantasia}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.idTipoDocumento.nombreTipoDocumento}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaTipoDoc}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.idTipoDocumento.nombreTipoDocumento}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.documento}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaDocumento}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.documento}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.idProvincia}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaProvincia}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.idProvincia.nombreProvincia}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.idLocalidad.nombreLocalidad}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaLocalidad}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.idLocalidad.nombreLocalidad}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.idSucursal.nombreSucursal}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaSucursal}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.idSucursal.nombreSucursal}"/>
-                </p:column>
-                <p:column >
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaDireccion}"/>
-                    </f:facet>
-                    <h:outputText value="#{cliente.calle} #{cliente.altura} #{msg.piso}: #{cliente.piso} #{msg.depto}: #{cliente.depto}"  />
-                </p:column>
+            <p:column sortBy="#{cliente.idResponsabilidadIva.nombreResponsabildiad}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaIVA}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.idResponsabilidadIva.nombreResponsabildiad}"/>
+            </p:column>
+            <p:column sortBy="#{cliente.email}">
+                <f:facet name="header">
+                    <h:outputLabel value="#{msg.tablaEmail}"/>
+                </f:facet>
+                <h:outputLabel value="#{cliente.email}"/>
+            </p:column>
 
-                <p:column sortBy="#{cliente.idResponsabilidadIva.nombreResponsabildiad}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaIVA}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.idResponsabilidadIva.nombreResponsabildiad}"/>
-                </p:column>
-                <p:column sortBy="#{cliente.email}">
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.tablaEmail}"/>
-                    </f:facet>
-                    <h:outputLabel value="#{cliente.email}"/>
-                </p:column>
-
-                <p:column exportable="false">
-                    <f:facet name="header">
-                        #{msg.acciones}
-                    </f:facet>
+            <p:column  exportable="false">
+                <f:facet name="header">
+                    #{msg.acciones}
+                </f:facet>
+                <p:panelGrid columns="1" layout="grid"  styleClass="ui-panelgrid-blank">
                     <p:commandButton id="editarClienteButton"
-                                     icon="fa fa-fw fa-edit" action="edicion/index.xhtml"  ajax="false" >
+                                     icon="fa fa-fw fa-edit" action="edicion/index.xhtml"  ajax="false"
+
+                                     title="#{msg.editar}">
                         <f:param name="idPersona" value="#{cliente.id}"/>
                     </p:commandButton>
 
-                </p:column>
+                </p:panelGrid>
+
+            </p:column>
 
 
-            </p:dataTable>
 
+        </p:dataTable>
 
-        </h:panelGrid>
 
 
     </h:form>

@@ -30,7 +30,7 @@ limitations under the License.
 
     <composite:implementation>
         <h:form id="vistaVentaForm" >
-            <h:panelGrid columns="2" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
                 <p:outputLabel value="#{msg.venta}:" />
                 <p:outputLabel value="#{cc.attrs.venta.id}" />
 
@@ -59,7 +59,7 @@ limitations under the License.
 
 
 
-            </h:panelGrid>
+            </p:panelGrid >
             <p:separator />
 
             <p:dataTable id="productosTable" value="#{cc.attrs.lineasVenta}" var="lineaVenta"
@@ -69,7 +69,8 @@ limitations under the License.
                          emptyMessage="#{msg.productosNoCargados}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10,15,30"
-                         resizableColumns="true">
+                         resizableColumns="true"
+                         reflow="true">
 
                 <p:column style="text-align: right; width: 5%">
                     <f:facet name="header">
@@ -140,14 +141,14 @@ limitations under the License.
                 </p:columnGroup>
 
             </p:dataTable>
-            <h:panelGrid columns="2" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
                 <p:outputLabel value="#{msg.observaciones}:" />
                 <p:outputLabel value="#{cc.attrs.venta.observaciones}" />
                 <p:outputLabel value="#{msg.remitente}:" />
                 <p:outputLabel value="#{cc.attrs.venta.remitente}" />
                 <p:outputLabel value="#{msg.numeroRemito}:" />
                 <p:outputLabel value="#{cc.attrs.venta.nroRemito}" />
-            </h:panelGrid>
+            </p:panelGrid >
         </h:form>
     </composite:implementation>
 </html>
