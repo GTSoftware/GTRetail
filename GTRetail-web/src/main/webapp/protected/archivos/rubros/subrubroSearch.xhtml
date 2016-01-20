@@ -16,7 +16,9 @@
                 <h:form id="formContenido" >
 
 
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                                 columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
+
                         <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                         <p:inputText id="textoBusquedaField" value="#{subRubrosSearchBean.filter.nombreSubRubro}" size="50"/>
                         <p:commandButton  action="#{subRubrosSearchBean.doSearch()}"
@@ -87,7 +89,7 @@
                         </p:column>
 
 
-                        <p:column style="width:64px" exportable="false">
+                        <p:column style="width:5%" exportable="false">
                             <f:facet name="header">
                                 #{msg.editar}
                             </f:facet>

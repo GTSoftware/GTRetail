@@ -16,7 +16,9 @@
                 <h:form id="formContenido" >
 
 
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                                 columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
+
                         <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                         <p:inputText id="textoBusquedaField" value="#{rubrosSearchBean.filter.nombreRubro}" size="50"/>
                         <p:commandButton  action="#{rubrosSearchBean.doSearch()}"
@@ -36,7 +38,7 @@
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                  rowsPerPageTemplate="10,15,30,100"
                                  style="width: 100%"
-                                 resizableColumns="true"
+
                                  scrollable="true"
                                  reflow="true">
 
@@ -87,7 +89,7 @@
                         </p:column>
 
 
-                        <p:column style="width:64px" exportable="false">
+                        <p:column style="width:5%" exportable="false">
                             <f:facet name="header">
                                 #{msg.editar}
                             </f:facet>
@@ -98,7 +100,7 @@
                             </p:commandButton>
 
                         </p:column>
-                        <p:column style="width:32px" exportable="false">
+                        <p:column  style="width:5%" exportable="false">
                             <f:facet name="header">
                                 #{msg.subRubros}
                             </f:facet>

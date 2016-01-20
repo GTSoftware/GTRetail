@@ -16,7 +16,8 @@
                 <h:form id="formContenido" >
 
 
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                                 columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
                         <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                         <p:inputText id="textoBusquedaField" value="#{marcasSearchBean.filter.nombreMarca}" size="50"/>
                         <p:commandButton  action="#{marcasSearchBean.doSearch()}"
@@ -36,7 +37,7 @@
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                  rowsPerPageTemplate="10,15,30,100"
                                  style="width: 100%"
-                                 resizableColumns="true"
+
                                  scrollable="true"
                                  reflow="true">
 

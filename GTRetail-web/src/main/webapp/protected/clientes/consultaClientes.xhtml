@@ -10,12 +10,12 @@
     <h:form id="buscarClienteForm">
 
         <p:defaultCommand target="buscarButton"/>
-        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="6"
-                     columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1">
-            <p:outputLabel value="#{msg.idCliente}:"/>
-            <p:inputText id="idClienteField" value="#{clientesSearchBean.filter.idPersona}" />
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                     columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
+<!--            <p:outputLabel value="#{msg.idCliente}:"/>
+            <p:inputText id="idClienteField" value="#{clientesSearchBean.filter.idPersona}" style="width: 100%"/>-->
             <p:outputLabel value="#{msg.busqueda}:"/>
-            <p:inputText id="searchField" value="#{clientesSearchBean.filter.txt}" size="50"/>
+            <p:inputText id="searchField" value="#{clientesSearchBean.filter.txt}" style="width: 100%"/>
             <p:commandButton id="buscarButton" action="#{clientesSearchBean.doSearch()}" value="Buscar" update="clientesTable" icon="fa fa-fw fa-search"/>
             <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus" />
 

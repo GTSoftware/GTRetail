@@ -18,7 +18,8 @@
                 <h:form id="formContenido" >
                     <p:panel header="Editar marca" >
 
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3">
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3"
+                                     columnClasses="ui-grid-col-1,ui-grid-col-5">
 
                             <h:outputLabel for="idField" value="#{msg.id}:" />
                             <h:outputLabel id="idField" value="#{marcasEditBean.marcaActual.id}" />
@@ -34,11 +35,14 @@
 
                         </p:panelGrid >
                     </p:panel>
-                    <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{marcasEditBean.doGuardar()}"
-                                     update="@form" />
-                    <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
-                                     action="marcaSearch.xhtml?faces-redirect=true"
-                                     ajax="false" immediate="true"/>
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="2"
+                                 columnClasses="ui-grid-col-1,ui-grid-col-1">
+                        <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{marcasEditBean.doGuardar()}"
+                                         update="@form" />
+                        <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                         action="marcaSearch.xhtml?faces-redirect=true"
+                                         ajax="false" immediate="true"/>
+                    </p:panelGrid>
                 </h:form>
             </ui:define>
 

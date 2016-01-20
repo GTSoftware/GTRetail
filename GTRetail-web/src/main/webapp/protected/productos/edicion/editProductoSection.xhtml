@@ -9,7 +9,8 @@
     <h:form id="editProductoForm">
 
 
-        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="fechasGrid" columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="fechasGrid" columns="2"
+                     columnClasses="ui-grid-col-1,ui-grid-col-3">
             <h:outputLabel value="#{msg.fechaAlta}:" />
             <h:outputLabel value="#{productoEditBean.productoActual.fechaAlta}">
                 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
@@ -22,7 +23,8 @@
         <p:tabView id="editProductoTabView" >
 
             <p:tab title="Datos básicos" >
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="datosBasicosGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="datosBasicosGrid" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
                     <h:outputLabel for="idProductoField" value="#{msg.id}:"  />
                     <h:outputText id="idProductoField" value="#{productoEditBean.productoActual.id}"  />
                     <h:outputLabel/>
@@ -66,7 +68,8 @@
 
             <!--Clasificación-->
             <p:tab title="Clasificación" >
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clasificacionGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clasificacionGrid" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
                     <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
                     <p:selectOneMenu id="tipoProveeduriaField" value="#{productoEditBean.productoActual.idTipoProveeduria}"
                                      required="true" requiredMessage="#{msg.seleccionarUno}"
@@ -182,13 +185,17 @@
             <!--Precios-->
             <p:tab title="Precios">
                 <p:fragment id="preciosFragment" autoUpdate="true"  >
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="precioGrid" columns="2" columnClasses="top-aligned-columns" >
-                        <h:panelGroup id="pgCostos" >
-                            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="3" columnClasses="top-aligned-columns" >
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="precioGrid" columns="2"
+                                 columnClasses="ui-grid-col-3,ui-grid-col-9">
+
+                        <h:panelGroup id="pgCostos" style="width: 100%" >
+                            <p:panelGrid layout="grid"   columns="3"
+                                         columnClasses="ui-grid-col-2,ui-grid-col-7,ui-grid-col-1">
+
                                 <h:outputLabel for="costoAdquisicionField" value="#{msg.costoAdquisicion}:" />
                                 <p:inputText id="costoAdquisicionField" value="#{productoEditBean.productoActual.costoAdquisicionNeto}"
                                              required="true" requiredMessage="#{msg.ingresarValor}"
-                                             style="text-align: right"
+                                             style="text-align: right; width: 100%"
                                              label="#{msg.costoAdquisicion}">
 
                                     <p:ajax event="blur" listener="#{productoEditBean.actualizarPrecios()}"
@@ -200,7 +207,8 @@
 
 
                                 <h:outputLabel for="alicuotaIVAField" value="#{msg.alicuotaIVA}:"/>
-                                <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productoActual.idAlicuotaIva}" required="true"
+                                <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productoActual.idAlicuotaIva}"
+                                                 required="true" style="width: 100%"
                                                  requiredMessage="#{msg.seleccionarValor}" converter="#{fiscalAlicuotaIVAConverter}"
                                                  label="#{msg.alicuotaIVA}">
                                     <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}" />
@@ -217,7 +225,7 @@
                                 <h:outputLabel for="costoFinalField" value="#{msg.costoFinal}:" />
                                 <p:inputText id="costoFinalField" value="#{productoEditBean.productoActual.costoFinal}"
                                              readonly="true"
-                                             style="text-align: right"
+                                             style="text-align: right; width: 100%"
                                              label="#{msg.costoFinal}">
                                     <f:convertNumber groupingUsed="true" maxFractionDigits="4" type="number"/>
                                 </p:inputText>
@@ -225,11 +233,13 @@
                             </p:panelGrid >
 
                         </h:panelGroup>
-                        <h:panelGroup id="pgPrecios" >
+
+                        <h:panelGroup id="pgPrecios" style="width: 100%" >
                             <p:remoteCommand name="onCellEdit" update="@this " />
 
 
-                            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="2" >
+                            <p:panelGrid layout="grid"    columns="2"
+                                         columnClasses="ui-grid-col-2,ui-grid-col-10" >
 
                                 <h:outputLabel for="porcentajesTable" value="#{msg.porcentajes}:"/>
 
@@ -261,8 +271,7 @@
                                              sortMode="single"
                                              emptyMessage="#{msg.busquedaSinResultados}"
                                              rowKey="#{porcentaje.id}"
-                                             style="width: 100%"
-                                             resizableColumns="true"
+                                             style="width: 100%;"
                                              scrollable="true"
                                              editable="true"
                                              editMode="cell"
@@ -359,7 +368,7 @@
                                              emptyMessage="#{msg.campoRequerido}"
                                              rowKey="#{precio.idPrecio}"
                                              style="width: 100%"
-                                             resizableColumns="true"
+                                             reflow="true"
                                              scrollable="true"
                                              editable="true"
                                              editMode="cell"> 
@@ -436,7 +445,8 @@
 
             <!--Proveedor-->
             <p:tab title="Proveedor">
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="proveedorGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="proveedorGrid" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
 
 
                     <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
@@ -454,7 +464,9 @@
                 </p:panelGrid >
             </p:tab>
             <p:tab title="Existencias">
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="existenciasGrid" columns="3" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="existenciasGrid" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
+
                     <h:outputLabel for="stockMinimoField" value="#{msg.stockMinimo}:"  />
                     <p:inputText id="stockMinimoField" value="#{productoEditBean.productoActual.stockMinimo}"
                                  label="#{msg.stockMinimo}">
@@ -474,7 +486,8 @@
             </p:tab>
         </p:tabView>
 
-        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                     columnClasses="ui-grid-col-1,ui-grid-col-1">
             <p:commandButton id="guardarButton"
                              value="#{msg.guardar}"
                              icon="fa fa-fw fa-save"

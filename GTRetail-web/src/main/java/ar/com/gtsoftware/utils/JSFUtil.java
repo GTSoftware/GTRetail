@@ -262,6 +262,16 @@ public abstract class JSFUtil {
     }
 
     /**
+     * Determina si el usuario actual pertenece al rol pasado como parámetro
+     *
+     * @param role
+     * @return
+     */
+    public static boolean isUserInRole(String role) {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role);
+    }
+
+    /**
      * Retorna el ResourceBundle por defecto para la localización actual
      *
      * @param messajeBundle el mesaje bundle para utilizar
