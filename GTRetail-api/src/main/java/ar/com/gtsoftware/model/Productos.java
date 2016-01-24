@@ -34,6 +34,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,7 +47,7 @@ import org.eclipse.persistence.annotations.JoinFetch;
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Entity
-@Table(name = "productos")
+@Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
 public class Productos extends BaseEntity implements Serializable {
@@ -139,6 +140,10 @@ public class Productos extends BaseEntity implements Serializable {
     @Size(max = 60)
     @Column(name = "ubicacion")
     private String ubicacion;
+
+    @Size(max = 60)
+    @Column(name = "codigo_fabricante")
+    private String codigoFabricante;
 
     @Basic(optional = false)
     @NotNull
@@ -379,6 +384,14 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setStockActual(BigDecimal stockActual) {
         this.stockActual = stockActual;
+    }
+
+    public String getCodigoFabricante() {
+        return codigoFabricante;
+    }
+
+    public void setCodigoFabricante(String codigoFabricante) {
+        this.codigoFabricante = codigoFabricante;
     }
 
     @Override
