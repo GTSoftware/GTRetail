@@ -15,12 +15,23 @@
     <h:form id="formContenido" >
         <h:outputText id="cid"
                       value="#{javax.enterprise.context.conversation.id}" />
+
         <p:panel id="inputPanel" >
-            <p:messages id="msgs" />
+
+            <p:focus context="inputPanel" />
             <p:panelGrid layout="grid" columns="3"
                          styleClass="ui-panelgrid-blank"
                          columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1"
                          >
+
+                <p:outputLabel for="codigoField" value="#{msg.codigo}:"/>
+                <p:inputText id="codigoField"
+                             required="true"
+                             value="#{shopCartBean.productosFilter.codigoPropio}">
+                    <f:validateLength minimum="1" />
+                </p:inputText>
+                <p:message for="codigoField" display="icon" />
+
                 <p:outputLabel for="cantidadField" value="#{msg.cantidad}:"/>
                 <p:inputText id="cantidadField"
                              required="true"
@@ -31,62 +42,56 @@
                 </p:inputText>
                 <p:message for="cantidadField" display="icon"/>
 
-                <p:outputLabel for="codigoField" value="#{msg.codigo}:"/>
-                <p:inputText id="codigoField"
-                             required="true"
-                             value="#{shopCartBean.productosFilter.codigoPropio}">
-                    <f:validateLength minimum="1" />
-                </p:inputText>
-                <p:message for="codigoField" display="icon" />
-
-
             </p:panelGrid>
             <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                              title="#{msg.insertar}"
                              action="#{shopCartBean.addToCart()}"
                              update="@form"/>
+            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                             title="#{msg.buscar} productos"
+                             immediate="true"/>
         </p:panel>
+
         <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
-                     rows="15"
-                     paginator="true"
+
+                     paginator="false"
                      sortMode="single"
                      emptyMessage="#{msg.productosNoCargados}"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="10,15,30"
 
                      reflow="true">
 
-            <p:column style="text-align: right; width: 5%">
+            <p:column style="text-align: right; ">
                 <f:facet name="header">
                     #{msg.tablaId}
                 </f:facet>
                 <h:outputText value="#{lineaVenta.idProducto.id}" />
             </p:column>
-            <p:column style="text-align: left; width: 5%">
+            <p:column style="text-align: left; ">
                 <f:facet name="header">
                     #{msg.codigo}
                 </f:facet>
                 <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
             </p:column>
-            <p:column style="text-align: left; width: 40%">
+            <p:column style="text-align: left; ">
                 <f:facet name="header">
                     #{msg.tablaDescripcion}
                 </f:facet>
-                <h:outputText value="#{lineaVenta.descripcion}" />
+                <h:outputText id="decripcionProd" value="#{lineaVenta.descripcion}" />
+                <p:tooltip id="toolTipFade" for="decripcionProd"  value="#{lineaVenta.idProducto.observaciones}" />
             </p:column>
-            <p:column style="text-align: right; width: 5%">
+            <p:column style="text-align: right;">
                 <f:facet name="header">
                     #{msg.tablaCantidad}
                 </f:facet>
                 <h:outputText value="#{lineaVenta.cantidad}" />
             </p:column>
-            <p:column style="text-align: left; width: 5%">
+            <p:column style="text-align: left; ">
                 <f:facet name="header">
                     #{msg.tablaUnidad}
                 </f:facet>
                 <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
             </p:column>
-            <p:column style="text-align: right; width: 2%">
+            <p:column style="text-align: right; ">
                 <f:facet name="header">
                     #{msg.tablaIVA}
                 </f:facet>
@@ -95,7 +100,7 @@
                 </h:outputText>
             </p:column>
 
-            <p:column style="text-align: right; width: 10%">
+            <p:column style="text-align: right; ">
                 <f:facet name="header">
                     #{msg.tablaPrecioUnitario}
                 </f:facet>
@@ -104,7 +109,7 @@
                 </h:outputText>
             </p:column>
 
-            <p:column style="text-align: right; width: 10%">
+            <p:column style="text-align: right; ">
                 <f:facet name="header">
                     #{msg.tablaSubTotal}
                 </f:facet>
@@ -127,10 +132,16 @@
 
             <p:columnGroup type="footer">
                 <p:row>
-                    <p:column colspan="7" footerText="#{msg.total}"
+                    <p:column colspan="7" footerText="#{msg.total}:"
                               style="text-align:right; font-size: larger"  />
 
-                    <p:column footerText="\$#{shopCartBean.venta.total}" style=" font-size: xx-large" />
+                    <p:column  >
+                        <f:facet name="footer">
+                            <h:outputText value="#{shopCartBean.venta.total}" style="font-size: xx-large;font-weight: bold" >
+                                <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
                 </p:row>
             </p:columnGroup>
 
