@@ -17,6 +17,7 @@ package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
@@ -253,4 +254,10 @@ public class Ventas extends BaseEntity implements Serializable {
         this.nroRemito = nroRemito;
     }
 
+    public void addLineaVenta(VentasLineas linea) {
+        if (ventasLineasList == null) {
+            ventasLineasList = new ArrayList<>();
+        }
+        ventasLineasList.add(linea);
+    }
 }

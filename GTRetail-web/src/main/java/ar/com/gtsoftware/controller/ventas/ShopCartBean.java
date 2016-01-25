@@ -16,10 +16,24 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
+import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
+import ar.com.gtsoftware.eao.ProductosPreciosFacade;
+import ar.com.gtsoftware.eao.VentasFacade;
+import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosListasPrecios;
+import ar.com.gtsoftware.model.ProductosPrecios;
+import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
+import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.GregorianCalendar;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -43,6 +57,33 @@ public class ShopCartBean implements Serializable {
     private AuthBackingBean authBackingBean;
     @EJB
     private ProductosFacade productosFacade;
+    @EJB
+    private VentasFacade ventasFacade;
+    @EJB
+    private ProductosPreciosFacade preciosFacade;
+    @EJB
+    private ParametrosFacade parametrosFacade;
+    @EJB
+    private ProductosListasPreciosFacade listasPreciosFacade;
+
+    private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
+            Boolean.TRUE);
+
+    private BigDecimal cantidad = BigDecimal.ONE;
+
+    private Ventas venta;
+
+    private boolean ventaModificada = false;
+
+    private ProductosListasPrecios lista;
+
+    private static final String ID_LISTA_PARAM = "venta.pos.id_lista";
+    private static final String CANT_DECIMALES_REDONDEO_PARAM = "venta.pos.redondear.cant_decimales";
+    private static final String ID_PRODUCTO_REDONDEO_PARAM = "venta.pos.redondeo.id_producto";
+
+    private Productos productoRedondeo;
+
+    private int cantDeccimalesRedondeo = 0;
 
     /**
      * Creates a new instance of ShopCartBean
@@ -56,6 +97,17 @@ public class ShopCartBean implements Serializable {
     public void initConversation() {
         if (!JSFUtil.isPostback() && conversation.isTransient()) {
             conversation.begin();
+            venta = new Ventas();
+            venta.setIdUsuario(authBackingBean.getUserLoggedIn());
+            venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+            venta.setFechaVenta(GregorianCalendar.getInstance().getTime());
+            venta.setTotal(BigDecimal.ZERO);
+            Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
+            Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
+            Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
+            lista = listasPreciosFacade.find(Long.parseLong(listaParam.getValorParametro()));
+            cantDeccimalesRedondeo = Integer.parseInt(cantDecimalesParam.getValorParametro());
+            productoRedondeo = productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
         }
     }
 
@@ -71,8 +123,102 @@ public class ShopCartBean implements Serializable {
         return "index?faces-redirect=true";
     }
 
-    public void addToCart(Productos producto) {
+    public void addToCart() {
+        Productos producto = productosFacade.findFirstBySearchFilter(productosFilter);
+        if (producto == null) {
+            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
+            return;
+        }
+        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
+        if (precio == null) {
+            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoSinPrecio"));
+            return;
+        }
 
+        venta.addLineaVenta(crearLinea(producto, precio));
+        calcularTotal();
+        //Init datos
+        cantidad = BigDecimal.ONE;
+        productosFilter.setCodigoPropio(null);
+        //Init datos
         JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoAgregadoAlCarritoSatisfactoriamente"));
+        ventaModificada = true;
     }
+
+    private VentasLineas crearLinea(Productos prod, ProductosPrecios precio) {
+        VentasLineas linea = new VentasLineas();
+        linea.setIdVenta(venta);
+        linea.setCantidad(cantidad);
+        linea.setDescripcion(prod.getDescripcion());
+        linea.setIdProducto(prod);
+        linea.setCantidadEntregada(BigDecimal.ZERO);
+        linea.setCostoBrutoUnitario(prod.getCostoAdquisicionNeto());
+        linea.setCostoNetoUnitario(prod.getCostoFinal());
+        linea.setPrecioVentaUnitario(precio.getPrecio());
+        linea.setSubTotal(cantidad.multiply(precio.getPrecio()));
+        return linea;
+    }
+
+    private void calcularTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (VentasLineas vl : venta.getVentasLineasList()) {
+            if (!vl.getIdProducto().equals(productoRedondeo)) {
+                total = total.add(vl.getSubTotal());
+            }
+        }
+        BigDecimal totalRedondeado = total.setScale(cantDeccimalesRedondeo, RoundingMode.HALF_UP);
+        BigDecimal redondeo = totalRedondeado.subtract(total);
+        if (redondeo.signum() != 0) {
+            cargarRedondeo(redondeo);
+        }
+        venta.setTotal(totalRedondeado);
+    }
+
+    private void cargarRedondeo(BigDecimal redondeo) {
+        int cont = 0;
+        int index = -1;
+        for (VentasLineas vl : venta.getVentasLineasList()) {
+            if (vl.getIdProducto().equals(productoRedondeo)) {
+                index = cont;
+                break;
+            }
+            cont++;
+        }
+        if (index != -1) {
+            venta.getVentasLineasList().remove(index);
+        }
+        venta.addLineaVenta(crearLineaRedondeo(redondeo));
+
+    }
+
+    private VentasLineas crearLineaRedondeo(BigDecimal redondeo) {
+        VentasLineas linea = new VentasLineas();
+        linea.setIdVenta(venta);
+        linea.setCantidad(BigDecimal.ONE);
+        linea.setDescripcion(productoRedondeo.getDescripcion());
+        linea.setIdProducto(productoRedondeo);
+        linea.setCantidadEntregada(BigDecimal.ONE);
+        linea.setCostoBrutoUnitario(BigDecimal.ZERO);
+        linea.setCostoNetoUnitario(BigDecimal.ZERO);
+        linea.setPrecioVentaUnitario(redondeo);
+        linea.setSubTotal(redondeo);
+        return linea;
+    }
+
+    public BigDecimal getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public ProductosSearchFilter getProductosFilter() {
+        return productosFilter;
+    }
+
+    public Ventas getVenta() {
+        return venta;
+    }
+
 }

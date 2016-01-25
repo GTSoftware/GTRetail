@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+
+
+    <!--Evento disparado para iniciar la conversación con el carrito-->
+    <f:event listener="#{shopCartBean.initConversation}"
+             type="preRenderView">
+    </f:event>
+    <h:form id="formContenido" >
+        <h:outputText id="cid"
+                      value="#{javax.enterprise.context.conversation.id}" />
+        <p:panel id="inputPanel" >
+            <p:messages id="msgs" />
+            <p:panelGrid layout="grid" columns="3"
+                         styleClass="ui-panelgrid-blank"
+                         columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1"
+                         >
+                <p:outputLabel for="cantidadField" value="#{msg.cantidad}:"/>
+                <p:inputText id="cantidadField"
+                             required="true"
+                             value="#{shopCartBean.cantidad}">
+                    <f:validateDoubleRange minimum="-9999999999999999999.99"
+                                           maximum="9999999999999999999.99" />
+
+                </p:inputText>
+                <p:message for="cantidadField" display="icon"/>
+
+                <p:outputLabel for="codigoField" value="#{msg.codigo}:"/>
+                <p:inputText id="codigoField"
+                             required="true"
+                             value="#{shopCartBean.productosFilter.codigoPropio}">
+                    <f:validateLength minimum="1" />
+                </p:inputText>
+                <p:message for="codigoField" display="icon" />
+
+
+            </p:panelGrid>
+            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
+                             title="#{msg.insertar}"
+                             action="#{shopCartBean.addToCart()}"
+                             update="@form"/>
+        </p:panel>
+        <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
+                     rows="15"
+                     paginator="true"
+                     sortMode="single"
+                     emptyMessage="#{msg.productosNoCargados}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="10,15,30"
+
+                     reflow="true">
+
+            <p:column style="text-align: right; width: 5%">
+                <f:facet name="header">
+                    #{msg.tablaId}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.id}" />
+            </p:column>
+            <p:column style="text-align: left; width: 5%">
+                <f:facet name="header">
+                    #{msg.codigo}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
+            </p:column>
+            <p:column style="text-align: left; width: 40%">
+                <f:facet name="header">
+                    #{msg.tablaDescripcion}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.descripcion}" />
+            </p:column>
+            <p:column style="text-align: right; width: 5%">
+                <f:facet name="header">
+                    #{msg.tablaCantidad}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.cantidad}" />
+            </p:column>
+            <p:column style="text-align: left; width: 5%">
+                <f:facet name="header">
+                    #{msg.tablaUnidad}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+            </p:column>
+            <p:column style="text-align: right; width: 2%">
+                <f:facet name="header">
+                    #{msg.tablaIVA}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
+                    <f:convertNumber  type="number" groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column style="text-align: right; width: 10%">
+                <f:facet name="header">
+                    #{msg.tablaPrecioUnitario}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column style="text-align: right; width: 10%">
+                <f:facet name="header">
+                    #{msg.tablaSubTotal}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.subTotal}" >
+                    <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column  exportable="false" style="width: 5%">
+                <f:facet name="header">
+                    #{msg.borrar}
+                </f:facet>
+                <p:commandButton id="borrarItemButton"
+                                 icon="fa fa-fw fa-trash"
+                                 process="@this"
+                                 >
+
+                </p:commandButton>
+            </p:column>
+
+            <p:columnGroup type="footer">
+                <p:row>
+                    <p:column colspan="7" footerText="#{msg.total}"
+                              style="text-align:right; font-size: larger"  />
+
+                    <p:column footerText="\$#{shopCartBean.venta.total}" style=" font-size: xx-large" />
+                </p:row>
+            </p:columnGroup>
+
+        </p:dataTable>
+    </h:form>
+
+</html>
