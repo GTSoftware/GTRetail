@@ -66,7 +66,15 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-
+    <!--Filters-->
+    <filter>
+        <filter-name>MobileFilter</filter-name>
+        <filter-class>ar.com.gtsoftware.utils.filter.MobileFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>MobileFilter</filter-name>
+        <url-pattern>/index.html</url-pattern>
+    </filter-mapping>
     <!-- Seguridad -->
     <login-config>
         <auth-method>FORM</auth-method>
