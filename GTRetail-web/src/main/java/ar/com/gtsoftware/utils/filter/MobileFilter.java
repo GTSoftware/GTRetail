@@ -16,8 +16,6 @@
 package ar.com.gtsoftware.utils.filter;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -33,8 +31,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MobileFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(MobileFilter.class.getName());
-
     @Override
     public void destroy() {
     }
@@ -42,7 +38,7 @@ public class MobileFilter implements Filter {
     @Override
     public void doFilter(ServletRequest arg0, ServletResponse arg1,
             FilterChain arg2) throws IOException, ServletException {
-        LOG.log(Level.INFO, "Ingreso al filtro");
+
         HttpServletRequest req = (HttpServletRequest) arg0;
         String userAgent = req.getHeader("user-agent");
         String accept = req.getHeader("Accept");
@@ -51,7 +47,7 @@ public class MobileFilter implements Filter {
             UserAgentInfo agent = new UserAgentInfo(userAgent, accept);
             HttpServletResponse res = (HttpServletResponse) arg1;
             if (agent.isMobileDevice()) {
-                LOG.log(Level.INFO, "Ingreso al mobile");
+
                 res.sendRedirect("protected/mobile/index.xhtml");
                 return;
             }
