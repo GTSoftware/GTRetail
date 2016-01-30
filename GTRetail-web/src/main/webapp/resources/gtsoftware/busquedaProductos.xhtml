@@ -24,22 +24,25 @@ limitations under the License.
 
     <composite:interface>
 
-        <composite:attribute name="textoBusqueda"  type="java.lang.String" />
-        <composite:attribute name="dataModel"   />
+
+
         <composite:attribute name="productoSeleccionado" type="ar.com.gtsoftware.model.Productos" />
-        <composite:attribute name="busquedaAction" method-signature="void busquedaAction()" />
+        <composite:attribute name="listaPrecios" type="ar.com.gtsoftware.model.ProductosListasPrecios" />
+
 
     </composite:interface>
 
     <composite:implementation>
         <h:form id="busquedaProductosForm" >
+            #{productosSearchBean.setListaSeleccionada(cc.attrs.listaPrecios)}
             <p:fragment>
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4">
+
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1">
                     <p:outputLabel value="#{msg.busqueda}"/>
                     <p:inputText id="cadenaBusquedaProdField"
-                                 value="#{cc.attrs.textoBusqueda}"
+                                 value="#{productosSearchBean.filter.txt}"
                                  size="50"/>
-                    <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
+<!--                    <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
                                      required="true" requiredMessage="#{msg.seleccionarUno}"
                                      converter="#{productosListasPreciosConverter}"
                                      >
@@ -47,8 +50,8 @@ limitations under the License.
                         <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
                                        itemValue="#{lista}"/>
 
-                    </p:selectOneMenu>
-                    <p:commandButton  action="#{cc.attrs.busquedaAction}"
+                    </p:selectOneMenu>-->
+                    <p:commandButton  action="#{productosSearchBean.doSearch()}"
                                       process="@this"
                                       value="#{msg.buscar}"
                                       update="productosBusquedaTable"
@@ -59,7 +62,7 @@ limitations under the License.
 
 
 
-                <p:dataTable id="productosBusquedaTable" var="pro" value="#{cc.attrs.dataModel}"
+                <p:dataTable id="productosBusquedaTable" var="pro" value="#{productosSearchBean.dataModel}"
                              rows="5"
                              lazy="true"
                              paginator="true"

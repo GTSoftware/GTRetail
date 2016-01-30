@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.GregorianCalendar;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -73,6 +74,8 @@ public class ShopCartBean implements Serializable {
 
     private Ventas venta;
 
+    private Productos productoBusquedaSeleccionado = null;
+
     private boolean ventaModificada = false;
 
     private ProductosListasPrecios lista;
@@ -84,6 +87,8 @@ public class ShopCartBean implements Serializable {
     private Productos productoRedondeo;
 
     private int cantDeccimalesRedondeo = 0;
+
+    private final AtomicInteger itemCounter = new AtomicInteger(1);
 
     /**
      * Creates a new instance of ShopCartBean
@@ -123,8 +128,31 @@ public class ShopCartBean implements Serializable {
         return "index?faces-redirect=true";
     }
 
+    public void removeFromCart(int item) {
+        int index = -1;
+        int cont = 0;
+        for (VentasLineas vl : venta.getVentasLineasList()) {
+            if (vl.getItem() == item) {
+                index = cont;
+                return;
+            }
+            cont++;
+        }
+        if (index >= 0) {
+            venta.getVentasLineasList().remove(index);
+            JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
+        }
+    }
+
     public void addToCart() {
-        Productos producto = productosFacade.findFirstBySearchFilter(productosFilter);
+
+        Productos producto;
+        if (productoBusquedaSeleccionado != null) {
+            producto = productoBusquedaSeleccionado;
+        } else {
+            producto = productosFacade.findFirstBySearchFilter(productosFilter);
+        }
+
         if (producto == null) {
             JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
             return;
@@ -156,6 +184,7 @@ public class ShopCartBean implements Serializable {
         linea.setCostoNetoUnitario(prod.getCostoFinal());
         linea.setPrecioVentaUnitario(precio.getPrecio());
         linea.setSubTotal(cantidad.multiply(precio.getPrecio()));
+        linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
 
@@ -202,6 +231,7 @@ public class ShopCartBean implements Serializable {
         linea.setCostoNetoUnitario(BigDecimal.ZERO);
         linea.setPrecioVentaUnitario(redondeo);
         linea.setSubTotal(redondeo);
+        linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
 
@@ -219,6 +249,14 @@ public class ShopCartBean implements Serializable {
 
     public Ventas getVenta() {
         return venta;
+    }
+
+    public Productos getProductoBusquedaSeleccionado() {
+        return productoBusquedaSeleccionado;
+    }
+
+    public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
+        this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
     }
 
 }

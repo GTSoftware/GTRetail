@@ -47,9 +47,11 @@
                              title="#{msg.insertar}"
                              action="#{shopCartBean.addToCart()}"
                              update="@form"/>
+
             <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
                              title="#{msg.buscar} productos"
-                             immediate="true"/>
+                             oncomplete="PF('dlgBusProd').show()"
+                             process="@none" />
         </p:panel>
 
         <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
@@ -125,6 +127,7 @@
                 <p:commandButton id="borrarItemButton"
                                  icon="fa fa-fw fa-trash"
                                  process="@this"
+                                 action="#{shopCartBean.removeFromCart(lineaVenta.item)}"
                                  >
 
                 </p:commandButton>
@@ -146,6 +149,24 @@
             </p:columnGroup>
 
         </p:dataTable>
+
+        <h:form id="busquedaProductosForm" >
+            <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                      modal="true" dynamic="true" >
+                <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
+                                              />
+                <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                 oncomplete="PF('dlgBusProd').hide()"
+                                 update=":formContenido"
+                                 immediate="true"
+                                 process="@this"
+                                 actionListener="#{shopCartBean.addToCart()}"/>
+
+                <p:commandButton value="#{msg.cancelar}"
+                                 immediate="true" icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();" />
+
+            </p:dialog>
+        </h:form>
     </h:form>
 
 </html>
