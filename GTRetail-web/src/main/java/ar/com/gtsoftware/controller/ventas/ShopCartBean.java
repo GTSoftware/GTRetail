@@ -111,8 +111,8 @@ public class ShopCartBean implements Serializable {
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
             Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
             lista = listasPreciosFacade.find(Long.parseLong(listaParam.getValorParametro()));
-            cantDeccimalesRedondeo = Integer.parseInt(cantDecimalesParam.getValorParametro());
-            productoRedondeo = productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
+            cantDeccimalesRedondeo = cantDecimalesParam == null ? 2 : Integer.parseInt(cantDecimalesParam.getValorParametro());
+            productoRedondeo = idProdRedondeoParam == null ? null : productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
         }
     }
 
@@ -195,11 +195,13 @@ public class ShopCartBean implements Serializable {
                 total = total.add(vl.getSubTotal());
             }
         }
+
         BigDecimal totalRedondeado = total.setScale(cantDeccimalesRedondeo, RoundingMode.HALF_UP);
         BigDecimal redondeo = totalRedondeado.subtract(total);
-        if (redondeo.signum() != 0) {
+        if (redondeo.signum() != 0 && productoRedondeo != null) {
             cargarRedondeo(redondeo);
         }
+
         venta.setTotal(totalRedondeado);
     }
 
