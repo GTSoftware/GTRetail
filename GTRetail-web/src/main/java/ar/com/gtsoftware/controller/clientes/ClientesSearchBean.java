@@ -22,6 +22,7 @@ import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -64,4 +65,8 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas> {
         return filter;
     }
 
+    public List<Personas> findClientesByString(String query) {
+        filter.setTxt(query);
+        return facade.findBySearchFilter(filter, 0, 15);
+    }
 }

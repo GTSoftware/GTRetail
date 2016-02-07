@@ -17,6 +17,7 @@ package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.eao.ParametrosFacade;
+import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
@@ -66,6 +67,8 @@ public class ShopCartBean implements Serializable {
     private ParametrosFacade parametrosFacade;
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
+    @EJB
+    private PersonasFacade personasFacade;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
@@ -83,6 +86,7 @@ public class ShopCartBean implements Serializable {
     private static final String ID_LISTA_PARAM = "venta.pos.id_lista";
     private static final String CANT_DECIMALES_REDONDEO_PARAM = "venta.pos.redondear.cant_decimales";
     private static final String ID_PRODUCTO_REDONDEO_PARAM = "venta.pos.redondeo.id_producto";
+    private static final String ID_CLIENTE_DEFECTO_PARAM = "venta.pos.id_cliente.defecto";
 
     private Productos productoRedondeo;
 
@@ -110,9 +114,11 @@ public class ShopCartBean implements Serializable {
             Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
             Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
+            Parametros idClienteParam = parametrosFacade.find(ID_CLIENTE_DEFECTO_PARAM);
             lista = listasPreciosFacade.find(Long.parseLong(listaParam.getValorParametro()));
             cantDeccimalesRedondeo = cantDecimalesParam == null ? 2 : Integer.parseInt(cantDecimalesParam.getValorParametro());
             productoRedondeo = idProdRedondeoParam == null ? null : productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
+            venta.setIdPersona(personasFacade.find(Long.parseLong(idClienteParam.getValorParametro())));
         }
     }
 
@@ -131,6 +137,7 @@ public class ShopCartBean implements Serializable {
     public void removeFromCart(int item) {
         int index = -1;
         int cont = 0;
+
         for (VentasLineas vl : venta.getVentasLineasList()) {
             if (vl.getItem() == item) {
                 index = cont;

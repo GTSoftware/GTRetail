@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+    <h:form id="cargaClienteForm" >
+        <p:fragment id="clienteFragment">
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clienteActualPanel" columns="2"
+                         columnClasses="ui-grid-col-1,ui-grid-col-5">
+
+                <p:outputLabel for='razonSocialField'
+                               value="#{msg.razonSocial}:"/>
+                <h:panelGroup >
+                    <p:autoComplete id="razonSocialField"
+                                    value="#{shopCartBean.venta.idPersona}"
+                                    completeMethod="#{clientesSearchBean.findClientesByString}"
+                                    var="cli"
+                                    itemLabel="#{cli.businessString}"
+                                    itemValue="#{cli}"
+                                    converter="#{personasConverter}"
+                                    forceSelection="true"
+                                    minQueryLength="3"
+                                    queryDelay="1000">
+                        <p:ajax event="blur" process="clienteFragment"
+                                update="clienteFragment" />
+
+                    </p:autoComplete>
+                    <p:commandButton id="buscarPersonasButton" icon="fa fa-fw fa-search"
+                                     oncomplete="PF('clientesDialog').show()"
+                                     immediate="true" />
+                </h:panelGroup>
+
+                <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
+                <p:inputText id="ivaField" value="#{shopCartBean.venta.idPersona.idResponsabilidadIva.nombreResponsabildiad}"
+                             readonly="true"/>
+
+                <p:outputLabel value="#{msg.documento}:"/>
+                <p:inputText id="documentoField" value="#{shopCartBean.venta.idPersona.documento}"
+                             readonly="true"/>
+
+                <p:outputLabel value="#{msg.pais}:"/>
+                <p:inputText id="nombrePaisField" value="#{shopCartBean.venta.idPersona.idPais.nombrePais}"
+                             readonly="true"/>
+
+                <p:outputLabel value="#{msg.provincia}:"/>
+                <p:inputText id="nombreProvinciaField" value="#{shopCartBean.venta.idPersona.idProvincia.nombreProvincia}"
+                             readonly="true"/>
+
+                <p:outputLabel value="#{msg.localidad}:"/>
+                <p:inputText id="nombreLocalidadField" value="#{shopCartBean.venta.idPersona.idLocalidad.nombreLocalidad}"
+                             readonly="true"/>
+
+                <p:outputLabel value="#{msg.direccion}:"/>
+                <p:inputTextarea id="direccionField"
+                                 value="#{shopCartBean.venta.idPersona.calle} #{shopCartBean.venta.idPersona.altura}"
+                                 readonly="true"/>
+
+            </p:panelGrid >
+        </p:fragment>
+    </h:form>
+
+    <h:form id="buscarPersonasForm" >
+        <p:dialog id='busquedaPersonasDialog'
+                  header="#{msg.busquedaClientes}"
+                  widgetVar="clientesDialog"
+                  resizable="true"
+                  closeOnEscape="true"
+                  dynamic="true"
+                  showEffect="fade" hideEffect="clip" modal="true">
+
+            <gtsoftware:busquedaPersonas personaSeleccionada="#{shopCartBean.venta.idPersona}"
+                                         textoBusqueda="#{clientesSearchBean.filter.txt}"
+                                         busquedaAction="#{clientesSearchBean.doSearch()}"
+                                         personasList="#{clientesSearchBean.dataModel}"
+                                         >
+            </gtsoftware:busquedaPersonas>
+
+            <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                             oncomplete="PF('clientesDialog').hide()"
+                             update=":cargaClienteForm:clienteFragment"
+                             immediate="true"
+                             process="@this"
+                             actionListener="#{shopCartBean.addToCart()}"/>
+
+            <p:commandButton value="#{msg.cancelar}"
+                             immediate="true" icon="fa fa-fw fa-ban" onclick="PF('clientesDialog').hide();" />
+
+
+
+        </p:dialog>
+    </h:form>
+</html>

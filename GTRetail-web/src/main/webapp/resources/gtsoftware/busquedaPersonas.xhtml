@@ -32,7 +32,8 @@ limitations under the License.
     <composite:implementation>
         <h:form id="busquedaPersonasForm" >
             <p:fragment>
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
                     <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
                     <p:inputText id="textoBusquedaField" value="#{cc.attrs.textoBusqueda}" size="50"/>
                     <p:commandButton  action="#{cc.attrs.busquedaAction}"

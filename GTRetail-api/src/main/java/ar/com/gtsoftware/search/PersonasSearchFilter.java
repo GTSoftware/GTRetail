@@ -23,6 +23,8 @@ import ar.com.gtsoftware.model.LegalTiposDocumento;
  */
 public class PersonasSearchFilter extends AbstractSearchFilter {
 
+    private static final long serialVersionUID = 1L;
+
     private String txt;
     private Integer idPersona;
 
@@ -55,8 +57,6 @@ public class PersonasSearchFilter extends AbstractSearchFilter {
         this.cliente = cliente;
         this.proveedor = proveedor;
     }
-
-   
 
     @Override
     public boolean hasFilter() {
@@ -154,5 +154,4 @@ public class PersonasSearchFilter extends AbstractSearchFilter {
         this.proveedor = proveedor;
     }
 
-    
 }
