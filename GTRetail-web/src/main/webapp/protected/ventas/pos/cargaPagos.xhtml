@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <f:event listener="#{shopCartBean.initPagos()}"
+             type="preRenderView">
+    </f:event>
+
+    <h:form id="cargaPagosForm" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                     columnClasses="ui-grid-col-2,ui-grid-col-5">
+
+            <h:outputLabel value="#{msg.totalPagar}:" style="font-size: xx-large"/>
+            <h:outputLabel value="#{shopCartBean.venta.total}" style="font-size: xx-large">
+                <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+            </h:outputLabel>
+
+            <h:outputLabel value="#{msg.condicionVenta}:" />
+            <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}"
+                             value="#{shopCartBean.venta.idCondicionVenta}"
+                             converter="#{negocioCondicionesOperacionesConverter}" filter="true"  >
+                <f:selectItems value="#{shopCartBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}"
+                               itemValue="#{cond}"/>
+
+            </p:selectOneMenu>
+
+            <h:outputLabel value="#{msg.formaPago}:" />
+            <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
+                             value="#{shopCartBean.pagoActual.idFormaPago}"
+                             converter="#{negocioFormasPagoConverter}" filter="true"  >
+                <f:selectItems value="#{shopCartBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}"
+                               itemValue="#{formaPago}"/>
+
+            </p:selectOneMenu>
+            <h:outputLabel for="importePagoField" value="#{msg.importePago}:" />
+            <p:inputText id="importePagoField" value="#{shopCartBean.pagoActual.importeTotalPagado}" label="#{msg.importePago}">
+                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
+                                       rendered="#{shopCartBean.venta.saldo gt 0}" />
+            </p:inputText>
+            <p:message for="importePagoField" />
+
+            <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}" icon="fa fa-fw fa-plus"
+                             update="pagosTable, importePagoField"/>
+
+        </p:panelGrid >
+        <p:dataTable id="pagosTable" value="#{shopCartBean.pagos}" var="pago"
+                     rows="5"
+                     paginator="true"
+                     sortMode="multiple"
+                     emptyMessage="#{msg.pagosVacio}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15,30"
+                     resizableColumns="true"
+                     reflow="true">
+            <f:facet name="header" >
+                #{msg.pagosVenta}
+            </f:facet>
+            <p:column sortBy="#{pago.idFormaPago}" headerText="#{msg.formaPago}" style="text-align: left">
+                <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
+            </p:column>
+            <p:column sortBy="#{pago.importeTotalPagado}" headerText="Importe" style="text-align: right">
+                <h:outputText value="#{pago.importeTotalPagado}" >
+                    <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+            <p:column style="width: 50px">
+                <f:facet name="header">
+                    #{msg.borrar}
+                </f:facet>
+                <p:commandButton icon="fa fa-fw fa-trash" update="pagosTable"
+                                 action="#{shopCartBean.eliminarPago(pago.item)}" />
+            </p:column>
+            <p:columnGroup type="footer">
+                <p:row>
+                    <p:column colspan="1" footerText="#{msg.saldo}:"
+                              style="text-align:right; font-size: larger"  />
+
+                    <p:column footerText="\$#{shopCartBean.venta.saldo}" style=" font-size: xx-large" />
+                </p:row>
+            </p:columnGroup>
+        </p:dataTable>
+        <h:outputLabel value="#{msg.observaciones}:" />
+        <br/>
+        <p:inputTextarea style="width: 100%" value="#{shopCartBean.venta.observaciones}" maxlength="1024"
+                         autoResize="true"
+                         converter="#{stringFormatConverter}"/>
+        <h:outputLabel value="#{msg.remitente}:" />
+        <p:inputText style="width: 100%" value="#{shopCartBean.venta.remitente}" maxlength="100"
+                     converter="#{stringFormatConverter}" />
+
+        <h:outputLabel value="#{msg.numeroRemito}:" />
+        <p:inputText style="width: 100%" value="#{shopCartBean.venta.nroRemito}" maxlength="100"
+                     converter="#{stringFormatConverter}" />
+
+        <p:separator />
+
+        <p:commandButton id="guardarButton" value="#{msg.guardar}" icon="fa fa-fw fa-save"
+                         />
+
+        <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                         action="#{shopCartBean.endConversation()}" immediate="true" ajax="false"  />
+
+    </h:form>
+</html>

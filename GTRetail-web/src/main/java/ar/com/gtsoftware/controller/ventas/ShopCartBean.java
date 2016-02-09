@@ -16,29 +16,37 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
+import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
-import ar.com.gtsoftware.eao.VentasFacade;
+import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
+import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -59,8 +67,7 @@ public class ShopCartBean implements Serializable {
     private AuthBackingBean authBackingBean;
     @EJB
     private ProductosFacade productosFacade;
-    @EJB
-    private VentasFacade ventasFacade;
+
     @EJB
     private ProductosPreciosFacade preciosFacade;
     @EJB
@@ -69,9 +76,17 @@ public class ShopCartBean implements Serializable {
     private ProductosListasPreciosFacade listasPreciosFacade;
     @EJB
     private PersonasFacade personasFacade;
+    @EJB
+    private NegocioCondicionesOperacionesFacade condicionesOperacionesFacade;
+    @EJB
+    private NegocioFormasPagoFacade formasPagoFacade;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
+
+    private final List<VentasPagos> pagos = new ArrayList<>();
+
+    private VentasPagos pagoActual = new VentasPagos();
 
     private BigDecimal cantidad = BigDecimal.ONE;
 
@@ -87,8 +102,12 @@ public class ShopCartBean implements Serializable {
     private static final String CANT_DECIMALES_REDONDEO_PARAM = "venta.pos.redondear.cant_decimales";
     private static final String ID_PRODUCTO_REDONDEO_PARAM = "venta.pos.redondeo.id_producto";
     private static final String ID_CLIENTE_DEFECTO_PARAM = "venta.pos.id_cliente.defecto";
+    private static final String ID_CONDICION_DEFECTO_PARAM = "venta.pos.id_condicion.defecto";
+    private static final String ID_FORMA_PAGO_DEFECTO_PARAM = "venta.pos.id_forma_pago.defecto";
 
     private Productos productoRedondeo;
+
+    private NegocioFormasPago formaPagoDefecto = null;
 
     private int cantDeccimalesRedondeo = 0;
 
@@ -115,10 +134,14 @@ public class ShopCartBean implements Serializable {
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
             Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
             Parametros idClienteParam = parametrosFacade.find(ID_CLIENTE_DEFECTO_PARAM);
+            Parametros idCondicionParam = parametrosFacade.find(ID_CONDICION_DEFECTO_PARAM);
+            Parametros idFormaPagoParam = parametrosFacade.find(ID_FORMA_PAGO_DEFECTO_PARAM);
             lista = listasPreciosFacade.find(Long.parseLong(listaParam.getValorParametro()));
             cantDeccimalesRedondeo = cantDecimalesParam == null ? 2 : Integer.parseInt(cantDecimalesParam.getValorParametro());
             productoRedondeo = idProdRedondeoParam == null ? null : productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
             venta.setIdPersona(personasFacade.find(Long.parseLong(idClienteParam.getValorParametro())));
+            venta.setIdCondicionVenta(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
+            formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
         }
     }
 
@@ -148,6 +171,35 @@ public class ShopCartBean implements Serializable {
         if (index >= 0) {
             venta.getVentasLineasList().remove(index);
             JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
+        }
+    }
+
+    public void eliminarPago(int item) {
+        int index = -1;
+        int cont = 0;
+
+        for (VentasPagos vp : pagos) {
+            if (vp.getItem() == item) {
+                index = cont;
+                return;
+            }
+            cont++;
+        }
+        if (index >= 0) {
+            pagos.remove(index);
+        }
+    }
+
+    public void initPagos() {
+        if (!JSFUtil.isPostback()) {
+            if (pagos.isEmpty() && formaPagoDefecto != null) {
+                VentasPagos vp = new VentasPagos();
+                vp.setImporteTotalPagado(venta.getTotal());
+                vp.setIdFormaPago(formaPagoDefecto);
+                vp.setItem(itemCounter.getAndIncrement());
+                pagos.add(vp);
+                venta.setSaldo(BigDecimal.ZERO);
+            }
         }
     }
 
@@ -187,6 +239,9 @@ public class ShopCartBean implements Serializable {
         linea.setDescripcion(prod.getDescripcion());
         linea.setIdProducto(prod);
         linea.setCantidadEntregada(BigDecimal.ZERO);
+        if (!prod.getIdTipoProveeduria().getControlStock()) {
+            linea.setCantidadEntregada(linea.getCantidad());
+        }
         linea.setCostoBrutoUnitario(prod.getCostoAdquisicionNeto());
         linea.setCostoNetoUnitario(prod.getCostoFinal());
         linea.setPrecioVentaUnitario(precio.getPrecio());
@@ -244,6 +299,32 @@ public class ShopCartBean implements Serializable {
         return linea;
     }
 
+    public void doAgregarPago() {
+        if (pagoActual.getIdFormaPago() != null) {
+            if (pagoActual.getImporteTotalPagado().compareTo(venta.getSaldo()) > 0) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El monto del pago supera el saldo!"));
+            } else {
+
+                pagoActual.setItem(itemCounter.getAndIncrement());
+                pagos.add(pagoActual);
+                pagoActual = new VentasPagos();
+                pagoActual.setImporteTotalPagado(BigDecimal.ZERO);
+            }
+        }
+        calcularTotalPagado();
+    }
+
+    private void calcularTotalPagado() {
+        venta.setSaldo(venta.getTotal());
+        BigDecimal sumaPagos = BigDecimal.ZERO;
+        for (VentasPagos p : pagos) {
+            sumaPagos = sumaPagos.add(p.getImporteTotalPagado());
+        }
+        venta.setSaldo(venta.getTotal().subtract(sumaPagos));
+        pagoActual.setImporteTotalPagado(venta.getSaldo());
+    }
+
     public BigDecimal getCantidad() {
         return cantidad;
     }
@@ -266,6 +347,26 @@ public class ShopCartBean implements Serializable {
 
     public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
         this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
+    }
+
+    public List<NegocioCondicionesOperaciones> getCondicionesVentaList() {
+        return condicionesOperacionesFacade.findAll();
+    }
+
+    public List<NegocioFormasPago> getFormasPagoList() {
+        return formasPagoFacade.findFormasPagoVenta();
+    }
+
+    public List<VentasPagos> getPagos() {
+        return pagos;
+    }
+
+    public VentasPagos getPagoActual() {
+        return pagoActual;
+    }
+
+    public void setPagoActual(VentasPagos pagoActual) {
+        this.pagoActual = pagoActual;
     }
 
 }

@@ -60,7 +60,29 @@
 
             </p:panelGrid >
         </p:fragment>
+        <p:separator />
+
+        <p:panelGrid layout="grid" columns="2"
+                     styleClass="ui-panelgrid-blank"
+                     columnClasses="ui-grid-col-1,ui-grid-col-1"
+                     >
+            <p:commandButton id="cancelarButton"
+                             icon="fa fa-fw fa-ban"
+                             value="#{msg.cancelar}"
+                             action="#{shopCartBean.endConversation()}"
+                             immediate="true">
+
+            </p:commandButton>
+
+            <p:commandButton id="siguienteButton"
+                             icon="fa fa-fw fa-arrow-right"
+                             value="#{msg.siguiente}"
+                             action="pago.xhtml?faces-redirect=true"
+                             immediate="true">
+            </p:commandButton>
+        </p:panelGrid>
     </h:form>
+
 
     <h:form id="buscarPersonasForm" >
         <p:dialog id='busquedaPersonasDialog'

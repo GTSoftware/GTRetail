@@ -48,7 +48,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -283,8 +282,8 @@ public class NuevaVentaBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El monto del pago supera el saldo!"));
             } else {
-                UUID idOne = UUID.randomUUID();
-                pagoActual.setItem(String.valueOf(idOne));
+
+                pagoActual.setItem(ai.getAndIncrement());
                 pagos.add(pagoActual);
                 pagoActual = new VentasPagos();
                 pagoActual.setImporteTotalPagado(BigDecimal.ZERO);
@@ -356,7 +355,7 @@ public class NuevaVentaBean implements Serializable {
 
         for (int i = 0; i < pagos.size(); i++) {
 
-            if (pagos.get(i).getItem().equalsIgnoreCase(pago.getItem())) {
+            if (pagos.get(i).getItem().equals(pago.getItem())) {
                 item = i;
             }
         }
