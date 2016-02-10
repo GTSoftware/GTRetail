@@ -164,12 +164,13 @@ public class ShopCartBean implements Serializable {
         for (VentasLineas vl : venta.getVentasLineasList()) {
             if (vl.getItem() == item) {
                 index = cont;
-                return;
+                break;
             }
             cont++;
         }
         if (index >= 0) {
             venta.getVentasLineasList().remove(index);
+            calcularTotal();
             JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
         }
     }
@@ -181,12 +182,13 @@ public class ShopCartBean implements Serializable {
         for (VentasPagos vp : pagos) {
             if (vp.getItem() == item) {
                 index = cont;
-                return;
+                break;
             }
             cont++;
         }
         if (index >= 0) {
             pagos.remove(index);
+            calcularTotalPagado();
         }
     }
 

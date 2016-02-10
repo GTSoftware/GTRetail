@@ -71,7 +71,7 @@
                 <f:facet name="header">
                     #{msg.borrar}
                 </f:facet>
-                <p:commandButton icon="fa fa-fw fa-trash" update="pagosTable"
+                <p:commandButton icon="fa fa-fw fa-trash" update="@form"
                                  action="#{shopCartBean.eliminarPago(pago.item)}" />
             </p:column>
             <p:columnGroup type="footer">
