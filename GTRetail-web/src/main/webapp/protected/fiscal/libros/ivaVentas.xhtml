@@ -19,16 +19,16 @@
                 <h:form id="formBusqueda" >
                     <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
                         <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
-                        <p:selectOneMenu id="periodoFiscalField" required="true" 
-                                         requiredMessage="#{msg.campoRequerido}" 
-                                         value="#{libroIVABean.ivaVentasFilter.periodo}" 
-                                         converter="#{fiscalPeriodoFiscalConverter}">
-                            <f:selectItems value="#{libroIVABean.periodosList}" 
-                                           var="periodo" itemLabel="#{periodo.nombrePeriodo}" 
+                        <p:selectOneMenu id="periodoFiscalField" required="true"
+                                         requiredMessage="#{msg.campoRequerido}"
+                                         value="#{libroIVABean.ivaVentasFilter.periodo}"
+                                         converter="omnifaces.SelectItemsIndexConverter">
+                            <f:selectItems value="#{libroIVABean.periodosList}"
+                                           var="periodo" itemLabel="#{periodo.nombrePeriodo}"
                                            itemValue="#{periodo}"/>
-                        </p:selectOneMenu>        
+                        </p:selectOneMenu>
                     </p:panelGrid >
-                    <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}" 
+                    <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}"
                                      value="#{msg.generar}"
                                      ajax="false"
                                      icon="ui-icon-gear"/>

@@ -33,7 +33,7 @@
 
             <p:selectOneMenu id="listaField" value="#{nuevaVentaBean.listaSeleccionada}"
                              required="true" requiredMessage="#{msg.seleccionarUno}"
-                             converter="#{productosListasPreciosConverter}"
+                             converter="omnifaces.SelectItemsIndexConverter"
                              >
 
                 <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"

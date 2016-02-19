@@ -15,7 +15,7 @@
                 <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
                 <p:selectOneMenu id="tipoProveeduriaField" value="#{productosPreciosBean.filter.idTipoProveeduria}"
 
-                                 converter="#{productosTiposProveeduriaConverter}"
+                                 converter="omnifaces.SelectItemsIndexConverter"
                                  >
                     <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
 
@@ -28,7 +28,7 @@
 
                 <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
                 <p:selectOneMenu id="proveedorHabitualField" value="#{productosPreciosBean.filter.idProveedorHabitual}"
-                                 converter="#{personasConverter}"
+                                 converter="omnifaces.SelectItemsIndexConverter"
                                  required="false" requiredMessage="#{msg.seleccionarUno}"
                                  filter="true"
                                  filterMatchMode="contains">
@@ -44,7 +44,7 @@
                 <h:panelGroup >
                     <p:selectOneMenu id="rubroField"  value="#{productosPreciosBean.filter.idRubro}"
 
-                                     converter="#{productosRubrosConverter}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
                                      label="#{msg.productoRubro}"
                                      >
 
@@ -64,7 +64,7 @@
                 <h:panelGroup id="subRubroPanelGroup">
 
                     <p:selectOneMenu id="subRubroField" value="#{productosPreciosBean.filter.idSubRubro}"
-                                     required="false" converter="#{productosSubRubrosConverter}"
+                                     required="false" converter="omnifaces.SelectItemsIndexConverter"
                                      requiredMessage="#{msg.seleccionarUno}"
                                      label="#{msg.productoSubRubro}"
                                      >
@@ -83,7 +83,7 @@
                 <h:panelGroup >
                     <p:selectOneMenu id="marcaField" value="#{productosPreciosBean.filter.idMarca}"
                                      required="flase" requiredMessage="#{msg.ingresarValor}"
-                                     converter="#{productosMarcasConverter}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
                                      label="#{msg.marca}">
                         <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}"/>
                         <f:selectItems value="#{productosPreciosBean.marcasList}" var="marca"

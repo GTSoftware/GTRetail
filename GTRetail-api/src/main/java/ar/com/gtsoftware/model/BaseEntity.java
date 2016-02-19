@@ -98,4 +98,9 @@ public abstract class BaseEntity extends GTEntity {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s[%d]", this.getClass().getSimpleName(), id);
+    }
+
 }

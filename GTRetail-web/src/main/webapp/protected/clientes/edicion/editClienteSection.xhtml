@@ -33,7 +33,7 @@
                     <h:outputLabel />
 
                     <h:outputLabel for="tipoPersoneriaField" value="#{msg.tipoPersoneria}:" />
-                    <p:selectOneMenu id="tipoPersoneriaField" required="true" requiredMessage="#{msg.tipoPersoneriaRequerido}" value="#{clientesEditBean.clienteActual.idTipoPersoneria}" converter="#{legalTiposPersoneriaConverter}"
+                    <p:selectOneMenu id="tipoPersoneriaField" required="true" requiredMessage="#{msg.tipoPersoneriaRequerido}" value="#{clientesEditBean.clienteActual.idTipoPersoneria}" converter="omnifaces.SelectItemsIndexConverter"
                                      filter="true" filterMatchMode="contains">
                         <p:ajax event="valueChange"
                                 update="@form"
@@ -74,7 +74,7 @@
                     <p:message for="nombreField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
 
                     <h:outputLabel for="responsabilidadIVAField" value="#{msg.responsabilidadIVA}:"/>
-                    <p:selectOneMenu id="responsabilidadIVAField" required="true" requiredMessage="#{msg.responsabilidadIVARequerido}" value="#{clientesEditBean.clienteActual.idResponsabilidadIva}" converter="#{fiscalResponsabilidadesIvaConverter}">
+                    <p:selectOneMenu id="responsabilidadIVAField" required="true" requiredMessage="#{msg.responsabilidadIVARequerido}" value="#{clientesEditBean.clienteActual.idResponsabilidadIva}" converter="omnifaces.SelectItemsIndexConverter">
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.responsabilidadesIVAList}"  var="responsabilidadIva" itemLabel="#{responsabilidadIva.nombreResponsabildiad}" itemValue="#{responsabilidadIva}"/>
                     </p:selectOneMenu>
@@ -82,7 +82,7 @@
 
 
                     <h:outputLabel for="generoField" value="#{msg.genero}:" />
-                    <p:selectOneMenu id="generoField" required="true" requiredMessage="#{msg.generoRequerido}" value="#{clientesEditBean.clienteActual.idGenero}" converter="#{legalGenerosConverter}">
+                    <p:selectOneMenu id="generoField" required="true" requiredMessage="#{msg.generoRequerido}" value="#{clientesEditBean.clienteActual.idGenero}" converter="omnifaces.SelectItemsIndexConverter">
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.generosList}" var="genero" itemLabel="#{genero.nombreGenero.concat(' - ').concat(genero.simbolo)}" itemValue="#{genero}" />
                     </p:selectOneMenu>
@@ -91,7 +91,7 @@
                     <h:outputLabel for="tipoDocumentoField" value="#{msg.tipoDocumento}:" />
                     <p:selectOneMenu id="tipoDocumentoField" required="true" requiredMessage="#{msg.tipoDocumentoRequerido}"
                                      value="#{clientesEditBean.clienteActual.idTipoDocumento}"
-                                     converter="#{legalTiposDocumentoConverter}">
+                                     converter="omnifaces.SelectItemsIndexConverter">
                         <f:selectItems value="#{clientesEditBean.tiposDocumentoList}" var="tipoDoc" itemLabel="#{tipoDoc.nombreTipoDocumento}" itemValue="#{tipoDoc}"/>
                     </p:selectOneMenu>
                     <p:message for="tipoDocumentoField" />
@@ -104,7 +104,7 @@
 
 
                     <h:outputLabel for="paisField" value="#{msg.pais}:" />
-                    <p:selectOneMenu id="paisField" required="true" requiredMessage="#{msg.paisRequerido}" value="#{clientesEditBean.clienteActual.idPais}" converter="#{ubicacionPaisesConverter}"
+                    <p:selectOneMenu id="paisField" required="true" requiredMessage="#{msg.paisRequerido}" value="#{clientesEditBean.clienteActual.idPais}" converter="omnifaces.SelectItemsIndexConverter"
                                      filter="true"  filterMatchMode="contains">
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.paisesList}" var="pais" itemLabel="#{pais.nombrePais}" itemValue="#{pais}"/>
@@ -115,7 +115,7 @@
 
 
                     <h:outputLabel for="provinciaField" value="#{msg.provincia}:" />
-                    <p:selectOneMenu id="provinciaField" required="true" requiredMessage="#{msg.provinciaRequerido}" value="#{clientesEditBean.clienteActual.idProvincia}" converter="#{ubicacionProvinciasConverter}"
+                    <p:selectOneMenu id="provinciaField" required="true" requiredMessage="#{msg.provinciaRequerido}" value="#{clientesEditBean.clienteActual.idProvincia}" converter="omnifaces.SelectItemsIndexConverter"
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.provinciasList}" var="prov" itemLabel="#{prov.nombreProvincia}" itemValue="#{prov}"/>
@@ -125,7 +125,7 @@
                     <p:message for="provinciaField" />
 
                     <h:outputLabel for="localidadField" value="#{msg.localidad}:" />
-                    <p:selectOneMenu id="localidadField" required="true" requiredMessage="#{msg.localidadRequerido}" value="#{clientesEditBean.clienteActual.idLocalidad}" converter="#{ubicacionLocalidadesConverter}"
+                    <p:selectOneMenu id="localidadField" required="true" requiredMessage="#{msg.localidadRequerido}" value="#{clientesEditBean.clienteActual.idLocalidad}" converter="omnifaces.SelectItemsIndexConverter"
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.localidadesList}" var="loca" itemLabel="#{loca.nombreLocalidad.concat(' - ').concat(loca.codigoPostal)}" itemValue="#{loca}" />

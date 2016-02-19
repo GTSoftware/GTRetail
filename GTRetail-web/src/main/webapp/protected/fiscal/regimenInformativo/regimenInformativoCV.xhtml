@@ -22,7 +22,7 @@
                         <p:selectOneMenu id="periodoFiscalField" required="true"
                                          requiredMessage="#{msg.campoRequerido}"
                                          value="#{regimenInformativoBean.periodo}"
-                                         converter="#{fiscalPeriodoFiscalConverter}">
+                                         converter="omnifaces.SelectItemsIndexConverter">
                             <f:selectItems value="#{regimenInformativoBean.periodosList}"
                                            var="periodo" itemLabel="#{periodo.nombrePeriodo}"
                                            itemValue="#{periodo}"/>

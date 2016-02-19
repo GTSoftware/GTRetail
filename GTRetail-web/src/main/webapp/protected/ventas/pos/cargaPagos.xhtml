@@ -22,7 +22,8 @@
             <h:outputLabel value="#{msg.condicionVenta}:" />
             <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}"
                              value="#{shopCartBean.venta.idCondicionVenta}"
-                             converter="#{negocioCondicionesOperacionesConverter}" filter="true"  >
+                             converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+
                 <f:selectItems value="#{shopCartBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}"
                                itemValue="#{cond}"/>
 
@@ -31,7 +32,8 @@
             <h:outputLabel value="#{msg.formaPago}:" />
             <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
                              value="#{shopCartBean.pagoActual.idFormaPago}"
-                             converter="#{negocioFormasPagoConverter}" filter="true"  >
+                             converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+
                 <f:selectItems value="#{shopCartBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}"
                                itemValue="#{formaPago}"/>
 
@@ -96,6 +98,15 @@
         <p:inputText style="width: 100%" value="#{shopCartBean.venta.nroRemito}" maxlength="100"
                      converter="#{stringFormatConverter}" />
 
+        <h:outputLabel value="Estado:" />
+        <p:selectOneMenu id="estadoField" required="true" requiredMessage="#{msg.ingresarValor}"
+                         value="#{shopCartBean.venta.idVentasEstados}"
+                         converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+
+            <f:selectItems value="#{shopCartBean.ventasEstados}" var="estado" itemLabel="#{estado.nombreEstado}"
+                           itemValue="#{estado}"/>
+
+        </p:selectOneMenu>
         <p:separator />
 
         <p:commandButton id="guardarButton" value="#{msg.guardar}" icon="fa fa-fw fa-save"

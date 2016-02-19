@@ -256,5 +256,6 @@
         <primefaces-themes.version>1.0.10</primefaces-themes.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <beanio.version>2.1.0</beanio.version>
+        <omnifaces.version>2.2</omnifaces.version>
     </properties>
 </project>

@@ -23,6 +23,7 @@ import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
+import ar.com.gtsoftware.eao.VentasEstadosFacade;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.model.Parametros;
@@ -30,6 +31,7 @@ import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.model.VentasEstados;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.model.VentasPagos;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
@@ -39,7 +41,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.ejb.EJB;
@@ -80,6 +82,8 @@ public class ShopCartBean implements Serializable {
     private NegocioCondicionesOperacionesFacade condicionesOperacionesFacade;
     @EJB
     private NegocioFormasPagoFacade formasPagoFacade;
+    @EJB
+    private VentasEstadosFacade estadosFacade;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
@@ -128,7 +132,7 @@ public class ShopCartBean implements Serializable {
             venta = new Ventas();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-            venta.setFechaVenta(GregorianCalendar.getInstance().getTime());
+            venta.setFechaVenta(new Date());
             venta.setTotal(BigDecimal.ZERO);
             Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
@@ -361,6 +365,10 @@ public class ShopCartBean implements Serializable {
 
     public List<VentasPagos> getPagos() {
         return pagos;
+    }
+
+    public List<VentasEstados> getVentasEstados() {
+        return estadosFacade.findAll();
     }
 
     public VentasPagos getPagoActual() {

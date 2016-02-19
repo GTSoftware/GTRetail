@@ -73,7 +73,7 @@
                     <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
                     <p:selectOneMenu id="tipoProveeduriaField" value="#{productoEditBean.productoActual.idTipoProveeduria}"
                                      required="true" requiredMessage="#{msg.seleccionarUno}"
-                                     converter="#{productosTiposProveeduriaConverter}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
                                      >
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
 
@@ -89,7 +89,8 @@
                     <h:outputLabel for="rubroField" value="#{msg.productoRubro}:" />
                     <h:panelGroup >
                         <p:selectOneMenu id="rubroField"  value="#{productoEditBean.productoActual.idRubro}"
-                                         valueChangeListener="#{productoEditBean.cargarSubRubros}" converter="#{productosRubrosConverter}"
+                                         valueChangeListener="#{productoEditBean.cargarSubRubros}"
+                                         converter="omnifaces.SelectItemsIndexConverter"
                                          label="#{msg.productoRubro}"
                                          >
 
@@ -111,7 +112,7 @@
                     <h:panelGroup id="subRubroPanelGroup">
 
                         <p:selectOneMenu id="subRubroField" value="#{productoEditBean.productoActual.idSubRubro}"
-                                         required="true" converter="#{productosSubRubrosConverter}"
+                                         required="true" converter="omnifaces.SelectItemsIndexConverter"
                                          requiredMessage="#{msg.seleccionarUno}"
                                          label="#{msg.productoSubRubro}"
                                          >
@@ -133,7 +134,7 @@
                     <h:panelGroup >
                         <p:selectOneMenu id="marcaField" value="#{productoEditBean.productoActual.idMarca}"
                                          required="true" requiredMessage="#{msg.ingresarValor}"
-                                         converter="#{productosMarcasConverter}"
+                                         converter="omnifaces.SelectItemsIndexConverter"
                                          label="#{msg.marca}">
                             <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
                             <f:selectItems value="#{productoEditBean.listMarcas}" var="marca" itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
@@ -152,7 +153,8 @@
 
                     <h:outputLabel for="tipoUnidadCompraSelect" value="#{msg.productoTipoUnidadCompra}:"/>
                     <p:selectOneMenu id="tipoUnidadCompraSelect" value="#{productoEditBean.productoActual.idTipoUnidadCompra}"
-                                     required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
+                                     required="true" requiredMessage="#{msg.seleccionarValor}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
                                      label="#{msg.productoTipoUnidadCompra}">
 
                         <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
@@ -163,7 +165,8 @@
 
                     <h:outputLabel for="tipoUnidadVentaSelect" value="#{msg.productoTipoUnidadVenta}:"/>
                     <p:selectOneMenu id="tipoUnidadVentaSelect" value="#{productoEditBean.productoActual.idTipoUnidadVenta}"
-                                     required="true" requiredMessage="#{msg.seleccionarValor}" converter="#{productosTiposUnidadesConverter}"
+                                     required="true" requiredMessage="#{msg.seleccionarValor}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
                                      label="#{msg.productoTipoUnidadVenta}">
 
                         <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}"/>
@@ -209,7 +212,8 @@
                                 <h:outputLabel for="alicuotaIVAField" value="#{msg.alicuotaIVA}:"/>
                                 <p:selectOneMenu id="alicuotaIVAField" value="#{productoEditBean.productoActual.idAlicuotaIva}"
                                                  required="true" style="width: 100%"
-                                                 requiredMessage="#{msg.seleccionarValor}" converter="#{fiscalAlicuotaIVAConverter}"
+                                                 requiredMessage="#{msg.seleccionarValor}"
+                                                 converter="omnifaces.SelectItemsIndexConverter"
                                                  label="#{msg.alicuotaIVA}">
                                     <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" itemValue="#{null}" />
                                     <f:selectItems value="#{productoEditBean.listAlicuotaIVA}" var="alicuota"
@@ -451,8 +455,10 @@
 
                     <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
                     <p:selectOneMenu id="proveedorHabitualField" value="#{productoEditBean.productoActual.idProveedorHabitual}"
-                                     converter="#{personasConverter}"
-                                     required="false" requiredMessage="#{msg.seleccionarUno}">
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                                     required="false" requiredMessage="#{msg.seleccionarUno}"
+                                     filter="true" filterMatchMode="contains">
+
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
                         <f:selectItems value="#{productoEditBean.listProveedores}" var="proveedor"
                                        itemLabel="#{proveedor.nombreFantasia}"

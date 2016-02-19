@@ -14,13 +14,13 @@
 
         <h:outputLabel value="#{msg.condicionVenta}:" />
         <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}" value="#{nuevaVentaBean.ventaActual.idCondicionVenta}"
-                         converter="#{negocioCondicionesOperacionesConverter}" filter="true"  >
+                         converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
             <f:selectItems value="#{nuevaVentaBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}" itemValue="#{cond}"/>
 
         </p:selectOneMenu>
         <h:outputLabel value="#{msg.formaPago}:" />
         <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}" value="#{nuevaVentaBean.pagoActual.idFormaPago}"
-                         converter="#{negocioFormasPagoConverter}" filter="true"  >
+                         converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
             <f:selectItems value="#{nuevaVentaBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}" itemValue="#{formaPago}"/>
 
         </p:selectOneMenu>
