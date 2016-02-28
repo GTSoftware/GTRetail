@@ -1,46 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-    <h:body>
-
-        <ui:composition template="/WEB-INF/templates/template.xhtml">
-
-            <!-- Contenido -->
-            <ui:define name="content">
-                <ui:insert >
-                    <ui:include src="breadcrumb.xhtml" />
-                </ui:insert>
-                <h:form id="formContenido" >
-                    <p:panel header="#{parametrosEditBean.parametroActual.nombreParametro}" >
-
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3">
-
-                            <h:outputLabel for="valorParametroField" value="#{msg.valor}:" />
-                            <p:inputText id="valorParametroField" 
-                                         value="#{parametrosEditBean.parametroActual.valorParametro}"
-                                         maxlength="255" required="true" requiredMessage="#{msg.campoRequerido}"/>
-                            <p:message for="valorParametroField"  />
-
-                            <h:outputLabel for="descripcionParametroField" value="#{msg.descripcion}:" />
-                            <h:outputLabel id="descripcionParametroField" 
-                                           value="#{parametrosEditBean.parametroActual.descripcionParametro}" 
-                                           />
-                        </p:panelGrid >
-                    </p:panel>
-                    <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{parametrosEditBean.edit()}" update="@form" />
-                    <p:commandButton value="#{msg.volver}" icon="ui-icon-arrowthick-1-w" action="parametroSearch.xhtml?faces-redirect=true"
-                                     ajax="false" immediate="true"/>
-                </h:form>
-            </ui:define>
-
-        </ui:composition>
 
 
-    </h:body>
-</html>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    template="/WEB-INF/templates/template.xhtml">
+
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <h:form id="formContenido" >
+            <p:panel header="#{parametrosEditBean.parametroActual.nombreParametro}" >
+
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3">
+
+                    <h:outputLabel for="valorParametroField" value="#{msg.valor}:" />
+                    <p:inputText id="valorParametroField"
+                                 value="#{parametrosEditBean.parametroActual.valorParametro}"
+                                 maxlength="255" required="true" requiredMessage="#{msg.campoRequerido}"/>
+                    <p:message for="valorParametroField"  />
+
+                    <h:outputLabel for="descripcionParametroField" value="#{msg.descripcion}:" />
+                    <h:outputLabel id="descripcionParametroField"
+                                   value="#{parametrosEditBean.parametroActual.descripcionParametro}"
+                                   />
+                </p:panelGrid >
+            </p:panel>
+            <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{parametrosEditBean.edit()}" update="@form" />
+            <p:commandButton value="#{msg.volver}" icon="ui-icon-arrowthick-1-w" action="parametroSearch.xhtml?faces-redirect=true"
+                             ajax="false" immediate="true"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
 

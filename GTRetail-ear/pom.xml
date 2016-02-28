@@ -6,27 +6,6 @@
         <groupId>ar.com.gtsoftware</groupId>
         <version>2.0.1-SNAPSHOT</version>
     </parent>
-    <organization>
-        <name>GT Software</name>
-        <url>http://www.gtsoftware.com.ar</url>
-    </organization>
-
-    <developers>
-        <developer>
-            <id>rodrigo</id>
-            <name>Rodrigo M. Tato Rothamel</name>
-            <email>rotatomel@gmail.com</email>
-            <url>http://rotatomel.blogspot.net</url>
-            <organization>GTSoftware</organization>
-            <organizationUrl>http://www.gtsoftware.com.ar</organizationUrl>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>-3</timezone>
-
-        </developer>
-    </developers>
 
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail-ear</artifactId>
@@ -41,7 +20,7 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
@@ -49,11 +28,11 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ear-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.8</version>
                 <configuration>
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
@@ -74,6 +53,24 @@
                     </modules>
                 </configuration>
             </plugin>
+            <!-- JBoss App Server -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.7.Final</version>
+
+                <configuration>
+                    <jbossHome>${jboss.directory}</jbossHome>
+                    <serverId>nexus</serverId>
+                    <serverName>standalone-full</serverName>
+                    <hostName>localhost</hostName>
+                    <username>bpmsAdmin</username>
+                    <password>Rodrigo737#</password>
+                    <fileNames>
+                        <fileName>${basedir}/target/${project.artifactId}.ear</fileName>
+                    </fileNames>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -88,6 +85,12 @@
             <artifactId>GTRetail-web</artifactId>
             <version>${project.version}</version>
             <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>ar.com.gtsoftware</groupId>
+            <artifactId>GTRetail-api</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 </project>

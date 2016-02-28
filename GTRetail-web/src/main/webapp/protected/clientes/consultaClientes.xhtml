@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                >
 
     <h:form id="buscarClienteForm">
 
         <p:defaultCommand target="buscarButton"/>
         <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
                      columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
-<!--            <p:outputLabel value="#{msg.idCliente}:"/>
+    <!--            <p:outputLabel value="#{msg.idCliente}:"/>
             <p:inputText id="idClienteField" value="#{clientesSearchBean.filter.idPersona}" style="width: 100%"/>-->
             <p:outputLabel value="#{msg.busqueda}:"/>
             <p:inputText id="searchField" value="#{clientesSearchBean.filter.txt}" style="width: 100%"/>
@@ -152,7 +152,6 @@
         </p:dataTable>
 
 
-
     </h:form>
 
-</html>
+</ui:composition>

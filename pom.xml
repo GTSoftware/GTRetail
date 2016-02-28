@@ -64,12 +64,58 @@
     </developers>
     <dependencyManagement>
         <dependencies>
+            <!-- Define the version of the EJB jar so that we don't need
+            to repeat ourselves in every module -->
+            <dependency>
+                <groupId>ar.com.gtsoftware</groupId>
+                <artifactId>GTRetail-ejb</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
+
+            <!-- Define the version of the WAR so that we don't need to repeat
+            ourselves in every module -->
+            <dependency>
+                <groupId>ar.com.gtsoftware</groupId>
+                <artifactId>GTRetail-web</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>ar.com.gtsoftware</groupId>
+                <artifactId>GTRetail-api</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
                 <version>1.1.6.Final</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-javaee-6.0-with-tools</artifactId>
+                <version>1.0.7.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+                <version>1.0.7.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-6.0</artifactId>
+                <version>3.0.2.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -84,9 +130,7 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.source}</target>
-                    <compilerArguments>
-                        <endorseddirs>${endorsed.dir}</endorseddirs>
-                    </compilerArguments>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -138,29 +182,12 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.extras</groupId>
-            <artifactId>glassfish-embedded-all</artifactId>
-            <version>3.1.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
     <reporting>
         <plugins>
@@ -240,16 +267,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
         <sonar.language>java</sonar.language>
         <arquillian.version>1.0.0.CR4</arquillian.version>
-        <hibernate-jpamodelgen.version>4.3.5.Final</hibernate-jpamodelgen.version>
-        <hibernate-entitymanager.version>4.3.5.Final</hibernate-entitymanager.version>
-        <hibernate-annotations.version>3.5.6-Final</hibernate-annotations.version>
-        <hibernate-commons-annotations.version>5.0.0.Final</hibernate-commons-annotations.version>
         <antlr.version>2.7.7</antlr.version>
         <dom4j.version>2.0.0-RC1</dom4j.version>
         <primefaces.version>5.3</primefaces.version>

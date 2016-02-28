@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 
 /**
  * Controlador para el caso de uso de búsqueda de usuarios

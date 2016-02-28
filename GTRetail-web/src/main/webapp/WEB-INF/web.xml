@@ -3,6 +3,8 @@
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
+        <!--        <param-name>org.jboss.jbossfaces.JSF_CONFIG_NAME</param-name>
+        <param-value>mojarra-2.2.8-12</param-value>-->
     </context-param>
 
     <servlet>
@@ -40,12 +42,17 @@
     </mime-mapping>
     <mime-mapping>
         <extension>woff2</extension>
-        <mime-type>application/x-font-woff</mime-type>
+        <mime-type>application/x-font-woff2</mime-type>
     </mime-mapping>
     <mime-mapping>
         <extension>svg</extension>
         <mime-type>image/svg+xml</mime-type>
     </mime-mapping>
+    <mime-mapping>
+        <extension>ico</extension>
+        <mime-type>image/x-icon</mime-type>
+    </mime-mapping>
+
     <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
@@ -54,6 +61,7 @@
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
+
     <context-param>
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
@@ -107,9 +115,9 @@
         <auth-constraint>
             <role-name>ADMINISTRADORES</role-name>
         </auth-constraint>
-        <user-data-constraint>
+        <!--        <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
+        </user-data-constraint>-->
     </security-constraint>
 
     <security-role>

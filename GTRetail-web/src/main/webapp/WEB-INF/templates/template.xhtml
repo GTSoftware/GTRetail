@@ -37,10 +37,13 @@
                         </p:panelGrid >
                     </p:dialog>
                     <p:growl autoUpdate="true" showDetail="true" showSummary="true" sticky="true"/>
-                </h:form>
 
-                <ui:include src="mainMenu.xhtml" />
+                </h:form>
+                <h:form id="menuForm">
+                    <ui:include src="mainMenu.xhtml" />
+                </h:form>
             </ui:insert>
+
         </div>
         <div>
 
