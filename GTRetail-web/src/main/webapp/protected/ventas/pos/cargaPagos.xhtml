@@ -40,13 +40,14 @@
             </p:selectOneMenu>
             <h:outputLabel for="importePagoField" value="#{msg.importePago}:" />
             <p:inputText id="importePagoField" value="#{shopCartBean.pagoActual.importeTotalPagado}" label="#{msg.importePago}">
-                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
-                                       rendered="#{shopCartBean.venta.saldo gt 0}" />
+<!--                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
+                                       rendered="#{shopCartBean.venta.saldo gt 0}" />-->
             </p:inputText>
             <p:message for="importePagoField" />
 
             <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}" icon="fa fa-fw fa-plus"
-                             update="pagosTable, importePagoField"/>
+                             update="pagosTable, importePagoField"
+                             global="false"/>
 
         </p:panelGrid >
         <p:dataTable id="pagosTable" value="#{shopCartBean.pagos}" var="pago"
@@ -74,14 +75,15 @@
                     #{msg.borrar}
                 </f:facet>
                 <p:commandButton icon="fa fa-fw fa-trash" update="@form"
-                                 action="#{shopCartBean.eliminarPago(pago.item)}" />
+                                 action="#{shopCartBean.eliminarPago(pago.item)}"
+                                 global="false"/>
             </p:column>
             <p:columnGroup type="footer">
                 <p:row>
                     <p:column colspan="1" footerText="#{msg.saldo}:"
                               style="text-align:right; font-size: larger"  />
 
-                    <p:column footerText="\$#{shopCartBean.venta.saldo}" style=" font-size: xx-large" />
+                    <p:column footerText="$#{shopCartBean.venta.saldo}" style=" font-size: xx-large" />
                 </p:row>
             </p:columnGroup>
         </p:dataTable>

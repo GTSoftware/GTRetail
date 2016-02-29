@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
 
 
     <!--Evento disparado para iniciar la conversación con el carrito-->
@@ -46,12 +46,14 @@
             <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                              title="#{msg.insertar}"
                              action="#{shopCartBean.addToCart()}"
-                             update="@form"/>
+                             update="@form"
+                             global="false"/>
 
             <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
                              title="#{msg.buscar} productos"
                              oncomplete="PF('dlgBusProd').show()"
-                             process="@none" />
+                             process="@none"
+                             global="false"/>
         </p:panel>
 
         <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
@@ -129,6 +131,7 @@
                                  process="@this"
                                  action="#{shopCartBean.removeFromCart(lineaVenta.item)}"
                                  update="productosTable"
+                                 global="false"
                                  >
 
                 </p:commandButton>
@@ -177,6 +180,7 @@
             <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
                       modal="true" dynamic="true" >
                 <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
+                                              listaPrecios="#{shopCartBean.lista}"
                                               />
                 <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                  oncomplete="PF('dlgBusProd').hide()"

@@ -33,8 +33,12 @@ limitations under the License.
     </composite:interface>
 
     <composite:implementation>
+
+        <f:event type="preRenderView" listener="#{productosSearchBean.setListaSeleccionada(cc.attrs.listaPrecios)}" />
+
+
         <h:form id="busquedaProductosForm" >
-            #{productosSearchBean.setListaSeleccionada(cc.attrs.listaPrecios)}
+
             <p:fragment>
 
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1">
@@ -107,7 +111,7 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.precioUnitario}
                         </f:facet>
-                        <h:outputText value="#{productosSearchBean.getPrecio(producto)}" style="font-size: medium; font-weight: bold">
+                        <h:outputText value="#{productosSearchBean.getPrecio(pro)}" style="font-size: medium; font-weight: bold">
                             <f:convertNumber groupingUsed="true" type="currency"
                                              currencySymbol="$"/>
                         </h:outputText>

@@ -95,11 +95,11 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos> {
             preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
         }
         preciosSF.setProducto(producto);
-        List<ProductosPrecios> precio = preciosFacade.findBySearchFilter(preciosSF, 0, 1);
-        if (precio.isEmpty()) {
+        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(preciosSF);
+        if (precio == null) {
             return null;
         }
-        return precio.get(0).getPrecio();
+        return precio.getPrecio();
     }
 
     @Override

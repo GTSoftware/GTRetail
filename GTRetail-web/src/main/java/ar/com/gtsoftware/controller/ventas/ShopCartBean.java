@@ -47,8 +47,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -199,12 +197,10 @@ public class ShopCartBean implements Serializable {
     public void initPagos() {
         if (!JSFUtil.isPostback()) {
             if (pagos.isEmpty() && formaPagoDefecto != null) {
-                VentasPagos vp = new VentasPagos();
-                vp.setImporteTotalPagado(venta.getTotal());
-                vp.setIdFormaPago(formaPagoDefecto);
-                vp.setItem(itemCounter.getAndIncrement());
-                pagos.add(vp);
+                pagoActual.setImporteTotalPagado(venta.getTotal());
+                pagoActual.setIdFormaPago(formaPagoDefecto);
                 venta.setSaldo(BigDecimal.ZERO);
+                doAgregarPago();
             }
         }
     }
@@ -236,6 +232,7 @@ public class ShopCartBean implements Serializable {
         //Init datos
         JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoAgregadoAlCarritoSatisfactoriamente"));
         ventaModificada = true;
+        productoBusquedaSeleccionado = null;
     }
 
     private VentasLineas crearLinea(Productos prod, ProductosPrecios precio) {
@@ -307,9 +304,10 @@ public class ShopCartBean implements Serializable {
 
     public void doAgregarPago() {
         if (pagoActual.getIdFormaPago() != null) {
-            if (pagoActual.getImporteTotalPagado().compareTo(venta.getSaldo()) > 0) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El monto del pago supera el saldo!"));
+            if (pagoActual.getImporteTotalPagado().signum() <= 0
+                    || pagoActual.getImporteTotalPagado().compareTo(venta.getSaldo()) > 0) {
+                JSFUtil.addErrorMessage("El monto del pago supera el saldo!");
+
             } else {
 
                 pagoActual.setItem(itemCounter.getAndIncrement());
@@ -377,6 +375,10 @@ public class ShopCartBean implements Serializable {
 
     public void setPagoActual(VentasPagos pagoActual) {
         this.pagoActual = pagoActual;
+    }
+
+    public ProductosListasPrecios getLista() {
+        return lista;
     }
 
 }
