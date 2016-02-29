@@ -48,16 +48,7 @@
             <artifactId>poi</artifactId>
             <version>3.7</version>
         </dependency>
-        <dependency>
-            <groupId>com.lowagie</groupId>
-            <artifactId>itext</artifactId>
-            <version>2.1.7</version>
-        </dependency>
-        <!--        <dependency>
-            <groupId>org.omnifaces</groupId>
-            <artifactId>omnifaces</artifactId>
-            <version>${omnifaces.version}</version>
-        </dependency>-->
+
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
@@ -69,7 +60,7 @@
             <version>${primefaces.version}</version>
         </dependency>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-ejb</artifactId>
             <type>ejb</type>
             <scope>provided</scope>
@@ -80,7 +71,7 @@
             <version>1.5</version>
         </dependency>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
             <scope>provided</scope>
         </dependency>

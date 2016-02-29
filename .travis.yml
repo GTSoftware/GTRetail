@@ -5,4 +5,4 @@ services:
   - postgresql
 before_install:
   - sudo rm /etc/mavenrc
-install: "mvn install"
+install: "mvn clean install"

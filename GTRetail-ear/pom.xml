@@ -14,21 +14,9 @@
 
     <name>GTRetail-ear</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <build>
         <plugins>
-            <!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ear-plugin</artifactId>
@@ -37,19 +25,7 @@
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <modules>
-<!--                        <ejbModule>
-                            <groupId>ar.com.gtsoftware</groupId>
-                            <artifactId>GTRetail-ejb</artifactId>
-                            <uri>GTRetail-ejb.jar</uri>
-                        </ejbModule>
 
-                         Register Web Application
-                        <webModule>
-                            <groupId>ar.com.gtsoftware</groupId>
-                            <artifactId>GTRetail-web</artifactId>
-                            <uri>GTRetail-web.war</uri>
-                            <contextRoot>/GTRetail</contextRoot>
-                        </webModule>-->
                     </modules>
                     <fileNameMapping>no-version</fileNameMapping>
                 </configuration>
@@ -64,11 +40,6 @@
                 <configuration>
                     <skip>false</skip>
                     <jbossHome>${jboss.directory}</jbossHome>
-                    <serverId>nexus</serverId>
-                    <serverName>standalone</serverName>
-                    <hostName>localhost</hostName>
-                    <username>bpmsAdmin</username>
-                    <password>Rodrigo737#</password>
                     <fileNames>
                         <fileName>${basedir}/target/${project.artifactId}.ear</fileName>
                     </fileNames>
@@ -79,21 +50,21 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-ejb</artifactId>
-            <version>${project.version}</version>
+
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-web</artifactId>
-            <version>${project.version}</version>
+
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
-            <version>${project.version}</version>
+
             <type>jar</type>
         </dependency>
     </dependencies>

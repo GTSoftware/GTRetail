@@ -70,30 +70,30 @@
         see the section entitled 'Use the Maven Repository'
         in the Development Guide for Red Hat JBoss Enterprise Application Platform located here:
         https://access.redhat.com/documentation/en/jboss-enterprise-application-platform/
-    -->
-    <repositories>
-        <repository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
+        <repositories>
+            <repository>
+                <id>jboss-developer-staging-repository</id>
+                <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </repository>
+            <repository>
+                <id>jboss-enterprise-maven-repository</id>
+                <url>https://maven.repository.redhat.com/ga/</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </repository>
+        </repositories>
+    -->
 
     <dependencyManagement>
         <dependencies>
@@ -336,6 +336,7 @@
 
         <!-- other plugin versions -->
         <version.ear.plugin>2.8</version.ear.plugin>
+        <version.jar.plugin>2.3.2</version.jar.plugin>
         <version.ejb.plugin>2.3</version.ejb.plugin>
         <version.surefire.plugin>2.10</version.surefire.plugin>
         <version.war.plugin>2.1.1</version.war.plugin>
