@@ -62,6 +62,39 @@
             <timezone>-3</timezone>
         </developer>
     </developers>
+
+    <!-- Activate JBoss Product Maven repository.
+        NOTE: Configuring the Maven repository in the pom.xml file is not a recommended procedure
+        and is only done here to make it easier to use the quickstarts.
+        For more information about how to configure Maven for your application,
+        see the section entitled 'Use the Maven Repository'
+        in the Development Guide for Red Hat JBoss Enterprise Application Platform located here:
+        https://access.redhat.com/documentation/en/jboss-enterprise-application-platform/
+    -->
+    <repositories>
+        <repository>
+            <id>jboss-developer-staging-repository</id>
+            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
     <dependencyManagement>
         <dependencies>
             <!-- Define the version of the EJB jar so that we don't need
@@ -96,27 +129,23 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            <!-- Define the version of the JBoss Java EE APIs we want to import.
+            Any dependencies from org.jboss.spec will have their version defined by this
+            BOM -->
+            <!-- JBoss distributes a complete set of Java EE APIs including
+            a Bill of Materials (BOM). A BOM specifies the versions of a "stack" (or
+            a collection) of artifacts. We use this here so that we always get the correct
+            versions of artifacts. Here we use the jboss-eap-javaee7-with-tools stack
+            (you can read this as the JBoss stack of the Java EE APIs, with some extras
+            tools for your project, such as Arquillian for testing)  -->
             <dependency>
                 <groupId>org.jboss.bom</groupId>
-                <artifactId>jboss-javaee-6.0-with-tools</artifactId>
-                <version>1.0.7.Final</version>
+                <artifactId>jboss-eap-javaee7-with-tools</artifactId>
+                <version>${version.jboss.bom.eap}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.jboss.bom</groupId>
-                <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
-                <version>1.0.7.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec</groupId>
-                <artifactId>jboss-javaee-6.0</artifactId>
-                <version>3.0.2.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -141,6 +170,20 @@
                     <!--
                     <tagBase>https://wakaleo.devguard.com/svn/maven-plugins/maven-schemaspy-plugin/tags/releases</tagBase>
                     -->
+                </configuration>
+            </plugin>
+            <!-- The JBoss AS plugin deploys your ear to a local JBoss AS
+            container -->
+            <!-- Due to Maven's lack of intelligence with EARs we need to
+            configure the jboss-as maven plugin to skip deployment for all modules. We
+            then enable it specifically in the ear module. -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.7.Final</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>
@@ -265,10 +308,12 @@
 
     </profiles>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
         <sonar.language>java</sonar.language>
@@ -279,6 +324,22 @@
         <primefaces-themes.version>1.0.10</primefaces-themes.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <beanio.version>2.1.0</beanio.version>
-        <omnifaces.version>2.2</omnifaces.version>
+        <omnifaces.version>2.1</omnifaces.version>
+        <!-- JBoss dependency versions -->
+
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+
+        <!-- Define the version of the JBoss BOMs we want to import to specify tested stacks. -->
+        <version.jboss.bom.eap>7.0.0-build-9</version.jboss.bom.eap>
+
+        <version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>
+
+        <!-- other plugin versions -->
+        <version.ear.plugin>2.8</version.ear.plugin>
+        <version.ejb.plugin>2.3</version.ejb.plugin>
+        <version.surefire.plugin>2.10</version.surefire.plugin>
+        <version.war.plugin>2.1.1</version.war.plugin>
+
+
     </properties>
 </project>

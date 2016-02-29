@@ -38,6 +38,7 @@
                         <p:ajax event="valueChange"
                                 update="@form"
                                 process="@this"
+                                global="false"
                                 />
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.tiposPersoneriaList}" var="personeria" itemLabel="#{personeria.nombreTipo}" itemValue="#{personeria}"/>
@@ -109,7 +110,7 @@
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.paisesList}" var="pais" itemLabel="#{pais.nombrePais}" itemValue="#{pais}"/>
                         <p:ajax update="provinciaField localidadField"
-                                process="@this" />
+                                process="@this" global="false"/>
                     </p:selectOneMenu>
                     <p:message for="paisField" />
 
@@ -120,7 +121,7 @@
                         <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}" />
                         <f:selectItems value="#{clientesEditBean.provinciasList}" var="prov" itemLabel="#{prov.nombreProvincia}" itemValue="#{prov}"/>
                         <p:ajax update="localidadField"
-                                process="@this" />
+                                process="@this" global="false"/>
                     </p:selectOneMenu>
                     <p:message for="provinciaField" />
 
@@ -182,9 +183,7 @@
 
 
                 <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"
-                                 value="#{msg.nuevo}"  icon="fa fa-fw fa-plus"  />
-
-
+                                 value="#{msg.nuevo}"  icon="fa fa-fw fa-plus" global="false" />
 
                 <p:dataTable id="telefonosTable" value="#{clientesEditBean.telefonos}" var="telefono"
                              rows="15"
@@ -237,8 +236,8 @@
 
             </p:tab>
         </p:tabView>
-
     </h:form>
+
     <h:form id="addTelefonoForm" >
         <p:dialog id="addTelefonoDialog" header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true" >
             <h:outputLabel  value="#{clientesEditBean.telefonoActual.id}" />
@@ -261,7 +260,7 @@
                              onsuccess="PF('dlgAddTelefono').hide();"
                              process="@form"/>
 
-            <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" onclick="PF('dlgAddTelefono').hide();" />
+            <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" immediate="true" onclick="PF('dlgAddTelefono').hide();" />
             <h:outputLabel  value="#{clientesEditBean.telefonoActual.idPersona}" />
         </p:dialog>
     </h:form>

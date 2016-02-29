@@ -1,111 +1,109 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:body>
-        <ui:composition template="/WEB-INF/templates/template.xhtml">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/templates/template.xhtml">
 
-            <!-- Contenido -->
-            <ui:define name="content">
-                <ui:insert >
-                    <ui:include src="breadcrumb.xhtml" />
-                </ui:insert>
-                <h:form id="formContenido" >
-
-
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
-                                 columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
-                        <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                        <p:inputText id="textoBusquedaField" value="#{marcasSearchBean.filter.nombreMarca}" size="50"/>
-                        <p:commandButton  action="#{marcasSearchBean.doSearch()}"
-                                          value="#{msg.buscar}"
-                                          icon="fa fa-fw fa-search"
-                                          update="marcasTable"/>
-                        <p:commandButton id="nuevoButton" action="marcaEdit.xhtml" value="#{msg.nuevo}" ajax="false"
-                                         icon="fa fa-fw fa-plus" />
-                    </p:panelGrid >
-                    <p:dataTable id="marcasTable" var="marca" value="#{marcasSearchBean.dataModel}"
-                                 rows="30"
-                                 lazy="true"
-                                 paginator="true"
-                                 sortMode="single"
-                                 emptyMessage="#{msg.busquedaSinResultados}"
-                                 rowKey="#{marca.id}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                                 rowsPerPageTemplate="10,15,30,100"
-                                 style="width: 100%"
-
-                                 scrollable="true"
-                                 reflow="true">
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <h:form id="formContenido" >
 
 
-                        <f:facet name="{Exporters}">
-                            <h:commandLink>
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                         columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
+                <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
+                <p:inputText id="textoBusquedaField" value="#{marcasSearchBean.filter.nombreMarca}" size="50"/>
+                <p:commandButton  action="#{marcasSearchBean.doSearch()}"
+                                  value="#{msg.buscar}"
+                                  icon="fa fa-fw fa-search"
+                                  update="marcasTable"/>
+                <p:commandButton id="nuevoButton" action="marcaEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                 icon="fa fa-fw fa-plus" />
+            </p:panelGrid >
+            <p:dataTable id="marcasTable" var="marca" value="#{marcasSearchBean.dataModel}"
+                         rows="30"
+                         lazy="true"
+                         paginator="true"
+                         sortMode="single"
+                         emptyMessage="#{msg.busquedaSinResultados}"
+                         rowKey="#{marca.id}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                         rowsPerPageTemplate="10,15,30,100"
+                         style="width: 100%"
 
-                                <p:graphicImage library="images" name="excel.png" width="24"/>
-                                <p:dataExporter type="xls" target="marcasTable" fileName="marcas" />
-                            </h:commandLink>
-
-                            <h:commandLink>
-                                <p:graphicImage library="images" name="pdf.png" width="24"/>
-                                <p:dataExporter type="pdf" target="marcasTable" fileName="marcas"/>
-                            </h:commandLink>
-
-                            <h:commandLink>
-                                <p:graphicImage library="images" name="csv.png" width="24"/>
-                                <p:dataExporter type="csv" target="marcasTable" fileName="marcas" />
-                            </h:commandLink>
-
-                            <h:commandLink>
-                                <p:graphicImage library="images" name="xml.png" width="24"/>
-                                <p:dataExporter type="xml" target="marcasTable" fileName="marcas" />
-                            </h:commandLink>
-                        </f:facet>
-
-                        <f:facet name="header">
-                            #{msg.marcas}
-                        </f:facet>
-
-                        <p:column sortBy="#{marca.id}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.id}"/>
-                            </f:facet>
-
-                            <h:outputText value="#{marca.id}" />
-
-                        </p:column>
-
-                        <p:column sortBy="#{marca.nombreMarca}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.nombre}"/>
-                            </f:facet>
-
-                            <h:outputText value="#{marca.nombreMarca}" />
-
-                        </p:column>
-
-                        <p:column style="width:64px" exportable="false">
-                            <f:facet name="header">
-                                #{msg.editar}
-                            </f:facet>
-                            <p:commandButton icon="fa fa-fw fa-edit" action="marcaEdit"
-                                             ajax="false" >
-                                <f:param name="idMarca" value="#{marca.id}" />
-
-                            </p:commandButton>
-
-                        </p:column>
-                    </p:dataTable>
-
-                </h:form>
-            </ui:define>
-
-        </ui:composition>
+                         scrollable="true"
+                         reflow="true">
 
 
-    </h:body>
-</html>
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+
+                        <p:graphicImage library="images" name="excel.png" width="24"/>
+                        <p:dataExporter type="xls" target="marcasTable" fileName="marcas" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="pdf.png" width="24"/>
+                        <p:dataExporter type="pdf" target="marcasTable" fileName="marcas"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="csv.png" width="24"/>
+                        <p:dataExporter type="csv" target="marcasTable" fileName="marcas" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="xml.png" width="24"/>
+                        <p:dataExporter type="xml" target="marcasTable" fileName="marcas" />
+                    </h:commandLink>
+                </f:facet>
+
+                <f:facet name="header">
+                    #{msg.marcas}
+                </f:facet>
+
+                <p:column sortBy="#{marca.id}" >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.id}"/>
+                    </f:facet>
+
+                    <h:outputText value="#{marca.id}" />
+
+                </p:column>
+
+                <p:column sortBy="#{marca.nombreMarca}" >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.nombre}"/>
+                    </f:facet>
+
+                    <h:outputText value="#{marca.nombreMarca}" />
+
+                </p:column>
+
+                <p:column style="width:64px" exportable="false">
+                    <f:facet name="header">
+                        #{msg.editar}
+                    </f:facet>
+                    <p:commandButton icon="fa fa-fw fa-edit" action="marcaEdit"
+                                     ajax="false" >
+                        <f:param name="idMarca" value="#{marca.id}" />
+
+                    </p:commandButton>
+
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+
 

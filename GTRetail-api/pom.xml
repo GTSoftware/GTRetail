@@ -15,19 +15,21 @@
         <!-- Import the EJB API, we use provided scope as the API is included in JBoss EAP 6 -->
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <!-- Annotation processor to generate the JPA 2.0 metamodel classes for
         typesafe criteria queries -->
         <dependency>
@@ -48,6 +50,7 @@
             <artifactId>beanio</artifactId>
             <version>${beanio.version}</version>
         </dependency>
+        
     </dependencies>
     <build>
         <finalName>GTRetail-api</finalName>

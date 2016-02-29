@@ -3,16 +3,16 @@
 
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
     template="/WEB-INF/templates/template.xhtml">
+
     <ui:define name="content">
         <ui:insert >
             <ui:include src="breadcrumb.xhtml" />
         </ui:insert>
-        <ui:insert >
-            <ui:include src="consultaClientes.xhtml" />
-        </ui:insert>
+
+        <ui:include src="consultaClientes.xhtml" />
+
     </ui:define>
 </ui:composition>
 

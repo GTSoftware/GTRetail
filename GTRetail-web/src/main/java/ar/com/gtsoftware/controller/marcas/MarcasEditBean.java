@@ -60,7 +60,7 @@ public class MarcasEditBean implements Serializable {
 
             if (marcaActual == null) {
                 LOG.log(Level.SEVERE, "Marca inexistente!");
-                throw new RuntimeException("Marca inexistente!");
+                throw new IllegalArgumentException("Marca inexistente!");
 
             }
 

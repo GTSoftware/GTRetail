@@ -69,4 +69,8 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas> {
         filter.setTxt(query);
         return facade.findBySearchFilter(filter, 0, 15);
     }
+
+    public String editarCliente(Personas p) {
+        return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
+    }
 }

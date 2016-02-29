@@ -1,65 +1,73 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Enables CTRL+SHIFT+D for activating Facelets debug window -->
+    <ui:debug />
+    <f:view contentType="text/html" id="fview">
+        <ui:insert name="metadata" />
 
-        <title>#{msg.appName}</title>
-        <link rel="shortcut icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
-        <link rel="icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
-    </h:head>
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <h:body>
+            <title>#{msg.appName}</title>
+            <link rel="shortcut icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
+            <link rel="icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
 
-        <h:outputStylesheet name="css/default.css" />
-        <div id="top" class="ui-fluid" >
-            <ui:insert name="top">
-                <h:form >
-                    <p:graphicImage library="images" name="logo.png" height="50" width="auto"/>
-                    <br/>
-                    <p:outputLabel value="#{msg.bienvenido}: "/>
-                    <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" />
+        </h:head>
 
-                    <p:spacer width="20"/>
-                    <p:outputLabel value="#{msg.fecha}:"/>
-                    <p:clock mode="server" id="clock" pattern="dd/MM/yyyy hh:mm:ss a" />
-                    <p:ajaxStatus  onstart="PF('dlgLoad').show()" oncomplete="PF('dlgLoad').hide()" onerror="PF('dlgLoad').hide()" onsuccess="PF('dlgLoad').hide()"/>
-                    <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)">
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="1" >
-
-                            <p:graphicImage library="images" name="ajax-loader-bar.gif" />
-                            <br/>
-                            #{msg.cargando}
-                        </p:panelGrid >
-                    </p:dialog>
-                    <p:growl autoUpdate="true" showDetail="true" showSummary="true" sticky="true"/>
-
-                </h:form>
-                <h:form id="menuForm">
-                    <ui:include src="mainMenu.xhtml" />
-                </h:form>
-            </ui:insert>
-
-        </div>
-        <div>
+        <h:body>
 
 
+            <h:outputStylesheet name="css/default.css" />
+            <div id="top" class="ui-fluid" >
+                <ui:insert name="top">
+                    <h:form >
+                        <p:graphicImage library="images" name="logo.png" height="50" width="auto"/>
+                        <br/>
+                        <p:outputLabel value="#{msg.bienvenido}: "/>
+                        <p:outputLabel value="#{authBackingBean.userLoggedIn.nombreUsuario}" />
 
-            <div id="content" class="ui-fluid"  >
-                <ui:insert name="content">Content</ui:insert>
+                        <p:spacer width="20"/>
+                        <p:outputLabel value="#{msg.fecha}:"/>
+                        <p:clock mode="server" id="clock" pattern="dd/MM/yyyy hh:mm:ss a" />
+                        <p:ajaxStatus  onstart="PF('dlgLoad').show()" oncomplete="PF('dlgLoad').hide()" onerror="PF('dlgLoad').hide()" onsuccess="PF('dlgLoad').hide()"/>
+                        <p:dialog widgetVar="dlgLoad" resizable="false" closable="false" modal="true" appendTo="@(body)">
+                            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="1" >
+
+                                <p:graphicImage library="images" name="ajax-loader-bar.gif" />
+                                <br/>
+                                #{msg.cargando}
+                            </p:panelGrid >
+                        </p:dialog>
+                        <p:growl autoUpdate="true" showDetail="true" showSummary="true" sticky="true"/>
+
+                    </h:form>
+                    <h:form id="menuForm">
+                        <ui:include src="mainMenu.xhtml" />
+                    </h:form>
+                </ui:insert>
+
             </div>
-        </div>
-        <div>
-            <div id="footer" class="ui-fluid" >
-                <p:separator/>
-                <h:outputLabel value="Version:  #{version.version} Build: #{version.build}" />
+            <div>
+
+
+
+                <div id="content" class="ui-fluid"  >
+                    <ui:insert name="content">Content</ui:insert>
+                </div>
             </div>
-        </div>
+            <div>
+                <div id="footer" class="ui-fluid" >
+                    <p:separator/>
+                    <h:outputLabel value="Version:  #{version.version} Build: #{version.build}" />
+                </div>
+            </div>
 
-    </h:body>
 
+        </h:body>
+    </f:view>
 </html>

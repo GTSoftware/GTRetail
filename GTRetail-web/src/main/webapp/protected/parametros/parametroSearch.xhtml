@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -45,42 +44,35 @@
                     <h:outputText value="#{msg.parametros}" />
                 </f:facet>
 
-                <p:column sortBy="#{par.nombreParametro}" >
-                    <f:facet name="header">
-                        <h:outputText value="#{msg.nombre}" />
-                    </f:facet>
+                <p:column sortBy="#{par.nombreParametro}" headerText="#{msg.nombre}">
+
 
                     <h:outputText value="#{par.nombreParametro}" />
 
                 </p:column>
 
-                <p:column sortBy="#{par.valorParametro}" >
-                    <f:facet name="header">
-                        #{msg.valor}
-                    </f:facet>
+                <p:column sortBy="#{par.valorParametro}" headerText="#{msg.valor}" >
+
 
                     <h:outputText value="#{par.valorParametro}" />
 
                 </p:column>
 
-                <p:column sortBy="#{par.descripcionParametro}" >
-                    <f:facet name="header">
-                        #{msg.descripcion}
-                    </f:facet>
+                <p:column sortBy="#{par.descripcionParametro}" headerText="#{msg.descripcion}" >
+
 
                     <h:outputText value="#{par.descripcionParametro}" />
 
                 </p:column>
 
-                <p:column style="width:32px">
-                    <f:facet name="header">
-                        #{msg.editar}
-                    </f:facet>
-                    <p:commandButton icon="fa fa-fw fa-edit" action="parametroEdit"
-                                     ajax="false" >
-                        <f:param name="nombreParametro" value="#{par.nombreParametro}" />
+                <p:column style="width:32px" headerText="#{msg.editar}">
 
-                    </p:commandButton>
+                    <p:commandButton id="editParamBtn" ajax="false"
+                                     immediate="true"
+                                     action="#{parametrosSearchBean.editParametro(par)}"
+                                     icon="fa fa-fw fa-edit"/>
+
+
                 </p:column>
             </p:dataTable>
 

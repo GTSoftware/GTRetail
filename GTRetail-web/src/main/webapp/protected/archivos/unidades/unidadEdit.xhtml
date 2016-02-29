@@ -1,63 +1,57 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:body>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/template.xhtml">
 
-        <ui:composition template="/WEB-INF/templates/template.xhtml">
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <h:form id="formContenido" >
+            <p:panel header="Editar Unidad" >
 
-            <!-- Contenido -->
-            <ui:define name="content">
-                <ui:insert >
-                    <ui:include src="breadcrumb.xhtml" />
-                </ui:insert>
-                <h:form id="formContenido" >
-                    <p:panel header="Editar Unidad" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
 
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3"
-                                     columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
+                    <h:outputLabel for="idField" value="#{msg.id}:" />
+                    <h:outputLabel id="idField" value="#{unidadesEditBean.unidadActual.id}" />
+                    <h:outputLabel  />
 
-                            <h:outputLabel for="idField" value="#{msg.id}:" />
-                            <h:outputLabel id="idField" value="#{unidadesEditBean.unidadActual.id}" />
-                            <h:outputLabel  />
+                    <h:outputLabel for="nombreField" value="#{msg.nombre}:" />
 
-                            <h:outputLabel for="nombreField" value="#{msg.nombre}:" />
+                    <p:inputText id="nombreField"
+                                 value="#{unidadesEditBean.unidadActual.nombreUnidad}"
+                                 maxlength="100" required="true" requiredMessage="#{msg.campoRequerido}"
+                                 converter="#{stringFormatConverter}"/>
+                    <p:message for="nombreField"  />
 
-                            <p:inputText id="nombreField"
-                                         value="#{unidadesEditBean.unidadActual.nombreUnidad}"
-                                         maxlength="100" required="true" requiredMessage="#{msg.campoRequerido}"
-                                         converter="#{stringFormatConverter}"/>
-                            <p:message for="nombreField"  />
+                    <h:outputLabel for="cantidadEnteraField" value="#{msg.cantidadEntera}:" />
 
-                            <h:outputLabel for="cantidadEnteraField" value="#{msg.cantidadEntera}:" />
-
-                            <p:selectBooleanCheckbox id="cantidadEnteraField"
-                                                     value="#{unidadesEditBean.unidadActual.cantidadEntera}"
-                                                     required="true" requiredMessage="#{msg.campoRequerido}"/>
-                            <p:message for="cantidadEnteraField"  />
-
-
-                        </p:panelGrid >
-                    </p:panel>
-
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="2"
-                                 columnClasses="ui-grid-col-1,ui-grid-col-1">
-                        <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{unidadesEditBean.doGuardar()}"
-                                         update="@form" />
-                        <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
-                                         action="unidadSearch.xhtml?faces-redirect=true"
-                                         ajax="false" immediate="true"/>
-                    </p:panelGrid>
-                </h:form>
-            </ui:define>
-
-        </ui:composition>
+                    <p:selectBooleanCheckbox id="cantidadEnteraField"
+                                             value="#{unidadesEditBean.unidadActual.cantidadEntera}"
+                                             required="true" requiredMessage="#{msg.campoRequerido}"/>
+                    <p:message for="cantidadEnteraField"  />
 
 
-    </h:body>
-</html>
+                </p:panelGrid >
+            </p:panel>
 
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="2"
+                         columnClasses="ui-grid-col-1,ui-grid-col-1">
+                <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{unidadesEditBean.doGuardar()}"
+                                 update="@form" />
+                <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                 action="unidadSearch.xhtml?faces-redirect=true"
+                                 ajax="false" immediate="true"/>
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

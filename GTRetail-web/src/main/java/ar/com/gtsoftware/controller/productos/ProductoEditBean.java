@@ -24,10 +24,10 @@ import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.UtilUI;
 import java.io.Serializable;
@@ -175,8 +175,8 @@ public class ProductoEditBean implements Serializable {
 
     public void nuevo() {
         productoActual = new Productos();
-        productoActual.setPrecios(new ArrayList<ProductosPrecios>());
-        productoActual.setPorcentajes(new ArrayList<ProductosPorcentajes>());
+        productoActual.setPrecios(new ArrayList<>());
+        productoActual.setPorcentajes(new ArrayList<>());
         productoActual.setUnidadesCompraUnidadesVenta(BigDecimal.ONE);
         productoActual.setActivo(true);
     }

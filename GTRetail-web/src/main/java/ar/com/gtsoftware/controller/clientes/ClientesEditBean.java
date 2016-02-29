@@ -37,12 +37,12 @@ import ar.com.gtsoftware.model.UbicacionProvincias;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -57,6 +57,8 @@ import javax.inject.Inject;
 @ManagedBean(name = "clientesEditBean")
 @ViewScoped
 public class ClientesEditBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Inject
     private AuthBackingBean authBackingBean;
@@ -90,10 +92,9 @@ public class ClientesEditBean implements Serializable {
     public ClientesEditBean() {
     }
 
-    @PostConstruct
-    private void init() {
+    public void init() {
 
-        String idPersona = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idPersona");
+        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {

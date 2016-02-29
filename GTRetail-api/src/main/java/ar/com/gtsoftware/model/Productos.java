@@ -39,13 +39,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-//import org.eclipse.persistence.annotations.JoinFetch;
 
-/**
- * Clase que representa a un producto
- *
- * @author Rodrigo Tato mailto:rotatomel@gmail.com
- */
 @Entity
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
 @XmlRootElement

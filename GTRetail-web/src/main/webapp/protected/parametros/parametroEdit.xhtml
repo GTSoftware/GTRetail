@@ -1,7 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -9,6 +6,15 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="nombreParametro" value="#{parametrosEditBean.nombreParametro}" required="true"/>
+            <f:viewAction action="#{parametrosEditBean.init()}" onPostback="false" />
+        </f:metadata>
+<!--        <f:event type="preRenderView" listener="#{parametrosEditBean.init()}" />-->
+
+    </ui:define>
 
     <!-- Contenido -->
     <ui:define name="content">

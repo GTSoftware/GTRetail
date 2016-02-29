@@ -1,121 +1,117 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:body>
-        <ui:composition template="/WEB-INF/templates/template.xhtml">
 
-            <!-- Contenido -->
-            <ui:define name="content">
-                <ui:insert >
-                    <ui:include src="breadcrumb.xhtml" />
-                </ui:insert>
-                <h:form id="formContenido" >
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/template.xhtml">
 
-
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
-                                 columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
-                        <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                        <p:inputText id="textoBusquedaField" value="#{unidadesSearchBean.filter.nombreUnidad}" size="50"/>
-                        <p:commandButton  action="#{unidadesSearchBean.doSearch()}"
-                                          value="#{msg.buscar}"
-                                          icon="fa fa-fw fa-search"
-                                          update="unidadesTable"/>
-                        <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
-                                         icon="fa fa-fw fa-plus" />
-                    </p:panelGrid >
-                    <p:dataTable id="unidadesTable" var="unidad" value="#{unidadesSearchBean.dataModel}"
-                                 rows="30"
-                                 lazy="true"
-                                 paginator="true"
-                                 sortMode="single"
-                                 emptyMessage="#{msg.busquedaSinResultados}"
-                                 rowKey="#{unidad.id}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                                 rowsPerPageTemplate="10,15,30,100"
-                                 style="width: 100%"
-
-                                 scrollable="true"
-                                 reflow="true">
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <h:form id="formContenido" >
 
 
-                        <f:facet name="{Exporters}">
-                            <h:commandLink>
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                         columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
+                <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
+                <p:inputText id="textoBusquedaField" value="#{unidadesSearchBean.filter.nombreUnidad}" size="50"/>
+                <p:commandButton  action="#{unidadesSearchBean.doSearch()}"
+                                  value="#{msg.buscar}"
+                                  icon="fa fa-fw fa-search"
+                                  update="unidadesTable"/>
+                <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                 icon="fa fa-fw fa-plus" />
+            </p:panelGrid >
+            <p:dataTable id="unidadesTable" var="unidad" value="#{unidadesSearchBean.dataModel}"
+                         rows="30"
+                         lazy="true"
+                         paginator="true"
+                         sortMode="single"
+                         emptyMessage="#{msg.busquedaSinResultados}"
+                         rowKey="#{unidad.id}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                         rowsPerPageTemplate="10,15,30,100"
+                         style="width: 100%"
 
-                                <p:graphicImage library="images" name="excel.png" width="24"/>
-                                <p:dataExporter type="xls" target="unidadesTable" fileName="unidades" />
-                            </h:commandLink>
-
-                            <h:commandLink>
-                                <p:graphicImage library="images" name="pdf.png" width="24"/>
-                                <p:dataExporter type="pdf" target="unidadesTable" fileName="unidades"/>
-                            </h:commandLink>
-
-                            <h:commandLink>
-                                <p:graphicImage library="images" name="csv.png" width="24"/>
-                                <p:dataExporter type="csv" target="unidadesTable" fileName="unidades" />
-                            </h:commandLink>
-
-                            <h:commandLink>
-                                <p:graphicImage library="images" name="xml.png" width="24"/>
-                                <p:dataExporter type="xml" target="unidadesTable" fileName="unidades" />
-                            </h:commandLink>
-                        </f:facet>
-
-                        <f:facet name="header">
-                            #{msg.unidades}
-                        </f:facet>
-
-                        <p:column sortBy="#{unidad.id}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.id}"/>
-                            </f:facet>
-
-                            <h:outputText value="#{unidad.id}" />
-
-                        </p:column>
-
-                        <p:column sortBy="#{unidad.nombreUnidad}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.nombre}"/>
-                            </f:facet>
-
-                            <h:outputText value="#{unidad.nombreUnidad}" />
-
-                        </p:column>
-                        <p:column  >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.cantidadEntera}"/>
-                            </f:facet>
-
-                            <h:outputText rendered="#{unidad.cantidadEntera}" value="#{msg.si}" />
-                            <h:outputText rendered="#{not unidad.cantidadEntera}" value="#{msg.no}" />
-
-                        </p:column>
-
-                        <p:column style="width:64px" exportable="false">
-                            <f:facet name="header">
-                                #{msg.editar}
-                            </f:facet>
-                            <p:commandButton icon="fa fa-fw fa-edit" action="unidadEdit"
-                                             ajax="false" >
-                                <f:param name="idUnidad" value="#{unidad.id}" />
-
-                            </p:commandButton>
-
-                        </p:column>
-                    </p:dataTable>
+                         scrollable="true"
+                         reflow="true">
 
 
-                </h:form>
-            </ui:define>
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
 
-        </ui:composition>
+                        <p:graphicImage library="images" name="excel.png" width="24"/>
+                        <p:dataExporter type="xls" target="unidadesTable" fileName="unidades" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="pdf.png" width="24"/>
+                        <p:dataExporter type="pdf" target="unidadesTable" fileName="unidades"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="csv.png" width="24"/>
+                        <p:dataExporter type="csv" target="unidadesTable" fileName="unidades" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="xml.png" width="24"/>
+                        <p:dataExporter type="xml" target="unidadesTable" fileName="unidades" />
+                    </h:commandLink>
+                </f:facet>
+
+                <f:facet name="header">
+                    #{msg.unidades}
+                </f:facet>
+
+                <p:column sortBy="#{unidad.id}" >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.id}"/>
+                    </f:facet>
+
+                    <h:outputText value="#{unidad.id}" />
+
+                </p:column>
+
+                <p:column sortBy="#{unidad.nombreUnidad}" >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.nombre}"/>
+                    </f:facet>
+
+                    <h:outputText value="#{unidad.nombreUnidad}" />
+
+                </p:column>
+                <p:column  >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.cantidadEntera}"/>
+                    </f:facet>
+
+                    <h:outputText rendered="#{unidad.cantidadEntera}" value="#{msg.si}" />
+                    <h:outputText rendered="#{not unidad.cantidadEntera}" value="#{msg.no}" />
+
+                </p:column>
+
+                <p:column style="width:64px" exportable="false">
+                    <f:facet name="header">
+                        #{msg.editar}
+                    </f:facet>
+                    <p:commandButton icon="fa fa-fw fa-edit" action="unidadEdit"
+                                     ajax="false" >
+                        <f:param name="idUnidad" value="#{unidad.id}" />
+
+                    </p:commandButton>
+
+                </p:column>
+            </p:dataTable>
 
 
-    </h:body>
-</html>
+        </h:form>
+    </ui:define>
 
+</ui:composition>
