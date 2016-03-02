@@ -42,14 +42,14 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.inject.Named;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-@Named(value = "productosPreciosBean")
+@ManagedBean(name = "productosPreciosBean")
 @ViewScoped
 public class ProductosPreciosBean implements Serializable {
 
@@ -119,16 +119,16 @@ public class ProductosPreciosBean implements Serializable {
     }
 
     public List<ProductosSubRubros> getSubRubrosList() {
+
         if (subRubrosList == null) {
             subRubrosList = new ArrayList<>();
         }
+        subRubrosList.clear();
         if (filter.getIdRubro() != null) {
             SubRubroSearchFilter subRubroSearchFilter = new SubRubroSearchFilter();
             subRubroSearchFilter.setProductosRubros(filter.getIdRubro());
             subRubroSearchFilter.addSortField(new SortField("nombreSubRubro", true));
             subRubrosList.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
-        } else {
-            subRubrosList.clear();
         }
         return subRubrosList;
     }

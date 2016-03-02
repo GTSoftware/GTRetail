@@ -22,14 +22,14 @@ import java.security.Principal;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@Named(value = "authBackingBean")
+@ManagedBean(name = "authBackingBean")
 @SessionScoped
 public class AuthBackingBean implements Serializable {
 

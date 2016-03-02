@@ -50,7 +50,7 @@
             <artifactId>beanio</artifactId>
             <version>${beanio.version}</version>
         </dependency>
-
+        
     </dependencies>
     <build>
         <finalName>GTRetail-api</finalName>
@@ -64,5 +64,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>

@@ -27,7 +27,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import javax.faces.bean.ManagedBean;
 
 /**
  * Controlador para el caso de uso de edición de usuarios
@@ -36,7 +36,7 @@ import javax.inject.Named;
  * @since 2.0.1
  * @version 1.0.0
  */
-@Named(value = "usuariosEditBean")
+@ManagedBean(name = "usuariosEditBean")
 @ViewScoped
 public class UsuariosEditBean implements Serializable {
 

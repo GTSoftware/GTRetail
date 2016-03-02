@@ -24,13 +24,13 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ViewScoped;
-import javax.inject.Named;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-@Named(value = "unidadesEditBean")
+@ManagedBean(name = "unidadesEditBean")
 @ViewScoped
 public class UnidadesEditBean implements Serializable {
 

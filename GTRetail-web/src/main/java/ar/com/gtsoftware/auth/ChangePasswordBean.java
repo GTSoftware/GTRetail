@@ -26,7 +26,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
+import javax.faces.bean.ManagedBean;
 
 /**
  * Controlador para el cambio de claves de los usuarios
@@ -35,7 +35,7 @@ import javax.inject.Named;
  * @since 1.0.0
  * @version 1.0.0
  */
-@Named(value = "changePasswordBean")
+@ManagedBean(name = "changePasswordBean")
 @ViewScoped
 public class ChangePasswordBean implements Serializable {
 
