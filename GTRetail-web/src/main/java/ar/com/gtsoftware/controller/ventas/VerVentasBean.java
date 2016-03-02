@@ -16,6 +16,9 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.bl.impl.FacturacionVentasBean;
+import ar.com.gtsoftware.bl.impl.VentasBean;
 import ar.com.gtsoftware.eao.FiscalLetrasComprobantesFacade;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
@@ -24,16 +27,12 @@ import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
 import ar.com.gtsoftware.utils.UtilUI;
-import ar.com.gtsoftware.bl.impl.FacturacionVentasBean;
-import ar.com.gtsoftware.bl.impl.VentasBean;
-import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -48,6 +47,8 @@ import javax.inject.Inject;
 @ManagedBean(name = "verVentasBean")
 @ViewScoped
 public class VerVentasBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Ventas ventaActual;
     private List<VentasLineas> lineasVenta = new ArrayList<>();
@@ -78,11 +79,10 @@ public class VerVentasBean implements Serializable {
     public VerVentasBean() {
     }
 
-    @PostConstruct
-    private void init() {
+    public void init() {
         String idVenta = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idVenta");
         if (idVenta == null) {
-            //TODO error y fallo 
+            throw new IllegalArgumentException("Parámetro nulo!");
         } else {
             ventaActual = ventasFacade.find(Long.parseLong(idVenta));
             if (ventaActual == null) {
@@ -92,7 +92,7 @@ public class VerVentasBean implements Serializable {
             } else {
                 lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
                 //Fix hardcode categoría IVA empresa
-                letraComprobante = letrasComprobantesFacade.findLetraComprobante(2, ventaActual.getIdPersona().getIdResponsabilidadIva()).getLetraComprobante();
+                letraComprobante = "B"; //letrasComprobantesFacade.findLetraComprobante(2, ventaActual.getIdPersona().getIdResponsabilidadIva()).getLetraComprobante();
                 puntoVentaComprobante = authBackingBean.getUserLoggedIn().getPuntoVenta();
                 numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(letraComprobante, puntoVentaComprobante);
             }

@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "ventas")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_venta", columnDefinition = "serial"))
-public class Ventas extends BaseEntity implements Serializable {
+public class Ventas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

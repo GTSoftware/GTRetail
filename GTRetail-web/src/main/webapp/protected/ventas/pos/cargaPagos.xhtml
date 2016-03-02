@@ -100,19 +100,19 @@
         <p:inputText style="width: 100%" value="#{shopCartBean.venta.nroRemito}" maxlength="100"
                      converter="#{stringFormatConverter}" />
 
-        <h:outputLabel value="Estado:" />
-        <p:selectOneMenu id="estadoField" required="true" requiredMessage="#{msg.ingresarValor}"
-                         value="#{shopCartBean.venta.idVentasEstados}"
-                         converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+        <!--        <h:outputLabel value="Estado:" />
+                <p:selectOneMenu id="estadoField" required="true" requiredMessage="#{msg.ingresarValor}"
+                                 value="#{shopCartBean.venta.idVentasEstados}"
+                                 converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
 
-            <f:selectItems value="#{shopCartBean.ventasEstados}" var="estado" itemLabel="#{estado.nombreEstado}"
-                           itemValue="#{estado}"/>
+                    <f:selectItems value="#{shopCartBean.ventasEstados}" var="estado" itemLabel="#{estado.nombreEstado}"
+                                   itemValue="#{estado}"/>
 
-        </p:selectOneMenu>
+                </p:selectOneMenu>-->
         <p:separator />
 
         <p:commandButton id="guardarButton" value="#{msg.guardar}" icon="fa fa-fw fa-save"
-                         />
+                         action="#{shopCartBean.guardarVenta()}"/>
 
         <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
                          action="#{shopCartBean.endConversation()}" immediate="true" ajax="false"  />

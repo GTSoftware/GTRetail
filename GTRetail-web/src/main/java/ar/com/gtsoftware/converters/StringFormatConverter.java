@@ -20,6 +20,7 @@ import javax.enterprise.inject.Model;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Converter para dar formato a la entrada del usuario, con mayúscula y sin espacios al comienzo y final
@@ -30,13 +31,11 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "stringFormatConverter")
 public class StringFormatConverter implements Serializable, javax.faces.convert.Converter {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent cmp, String value) {
-
-        if (value != null) {
-            // trim the entered value in a HtmlInputText before doing validation/updating the model
+        if (StringUtils.isNotEmpty(value)) {
             return value.trim().toUpperCase();
         }
 
@@ -48,7 +47,10 @@ public class StringFormatConverter implements Serializable, javax.faces.convert.
 
         if (value != null) {
             // return the value as is for presentation
-            return value.toString();
+            String strValue = String.valueOf(value);
+            if (StringUtils.isNotEmpty(strValue)) {
+                return strValue;
+            }
         }
         return null;
     }

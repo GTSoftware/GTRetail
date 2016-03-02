@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.impl.VentasBean;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
@@ -44,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -82,6 +85,8 @@ public class ShopCartBean implements Serializable {
     private NegocioFormasPagoFacade formasPagoFacade;
     @EJB
     private VentasEstadosFacade estadosFacade;
+    @EJB
+    private VentasBean ventasBean;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
@@ -327,6 +332,50 @@ public class ShopCartBean implements Serializable {
         }
         venta.setSaldo(venta.getTotal().subtract(sumaPagos));
         pagoActual.setImporteTotalPagado(venta.getSaldo());
+    }
+
+    private boolean validarVenta() {
+        if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
+            JSFUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
+            return false;
+        }
+        if (venta.getIdPersona() == null) {
+            JSFUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
+            return false;
+        }
+        if (venta.getVentasLineasList() == null || venta.getVentasLineasList().isEmpty()) {
+            JSFUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
+            return false;
+        }
+        if (venta.getIdCondicionVenta() != null) {
+            if (venta.getIdCondicionVenta().getPagoTotal()) {
+                if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
+                    JSFUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public String guardarVenta() {
+        if (validarVenta()) {
+            venta.setFechaVenta(new Date());
+            venta.setIdUsuario(authBackingBean.getUserLoggedIn());
+            venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+            try {
+                venta.setSaldo(venta.getTotal());
+                ventasBean.guardarVenta(venta, pagos);
+                JSFUtil.addInfoMessage("Operación guardada exitosamente!");
+                endConversation();
+                return "/protected/ventas/index?faces-redirect=true";
+            } catch (Exception ex) {
+                Logger.getLogger(NuevaVentaBean.class.getName()).log(Level.SEVERE, null, ex);
+                JSFUtil.addErrorMessage(ex.getMessage());
+            }
+        }
+        return null;
     }
 
     public BigDecimal getCantidad() {

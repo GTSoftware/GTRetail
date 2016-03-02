@@ -7,20 +7,24 @@
 
     <!-- Enables CTRL+SHIFT+D for activating Facelets debug window -->
     <ui:debug />
-    <f:view contentType="text/html" id="fview">
-        <ui:insert name="metadata" />
 
-        <h:head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-            <title>#{msg.appName}</title>
-            <link rel="shortcut icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
-            <link rel="icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
 
-        </h:head>
 
-        <h:body>
 
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <title>#{msg.appName}</title>
+        <link rel="shortcut icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
+        <link rel="icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
+
+    </h:head>
+
+    <h:body>
+        <f:view contentType="text/html" id="fview">
+
+            <ui:insert name="meta" />
 
             <h:outputStylesheet name="css/default.css" />
             <div id="top" class="ui-fluid" >
@@ -67,7 +71,7 @@
                 </div>
             </div>
 
+        </f:view>
+    </h:body>
 
-        </h:body>
-    </f:view>
 </html>
