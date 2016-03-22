@@ -21,7 +21,7 @@
         <locale-config>
             <default-locale>es_AR</default-locale>
         </locale-config>
-        
+
         <resource-bundle>
             <base-name>ar.com.gtsoftware.Messages</base-name>
             <var>msg</var>
@@ -31,4 +31,8 @@
             <var>version</var>
         </resource-bundle>
     </application>
+    <converter>
+        <converter-id>emptyToNull</converter-id>
+        <converter-class>ar.com.gtsoftware.converters.EmptyToNullStringConverter</converter-class>
+    </converter>
 </faces-config>

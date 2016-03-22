@@ -50,7 +50,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -67,7 +66,8 @@ public class ShopCartBean implements Serializable {
 
     @Inject
     private Conversation conversation;
-    @ManagedProperty(value = "#{authBackingBean}")
+
+    @Inject
     private AuthBackingBean authBackingBean;
     @EJB
     private ProductosFacade productosFacade;
@@ -429,14 +429,6 @@ public class ShopCartBean implements Serializable {
 
     public ProductosListasPrecios getLista() {
         return lista;
-    }
-
-    public AuthBackingBean getAuthBackingBean() {
-        return authBackingBean;
-    }
-
-    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
-        this.authBackingBean = authBackingBean;
     }
 
 }
