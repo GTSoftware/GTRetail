@@ -36,9 +36,9 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 /**
  *
@@ -64,7 +64,7 @@ public class VerVentasBean implements Serializable {
     private FiscalLetrasComprobantesFacade letrasComprobantesFacade;
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
-    @Inject
+    @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
     private String letraComprobante = "B";
@@ -210,6 +210,14 @@ public class VerVentasBean implements Serializable {
 
     public void setPeriodoSeleccionado(FiscalPeriodosFiscales periodoSeleccionado) {
         this.periodoSeleccionado = periodoSeleccionado;
+    }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
     }
 
 }

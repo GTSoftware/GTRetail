@@ -55,9 +55,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 /**
  *
@@ -83,7 +83,7 @@ public class NuevaVentaBean implements Serializable {
     private ParametrosFacade parametrosFacade;
     @EJB
     private ProductosPreciosFacade preciosFacade;
-    @Inject
+    @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
     private Ventas ventaActual;
     private ProductosSearchFilter productoSearchFilter;
@@ -482,4 +482,13 @@ public class NuevaVentaBean implements Serializable {
         }
         return precio.get(0).getPrecio();
     }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
+    }
+
 }
