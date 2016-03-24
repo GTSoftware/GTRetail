@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
     <h:form id="cargaClienteForm" >
         <p:fragment id="clienteFragment">
             <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clienteActualPanel" columns="2"
@@ -94,9 +94,6 @@
                   showEffect="fade" hideEffect="clip" modal="true">
 
             <gtsoftware:busquedaPersonas personaSeleccionada="#{shopCartBean.venta.idPersona}"
-                                         textoBusqueda="#{clientesSearchBean.filter.txt}"
-                                         busquedaAction="#{clientesSearchBean.doSearch()}"
-                                         personasList="#{clientesSearchBean.dataModel}"
                                          >
             </gtsoftware:busquedaPersonas>
 
@@ -105,13 +102,14 @@
                              update=":cargaClienteForm:clienteFragment"
                              immediate="true"
                              process="@this"
-                             actionListener="#{shopCartBean.addToCart()}"/>
+                             />
 
             <p:commandButton value="#{msg.cancelar}"
-                             immediate="true" icon="fa fa-fw fa-ban" onclick="PF('clientesDialog').hide();" />
+                             immediate="true" icon="fa fa-fw fa-ban" onclick="PF('clientesDialog').hide();"
+                             global="false"/>
 
 
 
         </p:dialog>
     </h:form>
-</html>
+</ui:composition>

@@ -26,6 +26,7 @@ import ar.com.gtsoftware.eao.VentasLineasFacade;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.UtilUI;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class VerVentasBean implements Serializable {
     }
 
     public void init() {
-        String idVenta = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idVenta");
+        String idVenta = JSFUtil.getRequestParameterMap().get("idVenta");
         if (idVenta == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {

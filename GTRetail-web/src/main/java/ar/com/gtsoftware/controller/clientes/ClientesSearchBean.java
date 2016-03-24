@@ -19,7 +19,6 @@ import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import java.util.List;
@@ -61,7 +60,7 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas> {
     }
 
     @Override
-    public AbstractSearchFilter getFilter() {
+    public PersonasSearchFilter getFilter() {
         return filter;
     }
 

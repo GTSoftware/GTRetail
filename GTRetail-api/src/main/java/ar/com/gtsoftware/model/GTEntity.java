@@ -22,10 +22,11 @@ import javax.persistence.Version;
 /**
  * Superclase para todas las entidades del sistema
  *
- * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
+ * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
+ * @param <T> la clase de la clave primaria
  */
 @MappedSuperclass
-public abstract class GTEntity implements Serializable {
+public abstract class GTEntity<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,7 +45,7 @@ public abstract class GTEntity implements Serializable {
      *
      * @return
      */
-    public abstract Object getId();
+    public abstract T getId();
 
     /**
      * Retorna un objeto clave primaria a partir de la representación en String del Id
@@ -52,7 +53,7 @@ public abstract class GTEntity implements Serializable {
      * @param id
      * @return
      */
-    public abstract Object calculateId(String id);
+    public abstract T calculateId(String id);
 
     /**
      * Retorna la representación en String del ID de la clase que puede ser vuelta a convertir en ID

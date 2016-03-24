@@ -27,7 +27,7 @@ import javax.persistence.MappedSuperclass;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @MappedSuperclass
-public abstract class BaseEntity extends GTEntity {
+public abstract class BaseEntity extends GTEntity<Long> {
 
     private static final long serialVersionUID = 1L;
 
@@ -87,7 +87,7 @@ public abstract class BaseEntity extends GTEntity {
     }
 
     @Override
-    public Object calculateId(String id) {
+    public Long calculateId(String id) {
         if (id != null) {
             try {
                 return Long.parseLong(id);

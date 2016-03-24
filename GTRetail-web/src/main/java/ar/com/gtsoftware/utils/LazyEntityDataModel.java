@@ -99,10 +99,11 @@ public class LazyEntityDataModel<Entity extends GTEntity>
 //        return index >= 0 && index < resultsFromEao.size();
 //    }
 //
-//    @Override
-//    public Object getRowKey(Entity dto) {
-//        return String.valueOf(dto.getId());
-//    }
+
+    @Override
+    public Object getRowKey(Entity dto) {
+        return dto.getId();
+    }
 //
 //    @Override
 //    public Entity getRowData() {
@@ -116,19 +117,19 @@ public class LazyEntityDataModel<Entity extends GTEntity>
 //        return resultsFromEao.get(index);
 //    }
 //
-//    @Override
-//    public Entity getRowData(String rowKey
-//    ) {
-//        if (resultsFromEao == null) {
-//            return null;
-//        }
-//        for (Entity dto : resultsFromEao) {
-//            if (dto.getId().toString().equals(rowKey)) {
-//                return dto;
-//            }
-//        }
-//        return null;
-//    }
+
+    @Override
+    public Entity getRowData(String rowKey) {
+        if (resultsFromEao == null) {
+            return null;
+        }
+        for (Entity dto : resultsFromEao) {
+            if (String.valueOf(dto.getId()).equals(rowKey)) {
+                return dto;
+            }
+        }
+        return null;
+    }
 //
 //    @Override
 //    public void setPageSize(int pageSize) {

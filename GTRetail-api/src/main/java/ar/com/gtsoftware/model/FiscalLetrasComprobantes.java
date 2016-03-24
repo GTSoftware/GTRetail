@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_letras_comprobantes")
 @XmlRootElement
-public class FiscalLetrasComprobantes extends GTEntity {
+public class FiscalLetrasComprobantes extends GTEntity<FiscalLetrasComprobantesPK> {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -129,12 +129,12 @@ public class FiscalLetrasComprobantes extends GTEntity {
     }
 
     @Override
-    public Object getId() {
+    public FiscalLetrasComprobantesPK getId() {
         return fiscalLetrasComprobantesPK;
     }
 
     @Override
-    public Object calculateId(String id) {
+    public FiscalLetrasComprobantesPK calculateId(String id) {
         if (id != null) {
             String[] pkStr = id.split("-");
             if (pkStr.length == 2) {

@@ -23,7 +23,6 @@ import ar.com.gtsoftware.eao.ProductosPreciosFacade;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
@@ -118,7 +117,7 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos> {
     }
 
     @Override
-    public AbstractSearchFilter getFilter() {
+    public ProductosSearchFilter getFilter() {
         return filter;
     }
 }

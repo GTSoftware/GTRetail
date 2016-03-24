@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "parametros")
 @XmlRootElement
-public class Parametros extends GTEntity {
+public class Parametros extends GTEntity<String> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -107,7 +107,7 @@ public class Parametros extends GTEntity {
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Parametros[ nombreParametro=" + nombreParametro + " ]";
+        return String.format("%s=%s", nombreParametro, valorParametro);
     }
 
     @Override
@@ -116,12 +116,12 @@ public class Parametros extends GTEntity {
     }
 
     @Override
-    public Object getId() {
+    public String getId() {
         return nombreParametro;
     }
 
     @Override
-    public Object calculateId(String id) {
+    public String calculateId(String id) {
         return id;
     }
 

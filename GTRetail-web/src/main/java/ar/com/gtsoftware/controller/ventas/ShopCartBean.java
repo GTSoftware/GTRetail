@@ -205,7 +205,7 @@ public class ShopCartBean implements Serializable {
             if (pagos.isEmpty() && formaPagoDefecto != null) {
                 pagoActual.setImporteTotalPagado(venta.getTotal());
                 pagoActual.setIdFormaPago(formaPagoDefecto);
-                venta.setSaldo(BigDecimal.ZERO);
+                venta.setSaldo(venta.getTotal());
                 doAgregarPago();
             }
         }
