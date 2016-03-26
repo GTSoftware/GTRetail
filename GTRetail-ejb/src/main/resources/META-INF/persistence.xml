@@ -74,6 +74,7 @@
         <class>ar.com.gtsoftware.model.VentasPagosLineas</class>
         <class>ar.com.gtsoftware.model.VentasRemitos</class>
         <class>ar.com.gtsoftware.model.VentasRemitosLineas</class>
+        <class>ar.com.gtsoftware.model.AFIPAuthServices</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
