@@ -72,6 +72,12 @@ public class FacturacionVentasBean {
                 || fechaFactura.before(periodoFiscal.getFechaInicioPeriodo())) {
             throw new ServiceException("La fecha de factura no puede estar fuera de las fechas que comprenden el período!");
         }
+        if (venta == null) {
+            throw new ServiceException("Venta nula!");
+        }
+        if (venta.getIdRegistroIva() != null) {
+            throw new ServiceException("Venta ya facturada!");
+        }
         FiscalLibroIvaVentas registro = new FiscalLibroIvaVentas();
         //TODO Falta registrar contablemente el asiento de la factura
         registro.setDocumento(venta.getIdPersona().getDocumento());
