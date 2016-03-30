@@ -31,6 +31,11 @@ import org.junit.Test;
  */
 public class WSAAClientTest {
 
+    public static final String ENDPOINT = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
+    public static final String CERT_PATH = "/home/rodrigo/certs/afip/alias.p12";
+    public static final String PASSWORD = "soloio";
+    public static final String DST_DN = "cn=wsaahomo,o=afip,c=ar,serialNumber=CUIT 33693450239";
+
     public WSAAClientTest() {
     }
 
@@ -59,13 +64,10 @@ public class WSAAClientTest {
     @Ignore
     public void testPerformAuthentication() throws ServiceException {
         System.out.println("performAuthentication");
-        String endpoint = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
-        String certPath = "/home/rodrigo/certs/afip/alias.p12";
-        String password = "soloio";
-        String dstDN = "cn=wsaahomo,o=afip,c=ar,serialNumber=CUIT 33693450239";
+
         String service = "wsfe";
 
-        AuthTicket result = WSAAClient.performAuthentication(endpoint, certPath, password, dstDN, service);
+        AuthTicket result = WSAAClient.performAuthentication(ENDPOINT, CERT_PATH, PASSWORD, DST_DN, service);
         Assert.assertNotNull(result);
 
         System.out.println(result);

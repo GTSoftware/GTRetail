@@ -4,13 +4,16 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:f="http://java.sun.com/jsf/core"
     template="/WEB-INF/templates/template.xhtml">
 
-    <ui:define name="metadata">
+    <ui:define name="meta">
         <f:metadata>
             <f:viewParam name="nombreParametro" value="#{parametrosEditBean.nombreParametro}" required="true"/>
-            <f:viewAction action="#{parametrosEditBean.init()}" onPostback="false" />
+
+            <f:event listener="#{parametrosEditBean.init()}"
+                     type="preRenderView">
+            </f:event>
         </f:metadata>
 <!--        <f:event type="preRenderView" listener="#{parametrosEditBean.init()}" />-->
 

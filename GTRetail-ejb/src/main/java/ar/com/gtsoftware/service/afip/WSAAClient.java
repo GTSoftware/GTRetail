@@ -127,6 +127,8 @@ public class WSAAClient {
     private static SOAPMessage createSOAPRequest(String certPath, String password, String dstDN, String service) throws SOAPException, ServiceException {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
+        soapMessage.getMimeHeaders().addHeader("SOAPAction", "\"\"");
+
         SOAPPart soapPart = soapMessage.getSOAPPart();
 
         SOAPEnvelope envelope = soapPart.getEnvelope();

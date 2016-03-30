@@ -27,6 +27,8 @@ import java.util.Date;
  */
 public class VentasSearchFilter extends AbstractSearchFilter {
 
+    private static final long serialVersionUID = 1L;
+
     private Integer idVenta;
     private Date fechaVentaDesde;
     private Date fechaVentaHasta;

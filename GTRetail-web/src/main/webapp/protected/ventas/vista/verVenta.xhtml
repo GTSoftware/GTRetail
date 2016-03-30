@@ -8,7 +8,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:f="http://java.sun.com/jsf/core"
     template="/WEB-INF/templates/template.xhtml">
 
 
@@ -16,8 +16,10 @@
 
         <f:metadata >
 
+            <f:event listener="#{verVentasBean.init()}"
+                     type="preRenderView">
+            </f:event>
 
-            <f:viewAction action="#{verVentasBean.init()}" />
         </f:metadata>
 
     </ui:define>
@@ -129,33 +131,32 @@
 
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
 
-                    <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
-                    <p:selectOneMenu id="periodoFiscalField" required="true"
-                                     requiredMessage="#{msg.campoRequerido}"
-                                     value="#{verVentasBean.periodoSeleccionado}"
-                                     converter="#{fiscalPeriodoFiscalConverter}">
-                        <f:selectItems value="#{verVentasBean.periodosFiscalesList}"
-                                       var="periodo" itemLabel="#{periodo.nombrePeriodo}"
-                                       itemValue="#{periodo}"/>
-                    </p:selectOneMenu>
 
                     <p:outputLabel for="letraFacturaField" value="#{msg.letraFactura}:"/>
                     <p:inputText id="letraFacturaField" value="#{verVentasBean.letraComprobante}" size="1" readonly="true"/>
 
                     <p:outputLabel for="pvFacturaField" value="#{msg.puntoVenta}:"/>
-                    <p:inputText id="pvFacturaField" value="#{verVentasBean.puntoVentaComprobante}" maxlength="4"  >
-                        <f:validateLongRange minimum="1" maximum="9999" />
-                        <p:ajax  update="nroFacturaField"
-                                 listener="#{verVentasBean.cargarNumeroComprobante()}" />
-                    </p:inputText>
 
-                    <p:outputLabel for="nroFacturaField" value="#{msg.numero}:"/>
-                    <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
-                        <f:validateLongRange minimum="1" maximum="99999999" />
-                    </p:inputText>
 
-                    <p:outputLabel for="fechaFacturaField" value="#{msg.fecha}:"/>
-                    <p:calendar id="fechaFacturaField" value="#{verVentasBean.fechaFactura}" navigator="true" pattern="dd/MM/yyyy HH:mm" />
+                    <p:selectOneMenu id="pvFacturaField" required="true"
+                                     requiredMessage="#{msg.campoRequerido}"
+                                     value="#{verVentasBean.puntoVentaSeleccionado}"
+                                     converter="omnifaces.SelectItemsIndexConverter">
+
+                        <f:selectItems value="#{verVentasBean.puntosVentaList}"
+                                       var="punto"
+                                       itemValue="#{punto}"
+                                       itemLabel="#{punto.businessString}"/>
+                    </p:selectOneMenu>
+
+                    <!--
+                                        <p:outputLabel for="nroFacturaField" value="#{msg.numero}:"/>
+                                        <p:inputText id="nroFacturaField" value="#{verVentasBean.numeroComprobante}" maxlength="8"  >
+                                            <f:validateLongRange minimum="1" maximum="99999999" />
+                                        </p:inputText>-->
+                    <!--
+                                        <p:outputLabel for="fechaFacturaField" value="#{msg.fecha}:"/>
+                                        <p:calendar id="fechaFacturaField" value="#{verVentasBean.fechaFactura}" navigator="true" pattern="dd/MM/yyyy HH:mm" />-->
 
                 </p:panelGrid >
 

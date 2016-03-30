@@ -15,10 +15,10 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
-import ar.com.gtsoftware.model.FiscalLetrasComprobantes_;
+import ar.com.gtsoftware.model.FiscalPuntosVenta;
+import ar.com.gtsoftware.model.FiscalPuntosVenta_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,10 +28,10 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasComprobantes> {
+public class FiscalPuntosVentaFacade extends AbstractFacade<FiscalPuntosVenta> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -41,24 +41,24 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
         return em;
     }
 
-    public FiscalLetrasComprobantesFacade() {
-        super(FiscalLetrasComprobantes.class);
+    public FiscalPuntosVentaFacade() {
+        super(FiscalPuntosVenta.class);
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalLetrasComprobantes> root) {
-        FiscalLetrasComprobantesSearchFilter lsf = (FiscalLetrasComprobantesSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalPuntosVenta> root) {
+        FiscalPuntosVentaSearchFilter pvsf = (FiscalPuntosVentaSearchFilter) sf;
+
         Predicate p = null;
-        if (lsf.getIvaEmisor() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaEmisor), lsf.getIvaEmisor());
+        if (pvsf.getSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.sucursal), pvsf.getSucursal());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (lsf.getIvaReceptor() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaReceptor), lsf.getIvaReceptor());
+        if (pvsf.getActivo() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.activo), pvsf.getActivo());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;
-
     }
 
 }

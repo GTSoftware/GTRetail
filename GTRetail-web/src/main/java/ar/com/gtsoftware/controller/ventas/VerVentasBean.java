@@ -21,13 +21,19 @@ import ar.com.gtsoftware.bl.impl.FacturacionVentasBean;
 import ar.com.gtsoftware.bl.impl.VentasBean;
 import ar.com.gtsoftware.eao.FiscalLetrasComprobantesFacade;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
+import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
+import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.eao.VentasLineasFacade;
+import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
+import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import ar.com.gtsoftware.utils.UtilUI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,16 +69,24 @@ public class VerVentasBean implements Serializable {
     private FacturacionVentasBean facturacionBean;
     @EJB
     private FiscalLetrasComprobantesFacade letrasComprobantesFacade;
+
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
+    @EJB
+    private FiscalPuntosVentaFacade puntosVentaFacade;
+    @EJB
+    private FiscalResponsabilidadesIvaFacade responsabilidadesIvaFacade;
+
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
     private String letraComprobante = "B";
     private String puntoVentaComprobante = "0000";
     private String numeroComprobante = "00000000";
-    private Date fechaFactura = UtilUI.getNow();
-    private FiscalPeriodosFiscales periodoSeleccionado;
+
+    private final List<FiscalPuntosVenta> puntosVentaList = new ArrayList<>();
+
+    private FiscalPuntosVenta puntoVentaSeleccionado;
 
     /**
      * Creates a new instance of VerVentasBean
@@ -81,21 +95,32 @@ public class VerVentasBean implements Serializable {
     }
 
     public void init() {
+        if (JSFUtil.isPostback()) {
+            return;
+        }
         String idVenta = JSFUtil.getRequestParameterMap().get("idVenta");
         if (idVenta == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {
             ventaActual = ventasFacade.find(Long.parseLong(idVenta));
             if (ventaActual == null) {
-                //TODO Error!
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Venta inexistente!", "Venta inexistente!"));
+
+                JSFUtil.addErrorMessage("Venta inexistente!");
                 Logger.getLogger(VerVentasBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
             } else {
                 lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
-                //Fix hardcode categoría IVA empresa
-                letraComprobante = "B"; //letrasComprobantesFacade.findLetraComprobante(2, ventaActual.getIdPersona().getIdResponsabilidadIva()).getLetraComprobante();
+                //TODO Fix hardcode categoría IVA empresa
+                //letraComprobante = "B"; //
+                FiscalLetrasComprobantesSearchFilter lsf = new FiscalLetrasComprobantesSearchFilter(
+                        ventaActual.getIdPersona().getIdResponsabilidadIva(),
+                        responsabilidadesIvaFacade.find(2L));
+                FiscalLetrasComprobantes letra = letrasComprobantesFacade.findFirstBySearchFilter(lsf);
+                letraComprobante = letra.getLetraComprobante();
+
                 puntoVentaComprobante = authBackingBean.getUserLoggedIn().getPuntoVenta();
                 numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(letraComprobante, puntoVentaComprobante);
+                puntosVentaList.addAll(puntosVentaFacade.findAllBySearchFilter(new FiscalPuntosVentaSearchFilter(
+                        authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE)));
             }
         }
     }
@@ -104,16 +129,24 @@ public class VerVentasBean implements Serializable {
      * Registra la factura en el libro de IVA Ventas
      */
     public void registrarFactura() {
+        FiscalPeriodosFiscalesSearchFilter psf = new FiscalPeriodosFiscalesSearchFilter(Boolean.TRUE);
+        FiscalPeriodosFiscales periodo = periodosFiscalesFacade.findFirstBySearchFilter(psf);
+        if (periodo == null) {
+            JSFUtil.addErrorMessage("No hay un período fiscal configurado!");
+        }
+        if (puntoVentaSeleccionado == null) {
+            JSFUtil.addErrorMessage("Debe seleccionar un punto de venta.");
+        }
         try {
 
             facturacionBean.registrarFacturaVenta(ventaActual,
                     letraComprobante,
-                    puntoVentaComprobante, numeroComprobante,
-                    periodoSeleccionado, fechaFactura);
+                    puntoVentaSeleccionado, numeroComprobante,
+                    periodo, new Date());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Factura registrada correctamente"));
         } catch (ServiceException ex) {
             Logger.getLogger(FacturacionVentasBean.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", ex.getMessage()));
+            JSFUtil.addErrorMessage(ex.getMessage());
         }
 
     }
@@ -193,32 +226,24 @@ public class VerVentasBean implements Serializable {
         this.numeroComprobante = numeroComprobante;
     }
 
-    public Date getFechaFactura() {
-        return fechaFactura;
-    }
-
-    public void setFechaFactura(Date fechaFactura) {
-        this.fechaFactura = fechaFactura;
-    }
-
-    public List<FiscalPeriodosFiscales> getPeriodosFiscalesList() {
-        return periodosFiscalesFacade.findPeriodosVigentes();
-    }
-
-    public FiscalPeriodosFiscales getPeriodoSeleccionado() {
-        return periodoSeleccionado;
-    }
-
-    public void setPeriodoSeleccionado(FiscalPeriodosFiscales periodoSeleccionado) {
-        this.periodoSeleccionado = periodoSeleccionado;
-    }
-
     public AuthBackingBean getAuthBackingBean() {
         return authBackingBean;
     }
 
     public void setAuthBackingBean(AuthBackingBean authBackingBean) {
         this.authBackingBean = authBackingBean;
+    }
+
+    public List<FiscalPuntosVenta> getPuntosVentaList() {
+        return puntosVentaList;
+    }
+
+    public FiscalPuntosVenta getPuntoVentaSeleccionado() {
+        return puntoVentaSeleccionado;
+    }
+
+    public void setPuntoVentaSeleccionado(FiscalPuntosVenta puntoVentaSeleccionado) {
+        this.puntoVentaSeleccionado = puntoVentaSeleccionado;
     }
 
 }

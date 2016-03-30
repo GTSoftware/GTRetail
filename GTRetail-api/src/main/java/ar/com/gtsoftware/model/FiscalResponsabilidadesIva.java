@@ -48,9 +48,9 @@ public class FiscalResponsabilidadesIva extends BaseEntity {
     @Basic(optional = true)
     @Column(name = "fiscal_codigo_responsable")
     private Integer fiscalCodigoResponsable;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fiscalResponsabilidadesIva")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIvaReceptor")
     private List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fiscalResponsabilidadesIva1")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIvaEmisor")
     private List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIva")
     private List<Bancos> bancosList;

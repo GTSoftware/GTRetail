@@ -93,6 +93,9 @@ public class ClientesEditBean implements Serializable {
     }
 
     public void init() {
+        if (JSFUtil.isPostback()) {
+            return;
+        }
 
         String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {

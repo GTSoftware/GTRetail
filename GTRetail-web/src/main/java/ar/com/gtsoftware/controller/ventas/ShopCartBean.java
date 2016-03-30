@@ -269,7 +269,7 @@ public class ShopCartBean implements Serializable {
 
         BigDecimal totalRedondeado = total.setScale(cantDeccimalesRedondeo, RoundingMode.HALF_UP);
         BigDecimal redondeo = totalRedondeado.subtract(total);
-        if (redondeo.signum() != 0 && productoRedondeo != null) {
+        if (redondeo.signum() > 0 && productoRedondeo != null) {
             cargarRedondeo(redondeo);
         }
 

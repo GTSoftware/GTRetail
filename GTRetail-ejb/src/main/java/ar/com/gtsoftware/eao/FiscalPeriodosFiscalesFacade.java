@@ -18,13 +18,11 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -47,46 +45,20 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
         super(FiscalPeriodosFiscales.class);
     }
 
-    /**
-     * Retorna los períodos fiscales vigentes dentro de la fecha actual
-     *
-     * @return una lista con los períodos vigentes
-     */
-    public List<FiscalPeriodosFiscales> findPeriodosVigentes() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<FiscalPeriodosFiscales> cq = cb.createQuery(FiscalPeriodosFiscales.class);
-        Root<FiscalPeriodosFiscales> producto = cq.from(FiscalPeriodosFiscales.class);
-        cq.select(producto);
-        Predicate p = cb.not(producto.get(FiscalPeriodosFiscales_.periodoCerrado));
-        Predicate p1 = cb.between(cb.currentTimestamp(),
-                producto.get(FiscalPeriodosFiscales_.fechaInicioPeriodo),
-                producto.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
-        p = appendAndPredicate(cb, p, p1);
-        cq.where(p);
-        TypedQuery<FiscalPeriodosFiscales> q = em.createQuery(cq);
-
-        List<FiscalPeriodosFiscales> productosList = q.getResultList();
-        return productosList;
-    }
-
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalPeriodosFiscales> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        FiscalPeriodosFiscalesSearchFilter psf = (FiscalPeriodosFiscalesSearchFilter) sf;
 
-    @Override
-    public List<FiscalPeriodosFiscales> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(FiscalPeriodosFiscales entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Predicate p = null;
+        if (psf.getVigente() != null) {
+            Predicate p1
+                    = cb.greaterThanOrEqualTo(cb.currentTimestamp(), root.get(FiscalPeriodosFiscales_.fechaInicioPeriodo));
+            Predicate p2
+                    = cb.lessThanOrEqualTo(cb.currentTimestamp(), root.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
+            p = appendAndPredicate(cb, p, p1);
+            p = appendAndPredicate(cb, p, p2);
+        }
+        return p;
     }
 
 }

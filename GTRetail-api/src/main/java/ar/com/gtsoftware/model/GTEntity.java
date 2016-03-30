@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
@@ -70,4 +71,22 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
         this.version = version;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.getId());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FiscalPuntosVenta other = (FiscalPuntosVenta) obj;
+        return Objects.equals(this.getId(), other.getId());
+    }
 }

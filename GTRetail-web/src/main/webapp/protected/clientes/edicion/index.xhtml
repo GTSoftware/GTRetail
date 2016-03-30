@@ -7,11 +7,11 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     template="/WEB-INF/templates/template.xhtml"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:define name="metadata">
+    <ui:define name="meta">
         <f:metadata>
-            <f:viewAction action="#{clientesEditBean.init()}" onPostback="false" />
+            <f:event type="preRenderView" listener="#{clientesEditBean.init()}" />
         </f:metadata>
 
 
