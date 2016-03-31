@@ -55,5 +55,4 @@ public class GeneradorCodigoBarraFE {
         }
         return (10 - ((sumaImpares * 3 + sumaPares) % 10)) % 10;
     }
-
 }

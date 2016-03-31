@@ -10,7 +10,7 @@
         <fieldDescription><![CDATA[alicuota]]></fieldDescription>
     </field>
     <field name="importeIva" class="java.math.BigDecimal">
-        <fieldDescription><![CDATA[importe]]></fieldDescription>
+        <fieldDescription><![CDATA[importeIva]]></fieldDescription>
     </field>
     <background>
         <band splitType="Stretch"/>

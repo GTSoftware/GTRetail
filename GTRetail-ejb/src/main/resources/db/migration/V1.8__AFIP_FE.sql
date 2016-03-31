@@ -39,3 +39,5 @@ alter table fiscal_libro_iva_ventas add column importe_iva numeric(19,2) not nul
 alter table fiscal_libro_iva_ventas alter column total_factura set not null;
 
 
+insert into parametros values ('empresa.fechainicio','01/01/2000','La fecha de inicio de actividades de la empresa',0);
+
