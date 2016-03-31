@@ -18,6 +18,7 @@ package ar.com.gtsoftware.controller.ventas;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.utils.GeneradorCodigoBarraFE;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -94,6 +95,8 @@ public class ImpresionVentasBean implements Serializable {
         for (int i = 0; i < cantCopias; i++) {
             ventas.add(ventaActual);
         }
+        String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
+        String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistroIva(), cuit);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura" + ventaActual.getIdRegistroIva().getLetraFactura() + ".jasper");
         HashMap<String, Object> parameters = new HashMap<>();

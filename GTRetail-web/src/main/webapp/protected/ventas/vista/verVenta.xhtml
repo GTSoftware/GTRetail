@@ -162,7 +162,7 @@
 
                 <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                                  oncomplete="PF('facturarDialog').hide()"
-                                 update=":opcionesForm"
+                                 update="@all"
                                  action="#{verVentasBean.registrarFactura()}"/>
 
             </p:dialog>
@@ -170,10 +170,10 @@
 
         </h:form>
 
-        <gtsoftware:vistaVenta
-            venta="#{verVentasBean.ventaActual}"
-            lineasVenta="#{verVentasBean.lineasVenta}"
-            >
+        <gtsoftware:vistaVenta id="vistaVentaComposite"
+                               venta="#{verVentasBean.ventaActual}"
+                               lineasVenta="#{verVentasBean.lineasVenta}"
+                               >
         </gtsoftware:vistaVenta>
 
 

@@ -143,6 +143,7 @@ public class VerVentasBean implements Serializable {
                     letraComprobante,
                     puntoVentaSeleccionado, numeroComprobante,
                     periodo, new Date());
+            ventaActual = ventasFacade.find(ventaActual.getId());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Factura registrada correctamente"));
         } catch (ServiceException ex) {
             Logger.getLogger(FacturacionVentasBean.class.getName()).log(Level.SEVERE, null, ex);
