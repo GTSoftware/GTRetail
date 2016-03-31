@@ -4,7 +4,7 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>3.0.0</version>
+        <version>3.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>GTRetail-web</artifactId>
@@ -64,7 +64,7 @@
             <artifactId>GTRetail-ejb</artifactId>
             <type>ejb</type>
             <scope>provided</scope>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
