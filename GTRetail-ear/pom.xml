@@ -4,12 +4,12 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>3.0.3</version>
+        <version>3.0.4-SNAPSHOT</version>
     </parent>
 
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail-ear</artifactId>
-    <version>3.0.3</version>
+    <version>3.0.4-SNAPSHOT</version>
     <packaging>ear</packaging>
 
     <name>GTRetail-ear</name>
