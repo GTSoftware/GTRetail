@@ -259,12 +259,14 @@ public class ShopCartBean implements Serializable {
         return linea;
     }
 
-    private void calcularTotal() {
+    public void calcularTotal() {
         BigDecimal total = BigDecimal.ZERO;
+        eliminarRedondeo();
         for (VentasLineas vl : venta.getVentasLineasList()) {
-            if (!vl.getIdProducto().equals(productoRedondeo)) {
-                total = total.add(vl.getSubTotal());
-            }
+
+            vl.setSubTotal(vl.getCantidad().multiply(vl.getPrecioVentaUnitario()));
+            total = total.add(vl.getSubTotal());
+
         }
 
         BigDecimal totalRedondeado = total.setScale(cantDeccimalesRedondeo, RoundingMode.HALF_UP);
@@ -277,6 +279,12 @@ public class ShopCartBean implements Serializable {
     }
 
     private void cargarRedondeo(BigDecimal redondeo) {
+
+        venta.addLineaVenta(crearLineaRedondeo(redondeo));
+
+    }
+
+    private void eliminarRedondeo() {
         int cont = 0;
         int index = -1;
         for (VentasLineas vl : venta.getVentasLineasList()) {
@@ -289,8 +297,6 @@ public class ShopCartBean implements Serializable {
         if (index != -1) {
             venta.getVentasLineasList().remove(index);
         }
-        venta.addLineaVenta(crearLineaRedondeo(redondeo));
-
     }
 
     private VentasLineas crearLineaRedondeo(BigDecimal redondeo) {

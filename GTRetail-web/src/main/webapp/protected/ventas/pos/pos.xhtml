@@ -36,7 +36,7 @@
                 <p:inputText id="cantidadField"
                              required="true"
                              value="#{shopCartBean.cantidad}">
-                    <f:validateDoubleRange minimum="-9999999999999999999.99"
+                    <f:validateDoubleRange minimum="0.01"
                                            maximum="9999999999999999999.99" />
 
                 </p:inputText>
@@ -56,13 +56,22 @@
                              global="false"/>
         </p:panel>
 
+        <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
+
         <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
 
                      paginator="false"
                      sortMode="single"
                      emptyMessage="#{msg.productosNoCargados}"
-
+                     editable="true"
+                     editMode="cell"
                      reflow="true">
+
+            <p:ajax event="cellEdit"
+                    listener="#{shopCartBean.calcularTotal()}"
+                    oncomplete="onCellEdit()"
+                    global="false"
+                    />
 
             <p:column style="text-align: right; ">
                 <f:facet name="header">
@@ -87,7 +96,18 @@
                 <f:facet name="header">
                     #{msg.tablaCantidad}
                 </f:facet>
-                <h:outputText value="#{lineaVenta.cantidad}" />
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{lineaVenta.cantidad}" />
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}" style="width:96%">
+                            <f:validateDoubleRange minimum="0.01"
+                                                   maximum="9999999999999999999.99" />
+                        </p:inputText>
+                    </f:facet>
+                </p:cellEditor>
+
             </p:column>
             <p:column style="text-align: left; ">
                 <f:facet name="header">
@@ -108,9 +128,20 @@
                 <f:facet name="header">
                     #{msg.tablaPrecioUnitario}
                 </f:facet>
-                <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
-                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
-                </h:outputText>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                            <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioVentaUnitario}" style="width:96%">
+                            <f:validateDoubleRange minimum="0.01"
+                                                   maximum="9999999999999999999.99" />
+                        </p:inputText>
+                    </f:facet>
+                </p:cellEditor>
+
             </p:column>
 
             <p:column style="text-align: right; ">
