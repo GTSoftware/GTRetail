@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -92,10 +93,8 @@ public class ClientesEditBean implements Serializable {
     public ClientesEditBean() {
     }
 
-    public void init() {
-        if (JSFUtil.isPostback()) {
-            return;
-        }
+    @PostConstruct
+    private void init() {
 
         String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
@@ -167,6 +166,7 @@ public class ClientesEditBean implements Serializable {
 
     public List<LegalGeneros> getGenerosList() {
         return generosFacade.findBySearchFilter(new GenerosSearchFilter(clienteActual.getIdTipoPersoneria()));
+
     }
 
     public List<LegalTiposDocumento> getTiposDocumentoList() {

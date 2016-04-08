@@ -14,7 +14,9 @@
             <p:outputLabel value="#{msg.busqueda}:"/>
             <p:inputText id="searchField" value="#{clientesSearchBean.filter.txt}" style="width: 100%"/>
             <p:commandButton id="buscarButton" action="#{clientesSearchBean.doSearch()}" value="Buscar" update="clientesTable" icon="fa fa-fw fa-search"/>
-            <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus" />
+            <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus" >
+
+            </p:commandButton>
 
         </p:panelGrid >
 
