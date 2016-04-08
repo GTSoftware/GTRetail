@@ -372,8 +372,26 @@ public class ShopCartBean implements Serializable {
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             try {
+
                 venta.setSaldo(venta.getTotal());
                 ventasBean.guardarVenta(venta, pagos);
+                System.out.print(NuevaVentaBean.class.getName() + "antes de actualizar el producto");
+                for (int i = 0; i < venta.getVentasLineasList().size(); i++) {
+                    VentasLineas linea = venta.getVentasLineasList().get(i);
+                    Productos product = linea.getIdProducto();
+                    if (product.getIdTipoProveeduria().getControlStock())
+                    {
+                        product.setStockActual(product.getStockActual().subtract(linea.getCantidad()));
+                        if (product.getStockActual().compareTo(BigDecimal.ZERO) == -1 )
+                        {
+                            product.setStockActual(BigDecimal.ZERO);
+                        }
+                        productosFacade.edit(product);
+                        System.out.print(NuevaVentaBean.class.getName() + "graba el producto");
+
+                    }
+
+                }
                 JSFUtil.addInfoMessage("Operación guardada exitosamente!");
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";

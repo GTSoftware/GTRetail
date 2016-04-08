@@ -251,6 +251,13 @@ public class NuevaVentaBean implements Serializable {
                 }
             }
 
+            if (productoActual.getIdTipoProveeduria().getControlStock())
+            {
+                if (lineaActual.getCantidad().compareTo(productoActual.getStockActual())==1)
+                {
+                    JSFUtil.addErrorMessage("La cantidad ingresada es mayor que el stock existente");
+                }
+            }
             return true;
         }
         return false;
@@ -332,6 +339,25 @@ public class NuevaVentaBean implements Serializable {
             ventaActual.setIdUsuario(authBackingBean.getUserLoggedIn());
             ventaActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             try {
+
+                System.out.print(NuevaVentaBean.class.getName() + "antes de actualizar el producto");
+                for (int i = 0; i < ventaActual.getVentasLineasList().size(); i++) {
+                    VentasLineas linea = ventaActual.getVentasLineasList().get(i);
+                    Productos product = linea.getIdProducto();
+
+                    if (product.getIdTipoProveeduria().getControlStock())
+                    {
+                        product.getStockActual().subtract(linea.getCantidad());
+                        if (product.getStockActual().compareTo(BigDecimal.ZERO) == -1 )
+                        {
+                            product.setStockActual(BigDecimal.ZERO);
+                        }
+                        productosFacade.edit(product);
+                        System.out.print(NuevaVentaBean.class.getName() + "graba el producto");
+
+                    }
+
+                }
                 ventaActual.setSaldo(ventaActual.getTotal());
                 ventasBean.guardarVenta(ventaActual, pagos);
                 JSFUtil.addInfoMessage("Operación guardada exitosamente!");
