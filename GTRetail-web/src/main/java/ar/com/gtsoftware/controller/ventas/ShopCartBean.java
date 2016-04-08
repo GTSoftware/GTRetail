@@ -63,6 +63,7 @@ import javax.inject.Named;
 public class ShopCartBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(ShopCartBean.class.getName());
 
     @Inject
     private Conversation conversation;
@@ -376,18 +377,15 @@ public class ShopCartBean implements Serializable {
                 venta.setSaldo(venta.getTotal());
                 ventasBean.guardarVenta(venta, pagos);
                 System.out.print(NuevaVentaBean.class.getName() + "antes de actualizar el producto");
-                for (int i = 0; i < venta.getVentasLineasList().size(); i++) {
-                    VentasLineas linea = venta.getVentasLineasList().get(i);
-                    Productos product = linea.getIdProducto();
-                    if (product.getIdTipoProveeduria().getControlStock())
-                    {
-                        product.setStockActual(product.getStockActual().subtract(linea.getCantidad()));
-                        if (product.getStockActual().compareTo(BigDecimal.ZERO) == -1 )
-                        {
+                for (VentasLineas vl : venta.getVentasLineasList()) {
+
+                    Productos product = vl.getIdProducto();
+                    if (product.getIdTipoProveeduria().getControlStock()) {
+                        product.setStockActual(product.getStockActual().subtract(vl.getCantidad()));
+                        if (product.getStockActual().signum() < 0) {
                             product.setStockActual(BigDecimal.ZERO);
                         }
                         productosFacade.edit(product);
-                        System.out.print(NuevaVentaBean.class.getName() + "graba el producto");
 
                     }
 
@@ -396,7 +394,7 @@ public class ShopCartBean implements Serializable {
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";
             } catch (Exception ex) {
-                Logger.getLogger(NuevaVentaBean.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 JSFUtil.addErrorMessage(ex.getMessage());
             }
         }

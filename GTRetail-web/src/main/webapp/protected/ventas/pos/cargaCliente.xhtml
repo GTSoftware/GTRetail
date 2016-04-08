@@ -23,7 +23,8 @@
                                     converter="#{personasConverter}"
                                     forceSelection="true"
                                     minQueryLength="3"
-                                    queryDelay="1000">
+                                    queryDelay="1000"
+                                    onclick="this.select();">
                         <p:ajax event="blur" process="clienteFragment"
                                 update="clienteFragment" />
 
