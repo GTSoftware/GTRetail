@@ -23,10 +23,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Controlador para el cambio de claves de los usuarios
@@ -35,13 +35,13 @@ import javax.inject.Named;
  * @since 1.0.0
  * @version 1.0.0
  */
-@Named(value = "changePasswordBean")
+@ManagedBean(name = "changePasswordBean")
 @ViewScoped
 public class ChangePasswordBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject
+    @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
     @EJB
@@ -133,4 +133,13 @@ public class ChangePasswordBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambio de clave", "La clave fue actualizada exitosamente"));
         }
     }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
+    }
+
 }

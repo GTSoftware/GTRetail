@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_letras_comprobantes")
 @XmlRootElement
-public class FiscalLetrasComprobantes extends GTEntity {
+public class FiscalLetrasComprobantes extends GTEntity<FiscalLetrasComprobantesPK> {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -45,10 +45,10 @@ public class FiscalLetrasComprobantes extends GTEntity {
     private String letraComprobante;
     @JoinColumn(name = "id_resoponsabildiad_iva_receptor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
-    private FiscalResponsabilidadesIva fiscalResponsabilidadesIva;
+    private FiscalResponsabilidadesIva idResponsabilidadIvaReceptor;
     @JoinColumn(name = "id_resoponsabildiad_iva_emisor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
-    private FiscalResponsabilidadesIva fiscalResponsabilidadesIva1;
+    private FiscalResponsabilidadesIva idResponsabilidadIvaEmisor;
 
     public FiscalLetrasComprobantes() {
     }
@@ -82,20 +82,20 @@ public class FiscalLetrasComprobantes extends GTEntity {
         this.letraComprobante = letraComprobante;
     }
 
-    public FiscalResponsabilidadesIva getFiscalResponsabilidadesIva() {
-        return fiscalResponsabilidadesIva;
+    public FiscalResponsabilidadesIva getIdResponsabilidadIvaReceptor() {
+        return idResponsabilidadIvaReceptor;
     }
 
-    public void setFiscalResponsabilidadesIva(FiscalResponsabilidadesIva fiscalResponsabilidadesIva) {
-        this.fiscalResponsabilidadesIva = fiscalResponsabilidadesIva;
+    public void setIdResponsabilidadIvaReceptor(FiscalResponsabilidadesIva idResponsabilidadIvaReceptor) {
+        this.idResponsabilidadIvaReceptor = idResponsabilidadIvaReceptor;
     }
 
-    public FiscalResponsabilidadesIva getFiscalResponsabilidadesIva1() {
-        return fiscalResponsabilidadesIva1;
+    public FiscalResponsabilidadesIva getIdResponsabilidadIvaEmisor() {
+        return idResponsabilidadIvaEmisor;
     }
 
-    public void setFiscalResponsabilidadesIva1(FiscalResponsabilidadesIva fiscalResponsabilidadesIva1) {
-        this.fiscalResponsabilidadesIva1 = fiscalResponsabilidadesIva1;
+    public void setIdResponsabilidadIvaEmisor(FiscalResponsabilidadesIva idResponsabilidadIvaEmisor) {
+        this.idResponsabilidadIvaEmisor = idResponsabilidadIvaEmisor;
     }
 
     @Override
@@ -129,12 +129,12 @@ public class FiscalLetrasComprobantes extends GTEntity {
     }
 
     @Override
-    public Object getId() {
+    public FiscalLetrasComprobantesPK getId() {
         return fiscalLetrasComprobantesPK;
     }
 
     @Override
-    public Object calculateId(String id) {
+    public FiscalLetrasComprobantesPK calculateId(String id) {
         if (id != null) {
             String[] pkStr = id.split("-");
             if (pkStr.length == 2) {

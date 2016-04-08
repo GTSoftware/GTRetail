@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.controller.productos;
 
+import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
@@ -25,14 +27,11 @@ import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.LazyEntityDataModel;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.DataModel;
 
 /**
  *
@@ -40,27 +39,26 @@ import javax.faces.model.DataModel;
  */
 @ManagedBean(name = "productosSearchBean")
 @ViewScoped
-public class ProductosSearchBean implements Serializable {
+public class ProductosSearchBean extends AbstractSearchBean<Productos> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private ProductosFacade productosFacade;
+    private ProductosFacade facade;
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
     @EJB
     private ProductosPreciosFacade preciosFacade;
 
-    private Productos productoActual;
     private ProductosListasPrecios listaSeleccionada;
-    private DataModel<Productos> dataModel;
+
     private ProductosPreciosSearchFilter preciosSF;
 
     private List<ProductosListasPrecios> listasPrecio;
     /**
      * Por defecto creamos un filtro para productos a la venta activos
      */
-    private ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE);
+    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE, Boolean.TRUE);
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -68,42 +66,9 @@ public class ProductosSearchBean implements Serializable {
     public ProductosSearchBean() {
     }
 
-    public DataModel<Productos> getDataModel() {
-        if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("descripcion", true));
-        }
-        if (listaSeleccionada == null) {
-            listaSeleccionada = getListasPrecio().get(0);
-        }
-        if (dataModel == null) {
-            dataModel = new LazyEntityDataModel<>(productosFacade, filter);
-        }
-        return dataModel;
-    }
-
-    public void doSearch() {
-        dataModel = null;
-    }
-
     public List<Productos> autocompleteProductos(String query) {
         filter.setTxt(query);
-        return productosFacade.findBySearchFilter(filter, 0, 5);
-    }
-
-    public Productos getProductoActual() {
-        return productoActual;
-    }
-
-    public void setProductoActual(Productos productoActual) {
-        this.productoActual = productoActual;
-    }
-
-    public ProductosSearchFilter getFilter() {
-        return filter;
-    }
-
-    public void setFilter(ProductosSearchFilter filter) {
-        this.filter = filter;
+        return facade.findBySearchFilter(filter, 0, 5);
     }
 
     public List<ProductosListasPrecios> getListasPrecio() {
@@ -129,10 +94,30 @@ public class ProductosSearchBean implements Serializable {
             preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
         }
         preciosSF.setProducto(producto);
-        List<ProductosPrecios> precio = preciosFacade.findBySearchFilter(preciosSF, 0, 1);
-        if (precio.isEmpty()) {
+        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(preciosSF);
+        if (precio == null) {
             return null;
         }
-        return precio.get(0).getPrecio();
+        return precio.getPrecio();
+    }
+
+    @Override
+    protected AbstractFacade<Productos> getFacade() {
+        return facade;
+    }
+
+    @Override
+    protected void prepareSearchFilter() {
+        if (!filter.hasOrderFields()) {
+            filter.addSortField(new SortField("descripcion", true));
+        }
+        if (listaSeleccionada == null) {
+            listaSeleccionada = getListasPrecio().get(0);
+        }
+    }
+
+    @Override
+    public ProductosSearchFilter getFilter() {
+        return filter;
     }
 }

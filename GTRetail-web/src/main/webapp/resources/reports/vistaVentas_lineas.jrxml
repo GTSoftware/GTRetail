@@ -50,21 +50,21 @@
             </staticText>
             <staticText>
                 <reportElement x="366" y="1" width="49" height="20" uuid="3c4947d0-6acb-4657-be9b-3d3921bf8df2"/>
-                <textElement>
+                <textElement textAlignment="Center">
                     <font isBold="true" isUnderline="true"/>
                 </textElement>
-                <text><![CDATA[Alicuota]]></text>
+                <text><![CDATA[IVA]]></text>
             </staticText>
             <staticText>
                 <reportElement x="415" y="1" width="69" height="20" uuid="3c3c2816-5c6e-410e-8ad8-4db6ee7c539d"/>
-                <textElement textAlignment="Right">
+                <textElement textAlignment="Center">
                     <font isBold="true" isUnderline="true"/>
                 </textElement>
                 <text><![CDATA[Precio]]></text>
             </staticText>
             <staticText>
                 <reportElement x="485" y="1" width="68" height="20" uuid="c36e2831-9097-46ac-99f3-213b13a9bcba"/>
-                <textElement textAlignment="Right">
+                <textElement textAlignment="Center">
                     <font isBold="true" isUnderline="true"/>
                 </textElement>
                 <text><![CDATA[Sub-Total]]></text>

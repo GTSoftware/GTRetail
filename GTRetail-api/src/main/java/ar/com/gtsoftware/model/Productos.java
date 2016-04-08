@@ -34,19 +34,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.eclipse.persistence.annotations.JoinFetch;
 
-/**
- * Clase que representa a un producto
- *
- * @author Rodrigo Tato mailto:rotatomel@gmail.com
- */
 @Entity
-@Table(name = "productos")
+@Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
 public class Productos extends BaseEntity implements Serializable {
@@ -98,37 +93,37 @@ public class Productos extends BaseEntity implements Serializable {
     private BigDecimal unidadesCompraUnidadesVenta;
     @JoinColumn(name = "id_tipo_unidad_venta", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+    //@JoinFetch
     private ProductosTiposUnidades idTipoUnidadVenta;
     @JoinColumn(name = "id_tipo_unidad_compra", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+    //@JoinFetch
     private ProductosTiposUnidades idTipoUnidadCompra;
     @JoinColumn(name = "id_tipo_proveeduria", referencedColumnName = "id_tipo_proveeduria", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+    //@JoinFetch
     private ProductosTiposProveeduria idTipoProveeduria;
     @JoinColumn(name = "id_sub_rubro", referencedColumnName = "id_sub_rubro", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+    //@JoinFetch
     private ProductosSubRubros idSubRubro;
     @JoinColumn(name = "id_rubro", referencedColumnName = "id_rubro", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+//    @JoinFetch
     private ProductosRubros idRubro;
     @JoinColumn(name = "id_proveedor_habitual", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne
     private Personas idProveedorHabitual;
     @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+    //  @JoinFetch
     private FiscalAlicuotasIva idAlicuotaIva;
     @JoinColumn(name = "id_marca", referencedColumnName = "id_marca", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    @JoinFetch
+    //@JoinFetch
     private ProductosMarcas idMarca;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "idProducto")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
@@ -139,6 +134,10 @@ public class Productos extends BaseEntity implements Serializable {
     @Size(max = 60)
     @Column(name = "ubicacion")
     private String ubicacion;
+
+    @Size(max = 60)
+    @Column(name = "codigo_fabricante")
+    private String codigoFabricante;
 
     @Basic(optional = false)
     @NotNull
@@ -379,6 +378,14 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setStockActual(BigDecimal stockActual) {
         this.stockActual = stockActual;
+    }
+
+    public String getCodigoFabricante() {
+        return codigoFabricante;
+    }
+
+    public void setCodigoFabricante(String codigoFabricante) {
+        this.codigoFabricante = codigoFabricante;
     }
 
     @Override

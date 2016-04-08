@@ -23,30 +23,30 @@ limitations under the License.
       xmlns:p="http://primefaces.org/ui">
 
     <composite:interface>
-        <composite:attribute name="textoBusqueda"  type="java.lang.String" />
-        <composite:attribute name="personasList"   />
+
         <composite:attribute name="personaSeleccionada" type="ar.com.gtsoftware.model.Personas" />
-        <composite:attribute name="busquedaAction" method-signature="void busquedaAction()" />
+
     </composite:interface>
 
     <composite:implementation>
         <h:form id="busquedaPersonasForm" >
             <p:fragment>
-                <h:panelGrid columns="3">
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
                     <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                    <p:inputText id="textoBusquedaField" value="#{cc.attrs.textoBusqueda}" size="50"/>
-                    <p:commandButton  action="#{cc.attrs.busquedaAction}"
+                    <p:inputText id="textoBusquedaField" value="#{clientesSearchBean.filter.txt}" size="50"/>
+                    <p:commandButton  action="#{clientesSearchBean.doSearch()}"
                                       process="@this"
                                       value="#{msg.buscar}"
-                                      icon="ui-icon-search"
+                                      icon="fa fa-fw fa-search"
                                       update="personasTable"/>
-                </h:panelGrid>
+                </p:panelGrid >
 
                 <p:separator />
 
                 <p:dataTable id="personasTable"
                              var="persona"
-                             value="#{cc.attrs.personasList}"
+                             value="#{clientesSearchBean.dataModel}"
                              rows="5"
                              lazy="true"
                              paginator="true"
@@ -58,9 +58,11 @@ limitations under the License.
                              rowsPerPageTemplate="5,10,15,30"
                              style="width: 100%"
                              resizableColumns="true"
-                             scrollable="true" >
+                             scrollable="true"
+                             sortMode="single"
+                             reflow="true">
 
-                    <p:ajax event="rowSelect"  />
+                    <p:ajax event="rowSelect" global="false" />
                     <p:column style="text-align: left; width:5%" sortBy="#{persona.id}" >
                         <f:facet name="header">
                             #{msg.tablaId}

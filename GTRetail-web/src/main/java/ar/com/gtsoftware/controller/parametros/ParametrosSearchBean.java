@@ -17,6 +17,7 @@ package ar.com.gtsoftware.controller.parametros;
 
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -29,7 +30,9 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "parametrosSearchBean")
 @ViewScoped
-public class ParametrosSearchBean {
+public class ParametrosSearchBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private ParametrosFacade parametrosFacade;
@@ -50,12 +53,6 @@ public class ParametrosSearchBean {
         this.parametrosList = parametrosList;
     }
 
-//    public void onRowEdit(RowEditEvent event) {
-//        Parametros paramEditado = (Parametros) event.getObject();
-//        parametrosFacade.edit(paramEditado);
-//        FacesMessage msg = new FacesMessage("Parámetro editado con éxito: " + paramEditado.getNombreParametro(), paramEditado.getValorParametro());
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-//    }
     public void buscar() {
         parametrosList.clear();
         parametrosList.addAll(parametrosFacade.findParametros(txt));
@@ -67,5 +64,9 @@ public class ParametrosSearchBean {
 
     public void setTxt(String txt) {
         this.txt = txt;
+    }
+
+    public String editParametro(Parametros param) {
+        return String.format("parametroEdit.xhtml?faces-redirect=true;&nombreParametro=%s", param.getNombreParametro());
     }
 }

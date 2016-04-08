@@ -48,7 +48,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,9 +55,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 /**
  *
@@ -84,7 +83,7 @@ public class NuevaVentaBean implements Serializable {
     private ParametrosFacade parametrosFacade;
     @EJB
     private ProductosPreciosFacade preciosFacade;
-    @Inject
+    @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
     private Ventas ventaActual;
     private ProductosSearchFilter productoSearchFilter;
@@ -252,6 +251,13 @@ public class NuevaVentaBean implements Serializable {
                 }
             }
 
+            if (productoActual.getIdTipoProveeduria().getControlStock())
+            {
+                if (lineaActual.getCantidad().compareTo(productoActual.getStockActual())==1)
+                {
+                    JSFUtil.addErrorMessage("La cantidad ingresada es mayor que el stock existente");
+                }
+            }
             return true;
         }
         return false;
@@ -283,8 +289,8 @@ public class NuevaVentaBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:", "El monto del pago supera el saldo!"));
             } else {
-                UUID idOne = UUID.randomUUID();
-                pagoActual.setItem(String.valueOf(idOne));
+
+                pagoActual.setItem(ai.getAndIncrement());
                 pagos.add(pagoActual);
                 pagoActual = new VentasPagos();
                 pagoActual.setImporteTotalPagado(BigDecimal.ZERO);
@@ -333,6 +339,25 @@ public class NuevaVentaBean implements Serializable {
             ventaActual.setIdUsuario(authBackingBean.getUserLoggedIn());
             ventaActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             try {
+
+                System.out.print(NuevaVentaBean.class.getName() + "antes de actualizar el producto");
+                for (int i = 0; i < ventaActual.getVentasLineasList().size(); i++) {
+                    VentasLineas linea = ventaActual.getVentasLineasList().get(i);
+                    Productos product = linea.getIdProducto();
+
+                    if (product.getIdTipoProveeduria().getControlStock())
+                    {
+                        product.getStockActual().subtract(linea.getCantidad());
+                        if (product.getStockActual().compareTo(BigDecimal.ZERO) == -1 )
+                        {
+                            product.setStockActual(BigDecimal.ZERO);
+                        }
+                        productosFacade.edit(product);
+                        System.out.print(NuevaVentaBean.class.getName() + "graba el producto");
+
+                    }
+
+                }
                 ventaActual.setSaldo(ventaActual.getTotal());
                 ventasBean.guardarVenta(ventaActual, pagos);
                 JSFUtil.addInfoMessage("Operación guardada exitosamente!");
@@ -356,7 +381,7 @@ public class NuevaVentaBean implements Serializable {
 
         for (int i = 0; i < pagos.size(); i++) {
 
-            if (pagos.get(i).getItem().equalsIgnoreCase(pago.getItem())) {
+            if (pagos.get(i).getItem().equals(pago.getItem())) {
                 item = i;
             }
         }
@@ -483,4 +508,13 @@ public class NuevaVentaBean implements Serializable {
         }
         return precio.get(0).getPrecio();
     }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
+    }
+
 }

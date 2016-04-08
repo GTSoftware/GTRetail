@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedBean;
 
 /**
  * Controlador para el caso de uso de búsqueda de usuarios
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-@Named(value = "usuariosSearchBean")
+@ManagedBean(name = "usuariosSearchBean")
 @ViewScoped
 public class UsuariosSearchBean implements Serializable {
 

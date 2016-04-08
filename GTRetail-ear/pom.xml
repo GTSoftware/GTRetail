@@ -4,90 +4,69 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>3.0.5-SNAPSHOT</version>
     </parent>
-    <organization>
-        <name>GT Software</name>
-        <url>http://www.gtsoftware.com.ar</url>
-    </organization>
-
-    <developers>
-        <developer>
-            <id>rodrigo</id>
-            <name>Rodrigo M. Tato Rothamel</name>
-            <email>rotatomel@gmail.com</email>
-            <url>http://rotatomel.blogspot.net</url>
-            <organization>GTSoftware</organization>
-            <organizationUrl>http://www.gtsoftware.com.ar</organizationUrl>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>-3</timezone>
-
-        </developer>
-    </developers>
 
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail-ear</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>3.0.5-SNAPSHOT</version>
     <packaging>ear</packaging>
 
     <name>GTRetail-ear</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ear-plugin</artifactId>
-                <version>2.6</version>
+                <version>${version.ear.plugin}</version>
                 <configuration>
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <modules>
-                        <ejbModule>
-                            <groupId>ar.com.gtsoftware</groupId>
-                            <artifactId>GTRetail-ejb</artifactId>
-                            <uri>GTRetail-ejb.jar</uri>
-                        </ejbModule>
 
-                        <!-- Register Web Application -->
-                        <webModule>
-                            <groupId>ar.com.gtsoftware</groupId>
-                            <artifactId>GTRetail-web</artifactId>
-                            <uri>GTRetail-web.war</uri>
-                            <contextRoot>/GTRetail</contextRoot>
-                        </webModule>
                     </modules>
+                    <fileNameMapping>no-version</fileNameMapping>
                 </configuration>
             </plugin>
+            <!-- The JBoss AS plugin deploys your ear to a local JBoss AS container -->
+            <!-- Due to Maven's lack of intelligence with EARs we need to configure
+            the jboss-as maven plugin to skip deployment for all modules. We then enable
+            it specifically in the ear module. -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                    <jbossHome>${jboss.directory}</jbossHome>
+                    <fileNames>
+                        <fileName>${basedir}/target/${project.artifactId}.ear</fileName>
+                    </fileNames>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-ejb</artifactId>
-            <version>${project.version}</version>
+
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>ar.com.gtsoftware</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-web</artifactId>
-            <version>${project.version}</version>
+
             <type>war</type>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>GTRetail-api</artifactId>
+
+            <type>jar</type>
+        </dependency>
+        
     </dependencies>
 </project>

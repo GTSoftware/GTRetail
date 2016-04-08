@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
         <ui:composition template="./../resources/templates/template.xhtml">
-            <ui:define name="content">                
+            <ui:define name="content">
                 <h:form id="form">
                     <p:panel header="Cuenta corriente de clientes">
                         <p:dataTable id="ccTable" value="#{clientesBean.ultimosMovimientos}" var="cmov"
@@ -16,12 +16,12 @@
                                      sortMode="multiple"
                                      emptyMessage="No hay clientes que coincidan con los términos de búsqueda..."
                                      rowKey="#{cmov.idMovimiento}"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,15,30"
                                      style="width: 100%"
                                      resizableColumns="true"
                                      scrollable="true"
-                                     >
+                                     reflow="true" >
 
                             <f:facet name="header" >
                                 Últimos movimientos
@@ -58,12 +58,12 @@
                                 </h:outputText>
                             </p:column>
                             <p:columnGroup type="footer">
-                                <p:row>  
-                                    <p:column colspan="1" footerText="Saldo actual:"  
-                                              style="text-align:right; font-size: larger"  />  
+                                <p:row>
+                                    <p:column colspan="1" footerText="Saldo actual:"
+                                              style="text-align:right; font-size: larger"  />
 
-                                    <p:column footerText="\$#{clientesBean.saldoCliente}" style=" font-size: xx-large" />  
-                                </p:row>  
+                                    <p:column footerText="\$#{clientesBean.saldoCliente}" style=" font-size: xx-large" />
+                                </p:row>
                             </p:columnGroup>
                         </p:dataTable>
                     </p:panel>

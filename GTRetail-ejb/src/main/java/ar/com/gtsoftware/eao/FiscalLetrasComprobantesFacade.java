@@ -16,13 +16,12 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
+import ar.com.gtsoftware.model.FiscalLetrasComprobantes_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -46,35 +45,20 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
         super(FiscalLetrasComprobantes.class);
     }
 
-    public FiscalLetrasComprobantes findLetraComprobante(int idResponsabildiadEmisor, FiscalResponsabilidadesIva ivaReceptor) {
-        Query q = getEntityManager().createQuery("SELECT l FROM FiscalLetrasComprobantes l WHERE l.fiscalLetrasComprobantesPK.idResoponsabildiadIvaEmisor = :ivaEmisor AND l.fiscalLetrasComprobantesPK.idResoponsabildiadIvaReceptor = :ivaReceptor");
-        q.setParameter("ivaEmisor", idResponsabildiadEmisor);
-        q.setParameter("ivaReceptor", ivaReceptor.getId());
-        List<FiscalLetrasComprobantes> lista = q.getResultList();
-        if (!lista.isEmpty()) {
-            return lista.get(0);
-        }
-        return null;
-    }
-
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalLetrasComprobantes> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        FiscalLetrasComprobantesSearchFilter lsf = (FiscalLetrasComprobantesSearchFilter) sf;
+        Predicate p = null;
+        if (lsf.getIvaEmisor() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaEmisor), lsf.getIvaEmisor());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (lsf.getIvaReceptor() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaReceptor), lsf.getIvaReceptor());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
 
-    @Override
-    public List<FiscalLetrasComprobantes> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(FiscalLetrasComprobantes entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

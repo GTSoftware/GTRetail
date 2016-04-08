@@ -31,10 +31,10 @@ import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.ProductoRubrosSearchFilter;
-import ar.com.gtsoftware.search.ProductoSubRubroSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -42,14 +42,14 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-@Named(value = "productosPreciosBean")
+@ManagedBean(name = "productosPreciosBean")
 @ViewScoped
 public class ProductosPreciosBean implements Serializable {
 
@@ -110,7 +110,7 @@ public class ProductosPreciosBean implements Serializable {
 
     public List<ProductosRubros> getRubrosList() {
         if (rubrosList == null) {
-            ProductoRubrosSearchFilter prsf = new ProductoRubrosSearchFilter();
+            RubrosSearchFilter prsf = new RubrosSearchFilter();
             prsf.addSortField(new SortField("nombreRubro", true));
             rubrosList = new ArrayList<>();
             rubrosList.addAll(productosRubrosFacade.findAllBySearchFilter(prsf));
@@ -119,16 +119,16 @@ public class ProductosPreciosBean implements Serializable {
     }
 
     public List<ProductosSubRubros> getSubRubrosList() {
+
         if (subRubrosList == null) {
             subRubrosList = new ArrayList<>();
         }
+        subRubrosList.clear();
         if (filter.getIdRubro() != null) {
-            ProductoSubRubroSearchFilter subRubroSearchFilter = new ProductoSubRubroSearchFilter();
+            SubRubroSearchFilter subRubroSearchFilter = new SubRubroSearchFilter();
             subRubroSearchFilter.setProductosRubros(filter.getIdRubro());
             subRubroSearchFilter.addSortField(new SortField("nombreSubRubro", true));
             subRubrosList.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
-        } else {
-            subRubrosList.clear();
         }
         return subRubrosList;
     }

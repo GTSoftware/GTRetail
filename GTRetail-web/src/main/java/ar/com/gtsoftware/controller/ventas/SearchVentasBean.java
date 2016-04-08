@@ -15,21 +15,25 @@
  */
 package ar.com.gtsoftware.controller.ventas;
 
+import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.VentasFacade;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.VentasSearchFilter;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
-import ar.com.gtsoftware.utils.UtilUI;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.DataModel;
+import org.apache.commons.lang3.time.DateUtils;
 
 /**
  *
@@ -37,15 +41,18 @@ import javax.faces.model.DataModel;
  */
 @ManagedBean(name = "searchVentasBean")
 @ViewScoped
-public class SearchVentasBean implements Serializable {
+public class SearchVentasBean extends AbstractSearchBean<Ventas> {
+
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private VentasFacade ventasFacade;
-    private VentasSearchFilter filter = new VentasSearchFilter(UtilUI.getBeginOfToday(), UtilUI.getEndOfToday(), Boolean.FALSE);
+    private final VentasSearchFilter filter = new VentasSearchFilter(DateUtils.truncate(new Date(), Calendar.DATE),
+            DateUtils.addDays(new Date(), 1), Boolean.FALSE);
     @EJB
     private PersonasFacade clientesFacade;
-    private PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
-    private DataModel<Ventas> dataModel;
+    private final PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
@@ -54,13 +61,6 @@ public class SearchVentasBean implements Serializable {
      * Creates a new instance of SearchVentasBean
      */
     public SearchVentasBean() {
-    }
-
-    /**
-     * Realiza la búsqueda según el filtro establecido
-     */
-    public void search() {
-        dataModel = null;
     }
 
     private void calcularTotales() {
@@ -74,20 +74,9 @@ public class SearchVentasBean implements Serializable {
         return clientesFacade.findBySearchFilter(personasSearchFilter, 0, 15);
     }
 
+    @Override
     public VentasSearchFilter getFilter() {
         return filter;
-    }
-
-    public void setFilter(VentasSearchFilter filter) {
-        this.filter = filter;
-    }
-
-    public VentasFacade getVentasFacade() {
-        return ventasFacade;
-    }
-
-    public void setVentasFacade(VentasFacade ventasFacade) {
-        this.ventasFacade = ventasFacade;
     }
 
     public BigDecimal getTotalVentasFacturadas() {
@@ -114,12 +103,25 @@ public class SearchVentasBean implements Serializable {
         this.totalVentasSinFacturar = totalVentasSinFacturar;
     }
 
+    @Override
     public DataModel<Ventas> getDataModel() {
         if (dataModel == null) {
             dataModel = new LazyEntityDataModel<>(ventasFacade, filter);
             calcularTotales();
         }
         return dataModel;
+    }
+
+    @Override
+    protected AbstractFacade<Ventas> getFacade() {
+        return ventasFacade;
+    }
+
+    @Override
+    protected void prepareSearchFilter() {
+        if (!filter.hasOrderFields()) {
+            filter.addSortField(new SortField("fechaVenta", true));
+        }
     }
 
 }

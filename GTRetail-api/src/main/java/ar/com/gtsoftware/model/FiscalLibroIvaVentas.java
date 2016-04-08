@@ -76,6 +76,7 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     @Column(name = "anulada")
     private boolean anulada;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @NotNull
     @Column(name = "total_factura")
     private BigDecimal totalFactura;
 
@@ -99,6 +100,28 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private ContabilidadRegistroContable idRegistroContable;
+
+    @Column(name = "cae")
+    private Long cae;
+    @Column(name = "fecha_vencimiento_cae")
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaVencimientoCae;
+
+    @Column(name = "importe_neto_no_gravado")
+    @NotNull
+    private BigDecimal importeNetoNoGravado;
+    @Column(name = "importe_exento")
+    @NotNull
+    private BigDecimal importeExento;
+    @Column(name = "importe_neto_gravado")
+    @NotNull
+    private BigDecimal importeNetoGravado;
+    @Column(name = "importe_tributos")
+    @NotNull
+    private BigDecimal importeTributos;
+    @Column(name = "importe_iva")
+    @NotNull
+    private BigDecimal importeIva;
 
     public FiscalLibroIvaVentas() {
     }
@@ -227,6 +250,62 @@ public class FiscalLibroIvaVentas extends BaseEntity {
 
     public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
         this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
+    }
+
+    public Long getCae() {
+        return cae;
+    }
+
+    public void setCae(Long cae) {
+        this.cae = cae;
+    }
+
+    public Date getFechaVencimientoCae() {
+        return fechaVencimientoCae;
+    }
+
+    public void setFechaVencimientoCae(Date fechaVencimientoCae) {
+        this.fechaVencimientoCae = fechaVencimientoCae;
+    }
+
+    public BigDecimal getImporteNetoNoGravado() {
+        return importeNetoNoGravado;
+    }
+
+    public void setImporteNetoNoGravado(BigDecimal importeNetoNoGravado) {
+        this.importeNetoNoGravado = importeNetoNoGravado;
+    }
+
+    public BigDecimal getImporteExento() {
+        return importeExento;
+    }
+
+    public void setImporteExento(BigDecimal importeExento) {
+        this.importeExento = importeExento;
+    }
+
+    public BigDecimal getImporteNetoGravado() {
+        return importeNetoGravado;
+    }
+
+    public void setImporteNetoGravado(BigDecimal importeNetoGravado) {
+        this.importeNetoGravado = importeNetoGravado;
+    }
+
+    public BigDecimal getImporteTributos() {
+        return importeTributos;
+    }
+
+    public void setImporteTributos(BigDecimal importeTributos) {
+        this.importeTributos = importeTributos;
+    }
+
+    public BigDecimal getImporteIva() {
+        return importeIva;
+    }
+
+    public void setImporteIva(BigDecimal importeIva) {
+        this.importeIva = importeIva;
     }
 
     @Override

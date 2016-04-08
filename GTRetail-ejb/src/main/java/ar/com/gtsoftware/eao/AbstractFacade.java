@@ -155,6 +155,12 @@ public abstract class AbstractFacade<T extends GTEntity> {
         return orders;
     }
 
+    /**
+     * Cuenta los elementos encontrados por el filtro de búsqueda.
+     *
+     * @param sf el filtro de búsqueda
+     * @return la cantidad de elementos encontrados
+     */
     public int countBySearchFilter(AbstractSearchFilter sf) {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
@@ -165,6 +171,20 @@ public abstract class AbstractFacade<T extends GTEntity> {
         }
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
+    }
+
+    /**
+     * Devuelve el primer elemento encontrado por el filtro de búsqueda.
+     *
+     * @param sf el filtro de búsuqeda
+     * @return el primer elemento o null si no encuentra ninguno.
+     */
+    public T findFirstBySearchFilter(AbstractSearchFilter sf) {
+        List<T> results = findBySearchFilter(sf, 0, 1);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
     }
 
     /**

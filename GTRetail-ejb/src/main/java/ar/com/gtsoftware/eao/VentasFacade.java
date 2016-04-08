@@ -30,6 +30,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -80,7 +81,7 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         if (vsf.getFacturada() != null) {
             Predicate p1;
             if (vsf.getFacturada()) {
-                p1 = cb.not(cb.isNull(root.get(Ventas_.idRegistroIva)));
+                p1 = cb.isNotNull(root.get(Ventas_.idRegistroIva));
             } else {
                 p1 = cb.isNull(root.get(Ventas_.idRegistroIva));
             }
@@ -107,7 +108,7 @@ public class VentasFacade extends AbstractFacade<Ventas> {
 
             p = appendAndPredicate(cb, p1, p);
         }
-        if (vsf.getNumeroFactura() != null) {
+        if (StringUtils.isNotEmpty(vsf.getNumeroFactura())) {
             Predicate p1;
             Expression<String> nroFactura = cb.concat(root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.letraFactura),
                     root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.puntoVentaFactura));

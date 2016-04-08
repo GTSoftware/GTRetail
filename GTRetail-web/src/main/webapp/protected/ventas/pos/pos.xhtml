@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
+
+
+    <!--Evento disparado para iniciar la conversación con el carrito-->
+    <f:event listener="#{shopCartBean.initConversation}"
+             type="preRenderView">
+    </f:event>
+    <h:form id="formContenido" >
+        <h:outputText id="cid"
+                      value="#{javax.enterprise.context.conversation.id}" />
+
+        <p:panel id="inputPanel" >
+
+            <p:focus context="inputPanel" />
+            <p:panelGrid layout="grid" columns="3"
+                         styleClass="ui-panelgrid-blank"
+                         columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1"
+                         >
+
+                <p:outputLabel for="codigoField" value="#{msg.codigo}:"/>
+                <p:inputText id="codigoField"
+                             required="true"
+                             value="#{shopCartBean.productosFilter.codigoPropio}">
+                    <f:validateLength minimum="1" />
+                </p:inputText>
+                <p:message for="codigoField" display="icon" />
+
+                <p:outputLabel for="cantidadField" value="#{msg.cantidad}:"/>
+                <p:inputText id="cantidadField"
+                             required="true"
+                             value="#{shopCartBean.cantidad}">
+                    <f:validateDoubleRange minimum="0.01"
+                                           maximum="9999999999999999999.99" />
+
+                </p:inputText>
+                <p:message for="cantidadField" display="icon"/>
+
+            </p:panelGrid>
+            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
+                             title="#{msg.insertar}"
+                             action="#{shopCartBean.addToCart()}"
+                             update="@form"
+                             global="false"/>
+
+            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                             title="#{msg.buscar} productos"
+                             oncomplete="PF('dlgBusProd').show()"
+                             process="@none"
+                             global="false"/>
+        </p:panel>
+
+        <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
+
+        <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
+
+                     paginator="false"
+                     sortMode="single"
+                     emptyMessage="#{msg.productosNoCargados}"
+                     editable="true"
+                     editMode="cell"
+                     reflow="true">
+
+            <p:ajax event="cellEdit"
+                    listener="#{shopCartBean.calcularTotal()}"
+                    oncomplete="onCellEdit()"
+                    global="false"
+                    />
+
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaId}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.id}" />
+            </p:column>
+            <p:column style="text-align: left; ">
+                <f:facet name="header">
+                    #{msg.codigo}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
+            </p:column>
+            <p:column style="text-align: left; ">
+                <f:facet name="header">
+                    #{msg.tablaDescripcion}
+                </f:facet>
+                <h:outputText id="decripcionProd" value="#{lineaVenta.descripcion}" />
+                <p:tooltip id="toolTipFade" for="decripcionProd"  value="#{lineaVenta.idProducto.observaciones}" />
+            </p:column>
+            <p:column style="text-align: right;">
+                <f:facet name="header">
+                    #{msg.tablaCantidad}
+                </f:facet>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{lineaVenta.cantidad}" />
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}" style="width:96%">
+                            <f:validateDoubleRange minimum="0.01"
+                                                   maximum="9999999999999999999.99" />
+                        </p:inputText>
+                    </f:facet>
+                </p:cellEditor>
+
+            </p:column>
+            <p:column style="text-align: left; ">
+                <f:facet name="header">
+                    #{msg.tablaUnidad}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+            </p:column>
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaIVA}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
+                    <f:convertNumber  type="number" groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaPrecioUnitario}
+                </f:facet>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                            <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioVentaUnitario}" style="width:96%">
+                            <f:validateDoubleRange minimum="0.01"
+                                                   maximum="9999999999999999999.99" />
+                        </p:inputText>
+                    </f:facet>
+                </p:cellEditor>
+
+            </p:column>
+
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaSubTotal}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.subTotal}" >
+                    <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column  exportable="false" style="width: 5%">
+                <f:facet name="header">
+                    #{msg.borrar}
+                </f:facet>
+                <p:commandButton id="borrarItemButton"
+                                 icon="fa fa-fw fa-trash"
+                                 process="@this"
+                                 action="#{shopCartBean.removeFromCart(lineaVenta.item)}"
+                                 update="productosTable"
+                                 global="false"
+                                 >
+
+                </p:commandButton>
+            </p:column>
+
+            <p:columnGroup type="footer">
+                <p:row>
+                    <p:column colspan="7" footerText="#{msg.total}:"
+                              style="text-align:right; font-size: larger"  />
+
+                    <p:column  >
+                        <f:facet name="footer">
+                            <h:outputText value="#{shopCartBean.venta.total}" style="font-size: xx-large;font-weight: bold" >
+                                <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
+                </p:row>
+            </p:columnGroup>
+
+        </p:dataTable>
+
+        <p:separator />
+
+        <p:panelGrid layout="grid" columns="2"
+                     styleClass="ui-panelgrid-blank"
+                     columnClasses="ui-grid-col-1,ui-grid-col-1"
+                     >
+            <p:commandButton id="cancelarButton"
+                             icon="fa fa-fw fa-ban"
+                             value="#{msg.cancelar}"
+                             action="#{shopCartBean.endConversation()}"
+                             immediate="true">
+
+            </p:commandButton>
+
+            <p:commandButton id="siguienteButton"
+                             icon="fa fa-fw fa-arrow-right"
+                             value="#{msg.siguiente}"
+                             action="cliente.xhtml?faces-redirect=true"
+                             immediate="true">
+            </p:commandButton>
+        </p:panelGrid>
+
+        <h:form id="busquedaProductosForm" >
+            <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                      modal="true" dynamic="true" >
+                <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
+                                              listaPrecios="#{shopCartBean.lista}"
+                                              />
+                <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                 oncomplete="PF('dlgBusProd').hide()"
+                                 update=":formContenido"
+                                 immediate="true"
+                                 process="@this"
+                                 actionListener="#{shopCartBean.addToCart()}"/>
+
+                <p:commandButton value="#{msg.cancelar}"
+                                 immediate="true" icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();" />
+
+            </p:dialog>
+        </h:form>
+    </h:form>
+
+</ui:composition>

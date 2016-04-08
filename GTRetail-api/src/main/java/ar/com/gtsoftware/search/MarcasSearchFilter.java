@@ -17,13 +17,19 @@ package ar.com.gtsoftware.search;
 
 /**
  *
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 public class MarcasSearchFilter extends AbstractSearchFilter {
+
+    private static final long serialVersionUID = 1L;
 
     private String nombreMarca;
 
     public MarcasSearchFilter() {
+    }
+
+    public MarcasSearchFilter(String nombreMarca) {
+        this.nombreMarca = nombreMarca;
     }
 
     @Override

@@ -1,44 +1,39 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <h:body>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/templates/template.xhtml">
 
-        <ui:composition template="/WEB-INF/templates/template.xhtml">
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
 
-            <!-- Contenido -->
-            <ui:define name="content">
-                <ui:insert >
-                    <ui:include src="breadcrumb.xhtml" />
-                </ui:insert>
+        <h:form id="formBusqueda" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+                <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
+                <p:selectOneMenu id="periodoFiscalField" required="true"
+                                 requiredMessage="#{msg.campoRequerido}"
+                                 value="#{regimenInformativoBean.periodo}"
+                                 converter="omnifaces.SelectItemsIndexConverter">
+                    <f:selectItems value="#{regimenInformativoBean.periodosList}"
+                                   var="periodo" itemLabel="#{periodo.nombrePeriodo}"
+                                   itemValue="#{periodo}"/>
+                </p:selectOneMenu>
+            </p:panelGrid >
+            <p:commandButton id="generarButton" action="#{regimenInformativoBean.generarRI()}"
+                             value="#{msg.generar}"
+                             ajax="false"
+                             icon="fa fa-fw fa-gear"/>
+        </h:form>
 
-                <h:form id="formBusqueda" >
-                    <h:panelGrid columns="2" >
-                        <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
-                        <p:selectOneMenu id="periodoFiscalField" required="true"
-                                         requiredMessage="#{msg.campoRequerido}"
-                                         value="#{regimenInformativoBean.periodo}"
-                                         converter="#{fiscalPeriodoFiscalConverter}">
-                            <f:selectItems value="#{regimenInformativoBean.periodosList}"
-                                           var="periodo" itemLabel="#{periodo.nombrePeriodo}"
-                                           itemValue="#{periodo}"/>
-                        </p:selectOneMenu>
-                    </h:panelGrid>
-                    <p:commandButton id="generarButton" action="#{regimenInformativoBean.generarRI()}"
-                                     value="#{msg.generar}"
-                                     ajax="false"
-                                     icon="ui-icon-gear"/>
-                </h:form>
+    </ui:define>
 
-            </ui:define>
-
-        </ui:composition>
-
-
-    </h:body>
-</html>
+</ui:composition>
 

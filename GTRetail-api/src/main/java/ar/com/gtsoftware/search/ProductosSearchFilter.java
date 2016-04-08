@@ -54,6 +54,13 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
         this.puedeVenderse = puedeVenderse;
     }
 
+    public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse, Boolean soloConStock) {
+        this.activo = activo;
+        this.puedeComprarse = puedeComprarse;
+        this.puedeVenderse = puedeVenderse;
+        this.conStock = soloConStock;
+    }
+
     public ProductosSearchFilter() {
     }
 

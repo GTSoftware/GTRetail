@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.model;
 
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "parametros")
 @XmlRootElement
-public class Parametros extends GTEntity {
+public class Parametros extends GTEntity<String> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -87,19 +88,21 @@ public class Parametros extends GTEntity {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (nombreParametro != null ? nombreParametro.hashCode() : 0);
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.nombreParametro);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Parametros)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Parametros other = (Parametros) object;
-        if ((this.nombreParametro == null && other.nombreParametro != null) || (this.nombreParametro != null && !this.nombreParametro.equals(other.nombreParametro))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Parametros other = (Parametros) obj;
+        if (!Objects.equals(this.nombreParametro, other.nombreParametro)) {
             return false;
         }
         return true;
@@ -107,7 +110,7 @@ public class Parametros extends GTEntity {
 
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.Parametros[ nombreParametro=" + nombreParametro + " ]";
+        return String.format("%s=%s", nombreParametro, valorParametro);
     }
 
     @Override
@@ -116,12 +119,12 @@ public class Parametros extends GTEntity {
     }
 
     @Override
-    public Object getId() {
+    public String getId() {
         return nombreParametro;
     }
 
     @Override
-    public Object calculateId(String id) {
+    public String calculateId(String id) {
         return id;
     }
 

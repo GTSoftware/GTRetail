@@ -24,7 +24,7 @@ import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
+ * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Model
 @FacesConverter(value = "personasConverter")

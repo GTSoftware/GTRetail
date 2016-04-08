@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
 
 
 
@@ -15,7 +15,9 @@
                 <p:defaultCommand target="buscarButton"/>
 
                 <p:tab title="#{msg.busquedaBasica}">
-                    <h:panelGrid columns="2">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                                 columnClasses="ui-grid-col-2,ui-grid-col-5">
+
                         <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
                         <p:calendar id="fechaDesdeField" value="#{searchVentasBean.filter.fechaVentaDesde}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
@@ -37,7 +39,7 @@
                                             >
 
                             </p:autoComplete>
-                            <p:commandButton id="buscarClienteButton" icon="ui-icon-search"
+                            <p:commandButton id="buscarClienteButton" icon="fa fa-fw fa-search"
                                              update=":busquedaPersonasDialogForm:busquedaPersonasDialog"
                                              oncomplete="PF('clientesDialog').show()"
                                              process="@this" />
@@ -51,11 +53,11 @@
                         <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
                         <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchVentasBean.filter.anulada}"/>
 
-                    </h:panelGrid>
-                    <p:commandButton id="buscarButton" action="#{searchVentasBean.search()}"
+                    </p:panelGrid >
+                    <p:commandButton id="buscarButton" action="#{searchVentasBean.doSearch()}"
                                      value="#{msg.buscar}"
                                      update="@form"
-                                     icon="ui-icon-search"
+                                     icon="fa fa-fw fa-search"
                                      />
                 </p:tab>
 
@@ -64,207 +66,218 @@
                 </p:tab>
             </p:tabView>
 
-            <h:panelGrid>
 
-                <p:dataTable id="ventasTable" value="#{searchVentasBean.dataModel}" var="venta"
-                             rows="15"
-                             lazy="true"
-                             paginator="true"
-                             emptyMessage="#{msg.busquedaSinResultados}"
-                             rowKey="#{venta.id}"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                             rowsPerPageTemplate="10,15,30"
-                             style="width: 100%"
-                             resizableColumns="true"
-                             scrollable="true"
-                             >
-                    <f:facet name="{Exporters}">
-                        <h:commandLink>
 
-                            <p:graphicImage library="images" name="excel.png" width="24"/>
-                            <p:dataExporter type="xls" target="ventasTable" fileName="ventas" />
-                        </h:commandLink>
+            <p:dataTable id="ventasTable" value="#{searchVentasBean.dataModel}" var="venta"
+                         rows="15"
+                         lazy="true"
+                         paginator="true"
+                         emptyMessage="#{msg.busquedaSinResultados}"
+                         rowKey="#{venta.id}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                         rowsPerPageTemplate="15,20,30,50,100"
+                         style="width: 100%"
+                         resizableColumns="true"
+                         scrollable="true"
+                         reflow="false" >
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
 
-                        <h:commandLink>
-                            <p:graphicImage library="images" name="pdf.png" width="24"/>
-                            <p:dataExporter type="pdf" target="ventasTable" fileName="ventas"/>
-                        </h:commandLink>
+                        <p:graphicImage library="images" name="excel.png" width="24"/>
+                        <p:dataExporter type="xls" target="ventasTable" fileName="ventas" />
+                    </h:commandLink>
 
-                        <h:commandLink>
-                            <p:graphicImage library="images" name="csv.png" width="24"/>
-                            <p:dataExporter type="csv" target="ventasTable" fileName="ventas" />
-                        </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="pdf.png" width="24"/>
+                        <p:dataExporter type="pdf" target="ventasTable" fileName="ventas"/>
+                    </h:commandLink>
 
-                        <h:commandLink>
-                            <p:graphicImage library="images" name="xml.png" width="24"/>
-                            <p:dataExporter type="xml" target="ventasTable" fileName="ventas" />
-                        </h:commandLink>
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="csv.png" width="24"/>
+                        <p:dataExporter type="csv" target="ventasTable" fileName="ventas" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="images" name="xml.png" width="24"/>
+                        <p:dataExporter type="xml" target="ventasTable" fileName="ventas" />
+                    </h:commandLink>
+                </f:facet>
+                <p:column style="width:16px" exportable="false">
+                    <p:rowToggler />
+                </p:column>
+                <p:column  sortBy="#{venta.id}" style="width: 2%">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.tablaId}" />
                     </f:facet>
-                    <p:column style="width:16px" exportable="false">
-                        <p:rowToggler />
-                    </p:column>
-                    <p:column  sortBy="#{venta.id}" style="width: 2%">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.tablaId}" />
-                        </f:facet>
-                        <h:outputLabel value="#{venta.id}"/>
-                    </p:column>
+                    <h:outputLabel value="#{venta.id}"/>
+                </p:column>
 
-                    <p:column  sortBy="#{venta.idSucursal.nombreSucursal}" >
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.sucursal}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{venta.idSucursal.nombreSucursal}"/>
-                    </p:column>
+                <p:column  sortBy="#{venta.idSucursal.nombreSucursal}" >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.sucursal}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{venta.idSucursal.nombreSucursal}"/>
+                </p:column>
 
-                    <p:column sortBy="#{venta.fechaVenta}" >
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.fecha}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{venta.fechaVenta}">
-                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
-                        </h:outputLabel>
-                    </p:column>
+                <p:column sortBy="#{venta.fechaVenta}" >
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.fecha}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{venta.fechaVenta}">
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                    </h:outputLabel>
+                </p:column>
 
-                    <p:column sortBy="#{venta.idPersona.razonSocial}">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.tablaRazonSocial}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{venta.idPersona.razonSocial}"/>
-                    </p:column>
+                <p:column sortBy="#{venta.idPersona.razonSocial}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.tablaRazonSocial}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{venta.idPersona.razonSocial}"/>
+                </p:column>
 
-                    <p:column sortBy="#{venta.idCondicionVenta.nombreCondicion}">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.condicionVenta}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{venta.idCondicionVenta.nombreCondicion}"/>
-                    </p:column>
+                <p:column sortBy="#{venta.idCondicionVenta.nombreCondicion}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.condicionVenta}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{venta.idCondicionVenta.nombreCondicion}"/>
+                </p:column>
 
-                    <p:column sortBy="#{venta.total}">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.total}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{venta.total}">
-                            <f:convertNumber groupingUsed="true" type="currency" />
-                        </h:outputLabel>
-                    </p:column>
-                    <p:column sortBy="#{venta.saldo}">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.saldo}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{venta.saldo}">
-                            <f:convertNumber groupingUsed="true" type="currency" />
-                        </h:outputLabel>
-                    </p:column>
-                    <p:column sortBy="#{venta.idRegistroIva}">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.factura}"/>
-                        </f:facet>
-                        <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}"
-                                       value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
+                <p:column sortBy="#{venta.total}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.total}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{venta.total}">
+                        <f:convertNumber groupingUsed="true" type="currency" />
+                    </h:outputLabel>
+                </p:column>
+                <p:column sortBy="#{venta.saldo}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.saldo}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{venta.saldo}">
+                        <f:convertNumber groupingUsed="true" type="currency" />
+                    </h:outputLabel>
+                </p:column>
+                <p:column sortBy="#{venta.idRegistroIva.numeroFactura}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.factura}"/>
+                    </f:facet>
+                    <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}"
+                                   value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
 
-                        <h:outputLabel rendered="#{empty venta.idRegistroIva and not venta.anulada}"
-                                       value="#{msg.no}" />
-                        <h:outputLabel rendered="#{venta.anulada}"
-                                       value="#{msg.anulada}" />
-                    </p:column>
+                    <h:outputLabel rendered="#{empty venta.idRegistroIva and not venta.anulada}"
+                                   value="#{msg.no}" />
+                    <h:outputLabel rendered="#{venta.anulada}"
+                                   value="#{msg.anulada}" />
+                </p:column>
 
 
 
-                    <p:column style="width: 32px" exportable="false" >
-                        <f:facet name="header">
-                            #{msg.ver}
-                        </f:facet>
-                        <p:commandButton icon="ui-icon-search" action="vista/verVenta"  ajax="false" >
-                            <f:param name="idVenta" value="#{venta.id}"/>
-                        </p:commandButton>
+                <p:column style="width: 32px" exportable="false" >
+                    <f:facet name="header">
+                        #{msg.ver}
+                    </f:facet>
+                    <!--                    <h:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" >
+                                            <f:param name="idVenta" value="#{venta.id}"/>
+                                            <i class="fa-search"/>
+                                        </h:link>-->
+                    <!--                    <p:commandButton icon="fa fa-fw fa-search" action="vista/verVenta.xhtml?faces-redirect=true"
+                                                         ajax="false"
+                                                         immediate="true">
+                                            <f:param name="idVenta" value="#{venta.id}"/>
+                                        </p:commandButton>-->
 
-                    </p:column>
+                    <p:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" value="Ver">
 
-                    <p:rowExpansion>
-                        <p:dataTable id="productosTable" value="#{venta.ventasLineasList}" var="lineaVenta"
+                        <f:param name="idVenta" value="#{venta.id}"/>
+                    </p:link>
 
-                                     emptyMessage="#{msg.productosNoCargados}"
-                                     resizableColumns="true">
+                </p:column>
 
-                            <p:column style="text-align: right; width: 5%">
-                                <f:facet name="header">
-                                    #{msg.tablaId}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.idProducto.id}" />
-                            </p:column>
-                            <p:column style="text-align: left; width: 5%">
-                                <f:facet name="header">
-                                    #{msg.codigo}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
-                            </p:column>
-                            <p:column style="text-align: left; width: 40%">
-                                <f:facet name="header">
-                                    #{msg.tablaDescripcion}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.descripcion}" />
-                            </p:column>
-                            <p:column style="text-align: right; width: 5%">
-                                <f:facet name="header">
-                                    #{msg.tablaCantidad}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.cantidad}" />
-                            </p:column>
-                            <p:column style="text-align: left; width: 5%">
-                                <f:facet name="header">
-                                    #{msg.tablaUnidad}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
-                            </p:column>
-                            <p:column style="text-align: right; width: 2%">
-                                <f:facet name="header">
-                                    #{msg.tablaIVA}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
-                                    <f:convertNumber  type="number" groupingUsed="true"/>
-                                </h:outputText>
-                            </p:column>
+                <p:rowExpansion >
+                    <p:dataTable id="productosTable" value="#{venta.ventasLineasList}" var="lineaVenta"
 
-                            <p:column style="text-align: right; width: 10%">
-                                <f:facet name="header">
-                                    #{msg.tablaPrecioUnitario}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
-                                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
-                                </h:outputText>
-                            </p:column>
+                                 emptyMessage="#{msg.productosNoCargados}"
+                                 resizableColumns="true">
 
-                            <p:column style="text-align: right; width: 10%">
-                                <f:facet name="header">
-                                    #{msg.tablaSubTotal}
-                                </f:facet>
-                                <h:outputText value="#{lineaVenta.subTotal}" >
-                                    <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
-                                </h:outputText>
-                            </p:column>
+                        <p:column style="text-align: right; width: 5%">
+                            <f:facet name="header">
+                                #{msg.tablaId}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.idProducto.id}" />
+                        </p:column>
+                        <p:column style="text-align: left; width: 5%">
+                            <f:facet name="header">
+                                #{msg.codigo}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
+                        </p:column>
+                        <p:column style="text-align: left; width: 40%">
+                            <f:facet name="header">
+                                #{msg.tablaDescripcion}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.descripcion}" />
+                        </p:column>
+                        <p:column style="text-align: right; width: 5%">
+                            <f:facet name="header">
+                                #{msg.tablaCantidad}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.cantidad}" />
+                        </p:column>
+                        <p:column style="text-align: left; width: 5%">
+                            <f:facet name="header">
+                                #{msg.tablaUnidad}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                        </p:column>
+                        <p:column style="text-align: right; width: 2%">
+                            <f:facet name="header">
+                                #{msg.tablaIVA}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
+                                <f:convertNumber  type="number" groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
 
+                        <p:column style="text-align: right; width: 10%">
+                            <f:facet name="header">
+                                #{msg.tablaPrecioUnitario}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                                <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
 
-
-                            <p:columnGroup type="footer">
-                                <p:row>
-                                    <p:column colspan="7" footerText="#{msg.total}"
-                                              style="text-align:right; font-size: larger"  />
-
-                                    <p:column footerText="\$#{venta.total}" style=" font-size: xx-large" />
-                                </p:row>
-                            </p:columnGroup>
-
-                        </p:dataTable>
-                    </p:rowExpansion>
-
-                </p:dataTable>
+                        <p:column style="text-align: right; width: 10%">
+                            <f:facet name="header">
+                                #{msg.tablaSubTotal}
+                            </f:facet>
+                            <h:outputText value="#{lineaVenta.subTotal}" >
+                                <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
 
 
-            </h:panelGrid>
+
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="7" footerText="#{msg.total}"
+                                          style="text-align:right; font-size: larger"  />
+
+                                <p:column footerText="\$#{venta.total}" style=" font-size: xx-large" />
+                            </p:row>
+                        </p:columnGroup>
+
+                    </p:dataTable>
+                </p:rowExpansion>
+
+            </p:dataTable>
+
+
+
             <p:panel id="totalesVentasPanel" header="#{msg.totales}" >
 
-                <h:panelGrid columns="2" >
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
                     <p:outputLabel value="#{msg.totalVentas}:" />
                     <p:outputLabel value="#{searchVentasBean.totalVentas}" style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
@@ -279,7 +292,7 @@
                     <p:outputLabel value="#{searchVentasBean.totalVentasFacturadas}" style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
-                </h:panelGrid>
+                </p:panelGrid >
             </p:panel>
         </p:panel>
     </h:form>

@@ -16,10 +16,13 @@
 package ar.com.gtsoftware.utils;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
@@ -258,4 +261,39 @@ public abstract class JSFUtil {
         return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
     }
 
+    /**
+     * Determina si el usuario actual pertenece al rol pasado como parámetro
+     *
+     * @param role
+     * @return
+     */
+    public static boolean isUserInRole(String role) {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role);
+    }
+
+    /**
+     * Retorna el ResourceBundle por defecto para la localización actual
+     *
+     * @param messajeBundle el mesaje bundle para utilizar
+     * @return un ResourceBundle
+     */
+    public static ResourceBundle getDefaultLocaleBundle(String messajeBundle) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Locale locale = facesContext.getViewRoot().getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle(messajeBundle, locale);
+        return bundle;
+    }
+
+    /**
+     * Retorna el ResourceBundle que corresponde con el basename messajeBundle
+     *
+     * @param varName el barName que figura en faces-config
+     * @return un ResourceBundle
+     */
+    public static ResourceBundle getBundle(String varName) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application app = context.getApplication();
+        ResourceBundle bundle = app.getResourceBundle(context, varName);
+        return bundle;
+    }
 }

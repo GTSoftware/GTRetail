@@ -25,7 +25,7 @@ limitations under the License.
     <h:form id="userEditForm">
         <p:messages id="msgField"/>
 
-        <h:panelGrid columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
             <!-- LogIn -->
             <p:outputLabel value="#{msg.usuariosLogIn}:" for="logInField"/>
 
@@ -58,16 +58,16 @@ limitations under the License.
 
             <!-- TODO Sucursal-->
 
-        </h:panelGrid>
+        </p:panelGrid >
         <p:separator/>
         <!-- Botones de guardar y cancelar-->
-        <h:panelGrid columns="4" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4" >
             <p:commandButton id="guardarButton"
                              value="#{msg.guardar}"
                              action="#{usuariosEditBean.doGuardarUsuario()}"
                              update="@form"
                              ajax="true"
-                             icon="ui-icon-disk"/>
+                             icon="fa fa-fw fa-save"/>
             <p:commandButton id="eliminarButton"
                              value="#{msg.eliminar}"
                              action="#{usuariosEditBean.doEliminarUsuario()}"
@@ -90,7 +90,7 @@ limitations under the License.
                              ajax="false"
                              immediate="true"
                              icon="ui-icon-close"/>
-        </h:panelGrid>
+        </p:panelGrid >
         
     </h:form>
 

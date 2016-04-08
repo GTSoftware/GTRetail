@@ -37,6 +37,7 @@ import ar.com.gtsoftware.model.UbicacionProvincias;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +47,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 /**
  *
@@ -58,7 +59,9 @@ import javax.inject.Inject;
 @ViewScoped
 public class ClientesEditBean implements Serializable {
 
-    @Inject
+    private static final long serialVersionUID = 1L;
+
+    @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
     @EJB
@@ -93,7 +96,7 @@ public class ClientesEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String idPersona = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idPersona");
+        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {
@@ -163,6 +166,7 @@ public class ClientesEditBean implements Serializable {
 
     public List<LegalGeneros> getGenerosList() {
         return generosFacade.findBySearchFilter(new GenerosSearchFilter(clienteActual.getIdTipoPersoneria()));
+
     }
 
     public List<LegalTiposDocumento> getTiposDocumentoList() {
@@ -189,6 +193,14 @@ public class ClientesEditBean implements Serializable {
 
     public void setTelefonoActual(PersonasTelefonos telefonoActual) {
         this.telefonoActual = telefonoActual;
+    }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
     }
 
 }

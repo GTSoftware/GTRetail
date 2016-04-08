@@ -13,7 +13,7 @@
         <p:focus transient="true" context="insertarPanel" for="cantidadField" />
         <p:defaultCommand target="insertarButton" />
 
-        <h:panelGrid  columns="10">
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="10">
 
             <p:outputLabel value="#{msg.buscar}:" for="buscarProductosButton"/>
             <p:outputLabel value="#{msg.listaPrecio}:" for="listaField"/>
@@ -26,14 +26,14 @@
             <p:outputLabel value="#{msg.subTotal}:" for="subTotalField"/>
             <p:outputLabel value="#{msg.insertar}" for="insertarButton" />
 
-            <p:commandButton id="buscarProductosButton" icon="ui-icon-search"
+            <p:commandButton id="buscarProductosButton" icon="fa fa-fw fa-search"
 
                              oncomplete="PF('productosDialog').show()"
                              process="@none" />
 
             <p:selectOneMenu id="listaField" value="#{nuevaVentaBean.listaSeleccionada}"
                              required="true" requiredMessage="#{msg.seleccionarUno}"
-                             converter="#{productosListasPreciosConverter}"
+                             converter="omnifaces.SelectItemsIndexConverter"
                              >
 
                 <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
@@ -98,7 +98,7 @@
             <p:message for="idProductoField" />
             <p:message for="cantidadField" />
             <p:message for="precioVentaField" />
-        </h:panelGrid>
+        </p:panelGrid >
     </h:panelGroup>
 
     <p:separator />
@@ -112,7 +112,8 @@
                          emptyMessage="#{msg.productosNoCargados}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10,15,30"
-                         resizableColumns="true">
+                         resizableColumns="true"
+                         reflow="true">
 
                 <p:column style="text-align: right; width: 5%">
                     <f:facet name="header">
@@ -217,7 +218,7 @@
                     </h:outputText>
                 </p:column>
             </p:dataTable>
-            <h:panelGrid columns="3" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
                 <p:outputLabel value="#{msg.descuentoRecargo}:" />
                 <p:inputText id="descuentoRecargoField"
                              value="#{nuevaVentaBean.descuentoRecargoGlobal}"
@@ -228,7 +229,7 @@
                 <p:commandButton id="cargarDescuentoRecargoButton" icon="ui-icon-circle-plus"
                                  action="#{nuevaVentaBean.doCargarDescuentoRecargoGlobal()}"
                                  process="descuentoRecargoField" />
-            </h:panelGrid>
+            </p:panelGrid >
         </p:fragment>
     </p:panel>
 

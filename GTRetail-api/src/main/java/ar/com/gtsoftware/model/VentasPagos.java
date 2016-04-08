@@ -77,7 +77,7 @@ public class VentasPagos extends BaseEntity {
     private Sucursales idSucursal;
 
     @Transient
-    private String item;
+    private Integer item;
 
     public VentasPagos() {
     }
@@ -140,11 +140,11 @@ public class VentasPagos extends BaseEntity {
         this.ventasPagosLineasList = ventasPagosLineasList;
     }
 
-    public String getItem() {
+    public Integer getItem() {
         return item;
     }
 
-    public void setItem(String item) {
+    public void setItem(Integer item) {
         this.item = item;
     }
 

@@ -17,14 +17,14 @@ package ar.com.gtsoftware.controller.parametros;
 
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
+import ar.com.gtsoftware.utils.JSFUtil;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -32,12 +32,17 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "parametrosEditBean")
 @ViewScoped
-public class ParametrosEditBean {
+public class ParametrosEditBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(ParametrosEditBean.class.getName());
 
     @EJB
     private ParametrosFacade parametrosFacade;
 
     private Parametros parametroActual;
+
+    private String nombreParametro;
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -45,26 +50,31 @@ public class ParametrosEditBean {
     public ParametrosEditBean() {
     }
 
-    @PostConstruct
     public void init() {
-        String nombreParametro = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("nombreParametro");
-        if (nombreParametro != null) {
-            parametroActual = parametrosFacade.findParametroByName(nombreParametro);
-            if (parametroActual == null) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Parámetro inexistente!", "Parámetro inexistente!"));
-                Logger.getLogger(ParametrosEditBean.class.getName()).log(Level.INFO, "Parámetro inexistente!");
-            }
+
+        if (JSFUtil.isPostback()) {
+            return;
+        }
+        nombreParametro = JSFUtil.getRequestParameterMap().get("nombreParametro");
+        if (StringUtils.isEmpty(nombreParametro)) {
+            throw new IllegalArgumentException("El parámetro es nulo");
+        }
+
+        parametroActual = parametrosFacade.findParametroByName(nombreParametro);
+        if (parametroActual == null) {
+            LOG.log(Level.INFO, "Parámetro inexistente!");
+            throw new IllegalArgumentException("El parámetro es nulo");
+
         }
 
     }
 
     public void edit() {
-        if (parametroActual != null) {
-            parametrosFacade.edit(parametroActual);
-            FacesMessage msg = new FacesMessage("Parámetro editado con éxito: " + parametroActual.getNombreParametro(),
-                    parametroActual.getValorParametro());
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
+
+        parametrosFacade.edit(parametroActual);
+        JSFUtil.addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
+                parametroActual.getNombreParametro(), parametroActual.getValorParametro()));
+
     }
 
     public void establecerParametro(Parametros param) {
@@ -77,6 +87,14 @@ public class ParametrosEditBean {
 
     public void setParametroActual(Parametros parametroActual) {
         this.parametroActual = parametroActual;
+    }
+
+    public String getNombreParametro() {
+        return nombreParametro;
+    }
+
+    public void setNombreParametro(String nombreParametro) {
+        this.nombreParametro = nombreParametro;
     }
 
 }

@@ -24,7 +24,7 @@ limitations under the License.
 
     <h:form id="searchUserForm">
         <p:messages id="msgField"/>
-        <h:panelGrid columns="2" >
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
             <p:outputLabel value="#{msg.terminosBusqueda}:" for="txtBusField"/>
 
             <p:inputText id="txtBusField"
@@ -37,22 +37,22 @@ limitations under the License.
                              action="#{usuariosSearchBean.findUsuarios()}"
                              update="@form"
                              ajax="true"
-                             icon="ui-icon-search"/>
+                             icon="fa fa-fw fa-search"/>
 
             <p:commandButton id="nuevoButton"
                              value="#{msg.nuevo}"
                              action="edicion/index.xhtml"
                              ajax="false"
                              immediate="true"
-                             icon="ui-icon-plus"/>
-        </h:panelGrid>
+                             icon="fa fa-fw fa-plus"/>
+        </p:panelGrid >
 
 
         <p:separator/>
 
 
-        <p:dataTable id="tablaUsuarios" 
-                     rendered="#{usuariosSearchBean.usuariosList ne null}" 
+        <p:dataTable id="tablaUsuarios"
+                     rendered="#{usuariosSearchBean.usuariosList ne null}"
                      value="#{usuariosSearchBean.usuariosList}"
                      var="item"
                      rows="15"
@@ -64,7 +64,7 @@ limitations under the License.
                      style="width: 100%"
                      resizableColumns="true"
                      scrollable="true"
-                     >
+                     reflow="true" >
             <f:facet name="header">
                 <h:outputText value="#{msg.listadoUsuarios}"/>
             </f:facet>
@@ -98,7 +98,7 @@ limitations under the License.
                 <p:commandButton id="editarButton"
                                  action="edicion/index.xhtml"
                                  ajax="false"
-                                 icon="ui-icon-pencil">
+                                 icon="fa fa-fw fa-edit">
                     <f:param name="login" value="#{item.login}"/>
 
                 </p:commandButton>

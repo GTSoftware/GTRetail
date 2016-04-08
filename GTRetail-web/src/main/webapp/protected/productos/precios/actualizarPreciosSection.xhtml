@@ -11,11 +11,12 @@
 
 
         <p:panel header="#{msg.filtros}">
-            <h:panelGrid id="clasificacionGrid" columns="3" >
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clasificacionGrid" columns="3" >
+
                 <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
                 <p:selectOneMenu id="tipoProveeduriaField" value="#{productosPreciosBean.filter.idTipoProveeduria}"
 
-                                 converter="#{productosTiposProveeduriaConverter}"
+                                 converter="omnifaces.SelectItemsIndexConverter"
                                  >
                     <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
 
@@ -28,7 +29,7 @@
 
                 <h:outputLabel for="proveedorHabitualField" value="#{msg.proveedor}:"/>
                 <p:selectOneMenu id="proveedorHabitualField" value="#{productosPreciosBean.filter.idProveedorHabitual}"
-                                 converter="#{personasConverter}"
+                                 converter="omnifaces.SelectItemsIndexConverter"
                                  required="false" requiredMessage="#{msg.seleccionarUno}"
                                  filter="true"
                                  filterMatchMode="contains">
@@ -41,41 +42,42 @@
                 <p:message for="proveedorHabitualField"/>
 
                 <h:outputLabel for="rubroField" value="#{msg.productoRubro}:" />
-                <h:panelGroup >
-                    <p:selectOneMenu id="rubroField"  value="#{productosPreciosBean.filter.idRubro}"
 
-                                     converter="#{productosRubrosConverter}"
-                                     label="#{msg.productoRubro}"
-                                     >
+                <p:selectOneMenu id="rubroField"  value="#{productosPreciosBean.filter.idRubro}"
 
-                        <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
-                        <f:selectItems value="#{productosPreciosBean.rubrosList}" var="rubro"
-                                       itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
-                        <p:ajax event="valueChange"
-                                update=":actualizarPreciosForm:subRubroPanelGroup"  process="@this"/>
-                    </p:selectOneMenu>
+                                 converter="omnifaces.SelectItemsIndexConverter"
+                                 label="#{msg.productoRubro}"
+                                 >
+
+                    <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
+                    <f:selectItems value="#{productosPreciosBean.rubrosList}" var="rubro"
+                                   itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
+                    <p:ajax event="valueChange"
+                            update=":actualizarPreciosForm:subRubroField"  process="@form"
+                            global="false"/>
+                </p:selectOneMenu>
 
 
-                </h:panelGroup>
+
                 <p:message for="rubroField"/>
 
 
                 <h:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:" />
-                <h:panelGroup id="subRubroPanelGroup">
-
-                    <p:selectOneMenu id="subRubroField" value="#{productosPreciosBean.filter.idSubRubro}"
-                                     required="false" converter="#{productosSubRubrosConverter}"
-                                     requiredMessage="#{msg.seleccionarUno}"
-                                     label="#{msg.productoSubRubro}"
-                                     >
-
-                        <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}" />
-                        <f:selectItems value="#{productosPreciosBean.subRubrosList}" var="subRubro"
-                                       itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
-                    </p:selectOneMenu>
 
 
-                </h:panelGroup>
+                <p:selectOneMenu id="subRubroField" value="#{productosPreciosBean.filter.idSubRubro}"
+                                 required="false" converter="omnifaces.SelectItemsIndexConverter"
+                                 requiredMessage="#{msg.seleccionarUno}"
+                                 label="#{msg.productoSubRubro}"
+                                 >
+
+                    <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}" />
+                    <f:selectItems value="#{productosPreciosBean.subRubrosList}" var="subRubro"
+                                   itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
+                </p:selectOneMenu>
+
+
+
                 <p:message for="subRubroField"/>
 
 
@@ -83,7 +85,7 @@
                 <h:panelGroup >
                     <p:selectOneMenu id="marcaField" value="#{productosPreciosBean.filter.idMarca}"
                                      required="flase" requiredMessage="#{msg.ingresarValor}"
-                                     converter="#{productosMarcasConverter}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
                                      label="#{msg.marca}">
                         <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}"/>
                         <f:selectItems value="#{productosPreciosBean.marcasList}" var="marca"
@@ -98,11 +100,12 @@
                 <p:inputText id="txtField" value="#{productosPreciosBean.filter.txt}"
                              label="#{msg.terminosBusqueda}" size="100"/>
                 <p:message for="txtField"/>
-            </h:panelGrid>
+            </p:panelGrid >
             <p:commandButton id="aplicarFiltrosButton"
                              value="#{msg.aplicarFiltros}"
-                             icon="ui-icon-search"
+                             icon="fa fa-fw fa-search"
                              update="@form"
+                             process="@form"
                              ajax="true"
                              />
 
@@ -112,18 +115,17 @@
 
         <p:panel header="#{msg.actualizarCosto}">
 
-            <h:panelGrid columns="3">
+            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
                 <p:outputLabel for="porcentajeCostoField" value="#{msg.porcentaje}:" />
                 <p:inputText id="porcentajeCostoField" value="#{productosPreciosBean.porcentajeCosto}"
                              style="text-align: right"
                              label="#{msg.porcentaje}"
                              title="Ingrese un valor positivo para sumar el porcentaje al costo y uno negativo para restar el porcentaje del costo.">
 
-                    <f:validateDoubleRange minimum="-9999999999999999999.9999"
-                                           maximum="9999999999999999999.9999" />
+
                 </p:inputText>
                 <p:message for="porcentajeCostoField"/>
-            </h:panelGrid>
+            </p:panelGrid >
             <p:commandButton id="aplicarCambios"
                              value="#{msg.aplicarCambios}"
                              action="#{productosPreciosBean.actualizarPrecios}"

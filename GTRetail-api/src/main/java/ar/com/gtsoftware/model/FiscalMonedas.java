@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_monedas")
 @XmlRootElement
-public class FiscalMonedas extends GTEntity {
+public class FiscalMonedas extends GTEntity<String> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -98,12 +98,12 @@ public class FiscalMonedas extends GTEntity {
     }
 
     @Override
-    public Object getId() {
+    public String getId() {
         return codigoMoneda;
     }
 
     @Override
-    public Object calculateId(String id) {
+    public String calculateId(String id) {
         return id;
     }
 

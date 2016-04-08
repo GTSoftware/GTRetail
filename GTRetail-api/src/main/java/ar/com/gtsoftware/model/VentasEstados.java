@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ventas_estados")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_estado", columnDefinition = "int4"))
-public class VentasEstados extends BaseEntity implements Serializable {
+public class VentasEstados extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,11 +58,6 @@ public class VentasEstados extends BaseEntity implements Serializable {
 
     public void setNombreEstado(String nombreEstado) {
         this.nombreEstado = nombreEstado;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.VentasEstados[ id=" + this.getId() + " ]";
     }
 
 }

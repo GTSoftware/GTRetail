@@ -18,6 +18,7 @@ package ar.com.gtsoftware.controller.ventas;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.utils.GeneradorCodigoBarraFE;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -88,16 +89,27 @@ public class ImpresionVentasBean implements Serializable {
 
     public void imprimirFactura(Ventas ventaActual) throws IOException, JRException {
         List<Ventas> ventas = new ArrayList<>();
-
-        String copias = parametrosFacade.findParametroByName("facturacion.preimreso.cantidad_copias").getValorParametro();
-        int cantCopias = Integer.parseInt(copias);
-        for (int i = 0; i < cantCopias; i++) {
-            ventas.add(ventaActual);
-        }
+        ventas.add(ventaActual);
+//        String copias = parametrosFacade.findParametroByName("facturacion.preimreso.cantidad_copias").getValorParametro();
+//        int cantCopias = Integer.parseInt(copias);
+//        for (int i = 0; i < cantCopias; i++) {
+//            ventas.add(ventaActual);
+//        }
+        String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
+        String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistroIva(), cuit);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
-        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura" + ventaActual.getIdRegistroIva().getLetraFactura() + ".jasper");
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura.jasper");
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.putAll(cargarParametros());
+        parameters.put("logoAfip", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/afip.png"));
+
+        parameters.put("codigobarras", codigoBarras);
+        if (ventaActual.getIdRegistroIva().getLetraFactura().equals("A")) {
+            parameters.put("subreport", "vistaVentas_lineasNeto.jasper");
+        } else {
+            parameters.put("subreport", "vistaVentas_lineas.jasper");
+        }
+
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");

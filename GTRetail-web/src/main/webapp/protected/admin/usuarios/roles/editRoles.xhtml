@@ -24,7 +24,7 @@ limitations under the License.
 
     <h:form id="userRolesForm">
         <p:messages id="msgField"/>
-        <h:panelGrid columns="2">
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
             <p:dataTable id="tablaRolesDisponibles" 
                          value="#{usuariosRolesEditBean.rolesDisponibles}"
                          var="item"
@@ -89,7 +89,7 @@ limitations under the License.
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
-        </h:panelGrid>
+        </p:panelGrid >
         <p:commandButton id="volverButton"
                          action="/protected/admin/usuarios/index.xhtml?faces-redirect=true"
                          ajax="false"

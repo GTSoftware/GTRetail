@@ -47,6 +47,8 @@ public class Personas extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String BUSINESS_STRING = "[%d] %s - %s: %s";
+
     @Column(name = "email", length = 100)
     @Pattern(regexp = "^$|^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
@@ -400,4 +402,7 @@ public class Personas extends BaseEntity implements Serializable {
         return "ar.com.gtsoftware.model.Personas[ idPersona=" + this.getId() + " ]";
     }
 
+    public String getBusinessString() {
+        return String.format(BUSINESS_STRING, this.getId(), razonSocial, idTipoDocumento.getNombreTipoDocumento(), documento);
+    }
 }

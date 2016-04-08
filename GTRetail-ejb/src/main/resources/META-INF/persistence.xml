@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
     <persistence-unit name="ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU" transaction-type="JTA">
-        <!--        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
+        <!--                <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
         <jta-data-source>jdbc/retail</jta-data-source>
         <class>ar.com.gtsoftware.model.GTEntity</class>
         <class>ar.com.gtsoftware.model.BaseEntity</class>
@@ -74,14 +74,16 @@
         <class>ar.com.gtsoftware.model.VentasPagosLineas</class>
         <class>ar.com.gtsoftware.model.VentasRemitos</class>
         <class>ar.com.gtsoftware.model.VentasRemitosLineas</class>
+        <class>ar.com.gtsoftware.model.AFIPAuthServices</class>
+        <class>ar.com.gtsoftware.model.FiscalPuntosVenta</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
         <properties>
-            <property name="eclipselink.logging.level" value="FINE"/>
+<!--            <property name="eclipselink.logging.level" value="FINE"/>
 
 
-            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>-->
 
             <!--             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
             <property name="hibernate.show_sql" value="true"/>
@@ -90,6 +92,9 @@
             <property name="hibernate.hbm2ddl.auto" value="validate" />
             <property name="hibernate.connection.charSet" value="UTF-8" />
             <property name="hibernate.archive.autodetection" value="class, hbm, jar"/>-->
+            <!--            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.show_sql" value="true"/>-->
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
