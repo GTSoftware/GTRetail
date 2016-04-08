@@ -4,7 +4,7 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>3.0.4-SNAPSHOT</version>
+        <version>3.0.4</version>
     </parent>
     <artifactId>GTRetail-ejb</artifactId>
 
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
-            <version>3.0.4-SNAPSHOT</version>
+            <version>3.0.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
