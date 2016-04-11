@@ -16,14 +16,16 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalTiposComprobante;
+import ar.com.gtsoftware.model.FiscalTiposComprobante_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.search.FiscalTiposComprobanteSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -46,22 +48,18 @@ public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComp
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalTiposComprobante> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        FiscalTiposComprobanteSearchFilter ftsf = (FiscalTiposComprobanteSearchFilter) sf;
+        Predicate p = null;
+        if (StringUtils.isNotEmpty(ftsf.getLetra())) {
+            Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.letra), ftsf.getLetra());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (ftsf.getTipoComprobante() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.tipoComprobante), ftsf.getTipoComprobante());
+            p = appendAndPredicate(cb, p, p1);
+        }
 
-    @Override
-    public List<FiscalTiposComprobante> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(FiscalTiposComprobante entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return p;
     }
 
 }

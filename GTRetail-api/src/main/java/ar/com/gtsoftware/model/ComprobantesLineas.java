@@ -16,37 +16,34 @@
 package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "ventas_lineas")
+@Table(name = "comprobantes_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_venta", columnDefinition = "serial"))
-public class VentasLineas extends BaseEntity {
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_comprobante"))
+public class ComprobantesLineas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "precio_venta_unitario")
-    private BigDecimal precioVentaUnitario;
+    @Column(name = "precio_unitario")
+    private BigDecimal precioUnitario;
     @Basic(optional = false)
     @NotNull
     @Column(name = "cantidad")
@@ -67,15 +64,11 @@ public class VentasLineas extends BaseEntity {
     @NotNull
     @Column(name = "cantidad_entregada")
     private BigDecimal cantidadEntregada;
-    @OneToMany(mappedBy = "idLineaVentaReferencia")
-    private List<VentasLineas> ventasLineasList;
-    @JoinColumn(name = "id_linea_venta_referencia", referencedColumnName = "id_linea_venta", columnDefinition = "int4")
-    @ManyToOne
-    private VentasLineas idLineaVentaReferencia;
-    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta", columnDefinition = "int4")
+
+    @JoinColumn(name = "id_comprobante", referencedColumnName = "id_comprobante")
     @ManyToOne(optional = false)
-    private Ventas idVenta;
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
+    private Comprobantes idComprobante;
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     @ManyToOne(optional = false)
     private Productos idProducto;
     @Basic(optional = false)
@@ -88,16 +81,16 @@ public class VentasLineas extends BaseEntity {
     @Column(name = "item")
     private Integer item;
 
-    public VentasLineas() {
+    public ComprobantesLineas() {
     }
 
-    public VentasLineas(Long idLineaVenta) {
+    public ComprobantesLineas(Long idLineaVenta) {
         super(idLineaVenta);
     }
 
-    public VentasLineas(Long idLineaVenta, BigDecimal precioVentaUnitario, BigDecimal cantidad, BigDecimal subTotal, BigDecimal costoNetoUnitario, BigDecimal costoBrutoUnitario, BigDecimal cantidadEntregada) {
+    public ComprobantesLineas(Long idLineaVenta, BigDecimal precioVentaUnitario, BigDecimal cantidad, BigDecimal subTotal, BigDecimal costoNetoUnitario, BigDecimal costoBrutoUnitario, BigDecimal cantidadEntregada) {
         super(idLineaVenta);
-        this.precioVentaUnitario = precioVentaUnitario;
+        this.precioUnitario = precioVentaUnitario;
         this.cantidad = cantidad;
         this.subTotal = subTotal;
         this.costoNetoUnitario = costoNetoUnitario;
@@ -105,12 +98,12 @@ public class VentasLineas extends BaseEntity {
         this.cantidadEntregada = cantidadEntregada;
     }
 
-    public BigDecimal getPrecioVentaUnitario() {
-        return precioVentaUnitario;
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
     }
 
-    public void setPrecioVentaUnitario(BigDecimal precioVentaUnitario) {
-        this.precioVentaUnitario = precioVentaUnitario;
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
     public BigDecimal getCantidad() {
@@ -153,29 +146,12 @@ public class VentasLineas extends BaseEntity {
         this.cantidadEntregada = cantidadEntregada;
     }
 
-    @XmlTransient
-    public List<VentasLineas> getVentasLineasList() {
-        return ventasLineasList;
+    public Comprobantes getIdComprobante() {
+        return idComprobante;
     }
 
-    public void setVentasLineasList(List<VentasLineas> ventasLineasList) {
-        this.ventasLineasList = ventasLineasList;
-    }
-
-    public VentasLineas getIdLineaVentaReferencia() {
-        return idLineaVentaReferencia;
-    }
-
-    public void setIdLineaVentaReferencia(VentasLineas idLineaVentaReferencia) {
-        this.idLineaVentaReferencia = idLineaVentaReferencia;
-    }
-
-    public Ventas getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Ventas idVenta) {
-        this.idVenta = idVenta;
+    public void setIdComprobante(Comprobantes idComprobante) {
+        this.idComprobante = idComprobante;
     }
 
     public Productos getIdProducto() {

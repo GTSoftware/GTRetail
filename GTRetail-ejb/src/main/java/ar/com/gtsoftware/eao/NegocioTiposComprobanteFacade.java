@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.VentasRemitosLineas;
+import ar.com.gtsoftware.model.NegocioTiposComprobante;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,10 +26,11 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class VentasRemitosLineasFacade extends AbstractFacade<VentasRemitosLineas> {
+public class NegocioTiposComprobanteFacade extends AbstractFacade<NegocioTiposComprobante> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -40,28 +39,17 @@ public class VentasRemitosLineasFacade extends AbstractFacade<VentasRemitosLinea
         return em;
     }
 
-    public VentasRemitosLineasFacade() {
-        super(VentasRemitosLineas.class);
+    public NegocioTiposComprobanteFacade() {
+        super(NegocioTiposComprobante.class);
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<VentasRemitosLineas> root) {
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<NegocioTiposComprobante> root) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<VentasRemitosLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public NegocioTiposComprobante getTipoFactura() {
+        return this.find(1L);
     }
 
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(VentasRemitosLineas entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

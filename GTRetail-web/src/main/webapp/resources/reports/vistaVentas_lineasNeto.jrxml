@@ -12,14 +12,14 @@
     <field name="idProducto" class="ar.com.gtsoftware.model.Productos">
         <fieldDescription><![CDATA[idProducto]]></fieldDescription>
     </field>
-    <field name="precioVentaUnitario" class="java.math.BigDecimal">
-        <fieldDescription><![CDATA[precioVentaUnitario]]></fieldDescription>
+    <field name="precioUnitario" class="java.math.BigDecimal">
+        <fieldDescription><![CDATA[precioUnitario]]></fieldDescription>
     </field>
     <field name="subTotal" class="java.math.BigDecimal">
         <fieldDescription><![CDATA[subTotal]]></fieldDescription>
     </field>
-    <field name="idVenta" class="ar.com.gtsoftware.model.Ventas">
-        <fieldDescription><![CDATA[idVenta]]></fieldDescription>
+    <field name="idComprobante" class="ar.com.gtsoftware.model.Comprobantes">
+        <fieldDescription><![CDATA[idComprobante]]></fieldDescription>
     </field>
     <field name="descripcion" class="java.lang.String"/>
     <columnHeader>
@@ -103,7 +103,7 @@
             <textField pattern="¤ #,##0.00">
                 <reportElement x="416" y="4" width="69" height="20" uuid="e8f13670-d049-4398-943b-644ed58e24a5"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{precioVentaUnitario}.divide(java.math.BigDecimal.ONE.add(
+                <textFieldExpression><![CDATA[$F{precioUnitario}.divide(java.math.BigDecimal.ONE.add(
 $F{idProducto}.getIdAlicuotaIva().getValorAlicuota().divide(
 new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldExpression>
             </textField>
@@ -140,7 +140,7 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldE
                 <textElement textAlignment="Right">
                     <font size="12" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$F{idVenta}.getTotal()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idComprobante}.getTotal()]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="288" y="0" width="127" height="20" uuid="776a6d4b-d973-4100-843d-7fb677146cfe"/>
@@ -152,11 +152,11 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldE
             <textField pattern="¤ #,##0.00">
                 <reportElement x="416" y="0" width="139" height="20" uuid="3a329bff-4395-4e72-9574-32bc5f65c71c"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idVenta}.getIdRegistroIva().getImporteNetoGravado()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idComprobante}.getIdRegistro().getImporteNetoGravado()]]></textFieldExpression>
             </textField>
             <subreport>
                 <reportElement x="0" y="20" width="553" height="60" uuid="15e1d657-1d59-4f6b-9be9-7e7e2f6d546b"/>
-                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{idVenta}.getIdRegistroIva().getFiscalLibroIvaVentasLineasList())]]></dataSourceExpression>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{idComprobante}.getIdRegistro().getFiscalLibroIvaVentasLineasList())]]></dataSourceExpression>
                 <subreportExpression><![CDATA["vistaVentas_alicuotas.jasper"]]></subreportExpression>
             </subreport>
             <staticText>
@@ -169,12 +169,12 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldE
             <textField pattern="¤ #,##0.00">
                 <reportElement x="417" y="82" width="139" height="20" uuid="f904eb23-118c-489c-87f2-9ae0778458c9"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idVenta}.getIdRegistroIva().getImporteNetoNoGravado()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idComprobante}.getIdRegistro().getImporteNetoNoGravado()]]></textFieldExpression>
             </textField>
             <textField pattern="¤ #,##0.00">
                 <reportElement x="417" y="102" width="139" height="20" uuid="97007d43-bd92-41e6-a5a9-d7492edf0a17"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idVenta}.getIdRegistroIva().getImporteTributos()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idComprobante}.getIdRegistro().getImporteTributos()]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="289" y="102" width="127" height="20" uuid="4facab07-9f80-4c55-a2bd-b064f547b918"/>

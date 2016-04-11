@@ -58,7 +58,7 @@
 
         <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
 
-        <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.ventasLineasList}"
+        <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.comprobantesLineasList}"
 
                      paginator="false"
                      sortMode="single"
@@ -130,12 +130,12 @@
                 </f:facet>
                 <p:cellEditor>
                     <f:facet name="output">
-                        <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                        <h:outputText value="#{lineaVenta.precioUnitario}" >
                             <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                         </h:outputText>
                     </f:facet>
                     <f:facet name="input">
-                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioVentaUnitario}" style="width:96%">
+                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioUnitario}" style="width:96%">
                             <f:validateDoubleRange minimum="0.01"
                                                    maximum="9999999999999999999.99" />
                         </p:inputText>

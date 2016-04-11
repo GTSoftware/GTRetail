@@ -107,7 +107,7 @@ public class Personas extends BaseEntity implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idProveedor")
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
-    private List<Ventas> ventasList;
+    private List<Comprobantes> ventasList;
     @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
@@ -281,11 +281,11 @@ public class Personas extends BaseEntity implements Serializable {
     }
 
     @XmlTransient
-    public List<Ventas> getVentasList() {
+    public List<Comprobantes> getVentasList() {
         return ventasList;
     }
 
-    public void setVentasList(List<Ventas> ventasList) {
+    public void setVentasList(List<Comprobantes> ventasList) {
         this.ventasList = ventasList;
     }
 

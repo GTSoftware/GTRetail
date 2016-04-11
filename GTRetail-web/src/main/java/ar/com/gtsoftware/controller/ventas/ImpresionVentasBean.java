@@ -16,8 +16,8 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.eao.ParametrosFacade;
+import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Parametros;
-import ar.com.gtsoftware.model.Ventas;
 import ar.com.gtsoftware.utils.GeneradorCodigoBarraFE;
 import java.io.IOException;
 import java.io.Serializable;
@@ -62,8 +62,8 @@ public class ImpresionVentasBean implements Serializable {
      * @throws IOException
      * @throws JRException
      */
-    public void imprimirPresupuesto(Ventas ventaActual) throws IOException, JRException {
-        List<Ventas> ventas = new ArrayList<>();
+    public void imprimirPresupuesto(Comprobantes ventaActual) throws IOException, JRException {
+        List<Comprobantes> ventas = new ArrayList<>();
         String copias = parametrosFacade.findParametroByName("presupuesto.impresion.cantidad_copias").getValorParametro();
         int cantCopias = Integer.parseInt(copias);
         ventas.add(ventaActual);
@@ -87,8 +87,8 @@ public class ImpresionVentasBean implements Serializable {
         FacesContext.getCurrentInstance().responseComplete();
     }
 
-    public void imprimirFactura(Ventas ventaActual) throws IOException, JRException {
-        List<Ventas> ventas = new ArrayList<>();
+    public void imprimirFactura(Comprobantes ventaActual) throws IOException, JRException {
+        List<Comprobantes> ventas = new ArrayList<>();
         ventas.add(ventaActual);
 //        String copias = parametrosFacade.findParametroByName("facturacion.preimreso.cantidad_copias").getValorParametro();
 //        int cantCopias = Integer.parseInt(copias);
@@ -96,7 +96,7 @@ public class ImpresionVentasBean implements Serializable {
 //            ventas.add(ventaActual);
 //        }
         String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
-        String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistroIva(), cuit);
+        String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistro(), cuit);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura.jasper");
         HashMap<String, Object> parameters = new HashMap<>();
@@ -104,7 +104,7 @@ public class ImpresionVentasBean implements Serializable {
         parameters.put("logoAfip", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/afip.png"));
 
         parameters.put("codigobarras", codigoBarras);
-        if (ventaActual.getIdRegistroIva().getLetraFactura().equals("A")) {
+        if (ventaActual.getIdRegistro().getLetraFactura().equals("A")) {
             parameters.put("subreport", "vistaVentas_lineasNeto.jasper");
         } else {
             parameters.put("subreport", "vistaVentas_lineas.jasper");

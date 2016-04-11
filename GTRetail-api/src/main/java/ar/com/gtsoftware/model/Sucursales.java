@@ -70,11 +70,7 @@ public class Sucursales extends BaseEntity {
     @OneToMany(mappedBy = "idSucursal")
     private List<Usuarios> usuariosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
-    private List<VentasRemitos> ventasRemitosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
-    private List<Ventas> ventasList;
     @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
@@ -160,30 +156,12 @@ public class Sucursales extends BaseEntity {
     }
 
     @XmlTransient
-    public List<VentasRemitos> getVentasRemitosList() {
-        return ventasRemitosList;
-    }
-
-    public void setVentasRemitosList(List<VentasRemitos> ventasRemitosList) {
-        this.ventasRemitosList = ventasRemitosList;
-    }
-
-    @XmlTransient
     public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
         return proveedoresOrdenesCompraList;
     }
 
     public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
         this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-    }
-
-    @XmlTransient
-    public List<Ventas> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Ventas> ventasList) {
-        this.ventasList = ventasList;
     }
 
     public UbicacionProvincias getIdProvincia() {

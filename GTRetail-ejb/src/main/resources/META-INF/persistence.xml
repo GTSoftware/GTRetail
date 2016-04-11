@@ -35,6 +35,7 @@
         <class>ar.com.gtsoftware.model.LegalTiposPersoneria</class>
         <class>ar.com.gtsoftware.model.NegocioCondicionesOperaciones</class>
         <class>ar.com.gtsoftware.model.NegocioFormasPago</class>
+        <class>ar.com.gtsoftware.model.NegocioTiposComprobante</class>
         <class>ar.com.gtsoftware.model.Parametros</class>
         <class>ar.com.gtsoftware.model.Personas</class>
         <class>ar.com.gtsoftware.model.PersonasCuentaCorriente</class>
@@ -65,15 +66,12 @@
         <class>ar.com.gtsoftware.model.UbicacionProvincias</class>
         <class>ar.com.gtsoftware.model.Usuarios</class>
         <class>ar.com.gtsoftware.model.UsuariosGrupos</class>
-        <class>ar.com.gtsoftware.model.Ventas</class>
-        <class>ar.com.gtsoftware.model.VentasCargosFijos</class>
-        <class>ar.com.gtsoftware.model.VentasEstados</class>
-        <class>ar.com.gtsoftware.model.VentasEstadosHistorico</class>
-        <class>ar.com.gtsoftware.model.VentasLineas</class>
-        <class>ar.com.gtsoftware.model.VentasPagos</class>
-        <class>ar.com.gtsoftware.model.VentasPagosLineas</class>
-        <class>ar.com.gtsoftware.model.VentasRemitos</class>
-        <class>ar.com.gtsoftware.model.VentasRemitosLineas</class>
+        <class>ar.com.gtsoftware.model.Comprobantes</class>
+        <class>ar.com.gtsoftware.model.ComprobantesEstados</class>
+        <class>ar.com.gtsoftware.model.ComprobantesEstadosHistorico</class>
+        <class>ar.com.gtsoftware.model.ComprobantesLineas</class>
+        <class>ar.com.gtsoftware.model.ComprobantesPagos</class>
+        <class>ar.com.gtsoftware.model.ComprobantesPagosLineas</class>
         <class>ar.com.gtsoftware.model.AFIPAuthServices</class>
         <class>ar.com.gtsoftware.model.FiscalPuntosVenta</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>

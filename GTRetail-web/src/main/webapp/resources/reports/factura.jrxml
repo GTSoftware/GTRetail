@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="presupuesto" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
     <property name="ireport.zoom" value="1.6105100000000019"/>
     <property name="ireport.x" value="0"/>
-    <property name="ireport.y" value="394"/>
+    <property name="ireport.y" value="274"/>
     <parameter name="logo" class="java.lang.String" isForPrompting="false"/>
     <parameter name="empresa.direccion" class="java.lang.String" isForPrompting="false"/>
     <parameter name="empresa.telefono" class="java.lang.String" isForPrompting="false"/>
@@ -15,7 +15,9 @@
     <parameter name="empresa.fechainicio" class="java.lang.String" isForPrompting="false"/>
     <parameter name="codigobarras" class="java.lang.String" isForPrompting="false"/>
     <parameter name="logoAfip" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="subreport" class="java.lang.String" isForPrompting="false"/>
+    <parameter name="subreport" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["vistaVentas_lineas.jasper"]]></defaultValueExpression>
+    </parameter>
     <queryString>
 		<![CDATA[]]>
     </queryString>
@@ -23,14 +25,14 @@
     <field name="total" class="java.math.BigDecimal">
         <fieldDescription><![CDATA[total]]></fieldDescription>
     </field>
-    <field name="idCondicionVenta" class="ar.com.gtsoftware.model.NegocioCondicionesOperaciones">
-        <fieldDescription><![CDATA[idCondicionVenta]]></fieldDescription>
+    <field name="idCondicionComprobante" class="ar.com.gtsoftware.model.NegocioCondicionesOperaciones">
+        <fieldDescription><![CDATA[idCondicionComprobante]]></fieldDescription>
     </field>
     <field name="idSucursal" class="ar.com.gtsoftware.model.Sucursales">
         <fieldDescription><![CDATA[idSucursal]]></fieldDescription>
     </field>
-    <field name="fechaVenta" class="java.util.Date">
-        <fieldDescription><![CDATA[fechaVenta]]></fieldDescription>
+    <field name="fechaComprobante" class="java.util.Date">
+        <fieldDescription><![CDATA[fechaComprobante]]></fieldDescription>
     </field>
     <field name="idPersona" class="ar.com.gtsoftware.model.Personas">
         <fieldDescription><![CDATA[idPersona]]></fieldDescription>
@@ -41,26 +43,23 @@
     <field name="id_1" class="java.lang.Integer">
         <fieldDescription><![CDATA[id]]></fieldDescription>
     </field>
-    <field name="ventasPagosLineasList" class="java.util.List">
-        <fieldDescription><![CDATA[ventasPagosLineasList]]></fieldDescription>
+    <field name="comprobantesPagosLineasList" class="java.util.List">
+        <fieldDescription><![CDATA[comprobantesPagosLineasList]]></fieldDescription>
     </field>
-    <field name="ventasLineasList" class="java.util.List">
-        <fieldDescription><![CDATA[ventasLineasList]]></fieldDescription>
+    <field name="comprobantesLineasList" class="java.util.List">
+        <fieldDescription><![CDATA[comprobantesLineasList]]></fieldDescription>
     </field>
     <field name="observaciones" class="java.lang.String">
         <fieldDescription><![CDATA[observaciones]]></fieldDescription>
     </field>
-    <field name="idRegistroIva" class="ar.com.gtsoftware.model.FiscalLibroIvaVentas">
-        <fieldDescription><![CDATA[idRegistroIva]]></fieldDescription>
+    <field name="idRegistro" class="ar.com.gtsoftware.model.FiscalLibroIvaVentas">
+        <fieldDescription><![CDATA[idRegistro]]></fieldDescription>
     </field>
     <field name="anulada" class="java.lang.Boolean">
         <fieldDescription><![CDATA[anulada]]></fieldDescription>
     </field>
     <field name="idUsuario" class="ar.com.gtsoftware.model.Usuarios">
         <fieldDescription><![CDATA[idUsuario]]></fieldDescription>
-    </field>
-    <field name="ventasRemitosList" class="java.util.List">
-        <fieldDescription><![CDATA[ventasRemitosList]]></fieldDescription>
     </field>
     <field name="nroRemito" class="java.lang.String"/>
     <field name="remitente" class="java.lang.String"/>
@@ -158,7 +157,7 @@
             </staticText>
             <textField pattern="dd/MM/yyyy HH:mm a" isBlankWhenNull="true">
                 <reportElement x="428" y="67" width="127" height="20" uuid="eb4786f3-f335-4897-b730-7cbd52541a3c"/>
-                <textFieldExpression><![CDATA[$F{idRegistroIva}.getFechaFactura()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idRegistro}.getFechaFactura()]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="5" y="217" width="66" height="20" uuid="fb7fdaff-a69f-442d-88a6-fe7167422048"/>
@@ -181,12 +180,12 @@
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="24" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$F{idRegistroIva}.getLetraFactura()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idRegistro}.getLetraFactura()]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="250" y="61" width="57" height="20" uuid="986ef63f-cdbe-4612-8e0d-94e675070653"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
-                <textFieldExpression><![CDATA["COD."+$F{idRegistroIva}.getCodigoTipoComprobante().getCodigoTipoComprobante()]]></textFieldExpression>
+                <textFieldExpression><![CDATA["COD."+$F{idRegistro}.getCodigoTipoComprobante().getCodigoTipoComprobante()]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="0" y="0" width="555" height="22" uuid="540f3aa3-bb9b-4c35-a48c-ac99ae03b1df"/>
@@ -215,7 +214,7 @@
             </staticText>
             <textField>
                 <reportElement x="391" y="44" width="152" height="16" uuid="c212fed7-ba73-4424-94f1-d7c2ccace652"/>
-                <textFieldExpression><![CDATA[$F{idRegistroIva}.getPuntoVentaFactura()+"-"+$F{idRegistroIva}.getNumeroFactura()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idRegistro}.getPuntoVentaFactura()+"-"+$F{idRegistro}.getNumeroFactura()]]></textFieldExpression>
             </textField>
             <textField isBlankWhenNull="true">
                 <reportElement x="357" y="120" width="100" height="20" uuid="71206050-325c-402f-bc85-c35381b9a2e1"/>
@@ -277,7 +276,7 @@
             </textField>
             <subreport>
                 <reportElement x="0" y="0" width="555" height="156" uuid="55ff1480-407e-487c-926f-34e77effe1cc"/>
-                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ventasLineasList})]]></dataSourceExpression>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{comprobantesLineasList})]]></dataSourceExpression>
                 <subreportExpression><![CDATA[$P{subreport}]]></subreportExpression>
             </subreport>
         </band>
@@ -304,11 +303,11 @@
             </staticText>
             <textField>
                 <reportElement x="436" y="49" width="120" height="20" uuid="36c38fc1-3ed7-4bc0-8531-abb1bf4ae424"/>
-                <textFieldExpression><![CDATA[$F{idRegistroIva}.getCae()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idRegistro}.getCae()]]></textFieldExpression>
             </textField>
             <textField pattern="dd/MM/yyyy">
                 <reportElement x="437" y="69" width="118" height="20" uuid="be163ea7-f475-431e-8e00-175fd695e4e2"/>
-                <textFieldExpression><![CDATA[$F{idRegistroIva}.getFechaVencimientoCae()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idRegistro}.getFechaVencimientoCae()]]></textFieldExpression>
             </textField>
             <componentElement>
                 <reportElement x="2" y="40" width="305" height="49" uuid="9d910b07-56b9-453e-877b-dbbdcad24924"/>

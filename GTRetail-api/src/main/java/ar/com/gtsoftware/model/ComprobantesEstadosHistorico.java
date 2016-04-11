@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
@@ -34,16 +33,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "ventas_estados_historico")
+@Table(name = "comprobantes_estados_historico")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_estado_historico", columnDefinition = "serial"))
-public class VentasEstadosHistorico extends BaseEntity implements Serializable {
+@AttributeOverride(name = "id", column = @Column(name = "id_estado_historico"))
+public class ComprobantesEstadosHistorico extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta", columnDefinition = "int4")
+    @JoinColumn(name = "id_comprobante", referencedColumnName = "id_comprobante")
     @ManyToOne(optional = false)
-    private Ventas idVenta;
+    private Comprobantes idComprobante;
 
     @Basic(optional = false)
     @NotNull
@@ -51,43 +50,43 @@ public class VentasEstadosHistorico extends BaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCambio;
 
-    @JoinColumn(name = "id_estado_anterior", referencedColumnName = "id_estado", columnDefinition = "int4")
+    @JoinColumn(name = "id_estado_anterior", referencedColumnName = "id_estado")
     @ManyToOne(optional = false)
-    private VentasEstados idEstadoAnterior;
+    private ComprobantesEstados idEstadoAnterior;
 
-    @JoinColumn(name = "id_estado_actual", referencedColumnName = "id_estado", columnDefinition = "int4")
+    @JoinColumn(name = "id_estado_actual", referencedColumnName = "id_estado")
     @ManyToOne(optional = false)
-    private VentasEstados idEstadoActual;
+    private ComprobantesEstados idEstadoActual;
 
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
 
-    public VentasEstadosHistorico() {
+    public ComprobantesEstadosHistorico() {
     }
 
-    public VentasEstadosHistorico(Long id) {
+    public ComprobantesEstadosHistorico(Long id) {
         super(id);
     }
 
-    public VentasEstadosHistorico(Ventas idVenta, Date fechaCambio,
-            VentasEstados idEstadoAnterior, VentasEstados idEstadoActual,
+    public ComprobantesEstadosHistorico(Comprobantes idVenta, Date fechaCambio,
+            ComprobantesEstados idEstadoAnterior, ComprobantesEstados idEstadoActual,
             Usuarios idUsuario, Long id) {
 
         super(id);
-        this.idVenta = idVenta;
+        this.idComprobante = idVenta;
         this.fechaCambio = fechaCambio;
         this.idEstadoAnterior = idEstadoAnterior;
         this.idEstadoActual = idEstadoActual;
         this.idUsuario = idUsuario;
     }
 
-    public Ventas getIdVenta() {
-        return idVenta;
+    public Comprobantes getIdComprobante() {
+        return idComprobante;
     }
 
-    public void setIdVenta(Ventas idVenta) {
-        this.idVenta = idVenta;
+    public void setIdComprobante(Comprobantes idComprobante) {
+        this.idComprobante = idComprobante;
     }
 
     public Date getFechaCambio() {
@@ -98,19 +97,19 @@ public class VentasEstadosHistorico extends BaseEntity implements Serializable {
         this.fechaCambio = fechaCambio;
     }
 
-    public VentasEstados getIdEstadoAnterior() {
+    public ComprobantesEstados getIdEstadoAnterior() {
         return idEstadoAnterior;
     }
 
-    public void setIdEstadoAnterior(VentasEstados idEstadoAnterior) {
+    public void setIdEstadoAnterior(ComprobantesEstados idEstadoAnterior) {
         this.idEstadoAnterior = idEstadoAnterior;
     }
 
-    public VentasEstados getIdEstadoActual() {
+    public ComprobantesEstados getIdEstadoActual() {
         return idEstadoActual;
     }
 
-    public void setIdEstadoActual(VentasEstados idEstadoActual) {
+    public void setIdEstadoActual(ComprobantesEstados idEstadoActual) {
         this.idEstadoActual = idEstadoActual;
     }
 

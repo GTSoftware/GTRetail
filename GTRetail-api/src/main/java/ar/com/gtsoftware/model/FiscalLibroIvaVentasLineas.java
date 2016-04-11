@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "fiscal_libro_iva_ventas_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_libro", columnDefinition = "serial"))
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_libro"))
 public class FiscalLibroIvaVentasLineas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -44,10 +44,10 @@ public class FiscalLibroIvaVentasLineas extends BaseEntity {
     private BigDecimal noGravado;
     @Column(name = "importe_iva")
     private BigDecimal importeIva;
-    @JoinColumn(name = "id_factura", referencedColumnName = "id_factura", columnDefinition = "int4")
+    @JoinColumn(name = "id_registro", referencedColumnName = "id_registro")
     @ManyToOne(optional = false)
-    private FiscalLibroIvaVentas idFactura;
-    @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva", columnDefinition = "int4")
+    private FiscalLibroIvaVentas idRegistro;
+    @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva")
     @ManyToOne(optional = false)
     private FiscalAlicuotasIva idAlicuotaIva;
 
@@ -82,12 +82,12 @@ public class FiscalLibroIvaVentasLineas extends BaseEntity {
         this.importeIva = importeIva;
     }
 
-    public FiscalLibroIvaVentas getIdFactura() {
-        return idFactura;
+    public FiscalLibroIvaVentas getIdRegistro() {
+        return idRegistro;
     }
 
-    public void setIdFactura(FiscalLibroIvaVentas idFactura) {
-        this.idFactura = idFactura;
+    public void setIdRegistro(FiscalLibroIvaVentas idRegistro) {
+        this.idRegistro = idRegistro;
     }
 
     public FiscalAlicuotasIva getIdAlicuotaIva() {

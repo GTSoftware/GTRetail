@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "ventas_estados")
+@Table(name = "comprobantes_estados")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_estado", columnDefinition = "int4"))
-public class VentasEstados extends BaseEntity {
+@AttributeOverride(name = "id", column = @Column(name = "id_estado"))
+public class ComprobantesEstados extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,14 +40,14 @@ public class VentasEstados extends BaseEntity {
     @Column(name = "nombre_estado")
     private String nombreEstado;
 
-    public VentasEstados(Long id) {
+    public ComprobantesEstados(Long id) {
         super(id);
     }
 
-    public VentasEstados() {
+    public ComprobantesEstados() {
     }
 
-    public VentasEstados(Long id, String nombreEstado) {
+    public ComprobantesEstados(Long id, String nombreEstado) {
         super(id);
         this.nombreEstado = nombreEstado;
     }

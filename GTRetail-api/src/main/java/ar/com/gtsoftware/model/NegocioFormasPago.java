@@ -57,7 +57,7 @@ public class NegocioFormasPago extends BaseEntity {
     @Column(name = "compra")
     private boolean compra;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormaPago")
-    private List<VentasPagos> ventasPagosList;
+    private List<ComprobantesPagos> ventasPagosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormaPago")
     private List<CajasMovimientos> cajasMovimientosList;
 
@@ -108,11 +108,11 @@ public class NegocioFormasPago extends BaseEntity {
     }
 
     @XmlTransient
-    public List<VentasPagos> getVentasPagosList() {
+    public List<ComprobantesPagos> getVentasPagosList() {
         return ventasPagosList;
     }
 
-    public void setVentasPagosList(List<VentasPagos> ventasPagosList) {
+    public void setVentasPagosList(List<ComprobantesPagos> ventasPagosList) {
         this.ventasPagosList = ventasPagosList;
     }
 

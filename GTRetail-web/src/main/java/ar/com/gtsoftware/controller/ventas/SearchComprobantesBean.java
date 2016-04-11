@@ -17,13 +17,13 @@ package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
+import ar.com.gtsoftware.eao.ComprobantesFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.eao.VentasFacade;
+import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.Ventas;
+import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.search.VentasSearchFilter;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -39,15 +39,15 @@ import org.apache.commons.lang3.time.DateUtils;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@ManagedBean(name = "searchVentasBean")
+@ManagedBean(name = "searchComprobantesBean")
 @ViewScoped
-public class SearchVentasBean extends AbstractSearchBean<Ventas> {
+public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private VentasFacade ventasFacade;
-    private final VentasSearchFilter filter = new VentasSearchFilter(DateUtils.truncate(new Date(), Calendar.DATE),
+    private ComprobantesFacade ventasFacade;
+    private final ComprobantesSearchFilter filter = new ComprobantesSearchFilter(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH),
             DateUtils.addDays(new Date(), 1), Boolean.FALSE);
     @EJB
     private PersonasFacade clientesFacade;
@@ -60,7 +60,7 @@ public class SearchVentasBean extends AbstractSearchBean<Ventas> {
     /**
      * Creates a new instance of SearchVentasBean
      */
-    public SearchVentasBean() {
+    public SearchComprobantesBean() {
     }
 
     private void calcularTotales() {
@@ -75,7 +75,7 @@ public class SearchVentasBean extends AbstractSearchBean<Ventas> {
     }
 
     @Override
-    public VentasSearchFilter getFilter() {
+    public ComprobantesSearchFilter getFilter() {
         return filter;
     }
 
@@ -104,7 +104,7 @@ public class SearchVentasBean extends AbstractSearchBean<Ventas> {
     }
 
     @Override
-    public DataModel<Ventas> getDataModel() {
+    public DataModel<Comprobantes> getDataModel() {
         if (dataModel == null) {
             dataModel = new LazyEntityDataModel<>(ventasFacade, filter);
             calcularTotales();
@@ -113,14 +113,14 @@ public class SearchVentasBean extends AbstractSearchBean<Ventas> {
     }
 
     @Override
-    protected AbstractFacade<Ventas> getFacade() {
+    protected AbstractFacade<Comprobantes> getFacade() {
         return ventasFacade;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("fechaVenta", true));
+            filter.addSortField(new SortField("fechaComprobante", true));
         }
     }
 

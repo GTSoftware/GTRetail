@@ -60,7 +60,7 @@ public class FiscalLibroIvaVentasLineasFacade extends AbstractFacade<FiscalLibro
         CriteriaQuery<FiscalLibroIvaVentasLineas> cq = cb.createQuery(FiscalLibroIvaVentasLineas.class);
         Root<FiscalLibroIvaVentasLineas> lineaFactura = cq.from(FiscalLibroIvaVentasLineas.class);
         cq.select(lineaFactura);
-        Predicate p = cb.equal(lineaFactura.get(FiscalLibroIvaVentasLineas_.idFactura), factura);
+        Predicate p = cb.equal(lineaFactura.get(FiscalLibroIvaVentasLineas_.idRegistro), factura);
 
         cq.where(p);
         TypedQuery<FiscalLibroIvaVentasLineas> q = em.createQuery(cq);
@@ -74,18 +74,4 @@ public class FiscalLibroIvaVentasLineasFacade extends AbstractFacade<FiscalLibro
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<FiscalLibroIvaVentasLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(FiscalLibroIvaVentasLineas entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

@@ -23,7 +23,7 @@ limitations under the License.
 
     <composite:interface>
 
-        <composite:attribute name="venta" type="ar.com.gtsoftware.model.Ventas" />
+        <composite:attribute name="venta" type="ar.com.gtsoftware.model.Comprobantes" />
         <composite:attribute name="lineasVenta" />
 
     </composite:interface>
@@ -38,10 +38,10 @@ limitations under the License.
                 <p:outputLabel value="#{cc.attrs.venta.idPersona.id} - #{cc.attrs.venta.idPersona.razonSocial}" />
 
                 <p:outputLabel value="#{msg.condicionVenta}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idCondicionVenta.nombreCondicion}" />
+                <p:outputLabel value="#{cc.attrs.venta.idCondicionComprobante.nombreCondicion}" />
 
                 <p:outputLabel value="#{msg.fecha}:" />
-                <p:outputLabel value="#{cc.attrs.venta.fechaVenta}" >
+                <p:outputLabel value="#{cc.attrs.venta.fechaComprobante}" >
                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
                 </p:outputLabel>
 
@@ -52,10 +52,10 @@ limitations under the License.
                 <p:outputLabel value="#{cc.attrs.venta.idUsuario.nombreUsuario}" />
 
                 <p:outputLabel value="#{msg.factura}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idRegistroIva.letraFactura} #{cc.attrs.venta.idRegistroIva.puntoVentaFactura}-#{cc.attrs.venta.idRegistroIva.numeroFactura}"
-                               rendered="#{not empty cc.attrs.venta.idRegistroIva}" />
+                <p:outputLabel value="#{cc.attrs.venta.idRegistro.letraFactura} #{cc.attrs.venta.idRegistro.puntoVentaFactura}-#{cc.attrs.venta.idRegistro.numeroFactura}"
+                               rendered="#{not empty cc.attrs.venta.idRegistro}" />
                 <p:outputLabel value="#{msg.no}"
-                               rendered="#{empty cc.attrs.venta.idRegistroIva}" />
+                               rendered="#{empty cc.attrs.venta.idRegistro}" />
 
 
 
@@ -115,7 +115,7 @@ limitations under the License.
                     <f:facet name="header">
                         #{msg.tablaPrecioUnitario}
                     </f:facet>
-                    <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                    <h:outputText value="#{lineaVenta.precioUnitario}" >
                         <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                     </h:outputText>
                 </p:column>

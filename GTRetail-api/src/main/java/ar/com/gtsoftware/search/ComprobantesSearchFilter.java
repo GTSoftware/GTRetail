@@ -25,7 +25,7 @@ import java.util.Date;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class VentasSearchFilter extends AbstractSearchFilter {
+public class ComprobantesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,10 +51,10 @@ public class VentasSearchFilter extends AbstractSearchFilter {
                 || (numeroFactura != null);
     }
 
-    public VentasSearchFilter() {
+    public ComprobantesSearchFilter() {
     }
 
-    public VentasSearchFilter(Date fechaDesde, Date fechaHasta, Boolean anulada) {
+    public ComprobantesSearchFilter(Date fechaDesde, Date fechaHasta, Boolean anulada) {
         this.fechaVentaDesde = fechaDesde;
         this.fechaVentaHasta = fechaHasta;
         this.anulada = anulada;

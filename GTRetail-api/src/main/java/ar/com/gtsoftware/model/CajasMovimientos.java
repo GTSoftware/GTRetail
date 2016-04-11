@@ -62,7 +62,7 @@ public class CajasMovimientos extends BaseEntity {
     @Column(name = "observaciones")
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMovimientoCaja")
-    private List<VentasPagos> ventasPagosList;
+    private List<ComprobantesPagos> ventasPagosList;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
@@ -122,11 +122,11 @@ public class CajasMovimientos extends BaseEntity {
     }
 
     @XmlTransient
-    public List<VentasPagos> getVentasPagosList() {
+    public List<ComprobantesPagos> getVentasPagosList() {
         return ventasPagosList;
     }
 
-    public void setVentasPagosList(List<VentasPagos> ventasPagosList) {
+    public void setVentasPagosList(List<ComprobantesPagos> ventasPagosList) {
         this.ventasPagosList = ventasPagosList;
     }
 

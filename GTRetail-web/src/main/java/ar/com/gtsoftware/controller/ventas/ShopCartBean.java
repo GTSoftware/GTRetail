@@ -17,24 +17,29 @@ package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.impl.VentasBean;
+import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
+import ar.com.gtsoftware.eao.FiscalLetrasComprobantesFacade;
+import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
+import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
-import ar.com.gtsoftware.eao.VentasEstadosFacade;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesEstados;
+import ar.com.gtsoftware.model.ComprobantesLineas;
+import ar.com.gtsoftware.model.ComprobantesPagos;
+import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasEstados;
-import ar.com.gtsoftware.model.VentasLineas;
-import ar.com.gtsoftware.model.VentasPagos;
+import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
@@ -86,20 +91,26 @@ public class ShopCartBean implements Serializable {
     @EJB
     private NegocioFormasPagoFacade formasPagoFacade;
     @EJB
-    private VentasEstadosFacade estadosFacade;
+    private ComprobantesEstadosFacade estadosFacade;
+    @EJB
+    private NegocioTiposComprobanteFacade tiposComprobanteFacade;
     @EJB
     private VentasBean ventasBean;
+    @EJB
+    private FiscalLetrasComprobantesFacade letrasComprobantesFacade;
+    @EJB
+    private FiscalResponsabilidadesIvaFacade responsabilidadesIvaFacade;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
 
-    private final List<VentasPagos> pagos = new ArrayList<>();
+    private final List<ComprobantesPagos> pagos = new ArrayList<>();
 
-    private VentasPagos pagoActual = new VentasPagos();
+    private ComprobantesPagos pagoActual = new ComprobantesPagos();
 
     private BigDecimal cantidad = BigDecimal.ONE;
 
-    private Ventas venta;
+    private Comprobantes venta;
 
     private Productos productoBusquedaSeleccionado = null;
 
@@ -134,10 +145,10 @@ public class ShopCartBean implements Serializable {
     public void initConversation() {
         if (!JSFUtil.isPostback() && conversation.isTransient()) {
             conversation.begin();
-            venta = new Ventas();
+            venta = new Comprobantes();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-            venta.setFechaVenta(new Date());
+            venta.setFechaComprobante(new Date());
             venta.setTotal(BigDecimal.ZERO);
             Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
@@ -149,8 +160,9 @@ public class ShopCartBean implements Serializable {
             cantDeccimalesRedondeo = cantDecimalesParam == null ? 2 : Integer.parseInt(cantDecimalesParam.getValorParametro());
             productoRedondeo = idProdRedondeoParam == null ? null : productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
             venta.setIdPersona(personasFacade.find(Long.parseLong(idClienteParam.getValorParametro())));
-            venta.setIdCondicionVenta(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
+            venta.setIdCondicionComprobante(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
             formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
+            venta.setTipoComprobante(tiposComprobanteFacade.getTipoFactura());
         }
     }
 
@@ -170,7 +182,7 @@ public class ShopCartBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (VentasLineas vl : venta.getVentasLineasList()) {
+        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
             if (vl.getItem() == item) {
                 index = cont;
                 break;
@@ -178,7 +190,7 @@ public class ShopCartBean implements Serializable {
             cont++;
         }
         if (index >= 0) {
-            venta.getVentasLineasList().remove(index);
+            venta.getComprobantesLineasList().remove(index);
             calcularTotal();
             JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
         }
@@ -188,7 +200,7 @@ public class ShopCartBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (VentasPagos vp : pagos) {
+        for (ComprobantesPagos vp : pagos) {
             if (vp.getItem() == item) {
                 index = cont;
                 break;
@@ -242,9 +254,9 @@ public class ShopCartBean implements Serializable {
         productoBusquedaSeleccionado = null;
     }
 
-    private VentasLineas crearLinea(Productos prod, ProductosPrecios precio) {
-        VentasLineas linea = new VentasLineas();
-        linea.setIdVenta(venta);
+    private ComprobantesLineas crearLinea(Productos prod, ProductosPrecios precio) {
+        ComprobantesLineas linea = new ComprobantesLineas();
+        linea.setIdComprobante(venta);
         linea.setCantidad(cantidad);
         linea.setDescripcion(prod.getDescripcion());
         linea.setIdProducto(prod);
@@ -254,7 +266,7 @@ public class ShopCartBean implements Serializable {
         }
         linea.setCostoBrutoUnitario(prod.getCostoAdquisicionNeto());
         linea.setCostoNetoUnitario(prod.getCostoFinal());
-        linea.setPrecioVentaUnitario(precio.getPrecio());
+        linea.setPrecioUnitario(precio.getPrecio());
         linea.setSubTotal(cantidad.multiply(precio.getPrecio()));
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
@@ -263,9 +275,9 @@ public class ShopCartBean implements Serializable {
     public void calcularTotal() {
         BigDecimal total = BigDecimal.ZERO;
         eliminarRedondeo();
-        for (VentasLineas vl : venta.getVentasLineasList()) {
+        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
 
-            vl.setSubTotal(vl.getCantidad().multiply(vl.getPrecioVentaUnitario()));
+            vl.setSubTotal(vl.getCantidad().multiply(vl.getPrecioUnitario()));
             total = total.add(vl.getSubTotal());
 
         }
@@ -288,7 +300,7 @@ public class ShopCartBean implements Serializable {
     private void eliminarRedondeo() {
         int cont = 0;
         int index = -1;
-        for (VentasLineas vl : venta.getVentasLineasList()) {
+        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
             if (vl.getIdProducto().equals(productoRedondeo)) {
                 index = cont;
                 break;
@@ -296,20 +308,20 @@ public class ShopCartBean implements Serializable {
             cont++;
         }
         if (index != -1) {
-            venta.getVentasLineasList().remove(index);
+            venta.getComprobantesLineasList().remove(index);
         }
     }
 
-    private VentasLineas crearLineaRedondeo(BigDecimal redondeo) {
-        VentasLineas linea = new VentasLineas();
-        linea.setIdVenta(venta);
+    private ComprobantesLineas crearLineaRedondeo(BigDecimal redondeo) {
+        ComprobantesLineas linea = new ComprobantesLineas();
+        linea.setIdComprobante(venta);
         linea.setCantidad(BigDecimal.ONE);
         linea.setDescripcion(productoRedondeo.getDescripcion());
         linea.setIdProducto(productoRedondeo);
         linea.setCantidadEntregada(BigDecimal.ONE);
         linea.setCostoBrutoUnitario(BigDecimal.ZERO);
         linea.setCostoNetoUnitario(BigDecimal.ZERO);
-        linea.setPrecioVentaUnitario(redondeo);
+        linea.setPrecioUnitario(redondeo);
         linea.setSubTotal(redondeo);
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
@@ -325,7 +337,7 @@ public class ShopCartBean implements Serializable {
 
                 pagoActual.setItem(itemCounter.getAndIncrement());
                 pagos.add(pagoActual);
-                pagoActual = new VentasPagos();
+                pagoActual = new ComprobantesPagos();
                 pagoActual.setImporteTotalPagado(BigDecimal.ZERO);
             }
         }
@@ -335,7 +347,7 @@ public class ShopCartBean implements Serializable {
     private void calcularTotalPagado() {
         venta.setSaldo(venta.getTotal());
         BigDecimal sumaPagos = BigDecimal.ZERO;
-        for (VentasPagos p : pagos) {
+        for (ComprobantesPagos p : pagos) {
             sumaPagos = sumaPagos.add(p.getImporteTotalPagado());
         }
         venta.setSaldo(venta.getTotal().subtract(sumaPagos));
@@ -351,12 +363,12 @@ public class ShopCartBean implements Serializable {
             JSFUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
-        if (venta.getVentasLineasList() == null || venta.getVentasLineasList().isEmpty()) {
+        if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
             JSFUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
-        if (venta.getIdCondicionVenta() != null) {
-            if (venta.getIdCondicionVenta().getPagoTotal()) {
+        if (venta.getIdCondicionComprobante() != null) {
+            if (venta.getIdCondicionComprobante().getPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
                     JSFUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
@@ -367,17 +379,26 @@ public class ShopCartBean implements Serializable {
         return true;
     }
 
+    private void establecerLetraComprobante() {
+        FiscalLetrasComprobantesSearchFilter lsf = new FiscalLetrasComprobantesSearchFilter(
+                venta.getIdPersona().getIdResponsabilidadIva(),
+                responsabilidadesIvaFacade.find(2L));
+        FiscalLetrasComprobantes letra = letrasComprobantesFacade.findFirstBySearchFilter(lsf);
+        venta.setLetra(letra.getLetraComprobante());
+    }
+
     public String guardarVenta() {
         if (validarVenta()) {
-            venta.setFechaVenta(new Date());
+            establecerLetraComprobante();
+            venta.setFechaComprobante(new Date());
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             try {
 
                 venta.setSaldo(venta.getTotal());
                 ventasBean.guardarVenta(venta, pagos);
-                System.out.print(NuevaVentaBean.class.getName() + "antes de actualizar el producto");
-                for (VentasLineas vl : venta.getVentasLineasList()) {
+
+                for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
 
                     Productos product = vl.getIdProducto();
                     if (product.getIdTipoProveeduria().getControlStock()) {
@@ -413,7 +434,7 @@ public class ShopCartBean implements Serializable {
         return productosFilter;
     }
 
-    public Ventas getVenta() {
+    public Comprobantes getVenta() {
         return venta;
     }
 
@@ -433,19 +454,19 @@ public class ShopCartBean implements Serializable {
         return formasPagoFacade.findFormasPagoVenta();
     }
 
-    public List<VentasPagos> getPagos() {
+    public List<ComprobantesPagos> getPagos() {
         return pagos;
     }
 
-    public List<VentasEstados> getVentasEstados() {
+    public List<ComprobantesEstados> getVentasEstados() {
         return estadosFacade.findAll();
     }
 
-    public VentasPagos getPagoActual() {
+    public ComprobantesPagos getPagoActual() {
         return pagoActual;
     }
 
-    public void setPagoActual(VentasPagos pagoActual) {
+    public void setPagoActual(ComprobantesPagos pagoActual) {
         this.pagoActual = pagoActual;
     }
 

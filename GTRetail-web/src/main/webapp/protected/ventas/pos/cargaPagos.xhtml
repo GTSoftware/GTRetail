@@ -21,7 +21,7 @@
 
             <h:outputLabel value="#{msg.condicionVenta}:" />
             <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}"
-                             value="#{shopCartBean.venta.idCondicionVenta}"
+                             value="#{shopCartBean.venta.idCondicionComprobante}"
                              converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
 
                 <f:selectItems value="#{shopCartBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}"
