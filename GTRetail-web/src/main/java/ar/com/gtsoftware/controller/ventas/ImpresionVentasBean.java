@@ -96,14 +96,17 @@ public class ImpresionVentasBean implements Serializable {
 //            ventas.add(ventaActual);
 //        }
         String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
-        String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistro(), cuit);
+
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura.jasper");
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.putAll(cargarParametros());
         parameters.put("logoAfip", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/afip.png"));
 
-        parameters.put("codigobarras", codigoBarras);
+        if (ventaActual.getIdRegistro().getCae() != null) {
+            String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistro(), cuit);
+            parameters.put("codigobarras", codigoBarras);
+        }
         if (ventaActual.getIdRegistro().getLetraFactura().equals("A")) {
             parameters.put("subreport", "vistaVentas_lineasNeto.jasper");
         } else {

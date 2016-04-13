@@ -73,6 +73,7 @@ public class VerComprobantesBean implements Serializable {
     private final List<FiscalPuntosVenta> puntosVentaList = new ArrayList<>();
 
     private FiscalPuntosVenta puntoVentaSeleccionado;
+    private static final Logger LOG = Logger.getLogger(VerComprobantesBean.class.getName());
 
     /**
      * Creates a new instance of VerVentasBean
@@ -92,7 +93,7 @@ public class VerComprobantesBean implements Serializable {
             if (ventaActual == null) {
 
                 JSFUtil.addErrorMessage("Venta inexistente!");
-                Logger.getLogger(VerComprobantesBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
+                LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
                 lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
 
@@ -126,25 +127,10 @@ public class VerComprobantesBean implements Serializable {
             ventaActual = ventasFacade.find(ventaActual.getId());
             JSFUtil.addInfoMessage("Factura registrada correctamente");
         } catch (ServiceException ex) {
-            Logger.getLogger(FacturacionVentasBean.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             JSFUtil.addErrorMessage(ex.getMessage());
         }
 
-    }
-
-    /**
-     * Anula la venta actual y su factura asociada
-     */
-    public void anularFactura() {
-        try {
-            facturacionBean.anularFactura(ventaActual);
-            JSFUtil.addInfoMessage("Factura anulada correctamente");
-
-        } catch (ServiceException ex) {
-            Logger.getLogger(VerComprobantesBean.class.getName()).log(Level.SEVERE, null, ex);
-            JSFUtil.addErrorMessage(ex.getMessage());
-
-        }
     }
 
     /**
@@ -156,7 +142,7 @@ public class VerComprobantesBean implements Serializable {
             JSFUtil.addInfoMessage("Factura anulada correctamente");
 
         } catch (ServiceException ex) {
-            Logger.getLogger(VerComprobantesBean.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             JSFUtil.addErrorMessage(ex.getMessage());
 
         }

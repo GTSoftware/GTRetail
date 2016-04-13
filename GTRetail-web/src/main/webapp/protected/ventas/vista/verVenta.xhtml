@@ -55,14 +55,7 @@
                                  action="#{impresionVentasBean.imprimirPresupuesto(verComprobantesBean.ventaActual)}"
                                  ajax="false"
                                  />
-                <!-- Anular factura -->
-                <p:commandButton value="#{msg.anularFactura}"
-                                 icon="ui-icon-cancel"
-                                 rendered="#{not empty verComprobantesBean.ventaActual.idRegistro}"
-                                 onclick="PF('confirmation').show()"
-                                 >
 
-                </p:commandButton>
                 <!-- Anular Venta -->
                 <p:commandButton value="#{msg.anularVenta}"
                                  icon="ui-icon-cancel"

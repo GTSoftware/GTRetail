@@ -22,6 +22,23 @@
         <fieldDescription><![CDATA[idComprobante]]></fieldDescription>
     </field>
     <field name="descripcion" class="java.lang.String"/>
+    <field name="item" class="java.lang.Integer">
+        <fieldDescription><![CDATA[item]]></fieldDescription>
+    </field>
+    <sortField name="item"/>
+    <variable name="sub-total-neto-linea" class="java.math.BigDecimal" resetType="None">
+        <variableExpression><![CDATA[$F{subTotal}.divide(java.math.BigDecimal.ONE.add(
+$F{idProducto}.getIdAlicuotaIva().getValorAlicuota().divide(
+new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></variableExpression>
+    </variable>
+    <variable name="sub-total" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$V{sub-total-neto-linea}]]></variableExpression>
+    </variable>
+    <variable name="precio-neto" class="java.math.BigDecimal" resetType="None">
+        <variableExpression><![CDATA[$F{precioUnitario}.divide(java.math.BigDecimal.ONE.add(
+$F{idProducto}.getIdAlicuotaIva().getValorAlicuota().divide(
+new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></variableExpression>
+    </variable>
     <columnHeader>
         <band height="21">
             <rectangle radius="5">
@@ -103,16 +120,7 @@
             <textField pattern="¤ #,##0.00">
                 <reportElement x="416" y="4" width="69" height="20" uuid="e8f13670-d049-4398-943b-644ed58e24a5"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{precioUnitario}.divide(java.math.BigDecimal.ONE.add(
-$F{idProducto}.getIdAlicuotaIva().getValorAlicuota().divide(
-new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldExpression>
-            </textField>
-            <textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-                <reportElement x="485" y="4" width="70" height="20" uuid="662c956e-f7e4-4c4a-b4bb-d316677c2f91"/>
-                <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{subTotal}.divide(java.math.BigDecimal.ONE.add(
-$F{idProducto}.getIdAlicuotaIva().getValorAlicuota().divide(
-new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$V{precio-neto}]]></textFieldExpression>
             </textField>
             <textField pattern="">
                 <reportElement x="367" y="4" width="49" height="20" uuid="f7d41e1f-9fa7-41bd-9a97-762275e9fac1"/>
@@ -124,65 +132,29 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></textFieldE
                     <pen lineStyle="Dashed"/>
                 </graphicElement>
             </line>
+            <textField pattern="¤ #,##0.00">
+                <reportElement x="485" y="4" width="70" height="20" uuid="769a6a0b-f7b8-43dc-a565-c5e08b2960e1"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$V{sub-total-neto-linea}]]></textFieldExpression>
+            </textField>
         </band>
     </detail>
     <columnFooter>
-        <band height="155">
+        <band height="21">
             <staticText>
-                <reportElement x="289" y="133" width="127" height="20" uuid="156629ee-5325-4125-a3f7-c07607651199"/>
+                <reportElement x="289" y="0" width="127" height="20" uuid="156629ee-5325-4125-a3f7-c07607651199"/>
                 <textElement textAlignment="Right">
                     <font isBold="true" isUnderline="true"/>
                 </textElement>
-                <text><![CDATA[Importe Total:]]></text>
+                <text><![CDATA[Sub-Total:]]></text>
             </staticText>
-            <textField pattern="¤ #,##0.00">
-                <reportElement x="417" y="133" width="136" height="20" uuid="5b7063a6-f944-4170-98f6-41e9d5098c31"/>
+            <textField>
+                <reportElement x="419" y="0" width="137" height="20" uuid="9ceecdec-2ecf-46da-919a-3734271bbca4"/>
                 <textElement textAlignment="Right">
-                    <font size="12" isBold="true"/>
+                    <font isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$F{idComprobante}.getTotal()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$V{sub-total}]]></textFieldExpression>
             </textField>
-            <staticText>
-                <reportElement x="288" y="0" width="127" height="20" uuid="776a6d4b-d973-4100-843d-7fb677146cfe"/>
-                <textElement textAlignment="Right">
-                    <font isBold="false" isUnderline="false"/>
-                </textElement>
-                <text><![CDATA[Importe Neto Gravado:]]></text>
-            </staticText>
-            <textField pattern="¤ #,##0.00">
-                <reportElement x="416" y="0" width="139" height="20" uuid="3a329bff-4395-4e72-9574-32bc5f65c71c"/>
-                <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idComprobante}.getIdRegistro().getImporteNetoGravado()]]></textFieldExpression>
-            </textField>
-            <subreport>
-                <reportElement x="0" y="20" width="553" height="60" uuid="15e1d657-1d59-4f6b-9be9-7e7e2f6d546b"/>
-                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{idComprobante}.getIdRegistro().getFiscalLibroIvaVentasLineasList())]]></dataSourceExpression>
-                <subreportExpression><![CDATA["vistaVentas_alicuotas.jasper"]]></subreportExpression>
-            </subreport>
-            <staticText>
-                <reportElement x="289" y="82" width="127" height="20" uuid="391b07d6-3664-4e8d-8d82-2d95fc10c664"/>
-                <textElement textAlignment="Right">
-                    <font isBold="false" isUnderline="false"/>
-                </textElement>
-                <text><![CDATA[Neto No Gravado:]]></text>
-            </staticText>
-            <textField pattern="¤ #,##0.00">
-                <reportElement x="417" y="82" width="139" height="20" uuid="f904eb23-118c-489c-87f2-9ae0778458c9"/>
-                <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idComprobante}.getIdRegistro().getImporteNetoNoGravado()]]></textFieldExpression>
-            </textField>
-            <textField pattern="¤ #,##0.00">
-                <reportElement x="417" y="102" width="139" height="20" uuid="97007d43-bd92-41e6-a5a9-d7492edf0a17"/>
-                <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idComprobante}.getIdRegistro().getImporteTributos()]]></textFieldExpression>
-            </textField>
-            <staticText>
-                <reportElement x="289" y="102" width="127" height="20" uuid="4facab07-9f80-4c55-a2bd-b064f547b918"/>
-                <textElement textAlignment="Right">
-                    <font isBold="false" isUnderline="false"/>
-                </textElement>
-                <text><![CDATA[Importe Otros Tributos:]]></text>
-            </staticText>
         </band>
     </columnFooter>
 </jasperReport>

@@ -84,7 +84,10 @@ public class VentasBean {
             throw new ServiceException("Venta nula!");
         }
         if (venta.getAnulada()) {
-            throw new ServiceException("La venta ya fue anulada!");
+            throw new ServiceException("El comprobante ya fue anulado!");
+        }
+        if (venta.getIdRegistro() != null) {
+            throw new ServiceException("Comprobante impreso fiscalmente!");
         }
 
         venta.setAnulada(true);
