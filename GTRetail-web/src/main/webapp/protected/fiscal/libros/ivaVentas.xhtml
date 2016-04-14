@@ -32,6 +32,10 @@
                              value="#{msg.generar}"
                              ajax="false"
                              icon="ui-icon-gear"/>
+            <p:commandButton id="exportExcelButton" action="#{libroIVABean.exportIVAVentaExcel()}"
+                             value="#{msg.exportarExcel}"
+                             ajax="false"
+                             icon="ui-icon-gear"/>
         </h:form>
 
     </ui:define>
