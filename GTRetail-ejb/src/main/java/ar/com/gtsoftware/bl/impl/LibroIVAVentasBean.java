@@ -21,10 +21,10 @@ import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
-import ar.com.gtsoftware.model.dto.FacturaDTO;
 import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.model.dto.ImportesResponsabilidad;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
+import ar.com.gtsoftware.model.dto.RegistroIVADTO;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class LibroIVAVentasBean {
         }
         List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findBySearchFilter(filter);
 
-        List<FacturaDTO> facturasDTOList = new ArrayList<>();
+        List<RegistroIVADTO> facturasDTOList = new ArrayList<>();
         BigDecimal importeGeneralTotal = BigDecimal.ZERO;
         BigDecimal totalGeneralIVA = BigDecimal.ZERO;
         List<ImportesResponsabilidad> totalesResponsabildiad = new ArrayList<>();
@@ -82,10 +82,10 @@ public class LibroIVAVentasBean {
         for (FiscalLibroIvaVentas factura : facturas) {
             Set<ImportesAlicuotasIVA> importesIVA = new HashSet<>();
 
-            FacturaDTO facDTO = inicializarFacturaDTO(factura);
+            RegistroIVADTO facDTO = inicializarRegistroDTO(factura);
 
             importeGeneralTotal = importeGeneralTotal.add(facDTO.getTotalFactura());
-            //HashMap<FiscalAlicuotasIva, BigDecimal> ivaMap = new HashMap<>();
+            //TODO esto se mantiene por motivos de compatibilidad con registros viejos...
             for (FiscalLibroIvaVentasLineas linea : ivaVentasLineasFacade.getLineasFactura(factura)) {
                 facDTO.setNetoGravado(facDTO.getNetoGravado().add(linea.getNetoGravado()));
                 facDTO.setNoGravado(facDTO.getNoGravado().add(linea.getNoGravado()));
@@ -143,12 +143,15 @@ public class LibroIVAVentasBean {
      * @param facDTO
      * @param factura
      */
-    private FacturaDTO inicializarFacturaDTO(FiscalLibroIvaVentas factura) {
-        FacturaDTO facDTO = new FacturaDTO();
+    private RegistroIVADTO inicializarRegistroDTO(FiscalLibroIvaVentas factura) {
+        RegistroIVADTO facDTO = new RegistroIVADTO();
         facDTO.setDocumentoCliente(factura.getDocumento());
         facDTO.setFechaFactura(factura.getFechaFactura());
         facDTO.setIdFactura(factura.getId());
         facDTO.setRazonSocialCliente(factura.getIdPersona().getRazonSocial());
+        facDTO.setTipoDocumento(factura.getIdPersona().getIdTipoDocumento().getNombreTipoDocumento());
+        facDTO.setTipoComprobante(factura.getCodigoTipoComprobante().getDenominacionComprobante());
+        facDTO.setCategoriaIVACliente(factura.getIdPersona().getIdResponsabilidadIva().getNombreResponsabildiad());
         if (factura.getAnulada()) {
             facDTO.setRazonSocialCliente("NULA");
         }
@@ -159,6 +162,8 @@ public class LibroIVAVentasBean {
         facDTO.setNoGravado(BigDecimal.ZERO);
         facDTO.setTotalFactura(factura.getTotalFactura());
         facDTO.setTotalIva(BigDecimal.ZERO);
+        facDTO.setOtrosTributos(factura.getImporteTributos());
+        facDTO.setExento(factura.getImporteExento());
         return facDTO;
     }
 
@@ -170,19 +175,19 @@ public class LibroIVAVentasBean {
      */
     private void totalizarAlicuotasIVAGeneral(List<ImportesAlicuotasIVA> totalAlicuotasIVAGeneral,
             List<ImportesAlicuotasIVA> totalAlicuotasIVAFactura) {
-        if (totalAlicuotasIVAGeneral.isEmpty()) {
-            totalAlicuotasIVAGeneral.addAll(totalAlicuotasIVAFactura);
-        } else {
-            for (ImportesAlicuotasIVA ivaFactrura : totalAlicuotasIVAFactura) {
-                if (totalAlicuotasIVAGeneral.contains(ivaFactrura)) {
-                    ImportesAlicuotasIVA existente = totalAlicuotasIVAGeneral.get(totalAlicuotasIVAGeneral.indexOf(ivaFactrura));
-                    existente.setImporteIva(existente.getImporteIva().add(ivaFactrura.getImporteIva()));
-                } else {
-                    ImportesAlicuotasIVA nuevoIva = new ImportesAlicuotasIVA(ivaFactrura.getAlicuota(), ivaFactrura.getImporteIva(), ivaFactrura.getNetoGravado());
-                    totalAlicuotasIVAGeneral.add(nuevoIva);
-                }
+//        if (totalAlicuotasIVAGeneral.isEmpty()) {
+//            totalAlicuotasIVAGeneral.addAll(totalAlicuotasIVAFactura);
+//        } else {
+        for (ImportesAlicuotasIVA ivaFactrura : totalAlicuotasIVAFactura) {
+            if (totalAlicuotasIVAGeneral.contains(ivaFactrura)) {
+                ImportesAlicuotasIVA existente = totalAlicuotasIVAGeneral.get(totalAlicuotasIVAGeneral.indexOf(ivaFactrura));
+                existente.setImporteIva(existente.getImporteIva().add(ivaFactrura.getImporteIva()));
+            } else {
+                ImportesAlicuotasIVA nuevoIva = new ImportesAlicuotasIVA(ivaFactrura.getAlicuota(), ivaFactrura.getImporteIva(), ivaFactrura.getNetoGravado());
+                totalAlicuotasIVAGeneral.add(nuevoIva);
             }
         }
+//        }
 
     }
 

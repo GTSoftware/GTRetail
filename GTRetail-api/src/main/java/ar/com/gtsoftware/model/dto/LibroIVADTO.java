@@ -37,7 +37,7 @@ public class LibroIVADTO implements Serializable {
     private Date fechaHasta;
     private Date fechaGeneracion;
 
-    private List<FacturaDTO> facturasList;
+    private List<RegistroIVADTO> facturasList;
     private BigDecimal importeTotal;
     private BigDecimal importeTotalIVA;
     private List<ImportesResponsabilidad> totalesIVAResponsabilidad;
@@ -121,7 +121,7 @@ public class LibroIVADTO implements Serializable {
      *
      * @return facturasList
      */
-    public List<FacturaDTO> getFacturasList() {
+    public List<RegistroIVADTO> getFacturasList() {
         return facturasList;
     }
 
@@ -130,7 +130,7 @@ public class LibroIVADTO implements Serializable {
      *
      * @param facturasList
      */
-    public void setFacturasList(List<FacturaDTO> facturasList) {
+    public void setFacturasList(List<RegistroIVADTO> facturasList) {
         this.facturasList = facturasList;
     }
 
