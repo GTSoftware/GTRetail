@@ -98,7 +98,9 @@ public class ImpresionVentasBean implements Serializable {
         String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
-        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/factura.jasper");
+        JRBeanCollectionDataSource beanCollectionDataSource1 = new JRBeanCollectionDataSource(ventas);
+        JRBeanCollectionDataSource beanCollectionDataSource2 = new JRBeanCollectionDataSource(ventas);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/facturaConDuplicado.jasper");
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.putAll(cargarParametros());
         parameters.put("logoAfip", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/afip.png"));
@@ -113,7 +115,10 @@ public class ImpresionVentasBean implements Serializable {
             parameters.put("subreport", "vistaVentas_lineas.jasper");
         }
 
+        parameters.put("subDataSource", beanCollectionDataSource1);
+        parameters.put("subDataSource2", beanCollectionDataSource2);
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
         ServletOutputStream servletStream = httpServletResponse.getOutputStream();

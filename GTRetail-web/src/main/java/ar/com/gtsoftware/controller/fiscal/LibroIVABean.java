@@ -122,8 +122,13 @@ public class LibroIVABean {
 
         Sheet sheet = wb.createSheet("sheet");
         int nroFila = 0;
-        row = sheet.createRow(nroFila++);
 
+        row = sheet.createRow(nroFila++);
+        cell = row.createCell(0);
+        cell.setCellValue("Libro de IVA Ventas");
+        cell.setCellStyle(styleHeader);
+
+        row = sheet.createRow(nroFila++);
         cell = row.createCell(0);
         cell.setCellValue("Fecha de impresión:");
         cell = row.createCell(1);
