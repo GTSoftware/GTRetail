@@ -117,6 +117,10 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
 
             p = appendAndPredicate(cb, p1, p);
         }
+        if (vsf.hasTiposComprobanteFilter()) {
+            Predicate p1 = root.get(Comprobantes_.tipoComprobante).in(vsf.getTiposComprobante());
+            p = appendAndPredicate(cb, p1, p);
+        }
         return p;
     }
 

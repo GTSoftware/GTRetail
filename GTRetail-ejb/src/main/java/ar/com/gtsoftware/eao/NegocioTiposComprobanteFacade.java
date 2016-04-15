@@ -16,13 +16,16 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.NegocioTiposComprobante;
+import ar.com.gtsoftware.model.NegocioTiposComprobante_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -45,7 +48,19 @@ public class NegocioTiposComprobanteFacade extends AbstractFacade<NegocioTiposCo
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<NegocioTiposComprobante> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NegocioTiposComprobanteSearchFilter nsf = (NegocioTiposComprobanteSearchFilter) sf;
+        Predicate p = null;
+        if (nsf.getActivo() != null) {
+            Predicate p1 = cb.equal(root.get(NegocioTiposComprobante_.activo), nsf.getActivo());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (StringUtils.isNotEmpty(nsf.getNombre())) {
+            String s = nsf.getNombre().toUpperCase();
+            Predicate p1 = cb.like(root.get(NegocioTiposComprobante_.nombreComprobante), String.format("%%%s%%", s));
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
+
     }
 
     public NegocioTiposComprobante getTipoFactura() {

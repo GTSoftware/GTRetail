@@ -18,17 +18,22 @@ package ar.com.gtsoftware.controller.ventas;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
+import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.NegocioTiposComprobante;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
+import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -51,16 +56,25 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes> {
             DateUtils.addDays(new Date(), 1), Boolean.FALSE);
     @EJB
     private PersonasFacade clientesFacade;
+    @EJB
+    private NegocioTiposComprobanteFacade tiposComprobanteFacade;
     private final PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private final NegocioTiposComprobanteSearchFilter tiposComprobanteSearchFilter = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
 
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
+    private final List<NegocioTiposComprobante> tiposCompList = new ArrayList<>();
 
     /**
      * Creates a new instance of SearchVentasBean
      */
     public SearchComprobantesBean() {
+    }
+
+    @PostConstruct
+    private void init() {
+        tiposCompList.addAll(tiposComprobanteFacade.findAll());
     }
 
     private void calcularTotales() {
@@ -72,6 +86,15 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes> {
     public List<Personas> findClientesByString(String query) {
         personasSearchFilter.setTxt(query);
         return clientesFacade.findBySearchFilter(personasSearchFilter, 0, 15);
+    }
+
+    public List<NegocioTiposComprobante> autocompleteTiposComp(String query) {
+        tiposComprobanteSearchFilter.setNombre(query);
+        return tiposComprobanteFacade.findAllBySearchFilter(tiposComprobanteSearchFilter);
+    }
+
+    public List<NegocioTiposComprobante> getTiposCompList() {
+        return tiposCompList;
     }
 
     @Override

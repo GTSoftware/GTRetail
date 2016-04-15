@@ -35,11 +35,13 @@ import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.NegocioTiposComprobante;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
@@ -103,6 +105,8 @@ public class ShopCartBean implements Serializable {
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
+
+    private final NegocioTiposComprobanteSearchFilter tipoCompSf = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
 
     private final List<ComprobantesPagos> pagos = new ArrayList<>();
 
@@ -363,6 +367,10 @@ public class ShopCartBean implements Serializable {
             JSFUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
+        if (venta.getTotal().signum() <= 0) {
+            JSFUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
+            return false;
+        }
         if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
             JSFUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
@@ -402,7 +410,7 @@ public class ShopCartBean implements Serializable {
 
                     Productos product = vl.getIdProducto();
                     if (product.getIdTipoProveeduria().getControlStock()) {
-                        product.setStockActual(product.getStockActual().subtract(vl.getCantidad()));
+                        product.setStockActual(product.getStockActual().subtract(vl.getCantidad().multiply(venta.getTipoComprobante().getSigno())));
                         if (product.getStockActual().signum() < 0) {
                             product.setStockActual(BigDecimal.ZERO);
                         }
@@ -448,6 +456,11 @@ public class ShopCartBean implements Serializable {
 
     public List<NegocioCondicionesOperaciones> getCondicionesVentaList() {
         return condicionesOperacionesFacade.findAll();
+    }
+
+    public List<NegocioTiposComprobante> getTiposComprobanteList() {
+
+        return tiposComprobanteFacade.findAllBySearchFilter(tipoCompSf);
     }
 
     public List<NegocioFormasPago> getFormasPagoList() {

@@ -5,7 +5,9 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
+      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
+
+      xmlns:o="http://omnifaces.org/ui">
 
 
 
@@ -45,6 +47,23 @@
                                              process="@this" />
                         </h:panelGroup>
 
+                        <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoCompField"/>
+                        <p:autoComplete id="tipoCompField" multiple="true"
+                                        value="#{searchComprobantesBean.filter.tiposComprobante}"
+                                        completeMethod="#{searchComprobantesBean.autocompleteTiposComp}"
+                                        var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}" itemValue="#{tipoComp}"
+                                        forceSelection="true"
+                                        minQueryLength="2"
+                                        >
+                            <o:converter converterId="omnifaces.ListConverter"
+                                         list="#{searchComprobantesBean.tiposCompList}"/>
+                            <p:ajax event="query" global="false"/>
+
+                            <p:column>
+                                <h:outputText value="#{tipoComp.nombreComprobante}" />
+                            </p:column>
+
+                        </p:autoComplete>
 
                         <h:outputLabel for="nroFacturaField" value="#{msg.factura}:" />
                         <p:inputText  id="nroFacturaField"  value="#{searchComprobantesBean.filter.numeroFactura}"
@@ -126,6 +145,13 @@
                     <h:outputLabel value="#{comprobante.fechaComprobante}">
                         <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
                     </h:outputLabel>
+                </p:column>
+
+                <p:column sortBy="#{comprobante.tipoComprobante.nombreComprobante}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.tipoComprobante}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{comprobante.tipoComprobante.nombreComprobante}"/>
                 </p:column>
 
                 <p:column sortBy="#{comprobante.idPersona.razonSocial}">

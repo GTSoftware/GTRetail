@@ -14,6 +14,16 @@
         <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
                      columnClasses="ui-grid-col-2,ui-grid-col-5">
 
+            <h:outputLabel value="#{msg.tipoComprobante}:" />
+            <p:selectOneMenu id="tipoComprobanteField" required="true" requiredMessage="#{msg.campoRequerido}"
+                             value="#{shopCartBean.venta.tipoComprobante}"
+                             converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+
+                <f:selectItems value="#{shopCartBean.tiposComprobanteList}" var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}"
+                               itemValue="#{tipoComp}"/>
+
+            </p:selectOneMenu>
+
             <h:outputLabel value="#{msg.totalPagar}:" style="font-size: xx-large"/>
             <h:outputLabel value="#{shopCartBean.venta.total}" style="font-size: xx-large">
                 <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>

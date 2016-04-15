@@ -127,7 +127,7 @@ public class VerComprobantesBean implements Serializable {
             ventaActual = ventasFacade.find(ventaActual.getId());
             JSFUtil.addInfoMessage("Factura registrada correctamente");
         } catch (ServiceException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
             JSFUtil.addErrorMessage(ex.getMessage());
         }
 
