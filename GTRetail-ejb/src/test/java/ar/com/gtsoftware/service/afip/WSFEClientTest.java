@@ -120,7 +120,7 @@ public class WSFEClientTest {
     }
 
     @Test
-
+    @Ignore
     public void testObtenerUltimoComprobanteAutorizado() throws ServiceException {
         AFIPAuthServices loginTicket = new AFIPAuthServices();
         AuthTicket loginTk = WSAAClient.performAuthentication(WSAAClientTest.ENDPOINT, WSAAClientTest.CERT_PATH,
