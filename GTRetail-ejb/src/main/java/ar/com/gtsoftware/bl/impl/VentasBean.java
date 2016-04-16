@@ -16,13 +16,13 @@
 package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.eao.VentasEstadosFacade;
-import ar.com.gtsoftware.eao.VentasFacade;
-import ar.com.gtsoftware.eao.VentasPagosFacade;
-import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasPagos;
-import ar.com.gtsoftware.model.VentasPagosLineas;
+import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
+import ar.com.gtsoftware.eao.ComprobantesFacade;
+import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
+import ar.com.gtsoftware.eao.ComprobantesPagosLineasFacade;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesPagos;
+import ar.com.gtsoftware.model.ComprobantesPagosLineas;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -37,34 +37,34 @@ import javax.ejb.Stateless;
 public class VentasBean {
 
     @EJB
-    private VentasFacade ventasFacade;
+    private ComprobantesFacade ventasFacade;
 
     @EJB
-    private VentasPagosFacade pagosFacade;
+    private ComprobantesPagosFacade pagosFacade;
     @EJB
-    private VentasPagosLineasFacade pagosLineasFacade;
+    private ComprobantesPagosLineasFacade pagosLineasFacade;
 
     @EJB
     private PersonasCuentaCorrienteBean cuentaCorrienteBean;
     @EJB
-    private VentasEstadosFacade estadosFacade;
+    private ComprobantesEstadosFacade estadosFacade;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public void guardarVenta(Ventas venta, List<VentasPagos> pagos) throws Exception {
+    public void guardarVenta(Comprobantes venta, List<ComprobantesPagos> pagos) throws Exception {
         if (venta.isNew()) { //TODO Evaluar para utilizar el mismo método en caso de una venta modificada
             //TODO Parametrizar estado inicial de venta
-            venta.setIdVentasEstados(estadosFacade.find(2L)); //Aceptada
+            venta.setIdEstadoComprobante(estadosFacade.find(2L)); //Aceptada
             ventasFacade.create(venta);
-            for (VentasPagos pago : pagos) {
-                pago.setFechaPago(venta.getFechaVenta());
+            for (ComprobantesPagos pago : pagos) {
+                pago.setFechaPago(venta.getFechaComprobante());
                 pago.setIdPersona(venta.getIdPersona());
                 pago.setIdUsuario(venta.getIdUsuario());
                 pago.setIdSucursal(venta.getIdSucursal());
                 pagosFacade.create(pago);
-                VentasPagosLineas lineaPago = new VentasPagosLineas();
-                lineaPago.setIdPagoVenta(pago);
-                lineaPago.setIdVenta(venta);
+                ComprobantesPagosLineas lineaPago = new ComprobantesPagosLineas();
+                lineaPago.setIdPagoComprobante(pago);
+                lineaPago.setIdComprobante(venta);
                 lineaPago.setImporte(pago.getImporteTotalPagado());
                 pagosLineasFacade.create(lineaPago);
             }
@@ -79,12 +79,15 @@ public class VentasBean {
      * @param venta
      * @throws ServiceException
      */
-    public void anularVenta(Ventas venta) throws ServiceException {
+    public void anularVenta(Comprobantes venta) throws ServiceException {
         if (venta == null) {
             throw new ServiceException("Venta nula!");
         }
         if (venta.getAnulada()) {
-            throw new ServiceException("La venta ya fue anulada!");
+            throw new ServiceException("El comprobante ya fue anulado!");
+        }
+        if (venta.getIdRegistro() != null) {
+            throw new ServiceException("Comprobante impreso fiscalmente!");
         }
 
         venta.setAnulada(true);

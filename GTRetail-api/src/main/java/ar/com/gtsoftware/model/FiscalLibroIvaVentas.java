@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "fiscal_libro_iva_ventas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_factura", columnDefinition = "serial"))
+@AttributeOverride(name = "id", column = @Column(name = "id_registro"))
 public class FiscalLibroIvaVentas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -81,23 +81,23 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     private BigDecimal totalFactura;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "codigo_tipo_comprobante", referencedColumnName = "codigo_tipo_comprobante", columnDefinition = "bpchar")
+    @JoinColumn(name = "codigo_tipo_comprobante", referencedColumnName = "codigo_tipo_comprobante")
     private FiscalTiposComprobante codigoTipoComprobante;
 
-    @OneToMany(mappedBy = "idRegistroIva")
-    private List<Ventas> ventasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFactura")
+    @OneToMany(mappedBy = "idRegistro")
+    private List<Comprobantes> ventasList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRegistro")
     private List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
+    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
-    @JoinColumn(name = "id_periodo_fiscal", referencedColumnName = "id_periodo_fiscal", columnDefinition = "int4")
+    @JoinColumn(name = "id_periodo_fiscal", referencedColumnName = "id_periodo_fiscal")
     @ManyToOne(optional = false)
     private FiscalPeriodosFiscales idPeriodoFiscal;
-    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro", columnDefinition = "int4")
+    @JoinColumn(name = "id_registro_contable", referencedColumnName = "id_registro")
     @ManyToOne(optional = true)
     private ContabilidadRegistroContable idRegistroContable;
 
@@ -188,11 +188,11 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     }
 
     @XmlTransient
-    public List<Ventas> getVentasList() {
+    public List<Comprobantes> getVentasList() {
         return ventasList;
     }
 
-    public void setVentasList(List<Ventas> ventasList) {
+    public void setVentasList(List<Comprobantes> ventasList) {
         this.ventasList = ventasList;
     }
 

@@ -5,3 +5,11 @@
 .top-aligned-columns td{
     vertical-align: top;
 }
+
+.ui-datatable-odd {
+    background: #ffffff;
+}
+
+.ui-datatable-even {
+    background: #F2F5F9;
+}

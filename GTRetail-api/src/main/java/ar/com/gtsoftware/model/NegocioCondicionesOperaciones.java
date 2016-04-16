@@ -15,27 +15,23 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "negocio_condiciones_operaciones")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_condicion", columnDefinition = "serial"))
+@AttributeOverride(name = "id", column = @Column(name = "id_condicion"))
 public class NegocioCondicionesOperaciones extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -61,10 +57,6 @@ public class NegocioCondicionesOperaciones extends BaseEntity {
     @NotNull
     @Column(name = "pago_total")
     private boolean pagoTotal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCondicionCompra")
-    private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCondicionVenta")
-    private List<Ventas> ventasList;
 
     public NegocioCondicionesOperaciones() {
     }
@@ -111,24 +103,6 @@ public class NegocioCondicionesOperaciones extends BaseEntity {
 
     public void setCompra(boolean compra) {
         this.compra = compra;
-    }
-
-    @XmlTransient
-    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
-        return proveedoresOrdenesCompraList;
-    }
-
-    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
-        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-    }
-
-    @XmlTransient
-    public List<Ventas> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Ventas> ventasList) {
-        this.ventasList = ventasList;
     }
 
     public boolean getPagoTotal() {

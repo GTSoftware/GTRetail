@@ -17,12 +17,12 @@ package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.eao.CajasCategoriasMovimientosFacade;
 import ar.com.gtsoftware.eao.CajasMovimientosFacade;
-import ar.com.gtsoftware.eao.VentasPagosFacade;
+import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasCategoriasMovimientos;
 import ar.com.gtsoftware.model.CajasMovimientos;
 import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.model.VentasPagos;
+import ar.com.gtsoftware.model.ComprobantesPagos;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -43,14 +43,14 @@ public class CajaBean {
     @EJB
     private CajasCategoriasMovimientosFacade categoriasMovimientosFacade;
     @EJB
-    private VentasPagosFacade pagosFacade;
+    private ComprobantesPagosFacade pagosFacade;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public void registrarPagos(List<VentasPagos> pagos, Usuarios usuario, Cajas caja) throws Exception {
+    public void registrarPagos(List<ComprobantesPagos> pagos, Usuarios usuario, Cajas caja) throws Exception {
         CajasCategoriasMovimientos categoriaPagosPorVentas = categoriasMovimientosFacade.find(1);
 
-        for (VentasPagos p : pagos) {
+        for (ComprobantesPagos p : pagos) {
             BigDecimal saldoAcumAnt = cajasMovimientosFacade.findSaldoCaja(caja);
             if (saldoAcumAnt == null) {
                 saldoAcumAnt = BigDecimal.ZERO;

@@ -15,10 +15,10 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasPagos;
-import ar.com.gtsoftware.model.VentasPagosLineas;
-import ar.com.gtsoftware.model.VentasPagosLineas_;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesPagos;
+import ar.com.gtsoftware.model.ComprobantesPagosLineas;
+import ar.com.gtsoftware.model.ComprobantesPagosLineas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -35,7 +35,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class VentasPagosLineasFacade extends AbstractFacade<VentasPagosLineas> {
+public class ComprobantesPagosLineasFacade extends AbstractFacade<ComprobantesPagosLineas> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -45,45 +45,45 @@ public class VentasPagosLineasFacade extends AbstractFacade<VentasPagosLineas> {
         return em;
     }
 
-    public VentasPagosLineasFacade() {
-        super(VentasPagosLineas.class);
+    public ComprobantesPagosLineasFacade() {
+        super(ComprobantesPagosLineas.class);
     }
 
-    public List<VentasPagosLineas> findLineasPagosNoAcentadas(Ventas venta) {
+    public List<ComprobantesPagosLineas> findLineasPagosNoAcentadas(Comprobantes venta) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<VentasPagosLineas> cq = cb.createQuery(VentasPagosLineas.class);
-        Root<VentasPagosLineas> pagoLinea = cq.from(VentasPagosLineas.class);
+        CriteriaQuery<ComprobantesPagosLineas> cq = cb.createQuery(ComprobantesPagosLineas.class);
+        Root<ComprobantesPagosLineas> pagoLinea = cq.from(ComprobantesPagosLineas.class);
         cq.select(pagoLinea);
-        Predicate p1 = cb.equal(pagoLinea.get(VentasPagosLineas_.idVenta), venta);
-        Predicate p2 = cb.isNull(pagoLinea.get(VentasPagosLineas_.idCajasMovimientos));
+        Predicate p1 = cb.equal(pagoLinea.get(ComprobantesPagosLineas_.idComprobante), venta);
+        Predicate p2 = cb.isNull(pagoLinea.get(ComprobantesPagosLineas_.idCajasMovimientos));
         cq.where(cb.and(p1, p2));
-        TypedQuery<VentasPagosLineas> q = em.createQuery(cq);
-        List<VentasPagosLineas> pagosLineasList = q.getResultList();
+        TypedQuery<ComprobantesPagosLineas> q = em.createQuery(cq);
+        List<ComprobantesPagosLineas> pagosLineasList = q.getResultList();
         return pagosLineasList;
 
     }
 
-    public List<VentasPagosLineas> findLineasPago(VentasPagos pago) {
+    public List<ComprobantesPagosLineas> findLineasPago(ComprobantesPagos pago) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<VentasPagosLineas> cq = cb.createQuery(VentasPagosLineas.class);
-        Root<VentasPagosLineas> pagoLinea = cq.from(VentasPagosLineas.class);
+        CriteriaQuery<ComprobantesPagosLineas> cq = cb.createQuery(ComprobantesPagosLineas.class);
+        Root<ComprobantesPagosLineas> pagoLinea = cq.from(ComprobantesPagosLineas.class);
         cq.select(pagoLinea);
-        Predicate p1 = cb.equal(pagoLinea.get(VentasPagosLineas_.idPagoVenta), pago);
+        Predicate p1 = cb.equal(pagoLinea.get(ComprobantesPagosLineas_.idPagoComprobante), pago);
 
         cq.where(p1);
-        TypedQuery<VentasPagosLineas> q = em.createQuery(cq);
-        List<VentasPagosLineas> pagosLineasList = q.getResultList();
+        TypedQuery<ComprobantesPagosLineas> q = em.createQuery(cq);
+        List<ComprobantesPagosLineas> pagosLineasList = q.getResultList();
         return pagosLineasList;
 
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<VentasPagosLineas> root) {
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ComprobantesPagosLineas> root) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<VentasPagosLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
+    public List<ComprobantesPagosLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -93,7 +93,7 @@ public class VentasPagosLineasFacade extends AbstractFacade<VentasPagosLineas> {
     }
 
     @Override
-    public void createOrEdit(VentasPagosLineas entity) {
+    public void createOrEdit(ComprobantesPagosLineas entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

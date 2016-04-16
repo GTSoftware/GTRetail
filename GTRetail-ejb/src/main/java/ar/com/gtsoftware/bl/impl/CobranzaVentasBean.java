@@ -15,14 +15,14 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
-import ar.com.gtsoftware.eao.VentasFacade;
-import ar.com.gtsoftware.eao.VentasPagosFacade;
-import ar.com.gtsoftware.eao.VentasPagosLineasFacade;
+import ar.com.gtsoftware.eao.ComprobantesFacade;
+import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
+import ar.com.gtsoftware.eao.ComprobantesPagosLineasFacade;
 import ar.com.gtsoftware.model.Cajas;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesPagos;
+import ar.com.gtsoftware.model.ComprobantesPagosLineas;
 import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasPagos;
-import ar.com.gtsoftware.model.VentasPagosLineas;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -30,8 +30,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -42,24 +42,24 @@ import javax.ejb.LocalBean;
 public class CobranzaVentasBean {
 
     @EJB
-    private VentasPagosFacade pagosFacade;
+    private ComprobantesPagosFacade pagosFacade;
     @EJB
-    private VentasPagosLineasFacade pagosLineasFacade;
+    private ComprobantesPagosLineasFacade pagosLineasFacade;
     @EJB
     private CajaBean cajaBean;
     @EJB
     private PersonasCuentaCorrienteBean clientesCuentaCorrienteBean;
     @EJB
-    private VentasFacade ventasFacade;
+    private ComprobantesFacade comprobantesFacade;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public void registrarCobranza(List<Ventas> ventasAPagar, List<VentasPagos> pagosAImputar, Usuarios usuario, Cajas caja) throws Exception {
+    public void registrarCobranza(List<Comprobantes> comprobantesAPagar, List<ComprobantesPagos> pagosAImputar, Usuarios usuario, Cajas caja) throws Exception {
         //Calcular el importe de cada línea de pago que impute en cada venta.
 
         List<SaldoPago> saldosPorPago = new ArrayList<>();
-        for (VentasPagos pago : pagosAImputar) {
-            if (pago.getId()== null) {
+        for (ComprobantesPagos pago : pagosAImputar) {
+            if (pago.getId() == null) {
                 pago.setFechaPago(GregorianCalendar.getInstance().getTime());
                 pagosFacade.create(pago);
             }
@@ -68,11 +68,11 @@ public class CobranzaVentasBean {
             saldo.setSaldoPago(pago.getImporteTotalPagado());
             saldosPorPago.add(saldo);
 
-            clientesCuentaCorrienteBean.registrarMovimientoCuenta(ventasAPagar.get(0).getIdPersona(), pago.getImporteTotalPagado(), "Cobranza de ventas");
+            clientesCuentaCorrienteBean.registrarMovimientoCuenta(comprobantesAPagar.get(0).getIdPersona(), pago.getImporteTotalPagado(), "Cobranza de ventas");
 
         }
 
-        for (Ventas v : ventasAPagar) {
+        for (Comprobantes v : comprobantesAPagar) {
             for (SaldoPago sp : saldosPorPago) {
                 if (v.getSaldo().compareTo(BigDecimal.ZERO) > 0) {
                     if (sp.getSaldoPago().compareTo(BigDecimal.ZERO) > 0) {
@@ -92,11 +92,11 @@ public class CobranzaVentasBean {
                             v.setSaldo(BigDecimal.ZERO);
                             sp.setSaldoPago(BigDecimal.ZERO);
                         }
-                        ventasFacade.edit(v);
+                        comprobantesFacade.edit(v);
                         if (sp.getPago().getId() == null) {
-                            VentasPagosLineas pagoLinea = new VentasPagosLineas();
-                            pagoLinea.setIdVenta(v);
-                            pagoLinea.setIdPagoVenta(sp.getPago());
+                            ComprobantesPagosLineas pagoLinea = new ComprobantesPagosLineas();
+                            pagoLinea.setIdComprobante(v);
+                            pagoLinea.setIdPagoComprobante(sp.getPago());
                             pagoLinea.setImporte(importeAsignado);
                             pagosLineasFacade.create(pagoLinea);
                         }
@@ -110,27 +110,27 @@ public class CobranzaVentasBean {
 
     }
 
-    public List<VentasPagos> obtenerPagosNoAcentadosVenta(Ventas venta) {
-        Set<VentasPagos> result = new HashSet<>();
-        List<VentasPagosLineas> lineas = pagosLineasFacade.findLineasPagosNoAcentadas(venta);
-        for (VentasPagosLineas l : lineas) {
-            result.add(l.getIdPagoVenta());
+    public List<ComprobantesPagos> obtenerPagosNoAcentadosVenta(Comprobantes venta) {
+        Set<ComprobantesPagos> result = new HashSet<>();
+        List<ComprobantesPagosLineas> lineas = pagosLineasFacade.findLineasPagosNoAcentadas(venta);
+        for (ComprobantesPagosLineas l : lineas) {
+            result.add(l.getIdPagoComprobante());
         }
-        List<VentasPagos> pagos = new ArrayList<>();
+        List<ComprobantesPagos> pagos = new ArrayList<>();
         pagos.addAll(result);
         return pagos;
     }
 
     private class SaldoPago {
 
-        private VentasPagos pago;
+        private ComprobantesPagos pago;
         private BigDecimal saldoPago;
 
-        public VentasPagos getPago() {
+        public ComprobantesPagos getPago() {
             return pago;
         }
 
-        public void setPago(VentasPagos pago) {
+        public void setPago(ComprobantesPagos pago) {
             this.pago = pago;
         }
 

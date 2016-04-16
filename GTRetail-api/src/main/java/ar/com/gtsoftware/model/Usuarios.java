@@ -81,14 +81,11 @@ public class Usuarios extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne
     private Sucursales idSucursal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<VentasRemitos> ventasRemitosList;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<CajasMovimientos> cajasMovimientosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<Ventas> ventasList;
 
     /**
      * Crea un nuevo objeto Usuario
@@ -270,23 +267,6 @@ public class Usuarios extends BaseEntity implements Serializable {
      * @return
      */
     @XmlTransient
-    public List<VentasRemitos> getVentasRemitosList() {
-        return ventasRemitosList;
-    }
-
-    /**
-     *
-     * @param ventasRemitosList
-     */
-    public void setVentasRemitosList(List<VentasRemitos> ventasRemitosList) {
-        this.ventasRemitosList = ventasRemitosList;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @XmlTransient
     public List<CajasMovimientos> getCajasMovimientosList() {
         return cajasMovimientosList;
     }
@@ -314,23 +294,6 @@ public class Usuarios extends BaseEntity implements Serializable {
      */
     public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
         this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @XmlTransient
-    public List<Ventas> getVentasList() {
-        return ventasList;
-    }
-
-    /**
-     *
-     * @param ventasList
-     */
-    public void setVentasList(List<Ventas> ventasList) {
-        this.ventasList = ventasList;
     }
 
     /**

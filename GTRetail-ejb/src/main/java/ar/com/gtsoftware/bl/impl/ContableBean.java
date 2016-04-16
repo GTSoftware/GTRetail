@@ -15,11 +15,11 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesLineas;
 import java.util.List;
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
  *
@@ -31,7 +31,7 @@ public class ContableBean {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    public void registrarFacturaVenta(Ventas venta, List<VentasLineas> lineas){
-        
+    public void registrarFacturaVenta(Comprobantes venta, List<ComprobantesLineas> lineas) {
+
     }
 }

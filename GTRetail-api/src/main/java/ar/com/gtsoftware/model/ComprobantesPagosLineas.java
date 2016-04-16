@@ -31,10 +31,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Rodrigo Tato <rotaotmel@gmail.com>
  */
 @Entity
-@Table(name = "ventas_pagos_lineas")
+@Table(name = "comprobantes_pagos_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_pago", columnDefinition = "serial"))
-public class VentasPagosLineas extends BaseEntity {
+@AttributeOverride(name = "id", column = @Column(name = "id_linea_pago"))
+public class ComprobantesPagosLineas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,24 +43,24 @@ public class VentasPagosLineas extends BaseEntity {
     @NotNull
     @Column(name = "importe")
     private BigDecimal importe;
-    @JoinColumn(name = "id_pago_venta", referencedColumnName = "id_pago_venta", columnDefinition = "int4")
+    @JoinColumn(name = "id_pago_comprobante", referencedColumnName = "id_pago_comprobante")
     @ManyToOne(optional = false)
-    private VentasPagos idPagoVenta;
-    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta", columnDefinition = "int4")
+    private ComprobantesPagos idPagoComprobante;
+    @JoinColumn(name = "id_comprobante", referencedColumnName = "id_comprobante")
     @ManyToOne(optional = false)
-    private Ventas idVenta;
+    private Comprobantes idComprobante;
     @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private CajasMovimientos idCajasMovimientos;
 
-    public VentasPagosLineas() {
+    public ComprobantesPagosLineas() {
     }
 
-    public VentasPagosLineas(Long idLineaPago) {
+    public ComprobantesPagosLineas(Long idLineaPago) {
         super(idLineaPago);
     }
 
-    public VentasPagosLineas(Long idLineaPago, BigDecimal importe) {
+    public ComprobantesPagosLineas(Long idLineaPago, BigDecimal importe) {
         super(idLineaPago);
         this.importe = importe;
     }
@@ -73,20 +73,20 @@ public class VentasPagosLineas extends BaseEntity {
         this.importe = importe;
     }
 
-    public VentasPagos getIdPagoVenta() {
-        return idPagoVenta;
+    public ComprobantesPagos getIdPagoComprobante() {
+        return idPagoComprobante;
     }
 
-    public void setIdPagoVenta(VentasPagos idPagoVenta) {
-        this.idPagoVenta = idPagoVenta;
+    public void setIdPagoComprobante(ComprobantesPagos idPagoComprobante) {
+        this.idPagoComprobante = idPagoComprobante;
     }
 
-    public Ventas getIdVenta() {
-        return idVenta;
+    public Comprobantes getIdComprobante() {
+        return idComprobante;
     }
 
-    public void setIdVenta(Ventas idVenta) {
-        this.idVenta = idVenta;
+    public void setIdComprobante(Comprobantes idComprobante) {
+        this.idComprobante = idComprobante;
     }
 
     public CajasMovimientos getIdCajasMovimientos() {

@@ -5,23 +5,25 @@
 package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.eao.ComprobantesFacade;
+import ar.com.gtsoftware.eao.ComprobantesLineasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
 import ar.com.gtsoftware.eao.FiscalTiposComprobanteFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
-import ar.com.gtsoftware.eao.VentasFacade;
-import ar.com.gtsoftware.eao.VentasLineasFacade;
 import ar.com.gtsoftware.model.AFIPAuthServices;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesLineas;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.VentasLineas;
+import ar.com.gtsoftware.model.FiscalTiposComprobante;
 import ar.com.gtsoftware.model.dto.fiscal.CAEResponse;
 import ar.com.gtsoftware.model.dto.fiscal.TotalesAlicuotas;
 import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.search.FiscalTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.service.afip.WSAAService;
 import ar.com.gtsoftware.service.afip.WSFEClient;
 import java.math.BigDecimal;
@@ -46,11 +48,11 @@ public class FacturacionVentasBean {
     private WSAAService wSAAService;
 
     @EJB
-    private VentasFacade ventasFacade;
+    private ComprobantesFacade ventasFacade;
     @EJB
     private VentasBean ventasBean;
     @EJB
-    private VentasLineasFacade ventasLineasFacade;
+    private ComprobantesLineasFacade ventasLineasFacade;
     @EJB
     private FiscalLibroIvaVentasFacade ivaVentasFacade;
     @EJB
@@ -65,14 +67,13 @@ public class FacturacionVentasBean {
      * factura pasados como parámetro
      *
      * @param venta
-     * @param letraComprobante
      * @param puntoVentaComprobante
      * @param numeroComprobante
      * @param periodoFiscal
      * @param fechaFactura
      * @throws ServiceException
      */
-    public void registrarFacturaVenta(Ventas venta, String letraComprobante,
+    public void registrarFacturaVenta(Comprobantes venta,
             FiscalPuntosVenta puntoVentaComprobante,
             String numeroComprobante,
             FiscalPeriodosFiscales periodoFiscal,
@@ -90,8 +91,13 @@ public class FacturacionVentasBean {
         if (venta == null) {
             throw new ServiceException("Venta nula!");
         }
-        if (venta.getIdRegistroIva() != null) {
+        if (venta.getIdRegistro() != null) {
             throw new ServiceException("Venta ya facturada!");
+        }
+        FiscalTiposComprobanteSearchFilter ftcsf = new FiscalTiposComprobanteSearchFilter(venta.getLetra(), venta.getTipoComprobante());
+        FiscalTiposComprobante tipoCompFiscal = fiscalTiposComprobanteFacade.findFirstBySearchFilter(ftcsf);
+        if (tipoCompFiscal == null) {
+            throw new ServiceException("Este comprobante no puede ser fiscalizado!");
         }
         FiscalLibroIvaVentas registro = new FiscalLibroIvaVentas();
         //TODO Falta registrar contablemente el asiento de la factura
@@ -100,62 +106,21 @@ public class FacturacionVentasBean {
         registro.setIdPersona(venta.getIdPersona());
         registro.setIdResponsabilidadIva(venta.getIdPersona().getIdResponsabilidadIva());
         registro.setIdPeriodoFiscal(periodoFiscal);
-        registro.setLetraFactura(letraComprobante);
+        registro.setLetraFactura(venta.getLetra());
         registro.setNumeroFactura(formatNumeroFactura(numeroComprobante));
         registro.setPuntoVentaFactura(formatPuntoVenta(puntoVentaComprobante.getNroPuntoVenta().toString()));
-        registro.setTotalFactura(venta.getTotal());
-        //TODO arreglar esto, por el momento solo soporta facturas A o B
-        if (letraComprobante.equalsIgnoreCase("B")) {
-            registro.setCodigoTipoComprobante(fiscalTiposComprobanteFacade.find("006"));
-        } else {
-            registro.setCodigoTipoComprobante(fiscalTiposComprobanteFacade.find("001"));
-        }
+        registro.setTotalFactura(venta.getTotal().multiply(venta.getTipoComprobante().getSigno()));
 
-        List<VentasLineas> lineasVenta = ventasLineasFacade.findVentasLineas(venta);
-        calcularIVA(lineasVenta, registro);
-//        BigDecimal totalIVA = BigDecimal.ZERO;
-//        BigDecimal totalNetoGravado = BigDecimal.ZERO;
-//        BigDecimal totalNetoNoGravado = BigDecimal.ZERO;
-//        List<FiscalLibroIvaVentasLineas> registroLineas = new ArrayList<>();
-//        for (VentasLineas linea : lineasVenta) {
-//            FiscalLibroIvaVentasLineas registroLinea = new FiscalLibroIvaVentasLineas();
-//            registroLinea.setIdFactura(registro);
-//            FiscalAlicuotasIva alicuota = linea.getIdProducto().getIdAlicuotaIva();
-//            registroLinea.setIdAlicuotaIva(linea.getIdProducto().getIdAlicuotaIva());
-//            BigDecimal importeIva = BigDecimal.ZERO;
-//            BigDecimal netoGravado = BigDecimal.ZERO;
-//            BigDecimal noGravado = BigDecimal.ZERO;
-//
-//            if (alicuota.getGravarIva()) {
-//                //Importe*(1+alicuota/100)=Neto
-//                BigDecimal coeficienteIVA = BigDecimal.ONE.add(alicuota.getValorAlicuota().divide(new BigDecimal(100)));
-//                netoGravado = linea.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP);
-//                importeIva = linea.getSubTotal().subtract(netoGravado);
-//                importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
-//
-//                noGravado = BigDecimal.ZERO;
-//            } else {
-//                importeIva = BigDecimal.ZERO;
-//                //noGravado = linea.getSubTotal().multiply(alicuota.getValorAlicuota().divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
-//                //netoGravado = linea.getSubTotal().subtract(noGravado).setScale(2, RoundingMode.HALF_UP);
-//                noGravado = linea.getSubTotal();//TODO Chequear que esto sea correcto
-//            }
-//            registroLinea.setImporteIva(importeIva);
-//            registroLinea.setNetoGravado(netoGravado);
-//            registroLinea.setNoGravado(noGravado);
-//            totalIVA = totalIVA.add(importeIva);
-//            totalNetoGravado = totalNetoGravado.add(netoGravado);
-//            totalNetoNoGravado = totalNetoNoGravado.add(noGravado);
-//            registroLineas.add(registroLinea);
-////            ivaVentasLineasFacade.create(registroLinea);
-//        }
-//        registro.setFiscalLibroIvaVentasLineasList(registroLineas);
+        registro.setCodigoTipoComprobante(tipoCompFiscal);
+
+        List<ComprobantesLineas> lineasVenta = ventasLineasFacade.findVentasLineas(venta);
+        calcularIVA(lineasVenta, registro, venta.getTipoComprobante().getSigno());
 
         if (puntoVentaComprobante.getTipo().equals(TiposPuntosVenta.ELECTRONICO)) {
             generarFacturaElectronica(registro, puntoVentaComprobante);
         }
         ivaVentasFacade.create(registro);
-        venta.setIdRegistroIva(registro);
+        venta.setIdRegistro(registro);
         ventasFacade.edit(venta);
 
     }
@@ -163,11 +128,11 @@ public class FacturacionVentasBean {
     /**
      * Calcula los importes de IVA por cada alícuota
      */
-    private void calcularIVA(List<VentasLineas> lineasVenta, FiscalLibroIvaVentas registro) {
+    private void calcularIVA(List<ComprobantesLineas> lineasVenta, FiscalLibroIvaVentas registro, BigDecimal signo) {
         List<FiscalLibroIvaVentasLineas> lineasIva = new ArrayList<>();
 
         ArrayList<TotalesAlicuotas> totales = new ArrayList<>();
-        for (VentasLineas vl : lineasVenta) {
+        for (ComprobantesLineas vl : lineasVenta) {
 
             FiscalAlicuotasIva alicuota = vl.getIdProducto().getIdAlicuotaIva();
             TotalesAlicuotas subTotal = new TotalesAlicuotas(alicuota);
@@ -179,10 +144,11 @@ public class FacturacionVentasBean {
                 subTotal.setNetoGravado(vl.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP));
                 BigDecimal importeIva = vl.getSubTotal().subtract(subTotal.getNetoGravado());
                 importeIva = importeIva.setScale(2, RoundingMode.HALF_UP);
-                subTotal.setImporteIva(importeIva);
+                subTotal.setImporteIva(importeIva.multiply(signo));
+                subTotal.setNetoGravado(subTotal.getNetoGravado().multiply(signo));
 
             } else {
-                subTotal.setNoGravado(vl.getSubTotal());
+                subTotal.setNoGravado(vl.getSubTotal().multiply(signo));
             }
 
             int index = totales.indexOf(subTotal);
@@ -198,7 +164,7 @@ public class FacturacionVentasBean {
 
         for (TotalesAlicuotas total : totales) {
             FiscalLibroIvaVentasLineas registroLinea = new FiscalLibroIvaVentasLineas();
-            registroLinea.setIdFactura(registro);
+            registroLinea.setIdRegistro(registro);
 
             registroLinea.setIdAlicuotaIva(total.getAlicuota());
             registroLinea.setImporteIva(total.getImporteIva());
@@ -286,18 +252,18 @@ public class FacturacionVentasBean {
      * @param venta
      * @throws ServiceException
      */
-    public void anularFactura(Ventas venta) throws ServiceException {
+    public void anularFactura(Comprobantes venta) throws ServiceException {
         if (venta == null) {
             throw new ServiceException("Venta nula!");
         }
-        if (venta.getIdRegistroIva() == null) {
+        if (venta.getIdRegistro() == null) {
             throw new ServiceException("Venta no facturada: ".concat(venta.toString()));
         }
-        if (venta.getIdRegistroIva().getIdPeriodoFiscal().isPeriodoCerrado()) {
+        if (venta.getIdRegistro().getIdPeriodoFiscal().isPeriodoCerrado()) {
             throw new ServiceException("Venta de un período cerrado: ".concat(venta.toString()));
         }
 
-        FiscalLibroIvaVentas factura = venta.getIdRegistroIva();
+        FiscalLibroIvaVentas factura = venta.getIdRegistro();
         factura.setTotalFactura(BigDecimal.ZERO);
         factura.setAnulada(true);
         for (FiscalLibroIvaVentasLineas lineaF : ivaVentasLineasFacade.getLineasFactura(factura)) {

@@ -4,7 +4,7 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>3.0.5-SNAPSHOT</version>
+        <version>4.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>GTRetail-web</artifactId>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.7</version>
+            <version>3.12</version>
         </dependency>
 
         <dependency>
@@ -64,7 +64,7 @@
             <artifactId>GTRetail-ejb</artifactId>
             <type>ejb</type>
             <scope>provided</scope>
-            <version>3.0.5-SNAPSHOT</version>
+            <version>4.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -122,6 +122,12 @@
             <groupId>batik</groupId>
             <artifactId>batik-dom</artifactId>
             <version>1.6-1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.12</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 

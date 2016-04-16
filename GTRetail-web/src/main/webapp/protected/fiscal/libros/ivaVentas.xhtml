@@ -28,8 +28,12 @@
                                    itemValue="#{periodo}"/>
                 </p:selectOneMenu>
             </p:panelGrid >
-            <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}"
+<!--            <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}"
                              value="#{msg.generar}"
+                             ajax="false"
+                             icon="ui-icon-gear"/>-->
+            <p:commandButton id="exportExcelButton" action="#{libroIVABean.exportIVAVentaExcel()}"
+                             value="#{msg.exportarExcel}"
                              ajax="false"
                              icon="ui-icon-gear"/>
         </h:form>

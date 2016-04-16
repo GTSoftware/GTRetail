@@ -5,7 +5,9 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
+      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
+
+      xmlns:o="http://omnifaces.org/ui">
 
 
 
@@ -19,18 +21,18 @@
                                  columnClasses="ui-grid-col-2,ui-grid-col-5">
 
                         <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
-                        <p:calendar id="fechaDesdeField" value="#{searchVentasBean.filter.fechaVentaDesde}"
+                        <p:calendar id="fechaDesdeField" value="#{searchComprobantesBean.filter.fechaVentaDesde}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 
                         <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
-                        <p:calendar id="fechaHastaField" value="#{searchVentasBean.filter.fechaVentaHasta}"
+                        <p:calendar id="fechaHastaField" value="#{searchComprobantesBean.filter.fechaVentaHasta}"
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 
                         <p:outputLabel value="#{msg.cliente}:" for="razonSocialField"/>
                         <h:panelGroup >
                             <p:autoComplete id="razonSocialField"
-                                            value="#{searchVentasBean.filter.idPersona}"
-                                            completeMethod="#{searchVentasBean.findClientesByString}"
+                                            value="#{searchComprobantesBean.filter.idPersona}"
+                                            completeMethod="#{searchComprobantesBean.findClientesByString}"
                                             var="cli" itemLabel="#{cli.razonSocial}"
                                             itemValue="#{cli}"
                                             converter="#{personasConverter}"
@@ -45,16 +47,33 @@
                                              process="@this" />
                         </h:panelGroup>
 
+                        <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoCompField"/>
+                        <p:autoComplete id="tipoCompField" multiple="true"
+                                        value="#{searchComprobantesBean.filter.tiposComprobante}"
+                                        completeMethod="#{searchComprobantesBean.autocompleteTiposComp}"
+                                        var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}" itemValue="#{tipoComp}"
+                                        forceSelection="true"
+                                        minQueryLength="2"
+                                        >
+                            <o:converter converterId="omnifaces.ListConverter"
+                                         list="#{searchComprobantesBean.tiposCompList}"/>
+                            <p:ajax event="query" global="false"/>
+
+                            <p:column>
+                                <h:outputText value="#{tipoComp.nombreComprobante}" />
+                            </p:column>
+
+                        </p:autoComplete>
 
                         <h:outputLabel for="nroFacturaField" value="#{msg.factura}:" />
-                        <p:inputText  id="nroFacturaField"  value="#{searchVentasBean.filter.numeroFactura}"
+                        <p:inputText  id="nroFacturaField"  value="#{searchComprobantesBean.filter.numeroFactura}"
                                       converter="#{stringFormatConverter}"/>
 
                         <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
-                        <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchVentasBean.filter.anulada}"/>
+                        <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchComprobantesBean.filter.anulada}"/>
 
                     </p:panelGrid >
-                    <p:commandButton id="buscarButton" action="#{searchVentasBean.doSearch()}"
+                    <p:commandButton id="buscarButton" action="#{searchComprobantesBean.doSearch()}"
                                      value="#{msg.buscar}"
                                      update="@form"
                                      icon="fa fa-fw fa-search"
@@ -68,12 +87,12 @@
 
 
 
-            <p:dataTable id="ventasTable" value="#{searchVentasBean.dataModel}" var="venta"
+            <p:dataTable id="ventasTable" value="#{searchComprobantesBean.dataModel}" var="comprobante"
                          rows="15"
                          lazy="true"
                          paginator="true"
                          emptyMessage="#{msg.busquedaSinResultados}"
-                         rowKey="#{venta.id}"
+                         rowKey="#{comprobante.id}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                          rowsPerPageTemplate="15,20,30,50,100"
                          style="width: 100%"
@@ -105,69 +124,76 @@
                 <p:column style="width:16px" exportable="false">
                     <p:rowToggler />
                 </p:column>
-                <p:column  sortBy="#{venta.id}" style="width: 2%">
+                <p:column  sortBy="#{comprobante.id}" style="width: 2%">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.tablaId}" />
                     </f:facet>
-                    <h:outputLabel value="#{venta.id}"/>
+                    <h:outputLabel value="#{comprobante.id}"/>
                 </p:column>
 
-                <p:column  sortBy="#{venta.idSucursal.nombreSucursal}" >
+                <p:column  sortBy="#{comprobante.idSucursal.nombreSucursal}" >
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.sucursal}"/>
                     </f:facet>
-                    <h:outputLabel value="#{venta.idSucursal.nombreSucursal}"/>
+                    <h:outputLabel value="#{comprobante.idSucursal.nombreSucursal}"/>
                 </p:column>
 
-                <p:column sortBy="#{venta.fechaVenta}" >
+                <p:column sortBy="#{comprobante.fechaComprobante}" >
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.fecha}"/>
                     </f:facet>
-                    <h:outputLabel value="#{venta.fechaVenta}">
+                    <h:outputLabel value="#{comprobante.fechaComprobante}">
                         <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
                     </h:outputLabel>
                 </p:column>
 
-                <p:column sortBy="#{venta.idPersona.razonSocial}">
+                <p:column sortBy="#{comprobante.tipoComprobante.nombreComprobante}">
+                    <f:facet name="header">
+                        <h:outputLabel value="#{msg.tipoComprobante}"/>
+                    </f:facet>
+                    <h:outputLabel value="#{comprobante.tipoComprobante.nombreComprobante}"/>
+                </p:column>
+
+                <p:column sortBy="#{comprobante.idPersona.razonSocial}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.tablaRazonSocial}"/>
                     </f:facet>
-                    <h:outputLabel value="#{venta.idPersona.razonSocial}"/>
+                    <h:outputLabel value="#{comprobante.idPersona.razonSocial}"/>
                 </p:column>
 
-                <p:column sortBy="#{venta.idCondicionVenta.nombreCondicion}">
+                <p:column sortBy="#{comprobante.idCondicionComprobante.nombreCondicion}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.condicionVenta}"/>
                     </f:facet>
-                    <h:outputLabel value="#{venta.idCondicionVenta.nombreCondicion}"/>
+                    <h:outputLabel value="#{comprobante.idCondicionComprobante.nombreCondicion}"/>
                 </p:column>
 
-                <p:column sortBy="#{venta.total}">
+                <p:column sortBy="#{comprobante.total}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.total}"/>
                     </f:facet>
-                    <h:outputLabel value="#{venta.total}">
+                    <h:outputLabel value="#{comprobante.total}">
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </h:outputLabel>
                 </p:column>
-                <p:column sortBy="#{venta.saldo}">
+                <p:column sortBy="#{comprobante.saldo}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.saldo}"/>
                     </f:facet>
-                    <h:outputLabel value="#{venta.saldo}">
+                    <h:outputLabel value="#{comprobante.saldo}">
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </h:outputLabel>
                 </p:column>
-                <p:column sortBy="#{venta.idRegistroIva.numeroFactura}">
+                <p:column sortBy="#{comprobante.idRegistro.numeroFactura}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.factura}"/>
                     </f:facet>
-                    <h:outputLabel rendered="#{not empty venta.idRegistroIva and not venta.anulada}"
-                                   value="#{venta.idRegistroIva.letraFactura} #{venta.idRegistroIva.puntoVentaFactura}-#{venta.idRegistroIva.numeroFactura}" />
+                    <h:outputLabel rendered="#{not empty comprobante.idRegistro and not comprobante.anulada}"
+                                   value="#{comprobante.idRegistro.letraFactura} #{comprobante.idRegistro.puntoVentaFactura}-#{comprobante.idRegistro.numeroFactura}" />
 
-                    <h:outputLabel rendered="#{empty venta.idRegistroIva and not venta.anulada}"
+                    <h:outputLabel rendered="#{empty comprobante.idRegistro and not comprobante.anulada}"
                                    value="#{msg.no}" />
-                    <h:outputLabel rendered="#{venta.anulada}"
+                    <h:outputLabel rendered="#{comprobante.anulada}"
                                    value="#{msg.anulada}" />
                 </p:column>
 
@@ -177,25 +203,17 @@
                     <f:facet name="header">
                         #{msg.ver}
                     </f:facet>
-                    <!--                    <h:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" >
-                                            <f:param name="idVenta" value="#{venta.id}"/>
-                                            <i class="fa-search"/>
-                                        </h:link>-->
-                    <!--                    <p:commandButton icon="fa fa-fw fa-search" action="vista/verVenta.xhtml?faces-redirect=true"
-                                                         ajax="false"
-                                                         immediate="true">
-                                            <f:param name="idVenta" value="#{venta.id}"/>
-                                        </p:commandButton>-->
+
 
                     <p:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" value="Ver">
 
-                        <f:param name="idVenta" value="#{venta.id}"/>
+                        <f:param name="idComprobante" value="#{comprobante.id}"/>
                     </p:link>
 
                 </p:column>
 
                 <p:rowExpansion >
-                    <p:dataTable id="productosTable" value="#{venta.ventasLineasList}" var="lineaVenta"
+                    <p:dataTable id="productosTable" value="#{comprobante.comprobantesLineasList}" var="lineaVenta"
 
                                  emptyMessage="#{msg.productosNoCargados}"
                                  resizableColumns="true">
@@ -243,7 +261,7 @@
                             <f:facet name="header">
                                 #{msg.tablaPrecioUnitario}
                             </f:facet>
-                            <h:outputText value="#{lineaVenta.precioVentaUnitario}" >
+                            <h:outputText value="#{lineaVenta.precioUnitario}" >
                                 <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                             </h:outputText>
                         </p:column>
@@ -264,7 +282,7 @@
                                 <p:column colspan="7" footerText="#{msg.total}"
                                           style="text-align:right; font-size: larger"  />
 
-                                <p:column footerText="\$#{venta.total}" style=" font-size: xx-large" />
+                                <p:column footerText="$#{comprobante.total}" style=" font-size: xx-large" />
                             </p:row>
                         </p:columnGroup>
 
@@ -279,17 +297,17 @@
 
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
                     <p:outputLabel value="#{msg.totalVentas}:" />
-                    <p:outputLabel value="#{searchVentasBean.totalVentas}" style="font-size: x-large; font-weight: bold" >
+                    <p:outputLabel value="#{searchComprobantesBean.totalVentas}" style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
 
                     <p:outputLabel value="#{msg.totalVentasSF}:" />
-                    <p:outputLabel value="#{searchVentasBean.totalVentasSinFacturar}" style="font-size: x-large; font-weight: bold" >
+                    <p:outputLabel value="#{searchComprobantesBean.totalVentasSinFacturar}" style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
 
                     <p:outputLabel value="#{msg.totalVentasF}:" />
-                    <p:outputLabel value="#{searchVentasBean.totalVentasFacturadas}" style="font-size: x-large; font-weight: bold" >
+                    <p:outputLabel value="#{searchComprobantesBean.totalVentasFacturadas}" style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
                 </p:panelGrid >
@@ -306,10 +324,8 @@
                   showEffect="fade" hideEffect="clip" modal="true"
                   dynamic="true">
 
-            <gtsoftware:busquedaPersonas personaSeleccionada="#{searchVentasBean.filter.idPersona}"
-                                         textoBusqueda="#{clientesSearchBean.filter.txt}"
-                                         busquedaAction="#{clientesSearchBean.doSearch()}"
-                                         personasList="#{clientesSearchBean.dataModel}"
+            <gtsoftware:busquedaPersonas personaSeleccionada="#{searchComprobantesBean.filter.idPersona}"
+
                                          >
             </gtsoftware:busquedaPersonas>
             <p:commandButton value="#{msg.ok}" icon="ui-icon-check"

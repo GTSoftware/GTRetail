@@ -40,10 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "ventas_pagos")
+@Table(name = "comprobantes_pagos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_pago_venta", columnDefinition = "serial"))
-public class VentasPagos extends BaseEntity {
+@AttributeOverride(name = "id", column = @Column(name = "id_pago_comprobante"))
+public class ComprobantesPagos extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,8 +64,8 @@ public class VentasPagos extends BaseEntity {
     @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja", columnDefinition = "int4")
     @ManyToOne(optional = true)
     private CajasMovimientos idMovimientoCaja;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPagoVenta")
-    private List<VentasPagosLineas> ventasPagosLineasList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPagoComprobante")
+    private List<ComprobantesPagosLineas> comprobantesPagosLineasList;
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
@@ -79,14 +79,14 @@ public class VentasPagos extends BaseEntity {
     @Transient
     private Integer item;
 
-    public VentasPagos() {
+    public ComprobantesPagos() {
     }
 
-    public VentasPagos(Long idPagoVenta) {
+    public ComprobantesPagos(Long idPagoVenta) {
         super(idPagoVenta);
     }
 
-    public VentasPagos(Long idPagoVenta, Date fechaPago) {
+    public ComprobantesPagos(Long idPagoVenta, Date fechaPago) {
         super(idPagoVenta);
         this.fechaPago = fechaPago;
     }
@@ -132,12 +132,12 @@ public class VentasPagos extends BaseEntity {
     }
 
     @XmlTransient
-    public List<VentasPagosLineas> getVentasPagosLineasList() {
-        return ventasPagosLineasList;
+    public List<ComprobantesPagosLineas> getComprobantesPagosLineasList() {
+        return comprobantesPagosLineasList;
     }
 
-    public void setVentasPagosLineasList(List<VentasPagosLineas> ventasPagosLineasList) {
-        this.ventasPagosLineasList = ventasPagosLineasList;
+    public void setComprobantesPagosLineasList(List<ComprobantesPagosLineas> comprobantesPagosLineasList) {
+        this.comprobantesPagosLineasList = comprobantesPagosLineasList;
     }
 
     public Integer getItem() {

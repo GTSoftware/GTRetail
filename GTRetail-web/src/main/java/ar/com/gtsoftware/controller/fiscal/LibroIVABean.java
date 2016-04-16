@@ -19,10 +19,15 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.bl.impl.LibroIVAVentasBean;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
+import ar.com.gtsoftware.model.dto.RegistroIVADTO;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
-import java.io.IOException;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +35,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +44,14 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -69,9 +83,9 @@ public class LibroIVABean {
             libros.add(libro);
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(libros);
             String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/LibroIVA_Ventas.jasper");
-            //InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("main/resources/Messages.properties");
+
             HashMap<String, Object> parameters = new HashMap<>();
-            //parameters.putAll(cargarParametros());
+
             JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
             HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
             httpServletResponse.addHeader("Content-disposition", "attachment; filename=IVA-Ventas.pdf");
@@ -81,6 +95,168 @@ public class LibroIVABean {
         } catch (ServiceException ex) {
             Logger.getLogger(LibroIVABean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void exportIVAVentaExcel() throws IOException, ServiceException {
+        //TODO ver la forma de mejorar esto para achicar el método
+        //Agregar totales por categoría de IVA
+        //Agregar encabezado con título
+
+        LibroIVADTO libro = libroIVAVentasBean.obtenerLibroIVA(ivaVentasFilter);
+
+        Row row = null;
+        Cell cell = null;
+
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFCellStyle styleHeader = wb.createCellStyle();
+        XSSFFont fontHeader = wb.createFont();
+        fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        styleHeader.setFont(fontHeader);
+
+        XSSFCellStyle dateStyle = wb.createCellStyle();
+        XSSFCellStyle moneyStyle = wb.createCellStyle();
+        CreationHelper createHelper = wb.getCreationHelper();
+        dateStyle.setDataFormat(
+                createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
+        moneyStyle.setDataFormat(createHelper.createDataFormat().getFormat("$ #.##"));
+
+        Sheet sheet = wb.createSheet("sheet");
+        int nroFila = 0;
+
+        row = sheet.createRow(nroFila++);
+        cell = row.createCell(0);
+        cell.setCellValue("Libro de IVA Ventas");
+        cell.setCellStyle(styleHeader);
+
+        row = sheet.createRow(nroFila++);
+        cell = row.createCell(0);
+        cell.setCellValue("Fecha de impresión:");
+        cell = row.createCell(1);
+
+        cell.setCellValue(new Date());
+        cell.setCellStyle(dateStyle);
+
+        cell = row.createCell(5);
+        cell.setCellValue("Periodo:");
+        cell = row.createCell(6);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        cell.setCellValue(String.format("%s al %s", dateFormat.format(libro.getFechaDesde()),
+                dateFormat.format(libro.getFechaHasta())));
+
+        row = sheet.createRow(nroFila++);
+        ArrayList<String> columnNames = new ArrayList<>();
+        columnNames.add("Fecha");
+        columnNames.add("Tipo");
+        columnNames.add("Número");
+        columnNames.add("Tipo Doc");
+        columnNames.add("Documento");
+        columnNames.add("Razón Social");
+        columnNames.add("Cat. IVA");
+        columnNames.add("Neto Gravado");
+        columnNames.add("No Grav.");
+        columnNames.add("IVA Total");
+        for (ImportesAlicuotasIVA al : libro.getTotalesAlicuota()) {
+            columnNames.add(al.getAlicuota().getNombreAlicuotaIva());
+        }
+        columnNames.add("Total");
+
+        for (int i = 0; i < columnNames.size(); i++) {
+            cell = row.createCell(i);
+            cell.setCellValue(columnNames.get(i));
+            cell.setCellStyle(styleHeader);
+
+        }
+
+        for (RegistroIVADTO fact : libro.getFacturasList()) {
+            int colNum = 0;
+            row = sheet.createRow(nroFila++);
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getFechaFactura());
+            cell.setCellStyle(dateStyle);
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getTipoComprobante());
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getNumeroFactura());
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getTipoDocumento());
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getDocumentoCliente());
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getRazonSocialCliente());
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getCategoriaIVACliente());
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getNetoGravado().doubleValue());
+            cell.setCellStyle(moneyStyle);
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getNoGravado().doubleValue());
+            cell.setCellStyle(moneyStyle);
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getTotalIva().doubleValue());
+            cell.setCellStyle(moneyStyle);
+
+            for (ImportesAlicuotasIVA al : fact.getTotalAlicuota()) {
+
+                cell = row.createCell(colNum++);
+                cell.setCellValue(al.getImporteIva().doubleValue());
+                cell.setCellStyle(moneyStyle);
+
+            }
+
+            cell = row.createCell(colNum++);
+            cell.setCellValue(fact.getTotalFactura().doubleValue());
+            cell.setCellStyle(moneyStyle);
+
+        }
+        for (int i = 0; i < columnNames.size(); i++) {
+            sheet.autoSizeColumn(i);
+        }
+        nroFila = nroFila + 3;
+        row = sheet.createRow(nroFila++);
+        cell = row.createCell(0);
+        cell.setCellValue("Alícuota");
+        cell.setCellStyle(styleHeader);
+        cell = row.createCell(1);
+        cell.setCellValue("Importe");
+        cell.setCellStyle(styleHeader);
+
+        for (ImportesAlicuotasIVA al : libro.getTotalesAlicuota()) {
+            Row alicRow = sheet.createRow(nroFila++);
+            Cell alicCell = alicRow.createCell(0);
+            alicCell.setCellValue(al.getAlicuota().getNombreAlicuotaIva());
+
+            alicCell = alicRow.createCell(1);
+            alicCell.setCellValue(al.getImporteIva().doubleValue());
+            alicCell.setCellStyle(moneyStyle);
+        }
+
+        cell = row.createCell(3);
+        cell.setCellValue("Facturación total:");
+        cell.setCellStyle(styleHeader);
+        cell = row.createCell(4);
+        cell.setCellValue(libro.getImporteTotal().doubleValue());
+        cell.setCellStyle(moneyStyle);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        externalContext.setResponseContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        externalContext.setResponseHeader("Content-Disposition",
+                String.format("attachment; filename=IVAVentas-%s.xlsx",
+                        dateFormat.format(libro.getFechaGeneracion())));
+
+        wb.write(externalContext.getResponseOutputStream());
+        facesContext.responseComplete();
+
     }
 
     public IVAVentasSearchFilter getIvaVentasFilter() {

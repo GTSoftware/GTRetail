@@ -15,11 +15,11 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.Comprobantes_;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
-import ar.com.gtsoftware.model.Ventas;
-import ar.com.gtsoftware.model.Ventas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.VentasSearchFilter;
+import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import java.math.BigDecimal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -37,7 +37,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class VentasFacade extends AbstractFacade<Ventas> {
+public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -47,43 +47,43 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         return em;
     }
 
-    public VentasFacade() {
-        super(Ventas.class);
+    public ComprobantesFacade() {
+        super(Comprobantes.class);
     }
 
     @Override
-    protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Ventas> root) {
-        VentasSearchFilter vsf = (VentasSearchFilter) sf;
+    protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Comprobantes> root) {
+        ComprobantesSearchFilter vsf = (ComprobantesSearchFilter) sf;
         Predicate p = null;
         if (vsf.getIdVenta() != null) {
-            p = cb.equal(root.get(Ventas_.id), vsf.getIdVenta());
+            p = cb.equal(root.get(Comprobantes_.id), vsf.getIdVenta());
         }
         if (vsf.getFechaVentaDesde() != null && vsf.getFechaVentaHasta() != null) {
-            Predicate p1 = cb.between(root.get(Ventas_.fechaVenta), vsf.getFechaVentaDesde(), vsf.getFechaVentaHasta());
+            Predicate p1 = cb.between(root.get(Comprobantes_.fechaComprobante), vsf.getFechaVentaDesde(), vsf.getFechaVentaHasta());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdPersona() != null) {
-            Predicate p1 = cb.equal(root.get(Ventas_.idPersona), vsf.getIdPersona());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idPersona), vsf.getIdPersona());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdSucursal() != null) {
-            Predicate p1 = cb.equal(root.get(Ventas_.idSucursal), vsf.getIdSucursal());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idSucursal), vsf.getIdSucursal());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getCondicionVenta() != null) {
-            Predicate p1 = cb.equal(root.get(Ventas_.idCondicionVenta), vsf.getCondicionVenta());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idCondicionComprobante), vsf.getCondicionVenta());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdUsuario() != null) {
-            Predicate p1 = cb.equal(root.get(Ventas_.idUsuario), vsf.getIdUsuario());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idUsuario), vsf.getIdUsuario());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getFacturada() != null) {
             Predicate p1;
             if (vsf.getFacturada()) {
-                p1 = cb.isNotNull(root.get(Ventas_.idRegistroIva));
+                p1 = cb.isNotNull(root.get(Comprobantes_.idRegistro));
             } else {
-                p1 = cb.isNull(root.get(Ventas_.idRegistroIva));
+                p1 = cb.isNull(root.get(Comprobantes_.idRegistro));
             }
 
             p = appendAndPredicate(cb, p1, p);
@@ -91,9 +91,9 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         if (vsf.getConSaldo() != null) {
             Predicate p1;
             if (vsf.getConSaldo()) {
-                p1 = cb.greaterThan(root.get(Ventas_.saldo), BigDecimal.ZERO);
+                p1 = cb.greaterThan(root.get(Comprobantes_.saldo), BigDecimal.ZERO);
             } else {
-                p1 = cb.equal(root.get(Ventas_.saldo), BigDecimal.ZERO);
+                p1 = cb.equal(root.get(Comprobantes_.saldo), BigDecimal.ZERO);
             }
 
             p = appendAndPredicate(cb, p1, p);
@@ -101,20 +101,24 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         if (vsf.getAnulada() != null) {
             Predicate p1;
             if (vsf.getAnulada()) {
-                p1 = cb.isTrue(root.get(Ventas_.anulada));
+                p1 = cb.isTrue(root.get(Comprobantes_.anulada));
             } else {
-                p1 = cb.isFalse(root.get(Ventas_.anulada));
+                p1 = cb.isFalse(root.get(Comprobantes_.anulada));
             }
 
             p = appendAndPredicate(cb, p1, p);
         }
         if (StringUtils.isNotEmpty(vsf.getNumeroFactura())) {
             Predicate p1;
-            Expression<String> nroFactura = cb.concat(root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.letraFactura),
-                    root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.puntoVentaFactura));
-            nroFactura = cb.concat(nroFactura, root.get(Ventas_.idRegistroIva).get(FiscalLibroIvaVentas_.numeroFactura));
+            Expression<String> nroFactura = cb.concat(root.get(Comprobantes_.idRegistro).get(FiscalLibroIvaVentas_.letraFactura),
+                    root.get(Comprobantes_.idRegistro).get(FiscalLibroIvaVentas_.puntoVentaFactura));
+            nroFactura = cb.concat(nroFactura, root.get(Comprobantes_.idRegistro).get(FiscalLibroIvaVentas_.numeroFactura));
             p1 = cb.like(nroFactura, String.format("%%%s%%", vsf.getNumeroFactura()));
 
+            p = appendAndPredicate(cb, p1, p);
+        }
+        if (vsf.hasTiposComprobanteFilter()) {
+            Predicate p1 = root.get(Comprobantes_.tipoComprobante).in(vsf.getTiposComprobante());
             p = appendAndPredicate(cb, p1, p);
         }
         return p;
@@ -130,8 +134,8 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         if (sf.hasFilter()) {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
-            Root<Ventas> root = cq.from(Ventas.class);
-            cq.select(cb.sum(root.get(Ventas_.total)));
+            Root<Comprobantes> root = cq.from(Comprobantes.class);
+            cq.select(cb.sum(root.get(Comprobantes_.total)));
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
             cq.where(p);
             TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
@@ -151,10 +155,10 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         if (sf.hasFilter()) {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
-            Root<Ventas> root = cq.from(Ventas.class);
-            cq.select(cb.sum(root.get(Ventas_.total)));
+            Root<Comprobantes> root = cq.from(Comprobantes.class);
+            cq.select(cb.sum(root.get(Comprobantes_.total)));
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
-            p = appendAndPredicate(cb, cb.not(cb.isNull(root.get(Ventas_.idRegistroIva))), p);
+            p = appendAndPredicate(cb, cb.not(cb.isNull(root.get(Comprobantes_.idRegistro))), p);
             cq.where(p);
             TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
             return q.getSingleResult();
@@ -173,10 +177,10 @@ public class VentasFacade extends AbstractFacade<Ventas> {
         if (sf.hasFilter()) {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
-            Root<Ventas> root = cq.from(Ventas.class);
-            cq.select(cb.sum(root.get(Ventas_.total)));
+            Root<Comprobantes> root = cq.from(Comprobantes.class);
+            cq.select(cb.sum(root.get(Comprobantes_.total)));
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
-            p = appendAndPredicate(cb, cb.isNull(root.get(Ventas_.idRegistroIva)), p);
+            p = appendAndPredicate(cb, cb.isNull(root.get(Comprobantes_.idRegistro)), p);
             cq.where(p);
             TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
             return q.getSingleResult();

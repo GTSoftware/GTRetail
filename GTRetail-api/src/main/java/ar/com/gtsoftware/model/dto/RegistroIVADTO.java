@@ -22,31 +22,36 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Clase que almacena la información de una factura de manera resumida
+ * Clase que almacena la información de un registro de IVA de manera resumida
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  * @since 1.0.0
  * @version 1.0.0
  */
-public class FacturaDTO implements Serializable {
+public class RegistroIVADTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
 
     private Long idFactura;
     private Date fechaFactura;
     private String numeroFactura;
+    private String tipoDocumento;
+    private String tipoComprobante;
     private String documentoCliente;
     private String razonSocialCliente;
+    private String categoriaIVACliente;
     private BigDecimal netoGravado;
     private BigDecimal noGravado;
     private BigDecimal totalIva;
+    private BigDecimal otrosTributos;
+    private BigDecimal exento;
     private List<ImportesAlicuotasIVA> totalAlicuota;
     private BigDecimal totalFactura;
 
     /**
      * Crea un nuevo objeto Factura
      */
-    public FacturaDTO() {
+    public RegistroIVADTO() {
     }
 
     /**
@@ -229,6 +234,56 @@ public class FacturaDTO implements Serializable {
         this.razonSocialCliente = razonSocialCliente;
     }
 
+    /**
+     * Total de otros tributos asociados
+     *
+     * @return
+     */
+    public BigDecimal getOtrosTributos() {
+        return otrosTributos;
+    }
+
+    /**
+     * Total de otros tributos asociados
+     *
+     * @param otrosTributos
+     */
+    public void setOtrosTributos(BigDecimal otrosTributos) {
+        this.otrosTributos = otrosTributos;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public String getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
+    public String getCategoriaIVACliente() {
+        return categoriaIVACliente;
+    }
+
+    public void setCategoriaIVACliente(String categoriaIVACliente) {
+        this.categoriaIVACliente = categoriaIVACliente;
+    }
+
+    public BigDecimal getExento() {
+        return exento;
+    }
+
+    public void setExento(BigDecimal exento) {
+        this.exento = exento;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -244,7 +299,7 @@ public class FacturaDTO implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final FacturaDTO other = (FacturaDTO) obj;
+        final RegistroIVADTO other = (RegistroIVADTO) obj;
         if (!Objects.equals(this.idFactura, other.idFactura)) {
             return false;
         }

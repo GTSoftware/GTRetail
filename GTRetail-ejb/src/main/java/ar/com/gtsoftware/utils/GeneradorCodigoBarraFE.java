@@ -24,11 +24,12 @@ import java.text.SimpleDateFormat;
  */
 public class GeneradorCodigoBarraFE {
 
+    private static final SimpleDateFormat AMD = new SimpleDateFormat("yyyyMMdd");
+
     public static String calcularCodigoBarras(FiscalLibroIvaVentas registro, String cuitEmpresa) {
         StringBuilder result = new StringBuilder();
 
-        SimpleDateFormat amd = new SimpleDateFormat("yyyyMMdd");
-        result.append(cuitEmpresa).append(registro.getCodigoTipoComprobante().getCodigoTipoComprobante()).append(registro.getPuntoVentaFactura()).append(registro.getCae()).append(amd.format(registro.getFechaVencimientoCae()));
+        result.append(cuitEmpresa).append(registro.getCodigoTipoComprobante().getCodigoTipoComprobante()).append(registro.getPuntoVentaFactura()).append(registro.getCae()).append(AMD.format(registro.getFechaVencimientoCae()));
         int digito = calcularDigitoVerificador(result.toString());
 
         result.append(String.valueOf(digito));

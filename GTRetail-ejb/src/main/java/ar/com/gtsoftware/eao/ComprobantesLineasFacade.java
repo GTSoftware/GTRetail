@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.VentasRemitosLineas;
+import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesLineas;
+import ar.com.gtsoftware.model.ComprobantesLineas_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -31,7 +34,8 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class VentasRemitosLineasFacade extends AbstractFacade<VentasRemitosLineas> {
+public class ComprobantesLineasFacade extends AbstractFacade<ComprobantesLineas> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -40,28 +44,25 @@ public class VentasRemitosLineasFacade extends AbstractFacade<VentasRemitosLinea
         return em;
     }
 
-    public VentasRemitosLineasFacade() {
-        super(VentasRemitosLineas.class);
+    public ComprobantesLineasFacade() {
+        super(ComprobantesLineas.class);
+    }
+
+    public List<ComprobantesLineas> findVentasLineas(Comprobantes comp) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ComprobantesLineas> cq = cb.createQuery(ComprobantesLineas.class);
+        Root<ComprobantesLineas> lineaVenta = cq.from(ComprobantesLineas.class);
+        cq.select(lineaVenta);
+        Predicate p = cb.equal(lineaVenta.get(ComprobantesLineas_.idComprobante), comp);
+        cq.where(p);
+        TypedQuery<ComprobantesLineas> q = em.createQuery(cq);
+        List<ComprobantesLineas> lineasVentaList = q.getResultList();
+        return lineasVentaList;
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<VentasRemitosLineas> root) {
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ComprobantesLineas> root) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<VentasRemitosLineas> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(VentasRemitosLineas entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

@@ -27,7 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,18 +41,18 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "ventas")
+@Table(name = "comprobantes")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_venta", columnDefinition = "serial"))
-public class Ventas extends BaseEntity {
+@AttributeOverride(name = "id", column = @Column(name = "id_comprobante"))
+public class Comprobantes extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "fecha_venta")
+    @Column(name = "fecha_comprobante")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaVenta;
+    private Date fechaComprobante;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -76,53 +75,60 @@ public class Ventas extends BaseEntity {
     @NotNull
     @Column(name = "anulada")
     private boolean anulada;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVenta")
-    private List<VentasRemitos> ventasRemitosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVenta")
-    @OrderColumn(name = "item")
-    private List<VentasLineas> ventasLineasList;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
+
+    @Size(max = 1)
+    @Column(name = "letra")
+    private String letra;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "id_negocio_tipo_comprobante", referencedColumnName = "id_negocio_tipo_comprobante")
+    private NegocioTiposComprobante tipoComprobante;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
+    private List<ComprobantesLineas> comprobantesLineasList;
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     @ManyToOne(optional = false)
     private Personas idPersona;
-    @JoinColumn(name = "id_condicion_venta", referencedColumnName = "id_condicion", columnDefinition = "int4")
+    @JoinColumn(name = "id_condicion_comprobante", referencedColumnName = "id_condicion")
     @ManyToOne(optional = false)
-    private NegocioCondicionesOperaciones idCondicionVenta;
-    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado", columnDefinition = "int4")
+    private NegocioCondicionesOperaciones idCondicionComprobante;
+    @JoinColumn(name = "id_estado", referencedColumnName = "id_estado")
     @ManyToOne(optional = false)
-    private VentasEstados idVentasEstados;
-    @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_factura", columnDefinition = "int4")
+    private ComprobantesEstados idEstadoComprobante;
+    @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_registro")
     @ManyToOne
-    private FiscalLibroIvaVentas idRegistroIva;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVenta")
-    private List<VentasPagosLineas> ventasPagosLineasList;
+    private FiscalLibroIvaVentas idRegistro;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
+    private List<ComprobantesPagosLineas> comprobantesPagosLineasList;
 
-    public Ventas() {
+    public Comprobantes() {
     }
 
-    public Ventas(Long idVenta) {
+    public Comprobantes(Long idVenta) {
         super(idVenta);
     }
 
-    public Ventas(Long idVenta, Date fechaVenta, BigDecimal total, BigDecimal saldo, boolean anulada) {
+    public Comprobantes(Long idVenta, Date fechaVenta, BigDecimal total, BigDecimal saldo, boolean anulada) {
         super(idVenta);
-        this.fechaVenta = fechaVenta;
+        this.fechaComprobante = fechaVenta;
         this.total = total;
         this.saldo = saldo;
         this.anulada = anulada;
     }
 
-    public Date getFechaVenta() {
-        return fechaVenta;
+    public Date getFechaComprobante() {
+        return fechaComprobante;
     }
 
-    public void setFechaVenta(Date fechaVenta) {
-        this.fechaVenta = fechaVenta;
+    public void setFechaComprobante(Date fechaComprobante) {
+        this.fechaComprobante = fechaComprobante;
     }
 
     public BigDecimal getTotal() {
@@ -158,21 +164,12 @@ public class Ventas extends BaseEntity {
     }
 
     @XmlTransient
-    public List<VentasRemitos> getVentasRemitosList() {
-        return ventasRemitosList;
+    public List<ComprobantesLineas> getComprobantesLineasList() {
+        return comprobantesLineasList;
     }
 
-    public void setVentasRemitosList(List<VentasRemitos> ventasRemitosList) {
-        this.ventasRemitosList = ventasRemitosList;
-    }
-
-    @XmlTransient
-    public List<VentasLineas> getVentasLineasList() {
-        return ventasLineasList;
-    }
-
-    public void setVentasLineasList(List<VentasLineas> ventasLineasList) {
-        this.ventasLineasList = ventasLineasList;
+    public void setComprobantesLineasList(List<ComprobantesLineas> comprobantesLineasList) {
+        this.comprobantesLineasList = comprobantesLineasList;
     }
 
     public Usuarios getIdUsuario() {
@@ -199,37 +196,37 @@ public class Ventas extends BaseEntity {
         this.idPersona = idPersona;
     }
 
-    public NegocioCondicionesOperaciones getIdCondicionVenta() {
-        return idCondicionVenta;
+    public NegocioCondicionesOperaciones getIdCondicionComprobante() {
+        return idCondicionComprobante;
     }
 
-    public void setIdCondicionVenta(NegocioCondicionesOperaciones idCondicionVenta) {
-        this.idCondicionVenta = idCondicionVenta;
+    public void setIdCondicionComprobante(NegocioCondicionesOperaciones idCondicionComprobante) {
+        this.idCondicionComprobante = idCondicionComprobante;
     }
 
-    public FiscalLibroIvaVentas getIdRegistroIva() {
-        return idRegistroIva;
+    public FiscalLibroIvaVentas getIdRegistro() {
+        return idRegistro;
     }
 
-    public void setIdRegistroIva(FiscalLibroIvaVentas idRegistroIva) {
-        this.idRegistroIva = idRegistroIva;
+    public void setIdRegistro(FiscalLibroIvaVentas idRegistro) {
+        this.idRegistro = idRegistro;
     }
 
     @XmlTransient
-    public List<VentasPagosLineas> getVentasPagosLineasList() {
-        return ventasPagosLineasList;
+    public List<ComprobantesPagosLineas> getComprobantesPagosLineasList() {
+        return comprobantesPagosLineasList;
     }
 
-    public void setVentasPagosLineasList(List<VentasPagosLineas> ventasPagosLineasList) {
-        this.ventasPagosLineasList = ventasPagosLineasList;
+    public void setComprobantesPagosLineasList(List<ComprobantesPagosLineas> comprobantesPagosLineasList) {
+        this.comprobantesPagosLineasList = comprobantesPagosLineasList;
     }
 
-    public VentasEstados getIdVentasEstados() {
-        return idVentasEstados;
+    public ComprobantesEstados getIdEstadoComprobante() {
+        return idEstadoComprobante;
     }
 
-    public void setIdVentasEstados(VentasEstados idVentasEstados) {
-        this.idVentasEstados = idVentasEstados;
+    public void setIdEstadoComprobante(ComprobantesEstados idEstadoComprobante) {
+        this.idEstadoComprobante = idEstadoComprobante;
     }
 
     @Override
@@ -253,10 +250,27 @@ public class Ventas extends BaseEntity {
         this.nroRemito = nroRemito;
     }
 
-    public void addLineaVenta(VentasLineas linea) {
-        if (ventasLineasList == null) {
-            ventasLineasList = new ArrayList<>();
+    public void addLineaVenta(ComprobantesLineas linea) {
+        if (comprobantesLineasList == null) {
+            comprobantesLineasList = new ArrayList<>();
         }
-        ventasLineasList.add(linea);
+        comprobantesLineasList.add(linea);
     }
+
+    public String getLetra() {
+        return letra;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
+    }
+
+    public NegocioTiposComprobante getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
 }

@@ -92,6 +92,10 @@ public class WSFEClientTest {
         comprobante.setPuntoVentaFactura("0001");
         comprobante.setTotalFactura(new BigDecimal(121));
         comprobante.setFechaFactura(new Date());
+        comprobante.setImporteNetoGravado(new BigDecimal(100));
+        comprobante.setImporteExento(BigDecimal.ZERO);
+        comprobante.setImporteIva(new BigDecimal(21));
+        comprobante.setImporteTributos(BigDecimal.ZERO);
 
         FiscalLibroIvaVentasLineas linea = new FiscalLibroIvaVentasLineas();
         FiscalAlicuotasIva alicuota = new FiscalAlicuotasIva();

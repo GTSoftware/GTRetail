@@ -15,10 +15,10 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.FiscalTiposComprobante;
-import ar.com.gtsoftware.model.FiscalTiposComprobante_;
+import ar.com.gtsoftware.model.NegocioTiposComprobante;
+import ar.com.gtsoftware.model.NegocioTiposComprobante_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.FiscalTiposComprobanteSearchFilter;
+import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,10 +29,10 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  *
- * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComprobante> {
+public class NegocioTiposComprobanteFacade extends AbstractFacade<NegocioTiposComprobante> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -42,24 +42,29 @@ public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComp
         return em;
     }
 
-    public FiscalTiposComprobanteFacade() {
-        super(FiscalTiposComprobante.class);
+    public NegocioTiposComprobanteFacade() {
+        super(NegocioTiposComprobante.class);
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalTiposComprobante> root) {
-        FiscalTiposComprobanteSearchFilter ftsf = (FiscalTiposComprobanteSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<NegocioTiposComprobante> root) {
+        NegocioTiposComprobanteSearchFilter nsf = (NegocioTiposComprobanteSearchFilter) sf;
         Predicate p = null;
-        if (StringUtils.isNotEmpty(ftsf.getLetra())) {
-            Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.letra), ftsf.getLetra());
+        if (nsf.getActivo() != null) {
+            Predicate p1 = cb.equal(root.get(NegocioTiposComprobante_.activo), nsf.getActivo());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (ftsf.getTipoComprobante() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.tipoComprobante), ftsf.getTipoComprobante());
+        if (StringUtils.isNotEmpty(nsf.getNombre())) {
+            String s = nsf.getNombre().toUpperCase();
+            Predicate p1 = cb.like(root.get(NegocioTiposComprobante_.nombreComprobante), String.format("%%%s%%", s));
             p = appendAndPredicate(cb, p, p1);
         }
-
         return p;
+
+    }
+
+    public NegocioTiposComprobante getTipoFactura() {
+        return this.find(1L);
     }
 
 }

@@ -129,24 +129,24 @@ public class WSFEClient {
         elementFeDetReq.addChildElement("CbteHasta").addTextNode(comprobante.getNumeroFactura());
 
         elementFeDetReq.addChildElement("CbteFch").addTextNode(SDF_YMD.format(comprobante.getFechaFactura()));
-        elementFeDetReq.addChildElement("ImpTotal").addTextNode(comprobante.getTotalFactura().toPlainString());
+        elementFeDetReq.addChildElement("ImpTotal").addTextNode(comprobante.getTotalFactura().abs().toPlainString());
 
         SOAPElement ivaArray = elementFeDetReq.addChildElement("Iva");
 
         for (FiscalLibroIvaVentasLineas lin : comprobante.getFiscalLibroIvaVentasLineasList()) {
             SOAPElement alic = ivaArray.addChildElement("AlicIva");
             alic.addChildElement("Id").addTextNode(lin.getIdAlicuotaIva().getFiscalCodigoAlicuota().toString());
-            alic.addChildElement("BaseImp").addTextNode(lin.getNetoGravado().toPlainString());
-            alic.addChildElement("Importe").addTextNode(lin.getImporteIva().toPlainString());
+            alic.addChildElement("BaseImp").addTextNode(lin.getNetoGravado().abs().toPlainString());
+            alic.addChildElement("Importe").addTextNode(lin.getImporteIva().abs().toPlainString());
 
         }
 
         elementFeDetReq.addChildElement("ImpTotConc").addTextNode("0");// TODO calcular neto gravado y no gravado y exento
 //TODO arreglar esto en el modelo
-        elementFeDetReq.addChildElement("ImpNeto").addTextNode(comprobante.getImporteNetoGravado().toPlainString());
-        elementFeDetReq.addChildElement("ImpOpEx").addTextNode(comprobante.getImporteExento().toPlainString());
-        elementFeDetReq.addChildElement("ImpIVA").addTextNode(comprobante.getImporteIva().toPlainString());
-        elementFeDetReq.addChildElement("ImpTrib").addTextNode(comprobante.getImporteTributos().toPlainString());
+        elementFeDetReq.addChildElement("ImpNeto").addTextNode(comprobante.getImporteNetoGravado().abs().toPlainString());
+        elementFeDetReq.addChildElement("ImpOpEx").addTextNode(comprobante.getImporteExento().abs().toPlainString());
+        elementFeDetReq.addChildElement("ImpIVA").addTextNode(comprobante.getImporteIva().abs().toPlainString());
+        elementFeDetReq.addChildElement("ImpTrib").addTextNode(comprobante.getImporteTributos().abs().toPlainString());
 
         elementFeDetReq.addChildElement("FchServDesde").addTextNode(SDF_YMD.format(comprobante.getFechaFactura()));
         elementFeDetReq.addChildElement("FchServHasta").addTextNode(SDF_YMD.format(comprobante.getFechaFactura()));

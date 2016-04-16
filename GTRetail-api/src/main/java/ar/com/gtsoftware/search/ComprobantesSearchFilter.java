@@ -16,16 +16,19 @@
 package ar.com.gtsoftware.search;
 
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
+import ar.com.gtsoftware.model.NegocioTiposComprobante;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Sucursales;
 import ar.com.gtsoftware.model.Usuarios;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-public class VentasSearchFilter extends AbstractSearchFilter {
+public class ComprobantesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,6 +43,7 @@ public class VentasSearchFilter extends AbstractSearchFilter {
     private NegocioCondicionesOperaciones condicionVenta;
     private Boolean conSaldo;
     private String numeroFactura;
+    private List<NegocioTiposComprobante> tiposComprobante;
 
     @Override
     public boolean hasFilter() {
@@ -48,13 +52,14 @@ public class VentasSearchFilter extends AbstractSearchFilter {
                 || (idSucursal != null) || (idPersona != null)
                 || (facturada != null) || (condicionVenta != null)
                 || (conSaldo != null)
-                || (numeroFactura != null);
+                || (numeroFactura != null)
+                || hasTiposComprobanteFilter();
     }
 
-    public VentasSearchFilter() {
+    public ComprobantesSearchFilter() {
     }
 
-    public VentasSearchFilter(Date fechaDesde, Date fechaHasta, Boolean anulada) {
+    public ComprobantesSearchFilter(Date fechaDesde, Date fechaHasta, Boolean anulada) {
         this.fechaVentaDesde = fechaDesde;
         this.fechaVentaHasta = fechaHasta;
         this.anulada = anulada;
@@ -148,4 +153,18 @@ public class VentasSearchFilter extends AbstractSearchFilter {
         this.numeroFactura = numeroFactura;
     }
 
+    public List<NegocioTiposComprobante> getTiposComprobante() {
+        if (tiposComprobante == null) {
+            tiposComprobante = new ArrayList<>();
+        }
+        return tiposComprobante;
+    }
+
+    public void setTiposComprobante(List<NegocioTiposComprobante> tiposComprobante) {
+        this.tiposComprobante = tiposComprobante;
+    }
+
+    public boolean hasTiposComprobanteFilter() {
+        return tiposComprobante != null && !tiposComprobante.isEmpty();
+    }
 }

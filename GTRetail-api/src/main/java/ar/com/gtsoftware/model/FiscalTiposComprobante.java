@@ -15,13 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -42,13 +42,19 @@ public class FiscalTiposComprobante extends GTEntity<String> {
     @Basic(optional = false)
     @NotNull
     @Size(min = 3, max = 3)
-    @Column(name = "codigo_tipo_comprobante", columnDefinition = "bpchar")
+    @Column(name = "codigo_tipo_comprobante")
     private String codigoTipoComprobante;
     @Size(max = 100)
     @Column(name = "denominacion_comprobante")
     private String denominacionComprobante;
-    @OneToMany(mappedBy = "codigoTipoComprobante")
-    private List<FiscalLibroIvaVentas> fiscalLibroIvaVentass;
+
+    @Size(max = 1)
+    @Column(name = "letra")
+    private String letra;
+
+    @JoinColumn(name = "id_negocio_tipo_comprobante", referencedColumnName = "id_negocio_tipo_comprobante")
+    @ManyToOne
+    private NegocioTiposComprobante tipoComprobante;
 
     public FiscalTiposComprobante() {
     }
@@ -114,6 +120,22 @@ public class FiscalTiposComprobante extends GTEntity<String> {
     @Override
     public String getStringId() {
         return codigoTipoComprobante;
+    }
+
+    public String getLetra() {
+        return letra;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
+    }
+
+    public NegocioTiposComprobante getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
     }
 
 }
