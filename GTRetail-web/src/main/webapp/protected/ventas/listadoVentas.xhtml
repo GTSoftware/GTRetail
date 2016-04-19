@@ -172,18 +172,19 @@
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.total}"/>
                     </f:facet>
-                    <h:outputLabel value="#{comprobante.total}">
+                    <h:outputLabel value="#{comprobante.totalConSigno}"
+                                   class="#{comprobante.totalConSigno.signum() lt 0 ?  'negative-number' :'null'}">
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </h:outputLabel>
                 </p:column>
-                <p:column sortBy="#{comprobante.saldo}">
+<!--                <p:column sortBy="#{comprobante.saldo}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.saldo}"/>
                     </f:facet>
                     <h:outputLabel value="#{comprobante.saldo}">
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </h:outputLabel>
-                </p:column>
+                </p:column>-->
                 <p:column sortBy="#{comprobante.idRegistro.numeroFactura}">
                     <f:facet name="header">
                         <h:outputLabel value="#{msg.factura}"/>
@@ -282,7 +283,9 @@
                                 <p:column colspan="7" footerText="#{msg.total}"
                                           style="text-align:right; font-size: larger"  />
 
-                                <p:column footerText="$#{comprobante.total}" style=" font-size: xx-large" />
+                                <p:column footerText="$#{comprobante.totalConSigno}"
+                                          class="#{comprobante.totalConSigno.signum() lt 0 ?  'negative-number' :'null'}"
+                                          style="font-size: xx-large" />
                             </p:row>
                         </p:columnGroup>
 
@@ -296,18 +299,24 @@
             <p:panel id="totalesVentasPanel" header="#{msg.totales}" >
 
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
-                    <p:outputLabel value="#{msg.totalVentas}:" />
-                    <p:outputLabel value="#{searchComprobantesBean.totalVentas}" style="font-size: x-large; font-weight: bold" >
+                    <p:outputLabel value="#{msg.totalComprobantes}:" />
+                    <p:outputLabel value="#{searchComprobantesBean.totalVentas}"
+
+                                   style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
 
-                    <p:outputLabel value="#{msg.totalVentasSF}:" />
-                    <p:outputLabel value="#{searchComprobantesBean.totalVentasSinFacturar}" style="font-size: x-large; font-weight: bold" >
+                    <p:outputLabel value="#{msg.totalComprobantesSF}:" />
+                    <p:outputLabel value="#{searchComprobantesBean.totalVentasSinFacturar}"
+
+                                   style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
 
-                    <p:outputLabel value="#{msg.totalVentasF}:" />
-                    <p:outputLabel value="#{searchComprobantesBean.totalVentasFacturadas}" style="font-size: x-large; font-weight: bold" >
+                    <p:outputLabel value="#{msg.totalComprobantesF}:" />
+                    <p:outputLabel value="#{searchComprobantesBean.totalVentasFacturadas}"
+
+                                   style="font-size: x-large; font-weight: bold" >
                         <f:convertNumber groupingUsed="true" type="currency" />
                     </p:outputLabel>
                 </p:panelGrid >

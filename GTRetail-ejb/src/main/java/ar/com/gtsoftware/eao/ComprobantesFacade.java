@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Comprobantes_;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
+import ar.com.gtsoftware.model.NegocioTiposComprobante_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import java.math.BigDecimal;
@@ -135,7 +136,8 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
             Root<Comprobantes> root = cq.from(Comprobantes.class);
-            cq.select(cb.sum(root.get(Comprobantes_.total)));
+            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
+                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
             cq.where(p);
             TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
@@ -156,7 +158,8 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
             Root<Comprobantes> root = cq.from(Comprobantes.class);
-            cq.select(cb.sum(root.get(Comprobantes_.total)));
+            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
+                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
             p = appendAndPredicate(cb, cb.not(cb.isNull(root.get(Comprobantes_.idRegistro))), p);
             cq.where(p);
@@ -178,7 +181,8 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
             Root<Comprobantes> root = cq.from(Comprobantes.class);
-            cq.select(cb.sum(root.get(Comprobantes_.total)));
+            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
+                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
             Predicate p = createWhereFromSearchFilter(sf, cb, root);
             p = appendAndPredicate(cb, cb.isNull(root.get(Comprobantes_.idRegistro)), p);
             cq.where(p);

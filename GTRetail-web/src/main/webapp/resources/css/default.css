@@ -13,3 +13,7 @@
 .ui-datatable-even {
     background: #F2F5F9;
 }
+
+.negative-number{
+    color: red;
+}

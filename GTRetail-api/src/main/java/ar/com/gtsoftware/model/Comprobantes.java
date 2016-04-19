@@ -30,6 +30,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -107,6 +108,9 @@ public class Comprobantes extends BaseEntity {
     private FiscalLibroIvaVentas idRegistro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
     private List<ComprobantesPagosLineas> comprobantesPagosLineasList;
+
+    @Transient
+    private BigDecimal totalConSigno;
 
     public Comprobantes() {
     }
@@ -229,11 +233,6 @@ public class Comprobantes extends BaseEntity {
         this.idEstadoComprobante = idEstadoComprobante;
     }
 
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Ventas[ idVenta=" + this.getId() + " ]";
-    }
-
     public String getRemitente() {
         return remitente;
     }
@@ -273,4 +272,12 @@ public class Comprobantes extends BaseEntity {
         this.tipoComprobante = tipoComprobante;
     }
 
+    public BigDecimal getTotalConSigno() {
+        if (total != null && tipoComprobante != null) {
+            if (totalConSigno == null) {
+                totalConSigno = total.multiply(tipoComprobante.getSigno());
+            }
+        }
+        return totalConSigno;
+    }
 }
