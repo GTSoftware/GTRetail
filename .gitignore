@@ -5,3 +5,6 @@
 /GTRetail-api/target/
 .idea/
 *.iml
+*.project
+*.settings/
+*.classpath
