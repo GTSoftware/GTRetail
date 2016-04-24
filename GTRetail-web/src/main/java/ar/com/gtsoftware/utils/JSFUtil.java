@@ -208,13 +208,6 @@ public abstract class JSFUtil {
         return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     }
 
-    public static Object getManagedBean(String name) {
-        return FacesContext.getCurrentInstance().getApplication().createValueBinding(name).getValue(FacesContext.getCurrentInstance());
-    }
-
-    public static Object getManagedBean(FacesContext fc, String name) {
-        return fc.getApplication().createValueBinding(name).getValue(fc);
-    }
 
     public static void redirect(String uri) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
