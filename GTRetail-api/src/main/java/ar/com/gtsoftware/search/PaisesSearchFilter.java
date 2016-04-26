@@ -21,6 +21,10 @@ package ar.com.gtsoftware.search;
  */
 public class PaisesSearchFilter extends AbstractSearchFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Integer idPais;
     private String nombrePais;
 

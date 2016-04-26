@@ -15,15 +15,13 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.GTEntity;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -37,12 +35,16 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import ar.com.gtsoftware.model.GTEntity;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.SortField;
+
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  * @param <T>
  */
-public abstract class AbstractFacade<T extends GTEntity> {
+public abstract class AbstractFacade<T extends GTEntity<?>> {
 
     private final Class<T> entityClass;
 
@@ -158,7 +160,8 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Cuenta los elementos encontrados por el filtro de búsqueda.
      *
-     * @param sf el filtro de búsqueda
+     * @param sf
+     *            el filtro de búsqueda
      * @return la cantidad de elementos encontrados
      */
     public int countBySearchFilter(AbstractSearchFilter sf) {
@@ -176,7 +179,8 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Devuelve el primer elemento encontrado por el filtro de búsqueda.
      *
-     * @param sf el filtro de búsuqeda
+     * @param sf
+     *            el filtro de búsuqeda
      * @return el primer elemento o null si no encuentra ninguno.
      */
     public T findFirstBySearchFilter(AbstractSearchFilter sf) {
@@ -190,9 +194,12 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Retorna el OR entre los predicados pasados como parámetro
      *
-     * @param cb el criteria builder
-     * @param p1 el predicado 1
-     * @param p2 el predicado 2
+     * @param cb
+     *            el criteria builder
+     * @param p1
+     *            el predicado 1
+     * @param p2
+     *            el predicado 2
      * @return un predicado que une a p1 y p2 mediante un OR
      */
     protected Predicate appendOrPredicate(CriteriaBuilder cb, Predicate p1, Predicate p2) {
@@ -208,9 +215,12 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Retorna el AND entre los predicados pasados como parámetro
      *
-     * @param cb el criteria builder
-     * @param p1 el predicado 1
-     * @param p2 el predicado 2
+     * @param cb
+     *            el criteria builder
+     * @param p1
+     *            el predicado 1
+     * @param p2
+     *            el predicado 2
      * @return un predicado que une a p1 y p2 mediante un AND
      */
     protected Predicate appendAndPredicate(CriteriaBuilder cb, Predicate p1, Predicate p2) {
@@ -226,9 +236,12 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Método que valida los parámetros que reciben los métodos de append.
      *
-     * @param cb el criteria builder
-     * @param p1 el predicado 1
-     * @param p2 el predicado 2
+     * @param cb
+     *            el criteria builder
+     * @param p1
+     *            el predicado 1
+     * @param p2
+     *            el predicado 2
      */
     private void validateAppendArguments(CriteriaBuilder cb, Predicate p1, Predicate p2) {
         if (cb == null) {
@@ -263,7 +276,8 @@ public abstract class AbstractFacade<T extends GTEntity> {
             Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
             while (iterator.hasNext()) {
                 ConstraintViolation<T> cv = iterator.next();
-                LOG.log(Level.SEVERE, "{0}.{1} {2}", new Object[]{cv.getRootBeanClass().getName(), cv.getPropertyPath(), cv.getMessage()});
+                LOG.log(Level.SEVERE, "{0}.{1} {2}",
+                        new Object[] { cv.getRootBeanClass().getName(), cv.getPropertyPath(), cv.getMessage() });
             }
             return true;
         } else {

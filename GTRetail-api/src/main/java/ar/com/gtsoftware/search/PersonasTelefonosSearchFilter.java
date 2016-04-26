@@ -23,6 +23,10 @@ import ar.com.gtsoftware.model.Personas;
  */
 public class PersonasTelefonosSearchFilter extends AbstractSearchFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Personas persona;
 
     public PersonasTelefonosSearchFilter() {

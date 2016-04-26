@@ -15,22 +15,24 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
-import ar.com.gtsoftware.controller.exceptions.ValidationException;
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.eao.UsuariosGruposFacade;
-import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.model.UsuariosGrupos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.bean.ManagedBean;
+
+import ar.com.gtsoftware.controller.exceptions.ValidationException;
+import ar.com.gtsoftware.eao.UsuariosFacade;
+import ar.com.gtsoftware.eao.UsuariosGruposFacade;
+import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.model.UsuariosGrupos;
 
 /**
  * Controlador para el caso de uso de edición de usuarios
@@ -42,6 +44,11 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = "usuariosRolesEditBean")
 @ViewScoped
 public class UsuariosRolesEditBean implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private UsuariosFacade usuarioFacade;
@@ -66,16 +73,16 @@ public class UsuariosRolesEditBean implements Serializable {
 
         String logIn = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("login");
         if (logIn == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Usuario inexistente!", logIn));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario inexistente!", logIn));
             LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
             usuarioActual = null;
         } else {
             usuarioActual = usuarioFacade.find(logIn);
             if (usuarioActual == null) {
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Usuario inexistente!", logIn));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario inexistente!", logIn));
                 LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
             }
         }
@@ -101,8 +108,8 @@ public class UsuariosRolesEditBean implements Serializable {
 
         } catch (ValidationException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Error", ex.getMessage()));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ex.getMessage()));
         }
 
     }

@@ -23,6 +23,11 @@ import ar.com.gtsoftware.model.Sucursales;
  */
 public class UsuariosSearchFilter extends AbstractSearchFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private Integer idUsuario;
 
     private String nombreUsuario;
@@ -43,9 +48,8 @@ public class UsuariosSearchFilter extends AbstractSearchFilter {
 
     @Override
     public boolean hasFilter() {
-        return (idUsuario != null) || (nombreUsuario != null)
-                || (login != null) || (idSucursal != null) || (password != null)
-                || (hasTextFilter());
+        return (idUsuario != null) || (nombreUsuario != null) || (login != null) || (idSucursal != null)
+                || (password != null) || (hasTextFilter());
     }
 
     public Integer getIdUsuario() {

@@ -15,8 +15,9 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import java.util.Date;
+
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 
 /**
  * Clase que sirve para encapsular los distintos criterios de búsqueda para la
@@ -28,6 +29,10 @@ import java.util.Date;
  */
 public class IVAVentasSearchFilter extends AbstractSearchFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private FiscalPeriodosFiscales periodo;
     private Date fechaDesde;
     private Date fechaHasta;
@@ -35,8 +40,7 @@ public class IVAVentasSearchFilter extends AbstractSearchFilter {
 
     @Override
     public boolean hasFilter() {
-        return (periodo != null) || (fechaDesde != null && fechaHasta != null)
-                || (anuladas != null);
+        return (periodo != null) || (fechaDesde != null && fechaHasta != null) || (anuladas != null);
     }
 
     public IVAVentasSearchFilter() {

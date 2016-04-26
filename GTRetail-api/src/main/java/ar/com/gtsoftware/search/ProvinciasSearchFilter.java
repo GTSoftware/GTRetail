@@ -23,6 +23,10 @@ import ar.com.gtsoftware.model.UbicacionPaises;
  */
 public class ProvinciasSearchFilter extends AbstractSearchFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Integer idProvincia;
     private String nombreProvincia;
     private UbicacionPaises idPais;
