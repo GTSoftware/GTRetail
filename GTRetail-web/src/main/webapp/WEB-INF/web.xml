@@ -135,19 +135,19 @@
     <!-- Páginas de error -->
     <error-page>
         <error-code>404</error-code>
-        <location>/resources/pages/404.xhtml?nocid=true</location>
+        <location>/resources/pages/404.xhtml</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/resources/pages/403.xhtml?nocid=true</location>
+        <location>/resources/pages/403.xhtml</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/resources/pages/error.xhtml?nocid=true</location>
+        <location>/resources/pages/error.xhtml</location>
     </error-page>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/resources/pages/vewExpired.xhtml?nocid=true</location>
+        <location>/resources/pages/vewExpired.xhtml</location>
     </error-page>
     <error-page>
         <exception-type>org.jboss.weld.context.BusyConversationException</exception-type>
@@ -159,6 +159,6 @@
     </error-page>
     <error-page>
         <exception-type>java.lang.Exception</exception-type>
-        <location>/resources/pages/error.xhtml?nocid=true</location>
+        <location>/resources/pages/error.xhtml</location>
     </error-page>
 </web-app>
