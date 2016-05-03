@@ -15,15 +15,15 @@
  */
 package ar.com.gtsoftware.model;
 
-import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -34,6 +34,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
+
 /**
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
@@ -41,30 +43,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "productos_precios")
 @XmlRootElement
-public class ProductosPrecios extends GTEntity {
+public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
 
     private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    private ProductosPreciosPK pk;
 
-    @Id
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, columnDefinition = "int4")
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, insertable = false)
     private Productos idProducto;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false,
-            columnDefinition = "int4")
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false, insertable = false)
     private ProductosListasPrecios idListaPrecios;
     @Basic(optional = false)
-    @Column(name = "utilidad", scale = 4, precision = 8)
+    @Column(name = "utilidad")
     private BigDecimal utilidad;
 
     @Basic(optional = false)
-    @Column(name = "precio", scale = 4, precision = 19)
+    @Column(name = "precio")
     private BigDecimal precio;
 
     @Basic(optional = false)
-    @Column(name = "neto", scale = 4, precision = 19)
+    @Column(name = "neto")
     private BigDecimal neto;
 
     @Basic(optional = false)
@@ -75,7 +76,7 @@ public class ProductosPrecios extends GTEntity {
 
     @Override
     public boolean isNew() {
-        return idProducto == null && idListaPrecios == null;
+        return pk != null;
     }
 
     public ProductosPrecios() {
@@ -121,6 +122,14 @@ public class ProductosPrecios extends GTEntity {
         this.neto = neto;
     }
 
+    public ProductosPreciosPK getPk() {
+        return pk;
+    }
+
+    public void setPk(ProductosPreciosPK pk) {
+        this.pk = pk;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -152,7 +161,7 @@ public class ProductosPrecios extends GTEntity {
         if (isNew()) {
             return null;
         }
-        return new ProductosPreciosPK(idProducto, idListaPrecios);
+        return new ProductosPreciosPK(idProducto.getId(), idListaPrecios.getId());
     }
 
     @Override
@@ -162,8 +171,8 @@ public class ProductosPrecios extends GTEntity {
             String[] pkStr = id.split("-");
             if (pkStr.length == 2) {
                 ProductosPreciosPK pk = new ProductosPreciosPK();
-                pk.setIdProducto(new Productos(Long.parseLong(pkStr[0])));
-                pk.setIdListaPrecios(new ProductosListasPrecios(Long.parseLong(pkStr[1])));
+                pk.setIdProducto(Long.parseLong(pkStr[0]));
+                pk.setIdListaPrecio(Long.parseLong(pkStr[1]));
             }
         }
         return null;
@@ -174,7 +183,7 @@ public class ProductosPrecios extends GTEntity {
         if (isNew()) {
             return null;
         }
-        return new ProductosPreciosPK(idProducto, idListaPrecios).toString();
+        return new ProductosPreciosPK(idProducto.getId(), idListaPrecios.getId()).toString();
     }
 
     public Date getFechaModificacion() {

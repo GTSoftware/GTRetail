@@ -15,10 +15,9 @@
  */
 package ar.com.gtsoftware.model.pk;
 
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
 import java.io.Serializable;
-import java.util.Objects;
+
+import javax.persistence.Column;
 
 /**
  *
@@ -28,91 +27,71 @@ public class ProductosPreciosPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-//    @Column(name = "id_producto", columnDefinition = "int4")
-//    private Long idProducto;
-//    @ManyToOne
-//    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, insertable = false, columnDefinition = "int4")
-    private Productos idProducto;
-//    @Column(name = "id_lista_precio", columnDefinition = "int4")
-//    private Long idListaPrecio;
-//    @ManyToOne
-//    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false, insertable = false,
-//            columnDefinition = "int4")
-    private ProductosListasPrecios idListaPrecios;
+    @Column(name = "id_producto")
+    private Long idProducto;
+
+    @Column(name = "id_lista_precio")
+    private Long idListaPrecio;
 
     public ProductosPreciosPK() {
     }
 
-    public ProductosPreciosPK(Productos idProducto, ProductosListasPrecios idListaPrecios) {
+    public ProductosPreciosPK(Long idProducto, Long idListaPrecio) {
+
         this.idProducto = idProducto;
-        this.idListaPrecios = idListaPrecios;
+        this.idListaPrecio = idListaPrecio;
     }
 
-    public Productos getIdProducto() {
+    public Long getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Productos idProducto) {
+    public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
     }
 
-    public ProductosListasPrecios getIdListaPrecios() {
-        return idListaPrecios;
+    public Long getIdListaPrecio() {
+        return idListaPrecio;
     }
 
-//    public ProductosPreciosPK(Long idProducto, Long idListaPrecio) {
-//        this.idProducto = idProducto;
-//        this.idListaPrecio = idListaPrecio;
-//    }
-//
-//    public Long getIdProducto() {
-//        return idProducto;
-//    }
-//
-//    public void setIdProducto(Long idProducto) {
-//        this.idProducto = idProducto;
-//    }
-//
-//    public Long getIdListaPrecio() {
-//        return idListaPrecio;
-//    }
-//
-//    public void setIdListaPrecio(Long idListaPrecio) {
-//        this.idListaPrecio = idListaPrecio;
-//    }
-    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
-        this.idListaPrecios = idListaPrecios;
+    public void setIdListaPrecio(Long idListaPrecio) {
+        this.idListaPrecio = idListaPrecio;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.idProducto);
-        hash = 97 * hash + Objects.hashCode(this.idListaPrecios);
-        return hash;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((idListaPrecio == null) ? 0 : idListaPrecio.hashCode());
+        result = prime * result + ((idProducto == null) ? 0 : idProducto.hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (this == obj)
+            return true;
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
             return false;
-        }
-        final ProductosPreciosPK other = (ProductosPreciosPK) obj;
-        if (!Objects.equals(this.idProducto, other.idProducto)) {
+        ProductosPreciosPK other = (ProductosPreciosPK) obj;
+        if (idListaPrecio == null) {
+            if (other.idListaPrecio != null)
+                return false;
+        } else if (!idListaPrecio.equals(other.idListaPrecio))
             return false;
-        }
-        if (!Objects.equals(this.idListaPrecios, other.idListaPrecios)) {
+        if (idProducto == null) {
+            if (other.idProducto != null)
+                return false;
+        } else if (!idProducto.equals(other.idProducto))
             return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return String.format("%s-%s", idProducto.getStringId(), idListaPrecios.getStringId());
+        return String.format("%d-%d", idProducto, idListaPrecio);
     }
 
 }

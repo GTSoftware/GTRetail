@@ -1,5 +1,21 @@
 package ar.com.gtsoftware.controller.productos;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+
 import ar.com.gtsoftware.eao.FiscalAlicuotasIvaFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
@@ -22,6 +38,7 @@ import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
@@ -30,20 +47,6 @@ import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.UtilUI;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -126,7 +129,7 @@ public class ProductoEditBean implements Serializable {
             }
             if (duplicar != null && duplicar.equals("1")) {
                 productoActual.setId(null);
-                //TODO ver como duplicar todos los datos
+                // TODO ver como duplicar todos los datos
             }
         }
         initDatos();
@@ -261,7 +264,8 @@ public class ProductoEditBean implements Serializable {
     public void actualizarPrecios() {
         BigDecimal costoAdquisicionNeto = productoActual.getCostoAdquisicionNeto();
         BigDecimal costoFinal = costoAdquisicionNeto;
-        BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN).add(BigDecimal.ONE);
+        BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN)
+                .add(BigDecimal.ONE);
         if (productoActual.getPorcentajes() != null) {
             for (ProductosPorcentajes pp : productoActual.getPorcentajes()) {
                 if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
@@ -301,6 +305,7 @@ public class ProductoEditBean implements Serializable {
         }
         if (!listaExistente) {
             ProductosPrecios pp = new ProductosPrecios();
+            pp.setPk(new ProductosPreciosPK(productoActual.getId(), listaSeleccionada.getId()));
 
             pp.setIdProducto(productoActual);
             pp.setIdListaPrecios(listaSeleccionada);
