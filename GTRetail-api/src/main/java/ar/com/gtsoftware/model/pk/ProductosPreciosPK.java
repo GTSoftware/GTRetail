@@ -16,13 +16,14 @@
 package ar.com.gtsoftware.model.pk;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
+@Embeddable
 public class ProductosPreciosPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,23 +70,30 @@ public class ProductosPreciosPK implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         ProductosPreciosPK other = (ProductosPreciosPK) obj;
         if (idListaPrecio == null) {
-            if (other.idListaPrecio != null)
+            if (other.idListaPrecio != null) {
                 return false;
-        } else if (!idListaPrecio.equals(other.idListaPrecio))
+            }
+        } else if (!idListaPrecio.equals(other.idListaPrecio)) {
             return false;
+        }
         if (idProducto == null) {
-            if (other.idProducto != null)
+            if (other.idProducto != null) {
                 return false;
-        } else if (!idProducto.equals(other.idProducto))
+            }
+        } else if (!idProducto.equals(other.idProducto)) {
             return false;
+        }
         return true;
     }
 
