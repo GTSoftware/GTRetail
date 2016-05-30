@@ -33,7 +33,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
+public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -75,21 +75,6 @@ public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<NegocioFormasPago> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<NegocioFormasPago> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(NegocioFormasPago entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosMarcas;
 import ar.com.gtsoftware.model.ProductosMarcas_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Stateless
-public class ProductosMarcasFacade extends AbstractFacade<ProductosMarcas> {
+public class ProductosMarcasFacade extends AbstractFacade<ProductosMarcas, MarcasSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,8 +45,8 @@ public class ProductosMarcasFacade extends AbstractFacade<ProductosMarcas> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosMarcas> root) {
-        MarcasSearchFilter msf = (MarcasSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(MarcasSearchFilter msf, CriteriaBuilder cb, Root<ProductosMarcas> root) {
+
         Predicate p = null;
         if (msf.getNombreMarca() != null) {
             String s = msf.getNombreMarca().toUpperCase();

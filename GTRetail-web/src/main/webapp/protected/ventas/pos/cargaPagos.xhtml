@@ -49,7 +49,7 @@
 
             </p:selectOneMenu>
             <h:outputLabel for="importePagoField" value="#{msg.importePago}:" />
-            <p:inputText id="importePagoField" value="#{shopCartBean.pagoActual.importeTotalPagado}" label="#{msg.importePago}">
+            <p:inputText id="importePagoField" value="#{shopCartBean.pagoActual.montoPago}" label="#{msg.importePago}">
 <!--                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
                                        rendered="#{shopCartBean.venta.saldo gt 0}" />-->
             </p:inputText>
@@ -75,8 +75,8 @@
             <p:column sortBy="#{pago.idFormaPago}" headerText="#{msg.formaPago}" style="text-align: left">
                 <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
             </p:column>
-            <p:column sortBy="#{pago.importeTotalPagado}" headerText="Importe" style="text-align: right">
-                <h:outputText value="#{pago.importeTotalPagado}" >
+            <p:column sortBy="#{pago.montoPago}" headerText="Importe" style="text-align: right">
+                <h:outputText value="#{pago.montoPago}" >
                     <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
                 </h:outputText>
             </p:column>

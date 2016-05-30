@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU" transaction-type="JTA">
-        <!--                <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
-        <jta-data-source>jdbc/retail</jta-data-source>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU" transaction-type="JTA">
+    <!--                <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>-->
+    <jta-data-source>jdbc/retail</jta-data-source>
         <class>ar.com.gtsoftware.model.GTEntity</class>
         <class>ar.com.gtsoftware.model.BaseEntity</class>
         <class>ar.com.gtsoftware.model.Bancos</class>
@@ -10,7 +10,6 @@
         <class>ar.com.gtsoftware.model.BancosCuentas</class>
         <class>ar.com.gtsoftware.model.BancosTiposCuenta</class>
         <class>ar.com.gtsoftware.model.Cajas</class>
-        <class>ar.com.gtsoftware.model.CajasCategoriasMovimientos</class>
         <class>ar.com.gtsoftware.model.CajasMovimientos</class>
         <class>ar.com.gtsoftware.model.ContabilidadLibros</class>
         <class>ar.com.gtsoftware.model.ContabilidadMonedas</class>
@@ -68,21 +67,25 @@
         <class>ar.com.gtsoftware.model.UsuariosGrupos</class>
         <class>ar.com.gtsoftware.model.Comprobantes</class>
         <class>ar.com.gtsoftware.model.ComprobantesEstados</class>
-        <class>ar.com.gtsoftware.model.ComprobantesEstadosHistorico</class>
         <class>ar.com.gtsoftware.model.ComprobantesLineas</class>
         <class>ar.com.gtsoftware.model.ComprobantesPagos</class>
-        <class>ar.com.gtsoftware.model.ComprobantesPagosLineas</class>
         <class>ar.com.gtsoftware.model.AFIPAuthServices</class>
         <class>ar.com.gtsoftware.model.FiscalPuntosVenta</class>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
-
-        <properties>
-<!--            <property name="eclipselink.logging.level" value="FINE"/>
+        <class>ar.com.gtsoftware.model.Valores</class>
+        <class>ar.com.gtsoftware.model.Cupones</class>
+        <class>ar.com.gtsoftware.model.Recibos</class>
+        <class>ar.com.gtsoftware.model.RecibosDetalle</class>
+        <class>ar.com.gtsoftware.model.NegocioPlanesPagoDetalle</class>
+        <class>ar.com.gtsoftware.model.NegocioPlanesPago</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      
+      <!--            <property name="eclipselink.logging.level" value="FINE"/>
 
 
             <property name="eclipselink.cache.shared.default" value="false"/>-->
-
             <!--             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

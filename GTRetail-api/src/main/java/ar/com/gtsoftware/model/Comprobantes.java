@@ -106,11 +106,11 @@ public class Comprobantes extends BaseEntity {
     @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_registro")
     @ManyToOne
     private FiscalLibroIvaVentas idRegistro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
-    private List<ComprobantesPagosLineas> comprobantesPagosLineasList;
 
     @Transient
     private BigDecimal totalConSigno;
+    @OneToMany(mappedBy = "idComprobante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComprobantesPagos> comprobantesPagoss;
 
     public Comprobantes() {
     }
@@ -216,15 +216,6 @@ public class Comprobantes extends BaseEntity {
         this.idRegistro = idRegistro;
     }
 
-    @XmlTransient
-    public List<ComprobantesPagosLineas> getComprobantesPagosLineasList() {
-        return comprobantesPagosLineasList;
-    }
-
-    public void setComprobantesPagosLineasList(List<ComprobantesPagosLineas> comprobantesPagosLineasList) {
-        this.comprobantesPagosLineasList = comprobantesPagosLineasList;
-    }
-
     public ComprobantesEstados getIdEstadoComprobante() {
         return idEstadoComprobante;
     }
@@ -270,6 +261,15 @@ public class Comprobantes extends BaseEntity {
 
     public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
         this.tipoComprobante = tipoComprobante;
+    }
+
+    @XmlTransient
+    public List<ComprobantesPagos> getComprobantesPagoss() {
+        return comprobantesPagoss;
+    }
+
+    public void setComprobantesPagoss(List<ComprobantesPagos> comprobantesPagoss) {
+        this.comprobantesPagoss = comprobantesPagoss;
     }
 
     public BigDecimal getTotalConSigno() {

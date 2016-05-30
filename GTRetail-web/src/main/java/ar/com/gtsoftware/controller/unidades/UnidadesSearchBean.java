@@ -32,7 +32,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "unidadesSearchBean")
 @ViewScoped
-public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidades> {
+public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidades, UnidadesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
     }
 
     @Override
-    protected AbstractFacade<ProductosTiposUnidades> getFacade() {
+    protected AbstractFacade<ProductosTiposUnidades, UnidadesSearchFilter> getFacade() {
         return facade;
     }
 

@@ -17,16 +17,11 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.LegalGeneros;
 import ar.com.gtsoftware.model.LegalGeneros_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -35,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class LegalGenerosFacade extends AbstractFacade<LegalGeneros> {
+public class LegalGenerosFacade extends AbstractFacade<LegalGeneros, GenerosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -49,49 +44,17 @@ public class LegalGenerosFacade extends AbstractFacade<LegalGeneros> {
         super(LegalGeneros.class);
     }
 
-    public List<LegalGeneros> findBySearchFilter(GenerosSearchFilter gsf) {
-        if (gsf.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<LegalGeneros> cq = cb.createQuery(LegalGeneros.class);
-            Root<LegalGeneros> genero = cq.from(LegalGeneros.class);
-            cq.select(genero);
-            Predicate p = null;
-            if (gsf.getIdGenero() != null) {
-                p = cb.equal(genero.get(LegalGeneros_.id), gsf.getIdGenero());
-            }
-            if (gsf.getIdTipoPersoneria() != null) {
-                Predicate p1 = cb.equal(genero.get(LegalGeneros_.idTipoPersoneria), gsf.getIdTipoPersoneria());
-                p = appendAndPredicate(cb, p, p1);
-            }
-
-            //TODO Agregar las demás condiciones de filtrado
-            cq.where(p);
-            TypedQuery<LegalGeneros> q = em.createQuery(cq);
-
-            List<LegalGeneros> generosList = q.getResultList();
-            return generosList;
+    @Override
+    public Predicate createWhereFromSearchFilter(GenerosSearchFilter gsf, CriteriaBuilder cb, Root<LegalGeneros> root) {
+        Predicate p = null;
+        if (gsf.getIdGenero() != null) {
+            p = cb.equal(root.get(LegalGeneros_.id), gsf.getIdGenero());
         }
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<LegalGeneros> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<LegalGeneros> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(LegalGeneros entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (gsf.getIdTipoPersoneria() != null) {
+            Predicate p1 = cb.equal(root.get(LegalGeneros_.idTipoPersoneria), gsf.getIdTipoPersoneria());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
     }
 
 }

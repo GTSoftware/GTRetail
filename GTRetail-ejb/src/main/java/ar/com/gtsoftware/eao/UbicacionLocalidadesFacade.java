@@ -17,16 +17,11 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.UbicacionLocalidades;
 import ar.com.gtsoftware.model.UbicacionLocalidades_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -35,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class UbicacionLocalidadesFacade extends AbstractFacade<UbicacionLocalidades> {
+public class UbicacionLocalidadesFacade extends AbstractFacade<UbicacionLocalidades, LocalidadesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -49,52 +44,21 @@ public class UbicacionLocalidadesFacade extends AbstractFacade<UbicacionLocalida
         super(UbicacionLocalidades.class);
     }
 
-    public List<UbicacionLocalidades> findBySearchFilter(LocalidadesSearchFilter lsf) {
-        if (lsf.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<UbicacionLocalidades> cq = cb.createQuery(UbicacionLocalidades.class);
-            Root<UbicacionLocalidades> localidad = cq.from(UbicacionLocalidades.class);
-            cq.select(localidad);
-            Predicate p = null;
-            if (lsf.getIdLocalidad() != null) {
-                p = cb.equal(localidad.get(UbicacionLocalidades_.id), lsf.getIdLocalidad());
-            }
-            if (lsf.getNombreLocalidad() != null) {
-                Predicate p1 = cb.like(localidad.get(UbicacionLocalidades_.nombreLocalidad), String.format("%%%s%%", lsf.getNombreLocalidad().toUpperCase()));
-                p = appendOrPredicate(cb, p, p1);
-            }
-            if (lsf.getIdProvincia() != null) {
-                Predicate p1 = cb.equal(localidad.get(UbicacionLocalidades_.idProvincia), lsf.getIdProvincia());
-                p = appendAndPredicate(cb, p, p1);
-            }
-
-            cq.where(p);
-
-            TypedQuery<UbicacionLocalidades> q = em.createQuery(cq);
-
-            List<UbicacionLocalidades> localidadesList = q.getResultList();
-            return localidadesList;
+    @Override
+    public Predicate createWhereFromSearchFilter(LocalidadesSearchFilter lsf, CriteriaBuilder cb, Root<UbicacionLocalidades> root) {
+        Predicate p = null;
+        if (lsf.getIdLocalidad() != null) {
+            p = cb.equal(root.get(UbicacionLocalidades_.id), lsf.getIdLocalidad());
         }
-        return new ArrayList<>();
+        if (lsf.getNombreLocalidad() != null) {
+            Predicate p1 = cb.like(root.get(UbicacionLocalidades_.nombreLocalidad), String.format("%%%s%%", lsf.getNombreLocalidad().toUpperCase()));
+            p = appendOrPredicate(cb, p, p1);
+        }
+        if (lsf.getIdProvincia() != null) {
+            Predicate p1 = cb.equal(root.get(UbicacionLocalidades_.idProvincia), lsf.getIdProvincia());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
     }
 
-    @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<UbicacionLocalidades> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<UbicacionLocalidades> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(UbicacionLocalidades entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

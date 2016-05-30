@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2016 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package ar.com.gtsoftware.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -27,80 +26,65 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "cajas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_caja", columnDefinition = "serial"))
+@AttributeOverride(name = "id", column = @Column(name = "id_caja"))
 public class Cajas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 60)
-    @Column(name = "nombre_caja")
-    private String nombreCaja;
-    @Basic(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuarios idUsuario;
+
     @NotNull
-    @Column(name = "fecha_alta")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaAlta;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "activo")
-    private boolean activo;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
     private Sucursales idSucursal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCaja")
-    private List<CajasMovimientos> cajasMovimientosList;
+
+    @NotNull
+    @Column(name = "fecha_apertura")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date fechaApertura;
+
+    @NotNull
+    @Column(name = "fecha_cierre")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date fechaCierre;
+
+    @NotNull
+    @Column(name = "saldo_inicial")
+    private BigDecimal saldoInicial;
+
+    @OneToMany(mappedBy = "idCaja")
+    private List<CajasMovimientos> cajasMovimientoss;
+
+    @OneToMany(mappedBy = "idCaja")
+    private List<Recibos> recibosList;
+
+    public Cajas(Long id) {
+        super(id);
+    }
 
     public Cajas() {
     }
 
-    public Cajas(Long idCaja) {
-        super(idCaja);
+    public Usuarios getIdUsuario() {
+        return idUsuario;
     }
 
-    public Cajas(Long idCaja, String nombreCaja, Date fechaAlta, boolean activo) {
-        super(idCaja);
-        this.nombreCaja = nombreCaja;
-        this.fechaAlta = fechaAlta;
-        this.activo = activo;
-    }
-
-    public String getNombreCaja() {
-        return nombreCaja;
-    }
-
-    public void setNombreCaja(String nombreCaja) {
-        this.nombreCaja = nombreCaja;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setIdUsuario(Usuarios idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Sucursales getIdSucursal() {
@@ -111,13 +95,46 @@ public class Cajas extends BaseEntity {
         this.idSucursal = idSucursal;
     }
 
-    @XmlTransient
-    public List<CajasMovimientos> getCajasMovimientosList() {
-        return cajasMovimientosList;
+    public Date getFechaApertura() {
+        return fechaApertura;
     }
 
-    public void setCajasMovimientosList(List<CajasMovimientos> cajasMovimientosList) {
-        this.cajasMovimientosList = cajasMovimientosList;
+    public void setFechaApertura(Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
+
+    public BigDecimal getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(BigDecimal saldoInicial) {
+        this.saldoInicial = saldoInicial;
+    }
+
+    @XmlTransient
+    public List<CajasMovimientos> getCajasMovimientoss() {
+        return cajasMovimientoss;
+    }
+
+    public void setCajasMovimientoss(List<CajasMovimientos> cajasMovimientoss) {
+        this.cajasMovimientoss = cajasMovimientoss;
+    }
+
+    @XmlTransient
+    public List<Recibos> getRecibosList() {
+        return recibosList;
+    }
+
+    public void setRecibosList(List<Recibos> recibosList) {
+        this.recibosList = recibosList;
     }
 
 }

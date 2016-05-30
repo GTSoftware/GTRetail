@@ -19,7 +19,6 @@ import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Comprobantes_;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
 import ar.com.gtsoftware.model.NegocioTiposComprobante_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import java.math.BigDecimal;
 import javax.ejb.Stateless;
@@ -38,7 +37,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
+public class ComprobantesFacade extends AbstractFacade<Comprobantes, ComprobantesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -53,8 +52,8 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
     }
 
     @Override
-    protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Comprobantes> root) {
-        ComprobantesSearchFilter vsf = (ComprobantesSearchFilter) sf;
+    protected Predicate createWhereFromSearchFilter(ComprobantesSearchFilter vsf, CriteriaBuilder cb, Root<Comprobantes> root) {
+
         Predicate p = null;
         if (vsf.getIdVenta() != null) {
             p = cb.equal(root.get(Comprobantes_.id), vsf.getIdVenta());
@@ -131,7 +130,7 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
      * @param sf
      * @return
      */
-    public BigDecimal calcularTotalVentasBySearchFilter(AbstractSearchFilter sf) {
+    public BigDecimal calcularTotalVentasBySearchFilter(ComprobantesSearchFilter sf) {
         if (sf.hasFilter()) {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
@@ -153,7 +152,7 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
      * @param sf
      * @return
      */
-    public BigDecimal calcularTotalVentasFacturadasBySearchFilter(AbstractSearchFilter sf) {
+    public BigDecimal calcularTotalVentasFacturadasBySearchFilter(ComprobantesSearchFilter sf) {
         if (sf.hasFilter()) {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
@@ -176,7 +175,7 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes> {
      * @param sf
      * @return
      */
-    public BigDecimal calcularTotalVentasSinFacturarBySearchFilter(AbstractSearchFilter sf) {
+    public BigDecimal calcularTotalVentasSinFacturarBySearchFilter(ComprobantesSearchFilter sf) {
         if (sf.hasFilter()) {
             CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);

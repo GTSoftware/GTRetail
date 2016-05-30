@@ -35,7 +35,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuentaCorriente> {
+public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuentaCorriente, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -81,18 +81,4 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public List<PersonasCuentaCorriente> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(PersonasCuentaCorriente entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

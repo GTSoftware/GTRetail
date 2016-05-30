@@ -15,39 +15,39 @@
  */
 package ar.com.gtsoftware.utils;
 
+import ar.com.gtsoftware.eao.AbstractFacade;
+import ar.com.gtsoftware.model.GTEntity;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
-
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.model.GTEntity;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 
 /**
  * Implemantación de LazyLoading para PrimeFaces
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @param <Entity>
+ * @param <Filter>
  */
-public class LazyEntityDataModel<Entity extends GTEntity<?>> extends LazyDataModel<Entity> implements Serializable {
+public class LazyEntityDataModel<Entity extends GTEntity<?>, Filter extends AbstractSearchFilter>
+        extends LazyDataModel<Entity> implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(LazyEntityDataModel.class.getName());
     private static final long serialVersionUID = 1L;
 
-    private AbstractFacade<Entity> facade;
-    private AbstractSearchFilter filter;
+    private AbstractFacade<Entity, Filter> facade;
+    private Filter filter;
 
     List<Entity> resultsFromEao = null;
 
-    public LazyEntityDataModel(AbstractFacade<Entity> facade, AbstractSearchFilter filter) {
+    public LazyEntityDataModel(AbstractFacade<Entity, Filter> facade, Filter filter) {
         super();
         if (facade == null) {
             throw new IllegalArgumentException("El Facade no puede ser nulo");

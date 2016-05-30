@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasComprobantes> {
+public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasComprobantes, FiscalLetrasComprobantesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,8 +45,8 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalLetrasComprobantes> root) {
-        FiscalLetrasComprobantesSearchFilter lsf = (FiscalLetrasComprobantesSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(FiscalLetrasComprobantesSearchFilter lsf, CriteriaBuilder cb, Root<FiscalLetrasComprobantes> root) {
+
         Predicate p = null;
         if (lsf.getIvaEmisor() != null) {
             Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaEmisor), lsf.getIvaEmisor());

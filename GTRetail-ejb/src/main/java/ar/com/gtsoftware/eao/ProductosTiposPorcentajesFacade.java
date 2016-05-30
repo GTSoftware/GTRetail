@@ -29,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ProductosTiposPorcentajesFacade extends AbstractFacade<ProductosTiposPorcentajes> {
+public class ProductosTiposPorcentajesFacade extends AbstractFacade<ProductosTiposPorcentajes, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;

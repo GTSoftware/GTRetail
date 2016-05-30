@@ -65,8 +65,7 @@ public class Sucursales extends BaseEntity {
     @NotNull
     @Column(name = "activo")
     private boolean activo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
-    private List<Cajas> cajasList;
+
     @OneToMany(mappedBy = "idSucursal")
     private List<Usuarios> usuariosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
@@ -135,15 +134,6 @@ public class Sucursales extends BaseEntity {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
-    }
-
-    @XmlTransient
-    public List<Cajas> getCajasList() {
-        return cajasList;
-    }
-
-    public void setCajasList(List<Cajas> cajasList) {
-        this.cajasList = cajasList;
     }
 
     @XmlTransient

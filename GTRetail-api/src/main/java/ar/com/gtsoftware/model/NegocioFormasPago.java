@@ -15,18 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -56,10 +52,6 @@ public class NegocioFormasPago extends BaseEntity {
     @NotNull
     @Column(name = "compra")
     private boolean compra;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormaPago")
-    private List<ComprobantesPagos> ventasPagosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormaPago")
-    private List<CajasMovimientos> cajasMovimientosList;
 
     public NegocioFormasPago() {
     }
@@ -105,24 +97,6 @@ public class NegocioFormasPago extends BaseEntity {
 
     public void setCompra(boolean compra) {
         this.compra = compra;
-    }
-
-    @XmlTransient
-    public List<ComprobantesPagos> getVentasPagosList() {
-        return ventasPagosList;
-    }
-
-    public void setVentasPagosList(List<ComprobantesPagos> ventasPagosList) {
-        this.ventasPagosList = ventasPagosList;
-    }
-
-    @XmlTransient
-    public List<CajasMovimientos> getCajasMovimientosList() {
-        return cajasMovimientosList;
-    }
-
-    public void setCajasMovimientosList(List<CajasMovimientos> cajasMovimientosList) {
-        this.cajasMovimientosList = cajasMovimientosList;
     }
 
 }

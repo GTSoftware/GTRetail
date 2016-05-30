@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.UbicacionPaises;
 import ar.com.gtsoftware.model.UbicacionPaises_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -36,7 +30,8 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class UbicacionPaisesFacade extends AbstractFacade<UbicacionPaises> {
+public class UbicacionPaisesFacade extends AbstractFacade<UbicacionPaises, PaisesSearchFilter> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -48,50 +43,18 @@ public class UbicacionPaisesFacade extends AbstractFacade<UbicacionPaises> {
     public UbicacionPaisesFacade() {
         super(UbicacionPaises.class);
     }
-    
-    public List<UbicacionPaises> findBySearchFilter(PaisesSearchFilter psf) {
-        if (psf.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<UbicacionPaises> cq = cb.createQuery(UbicacionPaises.class);
-            Root<UbicacionPaises> pais = cq.from(UbicacionPaises.class);
-            cq.select(pais);
-            Predicate p = null;
-            if (psf.getIdPais()!= null) {
-                p = cb.equal(pais.get(UbicacionPaises_.id), psf.getIdPais());
-            }
-            if (psf.getNombrePais()!= null) {
-                Predicate p1 = cb.like(pais.get(UbicacionPaises_.nombrePais), String.format("%%%s%%", psf.getNombrePais().toUpperCase()));
-                p = appendOrPredicate(cb, p, p1);
-            }
-            
-            cq.where(p);
-            
-            TypedQuery<UbicacionPaises> q = em.createQuery(cq);
 
-            List<UbicacionPaises> paisesList = q.getResultList();
-            return paisesList;
+    @Override
+    public Predicate createWhereFromSearchFilter(PaisesSearchFilter psf, CriteriaBuilder cb, Root<UbicacionPaises> root) {
+        Predicate p = null;
+        if (psf.getIdPais() != null) {
+            p = cb.equal(root.get(UbicacionPaises_.id), psf.getIdPais());
         }
-        return new ArrayList<>();
+        if (psf.getNombrePais() != null) {
+            Predicate p1 = cb.like(root.get(UbicacionPaises_.nombrePais), String.format("%%%s%%", psf.getNombrePais().toUpperCase()));
+            p = appendOrPredicate(cb, p, p1);
+        }
+        return p;
     }
 
-    @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<UbicacionPaises> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<UbicacionPaises> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(UbicacionPaises entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

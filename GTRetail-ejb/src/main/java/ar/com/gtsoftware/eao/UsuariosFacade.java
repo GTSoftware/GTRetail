@@ -17,10 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.model.Usuarios_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,7 +32,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
-public class UsuariosFacade extends AbstractFacade<Usuarios> {
+public class UsuariosFacade extends AbstractFacade<Usuarios, UsuariosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -47,47 +44,6 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
 
     public UsuariosFacade() {
         super(Usuarios.class);
-    }
-
-    public List<Usuarios> findBySearchFilter(UsuariosSearchFilter usuariosSearchFilter) {
-        if (usuariosSearchFilter.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Usuarios> cq = cb.createQuery(Usuarios.class);
-            Root<Usuarios> usuario = cq.from(Usuarios.class);
-            cq.select(usuario);
-            Predicate p = null;
-            if (usuariosSearchFilter.getIdUsuario() != null) {
-                p = cb.equal(usuario.get(Usuarios_.id), usuariosSearchFilter.getIdUsuario());
-            }
-            if (usuariosSearchFilter.getNombreUsuario() != null) {
-                Predicate p1 = cb.like(usuario.get(Usuarios_.nombreUsuario), String.format("%%%s%%", usuariosSearchFilter.getNombreUsuario().toLowerCase()));
-                p = appendOrPredicate(cb, p, p1);
-            }
-            if (usuariosSearchFilter.getLogin() != null) {
-                Predicate p1 = cb.like(usuario.get(Usuarios_.login), String.format("%%%s%%", usuariosSearchFilter.getLogin()));
-                p = appendOrPredicate(cb, p, p1);
-            }
-            if (usuariosSearchFilter.getPassword() != null) {
-                Predicate p1 = cb.equal(usuario.get(Usuarios_.password), usuariosSearchFilter.getPassword());
-                p = appendOrPredicate(cb, p, p1);
-            }
-            if (usuariosSearchFilter.hasTextFilter()) {
-                for (String s : usuariosSearchFilter.getText().toUpperCase().split(" ")) {
-
-                    Predicate p1 = cb.like(cb.upper(usuario.get(Usuarios_.login)), String.format("%%%s%%", s));
-                    Predicate p2 = cb.like(cb.upper(usuario.get(Usuarios_.nombreUsuario)), String.format("%%%s%%", s));
-
-                    p = appendOrPredicate(cb, p, p1);
-                    p = appendOrPredicate(cb, p, p2);
-                }
-            }
-            cq.where(p);
-            TypedQuery<Usuarios> q = em.createQuery(cq);
-
-            List<Usuarios> usuariosList = q.getResultList();
-            return usuariosList;
-        }
-        return new ArrayList<>();
     }
 
     /**
@@ -109,29 +65,34 @@ public class UsuariosFacade extends AbstractFacade<Usuarios> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Usuarios> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Usuarios> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(Usuarios entity) {
-        Usuarios usuarioExistente = find(entity.getLogin());
-
-        if (usuarioExistente != null) {
-            edit(entity);
-        } else {
-            create(entity);
+    public Predicate createWhereFromSearchFilter(UsuariosSearchFilter usuariosSearchFilter, CriteriaBuilder cb, Root<Usuarios> root) {
+        Predicate p = null;
+        if (usuariosSearchFilter.getIdUsuario() != null) {
+            p = cb.equal(root.get(Usuarios_.id), usuariosSearchFilter.getIdUsuario());
         }
-        getEntityManager().flush();
+        if (usuariosSearchFilter.getNombreUsuario() != null) {
+            Predicate p1 = cb.like(root.get(Usuarios_.nombreUsuario), String.format("%%%s%%", usuariosSearchFilter.getNombreUsuario().toLowerCase()));
+            p = appendOrPredicate(cb, p, p1);
+        }
+        if (usuariosSearchFilter.getLogin() != null) {
+            Predicate p1 = cb.like(root.get(Usuarios_.login), String.format("%%%s%%", usuariosSearchFilter.getLogin()));
+            p = appendOrPredicate(cb, p, p1);
+        }
+        if (usuariosSearchFilter.getPassword() != null) {
+            Predicate p1 = cb.equal(root.get(Usuarios_.password), usuariosSearchFilter.getPassword());
+            p = appendOrPredicate(cb, p, p1);
+        }
+        if (usuariosSearchFilter.hasTextFilter()) {
+            for (String s : usuariosSearchFilter.getText().toUpperCase().split(" ")) {
+
+                Predicate p1 = cb.like(cb.upper(root.get(Usuarios_.login)), String.format("%%%s%%", s));
+                Predicate p2 = cb.like(cb.upper(root.get(Usuarios_.nombreUsuario)), String.format("%%%s%%", s));
+
+                p = appendOrPredicate(cb, p, p1);
+                p = appendOrPredicate(cb, p, p2);
+            }
+        }
+        return p;
     }
+
 }

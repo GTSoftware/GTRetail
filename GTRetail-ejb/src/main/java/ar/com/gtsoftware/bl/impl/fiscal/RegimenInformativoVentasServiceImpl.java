@@ -90,7 +90,7 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
         cabecera.setImporteCreditoFiscalComputableContribSegSocyOtros(BigDecimal.ZERO);
         cabecera.setProrratearCreditoFiscalComputable(ReginfoCvCabecera.NO);
 
-        List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findBySearchFilter(filter);
+        List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findAllBySearchFilter(filter);
         cabecera.setSinMovimiento(facturas.isEmpty() ? ReginfoCvCabecera.SI : ReginfoCvCabecera.NO);
 
         List<ReginfoCvVentasCbte> regVentas = new ArrayList<>();

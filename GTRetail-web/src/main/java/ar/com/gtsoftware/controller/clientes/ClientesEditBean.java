@@ -165,7 +165,7 @@ public class ClientesEditBean implements Serializable {
     }
 
     public List<LegalGeneros> getGenerosList() {
-        return generosFacade.findBySearchFilter(new GenerosSearchFilter(clienteActual.getIdTipoPersoneria()));
+        return generosFacade.findAllBySearchFilter(new GenerosSearchFilter(clienteActual.getIdTipoPersoneria()));
 
     }
 
@@ -179,12 +179,12 @@ public class ClientesEditBean implements Serializable {
 
     public List<UbicacionProvincias> getProvinciasList() {
         ProvinciasSearchFilter psf = new ProvinciasSearchFilter(clienteActual.getIdPais());
-        return provinciasFacade.findBySearchFilter(psf);
+        return provinciasFacade.findAllBySearchFilter(psf);
     }
 
     public List<UbicacionLocalidades> getLocalidadesList() {
         LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
-        return localidadesFacade.findBySearchFilter(lsf);
+        return localidadesFacade.findAllBySearchFilter(lsf);
     }
 
     public PersonasTelefonos getTelefonoActual() {

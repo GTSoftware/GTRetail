@@ -15,18 +15,16 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
+import ar.com.gtsoftware.eao.UsuariosFacade;
+import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.search.UsuariosSearchFilter;
 
 /**
  * Controlador para el caso de uso de búsqueda de usuarios
@@ -38,7 +36,7 @@ import ar.com.gtsoftware.search.UsuariosSearchFilter;
 public class UsuariosSearchBean implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +57,7 @@ public class UsuariosSearchBean implements Serializable {
 
     public void findUsuarios() {
         usuariosList.clear();
-        usuariosList.addAll(usuarioFacade.findBySearchFilter(filter));
+        usuariosList.addAll(usuarioFacade.findAllBySearchFilter(filter));
     }
 
     public UsuariosSearchFilter getFilter() {

@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
 import ar.com.gtsoftware.model.ProductosTiposUnidades_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.UnidadesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Stateless
-public class ProductosTiposUnidadesFacade extends AbstractFacade<ProductosTiposUnidades> {
+public class ProductosTiposUnidadesFacade extends AbstractFacade<ProductosTiposUnidades, UnidadesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,7 +45,7 @@ public class ProductosTiposUnidadesFacade extends AbstractFacade<ProductosTiposU
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosTiposUnidades> root) {
+    public Predicate createWhereFromSearchFilter(UnidadesSearchFilter sf, CriteriaBuilder cb, Root<ProductosTiposUnidades> root) {
         UnidadesSearchFilter usf = (UnidadesSearchFilter) sf;
         Predicate p = null;
         if (usf.getNombreUnidad() != null) {

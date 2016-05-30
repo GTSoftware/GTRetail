@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2016 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,102 +17,80 @@ package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
+ * Los planes de pago elegidos para cada comprobante
  *
- * @author Rodrigo Tato <rotatomel@gmail.com>
+ * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "comprobantes_pagos")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_pago_comprobante"))
+@AttributeOverride(name = "id", column = @Column(name = "id_pago"))
 public class ComprobantesPagos extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
     @NotNull
-    @Column(name = "fecha_pago")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaPago;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "importe_total_pagado")
-    private BigDecimal importeTotalPagado;
-    @Size(max = 255)
-    @Column(name = "observaciones")
-    private String observaciones;
-    @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago", columnDefinition = "int4")
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "id_comprobante", referencedColumnName = "id_comprobante")
+    private Comprobantes idComprobante;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago")
     private NegocioFormasPago idFormaPago;
-    @JoinColumn(name = "id_movimiento_caja", referencedColumnName = "id_movimiento_caja", columnDefinition = "int4")
-    @ManyToOne(optional = true)
-    private CajasMovimientos idMovimientoCaja;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPagoComprobante")
-    private List<ComprobantesPagosLineas> comprobantesPagosLineasList;
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false, columnDefinition = "int4")
-    @ManyToOne(optional = false)
-    private Personas idPersona;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false, columnDefinition = "int4")
-    @ManyToOne(optional = false)
-    private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", nullable = false, columnDefinition = "int4")
-    @ManyToOne(optional = false)
-    private Sucursales idSucursal;
+
+    @ManyToOne
+    @JoinColumn(name = "id_plan", referencedColumnName = "id_plan")
+    private NegocioPlanesPago idPlan;
+
+    @ManyToOne
+    @JoinColumn(name = "id_detalle_plan", referencedColumnName = "id_detalle_plan")
+    private NegocioPlanesPagoDetalle idDetallePlan;
+
+    @NotNull
+    @Column(name = "monto_pago")
+    private BigDecimal montoPago;
+
+    @NotNull
+    @Column(name = "monto_pagado")
+    private BigDecimal montoPagado;
+
+    @Column(name = "fecha_pago")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date fechaPago;
+
+    @Column(name = "fecha_ultimo_pago")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date fechaUltimoPago;
 
     @Transient
-    private Integer item;
+    private int item;
+
+    public ComprobantesPagos(Long id) {
+        super(id);
+    }
 
     public ComprobantesPagos() {
     }
 
-    public ComprobantesPagos(Long idPagoVenta) {
-        super(idPagoVenta);
+    public Comprobantes getIdComprobante() {
+        return idComprobante;
     }
 
-    public ComprobantesPagos(Long idPagoVenta, Date fechaPago) {
-        super(idPagoVenta);
-        this.fechaPago = fechaPago;
-    }
-
-    public Date getFechaPago() {
-        return fechaPago;
-    }
-
-    public void setFechaPago(Date fechaPago) {
-        this.fechaPago = fechaPago;
-    }
-
-    public BigDecimal getImporteTotalPagado() {
-        return importeTotalPagado;
-    }
-
-    public void setImporteTotalPagado(BigDecimal importeTotalPagado) {
-        this.importeTotalPagado = importeTotalPagado;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setIdComprobante(Comprobantes idComprobante) {
+        this.idComprobante = idComprobante;
     }
 
     public NegocioFormasPago getIdFormaPago() {
@@ -123,58 +101,60 @@ public class ComprobantesPagos extends BaseEntity {
         this.idFormaPago = idFormaPago;
     }
 
-    public CajasMovimientos getIdMovimientoCaja() {
-        return idMovimientoCaja;
+    public NegocioPlanesPago getIdPlan() {
+        return idPlan;
     }
 
-    public void setIdMovimientoCaja(CajasMovimientos idMovimientoCaja) {
-        this.idMovimientoCaja = idMovimientoCaja;
+    public void setIdPlan(NegocioPlanesPago idPlan) {
+        this.idPlan = idPlan;
     }
 
-    @XmlTransient
-    public List<ComprobantesPagosLineas> getComprobantesPagosLineasList() {
-        return comprobantesPagosLineasList;
+    public NegocioPlanesPagoDetalle getIdDetallePlan() {
+        return idDetallePlan;
     }
 
-    public void setComprobantesPagosLineasList(List<ComprobantesPagosLineas> comprobantesPagosLineasList) {
-        this.comprobantesPagosLineasList = comprobantesPagosLineasList;
+    public void setIdDetallePlan(NegocioPlanesPagoDetalle idDetallePlan) {
+        this.idDetallePlan = idDetallePlan;
     }
 
-    public Integer getItem() {
+    public BigDecimal getMontoPago() {
+        return montoPago;
+    }
+
+    public void setMontoPago(BigDecimal montoPago) {
+        this.montoPago = montoPago;
+    }
+
+    public BigDecimal getMontoPagado() {
+        return montoPagado;
+    }
+
+    public void setMontoPagado(BigDecimal montoPagado) {
+        this.montoPagado = montoPagado;
+    }
+
+    public Date getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public Date getFechaUltimoPago() {
+        return fechaUltimoPago;
+    }
+
+    public void setFechaUltimoPago(Date fechaUltimoPago) {
+        this.fechaUltimoPago = fechaUltimoPago;
+    }
+
+    public int getItem() {
         return item;
     }
 
-    public void setItem(Integer item) {
+    public void setItem(int item) {
         this.item = item;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.VentasPagos[ idPagoVenta=" + this.getId() + " ]";
     }
 
 }

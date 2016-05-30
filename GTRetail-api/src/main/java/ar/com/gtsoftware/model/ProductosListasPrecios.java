@@ -15,13 +15,16 @@
  */
 package ar.com.gtsoftware.model;
 
+import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -44,6 +47,9 @@ public class ProductosListasPrecios extends BaseEntity {
     @Column(name = "activa")
     private boolean activa;
 
+    @ManyToMany(mappedBy = "listasPrecioHabilitadas")
+    private List<NegocioPlanesPago> planesPagoAsociados;
+
     public ProductosListasPrecios() {
     }
 
@@ -65,6 +71,15 @@ public class ProductosListasPrecios extends BaseEntity {
 
     public void setActiva(boolean activa) {
         this.activa = activa;
+    }
+
+    @XmlTransient
+    public List<NegocioPlanesPago> getPlanesPagoAsociados() {
+        return planesPagoAsociados;
+    }
+
+    public void setPlanesPagoAsociados(List<NegocioPlanesPago> planesPagoAsociados) {
+        this.planesPagoAsociados = planesPagoAsociados;
     }
 
     @Override

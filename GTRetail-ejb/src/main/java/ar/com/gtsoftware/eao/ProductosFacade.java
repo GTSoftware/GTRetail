@@ -21,7 +21,6 @@ import ar.com.gtsoftware.model.ProductosRubros_;
 import ar.com.gtsoftware.model.ProductosSubRubros_;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
 import ar.com.gtsoftware.model.Productos_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import java.math.BigDecimal;
 import javax.ejb.Stateless;
@@ -37,7 +36,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ProductosFacade extends AbstractFacade<Productos> {
+public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFilter> {
 
     private static final String WORDS = "\\W";
     private static final String LIKE = "%%%s%%";
@@ -55,8 +54,8 @@ public class ProductosFacade extends AbstractFacade<Productos> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Productos> root) {
-        ProductosSearchFilter psf = (ProductosSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(ProductosSearchFilter psf, CriteriaBuilder cb, Root<Productos> root) {
+
         Predicate p = null;
         if (psf.getIdProducto() != null) {
             p = cb.equal(root.get(Productos_.id), psf.getIdProducto());

@@ -220,7 +220,7 @@ public class ShopCartBean implements Serializable {
     public void initPagos() {
         if (!JSFUtil.isPostback()) {
             if (pagos.isEmpty() && formaPagoDefecto != null) {
-                pagoActual.setImporteTotalPagado(venta.getTotal());
+                pagoActual.setMontoPago(venta.getTotal());
                 pagoActual.setIdFormaPago(formaPagoDefecto);
                 venta.setSaldo(venta.getTotal());
                 doAgregarPago();
@@ -333,8 +333,8 @@ public class ShopCartBean implements Serializable {
 
     public void doAgregarPago() {
         if (pagoActual.getIdFormaPago() != null) {
-            if (pagoActual.getImporteTotalPagado().signum() <= 0
-                    || pagoActual.getImporteTotalPagado().compareTo(venta.getSaldo()) > 0) {
+            if (pagoActual.getMontoPago().signum() <= 0
+                    || pagoActual.getMontoPago().compareTo(venta.getSaldo()) > 0) {
                 JSFUtil.addErrorMessage("El monto del pago supera el saldo!");
 
             } else {
@@ -342,7 +342,7 @@ public class ShopCartBean implements Serializable {
                 pagoActual.setItem(itemCounter.getAndIncrement());
                 pagos.add(pagoActual);
                 pagoActual = new ComprobantesPagos();
-                pagoActual.setImporteTotalPagado(BigDecimal.ZERO);
+                pagoActual.setMontoPago(BigDecimal.ZERO);
             }
         }
         calcularTotalPagado();
@@ -352,10 +352,10 @@ public class ShopCartBean implements Serializable {
         venta.setSaldo(venta.getTotal());
         BigDecimal sumaPagos = BigDecimal.ZERO;
         for (ComprobantesPagos p : pagos) {
-            sumaPagos = sumaPagos.add(p.getImporteTotalPagado());
+            sumaPagos = sumaPagos.add(p.getMontoPago());
         }
         venta.setSaldo(venta.getTotal().subtract(sumaPagos));
-        pagoActual.setImporteTotalPagado(venta.getSaldo());
+        pagoActual.setMontoPago(venta.getSaldo());
     }
 
     private boolean validarVenta() {

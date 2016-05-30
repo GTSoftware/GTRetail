@@ -15,26 +15,24 @@
  */
 package ar.com.gtsoftware.controller.search;
 
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.model.DataModel;
-
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.model.DataModel;
 
 /**
  * Bean abstracto del que heredan los search bean para entidades
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
- * @param <T>
- *            la entidad a filtrar
+ * @param <T> la entidad a filtrar
+ * @param <S> el SearchFilter para esa entidad
  */
-public abstract class AbstractSearchBean<T extends GTEntity<?>> implements Serializable {
+public abstract class AbstractSearchBean<T extends GTEntity<?>, S extends AbstractSearchFilter> implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(AbstractSearchBean.class.getName());
@@ -49,9 +47,9 @@ public abstract class AbstractSearchBean<T extends GTEntity<?>> implements Seria
     public AbstractSearchBean() {
     }
 
-    protected abstract AbstractFacade<T> getFacade();
+    protected abstract AbstractFacade<T, S> getFacade();
 
-    public abstract AbstractSearchFilter getFilter();
+    public abstract S getFilter();
 
     public void doSearch() {
         dataModel = null;

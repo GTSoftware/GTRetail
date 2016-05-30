@@ -18,6 +18,7 @@ package ar.com.gtsoftware.converters;
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.search.PersonasSearchFilter;
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
 import javax.faces.convert.FacesConverter;
@@ -28,7 +29,7 @@ import javax.faces.convert.FacesConverter;
  */
 @Model
 @FacesConverter(value = "personasConverter")
-public class PersonasConverter extends AbstractEntityConverter<Personas> {
+public class PersonasConverter extends AbstractEntityConverter<Personas, PersonasSearchFilter> {
 
     @EJB
     private PersonasFacade personasFacade;
@@ -38,7 +39,7 @@ public class PersonasConverter extends AbstractEntityConverter<Personas> {
     }
 
     @Override
-    protected AbstractFacade<Personas> getFacade() {
+    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
         return personasFacade;
     }
 

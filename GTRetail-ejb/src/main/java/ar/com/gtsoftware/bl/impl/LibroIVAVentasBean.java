@@ -72,7 +72,7 @@ public class LibroIVAVentasBean {
             libro = new LibroIVADTO(filter.getPeriodo().getFechaInicioPeriodo(),
                     filter.getPeriodo().getFechaFinPeriodo());
         }
-        List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findBySearchFilter(filter);
+        List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findAllBySearchFilter(filter);
 
         List<RegistroIVADTO> facturasDTOList = new ArrayList<>();
         BigDecimal importeGeneralTotal = BigDecimal.ZERO;

@@ -83,8 +83,6 @@ public class Usuarios extends BaseEntity implements Serializable {
     private Sucursales idSucursal;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<CajasMovimientos> cajasMovimientosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
 
     /**
@@ -260,23 +258,6 @@ public class Usuarios extends BaseEntity implements Serializable {
      */
     public void setIdSucursal(Sucursales idSucursal) {
         this.idSucursal = idSucursal;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @XmlTransient
-    public List<CajasMovimientos> getCajasMovimientosList() {
-        return cajasMovimientosList;
-    }
-
-    /**
-     *
-     * @param cajasMovimientosList
-     */
-    public void setCajasMovimientosList(List<CajasMovimientos> cajasMovimientosList) {
-        this.cajasMovimientosList = cajasMovimientosList;
     }
 
     /**

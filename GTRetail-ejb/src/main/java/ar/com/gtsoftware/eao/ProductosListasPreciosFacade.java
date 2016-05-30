@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosListasPrecios_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ProductosListasPreciosFacade extends AbstractFacade<ProductosListasPrecios> {
+public class ProductosListasPreciosFacade extends AbstractFacade<ProductosListasPrecios, ProductosListasPreciosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,8 +45,8 @@ public class ProductosListasPreciosFacade extends AbstractFacade<ProductosListas
     }
 
     @Override
-    protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosListasPrecios> root) {
-        ProductosListasPreciosSearchFilter psf = (ProductosListasPreciosSearchFilter) sf;
+    protected Predicate createWhereFromSearchFilter(ProductosListasPreciosSearchFilter psf, CriteriaBuilder cb, Root<ProductosListasPrecios> root) {
+
         Predicate p = null;
 
         if (psf.getNombre() != null && !psf.getNombre().isEmpty()) {

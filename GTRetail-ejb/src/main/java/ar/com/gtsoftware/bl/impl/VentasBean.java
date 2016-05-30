@@ -19,10 +19,8 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
 import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
-import ar.com.gtsoftware.eao.ComprobantesPagosLineasFacade;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.ComprobantesPagos;
-import ar.com.gtsoftware.model.ComprobantesPagosLineas;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -41,8 +39,6 @@ public class VentasBean {
 
     @EJB
     private ComprobantesPagosFacade pagosFacade;
-    @EJB
-    private ComprobantesPagosLineasFacade pagosLineasFacade;
 
     @EJB
     private PersonasCuentaCorrienteBean cuentaCorrienteBean;
@@ -56,18 +52,18 @@ public class VentasBean {
             //TODO Parametrizar estado inicial de venta
             venta.setIdEstadoComprobante(estadosFacade.find(2L)); //Aceptada
             ventasFacade.create(venta);
-            for (ComprobantesPagos pago : pagos) {
-                pago.setFechaPago(venta.getFechaComprobante());
-                pago.setIdPersona(venta.getIdPersona());
-                pago.setIdUsuario(venta.getIdUsuario());
-                pago.setIdSucursal(venta.getIdSucursal());
-                pagosFacade.create(pago);
-                ComprobantesPagosLineas lineaPago = new ComprobantesPagosLineas();
-                lineaPago.setIdPagoComprobante(pago);
-                lineaPago.setIdComprobante(venta);
-                lineaPago.setImporte(pago.getImporteTotalPagado());
-                pagosLineasFacade.create(lineaPago);
-            }
+//            for (ComprobantesPagos pago : pagos) {
+//                pago.setFechaPago(venta.getFechaComprobante());
+//                pago.setIdPersona(venta.getIdPersona());
+//                pago.setIdUsuario(venta.getIdUsuario());
+//                pago.setIdSucursal(venta.getIdSucursal());
+//                pagosFacade.create(pago);
+//                ComprobantesPagosLineas lineaPago = new ComprobantesPagosLineas();
+//                lineaPago.setIdPagoComprobante(pago);
+//                lineaPago.setIdComprobante(venta);
+//                lineaPago.setImporte(pago.getImporteTotalPagado());
+//                pagosLineasFacade.create(lineaPago);
+//            }
 
             cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
         }
