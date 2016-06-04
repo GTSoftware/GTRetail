@@ -38,7 +38,7 @@ public class MarcasSearchBean extends AbstractSearchBean<ProductosMarcas, Marcas
     @EJB
     private ProductosMarcasFacade facade;
 
-    private final MarcasSearchFilter filter = new MarcasSearchFilter("%");
+    private final MarcasSearchFilter filter = new MarcasSearchFilter();
 
     /**
      * Creates a new instance of ParametrosEditBean
