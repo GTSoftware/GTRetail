@@ -5,7 +5,7 @@
             <displayName>deploy</displayName>
             <goals>
                 <goal>clean</goal>
-                <goal>install</goal>
+                <goal>package</goal>
                 <goal>jboss-as:undeploy</goal>
                 <goal>jboss-as:deploy</goal>
             </goals>

@@ -51,8 +51,8 @@
 
         <dependency>
             <groupId>org.primefaces.themes</groupId>
-            <artifactId>all-themes</artifactId>
-            <version>${primefaces-themes.version}</version>
+            <artifactId>olympos-theme</artifactId>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
@@ -185,12 +185,12 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
+    <!--    <repositories>
         <repository>
             <url>http://repository.primefaces.org/</url>
             <id>PrimeFaces-maven-lib</id>
             <layout>default</layout>
             <name>Repository for library PrimeFaces-maven-lib</name>
         </repository>
-    </repositories>
+    </repositories>-->
 </project>
