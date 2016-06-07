@@ -21,6 +21,7 @@
 
                     <div class="Container100 ui-fluid">
                         <div class="Card">
+                            <p:focus for="textoBusquedaField"/>
                             <p:panelGrid layout="grid"  columns="4"
                                          style="border:0px !important; background:none;" styleClass="ui-panelgrid-blank">
                                 <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
@@ -54,29 +55,28 @@
                                          liveResize="true"
                                          resizableColumns="true">
 
-
                                 <f:facet name="{Exporters}">
-                                    <h:commandLink>
-
-                                        <p:graphicImage library="images" name="excel.png" width="24"/>
-                                        <p:dataExporter type="xls" target="marcasTable" fileName="marcas" />
+                                    <h:commandLink title="xls">
+                                        <i class="fa fa-file-excel-o Fs24 Green" />
+                                        <p:dataExporter type="Exportar a xls" target="marcasTable" fileName="marcas" />
                                     </h:commandLink>
 
-                                    <h:commandLink>
-                                        <p:graphicImage library="images" name="pdf.png" width="24"/>
-                                        <p:dataExporter type="pdf" target="marcasTable" fileName="marcas"/>
+                                    <h:commandLink title="pdf">
+                                        <i class="fa fa-file-pdf-o Fs24 Red" />
+                                        <p:dataExporter type="Exportar a pdf" target="marcasTable" fileName="marcas"/>
                                     </h:commandLink>
 
-                                    <h:commandLink>
-                                        <p:graphicImage library="images" name="csv.png" width="24"/>
-                                        <p:dataExporter type="csv" target="marcasTable" fileName="marcas" />
+                                    <h:commandLink title="csv">
+                                        <i class="fa fa-file-text-o Fs24 Blue" />
+                                        <p:dataExporter type="Exportar a csv" target="marcasTable" fileName="marcas" />
                                     </h:commandLink>
 
-                                    <h:commandLink>
-                                        <p:graphicImage library="images" name="xml.png" width="24"/>
-                                        <p:dataExporter type="xml" target="marcasTable" fileName="marcas" />
+                                    <h:commandLink title="xml">
+                                        <i class="fa fa-file-code-o Fs24 Black" />
+                                        <p:dataExporter type="Exportar a xml" target="marcasTable" fileName="marcas" />
                                     </h:commandLink>
                                 </f:facet>
+
 
                                 <f:facet name="header">
                                     #{msg.marcas}
@@ -100,7 +100,7 @@
 
                                 </p:column>
 
-                                <p:column style="width:64px" exportable="false">
+                                <p:column  exportable="false">
                                     <f:facet name="header">
                                         #{msg.editar}
                                     </f:facet>

@@ -41,7 +41,7 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
 
     private ProductosTiposUnidades unidad;
 
-    private final UnidadesSearchFilter filter = new UnidadesSearchFilter("%");
+    private final UnidadesSearchFilter filter = new UnidadesSearchFilter();
 
     /**
      * Creates a new instance of ParametrosEditBean

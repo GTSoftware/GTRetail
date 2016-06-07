@@ -49,7 +49,7 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros, 
 
     private ProductosRubros rubro;
 
-    private final SubRubroSearchFilter filter = new SubRubroSearchFilter("%");
+    private final SubRubroSearchFilter filter = new SubRubroSearchFilter();
 
     /**
      * Creates a new instance of SubRubrosSearchBean

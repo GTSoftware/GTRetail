@@ -253,7 +253,7 @@ public class ShopCartBean implements Serializable {
         cantidad = BigDecimal.ONE;
         productosFilter.setCodigoPropio(null);
         //Init datos
-        JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoAgregadoAlCarritoSatisfactoriamente"));
+//        JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoAgregadoAlCarritoSatisfactoriamente"));
         ventaModificada = true;
         productoBusquedaSeleccionado = null;
     }

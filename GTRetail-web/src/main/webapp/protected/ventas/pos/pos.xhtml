@@ -12,219 +12,243 @@
     <f:event listener="#{shopCartBean.initConversation}"
              type="preRenderView">
     </f:event>
-    <h:form id="formContenido" >
-        <h:outputText id="cid"
-                      value="#{javax.enterprise.context.conversation.id}" />
 
-        <p:panel id="inputPanel" >
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">POS</h1>
+            <div class="SeparatorFull"></div>
+            <h:form id="formContenido" >
+                <!--                <h:outputText id="cid"
+                                              value="#{javax.enterprise.context.conversation.id}" />-->
 
-            <p:focus context="inputPanel" />
-            <p:panelGrid layout="grid" columns="3"
-                         styleClass="ui-panelgrid-blank"
-                         columnClasses="ui-grid-col-1,ui-grid-col-10,ui-grid-col-1"
-                         >
+                <p:panel id="inputPanel" >
 
-                <p:outputLabel for="codigoField" value="#{msg.codigo}:"/>
-                <p:inputText id="codigoField"
-                             required="true"
-                             value="#{shopCartBean.productosFilter.codigoPropio}">
-                    <f:validateLength minimum="1" />
-                </p:inputText>
-                <p:message for="codigoField" display="icon" />
+                    <p:focus context="inputPanel" />
+                    <p:panelGrid
+                        layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                        style="border:0px !important; background:none;"
+                        >
 
-                <p:outputLabel for="cantidadField" value="#{msg.cantidad}:"/>
-                <p:inputText id="cantidadField"
-                             required="true"
-                             value="#{shopCartBean.cantidad}">
-                    <f:validateDoubleRange minimum="0.01"
-                                           maximum="9999999999999999999.99" />
 
-                </p:inputText>
-                <p:message for="cantidadField" display="icon"/>
+                        <p:inputText id="codigoField"
+                                     required="true"
+                                     value="#{shopCartBean.productosFilter.codigoPropio}"
+                                     placeholder="Código">
+                            <f:validateLength minimum="1" />
+                        </p:inputText>
+                        <p:message for="codigoField" display="icon" />
 
-            </p:panelGrid>
-            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
-                             title="#{msg.insertar}"
-                             action="#{shopCartBean.addToCart()}"
-                             update="@form"
-                             global="false"/>
 
-            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
-                             title="#{msg.buscar} productos"
-                             oncomplete="PF('dlgBusProd').show()"
-                             process="@none"
-                             global="false"/>
-        </p:panel>
-
-        <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
-
-        <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.comprobantesLineasList}"
-
-                     paginator="false"
-                     sortMode="single"
-                     emptyMessage="#{msg.productosNoCargados}"
-                     editable="true"
-                     editMode="cell"
-                     reflow="true">
-
-            <p:ajax event="cellEdit"
-                    listener="#{shopCartBean.calcularTotal()}"
-                    oncomplete="onCellEdit()"
-                    global="false"
-                    />
-
-            <p:column style="text-align: right; ">
-                <f:facet name="header">
-                    #{msg.tablaId}
-                </f:facet>
-                <h:outputText value="#{lineaVenta.idProducto.id}" />
-            </p:column>
-            <p:column style="text-align: left; ">
-                <f:facet name="header">
-                    #{msg.codigo}
-                </f:facet>
-                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
-            </p:column>
-            <p:column style="text-align: left; ">
-                <f:facet name="header">
-                    #{msg.tablaDescripcion}
-                </f:facet>
-                <h:outputText id="decripcionProd" value="#{lineaVenta.descripcion}" />
-                <p:tooltip id="toolTipFade" for="decripcionProd"  value="#{lineaVenta.idProducto.observaciones}" />
-            </p:column>
-            <p:column style="text-align: right;">
-                <f:facet name="header">
-                    #{msg.tablaCantidad}
-                </f:facet>
-                <p:cellEditor>
-                    <f:facet name="output">
-                        <h:outputText value="#{lineaVenta.cantidad}" />
-                    </f:facet>
-                    <f:facet name="input">
-                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}" style="width:96%">
+                        <p:inputText id="cantidadField"
+                                     required="true"
+                                     value="#{shopCartBean.cantidad}"
+                                     placeholder="Cantidad">
                             <f:validateDoubleRange minimum="0.01"
                                                    maximum="9999999999999999999.99" />
+
                         </p:inputText>
-                    </f:facet>
-                </p:cellEditor>
+                        <p:message for="cantidadField" display="icon"/>
 
-            </p:column>
-            <p:column style="text-align: left; ">
-                <f:facet name="header">
-                    #{msg.tablaUnidad}
-                </f:facet>
-                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
-            </p:column>
-            <p:column style="text-align: right; ">
-                <f:facet name="header">
-                    #{msg.tablaIVA}
-                </f:facet>
-                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
-                    <f:convertNumber  type="number" groupingUsed="true"/>
-                </h:outputText>
-            </p:column>
+                    </p:panelGrid>
+                    <p:panelGrid
+                        layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                        style="border:0px !important; background:none;"
+                        >
+                        <div class="Container25 ui-fluid">
+                            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
+                                             title="#{msg.insertar}"
+                                             action="#{shopCartBean.addToCart()}"
+                                             update="@form"
+                                             global="false"
+                                             styleClass="GreenButton"/>
 
-            <p:column style="text-align: right; ">
-                <f:facet name="header">
-                    #{msg.tablaPrecioUnitario}
-                </f:facet>
-                <p:cellEditor>
-                    <f:facet name="output">
-                        <h:outputText value="#{lineaVenta.precioUnitario}" >
-                            <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
-                        </h:outputText>
-                    </f:facet>
-                    <f:facet name="input">
-                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioUnitario}" style="width:96%">
-                            <f:validateDoubleRange minimum="0.01"
-                                                   maximum="9999999999999999999.99" />
-                        </p:inputText>
-                    </f:facet>
-                </p:cellEditor>
+                            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                                             title="#{msg.buscar} productos"
+                                             oncomplete="PF('dlgBusProd').show()"
+                                             process="@none"
+                                             global="false"/>
+                        </div>
+                    </p:panelGrid>
+                </p:panel>
 
-            </p:column>
+                <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
+                <div class="Container100 ui-fluid">
+                    <div class="Card">
+                        <div class="SeparatorFull"></div>
+                        <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.comprobantesLineasList}"
 
-            <p:column style="text-align: right; ">
-                <f:facet name="header">
-                    #{msg.tablaSubTotal}
-                </f:facet>
-                <h:outputText value="#{lineaVenta.subTotal}" >
-                    <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
-                </h:outputText>
-            </p:column>
+                                     paginator="false"
+                                     sortMode="single"
+                                     emptyMessage="#{msg.productosNoCargados}"
+                                     editable="true"
+                                     editMode="cell"
+                                     reflow="true"
+                                     resizableColumns="true"
+                                     liveResize="true">
 
-            <p:column  exportable="false" style="width: 5%">
-                <f:facet name="header">
-                    #{msg.borrar}
-                </f:facet>
-                <p:commandButton id="borrarItemButton"
-                                 icon="fa fa-fw fa-trash"
-                                 process="@this"
-                                 action="#{shopCartBean.removeFromCart(lineaVenta.item)}"
-                                 update="productosTable"
-                                 global="false"
-                                 >
+                            <p:ajax event="cellEdit"
+                                    listener="#{shopCartBean.calcularTotal()}"
+                                    oncomplete="onCellEdit()"
+                                    global="false"
+                                    />
 
-                </p:commandButton>
-            </p:column>
+                            <p:column style="text-align: right; ">
+                                <f:facet name="header">
+                                    #{msg.tablaId}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.id}" />
+                            </p:column>
+                            <p:column style="text-align: left; ">
+                                <f:facet name="header">
+                                    #{msg.codigo}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
+                            </p:column>
+                            <p:column style="text-align: left; ">
+                                <f:facet name="header">
+                                    #{msg.tablaDescripcion}
+                                </f:facet>
+                                <h:outputText id="decripcionProd" value="#{lineaVenta.descripcion}" />
+                                <p:tooltip id="toolTipFade" for="decripcionProd"  value="#{lineaVenta.idProducto.observaciones}" />
+                            </p:column>
+                            <p:column style="text-align: right;">
+                                <f:facet name="header">
+                                    #{msg.tablaCantidad}
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{lineaVenta.cantidad}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}" style="width:96%">
+                                            <f:validateDoubleRange minimum="0.01"
+                                                                   maximum="9999999999999999999.99" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
 
-            <p:columnGroup type="footer">
-                <p:row>
-                    <p:column colspan="7" footerText="#{msg.total}:"
-                              style="text-align:right; font-size: larger"  />
+                            </p:column>
+                            <p:column style="text-align: left; ">
+                                <f:facet name="header">
+                                    #{msg.tablaUnidad}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                            </p:column>
+                            <p:column style="text-align: right; ">
+                                <f:facet name="header">
+                                    #{msg.tablaIVA}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
+                                    <f:convertNumber  type="number" groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
 
-                    <p:column  >
-                        <f:facet name="footer">
-                            <h:outputText value="#{shopCartBean.venta.total}" style="font-size: xx-large;font-weight: bold" >
-                                <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column>
-                </p:row>
-            </p:columnGroup>
+                            <p:column style="text-align: right; ">
+                                <f:facet name="header">
+                                    #{msg.tablaPrecioUnitario}
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{lineaVenta.precioUnitario}" >
+                                            <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioUnitario}" style="width:96%">
+                                            <f:validateDoubleRange minimum="0.01"
+                                                                   maximum="9999999999999999999.99" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
 
-        </p:dataTable>
+                            </p:column>
 
-        <p:separator />
+                            <p:column style="text-align: right; ">
+                                <f:facet name="header">
+                                    #{msg.tablaSubTotal}
+                                </f:facet>
+                                <h:outputText value="#{lineaVenta.subTotal}" >
+                                    <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
 
-        <p:panelGrid layout="grid" columns="2"
-                     styleClass="ui-panelgrid-blank"
-                     columnClasses="ui-grid-col-1,ui-grid-col-1"
-                     >
-            <p:commandButton id="cancelarButton"
-                             icon="fa fa-fw fa-ban"
-                             value="#{msg.cancelar}"
-                             action="#{shopCartBean.endConversation()}"
-                             immediate="true">
+                            <p:column  exportable="false" >
+                                <f:facet name="header">
+                                    #{msg.borrar}
+                                </f:facet>
+                                <p:commandButton id="borrarItemButton"
+                                                 icon="fa fa-fw fa-trash"
+                                                 process="@this"
+                                                 action="#{shopCartBean.removeFromCart(lineaVenta.item)}"
+                                                 update="productosTable"
+                                                 global="false"
+                                                 >
 
-            </p:commandButton>
+                                </p:commandButton>
+                            </p:column>
 
-            <p:commandButton id="siguienteButton"
-                             icon="fa fa-fw fa-arrow-right"
-                             value="#{msg.siguiente}"
-                             action="cliente.xhtml?faces-redirect=true"
-                             immediate="true">
-            </p:commandButton>
-        </p:panelGrid>
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="7" footerText="#{msg.total}:"
+                                              style="text-align:right; font-size: larger"  />
 
-        <h:form id="busquedaProductosForm" >
-            <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
-                      modal="true" dynamic="true" >
-                <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
-                                              listaPrecios="#{shopCartBean.lista}"
-                                              />
-                <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
-                                 oncomplete="PF('dlgBusProd').hide()"
-                                 update=":formContenido"
-                                 immediate="true"
-                                 process="@this"
-                                 actionListener="#{shopCartBean.addToCart()}"/>
+                                    <p:column  >
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{shopCartBean.venta.total}" style="font-size: xx-large;font-weight: bold" >
+                                                <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+                                </p:row>
+                            </p:columnGroup>
 
-                <p:commandButton value="#{msg.cancelar}"
-                                 immediate="true" icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();" />
+                        </p:dataTable>
+                    </div>
+                </div>
+                <div class="SeparatorFull"></div>
 
-            </p:dialog>
-        </h:form>
-    </h:form>
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                             style="border:0px !important; background:none;"
+                             >
+                    <p:commandButton id="cancelarButton"
+                                     icon="fa fa-fw fa-ban"
+                                     value="#{msg.cancelar}"
+                                     action="#{shopCartBean.endConversation()}"
+                                     immediate="true"
+                                     styleClass="RedButton">
+
+                    </p:commandButton>
+
+                    <p:commandButton id="siguienteButton"
+                                     icon="fa fa-fw fa-arrow-right"
+                                     value="#{msg.siguiente}"
+                                     action="cliente.xhtml?faces-redirect=true"
+                                     immediate="true">
+                    </p:commandButton>
+                </p:panelGrid>
+
+                <h:form id="busquedaProductosForm" >
+                    <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                              modal="true" dynamic="true" >
+                        <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
+                                                      listaPrecios="#{shopCartBean.lista}"
+                                                      />
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('dlgBusProd').hide()"
+                                         update=":formContenido"
+                                         immediate="true"
+                                         process="@this"
+                                         actionListener="#{shopCartBean.addToCart()}"/>
+
+                        <p:commandButton value="#{msg.cancelar}"
+                                         immediate="true" icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                         styleClass="RedButton"/>
+
+                    </p:dialog>
+                </h:form>
+            </h:form>
+
+        </div>
+    </div>
 
 </ui:composition>

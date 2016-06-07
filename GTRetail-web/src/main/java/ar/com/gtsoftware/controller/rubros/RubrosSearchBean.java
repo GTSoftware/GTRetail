@@ -38,7 +38,7 @@ public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros, Rubros
     @EJB
     private ProductosRubrosFacade facade;
 
-    private final RubrosSearchFilter filter = new RubrosSearchFilter("%");
+    private final RubrosSearchFilter filter = new RubrosSearchFilter();
 
     /**
      * Creates a new instance of ParametrosEditBean
