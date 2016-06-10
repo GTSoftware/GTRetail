@@ -1,314 +1,314 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
- <modelVersion>4.0.0</modelVersion>
- <groupId>ar.com.gtsoftware</groupId>
- <artifactId>GTRetail</artifactId>
- <version>4.0.2-SNAPSHOT</version>
- <packaging>pom</packaging>
- <name>GTRetail</name>
- <description>Sistema de gestión empresarial para PyMEs</description>
- <modules>
-  <module>GTRetail-ear</module>
-  <module>GTRetail-web</module>
-  <module>GTRetail-ejb</module>
-  <module>GTRetail-api</module>
- </modules>
- <licenses>
-  <license>
-   <name>Apache License, Version 2.0</name>
-   <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-   <distribution>repo</distribution>
-   <comments>A business-friendly OSS license</comments>
-  </license>
- </licenses>
- <organization>
-  <name>GT Software</name>
-  <url>http://www.gtsoftware.com.ar</url>
- </organization>
- <scm>
-  <url>https://github.com/GTSoftware/GTRetail</url>
-  <connection>scm:git:git://github.com/GTSoftware/GTRetail.git</connection>
-  <developerConnection>scm:git:git@github.com:GTSoftware/GTRetail.git</developerConnection>
-  <tag>HEAD</tag>
- </scm>
- <issueManagement>
-  <system>GitHub</system>
-  <url>https://github.com/GTSoftware/GTRetail/issues</url>
- </issueManagement>
- <developers>
-  <developer>
-   <id>rodrigo</id>
-   <name>Rodrigo M. Tato Rothamel</name>
-   <email>rotatomel@gmail.com</email>
-   <url>http://rotatomel.blogspot.net</url>
-   <organization>GTSoftware</organization>
-   <organizationUrl>http://www.gtsoftware.com.ar</organizationUrl>
-   <roles>
-    <role>architect</role>
-    <role>developer</role>
-   </roles>
-   <timezone>-3</timezone>
-
-  </developer>
-  <developer>
-   <id>rober</id>
-   <name>Roberta Gimenez</name>
-   <email>la.rober@gmail.com</email>
-   <organization>GTSofware</organization>
-   <organizationUrl>http://www.gtsoftware.com.ar</organizationUrl>
-   <roles>
-    <role>tester</role>
-   </roles>
-   <timezone>-3</timezone>
-  </developer>
- </developers>
-
- <!-- Activate JBoss Product Maven repository. NOTE: Configuring the Maven 
-  repository in the pom.xml file is not a recommended procedure and is only 
-  done here to make it easier to use the quickstarts. For more information 
-  about how to configure Maven for your application, see the section entitled 
-  'Use the Maven Repository' in the Development Guide for Red Hat JBoss Enterprise 
-  Application Platform located here: https://access.redhat.com/documentation/en/jboss-enterprise-application-platform/ 
-  <repositories> <repository> <id>jboss-developer-staging-repository</id> <url>http://jboss-developer.github.io/temp-maven-repo/</url> 
-  <releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
-  </snapshots> </repository> <repository> <id>jboss-enterprise-maven-repository</id> 
-  <url>https://maven.repository.redhat.com/ga/</url> <releases> <enabled>true</enabled> 
-  </releases> <snapshots> <enabled>false</enabled> </snapshots> </repository> 
-  </repositories> -->
-
- <dependencyManagement>
-  <dependencies>
-   <!-- Define the version of the EJB jar so that we don't need to repeat 
-    ourselves in every module -->
-   <dependency>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <groupId>ar.com.gtsoftware</groupId>
-    <artifactId>GTRetail-ejb</artifactId>
-    <version>${project.version}</version>
-    <type>ejb</type>
-   </dependency>
+    <artifactId>GTRetail</artifactId>
+    <version>4.0.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>GTRetail</name>
+    <description>Sistema de gestión empresarial para PyMEs</description>
+    <modules>
+        <module>GTRetail-ear</module>
+        <module>GTRetail-web</module>
+        <module>GTRetail-ejb</module>
+        <module>GTRetail-api</module>
+    </modules>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <organization>
+        <name>GT Software</name>
+        <url>http://www.gtsoftware.com.ar</url>
+    </organization>
+    <scm>
+        <url>https://github.com/GTSoftware/GTRetail</url>
+        <connection>scm:git:git://github.com/GTSoftware/GTRetail.git</connection>
+        <developerConnection>scm:git:git@github.com:GTSoftware/GTRetail.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/GTSoftware/GTRetail/issues</url>
+    </issueManagement>
+    <developers>
+        <developer>
+            <id>rodrigo</id>
+            <name>Rodrigo M. Tato Rothamel</name>
+            <email>rotatomel@gmail.com</email>
+            <url>http://rotatomel.blogspot.net</url>
+            <organization>GTSoftware</organization>
+            <organizationUrl>http://www.gtsoftware.com.ar</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>-3</timezone>
 
-   <!-- Define the version of the WAR so that we don't need to repeat ourselves 
-    in every module -->
-   <dependency>
-    <groupId>ar.com.gtsoftware</groupId>
-    <artifactId>GTRetail-web</artifactId>
-    <version>${project.version}</version>
-    <type>war</type>
-    <scope>compile</scope>
-   </dependency>
-   <dependency>
-    <groupId>ar.com.gtsoftware</groupId>
-    <artifactId>GTRetail-api</artifactId>
-    <version>${project.version}</version>
-    <type>jar</type>
-    <scope>compile</scope>
-   </dependency>
-   <dependency>
-    <groupId>org.jboss.arquillian</groupId>
-    <artifactId>arquillian-bom</artifactId>
-    <version>1.1.6.Final</version>
-    <scope>import</scope>
-    <type>pom</type>
-   </dependency>
-   <!-- Define the version of the JBoss Java EE APIs we want to import. Any 
-    dependencies from org.jboss.spec will have their version defined by this 
-    BOM -->
-   <!-- JBoss distributes a complete set of Java EE APIs including a Bill 
-    of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection) 
-    of artifacts. We use this here so that we always get the correct versions 
-    of artifacts. Here we use the jboss-eap-javaee7-with-tools stack (you can 
-    read this as the JBoss stack of the Java EE APIs, with some extras tools 
-    for your project, such as Arquillian for testing) -->
-   <dependency>
-    <groupId>org.jboss.bom</groupId>
-    <artifactId>jboss-javaee-6.0-with-tools</artifactId>
-    <version>${version.jboss.bom.eap}</version>
-    <type>pom</type>
-    <scope>import</scope>
-   </dependency>
-   <dependency>
-    <groupId>org.jboss.bom</groupId>
-    <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
-    <version>${version.jboss.bom.eap}</version>
-    <type>pom</type>
-    <scope>import</scope>
-   </dependency>
+        </developer>
+        <developer>
+            <id>rober</id>
+            <name>Roberta Gimenez</name>
+            <email>la.rober@gmail.com</email>
+            <organization>GTSofware</organization>
+            <organizationUrl>http://www.gtsoftware.com.ar</organizationUrl>
+            <roles>
+                <role>tester</role>
+            </roles>
+            <timezone>-3</timezone>
+        </developer>
+    </developers>
 
-  </dependencies>
- </dependencyManagement>
+    <!-- Activate JBoss Product Maven repository. NOTE: Configuring the Maven
+    repository in the pom.xml file is not a recommended procedure and is only
+    done here to make it easier to use the quickstarts. For more information
+    about how to configure Maven for your application, see the section entitled
+    'Use the Maven Repository' in the Development Guide for Red Hat JBoss Enterprise
+    Application Platform located here: https://access.redhat.com/documentation/en/jboss-enterprise-application-platform/
+    <repositories> <repository> <id>jboss-developer-staging-repository</id> <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+    <releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled>
+    </snapshots> </repository> <repository> <id>jboss-enterprise-maven-repository</id>
+    <url>https://maven.repository.redhat.com/ga/</url> <releases> <enabled>true</enabled>
+    </releases> <snapshots> <enabled>false</enabled> </snapshots> </repository>
+    </repositories> -->
 
- <build>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Define the version of the EJB jar so that we don't need to repeat
+            ourselves in every module -->
+            <dependency>
+                <groupId>ar.com.gtsoftware</groupId>
+                <artifactId>GTRetail-ejb</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
 
-  <plugins>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>3.5.1</version>
-    <configuration>
-     <source>${maven.compiler.source}</source>
-     <target>${maven.compiler.source}</target>
+            <!-- Define the version of the WAR so that we don't need to repeat ourselves
+            in every module -->
+            <dependency>
+                <groupId>ar.com.gtsoftware</groupId>
+                <artifactId>GTRetail-web</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>ar.com.gtsoftware</groupId>
+                <artifactId>GTRetail-api</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.6.Final</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- Define the version of the JBoss Java EE APIs we want to import. Any
+            dependencies from org.jboss.spec will have their version defined by this
+            BOM -->
+            <!-- JBoss distributes a complete set of Java EE APIs including a Bill
+            of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection)
+            of artifacts. We use this here so that we always get the correct versions
+            of artifacts. Here we use the jboss-eap-javaee7-with-tools stack (you can
+            read this as the JBoss stack of the Java EE APIs, with some extras tools
+            for your project, such as Arquillian for testing) -->
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-javaee-6.0-with-tools</artifactId>
+                <version>${version.jboss.bom.eap}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+                <version>${version.jboss.bom.eap}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-    </configuration>
-   </plugin>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-release-plugin</artifactId>
-    <version>2.5.1</version>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.source}</target>
+
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.9.2</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <checkModificationExcludes>
+                        <checkModificationExclude>pom.xml</checkModificationExclude>
+                    </checkModificationExcludes>
+                </configuration>
+            </plugin>
+            <!-- The JBoss AS plugin deploys your ear to a local JBoss AS container -->
+            <!-- Due to Maven's lack of intelligence with EARs we need to configure
+            the jboss-as maven plugin to skip deployment for all modules. We then enable
+            it specifically in the ear module. -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.7.Final</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>failsafe-maven-plugin</artifactId>
+                <version>2.4.3-alpha-1</version>
+                <configuration>
+                    <skipTests>false</skipTests>
+                </configuration>
+                <!-- <executions> <execution> <goals> <goal>integration-test</goal> <goal>verify</goal>
+                </goals> </execution> </executions> -->
+            </plugin>
+
+        </plugins>
+    </build>
     <dependencies>
-     <dependency>
-      <groupId>org.apache.maven.scm</groupId>
-      <artifactId>maven-scm-provider-gitexe</artifactId>
-      <version>1.9.2</version>
-     </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.4</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.2</version>
+                            <configuration>
+                                <dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+                                <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+                            </configuration>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <additionalparam>-views -all</additionalparam>
+                    <useStandardDocletOptions>true</useStandardDocletOptions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.17</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.12.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    <profiles>
 
-    <configuration>
-     <checkModificationExcludes>
-      <checkModificationExclude>pom.xml</checkModificationExclude>
-     </checkModificationExcludes>
-    </configuration>
-   </plugin>
-   <!-- The JBoss AS plugin deploys your ear to a local JBoss AS container -->
-   <!-- Due to Maven's lack of intelligence with EARs we need to configure 
-    the jboss-as maven plugin to skip deployment for all modules. We then enable 
-    it specifically in the ear module. -->
-   <plugin>
-    <groupId>org.jboss.as.plugins</groupId>
-    <artifactId>jboss-as-maven-plugin</artifactId>
-    <version>7.7.Final</version>
-    <inherited>true</inherited>
-    <configuration>
-     <skip>true</skip>
-    </configuration>
-   </plugin>
-   <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>failsafe-maven-plugin</artifactId>
-    <version>2.4.3-alpha-1</version>
-    <configuration>
-     <skipTests>false</skipTests>
-    </configuration>
-    <!-- <executions> <execution> <goals> <goal>integration-test</goal> <goal>verify</goal> 
-     </goals> </execution> </executions> -->
-   </plugin>
+        <profile>
 
-  </plugins>
- </build>
- <dependencies>
+            <id>glassfish-embedded</id>
 
-  <dependency>
-   <groupId>org.jboss.arquillian.junit</groupId>
-   <artifactId>arquillian-junit-container</artifactId>
-   <scope>test</scope>
-  </dependency>
- </dependencies>
- <reporting>
-  <plugins>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-site-plugin</artifactId>
-    <version>3.4</version>
-    <configuration>
-     <reportPlugins>
-      <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-project-info-reports-plugin</artifactId>
-       <version>2.2</version>
-       <configuration>
-        <dependencyDetailsEnabled>true</dependencyDetailsEnabled>
-        <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
-       </configuration>
-      </plugin>
-     </reportPlugins>
-    </configuration>
-   </plugin>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-javadoc-plugin</artifactId>
-    <version>2.10</version>
-    <configuration>
-     <additionalparam>-views -all</additionalparam>
-     <useStandardDocletOptions>true</useStandardDocletOptions>
-    </configuration>
-   </plugin>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-report-plugin</artifactId>
-    <version>2.17</version>
-   </plugin>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-checkstyle-plugin</artifactId>
-    <version>2.12.1</version>
-   </plugin>
-   <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>cobertura-maven-plugin</artifactId>
-    <version>2.6</version>
-   </plugin>
-  </plugins>
- </reporting>
- <profiles>
+            <dependencies>
 
-  <profile>
+                <dependency>
 
-   <id>glassfish-embedded</id>
+                    <groupId>org.jboss.arquillian.container</groupId>
 
-   <dependencies>
+                    <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
 
-    <dependency>
+                    <version>${arquillian.version}</version>
 
-     <groupId>org.jboss.arquillian.container</groupId>
+                </dependency>
 
-     <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+            </dependencies>
 
-     <version>${arquillian.version}</version>
+        </profile>
 
-    </dependency>
-
-   </dependencies>
-
-  </profile>
-
- </profiles>
+    </profiles>
 
 
- <properties>
-  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <maven.compiler.source>1.8</maven.compiler.source>
-  <maven.compiler.target>1.8</maven.compiler.target>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
-  <timestamp>${maven.build.timestamp}</timestamp>
-  <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
-  <sonar.language>java</sonar.language>
-  <arquillian.version>1.0.0.CR4</arquillian.version>
-  <antlr.version>2.7.7</antlr.version>
-  <dom4j.version>2.0.0-RC1</dom4j.version>
-  <primefaces.version>5.3</primefaces.version>
-  <primefaces-themes.version>1.0.10</primefaces-themes.version>
-  <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
-  <beanio.version>2.1.0</beanio.version>
-  <omnifaces.version>2.1</omnifaces.version>
-  <!-- JBoss dependency versions -->
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
+        <sonar.language>java</sonar.language>
+        <arquillian.version>1.0.0.CR4</arquillian.version>
+        <antlr.version>2.7.7</antlr.version>
+        <dom4j.version>2.0.0-RC1</dom4j.version>
+        <primefaces.version>5.3</primefaces.version>
+        <primefaces-themes.version>1.0.10</primefaces-themes.version>
+        <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
+        <beanio.version>2.1.0</beanio.version>
+        <omnifaces.version>2.1</omnifaces.version>
+        <!-- JBoss dependency versions -->
 
-  <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
 
-  <!-- Define the version of the JBoss BOMs we want to import to specify 
-   tested stacks. -->
-  <version.jboss.bom.eap>1.0.7.Final</version.jboss.bom.eap>
+        <!-- Define the version of the JBoss BOMs we want to import to specify
+        tested stacks. -->
+        <version.jboss.bom.eap>1.0.7.Final</version.jboss.bom.eap>
 
-  <version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>
+        <version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>
 
-  <!-- other plugin versions -->
-  <version.ear.plugin>2.8</version.ear.plugin>
-  <version.jar.plugin>2.3.2</version.jar.plugin>
-  <version.ejb.plugin>2.3</version.ejb.plugin>
-  <version.surefire.plugin>2.10</version.surefire.plugin>
-  <version.war.plugin>2.1.1</version.war.plugin>
+        <!-- other plugin versions -->
+        <version.ear.plugin>2.8</version.ear.plugin>
+        <version.jar.plugin>2.3.2</version.jar.plugin>
+        <version.ejb.plugin>2.3</version.ejb.plugin>
+        <version.surefire.plugin>2.10</version.surefire.plugin>
+        <version.war.plugin>2.1.1</version.war.plugin>
 
 
-  <jasperreports.version>6.2.1</jasperreports.version>
-  <jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
- </properties>
+        <jasperreports.version>6.2.1</jasperreports.version>
+        <jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
+    </properties>
 </project>
