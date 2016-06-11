@@ -7,12 +7,13 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core" >
 
-    <h:form id="breadcrumb" >
-        <p:breadCrumb>
-            <p:menuitem value="#{msg.home}" url="/protected/index.xhtml" />
-            <p:menuitem value="#{msg.clientesAdmin}" url="/protected/clientes/index.xhtml" />
-        </p:breadCrumb>
-    </h:form>
-
+    <div class="Container100 ui-fluid">
+        <h:form id="breadcrumb" >
+            <p:breadCrumb>
+                <p:menuitem value="#{msg.home}" url="/protected/index.xhtml" />
+                <p:menuitem value="#{msg.clientesAdmin}" url="/protected/clientes/index.xhtml" />
+            </p:breadCrumb>
+        </h:form>
+    </div>
 </ui:composition>
 

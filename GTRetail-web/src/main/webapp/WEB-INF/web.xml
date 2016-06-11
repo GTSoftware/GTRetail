@@ -172,7 +172,7 @@
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/resources/pages/404.xhtml</location>
+        <location>/resources/pages/access-denied.xhtml</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>

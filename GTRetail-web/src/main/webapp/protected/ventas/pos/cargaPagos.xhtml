@@ -15,7 +15,7 @@
             <div class="SeparatorFull"></div>
             <h:form id="cargaPagosForm" >
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
-                             columnClasses="ui-grid-col-2,ui-grid-col-5"
+
                              style="border:0px !important; background:none;">
 
                     <h:outputLabel value="#{msg.tipoComprobante}:" />
@@ -61,7 +61,8 @@
 
                     <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}" icon="fa fa-fw fa-plus"
                                      update="pagosTable, importePagoField"
-                                     global="false"/>
+                                     global="false"
+                                     styleClass="GreenButton"/>
 
                 </p:panelGrid >
                 <p:dataTable id="pagosTable" value="#{shopCartBean.pagos}" var="pago"

@@ -196,7 +196,7 @@ public class ShopCartBean implements Serializable {
         if (index >= 0) {
             venta.getComprobantesLineasList().remove(index);
             calcularTotal();
-            JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
+//            JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
         }
     }
 

@@ -18,58 +18,56 @@
             <h1 class="CardBigTopic TexAlCenter">POS</h1>
             <div class="SeparatorFull"></div>
             <h:form id="formContenido" >
+                <p:messages autoUpdate="true" />
                 <!--                <h:outputText id="cid"
                                               value="#{javax.enterprise.context.conversation.id}" />-->
 
-                <p:panel id="inputPanel" >
-
-                    <p:focus context="inputPanel" />
-                    <p:panelGrid
-                        layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
-                        style="border:0px !important; background:none;"
-                        >
 
 
-                        <p:inputText id="codigoField"
-                                     required="true"
-                                     value="#{shopCartBean.productosFilter.codigoPropio}"
-                                     placeholder="Código">
-                            <f:validateLength minimum="1" />
-                        </p:inputText>
-                        <p:message for="codigoField" display="icon" />
+                <p:focus for="codigoField"  />
+                <p:panelGrid
+                    layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                    style="border:0px !important; background:none;"
+                    >
 
 
-                        <p:inputText id="cantidadField"
-                                     required="true"
-                                     value="#{shopCartBean.cantidad}"
-                                     placeholder="Cantidad">
-                            <f:validateDoubleRange minimum="0.01"
-                                                   maximum="9999999999999999999.99" />
+                    <p:inputText id="codigoField"
+                                 required="true"
+                                 value="#{shopCartBean.productosFilter.codigoPropio}"
+                                 placeholder="Código">
+                        <f:validateLength minimum="1" />
+                    </p:inputText>
 
-                        </p:inputText>
-                        <p:message for="cantidadField" display="icon"/>
 
-                    </p:panelGrid>
-                    <p:panelGrid
-                        layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
-                        style="border:0px !important; background:none;"
-                        >
-                        <div class="Container25 ui-fluid">
-                            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
-                                             title="#{msg.insertar}"
-                                             action="#{shopCartBean.addToCart()}"
-                                             update="@form"
-                                             global="false"
-                                             styleClass="GreenButton"/>
 
-                            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
-                                             title="#{msg.buscar} productos"
-                                             oncomplete="PF('dlgBusProd').show()"
-                                             process="@none"
-                                             global="false"/>
-                        </div>
-                    </p:panelGrid>
-                </p:panel>
+                    <p:inputText id="cantidadField"
+                                 required="true"
+                                 value="#{shopCartBean.cantidad}"
+                                 placeholder="Cantidad">
+                        <f:validateDoubleRange minimum="0.01"
+                                               maximum="9999999999999999999.99" />
+
+                    </p:inputText>
+
+
+                </p:panelGrid>
+
+                <div class="Container25 ui-fluid">
+                    <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
+                                     title="#{msg.insertar}"
+                                     action="#{shopCartBean.addToCart()}"
+                                     update="@form"
+                                     global="false"
+                                     styleClass="GreenButton"/>
+
+                    <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                                     title="#{msg.buscar} productos"
+                                     oncomplete="PF('dlgBusProd').show()"
+                                     process="@none"
+                                     global="false"/>
+                </div>
+
+
 
                 <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
                 <div class="Container100 ui-fluid">
@@ -83,7 +81,7 @@
                                      editable="true"
                                      editMode="cell"
                                      reflow="true"
-                                     resizableColumns="true"
+
                                      liveResize="true">
 
                             <p:ajax event="cellEdit"
@@ -120,7 +118,7 @@
                                         <h:outputText value="#{lineaVenta.cantidad}" />
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}" style="width:96%">
+                                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}" >
                                             <f:validateDoubleRange minimum="0.01"
                                                                    maximum="9999999999999999999.99" />
                                         </p:inputText>
@@ -154,7 +152,7 @@
                                         </h:outputText>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioUnitario}" style="width:96%">
+                                        <p:inputText id="precioVentaTabField" value="#{lineaVenta.precioUnitario}">
                                             <f:validateDoubleRange minimum="0.01"
                                                                    maximum="9999999999999999999.99" />
                                         </p:inputText>
@@ -194,7 +192,7 @@
 
                                     <p:column  >
                                         <f:facet name="footer">
-                                            <h:outputText value="#{shopCartBean.venta.total}" style="font-size: xx-large;font-weight: bold" >
+                                            <h:outputText value="#{shopCartBean.venta.total}" style="font-size: larger;font-weight: bold" >
                                                 <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
                                             </h:outputText>
                                         </f:facet>
@@ -233,6 +231,8 @@
                         <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
                                                       listaPrecios="#{shopCartBean.lista}"
                                                       />
+                        <div class="SeparatorFull" />
+
                         <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                          oncomplete="PF('dlgBusProd').hide()"
                                          update=":formContenido"

@@ -9,7 +9,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
     xmlns:f="http://java.sun.com/jsf/core"
-    template="/WEB-INF/templates/template.xhtml">
+    template="/WEB-INF/template.xhtml">
 
 
     <ui:define name="meta">
@@ -30,141 +30,153 @@
             <ui:include src="breadcrumb.xhtml" />
         </ui:insert>
 
-        <h:form id="opcionesForm" >
-            <p:panel header="#{msg.acciones}">
-                <!-- Facturar-->
-                <p:commandButton id="facturarButton"
-                                 value="#{msg.facturar}"
-                                 icon="ui-icon-print"
-                                 rendered="#{empty verComprobantesBean.ventaActual.idRegistro}"
-                                 update=":facturarForm:facturarDialog"
-                                 oncomplete="PF('facturarDialog').show()"
-                                 process="@none"
-                                 />
-                <!-- Imprimir factura -->
-                <p:commandButton id="imprimirFacturaButton"
-                                 value="#{msg.imprimirFactura}"
-                                 icon="ui-icon-print"
-                                 rendered="#{not empty verComprobantesBean.ventaActual.idRegistro}"
-                                 action="#{impresionVentasBean.imprimirFactura(verComprobantesBean.ventaActual)}"
-                                 ajax="false"
-                                 />
-                <!-- Imprimir presupuesto -->
-                <p:commandButton value="#{msg.presupuesto}"
-                                 icon="ui-icon-print"
-                                 action="#{impresionVentasBean.imprimirPresupuesto(verComprobantesBean.ventaActual)}"
-                                 ajax="false"
-                                 />
+        <div class="Container100 Responsive100 NoIndent">
+            <div class="Container100 ui-fluid">
+                <div class="Card">
+                    <h1 class="CardBigTopic TexAlCenter">Vista de comprobante</h1>
+                    <div class="SeparatorFull" />
 
-                <!-- Anular Venta -->
-                <p:commandButton value="#{msg.anularVenta}"
-                                 icon="ui-icon-cancel"
-                                 rendered="#{verComprobantesBean.ventaActual.idRegistro eq null}"
-                                 onclick="PF('confirmationAnularVenta').show()"
-                                 >
+                    <h:form id="opcionesForm" >
+                        <p:panel header="#{msg.acciones}">
+                            <!-- Facturar-->
+                            <p:commandButton id="facturarButton"
+                                             value="#{msg.facturar}"
+                                             icon="fa fa-fw fa-print"
+                                             rendered="#{empty verComprobantesBean.ventaActual.idRegistro}"
+                                             update=":facturarForm:facturarDialog"
+                                             oncomplete="PF('facturarDialog').show()"
+                                             process="@none"
+                                             />
+                            <!-- Imprimir factura -->
+                            <p:commandButton id="imprimirFacturaButton"
+                                             value="#{msg.imprimirFactura}"
+                                             icon="fa fa-fw fa-print"
+                                             rendered="#{not empty verComprobantesBean.ventaActual.idRegistro}"
+                                             action="#{impresionVentasBean.imprimirFactura(verComprobantesBean.ventaActual)}"
+                                             ajax="false"
+                                             />
+                            <!-- Imprimir presupuesto -->
+                            <p:commandButton value="#{msg.presupuesto}"
+                                             icon="ui-icon-print"
+                                             action="#{impresionVentasBean.imprimirPresupuesto(verComprobantesBean.ventaActual)}"
+                                             ajax="false"
+                                             />
 
-                </p:commandButton>
-                <!-- Cuadro de confirmación para Anular factura -->
-                <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}"
-                                 appendTo="@(body)"
-                                 message="#{msg.anularRealmente}"
-                                 showEffect="fade" hideEffect="explode">
+                            <!-- Anular Venta -->
+                            <p:commandButton value="#{msg.anularVenta}"
+                                             icon="ui-icon-cancel"
+                                             rendered="#{verComprobantesBean.ventaActual.idRegistro eq null}"
+                                             onclick="PF('confirmationAnularVenta').show()"
+                                             styleClass="RedButton"
+                                             >
 
-
-                    <p:commandButton value="#{msg.si}"
-                                     oncomplete="confirmation.hide()"
-                                     actionListener="#{verComprobantesBean.anularFactura()}"
-                                     immediate="true"
-                                     update=":opcionesForm"
-                                     styleClass="ui-confirmdialog-yes"
-                                     icon="ui-icon-check"
-                                     process="@this"/>
-
-                    <p:commandButton value="#{msg.no}" type="button"
-                                     onclick="PF('confirmation').hide()"
-                                     styleClass="ui-confirmdialog-no"
-                                     icon="ui-icon-close" />
-
-                </p:confirmDialog>
-                <!-- Cuadro de confirmación para Anular Venta -->
-                <p:confirmDialog widgetVar="confirmationAnularVenta" header="#{msg.confirmacion}"
-                                 appendTo="@(body)"
-                                 message="#{msg.anularRealmente}"
-                                 showEffect="fade" hideEffect="explode">
+                            </p:commandButton>
+                            <!-- Cuadro de confirmación para Anular factura -->
+                            <p:confirmDialog widgetVar="confirmation" header="#{msg.confirmacion}"
+                                             appendTo="@(body)"
+                                             message="#{msg.anularRealmente}"
+                                             showEffect="fade" hideEffect="explode">
 
 
-                    <p:commandButton value="#{msg.si}"
-                                     oncomplete="confirmationAnularVenta.hide()"
-                                     actionListener="#{verComprobantesBean.anularVenta()}"
-                                     immediate="true"
-                                     update=":opcionesForm"
-                                     styleClass="ui-confirmdialog-yes"
-                                     icon="ui-icon-check"
-                                     process="@this"/>
+                                <p:commandButton value="#{msg.si}"
+                                                 oncomplete="confirmation.hide()"
+                                                 actionListener="#{verComprobantesBean.anularFactura()}"
+                                                 immediate="true"
+                                                 update=":opcionesForm"
+                                                 styleClass="ui-confirmdialog-yes"
+                                                 icon="ui-icon-check"
+                                                 process="@this"/>
 
-                    <p:commandButton value="#{msg.no}" type="button"
-                                     onclick="PF('confirmationAnularVenta').hide()"
-                                     styleClass="ui-confirmdialog-no"
-                                     icon="ui-icon-close" />
+                                <p:commandButton value="#{msg.no}" type="button"
+                                                 onclick="PF('confirmation').hide()"
+                                                 styleClass="ui-confirmdialog-no"
+                                                 icon="ui-icon-close"
+                                                 />
 
-                </p:confirmDialog>
-            </p:panel>
-        </h:form>
-
-        <h:form id="facturarForm" >
-            <p:dialog header="#{msg.facturar}"
-                      widgetVar="facturarDialog"
-                      resizable="true"
-                      id="facturarDialog"
-                      rendered="#{empty verComprobantesBean.ventaActual.idRegistro}"
-                      closeOnEscape="true"
-                      showEffect="fade"
-                      hideEffect="clip"
-                      modal="true">
-
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+                            </p:confirmDialog>
+                            <!-- Cuadro de confirmación para Anular Venta -->
+                            <p:confirmDialog widgetVar="confirmationAnularVenta" header="#{msg.confirmacion}"
+                                             appendTo="@(body)"
+                                             message="#{msg.anularRealmente}"
+                                             showEffect="fade" hideEffect="explode">
 
 
-                    <p:outputLabel for="letraFacturaField" value="#{msg.letraFactura}:"/>
-                    <p:inputText id="letraFacturaField" value="#{verComprobantesBean.ventaActual.letra}" size="1" readonly="true"/>
+                                <p:commandButton value="#{msg.si}"
+                                                 oncomplete="confirmationAnularVenta.hide()"
+                                                 actionListener="#{verComprobantesBean.anularVenta()}"
+                                                 immediate="true"
+                                                 update=":opcionesForm"
+                                                 styleClass="ui-confirmdialog-yes"
+                                                 icon="ui-icon-check"
+                                                 process="@this"/>
 
-                    <p:outputLabel for="pvFacturaField" value="#{msg.puntoVenta}:"/>
+                                <p:commandButton value="#{msg.no}" type="button"
+                                                 onclick="PF('confirmationAnularVenta').hide()"
+                                                 styleClass="ui-confirmdialog-no"
+                                                 icon="ui-icon-close"
+                                                 />
+
+                            </p:confirmDialog>
+                        </p:panel>
+                    </h:form>
+
+                    <h:form id="facturarForm" >
+                        <p:dialog header="#{msg.facturar}"
+                                  widgetVar="facturarDialog"
+                                  resizable="true"
+                                  id="facturarDialog"
+                                  rendered="#{empty verComprobantesBean.ventaActual.idRegistro}"
+                                  closeOnEscape="true"
+                                  showEffect="fade"
+                                  hideEffect="clip"
+                                  modal="true">
+
+                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="2">
 
 
-                    <p:selectOneMenu id="pvFacturaField" required="true"
-                                     requiredMessage="#{msg.campoRequerido}"
-                                     value="#{verComprobantesBean.puntoVentaSeleccionado}"
-                                     converter="omnifaces.SelectItemsIndexConverter"
-                                     style="width: 100%">
+                                <p:outputLabel for="letraFacturaField" value="#{msg.letraFactura}:"/>
+                                <p:inputText id="letraFacturaField" value="#{verComprobantesBean.ventaActual.letra}" size="1" readonly="true"/>
 
-                        <f:selectItems value="#{verComprobantesBean.puntosVentaList}"
-                                       var="punto"
-                                       itemValue="#{punto}"
-                                       itemLabel="#{punto.businessString}"/>
-                    </p:selectOneMenu>
+                                <p:outputLabel for="pvFacturaField" value="#{msg.puntoVenta}:"/>
 
 
+                                <p:selectOneMenu id="pvFacturaField" required="true"
+                                                 requiredMessage="#{msg.campoRequerido}"
+                                                 value="#{verComprobantesBean.puntoVentaSeleccionado}"
+                                                 converter="omnifaces.SelectItemsIndexConverter"
+                                                 style="width: 100%">
 
-                </p:panelGrid >
-
-                <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
-                                 oncomplete="PF('facturarDialog').hide()"
-                                 update="@all"
-                                 action="#{verComprobantesBean.registrarFactura()}"/>
-
-            </p:dialog>
-
-
-        </h:form>
-
-        <gtsoftware:vistaVenta id="vistaVentaComposite"
-                               venta="#{verComprobantesBean.ventaActual}"
-                               lineasVenta="#{verComprobantesBean.lineasVenta}"
-                               >
-        </gtsoftware:vistaVenta>
+                                    <f:selectItems value="#{verComprobantesBean.puntosVentaList}"
+                                                   var="punto"
+                                                   itemValue="#{punto}"
+                                                   itemLabel="#{punto.businessString}"/>
+                                </p:selectOneMenu>
 
 
 
+                            </p:panelGrid >
+
+                            <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                                             oncomplete="PF('facturarDialog').hide()"
+                                             update="@all"
+                                             action="#{verComprobantesBean.registrarFactura()}"/>
+
+                        </p:dialog>
+
+
+                    </h:form>
+
+                    <gtsoftware:vistaVenta id="vistaVentaComposite"
+                                           venta="#{verComprobantesBean.ventaActual}"
+                                           lineasVenta="#{verComprobantesBean.lineasVenta}"
+                                           >
+                    </gtsoftware:vistaVenta>
+
+
+                </div>
+            </div>
+        </div>
     </ui:define>
 
 </ui:composition>

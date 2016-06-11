@@ -30,7 +30,8 @@ limitations under the License.
 
     <composite:implementation>
         <h:form id="vistaVentaForm" >
-            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                         styleClass="ui-panelgrid-blank" columns="2" >
                 <p:outputLabel value="#{msg.venta}:" />
                 <p:outputLabel value="#{cc.attrs.venta.id}" />
 
@@ -60,7 +61,8 @@ limitations under the License.
 
 
             </p:panelGrid >
-            <p:separator />
+
+            <div class="SeparatorFull" />
 
             <p:dataTable id="productosTable" value="#{cc.attrs.lineasVenta}" var="lineaVenta"
                          rows="15"
@@ -69,40 +71,40 @@ limitations under the License.
                          emptyMessage="#{msg.productosNoCargados}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="10,15,30"
-                         resizableColumns="true"
+
                          reflow="true">
 
-                <p:column style="text-align: right; width: 5%">
+                <p:column style="text-align: right; ">
                     <f:facet name="header">
                         #{msg.tablaId}
                     </f:facet>
                     <h:outputText value="#{lineaVenta.idProducto.id}" />
                 </p:column>
-                <p:column style="text-align: left; width: 5%">
+                <p:column style="text-align: left; ">
                     <f:facet name="header">
                         #{msg.codigo}
                     </f:facet>
                     <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
                 </p:column>
-                <p:column style="text-align: left; width: 40%">
+                <p:column style="text-align: left; ">
                     <f:facet name="header">
                         #{msg.tablaDescripcion}
                     </f:facet>
                     <h:outputText value="#{lineaVenta.descripcion}" />
                 </p:column>
-                <p:column style="text-align: right; width: 5%">
+                <p:column style="text-align: right;">
                     <f:facet name="header">
                         #{msg.tablaCantidad}
                     </f:facet>
                     <h:outputText value="#{lineaVenta.cantidad}" />
                 </p:column>
-                <p:column style="text-align: left; width: 5%">
+                <p:column style="text-align: left; ">
                     <f:facet name="header">
                         #{msg.tablaUnidad}
                     </f:facet>
                     <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
                 </p:column>
-                <p:column style="text-align: right; width: 2%">
+                <p:column style="text-align: right; ">
                     <f:facet name="header">
                         #{msg.tablaIVA}
                     </f:facet>
@@ -111,7 +113,7 @@ limitations under the License.
                     </h:outputText>
                 </p:column>
 
-                <p:column style="text-align: right; width: 10%">
+                <p:column style="text-align: right;">
                     <f:facet name="header">
                         #{msg.tablaPrecioUnitario}
                     </f:facet>
@@ -120,7 +122,7 @@ limitations under the License.
                     </h:outputText>
                 </p:column>
 
-                <p:column style="text-align: right; width: 10%">
+                <p:column style="text-align: right; ">
                     <f:facet name="header">
                         #{msg.tablaSubTotal}
                     </f:facet>
@@ -141,7 +143,10 @@ limitations under the License.
                 </p:columnGroup>
 
             </p:dataTable>
-            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+            <div class="SeparatorFull" />
+
+            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                         styleClass="ui-panelgrid-blank" columns="2">
                 <p:outputLabel value="#{msg.observaciones}:" />
                 <p:outputLabel value="#{cc.attrs.venta.observaciones}" />
                 <p:outputLabel value="#{msg.remitente}:" />
