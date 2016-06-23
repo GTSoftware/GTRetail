@@ -15,9 +15,9 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.model.NegocioFormasPago_;
-import ar.com.gtsoftware.search.FormasPagoSearchFilter;
+import ar.com.gtsoftware.model.NegocioPlanesPago;
+import ar.com.gtsoftware.model.NegocioPlanesPago_;
+import ar.com.gtsoftware.search.PlanesPagoSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,11 +27,12 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * Capa de acceso a datos para planes de pago
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago, FormasPagoSearchFilter> {
+public class NegocioPlanesPagoFacade extends AbstractFacade<NegocioPlanesPago, PlanesPagoSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -41,33 +42,32 @@ public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago, F
         return em;
     }
 
-    public NegocioFormasPagoFacade() {
-        super(NegocioFormasPago.class);
+    public NegocioPlanesPagoFacade() {
+        super(NegocioPlanesPago.class);
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(FormasPagoSearchFilter sf, CriteriaBuilder cb, Root<NegocioFormasPago> root) {
+    public Predicate createWhereFromSearchFilter(PlanesPagoSearchFilter sf, CriteriaBuilder cb, Root<NegocioPlanesPago> root) {
         Predicate p = null;
-        if (sf.getDisponibleCompra() != null) {
-            Predicate p1 = cb.equal(root.get(NegocioFormasPago_.compra), sf.getDisponibleCompra());
-            p = appendAndPredicate(cb, p, p1);
-        }
-
-        if (sf.getRequierePlanes() != null) {
-            Predicate p1 = cb.equal(root.get(NegocioFormasPago_.requierePlan), sf.getRequierePlanes());
-            p = appendAndPredicate(cb, p, p1);
-        }
-
-        if (sf.getDisponibleVenta() != null) {
-            Predicate p1 = cb.equal(root.get(NegocioFormasPago_.venta), sf.getDisponibleVenta());
-            p = appendAndPredicate(cb, p, p1);
-        }
 
         if (StringUtils.isNotEmpty(sf.getNombre())) {
-            Predicate p1 = cb.like(cb.upper(root.get(NegocioFormasPago_.nombreFormaPago)), String.format("%%%s%%", sf.getNombre().toUpperCase()));
+            Predicate p1 = cb.like(cb.upper(root.get(NegocioPlanesPago_.nombre)), String.format("%%%s%%", sf.getNombre().toUpperCase()));
             p = appendAndPredicate(cb, p, p1);
         }
 
+        if (sf.getIdFormaPago() != null) {
+            Predicate p1 = cb.equal(root.get(NegocioPlanesPago_.idFormaPago), sf.getIdFormaPago());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (sf.getActivo() != null) {
+            Predicate p1 = cb.between(cb.currentTimestamp(), root.get(NegocioPlanesPago_.fechaActivoDesde),
+                    root.get(NegocioPlanesPago_.fechaActivoHasta));
+            if (!sf.getActivo()) {
+                p1 = cb.not(p1);
+            }
+            p = appendAndPredicate(cb, p, p1);
+        }
         return p;
 
     }

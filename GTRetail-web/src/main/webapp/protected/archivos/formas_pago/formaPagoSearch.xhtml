@@ -1,12 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
     template="/WEB-INF/template.xhtml">
 
     <!-- Contenido -->
@@ -14,10 +13,9 @@
         <ui:insert >
             <ui:include src="breadcrumb.xhtml" />
         </ui:insert>
-
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Administración de Unidades</h1>
+                <h1 class="CardBigTopic TexAlCenter">Administración de Formas de pago</h1>
                 <div class="SeparatorFull"></div>
                 <h:form id="formContenido" >
 
@@ -27,86 +25,100 @@
                             <p:panelGrid layout="grid"  columns="3"
                                          style="border:0px !important; background:none;" styleClass="ui-panelgrid-blank">
 
-                                <p:inputText id="textoBusquedaField" value="#{unidadesSearchBean.filter.nombreUnidad}"
+                                <p:inputText id="textoBusquedaField" value="#{formasPagoSearchBean.filter.nombre}"
                                              placeholder="Términos de búsqueda"/>
-                                <p:commandButton  action="#{unidadesSearchBean.doSearch()}"
+
+                                <p:commandButton  action="#{formasPagoSearchBean.doSearch()}"
                                                   value="#{msg.buscar}"
                                                   icon="fa fa-fw fa-search"
-                                                  update="unidadesTable"/>
-
-                                <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
-                                                 icon="fa fa-fw fa-plus" styleClass="GreenButton" />
+                                                  update="formasPagoTable"/>
+                                <p:commandButton id="nuevoButton" action="formaPagoEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                 icon="fa fa-fw fa-plus"
+                                                 styleClass="GreenButton"/>
                             </p:panelGrid >
                         </div>
                     </div>
                     <div class="Container100 ui-fluid">
                         <div class="Card">
                             <div class="SeparatorFull"></div>
-                            <p:dataTable id="unidadesTable" var="unidad" value="#{unidadesSearchBean.dataModel}"
+                            <p:dataTable id="formasPagoTable" var="forma" value="#{formasPagoSearchBean.dataModel}"
                                          rows="30"
                                          lazy="true"
                                          paginator="true"
                                          sortMode="single"
                                          emptyMessage="#{msg.busquedaSinResultados}"
-                                         rowKey="#{unidad.id}"
+                                         rowKey="#{forma.id}"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                          rowsPerPageTemplate="10,15,30,100"
-                                         resizableColumns="true"
-                                         liveResize="true"
                                          scrollable="true"
-                                         reflow="true">
-
+                                         reflow="true"
+                                         liveResize="true"
+                                         resizableColumns="true">
 
                                 <f:facet name="{Exporters}">
                                     <h:commandLink title="xls">
                                         <i class="fa fa-file-excel-o Fs24 Green" />
-                                        <p:dataExporter type="xls" target="unidadesTable" fileName="unidades" />
+                                        <p:dataExporter type="xls" target="formasPagoTable" fileName="formasPago" />
                                     </h:commandLink>
 
                                     <h:commandLink title="pdf">
                                         <i class="fa fa-file-pdf-o Fs24 Red" />
-                                        <p:dataExporter type="pdf" target="unidadesTable" fileName="unidades"/>
+                                        <p:dataExporter type="pdf" target="formasPagoTable" fileName="formasPago"/>
                                     </h:commandLink>
 
                                     <h:commandLink title="csv">
                                         <i class="fa fa-file-text-o Fs24 Blue" />
-                                        <p:dataExporter type="csv" target="unidadesTable" fileName="unidades" />
+                                        <p:dataExporter type="csv" target="formasPagoTable" fileName="formasPago" />
                                     </h:commandLink>
 
                                     <h:commandLink title="xml">
                                         <i class="fa fa-file-code-o Fs24 Black" />
-                                        <p:dataExporter type="xml" target="unidadesTable" fileName="unidades" />
+                                        <p:dataExporter type="xml" target="formasPagoTable" fileName="formasPago" />
                                     </h:commandLink>
                                 </f:facet>
 
-                                <f:facet name="header">
-                                    #{msg.unidades}
-                                </f:facet>
 
-                                <p:column sortBy="#{unidad.id}" >
+                                <p:column sortBy="#{forma.id}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.id}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{unidad.id}" />
+                                    <h:outputText value="#{forma.id}" />
 
                                 </p:column>
 
-                                <p:column sortBy="#{unidad.nombreUnidad}" >
+                                <p:column sortBy="#{forma.nombreFormaPago}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.nombre}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{unidad.nombreUnidad}" />
+                                    <h:outputText value="#{forma.nombreFormaPago}" />
 
                                 </p:column>
-                                <p:column  >
+                                <p:column sortBy="#{forma.nombreCorto}" >
                                     <f:facet name="header">
-                                        <h:outputLabel value="#{msg.cantidadEntera}"/>
+                                        <h:outputLabel value="#{msg.nombre} corto"/>
                                     </f:facet>
 
-                                    <h:outputText rendered="#{unidad.cantidadEntera}" value="#{msg.si}" />
-                                    <h:outputText rendered="#{not unidad.cantidadEntera}" value="#{msg.no}" />
+                                    <h:outputText value="#{forma.nombreCorto}" />
+
+                                </p:column>
+
+                                <p:column sortBy="#{forma.venta}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Disp. Venta"/>
+                                    </f:facet>
+
+                                    <h:outputLabel value="#{forma.venta ? 'Sí': 'No'}"/>
+
+                                </p:column>
+
+                                <p:column sortBy="#{forma.compra}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Disp. Compra"/>
+                                    </f:facet>
+                                    <h:outputLabel value="#{forma.compra ? 'Sí': 'No'}"/>
+
 
                                 </p:column>
 
@@ -114,9 +126,9 @@
                                     <f:facet name="header">
                                         #{msg.editar}
                                     </f:facet>
-                                    <p:commandButton icon="fa fa-fw fa-edit" action="unidadEdit"
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="formaPagoEdit"
                                                      ajax="false" >
-                                        <f:param name="idUnidad" value="#{unidad.id}" />
+                                        <f:param name="idFormaPago" value="#{forma.id}" />
 
                                     </p:commandButton>
 
@@ -124,10 +136,12 @@
                             </p:dataTable>
                         </div>
                     </div>
-
                 </h:form>
             </div>
         </div>
     </ui:define>
 
 </ui:composition>
+
+
+

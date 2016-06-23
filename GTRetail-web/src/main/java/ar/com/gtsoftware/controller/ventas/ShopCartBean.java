@@ -41,6 +41,7 @@ import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
@@ -108,8 +109,6 @@ public class ShopCartBean implements Serializable {
 
     private final NegocioTiposComprobanteSearchFilter tipoCompSf = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
 
-    private final List<ComprobantesPagos> pagos = new ArrayList<>();
-
     private ComprobantesPagos pagoActual = new ComprobantesPagos();
 
     private BigDecimal cantidad = BigDecimal.ONE;
@@ -128,6 +127,7 @@ public class ShopCartBean implements Serializable {
     private static final String ID_CLIENTE_DEFECTO_PARAM = "venta.pos.id_cliente.defecto";
     private static final String ID_CONDICION_DEFECTO_PARAM = "venta.pos.id_condicion.defecto";
     private static final String ID_FORMA_PAGO_DEFECTO_PARAM = "venta.pos.id_forma_pago.defecto";
+    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(true, null);
 
     private Productos productoRedondeo;
 
@@ -154,6 +154,7 @@ public class ShopCartBean implements Serializable {
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             venta.setFechaComprobante(new Date());
             venta.setTotal(BigDecimal.ZERO);
+            venta.setPagosList(new ArrayList<>());
             Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
             Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
@@ -167,6 +168,7 @@ public class ShopCartBean implements Serializable {
             venta.setIdCondicionComprobante(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
             formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
             venta.setTipoComprobante(tiposComprobanteFacade.getTipoFactura());
+
         }
     }
 
@@ -204,7 +206,7 @@ public class ShopCartBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (ComprobantesPagos vp : pagos) {
+        for (ComprobantesPagos vp : venta.getPagosList()) {
             if (vp.getItem() == item) {
                 index = cont;
                 break;
@@ -212,14 +214,14 @@ public class ShopCartBean implements Serializable {
             cont++;
         }
         if (index >= 0) {
-            pagos.remove(index);
+            venta.getPagosList().remove(index);
             calcularTotalPagado();
         }
     }
 
     public void initPagos() {
         if (!JSFUtil.isPostback()) {
-            if (pagos.isEmpty() && formaPagoDefecto != null) {
+            if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
                 pagoActual.setIdFormaPago(formaPagoDefecto);
                 venta.setSaldo(venta.getTotal());
@@ -340,9 +342,11 @@ public class ShopCartBean implements Serializable {
             } else {
 
                 pagoActual.setItem(itemCounter.getAndIncrement());
-                pagos.add(pagoActual);
+                pagoActual.setIdComprobante(venta);
+                venta.getPagosList().add(pagoActual);
                 pagoActual = new ComprobantesPagos();
                 pagoActual.setMontoPago(BigDecimal.ZERO);
+                pagoActual.setMontoPagado(BigDecimal.ZERO);
             }
         }
         calcularTotalPagado();
@@ -351,7 +355,7 @@ public class ShopCartBean implements Serializable {
     private void calcularTotalPagado() {
         venta.setSaldo(venta.getTotal());
         BigDecimal sumaPagos = BigDecimal.ZERO;
-        for (ComprobantesPagos p : pagos) {
+        for (ComprobantesPagos p : venta.getPagosList()) {
             sumaPagos = sumaPagos.add(p.getMontoPago());
         }
         venta.setSaldo(venta.getTotal().subtract(sumaPagos));
@@ -404,7 +408,7 @@ public class ShopCartBean implements Serializable {
             try {
 
                 venta.setSaldo(venta.getTotal());
-                ventasBean.guardarVenta(venta, pagos);
+                ventasBean.guardarVenta(venta);
 
                 for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
 
@@ -464,11 +468,7 @@ public class ShopCartBean implements Serializable {
     }
 
     public List<NegocioFormasPago> getFormasPagoList() {
-        return formasPagoFacade.findFormasPagoVenta();
-    }
-
-    public List<ComprobantesPagos> getPagos() {
-        return pagos;
+        return formasPagoFacade.findAllBySearchFilter(formasPagoSearchFilter);
     }
 
     public List<ComprobantesEstados> getVentasEstados() {

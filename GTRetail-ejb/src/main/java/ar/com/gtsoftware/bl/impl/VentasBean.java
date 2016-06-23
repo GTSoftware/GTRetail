@@ -20,8 +20,6 @@ import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
 import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
 import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.ComprobantesPagos;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -47,7 +45,7 @@ public class VentasBean {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public void guardarVenta(Comprobantes venta, List<ComprobantesPagos> pagos) throws Exception {
+    public void guardarVenta(Comprobantes venta) throws Exception {
         if (venta.isNew()) { //TODO Evaluar para utilizar el mismo método en caso de una venta modificada
             //TODO Parametrizar estado inicial de venta
             venta.setIdEstadoComprobante(estadosFacade.find(2L)); //Aceptada
@@ -65,7 +63,7 @@ public class VentasBean {
 //                pagosLineasFacade.create(lineaPago);
 //            }
 
-            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
+            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().multiply(venta.getTipoComprobante().getSigno()).negate(), "Comprobante Nro: " + venta.getId());
         }
     }
 

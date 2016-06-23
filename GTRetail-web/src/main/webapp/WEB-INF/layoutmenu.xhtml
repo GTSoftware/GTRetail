@@ -62,6 +62,15 @@
                                 immediate="true" ajax="false"/>
                 </p:submenu>
 
+                <p:submenu id="preciosSubMenu" label="#{msg.precio}s" icon="fa fa-fw fa-money">
+                    <p:menuitem id="formasPagoItem" value="#{msg.formaPago}"
+                                action="/protected/archivos/formas_pago/formaPagoSearch.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+                    <p:menuitem id="planesPagoItem" value="#{msg.planesPago}"
+                                action="/protected/archivos/planes_pago/planPagoSearch.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+                </p:submenu>
+
             </p:submenu>
             <!--
                         <p:submenu id="om_menuoptcolor" label="MENU AND COLOR OPTIONS">

@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template.xhtml">
+
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <div class="Container100 Responsive100 NoIndent">
+            <div class="Container100 ui-fluid">
+                <div class="Card">
+                    <h1 class="CardBigTopic TexAlCenter">Editar Forma de pago</h1>
+                    <h:form id="formContenido" >
+
+                        <p:messages />
+                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank" columns="3">
+
+                            <h:outputLabel for="idField" value="#{msg.id}:" />
+                            <h:outputLabel id="idField" value="#{formasPagoEditBean.formaPagoActual.id}" />
+                            <h:outputLabel  />
+
+                            <h:outputLabel for="nombreField" value="#{msg.nombre}:" />
+
+                            <p:inputText id="nombreField"
+                                         value="#{formasPagoEditBean.formaPagoActual.nombreFormaPago}"
+                                         maxlength="60" required="true" requiredMessage="#{msg.campoRequerido}"
+                                         converter="#{stringFormatConverter}"/>
+                            <p:message for="nombreField"  />
+
+                            <h:outputLabel for="nombreCortoField" value="#{msg.nombre}:" />
+
+                            <p:inputText id="nombreCortoField"
+                                         value="#{formasPagoEditBean.formaPagoActual.nombreCorto}"
+                                         maxlength="10" required="true" requiredMessage="#{msg.campoRequerido}"
+                                         converter="#{stringFormatConverter}"/>
+                            <p:message for="nombreCortoField"  />
+
+                            <h:outputLabel for="compraField" value="Disponible para la compra:" />
+
+                            <p:selectBooleanCheckbox id="compraField" value="#{formasPagoEditBean.formaPagoActual.compra}" />
+                            <p:message for="compraField"  />
+
+                            <h:outputLabel for="ventaField" value="Disponible para la venta:" />
+
+                            <p:selectBooleanCheckbox id="ventaField" value="#{formasPagoEditBean.formaPagoActual.venta}"  />
+                            <p:message for="ventaField"  />
+
+                            <h:outputLabel for="planField" value="Requiere plan:" />
+
+                            <p:selectBooleanCheckbox id="planField" value="#{formasPagoEditBean.formaPagoActual.requierePlan}" />
+                            <p:message for="planField"  />
+
+                            <h:outputLabel for="valoresField" value="Requiere valores:" />
+                            <p:selectBooleanCheckbox id="valoresField" value="#{formasPagoEditBean.formaPagoActual.requiereValores}" />
+                            <p:message for="valoresField"  />
+
+                        </p:panelGrid >
+
+                        <div class="SeparatorFull"></div>
+                        <p:panelGrid layout="grid" columns="2"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{formasPagoEditBean.doGuardar()}"
+                                             update="@form" />
+
+                            <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                             action="formaPagoSearch.xhtml?faces-redirect=true"
+                                             ajax="false" immediate="true" styleClass="RedButton"/>
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+

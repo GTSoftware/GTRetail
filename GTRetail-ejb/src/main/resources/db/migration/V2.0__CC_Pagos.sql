@@ -16,6 +16,12 @@ create table numeraciones (
 
 comment on table numeraciones is 'Generador de ID para las tablas';
 
+alter table negocio_formas_pago add column requiere_plan boolean not null default false;
+alter table negocio_formas_pago add column requiere_valores boolean not null default false;
+
+comment on column negocio_formas_pago.requiere_plan is 'Si requiere que tenga al menos un plan asociado para poder ser utilizado';
+comment on column negocio_formas_pago.requiere_valores is 'Si la forma de pago requiere el ingreso de valores que la representen';
+
 --Planes de pago, asocian una forma de pago con un plan
 create table negocio_planes_pago (
     id_plan integer primary key,

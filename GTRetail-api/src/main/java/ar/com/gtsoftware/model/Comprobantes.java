@@ -110,7 +110,7 @@ public class Comprobantes extends BaseEntity {
     @Transient
     private BigDecimal totalConSigno;
     @OneToMany(mappedBy = "idComprobante", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ComprobantesPagos> comprobantesPagoss;
+    private List<ComprobantesPagos> pagosList;
 
     public Comprobantes() {
     }
@@ -264,12 +264,12 @@ public class Comprobantes extends BaseEntity {
     }
 
     @XmlTransient
-    public List<ComprobantesPagos> getComprobantesPagoss() {
-        return comprobantesPagoss;
+    public List<ComprobantesPagos> getPagosList() {
+        return pagosList;
     }
 
-    public void setComprobantesPagoss(List<ComprobantesPagos> comprobantesPagoss) {
-        this.comprobantesPagoss = comprobantesPagoss;
+    public void setPagosList(List<ComprobantesPagos> pagosList) {
+        this.pagosList = pagosList;
     }
 
     public BigDecimal getTotalConSigno() {

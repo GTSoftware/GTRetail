@@ -15,24 +15,39 @@
         </ui:insert>
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Administración de marcas</h1>
+                <h1 class="CardBigTopic TexAlCenter">Administración de Planes de pago</h1>
                 <div class="SeparatorFull"></div>
                 <h:form id="formContenido" >
 
                     <div class="Container100 ui-fluid">
                         <div class="Card">
                             <p:focus for="textoBusquedaField"/>
-                            <p:panelGrid layout="grid"  columns="3"
+                            <p:panelGrid layout="grid"  columns="5"
                                          style="border:0px !important; background:none;" styleClass="ui-panelgrid-blank">
 
-                                <p:inputText id="textoBusquedaField" value="#{marcasSearchBean.filter.nombreMarca}"
+                                <p:inputText id="textoBusquedaField" value="#{planesPagoSearchBean.filter.nombre}"
                                              placeholder="Términos de búsqueda"/>
 
-                                <p:commandButton  action="#{marcasSearchBean.doSearch()}"
+                                <p:selectOneMenu id="formaPagoField"
+                                                 value="#{planesPagoSearchBean.filter.idFormaPago}"
+                                                 converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+
+                                    <f:selectItem itemValue="#{null}"  itemLabel="Todas las formas de pago"/>
+
+                                    <f:selectItems value="#{planesPagoSearchBean.formasPagoList}" var="formaPago"
+                                                   itemLabel="#{formaPago.nombreFormaPago}"
+                                                   itemValue="#{formaPago}"/>
+
+                                </p:selectOneMenu>
+
+                                <p:selectBooleanCheckbox id="activoField" value="#{planesPagoSearchBean.filter.activo}"
+                                                         itemLabel="Activo"/>
+
+                                <p:commandButton  action="#{planesPagoSearchBean.doSearch()}"
                                                   value="#{msg.buscar}"
                                                   icon="fa fa-fw fa-search"
-                                                  update="marcasTable"/>
-                                <p:commandButton id="nuevoButton" action="marcaEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                  update="planesPagoTable"/>
+                                <p:commandButton id="nuevoButton" action="planPagoEdit.xhtml" value="#{msg.nuevo}" ajax="false"
                                                  icon="fa fa-fw fa-plus"
                                                  styleClass="GreenButton"/>
                             </p:panelGrid >
@@ -41,13 +56,13 @@
                     <div class="Container100 ui-fluid">
                         <div class="Card">
                             <div class="SeparatorFull"></div>
-                            <p:dataTable id="marcasTable" var="marca" value="#{marcasSearchBean.dataModel}"
+                            <p:dataTable id="planesPagoTable" var="plan" value="#{planesPagoSearchBean.dataModel}"
                                          rows="30"
                                          lazy="true"
                                          paginator="true"
                                          sortMode="single"
                                          emptyMessage="#{msg.busquedaSinResultados}"
-                                         rowKey="#{marca.id}"
+                                         rowKey="#{plan.id}"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                          rowsPerPageTemplate="10,15,30,100"
                                          scrollable="true"
@@ -58,55 +73,78 @@
                                 <f:facet name="{Exporters}">
                                     <h:commandLink title="xls">
                                         <i class="fa fa-file-excel-o Fs24 Green" />
-                                        <p:dataExporter type="Exportar a xls" target="marcasTable" fileName="marcas" />
+                                        <p:dataExporter type="xls" target="planesPagoTable" fileName="planes" />
                                     </h:commandLink>
 
                                     <h:commandLink title="pdf">
                                         <i class="fa fa-file-pdf-o Fs24 Red" />
-                                        <p:dataExporter type="Exportar a pdf" target="marcasTable" fileName="marcas"/>
+                                        <p:dataExporter type="pdf" target="planesPagoTable" fileName="planes"/>
                                     </h:commandLink>
 
                                     <h:commandLink title="csv">
                                         <i class="fa fa-file-text-o Fs24 Blue" />
-                                        <p:dataExporter type="Exportar a csv" target="marcasTable" fileName="marcas" />
+                                        <p:dataExporter type="csv" target="planesPagoTable" fileName="planes" />
                                     </h:commandLink>
 
                                     <h:commandLink title="xml">
                                         <i class="fa fa-file-code-o Fs24 Black" />
-                                        <p:dataExporter type="Exportar a xml" target="marcasTable" fileName="marcas" />
+                                        <p:dataExporter type="xml" target="planesPagoTable" fileName="planes" />
                                     </h:commandLink>
                                 </f:facet>
 
 
-                                <f:facet name="header">
-                                    #{msg.marcas}
-                                </f:facet>
-
-                                <p:column sortBy="#{marca.id}" >
+                                <p:column sortBy="#{plan.id}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.id}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{marca.id}" />
+                                    <h:outputText value="#{plan.id}" />
 
                                 </p:column>
 
-                                <p:column sortBy="#{marca.nombreMarca}" >
+                                <p:column sortBy="#{plan.nombre}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.nombre}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{marca.nombreMarca}" />
+                                    <h:outputText value="#{plan.nombre}" />
 
                                 </p:column>
+                                <p:column sortBy="#{plan.idFormaPago}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Forma de pago"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{plan.idFormaPago.nombreFormaPago}" />
+
+                                </p:column>
+
+                                <p:column >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.fecha} activo desde"/>
+                                    </f:facet>
+                                    <h:outputLabel value="#{plan.fechaActivoDesde}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                                    </h:outputLabel>
+                                </p:column>
+
+                                <p:column >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.fecha} activo hasta"/>
+                                    </f:facet>
+                                    <h:outputLabel value="#{plan.fechaActivoHasta}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                                    </h:outputLabel>
+                                </p:column>
+
 
                                 <p:column  exportable="false">
                                     <f:facet name="header">
                                         #{msg.editar}
                                     </f:facet>
-                                    <p:commandButton icon="fa fa-fw fa-edit" action="marcaEdit"
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="planPagoEdit"
                                                      ajax="false" >
-                                        <f:param name="idMarca" value="#{marca.id}" />
+                                        <f:param name="idPlanPago" value="#{plan.id}" />
 
                                     </p:commandButton>
 

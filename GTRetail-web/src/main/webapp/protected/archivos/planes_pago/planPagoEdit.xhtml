@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template.xhtml"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <div class="Container100 Responsive100 NoIndent">
+            <div class="Container100 ui-fluid">
+                <div class="Card">
+                    <h1 class="CardBigTopic TexAlCenter">Editar Plan de pago</h1>
+                    <div class="SeparatorFull"></div>
+                    <h:form id="formContenido" >
+
+                        <p:messages />
+                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank" columns="3">
+
+                            <h:outputLabel for="idField" value="#{msg.id}:" />
+                            <h:outputLabel id="idField" value="#{planesPagoEditBean.planPagoActual.id}" />
+                            <h:outputLabel  />
+
+                            <h:outputLabel for="nombreField" value="#{msg.nombre}:" />
+
+                            <p:inputText id="nombreField"
+                                         value="#{planesPagoEditBean.planPagoActual.nombre}"
+                                         maxlength="60" required="true" requiredMessage="#{msg.campoRequerido}"
+                                         converter="#{stringFormatConverter}"/>
+                            <p:message for="nombreField"  />
+
+                            <h:outputLabel for="formaPagoField" value="Forma de pago:" />
+                            <p:selectOneMenu id="formaPagoField"
+                                             value="#{planesPagoEditBean.planPagoActual.idFormaPago}"
+                                             converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                             required="true">
+
+                                <f:selectItem itemValue="#{null}" itemLabel="Seleccione una forma de pago"
+                                              noSelectionOption="true"/>
+
+                                <f:selectItems value="#{planesPagoEditBean.formasPagoList}"
+                                               var="formaPago" itemLabel="#{formaPago.nombreFormaPago}"
+                                               itemValue="#{formaPago}"/>
+
+                            </p:selectOneMenu>
+                            <p:message for="formaPagoField"  />
+
+
+                            <p:outputLabel value="Activo desde:" for="fechaDesdeField"/>
+                            <p:calendar id="fechaDesdeField" value="#{planesPagoEditBean.planPagoActual.fechaActivoDesde}"
+                                        pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true"
+                                        required="true"/>
+                            <p:message for="fechaDesdeField"  />
+
+                            <p:outputLabel value="Activo hasta:" for="fechaHastaField"/>
+                            <p:calendar id="fechaHastaField" value="#{planesPagoEditBean.planPagoActual.fechaActivoHasta}"
+                                        pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true"
+                                        required="true"/>
+                            <p:message for="fechaHastaField"  />
+
+
+                        </p:panelGrid >
+
+                        <div class="SeparatorFull"></div>
+
+                        <h1 class="CardBigTopic TexAlCenter">Detalle del plan</h1>
+                        <dir class="EmptyBox10" />
+
+                        <p:commandButton value="#{msg.insertar}" icon="fa fa-fw fa-plus"
+                                         action="#{planesPagoEditBean.agregarDetallePlan()}"
+                                         update="planesPagoDetalleTable"
+                                         styleClass="GreenButton"
+                                         />
+
+                        <dir class="EmptyBox10" />
+
+                        <p:dataTable id="planesPagoDetalleTable" var="det" value="#{planesPagoEditBean.planPagoActual.negocioPlanesPagoDetalles}"
+                                     rows="30"
+                                     editable="true"
+                                     editMode="cell"
+                                     paginator="true"
+                                     sortMode="single"
+                                     emptyMessage="#{msg.busquedaSinResultados}"
+                                     rowKey="#{det.id}"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                     rowsPerPageTemplate="10,15,30,100"
+                                     scrollable="true"
+                                     reflow="true"
+                                     liveResize="true"
+                                     resizableColumns="true">
+
+                            <f:facet name="{Exporters}">
+                                <h:commandLink title="xls">
+                                    <i class="fa fa-file-excel-o Fs24 Green" />
+                                    <p:dataExporter type="xls" target="planesPagoDetalleTable" fileName="detallePlan" />
+                                </h:commandLink>
+
+                                <h:commandLink title="pdf">
+                                    <i class="fa fa-file-pdf-o Fs24 Red" />
+                                    <p:dataExporter type="pdf" target="planesPagoDetalleTable" fileName="detallePlan"/>
+                                </h:commandLink>
+
+                                <h:commandLink title="csv">
+                                    <i class="fa fa-file-text-o Fs24 Blue" />
+                                    <p:dataExporter type="csv" target="planesPagoDetalleTable" fileName="detallePlan" />
+                                </h:commandLink>
+
+                                <h:commandLink title="xml">
+                                    <i class="fa fa-file-code-o Fs24 Black" />
+                                    <p:dataExporter type="xml" target="planesPagoDetalleTable" fileName="detallePlan" />
+                                </h:commandLink>
+                            </f:facet>
+
+
+                            <p:column sortBy="#{det.id}" >
+                                <f:facet name="header">
+                                    <h:outputLabel value="#{msg.id}"/>
+                                </f:facet>
+
+                                <h:outputText value="#{det.id}" />
+
+                            </p:column>
+
+                            <p:column sortBy="#{det.cuotas}" >
+                                <f:facet name="header">
+                                    <h:outputLabel value="#{msg.cuotas}"/>
+                                </f:facet>
+
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{det.cuotas}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="cantCuotasField"
+                                                     required="true"
+                                                     value="#{det.cuotas}"
+                                                     placeholder="Cuotas">
+                                            <f:validateLongRange maximum="999" minimum="1" />
+
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column sortBy="#{det.coeficienteInteres}" >
+                                <f:facet name="header">
+                                    <h:outputLabel value="#{msg.coeficiente}"/>
+                                </f:facet>
+
+
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{det.coeficienteInteres}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="coeficienteField"
+                                                     required="true"
+                                                     value="#{det.coeficienteInteres}"
+                                                     placeholder="Coeficiente">
+                                            <f:validateDoubleRange maximum="999999999999999.9999" minimum="0" />
+
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputLabel value="#{msg.activo}"/>
+                                </f:facet>
+                                <p:selectBooleanCheckbox id="activoField" value="#{det.activo}" />
+
+
+                            </p:column>
+
+
+
+                            <p:column  exportable="false">
+                                <f:facet name="header">
+                                    #{msg.borrar}
+                                </f:facet>
+                                <p:commandButton icon="fa fa-fw fa-trash"
+                                                 styleClass="RedButton"
+                                                 action="#{planesPagoEditBean.borrarDetallePlan(det)}"
+                                                 update="planesPagoDetalleTable"
+                                                 >
+
+                                </p:commandButton>
+
+                            </p:column>
+                        </p:dataTable>
+
+                        <div class="SeparatorFull"></div>
+                        <p:panelGrid layout="grid" columns="2"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{planesPagoEditBean.doGuardar()}"
+                                             update="@form" />
+
+                            <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                             action="planPagoSearch.xhtml?faces-redirect=true"
+                                             ajax="false" immediate="true" styleClass="RedButton"/>
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
