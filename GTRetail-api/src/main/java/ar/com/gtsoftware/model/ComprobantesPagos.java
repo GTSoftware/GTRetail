@@ -78,6 +78,9 @@ public class ComprobantesPagos extends BaseEntity {
     @Transient
     private int item;
 
+    @Transient
+    private int productoRecargoItem;
+
     public ComprobantesPagos(Long id) {
         super(id);
     }
@@ -155,6 +158,24 @@ public class ComprobantesPagos extends BaseEntity {
 
     public void setItem(int item) {
         this.item = item;
+    }
+
+    /**
+     * Item del producto de recargo por financiación
+     *
+     * @return
+     */
+    public int getProductoRecargoItem() {
+        return productoRecargoItem;
+    }
+
+    /**
+     * Item del producto de recargo por financiación
+     *
+     * @param productoRecargoItem
+     */
+    public void setProductoRecargoItem(int productoRecargoItem) {
+        this.productoRecargoItem = productoRecargoItem;
     }
 
 }

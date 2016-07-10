@@ -17,6 +17,10 @@
             <p:submenu id="archivoSubMenu" label="#{msg.archivo}" icon="fa fa-fw fa-folder-open" >
 
 
+
+                <p:menuitem value="#{msg.parametros}" icon="fa fa-fw fa-gears" action="/protected/parametros/parametroSearch.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
+
+
                 <p:submenu id="clienteItem" label="#{msg.clientes}" icon="fa fa-fw fa-users">
                     <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
                 </p:submenu>

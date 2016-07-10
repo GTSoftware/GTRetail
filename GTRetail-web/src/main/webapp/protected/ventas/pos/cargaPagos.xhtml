@@ -51,6 +51,9 @@
                         <f:selectItems value="#{shopCartBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}"
                                        itemValue="#{formaPago}"/>
 
+                        <p:ajax event="valueChange"
+                                update=":cargaPagosForm:planFragment"  process="@this"/>
+
                     </p:selectOneMenu>
                     <h:outputLabel for="importePagoField" value="#{msg.importePago}:" />
                     <p:inputText id="importePagoField" value="#{shopCartBean.pagoActual.montoPago}" label="#{msg.importePago}">
@@ -58,6 +61,39 @@
                                                rendered="#{shopCartBean.venta.saldo gt 0}" />-->
                     </p:inputText>
                     <p:message for="importePagoField" />
+
+                    <p:fragment id="planFragment"  >
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+
+                                     style="border:0px !important; background:none;">
+
+                            <h:outputLabel for="planPagoField" value="#{msg.planPago}:" />
+                            <p:selectOneMenu id="planPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
+                                             value="#{shopCartBean.pagoActual.idPlan}"
+                                             converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                             rendered="#{shopCartBean.pagoActual.idFormaPago.requierePlan}">
+
+                                <f:selectItems value="#{shopCartBean.planesPagoList}" var="planPago"
+                                               itemLabel="#{planPago.nombre}"
+                                               itemValue="#{planPago}"/>
+
+                            </p:selectOneMenu>
+
+                            <h:outputLabel for="detallePlanPagoField" value="#{msg.cuotas}:" />
+                            <p:selectOneMenu id="detallePlanPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
+                                             value="#{shopCartBean.pagoActual.idDetallePlan}"
+                                             converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                             rendered="#{shopCartBean.pagoActual.idFormaPago.requierePlan}">
+
+                                <f:selectItems value="#{shopCartBean.detallePlan}" var="detPlan"
+                                               itemLabel="#{detPlan.cuotas}"
+                                               itemValue="#{detPlan}"/>
+
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                    </p:fragment>
+
 
                     <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}" icon="fa fa-fw fa-plus"
                                      update="pagosTable, importePagoField"
@@ -72,7 +108,7 @@
                              emptyMessage="#{msg.pagosVacio}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,15,30"
-                             resizableColumns="true"
+                             resizableColumns="false"
                              reflow="true"
                              liveResize="true">
                     <f:facet name="header" >
@@ -86,6 +122,17 @@
                             <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
                         </h:outputText>
                     </p:column>
+                    <p:column sortBy="#{pago.idPlan.nombre}" headerText="Plan">
+                        <h:outputText value="#{pago.idPlan.nombre}" >
+
+                        </h:outputText>
+                    </p:column>
+                    <p:column sortBy="#{pago.idDetallePlan}" headerText="Cuotas">
+                        <h:outputText value="#{pago.idDetallePlan.cuotas}" >
+
+                        </h:outputText>
+                    </p:column>
+
                     <p:column >
                         <f:facet name="header">
                             #{msg.borrar}

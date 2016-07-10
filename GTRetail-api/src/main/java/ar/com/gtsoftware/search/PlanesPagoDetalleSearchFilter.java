@@ -15,57 +15,43 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import org.apache.commons.lang3.StringUtils;
+import ar.com.gtsoftware.model.NegocioPlanesPago;
 
 /**
- * SearchFilter para planes de pago
+ * SearchFilter para detalle de planes de pago
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-public class PlanesPagoSearchFilter extends AbstractSearchFilter {
+public class PlanesPagoDetalleSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private NegocioFormasPago idFormaPago;
-    private String nombre;
+    private NegocioPlanesPago idPlan;
     private Boolean activo;
 
     @Override
     public boolean hasFilter() {
-        return StringUtils.isNotEmpty(nombre) || activo != null || idFormaPago != null;
+        return activo != null || idPlan != null;
     }
 
-    public PlanesPagoSearchFilter() {
+    public PlanesPagoDetalleSearchFilter() {
     }
 
-    public PlanesPagoSearchFilter(Boolean activo) {
+    public PlanesPagoDetalleSearchFilter(Boolean activo) {
         this.activo = activo;
     }
 
-    public PlanesPagoSearchFilter(NegocioFormasPago idFormaPago, Boolean activo) {
-        this.idFormaPago = idFormaPago;
+    public PlanesPagoDetalleSearchFilter(NegocioPlanesPago idPlan, Boolean activo) {
+        this.idPlan = idPlan;
         this.activo = activo;
     }
 
-    public PlanesPagoSearchFilter(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
+    public NegocioPlanesPago getIdPlan() {
+        return idPlan;
     }
 
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setIdPlan(NegocioPlanesPago idPlan) {
+        this.idPlan = idPlan;
     }
 
     public Boolean getActivo() {
