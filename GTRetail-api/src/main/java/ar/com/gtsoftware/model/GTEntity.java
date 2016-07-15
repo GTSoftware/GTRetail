@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Superclase para todas las entidades del sistema
@@ -80,13 +82,20 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (!(obj instanceof GTEntity)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        GTEntity other = (GTEntity) obj;
+        if ((getId() == null && other.getId() != null)
+                || (getId() != null && !this.getId().equals(other.getId()))) {
             return false;
         }
-        final FiscalPuntosVenta other = (FiscalPuntosVenta) obj;
-        return Objects.equals(this.getId(), other.getId());
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this,
+                ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
