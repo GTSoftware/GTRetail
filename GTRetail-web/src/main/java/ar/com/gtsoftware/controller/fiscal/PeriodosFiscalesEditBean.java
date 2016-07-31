@@ -15,10 +15,13 @@
  */
 package ar.com.gtsoftware.controller.fiscal;
 
+import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.UtilUI;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -33,12 +36,16 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "periodosFiscalesEditBean")
 @ViewScoped
-public class PeriodosFiscalesEditBean {
+public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosFiscales, FiscalPeriodosFiscalesSearchFilter> {
+
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
 
     private FiscalPeriodosFiscales periodoActual;
+
+    private final FiscalPeriodosFiscalesSearchFilter filter = new FiscalPeriodosFiscalesSearchFilter(null);
 
     /**
      * Creates a new instance of PeriodosFiscalesEditBean
@@ -60,14 +67,14 @@ public class PeriodosFiscalesEditBean {
     }
 
     public void guardarPeriodo() {
-        if (periodoActual.isNew()) {
-            periodosFiscalesFacade.create(periodoActual);
-        } else {
-            periodosFiscalesFacade.edit(periodoActual);
-        }
+
+        periodosFiscalesFacade.createOrEdit(periodoActual);
+
+        periodosFiscalesFacade.edit(periodoActual);
+
         nuevoPeriodo();
-        FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, 
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "Exito!", "Se ha guardado exitosamente!"));
     }
 
@@ -83,8 +90,20 @@ public class PeriodosFiscalesEditBean {
         this.periodoActual = periodoActual;
     }
 
-    public List<FiscalPeriodosFiscales> getPeriodosList() {
-        return periodosFiscalesFacade.findAll();
+    @Override
+    protected AbstractFacade<FiscalPeriodosFiscales, FiscalPeriodosFiscalesSearchFilter> getFacade() {
+        return periodosFiscalesFacade;
     }
 
+    @Override
+    public FiscalPeriodosFiscalesSearchFilter getFilter() {
+        return filter;
+    }
+
+    @Override
+    protected void prepareSearchFilter() {
+        if (!filter.hasOrderFields()) {
+            filter.addSortField(new SortField("nombrePeriodo", true));
+        }
+    }
 }

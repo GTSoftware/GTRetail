@@ -15,10 +15,9 @@
  */
 package ar.com.gtsoftware.model;
 
+import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
-
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,6 +25,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -33,8 +33,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 
 /**
  *
@@ -45,17 +43,20 @@ import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 @XmlRootElement
 public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     @EmbeddedId
     private ProductosPreciosPK pk;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, insertable = false)
+    @MapsId("idProducto")
+    @JoinColumn(name = "id_producto")
     private Productos idProducto;
 
     @ManyToOne
-    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false, insertable = false)
+    @MapsId("idListaPrecio")
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio")
     private ProductosListasPrecios idListaPrecios;
+
     @Basic(optional = false)
     @Column(name = "utilidad")
     private BigDecimal utilidad;
@@ -80,6 +81,7 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     }
 
     public ProductosPrecios() {
+        this.pk = new ProductosPreciosPK();
     }
 
     public Productos getIdProducto() {
@@ -128,32 +130,6 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
 
     public void setPk(ProductosPreciosPK pk) {
         this.pk = pk;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.idProducto);
-        hash = 59 * hash + Objects.hashCode(this.idListaPrecios);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ProductosPrecios other = (ProductosPrecios) obj;
-        if (!Objects.equals(this.idProducto, other.idProducto)) {
-            return false;
-        }
-        if (!Objects.equals(this.idListaPrecios, other.idListaPrecios)) {
-            return false;
-        }
-        return true;
     }
 
     @Override

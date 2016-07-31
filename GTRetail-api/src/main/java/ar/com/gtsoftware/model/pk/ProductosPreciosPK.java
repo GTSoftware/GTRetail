@@ -28,10 +28,10 @@ public class ProductosPreciosPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "id_producto")
+    @Column(name = "id_producto", updatable = false, insertable = false)
     private Long idProducto;
 
-    @Column(name = "id_lista_precio")
+    @Column(name = "id_lista_precio", updatable = false, insertable = false)
     private Long idListaPrecio;
 
     public ProductosPreciosPK() {

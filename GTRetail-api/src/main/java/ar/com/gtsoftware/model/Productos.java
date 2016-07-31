@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +43,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
-public class Productos extends BaseEntity implements Serializable {
+public class Productos extends BaseEntity {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     @Size(max = 100)
     @Column(name = "codigo_propio")
@@ -123,8 +122,7 @@ public class Productos extends BaseEntity implements Serializable {
     //@JoinFetch
     private ProductosMarcas idMarca;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
+    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "idProducto")
     @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
 

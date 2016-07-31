@@ -46,8 +46,4 @@ public class ProductosMarcas extends BaseEntity {
         this.nombreMarca = nombreMarca;
     }
 
-    @Override
-    public String toString() {
-        return "ProductosMarcas{" + "nombreMarca=" + nombreMarca + '}';
-    }
 }
