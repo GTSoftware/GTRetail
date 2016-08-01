@@ -21,7 +21,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -50,9 +49,6 @@ public class ProductosListasPrecios extends BaseEntity {
 
     @ManyToMany(mappedBy = "listasPrecioHabilitadas")
     private List<NegocioPlanesPago> planesPagoAsociados;
-
-    @OneToMany(mappedBy = "idListaPrecios")
-    private List<ProductosPrecios> productosPreciosList;
 
     public ProductosListasPrecios() {
     }
@@ -84,15 +80,6 @@ public class ProductosListasPrecios extends BaseEntity {
 
     public void setPlanesPagoAsociados(List<NegocioPlanesPago> planesPagoAsociados) {
         this.planesPagoAsociados = planesPagoAsociados;
-    }
-
-    @XmlTransient
-    public List<ProductosPrecios> getProductosPreciosList() {
-        return productosPreciosList;
-    }
-
-    public void setProductosPreciosList(List<ProductosPrecios> productosPreciosList) {
-        this.productosPreciosList = productosPreciosList;
     }
 
 }

@@ -19,8 +19,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Superclase para todas las entidades del sistema
@@ -95,7 +93,6 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this,
-                ToStringStyle.SHORT_PREFIX_STYLE);
+        return String.format("%s [id=%s]", this.getClass().getName(), getId());
     }
 }

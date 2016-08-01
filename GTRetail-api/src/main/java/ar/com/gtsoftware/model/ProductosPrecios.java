@@ -19,13 +19,9 @@ import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -47,16 +43,6 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     @EmbeddedId
     private ProductosPreciosPK pk;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @MapsId("idProducto")
-    @JoinColumn(name = "id_producto")
-    private Productos idProducto;
-
-    @ManyToOne
-    @MapsId("idListaPrecio")
-    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio")
-    private ProductosListasPrecios idListaPrecios;
-
     @Basic(optional = false)
     @Column(name = "utilidad")
     private BigDecimal utilidad;
@@ -75,29 +61,7 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    @Override
-    public boolean isNew() {
-        return pk != null;
-    }
-
     public ProductosPrecios() {
-        this.pk = new ProductosPreciosPK();
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public ProductosListasPrecios getIdListaPrecios() {
-        return idListaPrecios;
-    }
-
-    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
-        this.idListaPrecios = idListaPrecios;
     }
 
     public BigDecimal getUtilidad() {
@@ -133,33 +97,11 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     }
 
     @Override
-    public ProductosPreciosPK getId() {
-        if (isNew()) {
-            return null;
-        }
-        return new ProductosPreciosPK(idProducto.getId(), idListaPrecios.getId());
-    }
-
-    @Override
-    public ProductosPreciosPK calculateId(String id) {
-
-        if (id != null) {
-            String[] pkStr = id.split("-");
-            if (pkStr.length == 2) {
-                ProductosPreciosPK pk = new ProductosPreciosPK();
-                pk.setIdProducto(Long.parseLong(pkStr[0]));
-                pk.setIdListaPrecio(Long.parseLong(pkStr[1]));
-            }
-        }
-        return null;
-    }
-
-    @Override
     public String getStringId() {
         if (isNew()) {
             return null;
         }
-        return new ProductosPreciosPK(idProducto.getId(), idListaPrecios.getId()).toString();
+        return this.pk.toString();
     }
 
     public Date getFechaModificacion() {
@@ -175,4 +117,20 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     protected void onUpdate() {
         fechaModificacion = new Date();
     }
+
+    @Override
+    public boolean isNew() {
+        return this.pk == null;
+    }
+
+    @Override
+    public ProductosPreciosPK getId() {
+        return this.pk;
+    }
+
+    @Override
+    public ProductosPreciosPK calculateId(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

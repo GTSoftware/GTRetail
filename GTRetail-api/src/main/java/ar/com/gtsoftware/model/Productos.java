@@ -26,7 +26,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -122,11 +121,11 @@ public class Productos extends BaseEntity {
     //@JoinFetch
     private ProductosMarcas idMarca;
 
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "idProducto")
-    @OrderBy(value = "idListaPrecios")
+    @OneToMany(orphanRemoval = true, mappedBy = "pk.idProducto", cascade = CascadeType.ALL)
+//    @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idProducto", orphanRemoval = true)
     private List<ProductosPorcentajes> porcentajes;
 
     @Size(max = 60)

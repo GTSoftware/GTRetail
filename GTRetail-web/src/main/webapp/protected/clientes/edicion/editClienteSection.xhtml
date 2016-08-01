@@ -19,6 +19,7 @@
 
                             <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
                                          styleClass="ui-panelgrid-blank" columns="3">
+
                                 <h:outputLabel for="idClienteField" value="#{msg.idCliente}:"/>
                                 <h:outputLabel id="idClienteField" value="#{clientesEditBean.clienteActual.id}"/>
                                 <h:outputLabel/>
@@ -42,7 +43,7 @@
 
                                 <h:outputLabel for="razonSocialField" value="#{msg.razonSocial}:"
                                                rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"
-                                               converter="#{stringFormatConverter}"/>
+                                               />
                                 <p:inputText id="razonSocialField" value="#{clientesEditBean.clienteActual.razonSocial}" maxlength="200"
                                              rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"
                                              converter="#{stringFormatConverter}"/>

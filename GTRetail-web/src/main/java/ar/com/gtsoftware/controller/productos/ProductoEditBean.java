@@ -22,6 +22,7 @@ import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
@@ -296,16 +297,17 @@ public class ProductoEditBean implements Serializable {
     public void addLista() {
         boolean listaExistente = false;
         for (ProductosPrecios p : productoActual.getPrecios()) {
-            if (p.getIdListaPrecios().equals(listaSeleccionada)) {
+            if (p.getId().getIdListaPrecios().equals(listaSeleccionada)) {
                 listaExistente = true;
             }
         }
         if (!listaExistente) {
             ProductosPrecios pp = new ProductosPrecios();
-//            pp.setPk(new ProductosPreciosPK());
+            ProductosPreciosPK ppPk = new ProductosPreciosPK();
 
-            pp.setIdProducto(productoActual);
-            pp.setIdListaPrecios(listaSeleccionada);
+            ppPk.setIdProducto(productoActual);
+            ppPk.setIdListaPrecios(listaSeleccionada);
+            pp.setPk(ppPk);
             productoActual.getPrecios().add(pp);
         }
 

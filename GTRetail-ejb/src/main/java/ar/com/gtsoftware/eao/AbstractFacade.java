@@ -61,10 +61,11 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
         getEntityManager().flush();
     }
 
-    public void edit(T entity) {
+    public T edit(T entity) {
         constraintViolationsDetected(entity);
-        getEntityManager().merge(entity);
+        T mergedEntity = getEntityManager().merge(entity);
         getEntityManager().flush();
+        return mergedEntity;
 
     }
 
@@ -245,16 +246,19 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
      * Crea o edita la entidad pasada como parámetro según sea necesario
      *
      * @param entity
+     * @return T
      */
-    public void createOrEdit(T entity) {
+    public T createOrEdit(T entity) {
         if (entity == null) {
-            return;
+            throw new IllegalArgumentException("Null entity passed to persist!");
         }
         if (entity.isNew()) {
             create(entity);
         } else {
-            edit(entity);
+            T edit = edit(entity);
+            return edit;
         }
+        return entity;
     }
 
     private boolean constraintViolationsDetected(T entity) {

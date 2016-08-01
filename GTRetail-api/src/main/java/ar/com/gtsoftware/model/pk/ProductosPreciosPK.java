@@ -15,9 +15,12 @@
  */
 package ar.com.gtsoftware.model.pk;
 
+import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.ProductosListasPrecios;
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -28,78 +31,36 @@ public class ProductosPreciosPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "id_producto", updatable = false, insertable = false)
-    private Long idProducto;
+    @ManyToOne
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    private Productos idProducto;
 
-    @Column(name = "id_lista_precio", updatable = false, insertable = false)
-    private Long idListaPrecio;
+    @ManyToOne
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio")
+    private ProductosListasPrecios idListaPrecios;
 
     public ProductosPreciosPK() {
     }
 
-    public ProductosPreciosPK(Long idProducto, Long idListaPrecio) {
-
-        this.idProducto = idProducto;
-        this.idListaPrecio = idListaPrecio;
-    }
-
-    public Long getIdProducto() {
+    public Productos getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Long idProducto) {
+    public void setIdProducto(Productos idProducto) {
         this.idProducto = idProducto;
     }
 
-    public Long getIdListaPrecio() {
-        return idListaPrecio;
+    public ProductosListasPrecios getIdListaPrecios() {
+        return idListaPrecios;
     }
 
-    public void setIdListaPrecio(Long idListaPrecio) {
-        this.idListaPrecio = idListaPrecio;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((idListaPrecio == null) ? 0 : idListaPrecio.hashCode());
-        result = prime * result + ((idProducto == null) ? 0 : idProducto.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        ProductosPreciosPK other = (ProductosPreciosPK) obj;
-        if (idListaPrecio == null) {
-            if (other.idListaPrecio != null) {
-                return false;
-            }
-        } else if (!idListaPrecio.equals(other.idListaPrecio)) {
-            return false;
-        }
-        if (idProducto == null) {
-            if (other.idProducto != null) {
-                return false;
-            }
-        } else if (!idProducto.equals(other.idProducto)) {
-            return false;
-        }
-        return true;
+    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
+        this.idListaPrecios = idListaPrecios;
     }
 
     @Override
     public String toString() {
-        return String.format("%d-%d", idProducto, idListaPrecio);
+        return String.format("%d-%d", idProducto.getId(), idListaPrecios.getId());
     }
 
 }
