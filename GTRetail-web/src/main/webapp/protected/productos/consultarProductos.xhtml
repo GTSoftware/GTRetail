@@ -191,6 +191,10 @@
                                     <f:param name="idProducto" value="#{producto.id}"/>
                                     <f:param name="duplicar" value="1"/>
                                 </p:commandButton>
+                                <p:commandButton icon="fa fa-print" action="#{productosSearchBean.imprimirEtiqueta(producto)}"  ajax="false"
+                                                 title="Duplicar">
+                                    
+                                </p:commandButton>
                             </p:panelGrid>
 
                         </p:column>
