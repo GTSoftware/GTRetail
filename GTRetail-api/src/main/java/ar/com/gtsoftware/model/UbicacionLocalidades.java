@@ -15,21 +15,16 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "ubicacion_localidades")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_localidad", columnDefinition = "serial"))
-public class UbicacionLocalidades extends BaseEntity implements Serializable {
+public class UbicacionLocalidades extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,17 +48,10 @@ public class UbicacionLocalidades extends BaseEntity implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "codigo_postal")
     private String codigoPostal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idLocalidad")
-    private List<Bancos> bancosList;
-    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
+
+    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idLocalidad")
-    private List<Personas> personasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idLocalidad")
-    private List<Sucursales> sucursalesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idLocalidad")
-    private List<Depositos> depositosList;
 
     public UbicacionLocalidades() {
     }
@@ -85,15 +73,6 @@ public class UbicacionLocalidades extends BaseEntity implements Serializable {
         this.nombreLocalidad = nombreLocalidad;
     }
 
-    @XmlTransient
-    public List<Bancos> getBancosList() {
-        return bancosList;
-    }
-
-    public void setBancosList(List<Bancos> bancosList) {
-        this.bancosList = bancosList;
-    }
-
     public UbicacionProvincias getIdProvincia() {
         return idProvincia;
     }
@@ -102,44 +81,12 @@ public class UbicacionLocalidades extends BaseEntity implements Serializable {
         this.idProvincia = idProvincia;
     }
 
-    @XmlTransient
-    public List<Personas> getPersonasList() {
-        return personasList;
-    }
-
-    public void setPersonasList(List<Personas> personasList) {
-        this.personasList = personasList;
-    }
-
-    @XmlTransient
-    public List<Sucursales> getSucursalesList() {
-        return sucursalesList;
-    }
-
-    public void setSucursalesList(List<Sucursales> sucursalesList) {
-        this.sucursalesList = sucursalesList;
-    }
-
-    @XmlTransient
-    public List<Depositos> getDepositosList() {
-        return depositosList;
-    }
-
-    public void setDepositosList(List<Depositos> depositosList) {
-        this.depositosList = depositosList;
-    }
-
     public String getCodigoPostal() {
         return codigoPostal;
     }
 
     public void setCodigoPostal(String codigoPostal) {
         this.codigoPostal = codigoPostal;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.UbicacionLocalidades[ idLocalidad=" + this.getId() + " ]";
     }
 
 }

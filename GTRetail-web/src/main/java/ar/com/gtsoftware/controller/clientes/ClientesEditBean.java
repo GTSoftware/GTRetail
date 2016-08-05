@@ -40,6 +40,7 @@ import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,6 +116,7 @@ public class ClientesEditBean implements Serializable {
     public void nuevo() {
         clienteActual = new Personas();
         clienteActual.setCliente(true);
+        clienteActual.setActivo(true);
         clienteActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
     }
 
@@ -178,13 +180,19 @@ public class ClientesEditBean implements Serializable {
     }
 
     public List<UbicacionProvincias> getProvinciasList() {
-        ProvinciasSearchFilter psf = new ProvinciasSearchFilter(clienteActual.getIdPais());
-        return provinciasFacade.findAllBySearchFilter(psf);
+        if (clienteActual.getIdPais() != null) {
+            ProvinciasSearchFilter psf = new ProvinciasSearchFilter(clienteActual.getIdPais());
+            return provinciasFacade.findAllBySearchFilter(psf);
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public List<UbicacionLocalidades> getLocalidadesList() {
-        LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
-        return localidadesFacade.findAllBySearchFilter(lsf);
+        if (clienteActual.getIdProvincia() != null) {
+            LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
+            return localidadesFacade.findAllBySearchFilter(lsf);
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public PersonasTelefonos getTelefonoActual() {

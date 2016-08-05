@@ -14,7 +14,7 @@
                 <div class="SeparatorFull" />
 
                 <h:form id="editProductoForm">
-                    <p:messages autoUpdate="true" />
+
 
                     <p:panelGrid id="fechasGrid" layout="grid"  style="border:0px !important; background:none;"
                                  styleClass="ui-panelgrid-blank" columns="2">
@@ -404,7 +404,7 @@
                                                 <f:facet name="header">
                                                     #{msg.listaPrecio}
                                                 </f:facet>
-                                                <h:outputLabel value="#{precio.pk.idListaPrecios.nombreLista}"/>
+                                                <h:outputLabel value="#{precio.idListaPrecios.nombreLista}"/>
                                             </p:column>
                                             <p:column  >
                                                 <f:facet name="header">

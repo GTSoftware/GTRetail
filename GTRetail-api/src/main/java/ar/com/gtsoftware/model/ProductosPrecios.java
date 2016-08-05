@@ -22,6 +22,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -42,6 +45,18 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     private static final long serialVersionUID = 2L;
     @EmbeddedId
     private ProductosPreciosPK pk;
+
+    @MapsId("pk.idProducto")
+    @ManyToOne
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto",
+            insertable = false, updatable = false)
+    private Productos idProducto;
+
+    @MapsId("pk.idListaPrecios")
+    @ManyToOne
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio",
+            insertable = false, updatable = false)
+    private ProductosListasPrecios idListaPrecios;
 
     @Basic(optional = false)
     @Column(name = "utilidad")
@@ -126,6 +141,22 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     @Override
     public ProductosPreciosPK getId() {
         return this.pk;
+    }
+
+    public Productos getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Productos idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public ProductosListasPrecios getIdListaPrecios() {
+        return idListaPrecios;
+    }
+
+    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
+        this.idListaPrecios = idListaPrecios;
     }
 
     @Override

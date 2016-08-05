@@ -109,9 +109,11 @@ public class Productos extends BaseEntity {
     @ManyToOne(optional = false)
 //    @JoinFetch
     private ProductosRubros idRubro;
+
     @JoinColumn(name = "id_proveedor_habitual", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne
     private Personas idProveedorHabitual;
+
     @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     //  @JoinFetch
@@ -121,7 +123,7 @@ public class Productos extends BaseEntity {
     //@JoinFetch
     private ProductosMarcas idMarca;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "pk.idProducto", cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, mappedBy = "idProducto", cascade = CascadeType.ALL)
 //    @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
 
@@ -383,11 +385,6 @@ public class Productos extends BaseEntity {
 
     public void setCodigoFabricante(String codigoFabricante) {
         this.codigoFabricante = codigoFabricante;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("ar.com.gtsoftware.model.Productos[ idProducto= %s ]", this.getId());
     }
 
     @PrePersist

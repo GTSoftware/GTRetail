@@ -129,8 +129,7 @@ public class Personas extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
-    @OneToMany(mappedBy = "idProveedorHabitual")
-    private List<Productos> productosList;
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
     private List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
@@ -343,15 +342,6 @@ public class Personas extends BaseEntity implements Serializable {
 
     public void setIdResponsabilidadIva(FiscalResponsabilidadesIva idResponsabilidadIva) {
         this.idResponsabilidadIva = idResponsabilidadIva;
-    }
-
-    @XmlTransient
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
     }
 
     @XmlTransient

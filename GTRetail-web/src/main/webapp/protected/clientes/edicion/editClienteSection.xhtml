@@ -14,10 +14,10 @@
 
 
 
-                    <p:tabView id="tabPersona">
+                    <p:tabView id="tabPersona" scrollable="true">
                         <p:tab title="#{msg.datosFiliatorios}">
 
-                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                            <p:panelGrid id="datosBasicosGrid" layout="grid"  style="border:0px !important; background:none;"
                                          styleClass="ui-panelgrid-blank" columns="3">
 
                                 <h:outputLabel for="idClienteField" value="#{msg.idCliente}:"/>
@@ -30,7 +30,7 @@
                                                  converter="omnifaces.SelectItemsIndexConverter"
                                                  filter="true" filterMatchMode="contains">
                                     <p:ajax event="valueChange"
-                                            update="@form"
+                                            update="datosBasicosGrid"
                                             process="@this"
                                             global="false"
                                             />
@@ -40,6 +40,7 @@
 
                                 </p:selectOneMenu>
                                 <p:message for="tipoPersoneriaField"/>
+
 
                                 <h:outputLabel for="razonSocialField" value="#{msg.razonSocial}:"
                                                rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 2}"
@@ -69,6 +70,8 @@
                                              rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"
                                              converter="#{stringFormatConverter}"/>
                                 <p:message for="nombreField" rendered="#{clientesEditBean.clienteActual.idTipoPersoneria.id eq 1}"/>
+
+
 
                                 <h:outputLabel for="responsabilidadIVAField" value="#{msg.responsabilidadIVA}:"/>
                                 <p:selectOneMenu id="responsabilidadIVAField" required="true"
@@ -108,7 +111,10 @@
                                     <f:validateLongRange minimum="1" maximum="99999999999"/>
                                 </p:inputText>
                                 <p:message for="nroDocField"/>
+                            </p:panelGrid>
 
+                            <p:panelGrid id="ubicacionGrid" layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="3">
 
                                 <h:outputLabel for="paisField" value="#{msg.pais}:"/>
                                 <p:selectOneMenu id="paisField" required="true" requiredMessage="#{msg.paisRequerido}"
@@ -149,6 +155,7 @@
                                 </p:selectOneMenu>
                                 <p:message for="localidadField"/>
 
+
                                 <h:outputLabel for="calleField" value="#{msg.calle}:"/>
                                 <p:inputText id="calleField" value="#{clientesEditBean.clienteActual.calle}" required="true"
                                              requiredMessage="#{msg.calleRequerido}" maxlength="100"
@@ -169,7 +176,10 @@
                                 <p:inputText id="deptoField" value="#{clientesEditBean.clienteActual.depto}"
                                              converter="#{stringFormatConverter}"/>
                                 <p:message for="deptoField"/>
+                            </p:panelGrid>
 
+                            <p:panelGrid id="datosExtraGrid" layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="3">
                                 <h:outputLabel for="emailField" value="#{msg.email}:"/>
                                 <p:inputText id="emailField" value="#{clientesEditBean.clienteActual.email}"
                                              required="false">

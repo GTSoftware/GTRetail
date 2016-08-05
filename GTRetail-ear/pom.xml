@@ -7,9 +7,9 @@
         <version>4.0.2-SNAPSHOT</version>
     </parent>
 
-    
+
     <artifactId>GTRetail-ear</artifactId>
-    
+
     <packaging>ear</packaging>
 
     <name>GTRetail-ear</name>
@@ -37,6 +37,7 @@
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.9.Final</version>
                 <configuration>
                     <skip>false</skip>
                     <jbossHome>${jboss.directory}</jbossHome>
@@ -67,6 +68,6 @@
 
             <type>jar</type>
         </dependency>
-        
+
     </dependencies>
 </project>
