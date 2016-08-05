@@ -17,13 +17,24 @@ package ar.com.gtsoftware.auth;
 
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.model.UsuariosGrupos;
+import ar.com.gtsoftware.utils.JSFUtil;
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.MenuModel;
 
 /**
  *
@@ -39,7 +50,8 @@ public class AuthBackingBean implements Serializable {
     private UsuariosFacade usuariosFacade;
 
     private Usuarios usuarioLogueado;
-    private static Logger LOG = Logger.getLogger(AuthBackingBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(AuthBackingBean.class.getName());
+    private MenuModel rolesMenuModel;
 
     /**
      * Creates a new instance of AuthBackingBean
@@ -47,10 +59,36 @@ public class AuthBackingBean implements Serializable {
     public AuthBackingBean() {
     }
 
-    public String logout() {
+    @PostConstruct
+    public void init() {
 
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "login?faces-redirect=true";
+        rolesMenuModel = new DefaultMenuModel();
+        for (UsuariosGrupos rol : getUserLoggedIn().getUsuariosGruposList()) {
+            DefaultMenuItem rolMi = new DefaultMenuItem(String.format("Rol: %s", rol.getNombreGrupo()));
+            rolesMenuModel.addElement(rolMi);
+        }
+        DefaultMenuItem cambiarClaveMi = new DefaultMenuItem("Cambiar clave");
+        cambiarClaveMi.setIcon("fa fa-fw fa-lock");
+        cambiarClaveMi.setCommand(String.format("/protected/user/changePassword.xhtml%s", JSFUtil.JSF_REDIRECT_ESCAPED));
+        rolesMenuModel.addElement(cambiarClaveMi);
+
+        DefaultMenuItem salirMi = new DefaultMenuItem("Salir");
+        salirMi.setIcon("fa fa-fw fa-power-off");
+        salirMi.setCommand("#{authBackingBean.logout}");
+        rolesMenuModel.addElement(salirMi);
+
+    }
+
+    public void logout() {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        try {
+            request.getSession(false).invalidate();
+            request.logout();
+            ec.redirect(ec.getRequestContextPath() + "/index.html");
+        } catch (IOException | ServletException e) {
+            LOG.log(Level.SEVERE, "Logout error: {0}", e.getMessage());
+        }
     }
 
     public Usuarios getUserLoggedIn() {
@@ -71,23 +109,9 @@ public class AuthBackingBean implements Serializable {
         }
         return usuarioLogueado;
     }
-    /*
-     public boolean tienePrivilegio(Integer idPrivilegio) {
-     HashMap<Integer, String> privilegios = obtenerPrivilegiosUsuario(getUserLoggedIn());
-     if (privilegios != null && !privilegios.isEmpty()) {
-     privilegios.containsKey(idPrivilegio);
-     }
-     return false;
-     }
 
-     private HashMap<Integer, String> obtenerPrivilegiosUsuario(Usuarios usuario) {
-     HashMap<Integer, String> privilegiosList = new HashMap<Integer, String>();
-     for (UsuariosGrupos g : usuario.getUsuariosGruposList()) {
-     for (Privilegios p : g.getPrivilegiosList()) {
-     privilegiosList.put(p.getIdPrivilegio(), p.getNombrePrivilegio());
-     }
-     }
-     return privilegiosList;
-     }
-     */
+    public MenuModel getRolesMenuModel() {
+        return rolesMenuModel;
+    }
+
 }

@@ -18,13 +18,27 @@
                 <a id="menu-resize-btn" class="topbar-link Animated03"><h:graphicImage name="images/menu-resize-btn-icon.svg" id="menu-resize-btn" library="olympos-layout" /></a>
                 <a id="mobile-menu-btn" class="topbar-link Animated03"><h:graphicImage name="images/menu-btn-icon.svg" id="menu-btn-icon" library="olympos-layout" /></a>
 
-                <a id="" class="topbar-link Animated03 Fright"><i class="icon-user7"></i></a>
+                <!--                <a id="" class="topbar-link Animated03 Fright"><i class="icon-user7"></i></a>-->
+
+                <p:commandButton id="rolesButton" type="button" value="#{authBackingBean.userLoggedIn.nombreUsuario}"
+                                 icon="fa fa-user"
+                                 class=" Animated03 Fright Responsive100"
+                                 >
+
+                    <p:menu overlay="true" trigger="rolesButton" my="left top" at="left bottom" model="#{authBackingBean.rolesMenuModel}">
+
+                    </p:menu>
+
+
+                </p:commandButton>
+
                 <a id="" class="topbar-link Animated03 Fright"><i class="icon-finish3"></i></a>
 
                 <div id="search-bar">
                     <input type="text" placeholder="Search"></input>
                     <a id="search-btn" class="Animated03"><i class="icon-zoom64"></i></a>
                 </div>
+
 
             </div>
         </div>
