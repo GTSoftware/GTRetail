@@ -15,21 +15,20 @@
  */
 package ar.com.gtsoftware.model;
 
-import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,24 +37,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "productos_precios")
+@Table(name = "productos_precios", uniqueConstraints = @UniqueConstraint(columnNames = {"id_producto", "id_lista_precio"}))
 @XmlRootElement
-public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
+@AttributeOverride(name = "id", column = @Column(name = "productos_precios_id", columnDefinition = "serial"))
+public class ProductosPrecios extends BaseEntity {
 
-    private static final long serialVersionUID = 2L;
-    @EmbeddedId
-    private ProductosPreciosPK pk;
+    private static final long serialVersionUID = 3L;
 
-    @MapsId("pk.idProducto")
-    @ManyToOne
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto",
-            insertable = false, updatable = false)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    @ManyToOne(optional = false)
     private Productos idProducto;
 
-    @MapsId("pk.idListaPrecios")
-    @ManyToOne
-    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio",
-            insertable = false, updatable = false)
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio")
+    @ManyToOne(optional = false)
     private ProductosListasPrecios idListaPrecios;
 
     @Basic(optional = false)
@@ -103,22 +97,6 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
         this.neto = neto;
     }
 
-    public ProductosPreciosPK getPk() {
-        return pk;
-    }
-
-    public void setPk(ProductosPreciosPK pk) {
-        this.pk = pk;
-    }
-
-    @Override
-    public String getStringId() {
-        if (isNew()) {
-            return null;
-        }
-        return this.pk.toString();
-    }
-
     public Date getFechaModificacion() {
         return fechaModificacion;
     }
@@ -131,16 +109,6 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
     @PrePersist
     protected void onUpdate() {
         fechaModificacion = new Date();
-    }
-
-    @Override
-    public boolean isNew() {
-        return this.pk == null;
-    }
-
-    @Override
-    public ProductosPreciosPK getId() {
-        return this.pk;
     }
 
     public Productos getIdProducto() {
@@ -157,11 +125,6 @@ public class ProductosPrecios extends GTEntity<ProductosPreciosPK> {
 
     public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
         this.idListaPrecios = idListaPrecios;
-    }
-
-    @Override
-    public ProductosPreciosPK calculateId(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

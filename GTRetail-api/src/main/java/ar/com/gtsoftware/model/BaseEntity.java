@@ -21,7 +21,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.TableGenerator;
 
 /**
  *
@@ -33,9 +32,9 @@ public abstract class BaseEntity extends GTEntity<Long> {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "Numeraciones")
-    @TableGenerator(name = "Numeraciones", table = "numeraciones", allocationSize = 1,
-            pkColumnName = "tabla", valueColumnName = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @TableGenerator(name = "Numeraciones", table = "numeraciones", allocationSize = 1,
+//            pkColumnName = "tabla", valueColumnName = "id")
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;

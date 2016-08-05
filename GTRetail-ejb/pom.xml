@@ -97,8 +97,8 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <user>retail</user>
-                    <password>retail</password>
+                    <user>postgres</user>
+                    <password>postgres</password>
                     <url>jdbc:postgresql://localhost/retail</url>
                     <schemas>
                         <schema>public</schema>

@@ -241,6 +241,7 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void doGuardar() {
+
         try {
 
             if (productoActual.isNew()) {
@@ -248,6 +249,7 @@ public class ProductoEditBean implements Serializable {
                 actualizarPrecios();
 
             }
+
             productosFacade.createOrEdit(productoActual);
             JSFUtil.addInfoMessage("Producto guardado Exitosamente");
             productoActual = productosFacade.find(productoActual.getId());
@@ -302,11 +304,6 @@ public class ProductoEditBean implements Serializable {
         }
         if (!listaExistente) {
             ProductosPrecios pp = new ProductosPrecios();
-//            ProductosPreciosPK ppPk = new ProductosPreciosPK();
-//
-//            ppPk.setIdProducto(productoActual.getId());
-//            ppPk.setIdListaPrecio(listaSeleccionada.getId());
-//            pp.setPk(ppPk);
             pp.setIdListaPrecios(listaSeleccionada);
             pp.setIdProducto(productoActual);
             productoActual.getPrecios().add(pp);
