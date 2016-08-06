@@ -242,6 +242,7 @@ public class ShopCartBean implements Serializable {
         if (!JSFUtil.isPostback()) {
             if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
+                pagoActual.setMontoPagado(BigDecimal.ZERO);
                 pagoActual.setIdFormaPago(formaPagoDefecto);
                 venta.setSaldo(venta.getTotal());
                 doAgregarPago();
