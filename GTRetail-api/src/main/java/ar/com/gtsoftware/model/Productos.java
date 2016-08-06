@@ -127,7 +127,7 @@ public class Productos extends BaseEntity {
 //    @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
 
-    @OneToMany(mappedBy = "idProducto", orphanRemoval = true)
+    @OneToMany(mappedBy = "idProducto", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductosPorcentajes> porcentajes;
 
     @Size(max = 60)
