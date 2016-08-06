@@ -63,7 +63,7 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
         if (!StringUtils.isEmpty(psf.getCodigoPropio())) {
             p = cb.equal(root.get(Productos_.codigoPropio), psf.getCodigoPropio());
         }
-        if (!StringUtils.isEmpty(psf.getTxt())) {
+        if (StringUtils.isNotEmpty(psf.getTxt())) {
 
             for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
                 Predicate pTxt = null;

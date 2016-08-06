@@ -473,7 +473,7 @@
 
                                 <h:outputLabel for="stockMinimoField" value="#{msg.stockMinimo}:"  />
                                 <p:inputText id="stockMinimoField" value="#{productoEditBean.productoActual.stockMinimo}"
-                                             label="#{msg.stockMinimo}">
+                                             label="#{msg.stockMinimo}" required="true">
                                     <f:validateDoubleRange minimum="0"
                                                            maximum="9999999999999999999.99" />
                                 </p:inputText>
@@ -481,7 +481,7 @@
 
                                 <h:outputLabel for="stockActualField" value="#{msg.stockActual}:"  />
                                 <p:inputText id="stockActualField" value="#{productoEditBean.productoActual.stockActual}"
-                                             label="#{msg.stockActual}">
+                                             label="#{msg.stockActual}" required="true">
                                     <f:validateDoubleRange
                                         maximum="9999999999999999999.99" />
                                 </p:inputText>

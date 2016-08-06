@@ -33,7 +33,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private static final long serialVersionUID = 1L;
 
     private String txt;
-    private Integer idProducto;
+    private Long idProducto;
     @Size(max = 100)
     private String codigoPropio;
     private Boolean activo;
@@ -80,11 +80,11 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
         this.txt = txt;
     }
 
-    public Integer getIdProducto() {
+    public Long getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Integer idProducto) {
+    public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
     }
 
