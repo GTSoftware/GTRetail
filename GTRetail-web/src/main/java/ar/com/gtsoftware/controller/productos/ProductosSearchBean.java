@@ -20,6 +20,7 @@ import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
+import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
@@ -27,11 +28,22 @@ import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
@@ -79,6 +91,25 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
             listasPrecio = listasPreciosFacade.findAllBySearchFilter(sf);
         }
         return listasPrecio;
+    }
+    
+    public void imprimirEtiqueta(Productos prod) throws JRException, IOException{
+        List<Productos> productos = new ArrayList<>();
+        
+        productos.add(prod);
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(productos);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/productoEtiqueta.jasper");
+
+        HashMap<String, Object> parameters = new HashMap<>();
+        //parameters.put("codProv","112");
+        
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+        
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + prod.getId() + ".pdf");
+        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+        FacesContext.getCurrentInstance().responseComplete();
     }
 
     public ProductosListasPrecios getListaSeleccionada() {
