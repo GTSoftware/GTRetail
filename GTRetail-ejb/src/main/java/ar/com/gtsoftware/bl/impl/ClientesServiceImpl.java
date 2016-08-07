@@ -24,7 +24,7 @@ import ar.com.gtsoftware.model.PersonasTelefonos;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.PersonasTelefonosSearchFilter;
 import ar.com.gtsoftware.validators.ValidadorCUIT;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -54,7 +54,7 @@ public class ClientesServiceImpl implements ClientesService {
             formatDatosCliente(cliente);
             if (cliente.isNew()) {
 
-                cliente.setFechaAlta(GregorianCalendar.getInstance().getTime());
+                cliente.setFechaAlta(new Date());
                 cliente.setActivo(true);
                 cliente.setCliente(true);
                 personasFacade.create(cliente);

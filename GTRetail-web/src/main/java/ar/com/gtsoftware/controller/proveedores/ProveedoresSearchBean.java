@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.controller.clientes;
+package ar.com.gtsoftware.controller.proveedores;
 
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
@@ -30,21 +30,21 @@ import javax.faces.bean.ViewScoped;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@ManagedBean(name = "clientesSearchBean")
+@ManagedBean(name = "proveedoresSearchBean")
 @ViewScoped
-public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
+public class ProveedoresSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
     private PersonasFacade facade;
 
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
+    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, null, Boolean.TRUE);
 
     /**
-     * Creates a new instance of ClientesSearchBean
+     * Creates a new instance of ProveedoresSearchBean
      */
-    public ClientesSearchBean() {
+    public ProveedoresSearchBean() {
     }
 
     @Override
@@ -64,12 +64,12 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSea
         return filter;
     }
 
-    public List<Personas> findClientesByString(String query) {
+    public List<Personas> findProveedorByString(String query) {
         filter.setTxt(query);
         return facade.findBySearchFilter(filter, 0, 15);
     }
 
-    public String editarCliente(Personas p) {
+    public String editarProveedor(Personas p) {
         return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
 }

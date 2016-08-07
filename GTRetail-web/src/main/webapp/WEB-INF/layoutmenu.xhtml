@@ -24,6 +24,9 @@
                 <p:submenu id="clienteItem" label="#{msg.clientes}" icon="fa fa-fw fa-users">
                     <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
                 </p:submenu>
+                <p:submenu id="proveedorItem" label="#{msg.proveedores}" icon="fa fa-fw fa-users">
+                    <p:menuitem value="#{msg.proveedoresConsulta}" action="/protected/proveedores/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
+                </p:submenu>
                 <p:submenu id="productosSubMenu" label="#{msg.productos}" icon="fa fa-fw fa-tags" >
                     <p:menuitem id="busquedaProductosItem" value="#{msg.busquedaProductos}"
                                 action="/protected/productos/index.xhtml?faces-redirect=true"
