@@ -170,11 +170,11 @@
                             </h:outputText>
                         </p:column>
 
-                        <p:column sortBy="#{producto.idProveedorHabitual.nombreFantasia}">
+                        <p:column sortBy="#{producto.idProveedorHabitual.razonSocial}">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.proveedor}"/>
                             </f:facet>
-                            <h:outputLabel value="#{producto.idProveedorHabitual.nombreFantasia}"/>
+                            <h:outputLabel value="#{producto.idProveedorHabitual.razonSocial}"/>
 
                         </p:column>
                         <p:column  exportable="false" >
@@ -193,7 +193,7 @@
                                 </p:commandButton>
                                 <p:commandButton icon="fa fa-print" action="#{productosSearchBean.imprimirEtiqueta(producto)}"  ajax="false"
                                                  title="Duplicar">
-                                    
+
                                 </p:commandButton>
                             </p:panelGrid>
 

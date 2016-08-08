@@ -1,92 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="175" pageHeight="85" orientation="Landscape" columnWidth="175" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="853fbc68-941f-4e6d-9a55-93417f3bd8ea">
-	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<parameter name="codProv" class="java.lang.String"/>
-	<queryString>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="175" pageHeight="85" orientation="Landscape" columnWidth="165" leftMargin="5" rightMargin="5" topMargin="11" bottomMargin="5" uuid="853fbc68-941f-4e6d-9a55-93417f3bd8ea">
+    <property name="ireport.zoom" value="3.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <queryString>
 		<![CDATA[]]>
-	</queryString>
-	<field name="descripcion" class="java.lang.String">
-		<fieldDescription><![CDATA[descripcion]]></fieldDescription>
-	</field>
-	<field name="codigoPropio" class="java.lang.String">
-		<fieldDescription><![CDATA[codigoPropio]]></fieldDescription>
-	</field>
-	<field name="idMarca" class="ar.com.gtsoftware.model.ProductosMarcas">
-		<fieldDescription><![CDATA[idMarca]]></fieldDescription>
-	</field>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band height="85" splitType="Stretch">
-			<componentElement>
-				<reportElement x="89" y="49" width="80" height="34" uuid="ab58423b-f99d-4a86-8e98-4bab9480df05"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$F{codigoPropio}]]></jr:codeExpression>
-				</jr:Code128>
-			</componentElement>
-			<textField isBlankWhenNull="true">
-				<reportElement x="53" y="33" width="118" height="16" uuid="b494aa55-372a-435e-8a92-c7dc49be7404"/>
-				<textElement>
-					<font fontName="Arial" size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idMarca}.getNombreMarca()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="2" y="33" width="50" height="16" uuid="ed6def17-5242-4c9f-91d4-3f409e0298d0"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<text><![CDATA[Marca:]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="53" y="2" width="118" height="31" uuid="e23651c3-5854-47dd-8638-390ef7971674"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="2" y="2" width="50" height="23" uuid="0bd7c27e-b719-40e4-ae21-f530f345fe10"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<text><![CDATA[Descrip.:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="49" width="55" height="15" uuid="c4acfc3a-ae60-4518-a246-ca15a13872cc"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<text><![CDATA[Cod. Prov. :]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="2" y="65" width="87" height="18" uuid="2fd2f705-3490-40ce-a0fd-cc64b9f7f6bb"/>
-				<textElement>
-					<font fontName="Arial"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{codProv}]]></textFieldExpression>
-			</textField>
-		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band splitType="Stretch"/>
-	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band splitType="Stretch"/>
-	</summary>
+    </queryString>
+    <field name="descripcion" class="java.lang.String">
+        <fieldDescription><![CDATA[descripcion]]></fieldDescription>
+    </field>
+    <field name="codigoPropio" class="java.lang.String">
+        <fieldDescription><![CDATA[codigoPropio]]></fieldDescription>
+    </field>
+    <field name="idMarca" class="ar.com.gtsoftware.model.ProductosMarcas">
+        <fieldDescription><![CDATA[idMarca]]></fieldDescription>
+    </field>
+    <field name="idProveedorHabitual" class="ar.com.gtsoftware.model.Personas"/>
+    <field name="id" class="java.lang.Long"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="69" splitType="Stretch">
+            <textField isBlankWhenNull="true">
+                <reportElement x="2" y="55" width="96" height="13" uuid="8d1a077b-1d1d-46ef-bacc-8759b9896380"/>
+                <textElement verticalAlignment="Bottom">
+                    <font fontName="DejaVu Sans" size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{codigoPropio}]]></textFieldExpression>
+            </textField>
+            <componentElement>
+                <reportElement x="98" y="29" width="67" height="39" uuid="ab58423b-f99d-4a86-8e98-4bab9480df05"/>
+                <jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+                    <jr:codeExpression><![CDATA[$F{id}]]></jr:codeExpression>
+                </jr:Code128>
+            </componentElement>
+            <textField isBlankWhenNull="true">
+                <reportElement x="2" y="29" width="96" height="16" uuid="b494aa55-372a-435e-8a92-c7dc49be7404"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="9" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{idMarca}.getNombreMarca()]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement x="2" y="0" width="163" height="29" uuid="e23651c3-5854-47dd-8638-390ef7971674"/>
+                <textElement textAlignment="Justified" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans" size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="2" y="45" width="55" height="10" uuid="c4acfc3a-ae60-4518-a246-ca15a13872cc"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="8"/>
+                </textElement>
+                <text><![CDATA[Cod. Prov. :]]></text>
+            </staticText>
+            <textField isBlankWhenNull="true">
+                <reportElement x="57" y="45" width="41" height="10" uuid="2fd2f705-3490-40ce-a0fd-cc64b9f7f6bb"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{idProveedorHabitual}.getId()]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
 </jasperReport>

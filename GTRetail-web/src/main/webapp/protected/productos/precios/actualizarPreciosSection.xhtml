@@ -43,7 +43,7 @@
                                              filterMatchMode="contains">
                                 <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
                                 <f:selectItems value="#{productosPreciosBean.proveedoresList}" var="proveedor"
-                                               itemLabel="#{proveedor.nombreFantasia + ' - ' + proveedor.razonSocial}"
+                                               itemLabel="#{proveedor.businessString}"
                                                itemValue="#{proveedor}"/>
 
                             </p:selectOneMenu>

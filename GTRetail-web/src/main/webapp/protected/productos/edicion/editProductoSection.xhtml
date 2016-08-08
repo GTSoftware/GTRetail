@@ -502,7 +502,7 @@
 
                                     <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
                                     <f:selectItems value="#{productoEditBean.listProveedores}" var="proveedor"
-                                                   itemLabel="#{proveedor.nombreFantasia}"
+                                                   itemLabel="#{proveedor.businessString}"
                                                    itemValue="#{proveedor}"/>
 
                                 </p:selectOneMenu>

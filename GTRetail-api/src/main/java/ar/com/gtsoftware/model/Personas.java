@@ -387,11 +387,6 @@ public class Personas extends BaseEntity implements Serializable {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Personas[ idPersona=" + this.getId() + " ]";
-    }
-
     public String getBusinessString() {
         return String.format(BUSINESS_STRING, this.getId(), razonSocial, idTipoDocumento.getNombreTipoDocumento(), documento);
     }
