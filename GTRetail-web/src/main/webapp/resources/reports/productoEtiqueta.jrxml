@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="175" pageHeight="85" orientation="Landscape" columnWidth="165" leftMargin="5" rightMargin="5" topMargin="11" bottomMargin="5" uuid="853fbc68-941f-4e6d-9a55-93417f3bd8ea">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="175" pageHeight="85" orientation="Landscape" columnWidth="165" leftMargin="5" rightMargin="5" topMargin="11" bottomMargin="8" uuid="853fbc68-941f-4e6d-9a55-93417f3bd8ea">
     <property name="ireport.zoom" value="3.0"/>
     <property name="ireport.x" value="0"/>
     <property name="ireport.y" value="0"/>
@@ -21,16 +21,16 @@
         <band splitType="Stretch"/>
     </background>
     <title>
-        <band height="69" splitType="Stretch">
+        <band height="66" splitType="Stretch">
             <textField isBlankWhenNull="true">
-                <reportElement x="2" y="55" width="96" height="13" uuid="8d1a077b-1d1d-46ef-bacc-8759b9896380"/>
+                <reportElement x="2" y="55" width="96" height="11" uuid="8d1a077b-1d1d-46ef-bacc-8759b9896380"/>
                 <textElement verticalAlignment="Bottom">
                     <font fontName="DejaVu Sans" size="9"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{codigoPropio}]]></textFieldExpression>
             </textField>
             <componentElement>
-                <reportElement x="98" y="29" width="67" height="39" uuid="ab58423b-f99d-4a86-8e98-4bab9480df05"/>
+                <reportElement x="98" y="29" width="67" height="37" uuid="ab58423b-f99d-4a86-8e98-4bab9480df05"/>
                 <jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
                     <jr:codeExpression><![CDATA[$F{id}]]></jr:codeExpression>
                 </jr:Code128>
