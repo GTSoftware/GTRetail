@@ -508,6 +508,13 @@
                                 </p:selectOneMenu>
                                 <p:message for="proveedorHabitualField"/>
 
+                                <h:outputLabel for="codigoFabricaField" value="#{msg.codigoFabrica}:"  />
+                                <p:inputText id="codigoFabricaField" value="#{productoEditBean.productoActual.codigoFabricante}"
+                                             label="#{msg.codigoFabrica}" >
+
+                                </p:inputText>
+                                <p:message for="codigoFabricaField"/>
+
                             </p:panelGrid >
                         </p:tab>
 
