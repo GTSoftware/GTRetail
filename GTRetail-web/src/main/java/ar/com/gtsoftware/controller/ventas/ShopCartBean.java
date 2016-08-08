@@ -67,6 +67,7 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * MB para manejar el carrito de compras
@@ -256,6 +257,9 @@ public class ShopCartBean implements Serializable {
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
+            if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio())) {
+                return;
+            }
             producto = productosFacade.findFirstBySearchFilter(productosFilter);
         }
 
@@ -274,6 +278,7 @@ public class ShopCartBean implements Serializable {
 
         cantidad = BigDecimal.ONE;
         productosFilter.setCodigoPropio(null);
+        productosFilter.setIdProducto(null);
 
         ventaModificada = true;
         productoBusquedaSeleccionado = null;
