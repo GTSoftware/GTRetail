@@ -115,7 +115,10 @@ public class FiscalPuntosVenta extends GTEntity<Integer> {
 
     @Override
     public Integer calculateId(String id) {
-        return Integer.parseInt(id);
+        if (StringUtils.isNotEmpty(id)) {
+            return Integer.parseInt(id);
+        }
+        return null;
     }
 
     @Override

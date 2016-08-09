@@ -187,9 +187,8 @@ public class Sucursales extends BaseEntity {
         this.depositosList = depositosList;
     }
 
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Sucursales[ idSucursal=" + this.getId() + " ]";
+    public String getBusinessString() {
+        return String.format("[%d] %s", getId(), nombreSucursal);
     }
 
 }

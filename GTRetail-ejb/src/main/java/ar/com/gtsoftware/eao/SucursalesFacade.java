@@ -16,7 +16,8 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.model.Sucursales_;
+import ar.com.gtsoftware.search.SucursalesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class SucursalesFacade extends AbstractFacade<Sucursales, AbstractSearchFilter> {
+public class SucursalesFacade extends AbstractFacade<Sucursales, SucursalesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,8 +45,13 @@ public class SucursalesFacade extends AbstractFacade<Sucursales, AbstractSearchF
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Sucursales> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Predicate createWhereFromSearchFilter(SucursalesSearchFilter sf, CriteriaBuilder cb, Root<Sucursales> root) {
+        Predicate p = null;
+        if (sf.getActiva() != null) {
+            Predicate p1 = cb.equal(root.get(Sucursales_.activo), sf.getActiva());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
     }
 
 }
