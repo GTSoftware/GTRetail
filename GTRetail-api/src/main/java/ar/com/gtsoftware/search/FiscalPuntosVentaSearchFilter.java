@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.search;
 
 import ar.com.gtsoftware.model.Sucursales;
+import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
 
 /**
  *
@@ -28,10 +29,11 @@ public class FiscalPuntosVentaSearchFilter extends AbstractSearchFilter {
     private Sucursales sucursal;
     private Boolean activo;
     private Integer nroPuntoVenta;
+    private TiposPuntosVenta tipoPuntoVenta;
 
     @Override
     public boolean hasFilter() {
-        return sucursal != null || activo != null || nroPuntoVenta != null;
+        return sucursal != null || activo != null || nroPuntoVenta != null || tipoPuntoVenta != null;
     }
 
     public FiscalPuntosVentaSearchFilter(Sucursales sucursal, Boolean activo) {
@@ -61,6 +63,14 @@ public class FiscalPuntosVentaSearchFilter extends AbstractSearchFilter {
 
     public void setNroPuntoVenta(Integer nroPuntoVenta) {
         this.nroPuntoVenta = nroPuntoVenta;
+    }
+
+    public TiposPuntosVenta getTipoPuntoVenta() {
+        return tipoPuntoVenta;
+    }
+
+    public void setTipoPuntoVenta(TiposPuntosVenta tipoPuntoVenta) {
+        this.tipoPuntoVenta = tipoPuntoVenta;
     }
 
 }

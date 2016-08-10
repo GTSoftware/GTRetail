@@ -62,6 +62,11 @@ public class FiscalPuntosVentaFacade extends AbstractFacade<FiscalPuntosVenta, F
             Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.nroPuntoVenta), pvsf.getNroPuntoVenta());
             p = appendAndPredicate(cb, p, p1);
         }
+
+        if (pvsf.getTipoPuntoVenta() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.tipo), pvsf.getTipoPuntoVenta());
+            p = appendAndPredicate(cb, p, p1);
+        }
         return p;
     }
 

@@ -23,7 +23,7 @@
         <filter-name>Character Encoding Filter</filter-name>
         <filter-class>org.primefaces.olympos.filter.CharacterEncodingFilter</filter-class>
     </filter>
-    
+
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>olympos</param-value>
@@ -31,6 +31,28 @@
     <context-param>
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
         <param-value>/WEB-INF/primefaces-olympos.taglib.xml</param-value>
+    </context-param>
+    <!-- Auto scan REST service -->
+    <context-param>
+        <param-name>resteasy.scan</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>rest/*</url-pattern>
+    </servlet-mapping>
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/rest</param-value>
     </context-param>
     <!--    <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
@@ -141,7 +163,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Administradores</web-resource-name>
-            <url-pattern>/*</url-pattern>
+            <url-pattern>/protected/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>HEAD</http-method>
