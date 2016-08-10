@@ -20,9 +20,10 @@
 
                 <!--                <a id="" class="topbar-link Animated03 Fright"><i class="icon-user7"></i></a>-->
 
-                <p:commandButton id="rolesButton" type="button" value="#{authBackingBean.userLoggedIn.nombreUsuario}"
+                <p:commandButton id="rolesButton" type="button"
                                  icon="fa fa-user"
-                                 class=" Animated03 Fright Responsive100"
+                                 value="#{authBackingBean.userLoggedIn.nombreUsuario}"
+                                 class="  Animated03 Fright"
                                  >
 
                     <p:menu overlay="true" trigger="rolesButton" my="left top" at="left bottom" model="#{authBackingBean.rolesMenuModel}">
@@ -32,7 +33,7 @@
 
                 </p:commandButton>
 
-                <a id="" class="topbar-link Animated03 Fright"><i class="icon-finish3"></i></a>
+                <!--<a id="" class="topbar-link Animated03 Fright">#{authBackingBean.userLoggedIn.nombreUsuario}</a>-->
 
                 <div id="search-bar">
                     <input type="text" placeholder="Search"></input>

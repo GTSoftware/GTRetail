@@ -17,10 +17,8 @@
                     <p:defaultCommand target="buscarButton"/>
 
                     <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                 styleClass="ui-panelgrid-blank" columns="4"
+                                 styleClass="ui-panelgrid-blank" columns="5"
                                  >
-
-
 
 
                         <p:inputText id="searchField" value="#{puntoVentaSearchBean.filter.nroPuntoVenta}"
@@ -39,10 +37,15 @@
                                            itemValue="#{sucu}"/>
 
                         </p:selectOneMenu>
+
+                        <p:selectBooleanCheckbox id="activoField" value="#{puntoVentaSearchBean.filter.activo}"
+                                                 itemLabel="#{msg.activo}"/>
+
                         <p:commandButton id="buscarButton" action="#{puntoVentaSearchBean.doSearch()}" value="Buscar"
                                          update="puntoVentaTable" icon="fa fa-fw fa-search"/>
 
-                        <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus"
+                        <p:commandButton id="nuevoButton" action="edicion/edicionPuntoVenta.xhtml" value="#{msg.nuevo}"
+                                         ajax="false" icon="fa fa-fw fa-plus"
                                          styleClass="GreenButton"/>
 
                     </p:panelGrid >
