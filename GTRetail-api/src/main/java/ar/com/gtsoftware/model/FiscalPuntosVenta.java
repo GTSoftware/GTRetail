@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -122,15 +123,18 @@ public class FiscalPuntosVenta extends GTEntity<Integer> {
     }
 
     @Override
+    @XmlTransient
     public String getStringId() {
         return String.valueOf(nroPuntoVenta);
     }
 
     @Override
+    @XmlTransient
     public boolean isNew() {
         return nroPuntoVenta == null;
     }
 
+    @XmlTransient
     public String getBusinessString() {
         return String.format("%s - %s", StringUtils.leftPad(getStringId(), 4, '0'), tipo);
     }

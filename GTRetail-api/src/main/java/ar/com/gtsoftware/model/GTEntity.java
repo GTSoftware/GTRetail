@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Superclase para todas las entidades del sistema
@@ -32,6 +33,7 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Version
+    @XmlTransient
     private Integer version;
 
     /**
@@ -39,6 +41,7 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
      *
      * @return
      */
+    @XmlTransient
     public abstract boolean isNew();
 
     /**
@@ -61,6 +64,7 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
      *
      * @return
      */
+    @XmlTransient
     public abstract String getStringId();
 
     public Integer getVersion() {

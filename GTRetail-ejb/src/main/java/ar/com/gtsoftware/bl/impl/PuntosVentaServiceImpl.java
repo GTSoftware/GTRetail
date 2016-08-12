@@ -19,8 +19,10 @@ import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
 import ar.com.gtsoftware.eao.SucursalesFacade;
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.Sucursales;
+import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import ar.com.gtsoftware.service.rest.PuntosVentaEndpoint;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -39,18 +41,19 @@ public class PuntosVentaServiceImpl implements PuntosVentaEndpoint {
     private SucursalesFacade sucursalesFacade;
 
     @Override
-    public String getPuntosVentaActivos(Long idSucursal) {
+    public List<FiscalPuntosVenta> getPuntosVentaActivos(Long idSucursal) {
         if (idSucursal == null) {
-            return "Id Sucursal nulo";
+            return Collections.EMPTY_LIST;
         }
         Sucursales sucursal = sucursalesFacade.find(idSucursal);
         if (sucursal == null) {
-            return "Sucursal no válida";
+            return Collections.EMPTY_LIST;
         }
         FiscalPuntosVentaSearchFilter sf = new FiscalPuntosVentaSearchFilter(sucursal, Boolean.TRUE);
+        sf.setTipoPuntoVenta(TiposPuntosVenta.CONTROLADOR_FISCAL);
 
-        List<FiscalPuntosVenta> puntosVenta = facade.findAllBySearchFilter(sf);
-        return puntosVenta.toString();
+        return facade.findAllBySearchFilter(sf);
+
     }
 
     // Add business logic below. (Right-click in editor and choose

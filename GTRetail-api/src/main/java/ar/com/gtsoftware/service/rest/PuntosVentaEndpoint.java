@@ -15,10 +15,13 @@
  */
 package ar.com.gtsoftware.service.rest;
 
+import ar.com.gtsoftware.model.FiscalPuntosVenta;
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -29,7 +32,7 @@ public interface PuntosVentaEndpoint {
 
     @GET
     @Path("/activos")
-    @Produces(value = {"application/json"})
-    public String getPuntosVentaActivos(@QueryParam("sucursal") Long idSucursal);
+    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public List<FiscalPuntosVenta> getPuntosVentaActivos(@QueryParam("sucursal") Long idSucursal);
 
 }
