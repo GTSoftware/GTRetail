@@ -65,29 +65,32 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
         }
         if (StringUtils.isNotEmpty(psf.getTxt())) {
 
-            for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
-                Predicate pTxt = null;
-                String likeS = String.format(LIKE, s);
+            if (StringUtils.isNumeric(psf.getTxt())) {
 
-                Predicate p1 = cb.like(root.get(Productos_.descripcion), likeS);
-                Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), likeS);
-                Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), likeS);
-                Predicate p4 = cb.like(root.get(Productos_.idMarca).get(ProductosMarcas_.nombreMarca), likeS);
-                Predicate pCod = cb.like(root.get(Productos_.codigoPropio), likeS);
+                Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(psf.getTxt()));
+                p = appendOrPredicate(cb, p, pId);
 
-                pTxt = appendOrPredicate(cb, pTxt, pCod);
-                pTxt = appendOrPredicate(cb, pTxt, p1);
-                pTxt = appendOrPredicate(cb, pTxt, p2);
-                pTxt = appendOrPredicate(cb, pTxt, p3);
-                pTxt = appendOrPredicate(cb, pTxt, p4);
+            } else {
 
-                if (StringUtils.isNumeric(s)) {
-                    Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(s));
-                    pTxt = appendOrPredicate(cb, pTxt, pId);
+                for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
+                    Predicate pTxt = null;
+                    String likeS = String.format(LIKE, s);
+
+                    Predicate p1 = cb.like(root.get(Productos_.descripcion), likeS);
+                    Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), likeS);
+                    Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), likeS);
+                    Predicate p4 = cb.like(root.get(Productos_.idMarca).get(ProductosMarcas_.nombreMarca), likeS);
+                    Predicate pCod = cb.like(root.get(Productos_.codigoPropio), likeS);
+
+                    pTxt = appendOrPredicate(cb, pTxt, pCod);
+                    pTxt = appendOrPredicate(cb, pTxt, p1);
+                    pTxt = appendOrPredicate(cb, pTxt, p2);
+                    pTxt = appendOrPredicate(cb, pTxt, p3);
+                    pTxt = appendOrPredicate(cb, pTxt, p4);
+
+                    p = appendAndPredicate(cb, p, pTxt);
                 }
-                p = appendAndPredicate(cb, p, pTxt);
             }
-
         }
         if (psf.getIdProveedorHabitual() != null) {
             Predicate p1 = cb.equal(root.get(Productos_.idProveedorHabitual), psf.getIdProveedorHabitual());
@@ -134,10 +137,10 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
                 Predicate p1 = cb.gt(root.get(Productos_.stockActual), BigDecimal.ZERO);
                 Predicate p2 = cb.isTrue(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
                 pstk = appendAndPredicate(cb, p1, p2);
+            } else {
+                Predicate p2 = cb.isFalse(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
+                pstk = appendOrPredicate(cb, pstk, p2);
             }
-            Predicate p2 = cb.isFalse(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
-            pstk = appendOrPredicate(cb, pstk, p2);
-
             p = appendAndPredicate(cb, p, pstk);
         }
         return p;

@@ -101,6 +101,7 @@ public class FiscalPuntosVenta extends GTEntity<Integer> {
         this.tipo = tipo;
     }
 
+    @XmlTransient
     public Sucursales getSucursal() {
         return sucursal;
     }
