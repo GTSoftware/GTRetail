@@ -26,6 +26,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -146,6 +148,7 @@ public class ComprobantesLineas extends BaseEntity {
         this.cantidadEntregada = cantidadEntregada;
     }
 
+    @XmlTransient
     public Comprobantes getIdComprobante() {
         return idComprobante;
     }
@@ -154,6 +157,7 @@ public class ComprobantesLineas extends BaseEntity {
         this.idComprobante = idComprobante;
     }
 
+    @XmlTransient
     public Productos getIdProducto() {
         return idProducto;
     }
@@ -167,6 +171,7 @@ public class ComprobantesLineas extends BaseEntity {
      *
      * @return
      */
+    @XmlTransient
     public Integer getItem() {
         return item;
     }
@@ -188,9 +193,12 @@ public class ComprobantesLineas extends BaseEntity {
         this.descripcion = descripcion;
     }
 
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.VentasLineas[ idLineaVenta=" + this.getId() + " ]";
+    /**
+     * Retorna la descripción imprimible o mostrable hasta los 90 caracteres.
+     *
+     * @return
+     */
+    public String getDescripcionLinea() {
+        return StringUtils.left(String.format("[%d] &s", idProducto.getId(), descripcion), 90);
     }
-
 }

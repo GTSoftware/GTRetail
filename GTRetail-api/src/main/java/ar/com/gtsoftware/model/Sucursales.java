@@ -154,6 +154,7 @@ public class Sucursales extends BaseEntity {
         this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
     }
 
+    @XmlTransient
     public UbicacionProvincias getIdProvincia() {
         return idProvincia;
     }
@@ -162,6 +163,7 @@ public class Sucursales extends BaseEntity {
         this.idProvincia = idProvincia;
     }
 
+    @XmlTransient
     public UbicacionPaises getIdPais() {
         return idPais;
     }
@@ -170,6 +172,7 @@ public class Sucursales extends BaseEntity {
         this.idPais = idPais;
     }
 
+    @XmlTransient
     public UbicacionLocalidades getIdLocalidad() {
         return idLocalidad;
     }

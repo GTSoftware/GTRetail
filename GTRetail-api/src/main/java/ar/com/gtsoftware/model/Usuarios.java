@@ -158,6 +158,7 @@ public class Usuarios extends BaseEntity implements Serializable {
      *
      * @return
      */
+    @XmlTransient
     public String getPassword() {
         return password;
     }

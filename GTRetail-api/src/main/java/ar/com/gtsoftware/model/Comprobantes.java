@@ -167,7 +167,6 @@ public class Comprobantes extends BaseEntity {
         this.anulada = anulada;
     }
 
-    @XmlTransient
     public List<ComprobantesLineas> getComprobantesLineasList() {
         return comprobantesLineasList;
     }
@@ -184,6 +183,7 @@ public class Comprobantes extends BaseEntity {
         this.idUsuario = idUsuario;
     }
 
+    @XmlTransient
     public Sucursales getIdSucursal() {
         return idSucursal;
     }
@@ -208,6 +208,7 @@ public class Comprobantes extends BaseEntity {
         this.idCondicionComprobante = idCondicionComprobante;
     }
 
+    @XmlTransient
     public FiscalLibroIvaVentas getIdRegistro() {
         return idRegistro;
     }
