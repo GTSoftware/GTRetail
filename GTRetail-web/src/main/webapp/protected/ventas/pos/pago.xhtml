@@ -9,7 +9,14 @@
 
     <!-- Contenido -->
     <ui:define name="content">
-
+        <script  type="text/javascript">
+            //<![CDATA[
+            jQuery(document).ready(function () {
+                Olympos.changeBodyClass('SlimMenu');
+                return false;
+            });
+            //]]>
+        </script>
 
         <ui:include src="cargaPagos.xhtml" />
 
