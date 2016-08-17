@@ -39,6 +39,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.hostField = new System.Windows.Forms.TextBox();
             this.testWSButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.puntoVentaCombo = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // modeloFiscalCombo
@@ -71,7 +73,7 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(325, 161);
+            this.saveButton.Location = new System.Drawing.Point(329, 189);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 4;
@@ -81,7 +83,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(244, 161);
+            this.cancelButton.Location = new System.Drawing.Point(248, 189);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
@@ -128,24 +130,45 @@
             // 
             this.hostField.Location = new System.Drawing.Point(121, 96);
             this.hostField.Name = "hostField";
-            this.hostField.Size = new System.Drawing.Size(279, 20);
+            this.hostField.Size = new System.Drawing.Size(202, 20);
             this.hostField.TabIndex = 3;
             // 
             // testWSButton
             // 
-            this.testWSButton.Location = new System.Drawing.Point(121, 122);
+            this.testWSButton.Location = new System.Drawing.Point(329, 93);
             this.testWSButton.Name = "testWSButton";
             this.testWSButton.Size = new System.Drawing.Size(75, 23);
             this.testWSButton.TabIndex = 8;
-            this.testWSButton.Text = "&Test";
+            this.testWSButton.Text = "C&argar";
             this.testWSButton.UseVisualStyleBackColor = true;
             this.testWSButton.Click += new System.EventHandler(this.testWSButton_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 125);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(83, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Punto de venta:";
+            // 
+            // puntoVentaCombo
+            // 
+            this.puntoVentaCombo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.puntoVentaCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.puntoVentaCombo.FormattingEnabled = true;
+            this.puntoVentaCombo.Location = new System.Drawing.Point(121, 122);
+            this.puntoVentaCombo.Name = "puntoVentaCombo";
+            this.puntoVentaCombo.Size = new System.Drawing.Size(283, 21);
+            this.puntoVentaCombo.TabIndex = 9;
             // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 196);
+            this.ClientSize = new System.Drawing.Size(412, 224);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.puntoVentaCombo);
             this.Controls.Add(this.testWSButton);
             this.Controls.Add(this.hostField);
             this.Controls.Add(this.label4);
@@ -179,6 +202,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox hostField;
         private System.Windows.Forms.Button testWSButton;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox puntoVentaCombo;
     }
 }
 

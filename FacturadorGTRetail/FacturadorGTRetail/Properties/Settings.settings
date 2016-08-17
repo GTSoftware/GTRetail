@@ -14,5 +14,8 @@
     <Setting Name="Host" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://192.168.0.2:8080/GTRetail</Value>
     </Setting>
+    <Setting Name="Punto_Venta" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
