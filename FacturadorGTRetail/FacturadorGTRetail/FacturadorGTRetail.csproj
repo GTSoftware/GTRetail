@@ -17,6 +17,7 @@
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <StartupObject>FacturadorGTRetail.Program</StartupObject>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -115,6 +116,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PuntoVenta.cs" />
+    <Compile Include="RESTEndpoints.cs" />
+    <Compile Include="RestResult.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -70,5 +70,17 @@ namespace FacturadorGTRetail.Properties {
                 this["Host"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Punto_Venta {
+            get {
+                return ((int)(this["Punto_Venta"]));
+            }
+            set {
+                this["Punto_Venta"] = value;
+            }
+        }
     }
 }

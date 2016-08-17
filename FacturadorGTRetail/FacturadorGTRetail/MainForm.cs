@@ -114,7 +114,8 @@ namespace FacturadorGTRetail
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ConfigForm cf = new ConfigForm();
-            cf.Show();
+            cf.ShowDialog(this);
+            
         }
 
        
