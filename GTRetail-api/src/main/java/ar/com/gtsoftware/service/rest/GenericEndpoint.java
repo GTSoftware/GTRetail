@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.service.rest;
 
+import ar.com.gtsoftware.model.dto.ResultadoDTO;
 import java.time.LocalDateTime;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -31,7 +32,7 @@ public interface GenericEndpoint {
     @GET
     @Path("/ping")
     @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public String getPing();
+    public ResultadoDTO getPing();
 
     @GET
     @Path("/date")
