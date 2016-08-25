@@ -26,7 +26,7 @@
             <textField isBlankWhenNull="true">
                 <reportElement x="2" y="55" width="96" height="11" uuid="8d1a077b-1d1d-46ef-bacc-8759b9896380"/>
                 <textElement verticalAlignment="Bottom">
-                    <font fontName="SansSerif" size="9"/>
+                    <font fontName="SansSerif" size="8"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{codigoPropio}]]></textFieldExpression>
             </textField>
@@ -46,7 +46,7 @@
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                 <reportElement x="2" y="0" width="163" height="29" uuid="e23651c3-5854-47dd-8638-390ef7971674"/>
                 <textElement textAlignment="Justified" verticalAlignment="Top">
-                    <font fontName="SansSerif" size="8"/>
+                    <font fontName="SansSerif" size="7"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
             </textField>
