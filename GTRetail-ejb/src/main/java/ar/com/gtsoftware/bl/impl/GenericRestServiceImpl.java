@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.model.dto.ResultadoDTO;
 import ar.com.gtsoftware.service.rest.GenericEndpoint;
 import java.time.LocalDateTime;
 import javax.ejb.Stateless;
@@ -27,8 +28,8 @@ import javax.ejb.Stateless;
 public class GenericRestServiceImpl implements GenericEndpoint {
 
     @Override
-    public String getPing() {
-        return "{\"result\": pong}";
+    public ResultadoDTO getPing() {
+        return new ResultadoDTO("pong");
     }
 
     @Override
