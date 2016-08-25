@@ -199,6 +199,6 @@ public class ComprobantesLineas extends BaseEntity {
      * @return
      */
     public String getDescripcionLinea() {
-        return StringUtils.left(String.format("[%d] &s", idProducto.getId(), descripcion), 90);
+        return StringUtils.left(String.format("[%d] %s", idProducto.getId(), descripcion), 90);
     }
 }
