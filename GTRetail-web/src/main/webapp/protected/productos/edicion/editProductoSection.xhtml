@@ -171,7 +171,7 @@
                                                      action="#{productoEditBean.nuevoSubRubro}"
                                                      immediate="true"
                                                      oncomplete="PF('dlgSubRubro').show();"
-                                                     update="nuevoSubRubroForm"
+                                                     update=":nuevoSubRubroForm"
                                                      rendered="#{productoEditBean.productoActual.idRubro ne null}"/>
                                 </h:panelGroup>
                                 <p:message for="subRubroField"/>
@@ -201,7 +201,7 @@
                                                      action="#{productoEditBean.cargarNuevaMarca}"
                                                      immediate="true"
                                                      oncomplete="PF('dlgNuevaMarca').show();"
-                                                     update="nuevaMarca"
+                                                     update=":nuevaMarca"
                                                      />
 
                                 </h:panelGroup>
@@ -259,32 +259,6 @@
                                 </p:inputText>
                                 <p:message for="unidadCompraVentaField"/>
                             </p:panelGrid >
-
-                            <p:dialog modal="true" header="#{msg.nuevaMarca}"
-                                      widgetVar="dlgNuevaMarca"
-                                      height="100">
-                                <h:form id="nuevaMarca">
-
-
-                                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
-
-                                        <h:outputLabel for="nombreMarcaField" value="#{msg.marca}:" />
-                                        <p:inputText id="nombreMarcaField"
-                                                     value="#{productoEditBean.nuevaMarca.nombreMarca}"
-                                                     required="true" requiredMessage="#{msg.ingresarValor}"
-                                                     converter="#{stringFormatConverter}"/>
-                                        <p:message for="nombreMarcaField"/>
-                                    </p:panelGrid >
-                                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
-                                        <p:commandButton  value="#{msg.guardar}"
-                                                          action="#{productoEditBean.doGuardarMarca}"
-                                                          update=":editProductoForm:editProductoTabView:marcaField"
-                                                          onclick="PF('dlgNuevaMarca').hide();"/>
-
-                                    </p:panelGrid >
-                                </h:form>
-                            </p:dialog>
-
 
                         </p:tab>
 
@@ -698,7 +672,9 @@
                                            value="#{msg.productoRubro}:" />
                             <p:inputText id="descripcionRubroField"
                                          value="#{productoEditBean.productosRubrosNuevo.nombreRubro}"
-                                         required="true" requiredMessage="#{msg.ingresarValor}"/>
+                                         required="true"
+                                         requiredMessage="#{msg.ingresarValor}"
+                                         converter="#{stringFormatConverter}"/>
                             <p:message for="descripcionRubroField"/>
                         </p:panelGrid >
                         <p:panelGrid layout="grid"
@@ -750,13 +726,39 @@
                             <p:commandButton  value="#{msg.guardar}"
                                               action="#{productoEditBean.doGuardarSubRubro}"
                                               update=":editProductoForm:editProductoTabView"
-                                              onclick="PF('dlgSubRubro').hide();"/>
+                                              oncomplete="PF('dlgSubRubro').hide();"/>
 
                         </p:panelGrid >
 
                     </p:dialog>
                 </h:form>
 
+                <h:form id="nuevaMarca">
+                    <p:dialog modal="true" header="#{msg.nuevaMarca}"
+                              widgetVar="dlgNuevaMarca"
+                              height="100">
+
+
+
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
+
+                            <h:outputLabel for="nombreMarcaField" value="#{msg.marca}:" />
+                            <p:inputText id="nombreMarcaField"
+                                         value="#{productoEditBean.nuevaMarca.nombreMarca}"
+                                         required="true" requiredMessage="#{msg.ingresarValor}"
+                                         converter="#{stringFormatConverter}"/>
+                            <p:message for="nombreMarcaField"/>
+                        </p:panelGrid >
+                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
+                            <p:commandButton  value="#{msg.guardar}"
+                                              action="#{productoEditBean.doGuardarMarca}"
+                                              update=":editProductoForm:editProductoTabView:marcaField"
+                                              onclick="PF('dlgNuevaMarca').hide();"/>
+
+                        </p:panelGrid >
+
+                    </p:dialog>
+                </h:form>
             </div>
         </div>
     </div>
