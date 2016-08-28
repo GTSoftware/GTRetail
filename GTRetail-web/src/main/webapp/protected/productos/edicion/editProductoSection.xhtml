@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 
     <div class="Container100 Responsive100 NoIndent">
@@ -29,6 +30,8 @@
                             <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
                         </h:outputLabel>
                     </p:panelGrid >
+
+
 
                     <p:tabView id="editProductoTabView" >
 
@@ -88,6 +91,8 @@
 
                         <!--Clasificación-->
                         <p:tab id='clasificacionTab' title="Clasificación" >
+
+
                             <p:panelGrid  id="clasificacionGrid"
                                           layout="grid"
                                           style="border:0px !important; background:none;"
@@ -98,6 +103,8 @@
                                                  value="#{productoEditBean.productoActual.idTipoProveeduria}"
                                                  required="true" requiredMessage="#{msg.seleccionarUno}"
                                                  converter="omnifaces.SelectItemsIndexConverter"
+                                                 filter="true"
+                                                 filterMatchMode="contains"
                                                  >
                                     <f:selectItem  noSelectionOption="true"
                                                    itemLabel="#{msg.seleccionarUno}"
@@ -120,6 +127,8 @@
                                                      valueChangeListener="#{productoEditBean.cargarSubRubros}"
                                                      converter="omnifaces.SelectItemsIndexConverter"
                                                      label="#{msg.productoRubro}"
+                                                     filter="true"
+                                                     filterMatchMode="contains"
                                                      >
 
                                         <f:selectItem  noSelectionOption="true"
@@ -135,10 +144,10 @@
 
 
                                     <p:commandButton icon="fa fa-fw fa-plus"
-                                                     action="#{productoEditBean.nuevoRubro}"
+                                                     actionListener="#{productoEditBean.nuevoRubro}"
                                                      immediate="true"
-                                                     update=":nuevoRubroForm"
-                                                     oncomplete="PF('dlg2').show();" />
+                                                     update="editProductoForm:dialogsForm"
+                                                     oncomplete="PF('nuevoRubroDlg').show();" />
 
                                 </h:panelGroup>
                                 <p:message for="rubroField"/>
@@ -154,6 +163,8 @@
                                                      converter="omnifaces.SelectItemsIndexConverter"
                                                      requiredMessage="#{msg.seleccionarUno}"
                                                      label="#{msg.productoSubRubro}"
+                                                     filter="true"
+                                                     filterMatchMode="contains"
                                                      >
 
                                         <f:selectItem  noSelectionOption="true"
@@ -168,10 +179,10 @@
 
                                     <p:commandButton id="btnNuevoSubRubro"
                                                      icon="fa fa-fw fa-plus"
-                                                     action="#{productoEditBean.nuevoSubRubro}"
+                                                     actionListener="#{productoEditBean.nuevoSubRubro}"
                                                      immediate="true"
                                                      oncomplete="PF('dlgSubRubro').show();"
-                                                     update=":nuevoSubRubroForm"
+                                                     update="editProductoForm:dialogsForm"
                                                      rendered="#{productoEditBean.productoActual.idRubro ne null}"/>
                                 </h:panelGroup>
                                 <p:message for="subRubroField"/>
@@ -184,7 +195,9 @@
                                                      value="#{productoEditBean.productoActual.idMarca}"
                                                      required="true" requiredMessage="#{msg.ingresarValor}"
                                                      converter="omnifaces.SelectItemsIndexConverter"
-                                                     label="#{msg.marca}">
+                                                     label="#{msg.marca}"
+                                                     filter="true"
+                                                     filterMatchMode="contains">
                                         <f:selectItem noSelectionOption="true"
                                                       itemLabel="#{msg.seleccionarUno}"
                                                       itemValue="#{null}"/>
@@ -198,10 +211,10 @@
 
                                     <p:commandButton id="btnNuevaMarca"
                                                      icon="fa fa-fw fa-plus"
-                                                     action="#{productoEditBean.cargarNuevaMarca}"
+                                                     actionListener="#{productoEditBean.cargarNuevaMarca}"
                                                      immediate="true"
                                                      oncomplete="PF('dlgNuevaMarca').show();"
-                                                     update=":nuevaMarca"
+                                                     update="editProductoForm:dialogsForm"
                                                      />
 
                                 </h:panelGroup>
@@ -637,6 +650,8 @@
 
                     </p:tabView>
 
+
+
                     <div class="SeparatorFull" />
 
                     <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
@@ -659,106 +674,14 @@
                     </p:panelGrid >
 
 
+                    <ui:fragment id="dialogsForm" >
+                        <ui:include src="dialogos.xhtml"/>
+                    </ui:fragment>
                 </h:form>
 
-                <h:form id="nuevoRubroForm">
-                    <p:dialog modal="true" header="#{msg.nuevoRubro}" widgetVar="dlg2"  height="100">
-
-
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
-
-
-                            <h:outputLabel for="descripcionRubroField"
-                                           value="#{msg.productoRubro}:" />
-                            <p:inputText id="descripcionRubroField"
-                                         value="#{productoEditBean.productosRubrosNuevo.nombreRubro}"
-                                         required="true"
-                                         requiredMessage="#{msg.ingresarValor}"
-                                         converter="#{stringFormatConverter}"/>
-                            <p:message for="descripcionRubroField"/>
-                        </p:panelGrid >
-                        <p:panelGrid layout="grid"
-                                     styleClass="ui-panelgrid-blank" columns="2">
-                            <p:commandButton  value="#{msg.guardar}"
-                                              action="#{productoEditBean.doGuardarRubro}"
-                                              update=":editProductoForm:editProductoTabView"
-                                              onclick="PF('dlg2').hide();" />
 
 
 
-                        </p:panelGrid >
-                    </p:dialog>
-
-
-                </h:form>
-                <h:form id="nuevoSubRubroForm">
-                    <p:dialog modal="true" header="#{msg.nuevoSubRubro}"
-                              widgetVar="dlgSubRubro"
-                              appendTo="@(body)"
-                              height="100">
-
-                        <p:panelGrid layout="grid"
-                                     styleClass="ui-panelgrid-blank"
-                                     columns="2">
-
-                            <h:outputLabel for="descripcionRubro"
-                                           value="#{msg.productoRubro}:" />
-                            <h:outputText  id="descripcionRubro"
-                                           value="#{productoEditBean.productosSubRubrosNuevo.idRubro.nombreRubro}"
-                                           />
-                        </p:panelGrid >
-
-                        <p:panelGrid layout="grid"
-                                     styleClass="ui-panelgrid-blank"
-                                     columns="3" >
-
-                            <h:outputLabel for="descripcionSubRubroField"
-                                           value="#{msg.productoSubRubro}:" />
-                            <p:inputText id="descripcionSubRubroField"
-                                         value="#{productoEditBean.productosSubRubrosNuevo.nombreSubRubro}"
-                                         required="true"
-                                         requiredMessage="#{msg.ingresarValor}"
-                                         converter="#{stringFormatConverter}"/>
-                            <p:message for="descripcionSubRubroField"/>
-                        </p:panelGrid >
-                        <p:panelGrid layout="grid"
-                                     styleClass="ui-panelgrid-blank" columns="2">
-                            <p:commandButton  value="#{msg.guardar}"
-                                              action="#{productoEditBean.doGuardarSubRubro}"
-                                              update=":editProductoForm:editProductoTabView"
-                                              oncomplete="PF('dlgSubRubro').hide();"/>
-
-                        </p:panelGrid >
-
-                    </p:dialog>
-                </h:form>
-
-                <h:form id="nuevaMarca">
-                    <p:dialog modal="true" header="#{msg.nuevaMarca}"
-                              widgetVar="dlgNuevaMarca"
-                              height="100">
-
-
-
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
-
-                            <h:outputLabel for="nombreMarcaField" value="#{msg.marca}:" />
-                            <p:inputText id="nombreMarcaField"
-                                         value="#{productoEditBean.nuevaMarca.nombreMarca}"
-                                         required="true" requiredMessage="#{msg.ingresarValor}"
-                                         converter="#{stringFormatConverter}"/>
-                            <p:message for="nombreMarcaField"/>
-                        </p:panelGrid >
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2">
-                            <p:commandButton  value="#{msg.guardar}"
-                                              action="#{productoEditBean.doGuardarMarca}"
-                                              update=":editProductoForm:editProductoTabView:marcaField"
-                                              onclick="PF('dlgNuevaMarca').hide();"/>
-
-                        </p:panelGrid >
-
-                    </p:dialog>
-                </h:form>
             </div>
         </div>
     </div>

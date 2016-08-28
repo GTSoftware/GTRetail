@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <!--DIALOGOS-->
+    <p:dialog id="nuevoRubroDlg" modal="true" header="#{msg.nuevoRubro}" widgetVar="nuevoRubroDlg" appendTo="@(body)" >
+
+
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3">
+
+
+            <h:outputLabel for="descripcionRubroField"
+                           value="#{msg.productoRubro}:" />
+            <p:inputText id="descripcionRubroField"
+                         value="#{productoEditBean.productosRubrosNuevo.nombreRubro}"
+                         required="true"
+                         requiredMessage="#{msg.ingresarValor}"
+                         converter="#{stringFormatConverter}"/>
+            <p:message for="descripcionRubroField"/>
+        </p:panelGrid >
+
+        <p:commandButton  id="guardarRubroButton"
+                          value="#{msg.guardar}"
+                          action="#{productoEditBean.doGuardarRubro}"
+
+                          oncomplete="PF('nuevoRubroDlg').hide();"
+                          />
+
+
+
+
+    </p:dialog>
+
+
+    <p:dialog id="dlgSubRubro" modal="true" header="#{msg.nuevoSubRubro}"
+              widgetVar="dlgSubRubro"
+              appendTo="@(body)"
+              >
+
+        <p:panelGrid layout="grid"
+                     styleClass="ui-panelgrid-blank"
+                     columns="2">
+
+            <h:outputLabel for="descripcionRubro"
+                           value="#{msg.productoRubro}:" />
+            <h:outputText  id="descripcionRubro"
+                           value="#{productoEditBean.productosSubRubrosNuevo.idRubro.nombreRubro}"
+                           />
+        </p:panelGrid >
+
+        <p:panelGrid layout="grid"
+                     styleClass="ui-panelgrid-blank"
+                     columns="3" >
+
+            <h:outputLabel for="descripcionSubRubroField"
+                           value="#{msg.productoSubRubro}:" />
+            <p:inputText id="descripcionSubRubroField"
+                         value="#{productoEditBean.productosSubRubrosNuevo.nombreSubRubro}"
+                         required="true"
+                         requiredMessage="#{msg.ingresarValor}"
+                         converter="#{stringFormatConverter}"/>
+            <p:message for="descripcionSubRubroField"/>
+        </p:panelGrid >
+
+        <p:commandButton  value="#{msg.guardar}"
+                          action="#{productoEditBean.doGuardarSubRubro}"
+                          update=":editProductoForm:editProductoTabView"
+                          oncomplete="PF('dlgSubRubro').hide();"/>
+
+
+
+    </p:dialog>
+
+
+
+    <p:dialog id="dlgNuevaMarca" modal="true" header="#{msg.nuevaMarca}"
+              widgetVar="dlgNuevaMarca"
+              appendTo="@(body)"
+              >
+
+
+        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
+
+            <h:outputLabel for="nombreMarcaField" value="#{msg.marca}:" />
+            <p:inputText id="nombreMarcaField"
+                         value="#{productoEditBean.nuevaMarca.nombreMarca}"
+                         required="true" requiredMessage="#{msg.ingresarValor}"
+                         converter="#{stringFormatConverter}"/>
+            <p:message for="nombreMarcaField"/>
+        </p:panelGrid >
+
+        <p:commandButton  value="#{msg.guardar}"
+                          action="#{productoEditBean.doGuardarMarca}"
+                          update=":editProductoForm:editProductoTabView:marcaField"
+                          onclick="PF('dlgNuevaMarca').hide();"/>
+
+
+
+    </p:dialog>
+    <!--DIALOGOS-->
+</ui:composition>
