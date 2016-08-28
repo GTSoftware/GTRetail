@@ -201,4 +201,8 @@ public class ComprobantesLineas extends BaseEntity {
     public String getDescripcionLinea() {
         return StringUtils.left(String.format("[%d] %s", idProducto.getId(), descripcion), 90);
     }
+
+    public BigDecimal getIva() {
+        return this.idProducto.getIdAlicuotaIva().getValorAlicuota();
+    }
 }
