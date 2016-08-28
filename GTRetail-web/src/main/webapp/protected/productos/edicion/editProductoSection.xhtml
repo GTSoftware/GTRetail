@@ -144,9 +144,9 @@
 
 
                                     <p:commandButton icon="fa fa-fw fa-plus"
-                                                     actionListener="#{productoEditBean.nuevoRubro}"
+                                                     action="#{productoEditBean.nuevoRubro}"
                                                      immediate="true"
-                                                     update="editProductoForm:dialogsForm"
+                                                     update="nuevoRubroDlg"
                                                      oncomplete="PF('nuevoRubroDlg').show();" />
 
                                 </h:panelGroup>
@@ -179,10 +179,10 @@
 
                                     <p:commandButton id="btnNuevoSubRubro"
                                                      icon="fa fa-fw fa-plus"
-                                                     actionListener="#{productoEditBean.nuevoSubRubro}"
+                                                     action="#{productoEditBean.nuevoSubRubro}"
                                                      immediate="true"
                                                      oncomplete="PF('dlgSubRubro').show();"
-                                                     update="editProductoForm:dialogsForm"
+                                                     update="dlgSubRubro"
                                                      rendered="#{productoEditBean.productoActual.idRubro ne null}"/>
                                 </h:panelGroup>
                                 <p:message for="subRubroField"/>
@@ -211,10 +211,11 @@
 
                                     <p:commandButton id="btnNuevaMarca"
                                                      icon="fa fa-fw fa-plus"
-                                                     actionListener="#{productoEditBean.cargarNuevaMarca}"
+                                                     action="#{productoEditBean.cargarNuevaMarca}"
                                                      immediate="true"
+                                                     update="dlgNuevaMarca"
                                                      oncomplete="PF('dlgNuevaMarca').show();"
-                                                     update="editProductoForm:dialogsForm"
+
                                                      />
 
                                 </h:panelGroup>
@@ -674,12 +675,12 @@
                     </p:panelGrid >
 
 
-                    <ui:fragment id="dialogsForm" >
-                        <ui:include src="dialogos.xhtml"/>
-                    </ui:fragment>
+
                 </h:form>
 
 
+
+                <ui:include src="dialogos.xhtml"/>
 
 
             </div>

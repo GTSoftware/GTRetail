@@ -188,7 +188,6 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void doGuardarRubro() {
-        LOG.log(Level.SEVERE, "Guardando rubrooo!");
 
         try {
             productosRubrosFacade.create(productosRubrosNuevo);
