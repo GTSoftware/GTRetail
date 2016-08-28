@@ -40,9 +40,10 @@
             this.FechaCompFieldData = new BrightIdeasSoftware.OLVColumn();
             this.ClienteCompFieldData = new BrightIdeasSoftware.OLVColumn();
             this.LetraCompFieldData = new BrightIdeasSoftware.OLVColumn();
-            this.UsuarioCompFieldData = new BrightIdeasSoftware.OLVColumn();
             this.TipoCompFieldData = new BrightIdeasSoftware.OLVColumn();
             this.TotalCompFieldData = new BrightIdeasSoftware.OLVColumn();
+            this.UsuarioCompFieldData = new BrightIdeasSoftware.OLVColumn();
+            this.imprimirButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.comprobantesDataList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -101,7 +102,7 @@
             // 
             // buscarButton
             // 
-            this.buscarButton.Location = new System.Drawing.Point(528, 41);
+            this.buscarButton.Location = new System.Drawing.Point(600, 41);
             this.buscarButton.Name = "buscarButton";
             this.buscarButton.Size = new System.Drawing.Size(75, 23);
             this.buscarButton.TabIndex = 6;
@@ -118,9 +119,6 @@
             this.comprobantesDataList.AllColumns.Add(this.TipoCompFieldData);
             this.comprobantesDataList.AllColumns.Add(this.TotalCompFieldData);
             this.comprobantesDataList.AllColumns.Add(this.UsuarioCompFieldData);
-            this.comprobantesDataList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.comprobantesDataList.CellEditUseWholeCell = false;
             this.comprobantesDataList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.IdCompFieldData,
@@ -138,7 +136,7 @@
             this.comprobantesDataList.Location = new System.Drawing.Point(15, 81);
             this.comprobantesDataList.Name = "comprobantesDataList";
             this.comprobantesDataList.ShowHeaderInAllViews = false;
-            this.comprobantesDataList.Size = new System.Drawing.Size(588, 189);
+            this.comprobantesDataList.Size = new System.Drawing.Size(660, 160);
             this.comprobantesDataList.TabIndex = 7;
             this.comprobantesDataList.UseCompatibleStateImageBehavior = false;
             this.comprobantesDataList.View = System.Windows.Forms.View.Details;
@@ -165,12 +163,6 @@
             this.LetraCompFieldData.AspectName = "letra";
             this.LetraCompFieldData.Text = "Letra";
             // 
-            // UsuarioCompFieldData
-            // 
-            this.UsuarioCompFieldData.AspectName = "idUsuario.nombreUsuario";
-            this.UsuarioCompFieldData.Text = "Usuario";
-            this.UsuarioCompFieldData.Width = 100;
-            // 
             // TipoCompFieldData
             // 
             this.TipoCompFieldData.AspectName = "tipoComprobante.nombreComprobante";
@@ -182,12 +174,29 @@
             this.TotalCompFieldData.AspectName = "total";
             this.TotalCompFieldData.Text = "Total";
             // 
+            // UsuarioCompFieldData
+            // 
+            this.UsuarioCompFieldData.AspectName = "idUsuario.nombreUsuario";
+            this.UsuarioCompFieldData.Text = "Usuario";
+            this.UsuarioCompFieldData.Width = 100;
+            // 
+            // imprimirButton
+            // 
+            this.imprimirButton.Location = new System.Drawing.Point(600, 247);
+            this.imprimirButton.Name = "imprimirButton";
+            this.imprimirButton.Size = new System.Drawing.Size(75, 23);
+            this.imprimirButton.TabIndex = 8;
+            this.imprimirButton.Text = "Imprimir";
+            this.imprimirButton.UseVisualStyleBackColor = true;
+            this.imprimirButton.Click += new System.EventHandler(this.imprimirButton_Click);
+            // 
             // OperacionesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(615, 282);
+            this.ClientSize = new System.Drawing.Size(687, 282);
+            this.Controls.Add(this.imprimirButton);
             this.Controls.Add(this.comprobantesDataList);
             this.Controls.Add(this.buscarButton);
             this.Controls.Add(this.label3);
@@ -221,6 +230,7 @@
         private BrightIdeasSoftware.OLVColumn UsuarioCompFieldData;
         private BrightIdeasSoftware.OLVColumn TipoCompFieldData;
         private BrightIdeasSoftware.OLVColumn TotalCompFieldData;
+        private System.Windows.Forms.Button imprimirButton;
         
     }
 }

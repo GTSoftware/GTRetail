@@ -9,11 +9,14 @@ using System.Windows.Forms;
 using RestSharp;
 using FacturadorGTRetail.REST;
 using FacturadorGTRetail.DTO;
+using Newtonsoft.Json;
 
 namespace FacturadorGTRetail
 {
     public partial class OperacionesForm : Form
     {
+
+        
         public OperacionesForm()
         {
             InitializeComponent();
@@ -52,11 +55,11 @@ namespace FacturadorGTRetail
 
         private void buscarButton_Click(object sender, EventArgs e)
         {
-            buscarButton.Enabled = false;
+            this.Enabled = false;
             //comprobantesDataList.Clear();
 
             if (!validateRest()) {
-                buscarButton.Enabled = true;
+                this.Enabled = true;
                 return;
             }
             if (idComprobanteField.Text != null && idComprobanteField.Text.Length > 0) { 
@@ -67,7 +70,7 @@ namespace FacturadorGTRetail
                 compList.Add(getComprobanteById(int.Parse(idComprobanteField.Text)));
                 comprobantesDataList.SetObjects(compList);
             }
-            buscarButton.Enabled = true;
+            this.Enabled = true;
 
         }
 
@@ -78,17 +81,47 @@ namespace FacturadorGTRetail
             request.AddParameter("idComprobante", id,ParameterType.UrlSegment);
             request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-Type", "application/json");
+            
 
-            IRestResponse<Comprobante> response = client.Execute<Comprobante>(request);
+            IRestResponse response = client.Execute(request);
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                MessageBox.Show(String.Format("Ocurrio un error al probar el servicio web: {0}", response.ErrorMessage),
+                MessageBox.Show(String.Format("Ocurrio un error al obtener la respuesta: {0}", response.ErrorMessage),
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 
                 return null;
             }
-            return response.Data;
+            try
+            {
+                return JsonConvert.DeserializeObject<Comprobante>(response.Content);
+            }
+            catch (JsonException ex)
+            {
+                MessageBox.Show(String.Format("Ocurrio un error al parsear la respuesta: {0}", ex.Message),
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return null;
+            //return response.Data;
+        }
+
+        private void imprimirButton_Click(object sender, EventArgs e)
+        {
+            
+            if (comprobantesDataList.SelectedItem == null) { return; }
+            this.Enabled = false;
+            if (!FacturadorUtils.initControlador())
+            {
+                this.Enabled = true;
+                MessageBox.Show("No fue posible inicializar el controlador fiscal");
+                return;
+            }
+            Comprobante comp = (Comprobante)comprobantesDataList.SelectedItem.RowObject;
+            //LLamara al rest para registrar con el ultimo numero +1
+            long nroCOmp = FacturadorUtils.imprimirComprobante(comp);
+            
+            MessageBox.Show("Comprobante impreso: " + nroCOmp);
+            this.Enabled = true;
         }
         
     }

@@ -15,18 +15,19 @@ namespace FacturadorGTRetail.DTO
             public bool activo { get; set; }
         }
 
-        public class ComprobantesLineasList
+        public class ComprobantesLineas
         {
             public int version { get; set; }
             public int id { get; set; }
             public double precioUnitario { get; set; }
-            public int cantidad { get; set; }
+            public double cantidad { get; set; }
             public double subTotal { get; set; }
-            public int costoNetoUnitario { get; set; }
-            public int costoBrutoUnitario { get; set; }
-            public int cantidadEntregada { get; set; }
+            public double costoNetoUnitario { get; set; }
+            public double costoBrutoUnitario { get; set; }
+            public double cantidadEntregada { get; set; }
             public string descripcion { get; set; }
             public string descripcionLinea { get; set; }
+            public double iva { get; set; }
         }
 
         public class Sucursal
@@ -35,7 +36,7 @@ namespace FacturadorGTRetail.DTO
             public int id { get; set; }
             public string nombreSucursal { get; set; }
             public string direccion { get; set; }
-            public object telefonoFijo { get; set; }
+            public string telefonoFijo { get; set; }
             public long fechaAlta { get; set; }
             public bool activo { get; set; }
             public string businessString { get; set; }
@@ -117,13 +118,13 @@ namespace FacturadorGTRetail.DTO
             public int id { get; set; }
             public string email { get; set; }
             public string razonSocial { get; set; }
-            public object apellidos { get; set; }
-            public object nombres { get; set; }
-            public object nombreFantasia { get; set; }
+            public string apellidos { get; set; }
+            public string nombres { get; set; }
+            public string nombreFantasia { get; set; }
             public string calle { get; set; }
-            public object altura { get; set; }
-            public object piso { get; set; }
-            public object depto { get; set; }
+            public string altura { get; set; }
+            public string piso { get; set; }
+            public string depto { get; set; }
             public string documento { get; set; }
             public long fechaAlta { get; set; }
             public bool activo { get; set; }
@@ -165,13 +166,13 @@ namespace FacturadorGTRetail.DTO
             public long fechaComprobante { get; set; }
             public double total { get; set; }
             public double saldo { get; set; }
-            public object observaciones { get; set; }
-            public object remitente { get; set; }
-            public object nroRemito { get; set; }
+            public string observaciones { get; set; }
+            public string remitente { get; set; }
+            public string nroRemito { get; set; }
             public bool anulada { get; set; }
             public string letra { get; set; }
             public TipoComprobante tipoComprobante { get; set; }
-            public List<ComprobantesLineasList> comprobantesLineasList { get; set; }
+            public List<ComprobantesLineas> comprobantesLineasList { get; set; }
             public Usuario idUsuario { get; set; }
             public Persona idPersona { get; set; }
             public CondicionComprobante idCondicionComprobante { get; set; }
@@ -182,10 +183,10 @@ namespace FacturadorGTRetail.DTO
                 get
                 {
                     var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                    
-                    return epoch.AddMilliseconds(fechaComprobante).AddHours(-3); ;
+
+                    return epoch.AddMilliseconds(fechaComprobante).ToLocalTime(); ;
                 }
-                
+
             }
         }
 
