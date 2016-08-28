@@ -84,7 +84,7 @@ namespace FacturadorGTRetail {
 
 
 
-            determinarTipoComprobanteControlador(comp);
+            bool esFiscal = determinarTipoComprobanteControlador(comp);
            
             //Imprimo los items
             foreach (ComprobantesLineas cl in comp.comprobantesLineasList)
@@ -93,37 +93,48 @@ namespace FacturadorGTRetail {
             }
 
             Object nroComprobante;
-            controlador.CerrarComprobanteFiscal(1,out nroComprobante);
+            if (esFiscal)
+            {
+                controlador.CerrarComprobanteFiscal(1, out nroComprobante);
+            }
+            else
+            {
+                controlador.CerrarDNFH(1, out nroComprobante);
+            }
+            
 
             return long.Parse(nroComprobante.ToString());
         }
 
-        private static void determinarTipoComprobanteControlador(Comprobante comp) {
+        private static bool determinarTipoComprobanteControlador(Comprobante comp) {
             //Facturas
             if(comp.tipoComprobante.id==1){
                 switch(comp.letra){
                     case "A":
-                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.FACTURA_A);
+                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_FACTURA_A);
                         break;
                     case "B":
-                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.FACTURA_B);
+                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_FACTURA_B);
                         break;
                     
                 }
+                return true;
             }
             //Notas de credito
             if (comp.tipoComprobante.id == 2)
             {
+                controlador.set_DocumentoDeReferencia(1, "0001-00000001");
                 switch (comp.letra)
                 {
                     case "A":
-                        controlador.AbrirComprobanteNoFiscal(DocumentosNoFiscales.NOTA_CREDITO_A);
+                        controlador.AbrirDNFH(DocumentosNoFiscales.TICKET_NOTA_CREDITO_A,0);
                         break;
                     case "B":
-                        controlador.AbrirComprobanteNoFiscal(DocumentosNoFiscales.NOTA_CREDITO_B);
+                        controlador.AbrirDNFH(DocumentosNoFiscales.TICKET_NOTA_CREDITO_B,0);
                         break;
                    
                 }
+                return false;
             }
 
             //Notas de Debito
@@ -132,15 +143,16 @@ namespace FacturadorGTRetail {
                 switch (comp.letra)
                 {
                     case "A":
-                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.NOTA_DEBITO_A);
+                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_NOTA_DEBITO_A);
                         break;
                     case "B":
-                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.NOTA_DEBITO_B);
+                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_NOTA_DEBITO_A);
                         break;
 
                 }
+                return true;
             }
-
+            return false;
         }
     }
 }
