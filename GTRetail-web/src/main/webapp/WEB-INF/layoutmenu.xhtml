@@ -81,6 +81,13 @@
                                 immediate="true" ajax="false"/>
                 </p:submenu>
 
+                <p:submenu id="cajaSubMenu" label="#{msg.caja}s" icon="fa fa-fw fa-money">
+                    <p:menuitem id="movimientosCajaItem" value="#{msg.movimientosCaja}"
+                                action="/protected/caja/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+
+                </p:submenu>
+
             </p:submenu>
             <!--
                         <p:submenu id="om_menuoptcolor" label="MENU AND COLOR OPTIONS">
