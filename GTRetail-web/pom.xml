@@ -38,7 +38,6 @@
             <artifactId>GTRetail-ejb</artifactId>
             <type>ejb</type>
             <scope>provided</scope>
-            <version>4.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -103,10 +102,9 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <type>jar</type>
+            <scope>provided</scope>
         </dependency>
-        
+
     </dependencies>
 
     <build>
@@ -121,7 +119,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>${version.war.plugin}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -151,7 +149,7 @@
                     <dependency>
                         <groupId>net.sf.jasperreports</groupId>
                         <artifactId>jasperreports</artifactId>
-                        <version>5.6.0</version>
+                        <version>${jasperreports.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>com.lowagie</groupId>

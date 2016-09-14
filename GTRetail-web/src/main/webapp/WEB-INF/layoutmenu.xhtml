@@ -35,16 +35,7 @@
                                 action="/protected/productos/precios/actualizarPrecios.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
                 </p:submenu>
-                <p:submenu id="ventasSubMenu" label="#{msg.ventas}" >
-                    <p:menuitem id="listadoVentasItem" value="#{msg.ventasListado}"
-                                action="/protected/ventas/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
 
-
-                    <p:menuitem id="nuevoCarritoItem" value="#{msg.startNewCart}"
-                                action="/protected/ventas/pos/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false" icon="fa fa-fw fa-shopping-cart"/>
-                </p:submenu>
                 <p:submenu id="fiscalItem" label="#{msg.fiscal}" icon="fa fa-fw fa-book">
                     <p:menuitem id="periodosFiscalesItem" value="#{msg.periodosFiscales}"
                                 action="/protected/fiscal/periodosFiscales/periodosEdit.xhtml?faces-redirect=true"
@@ -81,13 +72,23 @@
                                 immediate="true" ajax="false"/>
                 </p:submenu>
 
-                <p:submenu id="cajaSubMenu" label="#{msg.caja}s" icon="fa fa-fw fa-money">
+                <p:submenu id="cajaSubMenu" label="#{msg.caja}" icon="fa fa-fw fa-bank">
                     <p:menuitem id="movimientosCajaItem" value="#{msg.movimientosCaja}"
                                 action="/protected/caja/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
 
                 </p:submenu>
 
+            </p:submenu>
+            <p:submenu id="ventasSubMenu" label="#{msg.ventas}" icon="fa fa-fw fa-opencart" >
+                <p:menuitem id="listadoVentasItem" value="#{msg.ventasListado}"
+                            action="/protected/ventas/index.xhtml?faces-redirect=true"
+                            immediate="true" ajax="false"/>
+
+
+                <p:menuitem id="nuevoCarritoItem" value="#{msg.startNewCart}"
+                            action="/protected/ventas/pos/index.xhtml?faces-redirect=true"
+                            immediate="true" ajax="false" icon="fa fa-fw fa-shopping-cart"/>
             </p:submenu>
             <!--
                         <p:submenu id="om_menuoptcolor" label="MENU AND COLOR OPTIONS">
