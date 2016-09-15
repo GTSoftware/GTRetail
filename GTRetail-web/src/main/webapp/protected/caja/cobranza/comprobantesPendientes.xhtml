@@ -6,15 +6,31 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
-      xmlns:o="http://omnifaces.org/ui">
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <c:set value="#{true}" target="#{searchComprobantesBean.filter}" property="conSaldo" />
 
     <div class="Container100 Responsive100 NoIndent">
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Consulta de comprobantes</h1>
+                <h1 class="CardBigTopic TexAlCenter">Cobro de comprobantes</h1>
                 <div class="SeparatorFull" />
 
                 <h:form id="formContenido" >
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="4">
+
+                        <p:outputLabel value="#{msg.caja}:" for="idCaja"/>
+                        <p:outputLabel id="idCaja" value="#{cobranzaBean.cajaActual.id}"/>
+                        <p:outputLabel value="#{msg.fechaApertura}:" for="fechaAperturaField"/>
+                        <p:outputLabel id="fechaAperturaField" value="#{cobranzaBean.cajaActual.fechaApertura}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                        </p:outputLabel>
+
+
+                    </p:panelGrid >
+                    <div class="SeparatorFull" />
 
                     <p:tabView id="busquedaTab">
                         <p:defaultCommand target="buscarButton"/>
@@ -82,8 +98,6 @@
                                 <p:inputText  id="nroFacturaField"  value="#{searchComprobantesBean.filter.numeroFactura}"
                                               converter="#{stringFormatConverter}"/>
 
-                                <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
-                                <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchComprobantesBean.filter.anulada}"/>
                             </p:panelGrid>
                         </p:tab>
                     </p:tabView>
@@ -130,6 +144,9 @@
                         <p:column  exportable="false">
                             <p:rowToggler />
                         </p:column>
+
+                        <!--<p:column selectionMode="multiple" style="text-align:center"/>-->
+
                         <p:column  sortBy="#{comprobante.id}">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.tablaId}" />
@@ -182,14 +199,14 @@
                                 <f:convertNumber groupingUsed="true" type="currency" />
                             </h:outputLabel>
                         </p:column>
-        <!--                <p:column sortBy="#{comprobante.saldo}">
+                        <p:column sortBy="#{comprobante.saldo}">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.saldo}"/>
                             </f:facet>
-                            <h:outputLabel value="#{comprobante.saldo}">
+                            <h:outputLabel value="#{comprobante.saldoConSigno}">
                                 <f:convertNumber groupingUsed="true" type="currency" />
                             </h:outputLabel>
-                        </p:column>-->
+                        </p:column>
                         <p:column sortBy="#{comprobante.idRegistro.numeroFactura}">
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.factura}"/>
@@ -207,14 +224,13 @@
 
                         <p:column  exportable="false" >
                             <f:facet name="header">
-                                #{msg.ver}
+                                #{msg.cobrar}
                             </f:facet>
+                            <p:commandButton  icon="fa fa-fw fa-check"
+                                              action="#{cobranzaBean.cobrarComprobante(comprobante)}"
+                                              update="@form"/>
 
 
-                            <p:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" value="Ver">
-
-                                <f:param name="idComprobante" value="#{comprobante.id}"/>
-                            </p:link>
 
                         </p:column>
 
@@ -289,6 +305,7 @@
                                                   style="text-align:right; font-size: larger"  />
 
                                         <p:column footerText="$#{comprobante.totalConSigno}"
+                                                  class="#{comprobante.totalConSigno.signum() lt 0 ?  'negative-number' :'null'}"
                                                   style="font-size: xx-large" />
                                     </p:row>
                                 </p:columnGroup>
@@ -345,7 +362,7 @@
 
                         <div class="SeparatorFull" />
 
-                        <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                          oncomplete="PF('clientesDialog').hide()"
                                          process="@this"
                                          update=":formContenido:busquedaTab"/>

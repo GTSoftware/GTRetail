@@ -57,7 +57,6 @@ public class Cajas extends BaseEntity {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaApertura;
 
-    @NotNull
     @Column(name = "fecha_cierre")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaCierre;

@@ -109,6 +109,8 @@ public class Comprobantes extends BaseEntity {
 
     @Transient
     private BigDecimal totalConSigno;
+    @Transient
+    private BigDecimal saldoConSigno;
     @OneToMany(mappedBy = "idComprobante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComprobantesPagos> pagosList;
 
@@ -280,5 +282,14 @@ public class Comprobantes extends BaseEntity {
             }
         }
         return totalConSigno;
+    }
+
+    public BigDecimal getSaldoConSigno() {
+        if (saldo != null && tipoComprobante != null) {
+            if (saldoConSigno == null) {
+                saldoConSigno = saldo.multiply(tipoComprobante.getSigno());
+            }
+        }
+        return saldoConSigno;
     }
 }

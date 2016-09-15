@@ -63,7 +63,7 @@ public class VentasBean {
 //                pagosLineasFacade.create(lineaPago);
 //            }
 
-            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().multiply(venta.getTipoComprobante().getSigno()).negate(), "Comprobante Nro: " + venta.getId());
+            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().multiply(venta.getTipoComprobante().getSigno()).negate(), String.format("Comprobante Nro: %d", venta.getId()));
         }
     }
 
@@ -83,10 +83,12 @@ public class VentasBean {
         if (venta.getIdRegistro() != null) {
             throw new ServiceException("Comprobante impreso fiscalmente!");
         }
-
+        if (venta.getTotal().subtract(venta.getSaldo()).signum() > 0) {
+            throw new ServiceException("Comprobante total o parcialmente cobrado!");
+        }
         venta.setAnulada(true);
         cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(),
-                venta.getTotal(), "Anulación venta Nro: " + venta.getId());
+                venta.getTotalConSigno(), String.format("Anulación comprobante Nro: %d", venta.getId()));
         ventasFacade.edit(venta);
     }
 

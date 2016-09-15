@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -71,7 +72,7 @@ public class Recibos extends BaseEntity {
     @JoinColumn(name = "id_caja", referencedColumnName = "id_caja")
     private Cajas idCaja;
 
-    @OneToMany(mappedBy = "idRecibo")
+    @OneToMany(mappedBy = "idRecibo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecibosDetalle> recibosDetalles;
 
     public Recibos(Long id) {
