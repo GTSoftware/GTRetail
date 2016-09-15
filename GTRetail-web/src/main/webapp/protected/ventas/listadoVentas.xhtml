@@ -6,7 +6,6 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
-
       xmlns:o="http://omnifaces.org/ui">
 
     <div class="Container100 Responsive100 NoIndent">
@@ -64,7 +63,8 @@
                                 <p:autoComplete id="tipoCompField" multiple="true"
                                                 value="#{searchComprobantesBean.filter.tiposComprobante}"
                                                 completeMethod="#{searchComprobantesBean.autocompleteTiposComp}"
-                                                var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}" itemValue="#{tipoComp}"
+                                                var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}"
+                                                itemValue="#{tipoComp}"
                                                 forceSelection="true"
                                                 minQueryLength="2"
                                                 >

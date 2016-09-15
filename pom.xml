@@ -170,7 +170,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>dd-MM-yyyy HH:mm</maven.build.timestamp.format>
+        <maven.build.timestamp.format>dd-MM-yyyy HH:mm:ss</maven.build.timestamp.format>
         <sonar.language>java</sonar.language>
 
         <antlr.version>2.7.7</antlr.version>
@@ -179,7 +179,7 @@
         <primefaces-themes.version>1.0.10</primefaces-themes.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <beanio.version>2.1.0</beanio.version>
-        <omnifaces.version>2.1</omnifaces.version>
+        <omnifaces.version>2.4</omnifaces.version>
         <!-- JBoss dependency versions -->
 
         <version.jboss.maven.plugin>7.9.Final</version.jboss.maven.plugin>
