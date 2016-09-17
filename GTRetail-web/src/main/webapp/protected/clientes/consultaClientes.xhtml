@@ -140,7 +140,7 @@
                             <f:facet name="header" >
                                 #{msg.acciones}
                             </f:facet>
-                            <p:panelGrid columns="1" layout="grid"  styleClass="ui-panelgrid-blank">
+                            <p:panelGrid columns="2" layout="grid"  styleClass="ui-panelgrid-blank">
                                 <p:commandButton id="editarClienteButton"
                                                  icon="fa fa-fw fa-edit" action="#{clientesSearchBean.editarCliente(cliente)}"
                                                  ajax="false"
@@ -149,6 +149,13 @@
                                     <f:param name="idPersona" value="#{cliente.id}"/>
                                 </p:commandButton>
 
+                                <p:commandButton id="verCCButton"
+                                                 icon="fa fa-fw fa-bank" action="#{clientesSearchBean.verCuentaCorriente(cliente)}"
+                                                 ajax="false"
+
+                                                 title="#{msg.verCuentaCorriente}">
+
+                                </p:commandButton>
                             </p:panelGrid>
 
                         </p:column>

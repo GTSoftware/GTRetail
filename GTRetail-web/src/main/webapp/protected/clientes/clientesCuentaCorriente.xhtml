@@ -1,75 +1,127 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:body>
-        <ui:composition template="./../resources/templates/template.xhtml">
-            <ui:define name="content">
-                <h:form id="form">
-                    <p:panel header="Cuenta corriente de clientes">
-                        <p:dataTable id="ccTable" value="#{clientesBean.ultimosMovimientos}" var="cmov"
-                                     rows="15"
-                                     paginator="true"
-                                     sortMode="multiple"
-                                     emptyMessage="No hay clientes que coincidan con los términos de búsqueda..."
-                                     rowKey="#{cmov.idMovimiento}"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,15,30"
-                                     style="width: 100%"
-                                     resizableColumns="true"
-                                     scrollable="true"
-                                     reflow="true" >
 
-                            <f:facet name="header" >
-                                Últimos movimientos
-                            </f:facet>
 
-                            <p:column sortBy="#{cmov.idMovimiento}">
-                                <f:facet name="header">
-                                    Id
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="meta">
+
+        <f:metadata >
+
+            <f:event listener="#{cuentaCorrienteSearchBean.init()}"
+                     type="preRenderView">
+            </f:event>
+
+        </f:metadata>
+
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+
+        <div class="Container100 Responsive100 NoIndent">
+            <div class="Container100 ui-fluid">
+                <div class="Card">
+                    <h1 class="CardBigTopic TexAlCenter">Movimientos de cuenta</h1>
+                    <div class="SeparatorFull" />
+
+
+                    <h:form id="form">
+                        <p:panel header="Cuenta corriente de clientes">
+                            <p:dataTable id="ccTable" value="#{cuentaCorrienteSearchBean.dataModel}"
+                                         var="cmov"
+                                         rows="15"
+                                         reflow="true"
+                                         paginator="true"
+                                         sortMode="single"
+                                         emptyMessage="#{msg.busquedaSinResultados}"
+                                         rowKey="#{cmov.id}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                         rowsPerPageTemplate="10,15,30"
+                                         lazy="true"
+                                         scrollable="true"
+                                         >
+                                <f:facet name="{Exporters}">
+                                    <h:commandLink title="xls">
+                                        <i class="fa fa-file-excel-o Fs24 Green" />
+                                        <p:dataExporter type="xls" target="ccTable" fileName="movCuenta" pageOnly="true" />
+                                    </h:commandLink>
+
+                                    <h:commandLink title="pdf">
+                                        <i class="fa fa-file-pdf-o Fs24 Red" />
+                                        <p:dataExporter type="pdf" target="ccTable" fileName="movCuenta" pageOnly="true"/>
+                                    </h:commandLink>
+
+                                    <h:commandLink title="csv">
+                                        <i class="fa fa-file-text-o Fs24 Blue" />
+                                        <p:dataExporter type="csv" target="ccTable" fileName="movCuenta" pageOnly="true"/>
+                                    </h:commandLink>
+
+                                    <h:commandLink title="xml">
+                                        <i class="fa fa-file-code-o Fs24 Black" />
+                                        <p:dataExporter type="xml" target="ccTable" fileName="movCuenta" pageOnly="true"/>
+                                    </h:commandLink>
                                 </f:facet>
-                                <h:outputLabel value="#{cmov.idMovimiento}"/>
-                            </p:column>
-                            <p:column sortBy="#{cmov.fechaMovimiento}">
-                                <f:facet name="header">
-                                    Fecha
-                                </f:facet>
-                                <h:outputText value="#{cmov.fechaMovimiento}">
-                                    <f:convertDateTime type="both" dateStyle="short" timeZone="GMT-3"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column sortBy="#{cmov.importeMovimiento}">
-                                <f:facet name="header">
-                                    Importe
-                                </f:facet>
-                                <h:outputText value="#{cmov.importeMovimiento}">
 
-                                </h:outputText>
-                            </p:column>
-                            <p:column sortBy="#{cmov.descripcionMovimiento}">
-                                <f:facet name="header">
-                                    Descripción
+                                <f:facet name="header" >
+                                    Últimos movimientos
                                 </f:facet>
-                                <h:outputText value="#{cmov.descripcionMovimiento}">
 
-                                </h:outputText>
-                            </p:column>
-                            <p:columnGroup type="footer">
-                                <p:row>
-                                    <p:column colspan="1" footerText="Saldo actual:"
-                                              style="text-align:right; font-size: larger"  />
+                                <p:column sortBy="#{cmov.id}">
+                                    <f:facet name="header">
+                                        Id
+                                    </f:facet>
+                                    <h:outputLabel value="#{cmov.id}"/>
+                                </p:column>
+                                <p:column sortBy="#{cmov.fechaMovimiento}">
+                                    <f:facet name="header">
+                                        Fecha
+                                    </f:facet>
+                                    <h:outputText value="#{cmov.fechaMovimiento}">
+                                        <f:convertDateTime type="both" dateStyle="short" timeZone="GMT-3"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column sortBy="#{cmov.importeMovimiento}">
+                                    <f:facet name="header">
+                                        Importe
+                                    </f:facet>
+                                    <h:outputText value="#{cmov.importeMovimiento}">
+                                        <f:convertNumber groupingUsed="true" type="currency" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column sortBy="#{cmov.descripcionMovimiento}">
+                                    <f:facet name="header">
+                                        Descripción
+                                    </f:facet>
+                                    <h:outputText value="#{cmov.descripcionMovimiento}">
 
-                                    <p:column footerText="\$#{clientesBean.saldoCliente}" style=" font-size: xx-large" />
-                                </p:row>
-                            </p:columnGroup>
-                        </p:dataTable>
-                    </p:panel>
-                </h:form>
-            </ui:define>
-        </ui:composition>
-    </h:body>
-</html>
+                                    </h:outputText>
+                                </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column colspan="1" footerText="Saldo actual:"
+                                                  style="text-align:right; font-size: larger"  />
+
+                                        <p:column footerText="\$#{cuentaCorrienteSearchBean.saldo}"
+                                                  style=" font-size: xx-large" />
+                                    </p:row>
+                                </p:columnGroup>
+                            </p:dataTable>
+                        </p:panel>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
 

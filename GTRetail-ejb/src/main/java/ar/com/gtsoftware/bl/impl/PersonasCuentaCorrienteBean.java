@@ -20,7 +20,6 @@ import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -52,7 +51,4 @@ public class PersonasCuentaCorrienteBean {
         return cuentaCorrienteFacade.getSaldoPersona(persona);
     }
 
-    public List<PersonasCuentaCorriente> obtenerUltimosMovimientos(Personas persona) {
-        return cuentaCorrienteFacade.getUltimosMovimientos(persona);
-    }
 }

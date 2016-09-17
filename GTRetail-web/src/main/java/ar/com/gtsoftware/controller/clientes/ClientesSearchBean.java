@@ -72,4 +72,8 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSea
     public String editarCliente(Personas p) {
         return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
+
+    public String verCuentaCorriente(Personas p) {
+        return String.format("clientesCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
+    }
 }
