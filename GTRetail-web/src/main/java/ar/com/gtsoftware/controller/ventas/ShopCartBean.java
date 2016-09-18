@@ -365,7 +365,8 @@ public class ShopCartBean implements Serializable {
         ComprobantesLineas linea = new ComprobantesLineas();
         linea.setIdComprobante(venta);
         linea.setCantidad(BigDecimal.ONE);
-        linea.setDescripcion("COSTO FINANCIERO POR " + detallePlan.getIdPlan().getNombre() + " EN: " + detallePlan.getCuotas() + " CUOTAS");
+        linea.setDescripcion(String.format("COSTO FINANCIERO POR %s EN: %s CUOTAS", detallePlan.getIdPlan().getNombre(),
+                detallePlan.getCuotas()));
         linea.setIdProducto(productoRedondeo);
         linea.setCantidadEntregada(BigDecimal.ONE);
         linea.setCostoBrutoUnitario(BigDecimal.ZERO);
