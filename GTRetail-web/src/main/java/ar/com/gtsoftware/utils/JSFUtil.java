@@ -208,7 +208,6 @@ public abstract class JSFUtil {
         return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     }
 
-
     public static void redirect(String uri) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         try {

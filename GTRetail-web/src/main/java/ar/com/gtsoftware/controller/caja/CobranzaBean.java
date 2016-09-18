@@ -17,19 +17,25 @@ package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.CobranzaService;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.Recibos;
 import ar.com.gtsoftware.search.CajasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -39,10 +45,11 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class CobranzaBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(CobranzaBean.class.getName());
+
     @EJB
     private CobranzaService cobranzaServiceImpl;
-
-    private static final long serialVersionUID = 1L;
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
@@ -52,6 +59,8 @@ public class CobranzaBean implements Serializable {
 
     @EJB
     private CajasFacade facade;
+
+    private Comprobantes comprobanteACobrar;
 
     /**
      * Creates a new instance of CobranzaBean
@@ -95,7 +104,36 @@ public class CobranzaBean implements Serializable {
         return cajaActual;
     }
 
-    public void cobrarComprobante(Comprobantes comprobante) {
-        cobranzaServiceImpl.cobrarComprobanteEfectivo(cajaActual, comprobante);
+    public void cobrarComprobante() {
+
+        if (comprobanteACobrar == null) {
+            return;
+        }
+        if (!comprobanteACobrar.getIdCondicionComprobante().getPagoTotal()) {
+            JSFUtil.addErrorMessage("No implementado para cobranza de comprobantes en CC!");
+            return;
+        }
+        boolean requiereValores = comprobanteACobrar.getPagosList().stream().anyMatch(p -> p.getIdFormaPago().getRequiereValores());
+        if (requiereValores) {
+            JSFUtil.addErrorMessage("Se requiere ingresar valores!");
+            return;
+        }
+        try {
+            Recibos recibo = cobranzaServiceImpl.cobrarComprobante(cajaActual, comprobanteACobrar);
+            JSFUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", recibo.getId()));
+            RequestContext.getCurrentInstance().execute("PF('cobrarComprobanteDialog').hide();");
+        } catch (ServiceException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
     }
+
+    public Comprobantes getComprobanteACobrar() {
+        return comprobanteACobrar;
+    }
+
+    public void setComprobanteACobrar(Comprobantes comprobanteACobrar) {
+        this.comprobanteACobrar = comprobanteACobrar;
+
+    }
+
 }

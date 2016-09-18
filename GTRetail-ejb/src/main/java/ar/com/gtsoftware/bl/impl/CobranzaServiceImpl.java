@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.CobranzaService;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.CajasMovimientosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
 import ar.com.gtsoftware.eao.RecibosFacade;
@@ -26,8 +27,9 @@ import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.Recibos;
 import ar.com.gtsoftware.model.RecibosDetalle;
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -49,10 +51,8 @@ public class CobranzaServiceImpl implements CobranzaService {
     private PersonasCuentaCorrienteBean cuentaCorrienteBean;
 
     @Override
-    public Recibos cobrarComprobanteEfectivo(Cajas caja, Comprobantes comprobante) {
-        if (comprobante.getPagosList().size() != 1) {
-            throw new RuntimeException("Método no válido para este comprobante");
-        }
+    public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException {
+
         Date fecha = new Date();
         Recibos recibo = new Recibos();
         recibo.setFechaRecibo(fecha);
@@ -60,18 +60,29 @@ public class CobranzaServiceImpl implements CobranzaService {
         recibo.setIdPersona(comprobante.getIdPersona());
         recibo.setIdUsuario(caja.getIdUsuario());
         recibo.setMontoTotal(comprobante.getSaldoConSigno());
-        RecibosDetalle reciboDet = new RecibosDetalle();
-        reciboDet.setIdRecibo(recibo);
-        reciboDet.setMontoPagado(comprobante.getSaldoConSigno());
-        ComprobantesPagos compPago = comprobante.getPagosList().get(0);
+//        RecibosDetalle reciboDet = new RecibosDetalle();
+//        reciboDet.setIdRecibo(recibo);
+//        reciboDet.setMontoPagado(comprobante.getSaldoConSigno());
+//        ComprobantesPagos compPago = comprobante.getPagosList().get(0);
+        List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
+        for (ComprobantesPagos compPago : comprobante.getPagosList()) {
+            RecibosDetalle reciboDet = new RecibosDetalle();
+            reciboDet.setIdRecibo(recibo);
+            reciboDet.setMontoPagado(compPago.getMontoPago());
+            reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+            reciboDet.setIdPagoComprobante(compPago);
 
-        reciboDet.setIdFormaPago(compPago.getIdFormaPago());
-        reciboDet.setIdPagoComprobante(compPago);
-        recibo.setRecibosDetalles(Arrays.asList(reciboDet));
-
+            compPago.setFechaPago(fecha);
+            compPago.setFechaUltimoPago(fecha);
+            compPago.setMontoPagado(compPago.getMontoPago());
+            recibosDetalleList.add(reciboDet);
+        }
+        recibo.setRecibosDetalles(recibosDetalleList);
+//        reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+//        reciboDet.setIdPagoComprobante(compPago);
+//        recibo.setRecibosDetalles(Arrays.asList(reciboDet));
         comprobante.setSaldo(BigDecimal.ZERO);
-        compPago.setFechaPago(fecha);
-        compPago.setFechaUltimoPago(fecha);
+
         comprobantesFacade.edit(comprobante);
         recibosFacade.create(recibo);
 

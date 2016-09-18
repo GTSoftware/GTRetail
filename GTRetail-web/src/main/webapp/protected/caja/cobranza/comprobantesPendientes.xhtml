@@ -18,6 +18,7 @@
                 <div class="SeparatorFull" />
 
                 <h:form id="formContenido" >
+                    <p:defaultCommand id="defCmd" target="buscarButton" />
                     <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
                                  styleClass="ui-panelgrid-blank" columns="4">
 
@@ -47,15 +48,6 @@
                                 <p:calendar id="fechaHastaField" value="#{searchComprobantesBean.filter.fechaVentaHasta}"
                                             pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 
-
-
-                            </p:panelGrid >
-
-                        </p:tab>
-
-                        <p:tab title="#{msg.busquedaAvanzada}" >
-                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                         styleClass="ui-panelgrid-blank" columns="2">
                                 <p:outputLabel value="#{msg.cliente}:" for="razonSocialField"/>
                                 <h:panelGroup >
                                     <p:autoComplete id="razonSocialField"
@@ -70,10 +62,20 @@
 
                                     </p:autoComplete>
                                     <p:commandButton id="buscarClienteButton" icon="fa fa-fw fa-search"
-                                                     update=":busquedaPersonasDialogForm:busquedaPersonasDialog"
+                                                     update=":busquedaPersonasDialog"
                                                      oncomplete="PF('clientesDialog').show()"
                                                      process="@this" />
                                 </h:panelGroup>
+
+
+                            </p:panelGrid >
+
+                        </p:tab>
+
+                        <p:tab title="#{msg.busquedaAvanzada}" >
+                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="2">
+
 
                                 <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoCompField"/>
                                 <p:autoComplete id="tipoCompField" multiple="true"
@@ -98,6 +100,11 @@
                                 <p:inputText  id="nroFacturaField"  value="#{searchComprobantesBean.filter.numeroFactura}"
                                               converter="#{stringFormatConverter}"/>
 
+                                <h:outputLabel for="idCcomprobante" value="#{msg.id}:" />
+                                <p:inputText  id="idCcomprobante"  value="#{searchComprobantesBean.filter.idVenta}"
+                                              >
+                                    <f:validateLongRange minimum="1" />
+                                </p:inputText>
                             </p:panelGrid>
                         </p:tab>
                     </p:tabView>
@@ -226,10 +233,12 @@
                             <f:facet name="header">
                                 #{msg.cobrar}
                             </f:facet>
-                            <p:commandButton  icon="fa fa-fw fa-check"
-                                              action="#{cobranzaBean.cobrarComprobante(comprobante)}"
-                                              update="@form"/>
-
+                            <p:commandButton  icon="fa fa-fw fa-money"
+                                              actionListener="#{cobranzaBean.setComprobanteACobrar(comprobante)}"
+                                              update=":cobrarComprobanteDialog"
+                                              oncomplete="PF('cobrarComprobanteDialog').show()"
+                                              process="ventasTable"
+                                              />
 
 
                         </p:column>
@@ -305,7 +314,6 @@
                                                   style="text-align:right; font-size: larger"  />
 
                                         <p:column footerText="$#{comprobante.totalConSigno}"
-                                                  class="#{comprobante.totalConSigno.signum() lt 0 ?  'negative-number' :'null'}"
                                                   style="font-size: xx-large" />
                                     </p:row>
                                 </p:columnGroup>
@@ -316,45 +324,17 @@
                     </p:dataTable>
 
 
-
-                    <p:panel id="totalesVentasPanel" header="#{msg.totales}" toggleable="true">
-
-                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                     styleClass="ui-panelgrid-blank" columns="2" >
-                            <p:outputLabel value="#{msg.totalComprobantes}:" />
-                            <p:outputLabel value="#{searchComprobantesBean.totalVentas}"
-
-                                           style="font-size: x-large; font-weight: bold" >
-                                <f:convertNumber groupingUsed="true" type="currency" />
-                            </p:outputLabel>
-
-                            <p:outputLabel value="#{msg.totalComprobantesSF}:" />
-                            <p:outputLabel value="#{searchComprobantesBean.totalVentasSinFacturar}"
-
-                                           style="font-size: x-large; font-weight: bold" >
-                                <f:convertNumber groupingUsed="true" type="currency" />
-                            </p:outputLabel>
-
-                            <p:outputLabel value="#{msg.totalComprobantesF}:" />
-                            <p:outputLabel value="#{searchComprobantesBean.totalVentasFacturadas}"
-
-                                           style="font-size: x-large; font-weight: bold" >
-                                <f:convertNumber groupingUsed="true" type="currency" />
-                            </p:outputLabel>
-                        </p:panelGrid >
-                    </p:panel>
-
                 </h:form>
-                <h:form id="busquedaPersonasDialogForm">
 
-                    <p:dialog id='busquedaPersonasDialog'
-                              header="#{msg.busquedaClientes}"
-                              widgetVar="clientesDialog"
-                              resizable="true"
-                              closeOnEscape="true"
-                              showEffect="fade" hideEffect="clip" modal="true"
-                              dynamic="true">
 
+                <p:dialog id='busquedaPersonasDialog'
+                          header="#{msg.busquedaClientes}"
+                          widgetVar="clientesDialog"
+                          resizable="true"
+                          closeOnEscape="true"
+                          showEffect="fade" hideEffect="clip" modal="true"
+                          dynamic="true">
+                    <h:form id="busquedaPersonasDialogForm">
                         <gtsoftware:busquedaPersonas personaSeleccionada="#{searchComprobantesBean.filter.idPersona}"
 
                                                      >
@@ -367,11 +347,81 @@
                                          process="@this"
                                          update=":formContenido:busquedaTab"/>
 
+                    </h:form>
+                </p:dialog>
 
-                    </p:dialog>
 
 
-                </h:form>
+
+
+
+                <p:dialog id='cobrarComprobanteDialog'
+                          header="#{msg.cobrar}"
+                          widgetVar="cobrarComprobanteDialog"
+                          resizable="true"
+                          closeOnEscape="true"
+                          showEffect="fade" hideEffect="clip" modal="true"
+                          dynamic="false">
+                    <h:form id="cobrarComprobanteDialogForm">
+
+                        <p:dataTable id="pagosTable" value="#{cobranzaBean.comprobanteACobrar.pagosList}" var="pago"
+                                     rows="5"
+                                     paginator="true"
+
+                                     emptyMessage="#{msg.pagosVacio}"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,30"
+                                     resizableColumns="false"
+                                     reflow="true"
+                                     liveResize="true">
+                            <f:facet name="header" >
+                                Comprobante: #{cobranzaBean.comprobanteACobrar.id}
+                            </f:facet>
+                            <p:column  headerText="#{msg.formaPago}" style="text-align: left">
+                                <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
+                            </p:column>
+                            <p:column headerText="Importe" style="text-align: right">
+                                <h:outputText value="#{pago.montoPago}" >
+                                    <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column  headerText="Plan">
+                                <h:outputText value="#{pago.idPlan.nombre}" >
+
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Cuotas">
+                                <h:outputText value="#{pago.idDetallePlan.cuotas}" >
+
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+
+
+
+                        <div class="SeparatorFull" />
+                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank" columns="2">
+
+                            <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                             immediate="true" ajax="false"
+                                             onclick="PF('cobrarComprobanteDialog').hide();"
+                                             styleClass="RedButton"/>
+
+                            <p:commandButton id="cobrarButton" widgetVar="cobrarButton" value="#{msg.cobrar}" icon="fa fa-fw fa-money"
+                                             action="#{cobranzaBean.cobrarComprobante()}"
+                                             process="@this"
+                                             onclick="PF('cobrarButton').disable();"
+                                             update=":formContenido"/>
+                        </p:panelGrid>
+
+
+                    </h:form>
+                </p:dialog>
+
+
+
             </div>
         </div>
     </div>

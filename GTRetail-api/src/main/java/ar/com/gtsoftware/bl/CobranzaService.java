@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.bl;
 
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Recibos;
@@ -33,5 +34,5 @@ public interface CobranzaService {
      * @param comprobante
      * @return el recibo generado por la cobranza
      */
-    public Recibos cobrarComprobanteEfectivo(Cajas caja, Comprobantes comprobante);
+    public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException;
 }
