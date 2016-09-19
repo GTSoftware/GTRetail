@@ -48,6 +48,12 @@ public class RecibosFacade extends AbstractFacade<Recibos, RecibosSearchFilter> 
     public Predicate createWhereFromSearchFilter(RecibosSearchFilter rsf, CriteriaBuilder cb, Root<Recibos> root) {
         Predicate p = null;
 
+        if (rsf.getIdRecibo() != null) {
+            Predicate p1 = cb.equal(root.get(Recibos_.id), rsf.getIdRecibo());
+            p = appendAndPredicate(cb, p1, p);
+
+        }
+
         if (rsf.getFechaDesde() != null && rsf.getFechaHasta() != null) {
             Predicate p1 = cb.between(root.get(Recibos_.fechaRecibo), rsf.getFechaDesde(), rsf.getFechaHasta());
             p = appendAndPredicate(cb, p1, p);

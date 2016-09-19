@@ -33,14 +33,20 @@ public class RecibosSearchFilter extends AbstractSearchFilter {
     private Personas idPersona;
     private Usuarios idUsuario;
     private Cajas idCaja;
+    private Long idRecibo;
 
     @Override
     public boolean hasFilter() {
         return (fechaDesde != null) || (fechaHasta != null) || (idCaja != null) || (idPersona != null)
-                || (idUsuario != null);
+                || (idUsuario != null) || (idRecibo != null);
     }
 
     public RecibosSearchFilter() {
+    }
+
+    public RecibosSearchFilter(Date fechaDesde, Date fechaHasta) {
+        this.fechaDesde = fechaDesde;
+        this.fechaHasta = fechaHasta;
     }
 
     public Date getFechaDesde() {
@@ -81,6 +87,14 @@ public class RecibosSearchFilter extends AbstractSearchFilter {
 
     public void setIdCaja(Cajas idCaja) {
         this.idCaja = idCaja;
+    }
+
+    public Long getIdRecibo() {
+        return idRecibo;
+    }
+
+    public void setIdRecibo(Long idRecibo) {
+        this.idRecibo = idRecibo;
     }
 
 }
