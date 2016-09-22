@@ -103,9 +103,16 @@
                             </f:facet>
                             <p:outputLabel value="#{mov.observaciones}"/>
                         </p:column>
+                        <p:column exportable="false">
+                            <f:facet name="header" >
+                                #{msg.imprimir}
+                            </f:facet>
+                            <p:commandButton icon="fa fa-print" action="#{recibosSearchBean.imprimirRecibo(mov)}"
+                                             ajax="false"
+                                             title="Imprimir etiqueta">
 
-
-
+                            </p:commandButton>
+                        </p:column>
 
                     </p:dataTable>
 

@@ -16,8 +16,8 @@
 package ar.com.gtsoftware.utils;
 
 /**
- * Esta clase provee la funcionalidad de convertir un numero representado en
- * digitos a una representacion en letras. Mejorado para leer centavos
+ * Esta clase provee la funcionalidad de convertir un numero representado en digitos a una representacion en letras.
+ * Mejorado para leer centavos
  *
  * @version 1.0
  */
@@ -27,16 +27,28 @@ public abstract class NumberToLetterConverter {
         "CUATRO ", "CINCO ", "SEIS ", "SIETE ", "OCHO ", "NUEVE ", "DIEZ ",
         "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS",
         "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE"};
-    private static final String[] DECENAS = {"VENTI", "TREINTA ", "CUARENTA ",
+    private static final String[] DECENAS = {"VEINTI", "TREINTA ", "CUARENTA ",
         "CINCUENTA ", "SESENTA ", "SETENTA ", "OCHENTA ", "NOVENTA ",
         "CIEN "};
     private static final String[] CENTENAS = {"CIENTO ", "DOSCIENTOS ",
         "TRESCIENTOS ", "CUATROCIENTOS ", "QUINIENTOS ", "SEISCIENTOS ",
         "SETECIENTOS ", "OCHOCIENTOS ", "NOVECIENTOS "};
 
+    private static final String MILLONES = "MILLONES ";
+    private static final String UN_MILLON = "UN MILLON ";
+    private static final String PESOS = " PESOS";
+    private static final String UN_CENTAVO = "UN CENTAVO";
+    private static final String CENTAVOS = "CENTAVOS";
+    private static final String CON = " CON ";
+    private static final String CERO = "CERO";
+    private static final String UN = "UN";
+    private static final String MIL = "MIL ";
+    private static final String CIEN = "CIEN";
+    private static final String Y = "Y ";
+
     /**
-     * Convierte un numero en representacion numerica a uno en representacion de
-     * texto. El numero es valido si esta entre 0 y 999.999.999
+     * Convierte un numero en representacion numerica a uno en representacion de texto. El numero es valido si esta
+     * entre 0 y 999.999.999
      * <p>
      * Creation date 3/05/2006 - 05:37:47 PM
      *
@@ -64,67 +76,66 @@ public abstract class NumberToLetterConverter {
         // Descompone el trio de millones - ¡SGT!
         int millon = Integer.parseInt(String.valueOf(getDigitAt(splitNumber[0],
                 8))
-                + String.valueOf(getDigitAt(splitNumber[0], 7))
-                + String.valueOf(getDigitAt(splitNumber[0], 6)));
+                .concat(String.valueOf(getDigitAt(splitNumber[0], 7)))
+                .concat(String.valueOf(getDigitAt(splitNumber[0], 6))));
         if (millon == 1) {
-            converted.append("UN MILLON ");
+            converted.append(UN_MILLON);
         }
         if (millon > 1) {
             converted.append(convertNumber(String.valueOf(millon)))
-                    .append("MILLONES ");
+                    .append(MILLONES);
         }
 
         // Descompone el trio de miles - ¡SGT!
         int miles = Integer.parseInt(String.valueOf(getDigitAt(splitNumber[0],
                 5))
-                + String.valueOf(getDigitAt(splitNumber[0], 4))
-                + String.valueOf(getDigitAt(splitNumber[0], 3)));
+                .concat(String.valueOf(getDigitAt(splitNumber[0], 4)))
+                .concat(String.valueOf(getDigitAt(splitNumber[0], 3))));
         if (miles == 1) {
-            converted.append("MIL ");
+            converted.append(MIL);
         }
         if (miles > 1) {
             converted.append(convertNumber(String.valueOf(miles)))
-                    .append("MIL ");
+                    .append(MIL);
         }
 
         // Descompone el ultimo trio de unidades - ¡SGT!
         int cientos = Integer.parseInt(String.valueOf(getDigitAt(
                 splitNumber[0], 2))
-                + String.valueOf(getDigitAt(splitNumber[0], 1))
-                + String.valueOf(getDigitAt(splitNumber[0], 0)));
+                .concat(String.valueOf(getDigitAt(splitNumber[0], 1)))
+                .concat(String.valueOf(getDigitAt(splitNumber[0], 0))));
         if (cientos == 1) {
-            converted.append("UN");
+            converted.append(UN);
         }
 
         if (millon + miles + cientos == 0) {
-            converted.append("CERO");
+            converted.append(CERO);
         }
         if (cientos > 1) {
             converted.append(convertNumber(String.valueOf(cientos)));
         }
 
-        converted.append(" PESOS ");
+        converted.append(PESOS);
 
         // Descompone los centavos
         int centavos = Integer.parseInt(String.valueOf(getDigitAt(
                 splitNumber[1], 2))
-                + String.valueOf(getDigitAt(splitNumber[1], 1))
-                + String.valueOf(getDigitAt(splitNumber[1], 0)));
+                .concat(String.valueOf(getDigitAt(splitNumber[1], 1)))
+                .concat(String.valueOf(getDigitAt(splitNumber[1], 0))));
         if (centavos == 1) {
-            converted.append(" CON UN CENTAVO");
+            converted.append(CON).append(UN_CENTAVO);
         }
         if (centavos > 1) {
-            converted.append(" CON ")
+            converted.append(CON)
                     .append(convertNumber(String.valueOf(centavos)))
-                    .append("CENTAVOS");
+                    .append(CENTAVOS);
         }
 
         return converted.toString();
     }
 
     /**
-     * Convierte los trios de numeros que componen las unidades, las decenas y
-     * las centenas del numero.
+     * Convierte los trios de numeros que componen las unidades, las decenas y las centenas del numero.
      * <p>
      * Creation date 3/05/2006 - 05:33:40 PM
      *
@@ -143,27 +154,25 @@ public abstract class NumberToLetterConverter {
             output.append(CENTENAS[getDigitAt(number, 2) - 1]);
         }
 
-        int k = Integer.parseInt(String.valueOf(getDigitAt(number, 1))
-                + String.valueOf(getDigitAt(number, 0)));
+        int k = Integer.parseInt(String.valueOf(getDigitAt(number, 1)).concat(
+                String.valueOf(getDigitAt(number, 0))));
 
         if (k <= 20) {
             output.append(UNIDADES[k]);
+        } else if (k > 30 && getDigitAt(number, 0) != 0) {
+            output.append(DECENAS[getDigitAt(number, 1) - 2])
+                    .append(Y)
+                    .append(
+                            UNIDADES[getDigitAt(number, 0)]);
         } else {
-            if (k > 30 && getDigitAt(number, 0) != 0) {
-                output.append(DECENAS[getDigitAt(number, 1) - 2])
-                        .append("Y ")
-                        .append(
-                                UNIDADES[getDigitAt(number, 0)]);
-            } else {
-                output.append(DECENAS[getDigitAt(number, 1) - 2])
-                        .append(
-                                UNIDADES[getDigitAt(number, 0)]);
-            }
+            output.append(DECENAS[getDigitAt(number, 1) - 2])
+                    .append(
+                            UNIDADES[getDigitAt(number, 0)]);
         }
 
         // Caso especial con el 100
         if (getDigitAt(number, 2) == 1 && k == 0) {
-            output.append("CIEN");
+            output.append(CIEN);
         }
 
         return output.toString();

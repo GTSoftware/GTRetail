@@ -17,10 +17,10 @@ package ar.com.gtsoftware.utils;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -54,7 +54,7 @@ public class NumberToLetterConverterTest {
     public void testConvertNumberToLetter() {
         System.out.println("convertNumberToLetter");
         double number = 0.0;
-        String expResult = "CERO PESOS ";
+        String expResult = "CERO PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
@@ -68,7 +68,16 @@ public class NumberToLetterConverterTest {
     public void test1989ConvertNumberToLetter() {
         System.out.println("convertNumberToLetter 1989");
         double number = 1989;
-        String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE  PESOS ";
+        String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE  PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testImporteConvertNumberToLetter() {
+        System.out.println("convertNumberToLetter 125.43");
+        double number = 125.43;
+        String expResult = "CIENTO VEINTICINCO  PESOS CON CUARENTA Y TRES CENTAVOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -99,7 +108,7 @@ public class NumberToLetterConverterTest {
     public void testMaxNumber() {
         System.out.println("testMaxNumber");
         double number = 9999999;
-        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE  PESOS ";
+        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE  PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
