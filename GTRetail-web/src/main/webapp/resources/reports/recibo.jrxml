@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="420" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
     <property name="ireport.zoom" value="1.331000000000001"/>
     <property name="ireport.x" value="0"/>
-    <property name="ireport.y" value="48"/>
+    <property name="ireport.y" value="23"/>
     <parameter name="logo" class="java.lang.String" isForPrompting="false"/>
     <parameter name="empresa.direccion" class="java.lang.String" isForPrompting="false"/>
     <parameter name="empresa.telefono" class="java.lang.String" isForPrompting="false"/>
@@ -175,7 +175,13 @@
         </band>
     </title>
     <detail>
-        <band height="113"/>
+        <band height="113">
+            <subreport>
+                <reportElement x="0" y="0" width="555" height="113" uuid="68590962-37cc-404b-bab4-e92bd2f0cfbe"/>
+                <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{recibosDetalles})]]></dataSourceExpression>
+                <subreportExpression><![CDATA["reciboDetalle.jasper"]]></subreportExpression>
+            </subreport>
+        </band>
     </detail>
     <lastPageFooter>
         <band height="50">

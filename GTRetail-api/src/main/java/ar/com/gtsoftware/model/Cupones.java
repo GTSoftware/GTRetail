@@ -64,7 +64,7 @@ public class Cupones extends Valores {
     @Column(name = "cant_cuotas")
     private Integer cantCuotas;
 
-    @Column(name = "cuotas")
+    @Column(name = "notas")
     @Size(max = 255)
     private String notas;
 

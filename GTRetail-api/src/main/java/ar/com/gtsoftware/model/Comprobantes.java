@@ -292,4 +292,12 @@ public class Comprobantes extends BaseEntity {
         }
         return saldoConSigno;
     }
+
+    public String getBusinessString() {
+        if (idRegistro != null) {
+            return String.format("[%d] %s %s %s-%s", getId(), tipoComprobante.getNombreComprobante(), letra,
+                    idRegistro.getPuntoVentaFactura(), idRegistro.getNumeroFactura());
+        }
+        return String.format("[%d] %s", getId(), tipoComprobante.getNombreComprobante());
+    }
 }

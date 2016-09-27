@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboDetalle" pageWidth="595" pageHeight="420" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
     <property name="ireport.zoom" value="1.331000000000001"/>
     <property name="ireport.x" value="0"/>
-    <property name="ireport.y" value="48"/>
+    <property name="ireport.y" value="0"/>
     <queryString>
 		<![CDATA[]]>
     </queryString>
@@ -30,24 +30,34 @@
     <columnHeader>
         <band height="20">
             <staticText>
-                <reportElement x="0" y="0" width="100" height="20" uuid="9f7959df-57e2-4354-ba3f-9e200c093121"/>
-                <text><![CDATA[idFormaPago]]></text>
+                <reportElement x="0" y="0" width="139" height="20" uuid="9f7959df-57e2-4354-ba3f-9e200c093121"/>
+                <text><![CDATA[Forma de pago]]></text>
             </staticText>
             <staticText>
-                <reportElement x="112" y="0" width="100" height="20" uuid="8355fd68-c86e-4d5a-ad71-b442f09100f3"/>
-                <text><![CDATA[idPagoComprobante]]></text>
+                <reportElement x="441" y="0" width="100" height="20" uuid="8355fd68-c86e-4d5a-ad71-b442f09100f3"/>
+                <textElement textAlignment="Center"/>
+                <text><![CDATA[Monto]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="226" y="0" width="167" height="20" uuid="817c3943-5f38-4c83-a8a9-6495ca7844d4"/>
+                <text><![CDATA[Comprobante]]></text>
             </staticText>
         </band>
     </columnHeader>
     <detail>
-        <band height="113">
+        <band height="22">
             <textField>
-                <reportElement x="0" y="0" width="100" height="20" uuid="fc093efe-2410-41a3-829b-3cbb26b83046"/>
-                <textFieldExpression><![CDATA[""+$F{idFormaPago}]]></textFieldExpression>
+                <reportElement x="0" y="0" width="139" height="20" uuid="fc093efe-2410-41a3-829b-3cbb26b83046"/>
+                <textFieldExpression><![CDATA[$F{idFormaPago}.getNombreFormaPago()]]></textFieldExpression>
             </textField>
             <textField pattern="¤ #,##0.00">
-                <reportElement x="112" y="0" width="100" height="20" uuid="e08e9214-3c21-4341-b4d9-06fec343c6d7"/>
+                <reportElement x="441" y="0" width="100" height="20" uuid="e08e9214-3c21-4341-b4d9-06fec343c6d7"/>
+                <textElement textAlignment="Right"/>
                 <textFieldExpression><![CDATA[$F{idPagoComprobante}.getMontoPago()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="226" y="0" width="167" height="20" uuid="d9eaae7d-9a4f-4edb-a653-45a724eed560"/>
+                <textFieldExpression><![CDATA[$F{idPagoComprobante}.getIdComprobante().getBusinessString()]]></textFieldExpression>
             </textField>
         </band>
     </detail>
