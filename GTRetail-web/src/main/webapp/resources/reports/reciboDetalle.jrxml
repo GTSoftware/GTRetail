@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboDetalle" pageWidth="595" pageHeight="420" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboDetalle" pageWidth="555" pageHeight="380" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0d3f5d5d-e82d-4fe9-af74-98902561a71d">
     <property name="ireport.zoom" value="1.331000000000001"/>
     <property name="ireport.x" value="0"/>
     <property name="ireport.y" value="0"/>
@@ -35,11 +35,11 @@
             </staticText>
             <staticText>
                 <reportElement x="441" y="0" width="100" height="20" uuid="8355fd68-c86e-4d5a-ad71-b442f09100f3"/>
-                <textElement textAlignment="Center"/>
+                <textElement textAlignment="Right"/>
                 <text><![CDATA[Monto]]></text>
             </staticText>
             <staticText>
-                <reportElement x="226" y="0" width="167" height="20" uuid="817c3943-5f38-4c83-a8a9-6495ca7844d4"/>
+                <reportElement x="153" y="0" width="239" height="20" uuid="817c3943-5f38-4c83-a8a9-6495ca7844d4"/>
                 <text><![CDATA[Comprobante]]></text>
             </staticText>
         </band>
@@ -56,7 +56,7 @@
                 <textFieldExpression><![CDATA[$F{idPagoComprobante}.getMontoPago()]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="226" y="0" width="167" height="20" uuid="d9eaae7d-9a4f-4edb-a653-45a724eed560"/>
+                <reportElement x="153" y="0" width="239" height="20" uuid="d9eaae7d-9a4f-4edb-a653-45a724eed560"/>
                 <textFieldExpression><![CDATA[$F{idPagoComprobante}.getIdComprobante().getBusinessString()]]></textFieldExpression>
             </textField>
         </band>

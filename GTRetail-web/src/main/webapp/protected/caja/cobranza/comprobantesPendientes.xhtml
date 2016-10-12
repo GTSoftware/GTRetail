@@ -375,7 +375,7 @@
                                      reflow="true"
                                      liveResize="true">
                             <f:facet name="header" >
-                                Comprobante: #{cobranzaBean.comprobanteACobrar.id}
+                                Comprobante: #{cobranzaBean.comprobanteACobrar.businessString}
                             </f:facet>
                             <p:column  headerText="#{msg.formaPago}" style="text-align: left">
                                 <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
@@ -396,6 +396,7 @@
                                 </h:outputText>
                             </p:column>
 
+
                         </p:dataTable>
 
 
@@ -406,6 +407,7 @@
 
                             <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
                                              immediate="true" ajax="false"
+                                             type="button"
                                              onclick="PF('cobrarComprobanteDialog').hide();"
                                              styleClass="RedButton"/>
 
