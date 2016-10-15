@@ -20,13 +20,13 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -44,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "usuarios")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_usuario", columnDefinition = "serial"))
+@NamedEntityGraph(name = "rolesUsuarios", attributeNodes = @NamedAttributeNode("usuariosGruposList"))
 public class Usuarios extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,17 +75,16 @@ public class Usuarios extends BaseEntity implements Serializable {
     private String puntoVenta;
     @ManyToMany(mappedBy = "usuariosList")
     private List<UsuariosGrupos> usuariosGruposList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<StockMovimientos> stockMovimientosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<ProductosImagenes> productosImagenesList;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
+//    private List<StockMovimientos> stockMovimientosList;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
+//    private List<ProductosImagenes> productosImagenesList;
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne
     private Sucursales idSucursal;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
-
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
+//    private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
     /**
      * Crea un nuevo objeto Usuario
      */
@@ -213,36 +213,32 @@ public class Usuarios extends BaseEntity implements Serializable {
      *
      * @return
      */
-    @XmlTransient
-    public List<StockMovimientos> getStockMovimientosList() {
-        return stockMovimientosList;
-    }
-
+//    @XmlTransient
+//    public List<StockMovimientos> getStockMovimientosList() {
+//        return stockMovimientosList;
+//    }
     /**
      *
      * @param stockMovimientosList
      */
-    public void setStockMovimientosList(List<StockMovimientos> stockMovimientosList) {
-        this.stockMovimientosList = stockMovimientosList;
-    }
-
+//    public void setStockMovimientosList(List<StockMovimientos> stockMovimientosList) {
+//        this.stockMovimientosList = stockMovimientosList;
+//    }
     /**
      *
      * @return
      */
-    @XmlTransient
-    public List<ProductosImagenes> getProductosImagenesList() {
-        return productosImagenesList;
-    }
-
+//    @XmlTransient
+//    public List<ProductosImagenes> getProductosImagenesList() {
+//        return productosImagenesList;
+//    }
     /**
      *
      * @param productosImagenesList
      */
-    public void setProductosImagenesList(List<ProductosImagenes> productosImagenesList) {
-        this.productosImagenesList = productosImagenesList;
-    }
-
+//    public void setProductosImagenesList(List<ProductosImagenes> productosImagenesList) {
+//        this.productosImagenesList = productosImagenesList;
+//    }
     /**
      * Devuelve la sucursal a la que pertenece el usuario
      *
@@ -265,19 +261,17 @@ public class Usuarios extends BaseEntity implements Serializable {
      *
      * @return
      */
-    @XmlTransient
-    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
-        return proveedoresOrdenesCompraList;
-    }
-
+//    @XmlTransient
+//    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
+//        return proveedoresOrdenesCompraList;
+//    }
     /**
      *
      * @param proveedoresOrdenesCompraList
      */
-    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
-        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-    }
-
+//    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
+//        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
+//    }
     /**
      * Devuelve el punto de venta por defecto del usuario
      *
@@ -294,11 +288,6 @@ public class Usuarios extends BaseEntity implements Serializable {
      */
     public void setPuntoVenta(String puntoVenta) {
         this.puntoVenta = puntoVenta;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Usuarios[ idUsuario=" + this.getId() + " ]";
     }
 
 }

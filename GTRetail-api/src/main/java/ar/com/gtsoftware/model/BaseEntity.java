@@ -36,7 +36,7 @@ public abstract class BaseEntity extends GTEntity<Long> {
 //    @TableGenerator(name = "Numeraciones", table = "numeraciones", allocationSize = 1,
 //            pkColumnName = "tabla", valueColumnName = "id")
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     public BaseEntity(Long id) {

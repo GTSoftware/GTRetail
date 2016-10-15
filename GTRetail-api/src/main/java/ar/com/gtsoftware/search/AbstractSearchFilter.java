@@ -18,6 +18,8 @@ package ar.com.gtsoftware.search;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Clase abstracta que representa una agrupación de criterios de filtrado
@@ -32,12 +34,18 @@ public abstract class AbstractSearchFilter implements Serializable {
 
     private List<SortField> sortFields;
 
+    private String namedEntityGraph;
+
     public boolean hasFilter() {
         return false;
     }
 
     public boolean hasOrderFields() {
-        return (sortFields != null && !sortFields.isEmpty());
+        return CollectionUtils.isNotEmpty(sortFields);
+    }
+
+    public boolean hasNamedEntityGraph() {
+        return StringUtils.isNotEmpty(namedEntityGraph);
     }
 
     public List<SortField> getSortFields() {
@@ -61,6 +69,14 @@ public abstract class AbstractSearchFilter implements Serializable {
      */
     public void clearSortFields() {
         sortFields = null;
+    }
+
+    public String getNamedEntityGraph() {
+        return namedEntityGraph;
+    }
+
+    public void setNamedEntityGraph(String namedEntityGraph) {
+        this.namedEntityGraph = namedEntityGraph;
     }
 
 }

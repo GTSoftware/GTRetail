@@ -18,6 +18,7 @@ package ar.com.gtsoftware.auth;
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.model.UsuariosGrupos;
+import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.IOException;
 import java.io.Serializable;
@@ -96,7 +97,10 @@ public class AuthBackingBean implements Serializable {
             Principal usuP = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
 
             if (usuP != null) {
-                Usuarios usuario = usuariosFacade.findByLogIn(usuP.getName());
+                UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP.getName());
+                sf.setNamedEntityGraph("rolesUsuarios");
+
+                Usuarios usuario = usuariosFacade.findFirstBySearchFilter(sf);
                 if (usuario != null) {
                     usuarioLogueado = usuario;
                     return usuario;

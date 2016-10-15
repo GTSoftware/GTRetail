@@ -19,11 +19,15 @@ import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -36,6 +40,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  *
@@ -48,6 +53,7 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
     private final Class<T> entityClass;
 
     private static final Logger LOG = Logger.getLogger(AbstractFacade.class.getName());
+    private static final String LOAD_GRAPH = "javax.persistence.loadgraph";
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -104,6 +110,22 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
 
     protected abstract Predicate createWhereFromSearchFilter(S sf, CriteriaBuilder cb, Root<T> root);
 
+    protected Map<String, Object> createHints(S sf) {
+        if (sf.hasNamedEntityGraph()) {
+            Map<String, Object> hints = new HashMap<>();
+            List<EntityGraph<? super T>> graphs = getEntityManager().getEntityGraphs(this.entityClass);
+            for (EntityGraph<? super T> eg : graphs) {
+                if (eg.getName().equalsIgnoreCase(sf.getNamedEntityGraph())) {
+                    hints.put(LOAD_GRAPH, eg);
+                    break;
+                }
+            }
+            return hints;
+
+        }
+        return Collections.EMPTY_MAP;
+    }
+
     public List<T> findAllBySearchFilter(S sf) {
         return findBySearchFilter(sf, 0, countBySearchFilter(sf));
     }
@@ -126,6 +148,10 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
         TypedQuery<T> q = getEntityManager().createQuery(cq);
         q.setMaxResults(maxResults);
         q.setFirstResult(firstResult);
+        Map<String, Object> hints = createHints(sf);
+        if (!hints.isEmpty()) {
+            hints.forEach((x, y) -> q.setHint(x, y));
+        }
         List<T> resultList = q.getResultList();
         return resultList;
 
@@ -184,7 +210,7 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
      */
     public T findFirstBySearchFilter(S sf) {
         List<T> results = findBySearchFilter(sf, 0, 1);
-        if (results.isEmpty()) {
+        if (CollectionUtils.isEmpty(results)) {
             return null;
         }
         return results.get(0);

@@ -21,9 +21,7 @@ import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -46,24 +44,6 @@ public class UsuariosFacade extends AbstractFacade<Usuarios, UsuariosSearchFilte
         super(Usuarios.class);
     }
 
-    /**
-     * Retorna el usuario cuyo login coincida con el que se pasa por parámetro
-     *
-     * @param login
-     * @return
-     */
-    public Usuarios findByLogIn(String login) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Usuarios> cq = cb.createQuery(Usuarios.class);
-        Root<Usuarios> usuario = cq.from(Usuarios.class);
-        cq.select(usuario);
-        Predicate p = cb.equal(usuario.get(Usuarios_.login), login);
-        cq.where(p);
-        TypedQuery<Usuarios> q = em.createQuery(cq);
-        q.setMaxResults(1);
-        return q.getSingleResult();
-    }
-
     @Override
     public Predicate createWhereFromSearchFilter(UsuariosSearchFilter usuariosSearchFilter, CriteriaBuilder cb, Root<Usuarios> root) {
         Predicate p = null;
@@ -75,8 +55,8 @@ public class UsuariosFacade extends AbstractFacade<Usuarios, UsuariosSearchFilte
             p = appendOrPredicate(cb, p, p1);
         }
         if (usuariosSearchFilter.getLogin() != null) {
-            Predicate p1 = cb.like(root.get(Usuarios_.login), String.format("%%%s%%", usuariosSearchFilter.getLogin()));
-            p = appendOrPredicate(cb, p, p1);
+            Predicate p1 = cb.equal(root.get(Usuarios_.login), usuariosSearchFilter.getLogin());
+            p = appendAndPredicate(cb, p, p1);
         }
         if (usuariosSearchFilter.getPassword() != null) {
             Predicate p1 = cb.equal(root.get(Usuarios_.password), usuariosSearchFilter.getPassword());
