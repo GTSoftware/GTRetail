@@ -77,17 +77,18 @@
         <class>ar.com.gtsoftware.model.RecibosDetalle</class>
         <class>ar.com.gtsoftware.model.NegocioPlanesPagoDetalle</class>
         <class>ar.com.gtsoftware.model.NegocioPlanesPago</class>
+        <!--<jar-file>GTRetail-api.jar</jar-file>-->
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      
+
       <!--PERFORMANCE STATS-->
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true" />
       <property name="org.hibernate.stat" value="debug" />
       <property name="hibernate.generate_statistics" value="true" />
-
+      <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
       <!--            <property name="eclipselink.logging.level" value="FINE"/>
 
 
@@ -101,7 +102,7 @@
             <property name="hibernate.archive.autodetection" value="class, hbm, jar"/>-->
             <!--            <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.show_sql" value="true"/>-->
-            <!--            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>-->
+
         </properties>
     </persistence-unit>
 </persistence>

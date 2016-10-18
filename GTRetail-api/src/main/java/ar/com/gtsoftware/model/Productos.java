@@ -25,6 +25,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -42,6 +44,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
+@NamedEntityGraph(name = "precios", attributeNodes = {
+    @NamedAttributeNode("porcentajes"),
+    @NamedAttributeNode("precios")})
+
 public class Productos extends BaseEntity {
 
     private static final long serialVersionUID = 3L;

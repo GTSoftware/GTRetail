@@ -41,6 +41,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Session;
 
 /**
  *
@@ -69,9 +71,10 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
 
     public T edit(T entity) {
         constraintViolationsDetected(entity);
-        T mergedEntity = getEntityManager().merge(entity);
+//        T mergedEntity = getEntityManager().merge(entity);
+        getEntityManager().unwrap(Session.class).update(entity);
         getEntityManager().flush();
-        return mergedEntity;
+        return entity;
 
     }
 
@@ -83,6 +86,10 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
+    }
+
+    public T find(Object id, String entityGraph) {
+        return getEntityManager().find(entityClass, id, createHints(entityGraph));
     }
 
     public List<T> findAll() {
@@ -110,12 +117,19 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
 
     protected abstract Predicate createWhereFromSearchFilter(S sf, CriteriaBuilder cb, Root<T> root);
 
-    protected Map<String, Object> createHints(S sf) {
+    private Map<String, Object> createHints(S sf) {
         if (sf.hasNamedEntityGraph()) {
+            return createHints(sf.getNamedEntityGraph());
+        }
+        return Collections.EMPTY_MAP;
+    }
+
+    private Map<String, Object> createHints(String namedEntityGraph) {
+        if (StringUtils.isNotEmpty(namedEntityGraph)) {
             Map<String, Object> hints = new HashMap<>();
             List<EntityGraph<? super T>> graphs = getEntityManager().getEntityGraphs(this.entityClass);
             for (EntityGraph<? super T> eg : graphs) {
-                if (eg.getName().equalsIgnoreCase(sf.getNamedEntityGraph())) {
+                if (eg.getName().equalsIgnoreCase(namedEntityGraph)) {
                     hints.put(LOAD_GRAPH, eg);
                     break;
                 }
@@ -149,6 +163,7 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
         q.setMaxResults(maxResults);
         q.setFirstResult(firstResult);
         Map<String, Object> hints = createHints(sf);
+
         if (!hints.isEmpty()) {
             hints.forEach((x, y) -> q.setHint(x, y));
         }

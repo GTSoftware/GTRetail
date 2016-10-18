@@ -117,6 +117,7 @@ public class ProductoEditBean implements Serializable {
         if (idProducto == null) {
             nuevo();
         } else {
+
             productoActual = productosFacade.find(Long.parseLong(idProducto));
 
             if (productoActual == null) {

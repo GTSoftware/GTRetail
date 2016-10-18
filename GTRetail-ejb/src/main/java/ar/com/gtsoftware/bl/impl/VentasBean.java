@@ -18,7 +18,6 @@ package ar.com.gtsoftware.bl.impl;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
-import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
 import ar.com.gtsoftware.model.Comprobantes;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -34,9 +33,6 @@ public class VentasBean {
 
     @EJB
     private ComprobantesFacade ventasFacade;
-
-    @EJB
-    private ComprobantesPagosFacade pagosFacade;
 
     @EJB
     private PersonasCuentaCorrienteBean cuentaCorrienteBean;

@@ -89,7 +89,7 @@ public class ClientesServiceImpl implements ClientesService {
     private String formatRazonSocial(String razonSocialCliente, String apellidos, String nombres, long tipoPersoneria) {
         String razonSocial = razonSocialCliente;
         if (tipoPersoneria == 1) {//Persona física
-            razonSocial = apellidos.concat(", ").concat(nombres);
+            razonSocial = String.format("%s, %s", apellidos, nombres);
         }
         return razonSocial;
     }

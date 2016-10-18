@@ -26,6 +26,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -45,6 +48,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "comprobantes")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_comprobante"))
+@NamedEntityGraphs({
+    @NamedEntityGraph(name = "lineas", attributeNodes = {
+        @NamedAttributeNode("comprobantesLineasList")}),
+    @NamedEntityGraph(name = "pagos", attributeNodes = {
+        @NamedAttributeNode("pagosList")}),
+    @NamedEntityGraph(name = "todo", attributeNodes = {
+        @NamedAttributeNode("pagosList"),
+        @NamedAttributeNode("comprobantesLineasList")})})
 public class Comprobantes extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -86,7 +97,7 @@ public class Comprobantes extends BaseEntity {
     @JoinColumn(name = "id_negocio_tipo_comprobante", referencedColumnName = "id_negocio_tipo_comprobante")
     private NegocioTiposComprobante tipoComprobante;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante", orphanRemoval = true)
     private List<ComprobantesLineas> comprobantesLineasList;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(optional = false)
