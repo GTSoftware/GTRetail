@@ -18,7 +18,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
-            <version>4.0.2-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -55,17 +55,22 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.0.0.Final</version>
-            <scope>provided</scope>
-            <type>jar</type>
-        </dependency>
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+
+        <!-- Annotation processor to generate the JPA 2.0 metamodel classes for
+        typesafe criteria queries -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
+            <version>${eclipselink.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <!-- Build Configuration -->
@@ -118,6 +123,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>

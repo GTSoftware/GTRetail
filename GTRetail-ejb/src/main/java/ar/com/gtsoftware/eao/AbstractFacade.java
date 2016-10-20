@@ -42,7 +42,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
 
 /**
  *
@@ -71,15 +70,15 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
 
     public T edit(T entity) {
         constraintViolationsDetected(entity);
-//        T mergedEntity = getEntityManager().merge(entity);
-        getEntityManager().unwrap(Session.class).update(entity);
+        T mergedEntity = getEntityManager().merge(entity);
         getEntityManager().flush();
-        return entity;
+        return mergedEntity;
 
     }
 
     public void remove(T entity) {
-        getEntityManager().remove(getEntityManager().merge(entity));
+        getEntityManager().refresh(entity);
+        getEntityManager().remove(entity);
         getEntityManager().flush();
 
     }
