@@ -31,6 +31,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -98,7 +100,7 @@ public class RecibosSearchBean extends AbstractSearchBean<Recibos, RecibosSearch
         this.authBackingBean = authBackingBean;
     }
 
-    public void imprimirRecibo(Recibos recibo) throws IOException, JRException {
+    public void imprimirRecibo(Recibos recibo) {
         List<Recibos> recibos = new ArrayList<>();
 
         recibos.add(recibo);
@@ -109,12 +111,19 @@ public class RecibosSearchBean extends AbstractSearchBean<Recibos, RecibosSearch
         parameters.putAll(cargarParametros());
         parameters.put("totalEnLetras", NumberToLetterConverter.convertNumberToLetter(recibo.getMontoTotal().abs().doubleValue()));
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+        JasperPrint jasperPrint;
+        try {
+            jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 
-        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        httpServletResponse.addHeader("Content-disposition", String.format("attachment; filename=recibo-%d.pdf", recibo.getId()));
-        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
-        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+            HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            httpServletResponse.addHeader("Content-disposition", String.format("attachment; filename=recibo-%d.pdf", recibo.getId()));
+            ServletOutputStream servletStream = httpServletResponse.getOutputStream();
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+        } catch (JRException | IOException ex) {
+            Logger.getLogger(RecibosSearchBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+        }
         FacesContext.getCurrentInstance().responseComplete();
     }
 

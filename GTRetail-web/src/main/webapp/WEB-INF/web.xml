@@ -202,7 +202,9 @@
         <web-resource-collection>
             <web-resource-name>Allowed resources</web-resource-name>
             <url-pattern>/javax.faces.resource/*</url-pattern>
+            <url-pattern>/public/*</url-pattern>
             <url-pattern>/resources/*</url-pattern>
+            <url-pattern>/rest/*</url-pattern>
         </web-resource-collection>
         <!-- No Auth Constraint! -->
     </security-constraint>
@@ -221,9 +223,9 @@
         <auth-constraint>
             <role-name>ADMINISTRADORES</role-name>
         </auth-constraint>
-        <!--        <user-data-constraint>
+        <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>-->
+        </user-data-constraint>
     </security-constraint>
 
     <security-role>

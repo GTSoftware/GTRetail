@@ -54,8 +54,13 @@ public class CobranzaBean implements Serializable {
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
+    @ManagedProperty(value = "#{recibosSearchBean}")
+    private RecibosSearchBean recibosSearchBean;
+
     private CajasSearchFilter cajasFilter;
     private Cajas cajaActual;
+
+    private Recibos reciboActual;
 
     @EJB
     private CajasFacade facade;
@@ -119,9 +124,10 @@ public class CobranzaBean implements Serializable {
             return;
         }
         try {
-            Recibos recibo = cobranzaServiceImpl.cobrarComprobante(cajaActual, comprobanteACobrar);
-            JSFUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", recibo.getId()));
+            reciboActual = cobranzaServiceImpl.cobrarComprobante(cajaActual, comprobanteACobrar);
+            JSFUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
             RequestContext.getCurrentInstance().execute("PF('cobrarComprobanteDialog').hide();");
+            RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
@@ -136,4 +142,15 @@ public class CobranzaBean implements Serializable {
 
     }
 
+    public RecibosSearchBean getRecibosSearchBean() {
+        return recibosSearchBean;
+    }
+
+    public void setRecibosSearchBean(RecibosSearchBean recibosSearchBean) {
+        this.recibosSearchBean = recibosSearchBean;
+    }
+
+    public void imprimirRecibo() {
+        recibosSearchBean.imprimirRecibo(reciboActual);
+    }
 }

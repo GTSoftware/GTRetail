@@ -422,6 +422,33 @@
                     </h:form>
                 </p:dialog>
 
+                <p:dialog id='imprimirReciboDialog'
+                          header="#{msg.imprimir} #{msg.recibos}"
+                          widgetVar="imprimirReciboDialog"
+                          resizable="true"
+                          closeOnEscape="true"
+                          showEffect="fade" hideEffect="clip" modal="true"
+                          dynamic="false">
+                    <h:form id="imprimirReciboDialogForm">
+
+                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank" columns="2">
+
+                            <p:commandButton id="cancelarButtonImprimirRecibo" value="#{msg.cancelar}"
+                                             icon="fa fa-fw fa-ban"
+                                             immediate="true" ajax="false"
+                                             type="button"
+                                             onclick="PF('imprimirReciboDialog').hide();"
+                                             styleClass="RedButton"/>
+
+                            <p:commandButton id="imprimirReciboButton" widgetVar="imprimirReciboButton" value="#{msg.imprimir} recibo"
+                                             icon="fa fa-fw fa-print"
+                                             action="#{cobranzaBean.imprimirRecibo()}"
+                                             ajax="false"
+                                             />
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
 
 
             </div>
