@@ -57,6 +57,9 @@ public class CobranzaBean implements Serializable {
     @ManagedProperty(value = "#{recibosSearchBean}")
     private RecibosSearchBean recibosSearchBean;
 
+    @EJB
+    private JSFUtil jsfUtil;
+
     private CajasSearchFilter cajasFilter;
     private Cajas cajaActual;
 
@@ -115,17 +118,17 @@ public class CobranzaBean implements Serializable {
             return;
         }
         if (!comprobanteACobrar.getIdCondicionComprobante().getPagoTotal()) {
-            JSFUtil.addErrorMessage("No implementado para cobranza de comprobantes en CC!");
+            jsfUtil.addErrorMessage("No implementado para cobranza de comprobantes en CC!");
             return;
         }
         boolean requiereValores = comprobanteACobrar.getPagosList().stream().anyMatch(p -> p.getIdFormaPago().getRequiereValores());
         if (requiereValores) {
-            JSFUtil.addErrorMessage("Se requiere ingresar valores!");
+            jsfUtil.addErrorMessage("Se requiere ingresar valores!");
             return;
         }
         try {
             reciboActual = cobranzaServiceImpl.cobrarComprobante(cajaActual, comprobanteACobrar);
-            JSFUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
+            jsfUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
             RequestContext.getCurrentInstance().execute("PF('cobrarComprobanteDialog').hide();");
             RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
         } catch (ServiceException ex) {

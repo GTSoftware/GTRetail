@@ -50,7 +50,8 @@ public class PuntoVentaEditBean implements Serializable {
     private FiscalPuntosVentaFacade facade;
     @EJB
     private SucursalesFacade sucursalesFacade;
-
+    @EJB
+    private JSFUtil jsfUtil;
     private FiscalPuntosVenta puntoVentaActual = null;
 
     private final List<Sucursales> sucursalesList = new ArrayList<>();
@@ -66,7 +67,7 @@ public class PuntoVentaEditBean implements Serializable {
         SucursalesSearchFilter sf = new SucursalesSearchFilter(Boolean.TRUE);
         sucursalesList.addAll(sucursalesFacade.findAllBySearchFilter(sf));
 
-        String nroPuntoVenta = JSFUtil.getRequestParameterMap().get("nroPuntoVenta");
+        String nroPuntoVenta = jsfUtil.getRequestParameterMap().get("nroPuntoVenta");
 
         if (nroPuntoVenta == null) {
             nuevo();
@@ -106,11 +107,11 @@ public class PuntoVentaEditBean implements Serializable {
         try {
 
             facade.createOrEdit(puntoVentaActual);
-            JSFUtil.addInfoMessage("Punto de venta guardado exitosamente");
+            jsfUtil.addInfoMessage("Punto de venta guardado exitosamente");
             puntoVentaActual = facade.find(puntoVentaActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }

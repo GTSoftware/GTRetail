@@ -47,6 +47,9 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     @EJB
     private PersonasFacade personasFacade;
 
+    @EJB
+    private JSFUtil jsfUtil;
+
     private final PersonasCuentaCorrienteSearchFilter filter = new PersonasCuentaCorrienteSearchFilter();
 
     /**
@@ -56,17 +59,17 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     }
 
     public void init() {
-        if (JSFUtil.isPostback()) {
+        if (jsfUtil.isPostback()) {
             return;
         }
-        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = jsfUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {
             Personas persona = personasFacade.find(Long.parseLong(idPersona));
             if (persona == null) {
 
-                JSFUtil.addErrorMessage("Cliente inexistente!");
+                jsfUtil.addErrorMessage("Cliente inexistente!");
                 LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
                 filter.setPersona(persona);

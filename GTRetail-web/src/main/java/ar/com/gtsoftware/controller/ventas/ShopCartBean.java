@@ -115,6 +115,8 @@ public class ShopCartBean implements Serializable {
     private NegocioPlanesPagoFacade planesPagoFacade;
     @EJB
     private NegocioPlanesPagoDetalleFacade pagoDetalleFacade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
@@ -164,7 +166,7 @@ public class ShopCartBean implements Serializable {
      * Inicializa la conversación
      */
     public void initConversation() {
-        if (!JSFUtil.isPostback() && conversation.isTransient()) {
+        if (!jsfUtil.isPostback() && conversation.isTransient()) {
             conversation.begin();
             venta = new Comprobantes();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
@@ -240,7 +242,7 @@ public class ShopCartBean implements Serializable {
     }
 
     public void initPagos() {
-        if (!JSFUtil.isPostback()) {
+        if (!jsfUtil.isPostback()) {
             if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
                 pagoActual.setMontoPagado(BigDecimal.ZERO);
@@ -264,12 +266,12 @@ public class ShopCartBean implements Serializable {
         }
 
         if (producto == null) {
-            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
+            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
         ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
         if (precio == null) {
-            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoSinPrecio"));
+            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoSinPrecio"));
             return;
         }
 
@@ -381,7 +383,7 @@ public class ShopCartBean implements Serializable {
         if (pagoActual.getIdFormaPago() != null) {
             if (pagoActual.getMontoPago().signum() <= 0
                     || pagoActual.getMontoPago().compareTo(venta.getSaldo()) > 0) {
-                JSFUtil.addErrorMessage("El monto del pago supera el saldo!");
+                jsfUtil.addErrorMessage("El monto del pago supera el saldo!");
 
             } else {
 
@@ -423,25 +425,25 @@ public class ShopCartBean implements Serializable {
 
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
-            JSFUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
+            jsfUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
             return false;
         }
         if (venta.getIdPersona() == null) {
-            JSFUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
+            jsfUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
         if (venta.getTotal().signum() <= 0) {
-            JSFUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
+            jsfUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
             return false;
         }
         if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
-            JSFUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
+            jsfUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
         if (venta.getIdCondicionComprobante() != null) {
             if (venta.getIdCondicionComprobante().getPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
-                    JSFUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
+                    jsfUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
                 }
             }
@@ -482,12 +484,12 @@ public class ShopCartBean implements Serializable {
                     }
 
                 }
-                JSFUtil.addInfoMessage("Operación guardada exitosamente!");
+                jsfUtil.addInfoMessage("Operación guardada exitosamente!");
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
-                JSFUtil.addErrorMessage(ex.getMessage());
+                jsfUtil.addErrorMessage(ex.getMessage());
             }
         }
         return null;

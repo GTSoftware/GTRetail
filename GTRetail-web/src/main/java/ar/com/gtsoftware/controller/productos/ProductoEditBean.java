@@ -86,6 +86,9 @@ public class ProductoEditBean implements Serializable {
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
 
+    @EJB
+    private JSFUtil jsfUtil;
+
     private Productos productoActual;
 
     private List<ProductosMarcas> listMarcas = new ArrayList<>();
@@ -112,8 +115,8 @@ public class ProductoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idProducto = JSFUtil.getRequestParameterMap().get("idProducto");
-        String duplicar = JSFUtil.getRequestParameterMap().get("duplicar");
+        String idProducto = jsfUtil.getRequestParameterMap().get("idProducto");
+        String duplicar = jsfUtil.getRequestParameterMap().get("duplicar");
         if (idProducto == null) {
             nuevo();
         } else {
@@ -196,7 +199,7 @@ public class ProductoEditBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
 
         }
     }
@@ -216,7 +219,7 @@ public class ProductoEditBean implements Serializable {
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
 
         }
 
@@ -236,7 +239,7 @@ public class ProductoEditBean implements Serializable {
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }
@@ -252,11 +255,11 @@ public class ProductoEditBean implements Serializable {
             }
 
             productosFacade.createOrEdit(productoActual);
-            JSFUtil.addInfoMessage("Producto guardado Exitosamente");
+            jsfUtil.addInfoMessage("Producto guardado Exitosamente");
             productoActual = productosFacade.find(productoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }

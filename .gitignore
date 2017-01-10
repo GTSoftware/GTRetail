@@ -9,3 +9,4 @@
 *.settings/
 *.classpath
 /automated-tests/target/
+/GTRetail-web/nbproject/

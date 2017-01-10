@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
+import javax.ejb.Stateless;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -29,18 +30,20 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Util static methods used in JSF.
+ * Utility Bean for JSF.
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0
  */
-public abstract class JSFUtil {
+@Stateless
+public class JSFUtil {
 
     private static final Logger LOG = Logger.getLogger(JSFUtil.class.getName());
 
@@ -148,7 +151,7 @@ public abstract class JSFUtil {
      *
      * @param localizedMessage
      */
-    public static void addErrorMessage(String localizedMessage) {
+    public void addErrorMessage(String localizedMessage) {
         addMessage(localizedMessage, FacesMessage.SEVERITY_ERROR);
     }
 
@@ -157,7 +160,7 @@ public abstract class JSFUtil {
      *
      * @param localizedMessage
      */
-    public static void addInfoMessage(String localizedMessage) {
+    public void addInfoMessage(String localizedMessage) {
         addMessage(localizedMessage, FacesMessage.SEVERITY_INFO);
     }
 
@@ -167,7 +170,7 @@ public abstract class JSFUtil {
      * @param localizedMessage
      * @param severity
      */
-    public static void addMessage(String localizedMessage, Severity severity) {
+    public void addMessage(String localizedMessage, Severity severity) {
         addMessage(null, localizedMessage, severity);
     }
 
@@ -178,7 +181,7 @@ public abstract class JSFUtil {
      * @param localizedMessage
      * @param severity
      */
-    public static void addMessage(String clientId, String localizedMessage, Severity severity) {
+    public void addMessage(String clientId, String localizedMessage, Severity severity) {
         FacesContext context = FacesContext.getCurrentInstance();
         UIComponent componet = null;
         if (clientId != null) {
@@ -196,19 +199,19 @@ public abstract class JSFUtil {
         }
     }
 
-    public static HttpSession getSession() {
+    public HttpSession getSession() {
         return (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
     }
 
-    public static HttpServletRequest getRequest() {
+    public HttpServletRequest getRequest() {
         return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
     }
 
-    public static HttpServletResponse getResponse() {
+    public HttpServletResponse getResponse() {
         return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     }
 
-    public static void redirect(String uri) {
+    public void redirect(String uri) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         try {
             ec.redirect(ec.getRequestContextPath() + uri);
@@ -222,7 +225,7 @@ public abstract class JSFUtil {
      *
      * @return
      */
-    public static boolean isPostback() {
+    public boolean isPostback() {
         return FacesContext.getCurrentInstance().isPostback();
     }
 
@@ -231,7 +234,7 @@ public abstract class JSFUtil {
      *
      * @return
      */
-    public static String getUserPrincipalName() {
+    public String getUserPrincipalName() {
         return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
     }
 
@@ -240,7 +243,7 @@ public abstract class JSFUtil {
      *
      * @return
      */
-    public static Map<String, String> getRequestParameterMap() {
+    public Map<String, String> getRequestParameterMap() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     }
 
@@ -249,7 +252,7 @@ public abstract class JSFUtil {
      *
      * @return
      */
-    public static Map<String, Object> getSessionParameterMap() {
+    public Map<String, Object> getSessionParameterMap() {
         return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
     }
 
@@ -259,7 +262,7 @@ public abstract class JSFUtil {
      * @param role
      * @return
      */
-    public static boolean isUserInRole(String role) {
+    public boolean isUserInRole(String role) {
         return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role);
     }
 
@@ -269,7 +272,7 @@ public abstract class JSFUtil {
      * @param messajeBundle el mesaje bundle para utilizar
      * @return un ResourceBundle
      */
-    public static ResourceBundle getDefaultLocaleBundle(String messajeBundle) {
+    public ResourceBundle getDefaultLocaleBundle(String messajeBundle) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Locale locale = facesContext.getViewRoot().getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle(messajeBundle, locale);
@@ -282,10 +285,27 @@ public abstract class JSFUtil {
      * @param varName el barName que figura en faces-config
      * @return un ResourceBundle
      */
-    public static ResourceBundle getBundle(String varName) {
+    public ResourceBundle getBundle(String varName) {
         FacesContext context = FacesContext.getCurrentInstance();
         Application app = context.getApplication();
         ResourceBundle bundle = app.getResourceBundle(context, varName);
         return bundle;
+    }
+
+    /**
+     * Realiza la invalidación de la sesión de usuario y redirecciona a la dirección establecida en el parámetro.
+     *
+     * @param redirectTo
+     */
+    public void logOut(String redirectTo) {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        try {
+            request.getSession(false).invalidate();
+            request.logout();
+            ec.redirect(ec.getRequestContextPath() + redirectTo);
+        } catch (IOException | ServletException e) {
+            LOG.log(Level.SEVERE, "Logout error: {0}", e.getMessage());
+        }
     }
 }

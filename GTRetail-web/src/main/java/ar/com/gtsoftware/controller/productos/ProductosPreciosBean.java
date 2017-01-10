@@ -77,6 +77,8 @@ public class ProductosPreciosBean implements Serializable {
     private ProductosMarcasFacade productosMarcasFacade;
     @EJB
     private PersonasFacade personasFacade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     /**
      * Creates a new instance of ProductosPreciosBean
@@ -174,7 +176,7 @@ public class ProductosPreciosBean implements Serializable {
             }
             productosFacade.edit(producto);
         }
-        JSFUtil.addInfoMessage("Productos actualizados exitosamente.");
+        jsfUtil.addInfoMessage("Productos actualizados exitosamente.");
     }
 
     public BigDecimal getPorcentajeCosto() {

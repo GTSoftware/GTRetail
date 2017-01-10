@@ -69,6 +69,8 @@ public class VerComprobantesBean implements Serializable {
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private final List<FiscalPuntosVenta> puntosVentaList = new ArrayList<>();
 
@@ -82,17 +84,17 @@ public class VerComprobantesBean implements Serializable {
     }
 
     public void init() {
-        if (JSFUtil.isPostback()) {
+        if (jsfUtil.isPostback()) {
             return;
         }
-        String idVenta = JSFUtil.getRequestParameterMap().get("idComprobante");
+        String idVenta = jsfUtil.getRequestParameterMap().get("idComprobante");
         if (idVenta == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {
             ventaActual = ventasFacade.find(Long.parseLong(idVenta));
             if (ventaActual == null) {
 
-                JSFUtil.addErrorMessage("Venta inexistente!");
+                jsfUtil.addErrorMessage("Venta inexistente!");
                 LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
                 lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
@@ -112,10 +114,10 @@ public class VerComprobantesBean implements Serializable {
         FiscalPeriodosFiscalesSearchFilter psf = new FiscalPeriodosFiscalesSearchFilter(Boolean.TRUE);
         FiscalPeriodosFiscales periodo = periodosFiscalesFacade.findFirstBySearchFilter(psf);
         if (periodo == null) {
-            JSFUtil.addErrorMessage("No hay un período fiscal configurado!");
+            jsfUtil.addErrorMessage("No hay un período fiscal configurado!");
         }
         if (puntoVentaSeleccionado == null) {
-            JSFUtil.addErrorMessage("Debe seleccionar un punto de venta.");
+            jsfUtil.addErrorMessage("Debe seleccionar un punto de venta.");
         }
         try {
             String numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(ventaActual.getLetra(),
@@ -125,10 +127,10 @@ public class VerComprobantesBean implements Serializable {
                     puntoVentaSeleccionado, numeroComprobante,
                     periodo, new Date());
             ventaActual = ventasFacade.find(ventaActual.getId());
-            JSFUtil.addInfoMessage("Factura registrada correctamente");
+            jsfUtil.addInfoMessage("Factura registrada correctamente");
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            JSFUtil.addErrorMessage(ex.getMessage());
+            jsfUtil.addErrorMessage(ex.getMessage());
         }
 
     }
@@ -139,11 +141,11 @@ public class VerComprobantesBean implements Serializable {
     public void anularVenta() {
         try {
             ventasBean.anularVenta(ventaActual);
-            JSFUtil.addInfoMessage("Factura anulada correctamente");
+            jsfUtil.addInfoMessage("Factura anulada correctamente");
 
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JSFUtil.addErrorMessage(ex.getMessage());
+            jsfUtil.addErrorMessage(ex.getMessage());
 
         }
     }

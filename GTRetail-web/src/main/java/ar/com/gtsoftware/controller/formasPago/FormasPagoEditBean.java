@@ -40,7 +40,8 @@ public class FormasPagoEditBean implements Serializable {
 
     @EJB
     private NegocioFormasPagoFacade facade;
-
+    @EJB
+    private JSFUtil jsfUtil;
     private NegocioFormasPago formaPagoActual = null;
 
     /**
@@ -52,7 +53,7 @@ public class FormasPagoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idMarca = JSFUtil.getRequestParameterMap().get("idFormaPago");
+        String idMarca = jsfUtil.getRequestParameterMap().get("idFormaPago");
 
         if (idMarca == null) {
             nuevo();
@@ -77,11 +78,11 @@ public class FormasPagoEditBean implements Serializable {
         try {
 
             facade.createOrEdit(formaPagoActual);
-            JSFUtil.addInfoMessage("Forma de pago guardada Exitosamente");
+            jsfUtil.addInfoMessage("Forma de pago guardada Exitosamente");
             formaPagoActual = facade.find(formaPagoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }

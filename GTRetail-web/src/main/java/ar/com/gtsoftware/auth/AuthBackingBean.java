@@ -20,19 +20,12 @@ import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.model.UsuariosGrupos;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.IOException;
 import java.io.Serializable;
-import java.security.Principal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
@@ -50,24 +43,32 @@ public class AuthBackingBean implements Serializable {
     @EJB
     private UsuariosFacade usuariosFacade;
 
+    @EJB
+    private JSFUtil jSFUtil;
+
     private Usuarios usuarioLogueado;
-    private static final Logger LOG = Logger.getLogger(AuthBackingBean.class.getName());
+
     private MenuModel rolesMenuModel;
+
+    public AuthBackingBean() {
+    }
 
     /**
      * Creates a new instance of AuthBackingBean
+     *
+     * @param usuariosFacade
+     * @param jSFUtil
      */
-    public AuthBackingBean() {
+    public AuthBackingBean(UsuariosFacade usuariosFacade, JSFUtil jSFUtil) {
+        this.usuariosFacade = usuariosFacade;
+        this.jSFUtil = jSFUtil;
     }
 
     @PostConstruct
     public void init() {
 
         rolesMenuModel = new DefaultMenuModel();
-        for (UsuariosGrupos rol : getUserLoggedIn().getUsuariosGruposList()) {
-            DefaultMenuItem rolMi = new DefaultMenuItem(String.format("Rol: %s", rol.getNombreGrupo()));
-            rolesMenuModel.addElement(rolMi);
-        }
+
         DefaultMenuItem cambiarClaveMi = new DefaultMenuItem("Cambiar clave");
         cambiarClaveMi.setIcon("fa fa-fw fa-lock");
         cambiarClaveMi.setCommand(String.format("/protected/user/changePassword.xhtml%s", JSFUtil.JSF_REDIRECT_ESCAPED));
@@ -78,26 +79,23 @@ public class AuthBackingBean implements Serializable {
         salirMi.setCommand("#{authBackingBean.logout}");
         rolesMenuModel.addElement(salirMi);
 
+        for (UsuariosGrupos rol : getUserLoggedIn().getUsuariosGruposList()) {
+            DefaultMenuItem rolMi = new DefaultMenuItem(String.format("Rol: %s", rol.getNombreGrupo()));
+            rolesMenuModel.addElement(rolMi);
+        }
+
     }
 
     public void logout() {
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
-        try {
-            request.getSession(false).invalidate();
-            request.logout();
-            ec.redirect(ec.getRequestContextPath() + "/index.html");
-        } catch (IOException | ServletException e) {
-            LOG.log(Level.SEVERE, "Logout error: {0}", e.getMessage());
-        }
+        jSFUtil.logOut("/index.html");
     }
 
     public Usuarios getUserLoggedIn() {
         if (usuarioLogueado == null) {
-            Principal usuP = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+            String usuP = jSFUtil.getUserPrincipalName();
 
-            if (usuP != null) {
-                UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP.getName());
+            if (StringUtils.isNotEmpty(usuP)) {
+                UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP);
                 sf.setNamedEntityGraph("rolesUsuarios");
 
                 Usuarios usuario = usuariosFacade.findFirstBySearchFilter(sf);
@@ -106,10 +104,8 @@ public class AuthBackingBean implements Serializable {
                     return usuario;
                 }
             }
-            Usuarios usu = new Usuarios();
-            usu.setNombreUsuario("ANONYMOUS");
+            throw new RuntimeException("Usuario no encontrado!");
 
-            return usu;
         }
         return usuarioLogueado;
     }

@@ -38,6 +38,8 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
 
     @EJB
     private ProductosTiposUnidadesFacade facade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private ProductosTiposUnidades unidad;
 
@@ -77,6 +79,6 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
 
     public void deleteUnidad() {
         facade.remove(unidad);
-        JSFUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
+        jsfUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
     }
 }
