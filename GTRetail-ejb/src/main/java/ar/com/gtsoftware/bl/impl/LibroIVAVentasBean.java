@@ -51,6 +51,8 @@ public class LibroIVAVentasBean {
     @EJB
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
+    private static final String NUMERO_FACTURA_FMT = "%s %s-%s";
+
     /**
      * Genera el libro de IVA ventas para el período establecido en el filter
      *
@@ -155,9 +157,8 @@ public class LibroIVAVentasBean {
         if (factura.getAnulada()) {
             facDTO.setRazonSocialCliente("NULA");
         }
-        facDTO.setNumeroFactura(factura.getLetraFactura().concat(" ")
-                .concat(factura.getPuntoVentaFactura()).concat("-")
-                .concat(factura.getNumeroFactura()));
+        facDTO.setNumeroFactura(String.format(NUMERO_FACTURA_FMT, factura.getLetraFactura(), factura.getPuntoVentaFactura(),
+                factura.getNumeroFactura()));
         facDTO.setNetoGravado(BigDecimal.ZERO);
         facDTO.setNoGravado(BigDecimal.ZERO);
         facDTO.setTotalFactura(factura.getTotalFactura());
