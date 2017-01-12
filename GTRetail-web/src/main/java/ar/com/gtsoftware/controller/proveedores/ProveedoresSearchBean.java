@@ -72,4 +72,8 @@ public class ProveedoresSearchBean extends AbstractSearchBean<Personas, Personas
     public String editarProveedor(Personas p) {
         return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
+
+    public String verCuentaCorriente(Personas p) {
+        return String.format("proveedoresCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
+    }
 }

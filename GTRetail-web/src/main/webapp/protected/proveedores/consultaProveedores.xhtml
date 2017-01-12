@@ -149,6 +149,14 @@
                                     <f:param name="idPersona" value="#{cliente.id}"/>
                                 </p:commandButton>
 
+                                <p:commandButton id="verCCButton"
+                                                 icon="fa fa-fw fa-bank" action="#{proveedoresSearchBean.verCuentaCorriente(cliente)}"
+                                                 ajax="false"
+
+                                                 title="#{msg.verCuentaCorriente}">
+
+                                </p:commandButton>
+
                             </p:panelGrid>
 
                         </p:column>
