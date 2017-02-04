@@ -75,6 +75,9 @@ public class CobranzaBean implements Serializable {
      */
     public CobranzaBean() {
     }
+    //TODO permitir seleccionar varios comprobantes de un mismo cliente
+    //Cambiar a otra parte de la pantalla para cargar los datos de los valores y agruparlos
+    //Permitir la cobranza de comprobantes en cuenta corriente. Habra que generar notas de débito si la forma de pago elegida tiene recargos
 
     @PostConstruct
     private void init() {

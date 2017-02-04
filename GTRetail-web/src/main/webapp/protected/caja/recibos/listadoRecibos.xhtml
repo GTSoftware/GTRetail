@@ -24,6 +24,8 @@
                                     pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
 <!--                        <p:inputText id="searchField" value="#{movimientosCajaSearchBean.filter.txt}" placeholder="#{msg.b.usqueda}"/>-->
 
+                        <p:outputLabel value="#{msg.soloMios}:" for="soloMiosField"/>
+                        <p:selectBooleanCheckbox id="soloMiosField" value="#{recibosSearchBean.soloMiosFilter}" />
                     </p:panelGrid >
                     <p:commandButton id="buscarButton" action="#{recibosSearchBean.doSearch()}" value="Buscar"
                                      update="recibosTable" icon="fa fa-fw fa-search"/>

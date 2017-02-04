@@ -62,6 +62,8 @@ public class RecibosSearchBean extends AbstractSearchBean<Recibos, RecibosSearch
     @EJB
     private ParametrosFacade parametrosFacade;
 
+    private boolean soloMiosFilter = true;
+
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
@@ -84,6 +86,10 @@ public class RecibosSearchBean extends AbstractSearchBean<Recibos, RecibosSearch
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
             filter.addSortField(new SortField("fechaRecibo", false));
+        }
+        filter.setIdUsuario(null);
+        if (soloMiosFilter) {
+            filter.setIdUsuario(authBackingBean.getUserLoggedIn());
         }
     }
 
@@ -141,4 +147,23 @@ public class RecibosSearchBean extends AbstractSearchBean<Recibos, RecibosSearch
         }
         return result;
     }
+
+    /**
+     * Si es True especifica que solo se deben buscar recibos del usuario logueado
+     *
+     * @return
+     */
+    public Boolean getSoloMiosFilter() {
+        return soloMiosFilter;
+    }
+
+    /**
+     * Si es True especifica que solo se deben buscar recibos del usuario logueado
+     *
+     * @param soloMiosFilter
+     */
+    public void setSoloMiosFilter(Boolean soloMiosFilter) {
+        this.soloMiosFilter = soloMiosFilter;
+    }
+
 }
