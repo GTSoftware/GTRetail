@@ -11,6 +11,8 @@
         <class>ar.com.gtsoftware.model.BancosCuentas</class>
         <class>ar.com.gtsoftware.model.BancosTiposCuenta</class>
         <class>ar.com.gtsoftware.model.Cajas</class>
+        <class>ar.com.gtsoftware.model.CajasArqueos</class>
+        <class>ar.com.gtsoftware.model.CajasArqueosDetalle</class>
         <class>ar.com.gtsoftware.model.CajasMovimientos</class>
         <class>ar.com.gtsoftware.model.ContabilidadLibros</class>
         <class>ar.com.gtsoftware.model.ContabilidadMonedas</class>
