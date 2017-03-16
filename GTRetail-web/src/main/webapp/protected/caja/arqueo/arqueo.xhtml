@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Arqueo de caja</h1>
+                <div class="SeparatorFull" />
+
+                <h:form id="formContenido" >
+
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="4">
+
+                        <p:outputLabel value="#{msg.caja}:" for="idCaja"/>
+                        <p:outputLabel id="idCaja" value="#{cobranzaBean.cajaActual.id}"/>
+                        <p:outputLabel value="#{msg.fechaApertura}:" for="fechaAperturaField"/>
+                        <p:outputLabel id="fechaAperturaField" value="#{cobranzaBean.cajaActual.fechaApertura}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                        </p:outputLabel>
+
+
+                    </p:panelGrid >
+                    <div class="SeparatorFull" />
+
+
+
+
+            </div>
+        </div>
+    </div>
+</html>

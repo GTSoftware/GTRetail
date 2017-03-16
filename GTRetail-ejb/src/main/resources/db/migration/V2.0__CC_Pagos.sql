@@ -217,3 +217,51 @@ alter table productos_precios drop constraint productos_precios_pkey;
 alter table productos_precios add column productos_precios_id serial primary key;
 
 alter table productos_precios add constraint productos_precios_unique unique (id_producto, id_lista_precio);
+
+--Arqueos de caja
+create table caja_arqueos(
+    id_arqueo serial primary key,
+    fecha_arqueo timestamp not null,
+    id_caja integer not null references cajas(id_caja),
+    id_usuario_arqueo integer not null references usuarios(id_usuario),
+    version integer not null default 0,
+    id_usuario_control integer references usuarios(id_usuario),
+    fecha_control timestamp,
+    saldo_inicial numeric(19,2) not null,
+    saldo_final numeric(19,2) not null,
+    id_sucursal integer not null references sucursales(id_sucursal),
+    observaciones_control varchar(500)
+);
+
+comment on table caja_arqueos is 'Arqueos de caja realizadados por los cajeros. Delimitan un cierre y apertura de caja.';
+comment on column caja_arqueos.id_usuario_arqueo is 'El usuario que realiza el arqueo.';
+comment on column caja_arqueos.id_usuario_control is 'El usuario que controló el arqueo.';
+comment on column caja_arqueos.fecha_control is 'La fecha de control.';
+comment on column caja_arqueos.observaciones_control is 'Notas aclaratorias dejadas por el usuario de control.';
+
+CREATE INDEX fk_caja_arqueos_id_caja_fkey_idx ON caja_arqueos (id_caja);
+CREATE INDEX fk_caja_arqueos_id_usuario_arqueo_fkey_idx ON caja_arqueos (id_usuario_arqueo);
+CREATE INDEX fk_caja_arqueos_id_usuario_control_fkey_idx ON caja_arqueos (id_usuario_control);
+CREATE INDEX fk_caja_arqueos_id_sucursal_fkey_idx ON caja_arqueos (id_sucursal);
+
+create table caja_arqueos_detalle(
+    id_arqueo_detalle serial primary key,
+    id_arqueo integer not null references caja_arqueos(id_arqueo),
+    version integer not null default 0,
+    id_forma_pago integer not null references negocio_formas_pago(id_forma_pago),
+    monto_sistema numeric(19,2) not null,
+    monto_declarado numeric(19,2) not null,
+    diferencia numeric(19,2) not null,
+    descargo varchar(200)
+);
+
+comment on table caja_arqueos_detalle is 'Detalle del arqueo.';
+comment on column caja_arqueos_detalle.monto_sistema is 'El monto calculado por el sistema para la forma de pago.';
+comment on column caja_arqueos_detalle.monto_declarado is 'El monto declarado (fisico) por el usuario para la forma de pago.';
+comment on column caja_arqueos_detalle.diferencia is 'La diferencia con el físico.';
+comment on column caja_arqueos_detalle.descargo is 'La explicación del usuario por la diferencia.';
+
+CREATE INDEX fk_caja_arqueos_detalle_id_arqueo_fkey_idx ON caja_arqueos_detalle (id_arqueo);
+CREATE INDEX fk_caja_arqueos_detalle_id_forma_pago_fkey_idx ON caja_arqueos_detalle (id_forma_pago);
+
+
