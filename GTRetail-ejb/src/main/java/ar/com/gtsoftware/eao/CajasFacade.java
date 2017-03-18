@@ -17,11 +17,21 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Cajas_;
+import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.Recibos;
+import ar.com.gtsoftware.model.RecibosDetalle;
+import ar.com.gtsoftware.model.RecibosDetalle_;
+import ar.com.gtsoftware.model.Recibos_;
 import ar.com.gtsoftware.search.CajasSearchFilter;
+import java.math.BigDecimal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -63,6 +73,26 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
             p = appendAndPredicate(cb, p, p1);
         }
         return p;
+
+    }
+
+    public BigDecimal obtenerMontoFormaPago(NegocioFormasPago formaPago, Cajas caja) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+        Root<RecibosDetalle> root = cq.from(RecibosDetalle.class);
+        Join<RecibosDetalle, Recibos> recibos = root.join(RecibosDetalle_.idRecibo, JoinType.INNER);
+        CriteriaBuilder.Coalesce<BigDecimal> coalesce = cb.coalesce();
+        coalesce.value(cb.sum(root.get(RecibosDetalle_.montoPagado)));
+        coalesce.value(BigDecimal.ZERO);
+        cq.select(coalesce);
+        Predicate p = cb.equal(recibos.get(Recibos_.idCaja), caja);
+        Predicate p1 = cb.equal(root.get(RecibosDetalle_.idFormaPago), formaPago);
+
+        p = appendAndPredicate(cb, p, p1);
+
+        cq.where(p);
+        TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+        return q.getSingleResult();
 
     }
 

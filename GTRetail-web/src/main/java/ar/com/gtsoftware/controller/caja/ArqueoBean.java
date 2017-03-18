@@ -17,13 +17,18 @@ package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.eao.CajasFacade;
+import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.model.Cajas;
+import ar.com.gtsoftware.model.CajasArqueos;
+import ar.com.gtsoftware.model.CajasArqueosDetalle;
+import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.search.CajasSearchFilter;
+import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -45,9 +50,6 @@ public class ArqueoBean implements Serializable {
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
-    @ManagedProperty(value = "#{recibosSearchBean}")
-    private RecibosSearchBean recibosSearchBean;
-
     @EJB
     private JSFUtil jsfUtil;
 
@@ -55,16 +57,24 @@ public class ArqueoBean implements Serializable {
     private Cajas cajaActual;
 
     @EJB
-    private CajasFacade facade;
+    private CajasFacade cajasFacade;
+
+    @EJB
+    private NegocioFormasPagoFacade formasPagoFacade;
+
+    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(true, null);
+
+    private CajasArqueos arqueoActual = new CajasArqueos();
+
+    private CajasArqueosDetalle detalleArqueoActual;
+
+    private int itemId = 1;
 
     /**
      * Creates a new instance of CobranzaBean
      */
     public ArqueoBean() {
     }
-    //TODO permitir seleccionar varios comprobantes de un mismo cliente
-    //Cambiar a otra parte de la pantalla para cargar los datos de los valores y agruparlos
-    //Permitir la cobranza de comprobantes en cuenta corriente. Habra que generar notas de débito si la forma de pago elegida tiene recargos
 
     @PostConstruct
     private void init() {
@@ -72,22 +82,28 @@ public class ArqueoBean implements Serializable {
                 authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE);
         cajasFilter.addSortField(new SortField("fechaApertura", false));
 
-        int cantCajasAbiertas = facade.countBySearchFilter(cajasFilter);
+        int cantCajasAbiertas = cajasFacade.countBySearchFilter(cajasFilter);
         if (cantCajasAbiertas > 1) {
             throw new RuntimeException(String.format("El usuario %s tiene más de una caja abierta en la sucursal %d!",
                     authBackingBean.getUserLoggedIn().getNombreUsuario(),
                     authBackingBean.getUserLoggedIn().getIdSucursal().getId()));
         }
         if (cantCajasAbiertas == 0) {
+            throw new RuntimeException("El usuario no tiene una caja abierta para realizar el arqueo.");
 
-            Cajas caja = new Cajas();
-            caja.setFechaApertura(new Date());
-            caja.setIdUsuario(authBackingBean.getUserLoggedIn());
-            caja.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-            caja.setSaldoInicial(BigDecimal.ZERO);//TODO ver el arrastre de saldos
-            facade.create(caja);
+//            Cajas caja = new Cajas();
+//            caja.setFechaApertura(new Date());
+//            caja.setIdUsuario(authBackingBean.getUserLoggedIn());
+//            caja.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+//            caja.setSaldoInicial(BigDecimal.ZERO);//TODO ver el arrastre de saldos
+//            cajasFacade.create(caja);
         }
-        cajaActual = facade.findFirstBySearchFilter(cajasFilter);
+        cajaActual = cajasFacade.findFirstBySearchFilter(cajasFilter);
+        arqueoActual.setSaldoInicial(cajaActual.getSaldoInicial());
+        arqueoActual.setIdUsuario(authBackingBean.getUserLoggedIn());
+        arqueoActual.setIdCaja(cajaActual);
+        detalleArqueoActual = new CajasArqueosDetalle();
+        detalleArqueoActual.setItem(itemId);
     }
 
     public AuthBackingBean getAuthBackingBean() {
@@ -102,12 +118,55 @@ public class ArqueoBean implements Serializable {
         return cajaActual;
     }
 
-    public RecibosSearchBean getRecibosSearchBean() {
-        return recibosSearchBean;
+    public void agregarDetalleArqueo() {
+
+        if (validarFormaPagoYaIngresada(detalleArqueoActual)) {
+            detalleArqueoActual.setMontoSistema(obtenerSaldoCajaFormaPago(detalleArqueoActual.getIdFormaPago()));
+            detalleArqueoActual.setDiferencia(detalleArqueoActual.getMontoDeclarado().subtract(detalleArqueoActual.getMontoSistema()));
+
+            arqueoActual.agregarDetalleArqueo(detalleArqueoActual);
+            detalleArqueoActual = new CajasArqueosDetalle();
+            detalleArqueoActual.setItem(++itemId);
+            jsfUtil.addInfoMessage("Se ha agregado el monto al arqueo con éxito");
+        } else {
+            jsfUtil.addErrorMessage("Ya se ha ingresado esa forma de pago!");
+
+        }
     }
 
-    public void setRecibosSearchBean(RecibosSearchBean recibosSearchBean) {
-        this.recibosSearchBean = recibosSearchBean;
+    private boolean validarFormaPagoYaIngresada(CajasArqueosDetalle detalleNuevo) {
+        if (arqueoActual.getDetalleArqueo() != null) {
+            for (CajasArqueosDetalle d : arqueoActual.getDetalleArqueo()) {
+                if (d.getIdFormaPago().equals(detalleNuevo.getIdFormaPago())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private BigDecimal obtenerSaldoCajaFormaPago(NegocioFormasPago formaPago) {
+        return cajasFacade.obtenerMontoFormaPago(formaPago, cajaActual);
+    }
+
+    public List<NegocioFormasPago> getFormasPagoList() {
+        return formasPagoFacade.findAllBySearchFilter(formasPagoSearchFilter);
+    }
+
+    public CajasArqueos getArqueoActual() {
+        return arqueoActual;
+    }
+
+    public void setArqueoActual(CajasArqueos arqueoActual) {
+        this.arqueoActual = arqueoActual;
+    }
+
+    public CajasArqueosDetalle getDetalleArqueoActual() {
+        return detalleArqueoActual;
+    }
+
+    public void setDetalleArqueoActual(CajasArqueosDetalle detalleArqueoActual) {
+        this.detalleArqueoActual = detalleArqueoActual;
     }
 
 }

@@ -25,15 +25,141 @@
                         <p:outputLabel value="#{msg.caja}:" for="idCaja"/>
                         <p:outputLabel id="idCaja" value="#{cobranzaBean.cajaActual.id}"/>
                         <p:outputLabel value="#{msg.fechaApertura}:" for="fechaAperturaField"/>
-                        <p:outputLabel id="fechaAperturaField" value="#{cobranzaBean.cajaActual.fechaApertura}">
+                        <p:outputLabel id="fechaAperturaField" value="#{arqueoBean.cajaActual.fechaApertura}">
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
                         </p:outputLabel>
 
-
+                        <p:outputLabel value="#{msg.saldoInicial}:" for="saldoInicialFIeld"/>
+                        <p:outputLabel id="saldoInicialFIeld" value="#{arqueoBean.cajaActual.saldoInicial}">
+                            <f:convertNumber type="currency" currencySymbol="$" maxFractionDigits="2" />
+                        </p:outputLabel>
                     </p:panelGrid >
                     <div class="SeparatorFull" />
 
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2">
 
+                        <h:outputLabel value="#{msg.formaPago}:" />
+                        <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
+                                         value="#{arqueoBean.detalleArqueoActual.idFormaPago}"
+                                         converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+
+                            <f:selectItems value="#{arqueoBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}"
+                                           itemValue="#{formaPago}"/>
+
+
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="importeDeclaradoField" value="#{msg.importeDeclarado}:" />
+                        <p:inputText id="importeDeclaradoField" value="#{arqueoBean.detalleArqueoActual.montoDeclarado}"
+                                     label="#{msg.importeDeclarado}">
+            <!--                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
+                                                   rendered="#{shopCartBean.venta.saldo gt 0}" />-->
+                        </p:inputText>
+                        <p:message for="importeDeclaradoField" />
+
+                        <p:commandButton  icon="fa fa-fw fa-plus"
+                                          actionListener="#{arqueoBean.agregarDetalleArqueo()}"
+                                          update="detalleArqueoTable"
+                                          />
+                    </p:panelGrid>
+
+                    <div class="SeparatorFull" />
+
+
+                    <p:dataTable id="detalleArqueoTable" value="#{arqueoBean.arqueoActual.detalleArqueo}" var="mov"
+                                 rows="10"
+                                 paginator="true"
+                                 emptyMessage="#{msg.busquedaSinResultados}"
+                                 rowKey="#{mov.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowsPerPageTemplate="10,15,30,100"
+                                 scrollable="true"
+                                 reflow="true"
+                                 editMode="cell"
+                                 editable="true">
+
+                        <f:facet name="{Exporters}">
+
+                            <h:commandLink title="xls">
+                                <i class="fa fa-file-excel-o Fs24 Green" />
+                                <p:dataExporter type="xls" target="detalleArqueoTable" fileName="detalle_arqueo" />
+                            </h:commandLink>
+
+                            <h:commandLink title="pdf">
+                                <i class="fa fa-file-pdf-o Fs24 Red" />
+                                <p:dataExporter type="pdf" target="detalleArqueoTable" fileName="detalle_arqueo"/>
+                            </h:commandLink>
+
+                            <h:commandLink title="csv">
+                                <i class="fa fa-file-text-o Fs24 Blue" />
+                                <p:dataExporter type="csv" target="detalleArqueoTable" fileName="detalle_arqueo" />
+                            </h:commandLink>
+
+                            <h:commandLink title="xml">
+                                <i class="fa fa-file-code-o Fs24 Black" />
+                                <p:dataExporter type="xml" target="detalleArqueoTable" fileName="detalle_arqueo" />
+                            </h:commandLink>
+                        </f:facet>
+
+                        <f:facet name="header" >
+                            #{msg.detalleArqueo}
+                        </f:facet>
+
+
+                        <p:column sortBy="#{mov.idFormaPago.nombreFormaPago}"  >
+                            <f:facet name="header" >
+                                #{msg.formaPago}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.idFormaPago.nombreFormaPago}">
+
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.montoDeclarado}" >
+                            <f:facet name="header" >
+                                #{msg.importeDeclarado}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.montoDeclarado}">
+                                <f:convertNumber groupingUsed="true" type="currency"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.montoSistema}" >
+                            <f:facet name="header" >
+                                #{msg.importeSistema}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.montoSistema}">
+                                <f:convertNumber groupingUsed="true" type="currency"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.diferencia}" >
+                            <f:facet name="header" >
+                                #{msg.diferencia}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.diferencia}">
+                                <f:convertNumber groupingUsed="true" type="currency"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header" >
+                                #{msg.descargo}
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{mov.descargo}"/>
+
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="descargoField" value="#{mov.descargo}">
+                                        <f:validateLength maximum="200"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
 
 
             </div>

@@ -16,12 +16,16 @@
 package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
@@ -79,6 +83,9 @@ public class CajasArqueos extends BaseEntity {
     @Column(name = "observaciones_control")
     @Size(max = 500)
     private String obvervacionesControl;
+
+    @OneToMany(mappedBy = "idArqueo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CajasArqueosDetalle> detalleArqueo;
 
     public CajasArqueos(Long id) {
         super(id);
@@ -159,4 +166,22 @@ public class CajasArqueos extends BaseEntity {
         this.obvervacionesControl = obvervacionesControl;
     }
 
+    public List<CajasArqueosDetalle> getDetalleArqueo() {
+        return detalleArqueo;
+    }
+
+    public void setDetalleArqueo(List<CajasArqueosDetalle> detalleArqueo) {
+        this.detalleArqueo = detalleArqueo;
+    }
+
+    public void agregarDetalleArqueo(CajasArqueosDetalle detalle) {
+        if (detalle == null) {
+            throw new IllegalArgumentException("Detalle de arqueo nulo!");
+        }
+        if (detalleArqueo == null) {
+            detalleArqueo = new ArrayList<>();
+        }
+        detalle.setIdArqueo(this);
+        detalleArqueo.add(detalle);
+    }
 }
