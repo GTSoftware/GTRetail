@@ -97,6 +97,7 @@ public class CobranzaBean implements Serializable {
             caja.setFechaApertura(new Date());
             caja.setIdUsuario(authBackingBean.getUserLoggedIn());
             caja.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+            //Obtener el último arqueo y sacar el saldo final de allí.
             caja.setSaldoInicial(BigDecimal.ZERO);//TODO ver el arrastre de saldos
             facade.create(caja);
         }

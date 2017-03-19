@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.eao.CajasArqueosFacade;
 import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
 import ar.com.gtsoftware.model.Cajas;
@@ -28,6 +29,8 @@ import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -35,6 +38,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -61,8 +65,10 @@ public class ArqueoBean implements Serializable {
 
     @EJB
     private NegocioFormasPagoFacade formasPagoFacade;
+    @EJB
+    private CajasArqueosFacade arqueosFacade;
 
-    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(true, null);
+    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(null, null);
 
     private CajasArqueos arqueoActual = new CajasArqueos();
 
@@ -70,8 +76,10 @@ public class ArqueoBean implements Serializable {
 
     private int itemId = 1;
 
+    private boolean arqueoGuardado = false;
+
     /**
-     * Creates a new instance of CobranzaBean
+     * Creates a new instance of ArqueoBean
      */
     public ArqueoBean() {
     }
@@ -89,19 +97,14 @@ public class ArqueoBean implements Serializable {
                     authBackingBean.getUserLoggedIn().getIdSucursal().getId()));
         }
         if (cantCajasAbiertas == 0) {
-            throw new RuntimeException("El usuario no tiene una caja abierta para realizar el arqueo.");
-
-//            Cajas caja = new Cajas();
-//            caja.setFechaApertura(new Date());
-//            caja.setIdUsuario(authBackingBean.getUserLoggedIn());
-//            caja.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-//            caja.setSaldoInicial(BigDecimal.ZERO);//TODO ver el arrastre de saldos
-//            cajasFacade.create(caja);
+            throw new RuntimeException("El usuario no tiene una caja abierta para poder realizar el arqueo.");
         }
         cajaActual = cajasFacade.findFirstBySearchFilter(cajasFilter);
         arqueoActual.setSaldoInicial(cajaActual.getSaldoInicial());
         arqueoActual.setIdUsuario(authBackingBean.getUserLoggedIn());
         arqueoActual.setIdCaja(cajaActual);
+        arqueoActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+        arqueoActual.setDetalleArqueo(new ArrayList<>());
         detalleArqueoActual = new CajasArqueosDetalle();
         detalleArqueoActual.setItem(itemId);
     }
@@ -134,6 +137,12 @@ public class ArqueoBean implements Serializable {
         }
     }
 
+    /**
+     * Verifica que no se haya ingresado una misma forma de pago más de una vez.
+     *
+     * @param detalleNuevo
+     * @return
+     */
     private boolean validarFormaPagoYaIngresada(CajasArqueosDetalle detalleNuevo) {
         if (arqueoActual.getDetalleArqueo() != null) {
             for (CajasArqueosDetalle d : arqueoActual.getDetalleArqueo()) {
@@ -143,6 +152,75 @@ public class ArqueoBean implements Serializable {
             }
         }
         return true;
+    }
+
+    /**
+     * Borra el item de detalle de arqueo pasado por parámetro
+     *
+     * @param item
+     */
+    public void borrarDetalle(int item) {
+        int index = -1;
+        int cont = 0;
+
+        for (CajasArqueosDetalle da : arqueoActual.getDetalleArqueo()) {
+            if (da.getItem() == item) {
+                index = cont;
+                break;
+            }
+            cont++;
+        }
+        if (index >= 0) {
+            arqueoActual.getDetalleArqueo().remove(index);
+        }
+    }
+
+    /**
+     * Verifica que los montos de sistema coincidan con el total en caja y que estén justificadas todas las diferencias.
+     *
+     * @return
+     */
+    private boolean validarArqueo() {
+
+        StringBuilder sb = new StringBuilder();
+        BigDecimal montoTotalCaja = cajasFacade.obtenerMontoFormaPago(null, cajaActual);
+        BigDecimal montoTotalArqueo = BigDecimal.ZERO;
+
+        for (CajasArqueosDetalle ad : arqueoActual.getDetalleArqueo()) {
+            montoTotalArqueo = montoTotalArqueo.add(ad.getMontoSistema());
+            if (ad.getDiferencia().signum() != 0 && StringUtils.isEmpty(ad.getDescargo())) {
+                sb.append(String.format("La forma de pago: %s tiene una diferencia y debe ingresar el descargo.", ad.getIdFormaPago().getNombreFormaPago()));
+            }
+        }
+        if (montoTotalCaja.compareTo(montoTotalArqueo) != 0) {
+            sb.append("El monto de las formas de pago declaradas no coincide con el saldo en caja. Declare todas las formas de pago.\n");
+        }
+        String errores = sb.toString();
+        if (StringUtils.isNotEmpty(errores)) {
+            jsfUtil.addErrorMessage(errores);
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Persiste el arqueo actual en la base de datos si es que es válido.
+     */
+    public void guardarArqueo() {
+        if (!validarArqueo() && !arqueoGuardado) {
+            return;
+        }
+        Date fechaActual = new Date();
+        cajaActual.setFechaCierre(fechaActual);
+        arqueoActual.setFechaArqueo(fechaActual);
+        arqueoActual.setSaldoFinal(cajasFacade.obtenerMontoFormaPago(null, cajaActual));
+        cajasFacade.edit(cajaActual);
+        arqueosFacade.create(arqueoActual);
+        arqueoGuardado = true;
+        jsfUtil.addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
+
     }
 
     private BigDecimal obtenerSaldoCajaFormaPago(NegocioFormasPago formaPago) {

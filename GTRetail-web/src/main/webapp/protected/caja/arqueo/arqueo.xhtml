@@ -60,7 +60,7 @@
 
                         <p:commandButton  icon="fa fa-fw fa-plus"
                                           actionListener="#{arqueoBean.agregarDetalleArqueo()}"
-                                          update="detalleArqueoTable"
+                                          update=":formContenido"
                                           />
                     </p:panelGrid>
 
@@ -157,8 +157,33 @@
 
                         </p:column>
 
-                    </p:dataTable>
+                        <p:column  exportable="false" >
+                            <f:facet name="header">
+                                #{msg.borrar}
+                            </f:facet>
+                            <p:commandButton  icon="fa fa-fw fa-trash"
+                                              actionListener="#{arqueoBean.borrarDetalle(mov.item)}"
+                                              update=":formContenido"
+                                              title="Borrar detalle de arqueo"
+                                              process=":formContenido:detalleArqueoTable"
+                                              styleClass="RedButton"
+                                              />
 
+
+                        </p:column>
+
+                    </p:dataTable>
+                    <div class="SeparatorFull" />
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="1">
+
+                        <p:commandButton  icon="fa fa-fw fa-check"
+                                          actionListener="#{arqueoBean.guardarArqueo()}"
+                                          update=":formContenido"
+                                          styleClass="GreenButton"
+                                          value="#{msg.guardarArqueo}"
+                                          />
+                    </p:panelGrid>
                 </h:form>
 
 

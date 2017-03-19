@@ -86,7 +86,10 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
         coalesce.value(BigDecimal.ZERO);
         cq.select(coalesce);
         Predicate p = cb.equal(recibos.get(Recibos_.idCaja), caja);
-        Predicate p1 = cb.equal(root.get(RecibosDetalle_.idFormaPago), formaPago);
+        Predicate p1 = null;
+        if (formaPago != null) {
+            p1 = cb.equal(root.get(RecibosDetalle_.idFormaPago), formaPago);
+        }
 
         p = appendAndPredicate(cb, p, p1);
 
