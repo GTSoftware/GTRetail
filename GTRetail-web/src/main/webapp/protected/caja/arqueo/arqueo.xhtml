@@ -178,12 +178,37 @@
                                  styleClass="ui-panelgrid-blank" columns="1">
 
                         <p:commandButton  icon="fa fa-fw fa-check"
-                                          actionListener="#{arqueoBean.guardarArqueo()}"
-                                          update=":formContenido"
                                           styleClass="GreenButton"
                                           value="#{msg.guardarArqueo}"
+                                          onclick="PF('confirmationGuardarArqueo').show()"
+                                          immediate="true"
+                                          rendered="#{not arqueoBean.arqueoGuardado}"
                                           />
+
+
                     </p:panelGrid>
+                    <p:confirmDialog widgetVar="confirmationGuardarArqueo" header="#{msg.confirmacion}"
+                                     appendTo="@(body)"
+                                     message="#{msg.confirmGuardarArqueo}"
+                                     showEffect="fade" hideEffect="explode">
+
+
+                        <p:commandButton value="#{msg.si}"
+                                         oncomplete="confirmationGuardarArqueo.hide()"
+                                         actionListener="#{arqueoBean.guardarArqueo()}"
+                                         immediate="true"
+                                         update=":formContenido"
+                                         styleClass="ui-confirmdialog-yes"
+                                         icon="ui-icon-check"
+                                         process="@this"/>
+
+                        <p:commandButton value="#{msg.no}" type="button"
+                                         onclick="PF('confirmationGuardarArqueo').hide()"
+                                         styleClass="ui-confirmdialog-no"
+                                         icon="ui-icon-close"
+                                         />
+
+                    </p:confirmDialog>
                 </h:form>
 
 

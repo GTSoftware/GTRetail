@@ -247,4 +247,8 @@ public class ArqueoBean implements Serializable {
         this.detalleArqueoActual = detalleArqueoActual;
     }
 
+    public boolean getArqueoGuardado() {
+        return arqueoGuardado;
+    }
+
 }
