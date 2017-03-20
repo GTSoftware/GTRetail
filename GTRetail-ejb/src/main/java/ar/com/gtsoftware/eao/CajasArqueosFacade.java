@@ -16,7 +16,8 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.CajasArqueos;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.model.CajasArqueos_;
+import ar.com.gtsoftware.search.CajasArqueosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class CajasArqueosFacade extends AbstractFacade<CajasArqueos, AbstractSearchFilter> {
+public class CajasArqueosFacade extends AbstractFacade<CajasArqueos, CajasArqueosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,8 +45,28 @@ public class CajasArqueosFacade extends AbstractFacade<CajasArqueos, AbstractSea
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter psf, CriteriaBuilder cb, Root<CajasArqueos> root) {
+    public Predicate createWhereFromSearchFilter(CajasArqueosSearchFilter psf, CriteriaBuilder cb, Root<CajasArqueos> root) {
         Predicate p = null;
+        if (psf.hasValidFechasArqueo()) {
+            Predicate p1 = cb.between(root.get(CajasArqueos_.fechaArqueo), psf.getFechaArqueoDesde(), psf.getFechaArqueoHasta());
+            p = appendAndPredicate(cb, p1, p);
+        }
+
+        if (psf.getControlado() != null) {
+            Predicate p1;
+            if (psf.getControlado()) {
+                p1 = cb.isNotNull(root.get(CajasArqueos_.idUsuarioControl));
+            } else {
+                p1 = cb.isNull(root.get(CajasArqueos_.idUsuarioControl));
+            }
+
+            p = appendAndPredicate(cb, p1, p);
+        }
+
+        if (psf.getSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(CajasArqueos_.idSucursal), psf.getSucursal());
+            p = appendAndPredicate(cb, p1, p);
+        }
 
         return p;
 
