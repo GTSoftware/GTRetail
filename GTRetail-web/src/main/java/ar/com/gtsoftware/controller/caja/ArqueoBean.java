@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.CajasService;
 import ar.com.gtsoftware.eao.CajasArqueosFacade;
 import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
@@ -23,9 +24,7 @@ import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasArqueos;
 import ar.com.gtsoftware.model.CajasArqueosDetalle;
 import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.search.CajasSearchFilter;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -57,7 +56,6 @@ public class ArqueoBean implements Serializable {
     @EJB
     private JSFUtil jsfUtil;
 
-    private CajasSearchFilter cajasFilter;
     private Cajas cajaActual;
 
     @EJB
@@ -67,6 +65,8 @@ public class ArqueoBean implements Serializable {
     private NegocioFormasPagoFacade formasPagoFacade;
     @EJB
     private CajasArqueosFacade arqueosFacade;
+    @EJB
+    private CajasService cajasService;
 
     private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(null, null);
 
@@ -86,20 +86,12 @@ public class ArqueoBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        cajasFilter = new CajasSearchFilter(authBackingBean.getUserLoggedIn(),
-                authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE);
-        cajasFilter.addSortField(new SortField("fechaApertura", false));
+        Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
 
-        int cantCajasAbiertas = cajasFacade.countBySearchFilter(cajasFilter);
-        if (cantCajasAbiertas > 1) {
-            throw new RuntimeException(String.format("El usuario %s tiene más de una caja abierta en la sucursal %d!",
-                    authBackingBean.getUserLoggedIn().getNombreUsuario(),
-                    authBackingBean.getUserLoggedIn().getIdSucursal().getId()));
-        }
-        if (cantCajasAbiertas == 0) {
+        if (cajaAbierta == null) {
             throw new RuntimeException("El usuario no tiene una caja abierta para poder realizar el arqueo.");
         }
-        cajaActual = cajasFacade.findFirstBySearchFilter(cajasFilter);
+        cajaActual = cajaAbierta;
         arqueoActual.setSaldoInicial(cajaActual.getSaldoInicial());
         arqueoActual.setIdUsuario(authBackingBean.getUserLoggedIn());
         arqueoActual.setIdCaja(cajaActual);
@@ -213,11 +205,11 @@ public class ArqueoBean implements Serializable {
             return;
         }
         Date fechaActual = new Date();
-        cajaActual.setFechaCierre(fechaActual);
+
         arqueoActual.setFechaArqueo(fechaActual);
         arqueoActual.setSaldoFinal(cajasFacade.obtenerMontoFormaPago(null, cajaActual));
-        cajasFacade.edit(cajaActual);
         arqueosFacade.create(arqueoActual);
+        cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
         jsfUtil.addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
 

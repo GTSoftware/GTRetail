@@ -16,18 +16,14 @@
 package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.CajasService;
 import ar.com.gtsoftware.bl.CobranzaService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Recibos;
-import ar.com.gtsoftware.search.CajasSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -45,6 +41,9 @@ import org.primefaces.context.RequestContext;
 @ViewScoped
 public class CobranzaBean implements Serializable {
 
+    @EJB
+    private CajasService cajasService;
+
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(CobranzaBean.class.getName());
 
@@ -60,13 +59,9 @@ public class CobranzaBean implements Serializable {
     @EJB
     private JSFUtil jsfUtil;
 
-    private CajasSearchFilter cajasFilter;
     private Cajas cajaActual;
 
     private Recibos reciboActual;
-
-    @EJB
-    private CajasFacade facade;
 
     private Comprobantes comprobanteACobrar;
 
@@ -81,27 +76,10 @@ public class CobranzaBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        cajasFilter = new CajasSearchFilter(authBackingBean.getUserLoggedIn(),
-                authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE);
-        cajasFilter.addSortField(new SortField("fechaApertura", false));
+        Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
 
-        int cantCajasAbiertas = facade.countBySearchFilter(cajasFilter);
-        if (cantCajasAbiertas > 1) {
-            throw new RuntimeException(String.format("El usuario %s tiene más de una caja abierta en la sucursal %d!",
-                    authBackingBean.getUserLoggedIn().getNombreUsuario(),
-                    authBackingBean.getUserLoggedIn().getIdSucursal().getId()));
-        }
-        if (cantCajasAbiertas == 0) {
-
-            Cajas caja = new Cajas();
-            caja.setFechaApertura(new Date());
-            caja.setIdUsuario(authBackingBean.getUserLoggedIn());
-            caja.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-            //Obtener el último arqueo y sacar el saldo final de allí.
-            caja.setSaldoInicial(BigDecimal.ZERO);//TODO ver el arrastre de saldos
-            facade.create(caja);
-        }
-        cajaActual = facade.findFirstBySearchFilter(cajasFilter);
+        //TODO ver de setear variable para realizar la apertura de caja o redirecionarlo a otra pantalla para abrir caja.
+        cajaActual = cajaAbierta;
     }
 
     public AuthBackingBean getAuthBackingBean() {

@@ -68,6 +68,11 @@ public class CajasArqueosFacade extends AbstractFacade<CajasArqueos, CajasArqueo
             p = appendAndPredicate(cb, p1, p);
         }
 
+        if (psf.getUsuario() != null) {
+            Predicate p1 = cb.equal(root.get(CajasArqueos_.idUsuario), psf.getUsuario());
+            p = appendAndPredicate(cb, p1, p);
+        }
+
         return p;
 
     }
