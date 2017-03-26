@@ -4,7 +4,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-
+    <!--TODO crear un backing bean para errores que permita enviar el mail con el error-->
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,7 +26,7 @@
                 <div class="EmptyBox100 ShowOnDesktop"></div>
                 <div class="EmptyBox20 ShowOnMobile"></div>
                 <div class="Wid50 MarAuto WidAutoOnMobile">
-                    <div class="Wid100 FontLatoRegular White Fs18">Por favor contacte al administrador del sistema !</div>
+                    <div class="Wid100 FontLatoRegular White Fs18">¡Vaya! Algo no ha ido bien...</div>
                     <div class="EmptyBox30"></div>
                     <div class="Card ui-fluid ShadowEffect">
                         <div class="EmptyBox20"></div>
@@ -34,7 +34,7 @@
                             <i class="icon-website22 Fs100 Red"></i>
                         </div>
                         <div class="Container100 FontLatoBlack Fs30 Red">
-                            Error Exception Occured!
+                            No podemos continuar la operación actual.
                         </div>
                         <div class="EmptyBox10"></div>
                         <div class="Container100">
@@ -45,16 +45,16 @@
                         <div class="Separator"></div>
                         <div class="EmptyBox10"></div>
 
-                        <span class="DispBlock OvHidden FontLatoBold Fs16 SoftGray">Or Contact With Admin</span>
+                        <span class="DispBlock OvHidden FontLatoBold Fs16 SoftGray">O contacte al Administrador:</span>
                         <div class="EmptyBox10"></div>
                         <div class="Container100">
-                            <p:inputText placeholder="Your E-Mail" style="padding:15px !important;"/>
+                            <p:inputText placeholder="Su E-Mail" style="padding:15px !important;"/>
                         </div>
                         <div class="Container100">
-                            <p:inputTextarea rows="3" placeholder="Your Message" style="padding:15px !important;"/>
+                            <p:inputTextarea rows="3" placeholder="Su Mensaje..." style="padding:15px !important;"/>
                         </div>
                         <div class="Container100">
-                            <p:commandButton type="button"  value="Send To Admin" styleClass="OrangeButton"/>
+                            <p:commandButton type="button"  value="Enviar al Administrador" styleClass="OrangeButton"/>
                         </div>
 
                     </div>

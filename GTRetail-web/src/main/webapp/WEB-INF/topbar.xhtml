@@ -11,7 +11,7 @@
     <div id="layout-topbar-cover">
         <div id="layout-topbar-row">
             <div id="layout-topbar-left">
-                <a href="dashboard-banking.xhtml" id="logo"><h:graphicImage name="logo.svg" id="logo" library="images" /></a>
+                <a href="index.xhtml" id="logo"><h:graphicImage name="logo.svg" id="logo" library="images" /></a>
             </div>
             <div id="layout-topbar-right">
 
@@ -20,25 +20,36 @@
 
                 <!--                <a id="" class="topbar-link Animated03 Fright"><i class="icon-user7"></i></a>-->
 
-                <p:commandButton id="rolesButton" type="button"
-                                 icon="fa fa-user"
-                                 value="#{authBackingBean.userLoggedIn.nombreUsuario}"
-                                 class="  Animated03 Fright"
-                                 >
-
-                    <p:menu overlay="true" trigger="rolesButton" my="left top" at="left bottom" model="#{authBackingBean.rolesMenuModel}">
-
-                    </p:menu>
+                <div class="  Animated03 Fright" >
 
 
-                </p:commandButton>
+                    <p:outputLabel id="usuarioSucursalLabel" value="#{msg.sucursal}: #{authBackingBean.userLoggedIn.idSucursal.nombreSucursal}"
+                                   style="color: #ffffff;font-size: small;"
+                                   />
 
-                <!--<a id="" class="topbar-link Animated03 Fright">#{authBackingBean.userLoggedIn.nombreUsuario}</a>-->
+                    <p:spacer />
 
-                <div id="search-bar">
-                    <input type="text" placeholder="Search"></input>
-                    <a id="search-btn" class="Animated03"><i class="icon-zoom64"></i></a>
+                    <p:commandButton id="rolesButton" type="button"
+                                     icon="fa fa-user"
+                                     value="#{authBackingBean.userLoggedIn.nombreUsuario}"
+
+                                     >
+
+                        <p:menu overlay="true" trigger="rolesButton" my="left top" at="left bottom" model="#{authBackingBean.rolesMenuModel}">
+
+                        </p:menu>
+
+
+                    </p:commandButton>
+
+
+
+                                 <!--<a id="" class="topbar-link Animated03 Fright">#{authBackingBean.userLoggedIn.nombreUsuario}</a>-->
                 </div>
+                <!--                <div id="search-bar">
+                                    <input type="text" placeholder="Search"></input>
+                                    <a id="search-btn" class="Animated03"><i class="icon-zoom64"></i></a>
+                                </div>-->
 
 
             </div>
