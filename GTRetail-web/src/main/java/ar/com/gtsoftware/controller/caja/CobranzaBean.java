@@ -77,8 +77,10 @@ public class CobranzaBean implements Serializable {
     @PostConstruct
     private void init() {
         Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
+        if (cajaAbierta == null) {
+            RequestContext.getCurrentInstance().execute("PF('abrirCajaDialog').show();");
+        }
 
-        //TODO ver de setear variable para realizar la apertura de caja o redirecionarlo a otra pantalla para abrir caja.
         cajaActual = cajaAbierta;
     }
 
@@ -95,6 +97,11 @@ public class CobranzaBean implements Serializable {
     }
 
     public void cobrarComprobante() {
+        RequestContext.getCurrentInstance().execute("PF('cobrarComprobanteDialog').hide();");
+        if (cajaActual == null) {
+            jsfUtil.addErrorMessage("No hay una caja abierta.");
+            return;
+        }
 
         if (comprobanteACobrar == null) {
             return;
@@ -137,5 +144,13 @@ public class CobranzaBean implements Serializable {
 
     public void imprimirRecibo() {
         recibosSearchBean.imprimirRecibo(reciboActual);
+    }
+
+    /**
+     * Realiza la apertura de caja para el usuario.
+     */
+    public void abrirCaja() {
+        Cajas cajaAbierta = cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
+        cajaActual = cajaAbierta;
     }
 }

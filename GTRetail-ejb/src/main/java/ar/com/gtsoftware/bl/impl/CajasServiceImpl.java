@@ -59,7 +59,7 @@ public class CajasServiceImpl implements CajasService {
 
     @Override
     public Cajas abrirCaja(Usuarios usuario) {
-        if (obtenerCajaActual(usuario) != null) {
+        if (obtenerCajaActual(usuario) == null) {
 
             Cajas caja = new Cajas();
             caja.setFechaApertura(new Date());
@@ -69,9 +69,8 @@ public class CajasServiceImpl implements CajasService {
             caja.setSaldoInicial(obtenerSaldoUltimoArqueo(usuario));
             facade.create(caja);
         }
-        CajasSearchFilter cajasFilter = new CajasSearchFilter(usuario,
-                usuario.getIdSucursal(), Boolean.TRUE);
-        return facade.findFirstBySearchFilter(cajasFilter);
+
+        return obtenerCajaActual(usuario);
     }
 
     /**

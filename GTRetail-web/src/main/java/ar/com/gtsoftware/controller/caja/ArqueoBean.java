@@ -89,7 +89,10 @@ public class ArqueoBean implements Serializable {
         Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
 
         if (cajaAbierta == null) {
-            throw new RuntimeException("El usuario no tiene una caja abierta para poder realizar el arqueo.");
+            jsfUtil.addErrorMessage("El usuario no tiene una caja abierta para poder realizar el arqueo.");
+            jsfUtil.redirect("/protected/index.xhtml");
+
+            return;
         }
         cajaActual = cajaAbierta;
         arqueoActual.setSaldoInicial(cajaActual.getSaldoInicial());
