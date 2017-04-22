@@ -17,7 +17,6 @@ package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.eao.DepositosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.RemitoFacade;
 import ar.com.gtsoftware.eao.RemitoRecepcionFacade;
 import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
@@ -45,8 +44,8 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class IngresoMercaderiaBean implements Serializable {
 
-    @EJB
-    private ProductosFacade productosFacade;
+    private static final long serialVersionUID = 1L;
+
     @EJB
     private PersonasFacade personasFacade;
     @EJB
@@ -58,6 +57,9 @@ public class IngresoMercaderiaBean implements Serializable {
 
     @EJB
     private RemitoRecepcionFacade remitoRecepcionFacade;
+
+    @EJB
+    private JSFUtil jsfUtil;
 
     private Remito remitoCabecera = new Remito();
     private List<Personas> proveedoresList = new ArrayList();
@@ -71,14 +73,14 @@ public class IngresoMercaderiaBean implements Serializable {
         psf.addSortField(new SortField("razonSocial", true));
         proveedoresList.addAll(personasFacade.findAllBySearchFilter(psf));
         remitoCabecera.setDetalleList(new ArrayList<>());
-        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2));
+        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));//TODO: ID deposito Cableado por el momento
 
     }
 
     public void agregarLinea() {
 
         if (remitoDetalle.getIdProducto() == null) {
-            JSFUtil.addErrorMessage("Debe seleccionar un producto antes.");
+            jsfUtil.addErrorMessage("Debe seleccionar un producto antes.");
             return;
         }
 
@@ -94,7 +96,7 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public String confirmarIngreso() {
         if (remitoCabecera.getDetalleList().isEmpty()) {
-            JSFUtil.addErrorMessage("Debe ingresar algunas lineas.");
+            jsfUtil.addErrorMessage("Debe ingresar algunas lineas.");
             return "";
         }
 

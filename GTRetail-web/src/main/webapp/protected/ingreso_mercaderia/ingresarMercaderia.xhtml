@@ -17,7 +17,7 @@
 
 
                     <p:panel header="#{msg.proveedores}">
-                        <p:defaultCommand target="buscarButton"/>
+
                         <p:panelGrid layout="grid"
                                      id="proveedorGrid"
                                      style="border:0px !important; background:none;"
@@ -30,7 +30,7 @@
                                          />
 
 
-                            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                            <p:commandButton id="buscarProveedorButton" icon="fa fa-fw fa-search"
                                              title="#{msg.buscar} proveedores"
                                              oncomplete="PF('proveedoresDialog').show()"
                                              process="@none"
@@ -43,9 +43,9 @@
                     <div class="SeparatorFull" />
 
                     <p:panel header="#{msg.productos}">
-                        <p:defaultCommand target="buscarButton"/>
+
                         <p:panelGrid layout="grid"
-                                     id="proveedorGrid"
+                                     id="productosGrid"
                                      style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank" columns="2"
                                      >
@@ -53,14 +53,14 @@
                             <p:outputLabel value="#{msg.codigo}: "/>
 
                             <p:panelGrid layout="grid"
-                                         id="proveedorGrid"
+                                         id="detalleGrid"
                                          style="border:0px !important; background:none;"
                                          styleClass="ui-panelgrid-blank" columns="2"
                                          >
                                 <p:outputLabel
                                     value="#{ingresoMercaderiaBean.remitoDetalle.idProducto.id}"
                                     />
-                                <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                                <p:commandButton id="buscarProveedor2Button" icon="fa fa-fw fa-search"
                                                  title="#{msg.buscar} proveedores"
                                                  oncomplete="PF('proveedoresDialog').show()"
                                                  process="@none"
@@ -163,7 +163,7 @@
                                          >
             </gtsoftware:busquedaPersonas>
 
-            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+            <p:commandButton id="buscarPersonaOkButton" icon="fa fa-fw fa-search"
                              title="#{msg.ok}"
                              oncomplete="PF('proveedoresDialog').hide()"
                              update=":formContenido:proveedorGrid"

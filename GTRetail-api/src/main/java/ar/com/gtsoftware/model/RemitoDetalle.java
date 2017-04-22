@@ -28,7 +28,7 @@ import javax.persistence.Table;
  * @author fede
  */
 @Entity
-@Table(name = "remito_detalle")
+@Table(name = "remitos_detalle")
 @AttributeOverride(name = "id", column = @Column(name = "id_remito_detalle", columnDefinition = "serial"))
 public class RemitoDetalle extends BaseEntity {
 

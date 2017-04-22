@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
  * @author fede
  */
 @Entity
-@Table(name = "remito_recepciones")
+@Table(name = "remitos_recepciones")
 @AttributeOverride(name = "id", column = @Column(name = "id_recepcion", columnDefinition = "serial"))
 public class RemitoRecepcion extends BaseEntity {
 
