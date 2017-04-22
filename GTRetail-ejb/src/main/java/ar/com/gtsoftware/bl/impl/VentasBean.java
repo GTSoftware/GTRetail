@@ -35,7 +35,7 @@ public class VentasBean {
     private ComprobantesFacade ventasFacade;
 
     @EJB
-    private PersonasCuentaCorrienteBean cuentaCorrienteBean;
+    private PersonasCuentaCorrienteServiceImpl cuentaCorrienteBean;
     @EJB
     private ComprobantesEstadosFacade estadosFacade;
     // Add business logic below. (Right-click in editor and choose

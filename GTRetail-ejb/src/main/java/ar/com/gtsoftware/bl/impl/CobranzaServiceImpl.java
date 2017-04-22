@@ -48,7 +48,7 @@ public class CobranzaServiceImpl implements CobranzaService {
     private CajasMovimientosFacade cajasMovimientosFacade;
 
     @EJB
-    private PersonasCuentaCorrienteBean cuentaCorrienteBean;
+    private PersonasCuentaCorrienteServiceImpl cuentaCorrienteBean;
 
     @Override
     public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException {

@@ -21,9 +21,15 @@ import ar.com.gtsoftware.bl.CobranzaService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Comprobantes;
+import ar.com.gtsoftware.model.ComprobantesPagos;
+import ar.com.gtsoftware.model.Cupones;
 import ar.com.gtsoftware.model.Recibos;
+import ar.com.gtsoftware.model.dto.PagoValorDTO;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,6 +37,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -64,6 +71,10 @@ public class CobranzaBean implements Serializable {
     private Recibos reciboActual;
 
     private Comprobantes comprobanteACobrar;
+
+    private List<Comprobantes> selectedComprobantes;
+
+    private List<PagoValorDTO> pagosValores;
 
     /**
      * Creates a new instance of CobranzaBean
@@ -153,4 +164,65 @@ public class CobranzaBean implements Serializable {
         Cajas cajaAbierta = cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
         cajaActual = cajaAbierta;
     }
+
+    public List<Comprobantes> getSelectedComprobantes() {
+        return selectedComprobantes;
+    }
+
+    public void setSelectedComprobantes(List<Comprobantes> selectedComprobantes) {
+        this.selectedComprobantes = selectedComprobantes;
+    }
+
+    private boolean validarComprobantesSeleccionados() {
+        if (CollectionUtils.isEmpty(selectedComprobantes)) {
+            jsfUtil.addErrorMessage("No hay comprobantes seleccionados.");
+            return false;
+        }
+        Long idPersona = selectedComprobantes.get(0).getIdPersona().getId();
+        for (Comprobantes c : selectedComprobantes) {
+            if (!Objects.equals(idPersona, c.getIdPersona().getId())) {
+                jsfUtil.addErrorMessage("Debe seleccionar comprobatnes de un mismo cliente.");
+                return false;
+            }
+        }
+        for (Comprobantes c : selectedComprobantes) {
+            if (!c.getIdCondicionComprobante().getPagoTotal()) {
+                jsfUtil.addErrorMessage("No implementado para cobranza de comprobantes en CC!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void cobrarComprobantes() {
+        if (!validarComprobantesSeleccionados()) {
+            return;
+        }
+    }
+
+    public void cargarValores() {
+
+        pagosValores = new ArrayList<>();
+        int item = 1;
+        for (Comprobantes comp : selectedComprobantes) {
+            for (ComprobantesPagos pago : comp.getPagosList()) {
+                PagoValorDTO pagoValor = new PagoValorDTO(item++, pago, null);
+                if (pago.getIdFormaPago().getRequiereValores()) {
+                    //Supongo que siempre es con tarjeta, después veo como hago lo de cheques
+                    Cupones cupon = new Cupones();
+                    cupon.setCantCuotas(pago.getIdDetallePlan().getCuotas());
+                    cupon.setCoeficiente(pago.getIdDetallePlan().getCoeficienteInteres());
+                    cupon.setMonto(pago.getMontoPago());
+                    pagoValor.setCupon(cupon);
+
+                }
+                pagosValores.add(pagoValor);
+            }
+        }
+    }
+
+    public List<PagoValorDTO> getPagosValores() {
+        return pagosValores;
+    }
+
 }

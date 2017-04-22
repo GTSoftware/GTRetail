@@ -35,4 +35,5 @@ public interface CobranzaService {
      * @return el recibo generado por la cobranza
      */
     public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException;
+
 }

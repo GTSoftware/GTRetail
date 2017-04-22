@@ -19,7 +19,7 @@ import ar.com.gtsoftware.eao.PersonasCuentaCorrienteFacade;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import java.math.BigDecimal;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -30,17 +30,15 @@ import javax.ejb.Stateless;
  */
 @Stateless
 @LocalBean
-public class PersonasCuentaCorrienteBean {
+public class PersonasCuentaCorrienteServiceImpl {
 
     @EJB
     private PersonasCuentaCorrienteFacade cuentaCorrienteFacade;
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 
     public void registrarMovimientoCuenta(Personas persona, BigDecimal importe, String descripcion) {
         PersonasCuentaCorriente cc = new PersonasCuentaCorriente();
         cc.setDescripcionMovimiento(descripcion);
-        cc.setFechaMovimiento(GregorianCalendar.getInstance().getTime());
+        cc.setFechaMovimiento(new Date());
         cc.setImporteMovimiento(importe);
         cc.setIdPersona(persona);
         //cc.setIdRegistroContable(null);

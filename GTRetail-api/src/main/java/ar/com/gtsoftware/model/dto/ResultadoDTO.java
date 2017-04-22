@@ -18,6 +18,7 @@ package ar.com.gtsoftware.model.dto;
 import java.io.Serializable;
 
 /**
+ * Utilizado en las comunicaciones por API REST
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */

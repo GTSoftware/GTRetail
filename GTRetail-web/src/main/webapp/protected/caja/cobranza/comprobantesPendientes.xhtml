@@ -121,12 +121,17 @@
                                  paginator="true"
                                  emptyMessage="#{msg.busquedaSinResultados}"
                                  rowKey="#{comprobante.id}"
+                                 selection="#{cobranzaBean.selectedComprobantes}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                  rowsPerPageTemplate="15,20,30,50,100"
 
 
                                  scrollable="true"
                                  reflow="true" >
+                        <f:facet name="header">
+                            Seleccione los comprobantes que desea cobrar
+                        </f:facet>
+
                         <f:facet name="{Exporters}">
                             <h:commandLink title="xls">
                                 <i class="fa fa-file-excel-o Fs24 Green" />
@@ -148,6 +153,10 @@
                                 <p:dataExporter type="xml" target="ventasTable" fileName="comprobantes" />
                             </h:commandLink>
                         </f:facet>
+
+
+                        <p:column selectionMode="multiple" style="text-align:center" exportable="false"/>
+
                         <p:column  exportable="false">
                             <p:rowToggler />
                         </p:column>
@@ -323,10 +332,21 @@
 
                     </p:dataTable>
 
+                    <div class="SeparatorFull" />
+
+                    <p:commandButton id="cobrarComprobantesButton"
+                                     value="#{msg.cobrar} seleccionados"
+                                     icon="fa fa-fw fa-money"
+                                     styleClass="GreenButton"
+                                     action="#{cobranzaBean.cargarValores()}"
+                                     update=":cobrarComprobantesDialog"
+                                     oncomplete="PF('cobrarComprobantesDialog').show()"
+
+                                     />
 
                 </h:form>
 
-
+                <!--DIALOGOS-->
                 <p:dialog id='busquedaPersonasDialog'
                           header="#{msg.busquedaClientes}"
                           widgetVar="clientesDialog"
@@ -349,9 +369,6 @@
 
                     </h:form>
                 </p:dialog>
-
-
-
 
 
 
@@ -413,6 +430,125 @@
 
                             <p:commandButton id="cobrarButton" widgetVar="cobrarButton" value="#{msg.cobrar}" icon="fa fa-fw fa-money"
                                              action="#{cobranzaBean.cobrarComprobante()}"
+                                             process="@this"
+                                             onclick="PF('cobrarButton').disable();"
+                                             update=":formContenido"/>
+                        </p:panelGrid>
+
+
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id='cobrarComprobantesDialog'
+                          header="#{msg.cobrar}"
+                          widgetVar="cobrarComprobantesDialog"
+                          resizable="true"
+                          closeOnEscape="true"
+                          showEffect="fade" hideEffect="clip" modal="true"
+                          dynamic="false">
+                    <h:form id="cobrarComprobantesDialogForm">
+
+                        <p:dataTable id="pagosValorTable" value="#{cobranzaBean.pagosValores}" var="pago"
+                                     rows="5"
+                                     paginator="true"
+
+                                     emptyMessage="#{msg.pagosVacio}"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,30"
+                                     resizableColumns="false"
+                                     reflow="true"
+                                     liveResize="true"
+                                     editable="true" editMode="cell">
+                            <!--<f:facet name="header" >
+                                Comprobante: #{cobranzaBean.comprobanteACobrar.businessString}
+                            </f:facet>-->
+                            <p:column  headerText="#{msg.comprobante}">
+                                <h:outputText value="#{pago.pago.idComprobante.businessString}" />
+                            </p:column>
+
+                            <p:column  headerText="#{msg.formaPago}" style="text-align: left">
+                                <h:outputText value="#{pago.pago.idFormaPago.nombreFormaPago}" />
+                            </p:column>
+
+                            <p:column  headerText="Plan">
+                                <h:outputText value="#{pago.pago.idPlan.nombre}" >
+
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Importe" style="text-align: right">
+                                <h:outputText value="#{pago.pago.montoPago}" >
+                                    <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Cuotas">
+                                <h:outputText value="#{pago.pago.idDetallePlan.cuotas}" >
+
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Código de Autorizacion">
+
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cupon.codigoAutorizacion}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="nroAutorizacionInput" value="#{pago.cupon.codigoAutorizacion}" style="width:96%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Nro Cupón">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cupon.nroCupon}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="nroCuponInput" value="#{pago.cupon.nroCupon}" required="true" style="width:96%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Nro Lote">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cupon.nroLote}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="nroLoteInput" value="#{pago.cupon.nroLote}" required="true" style="width:96%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Notas">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cupon.notas}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="notasInput" value="#{pago.cupon.notas}" style="width:96%"/>
+                                    </f:facet>
+                                </p:cellEditor>
+
+
+                            </p:column>
+
+
+                        </p:dataTable>
+
+
+
+                        <div class="SeparatorFull" />
+                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank" columns="2">
+
+                            <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                             immediate="true" ajax="false"
+                                             type="button"
+                                             onclick="PF('cobrarComprobantesDialog').hide();"
+                                             styleClass="RedButton"/>
+
+                            <p:commandButton id="cobrarButton" widgetVar="cobrarButton" value="#{msg.cobrar}" icon="fa fa-fw fa-money"
+
                                              process="@this"
                                              onclick="PF('cobrarButton').disable();"
                                              update=":formContenido"/>
