@@ -49,12 +49,14 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
 
         Predicate p = null;
         if (psf.getVigente() != null) {
-            Predicate p1
-                    = cb.greaterThanOrEqualTo(cb.currentTimestamp(), root.get(FiscalPeriodosFiscales_.fechaInicioPeriodo));
-            Predicate p2
-                    = cb.lessThanOrEqualTo(cb.currentTimestamp(), root.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
-            p = appendAndPredicate(cb, p, p1);
-            p = appendAndPredicate(cb, p, p2);
+
+            Predicate p3 = cb.between(cb.currentTimestamp(),
+                    root.get(FiscalPeriodosFiscales_.fechaInicioPeriodo), root.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
+            if (psf.getVigente()) {
+                p = appendAndPredicate(cb, p, p3);
+            } else {
+                p = appendAndPredicate(cb, p, cb.not(p3));
+            }
         }
         return p;
     }
