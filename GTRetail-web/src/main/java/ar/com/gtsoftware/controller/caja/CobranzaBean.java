@@ -83,7 +83,7 @@ public class CobranzaBean implements Serializable {
     }
     //TODO permitir seleccionar varios comprobantes de un mismo cliente
     //Cambiar a otra parte de la pantalla para cargar los datos de los valores y agruparlos
-    //Permitir la cobranza de comprobantes en cuenta corriente. Habra que generar notas de débito si la forma de pago elegida tiene recargos
+    //Permitir la cobranza de comprobantes en cuenta corriente. Habra que generar notas de débito si la forma de pago elegida tiene recargos (Tal vez no permitirlos directamente para esta versión)
 
     @PostConstruct
     private void init() {
@@ -195,8 +195,12 @@ public class CobranzaBean implements Serializable {
     }
 
     public void cobrarComprobantes() {
-        if (!validarComprobantesSeleccionados()) {
-            return;
+        if (validarComprobantesSeleccionados()) {
+
+            reciboActual = cobranzaServiceImpl.cobrarComprobantes(cajaActual, pagosValores);
+            jsfUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
+            RequestContext.getCurrentInstance().execute("PF('cobrarComprobantesDialog').hide();");
+            RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
         }
     }
 
@@ -209,6 +213,7 @@ public class CobranzaBean implements Serializable {
                 PagoValorDTO pagoValor = new PagoValorDTO(item++, pago, null);
                 if (pago.getIdFormaPago().getRequiereValores()) {
                     //Supongo que siempre es con tarjeta, después veo como hago lo de cheques
+                    //TODO: cable para que detecte el tipo de pago y mande a una lista distinta de DTOs
                     Cupones cupon = new Cupones();
                     cupon.setCantCuotas(pago.getIdDetallePlan().getCuotas());
                     cupon.setCoeficiente(pago.getIdDetallePlan().getCoeficienteInteres());

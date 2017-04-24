@@ -548,7 +548,7 @@
                                              styleClass="RedButton"/>
 
                             <p:commandButton id="cobrarButton" widgetVar="cobrarButton" value="#{msg.cobrar}" icon="fa fa-fw fa-money"
-
+                                             action="#{cobranzaBean.cobrarComprobantes()}"
                                              process="@this"
                                              onclick="PF('cobrarButton').disable();"
                                              update=":formContenido"/>

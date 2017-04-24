@@ -19,6 +19,7 @@ import ar.com.gtsoftware.bl.CobranzaService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.CajasMovimientosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
+import ar.com.gtsoftware.eao.CuponesFacade;
 import ar.com.gtsoftware.eao.RecibosFacade;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasMovimientos;
@@ -26,12 +27,16 @@ import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.Recibos;
 import ar.com.gtsoftware.model.RecibosDetalle;
+import ar.com.gtsoftware.model.dto.PagoValorDTO;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  *
@@ -49,6 +54,9 @@ public class CobranzaServiceImpl implements CobranzaService {
 
     @EJB
     private PersonasCuentaCorrienteServiceImpl cuentaCorrienteBean;
+
+    @EJB
+    private CuponesFacade cuponesFacade;
 
     @Override
     public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException {
@@ -99,6 +107,67 @@ public class CobranzaServiceImpl implements CobranzaService {
         cuentaCorrienteBean.registrarMovimientoCuenta(comprobante.getIdPersona(), recibo.getMontoTotal(), descMovimiento);
         return recibo;
 
+    }
+
+    @Override
+    public Recibos cobrarComprobantes(Cajas caja, List<PagoValorDTO> pagos) {
+        if (CollectionUtils.isEmpty(pagos)) {
+            throw new IllegalArgumentException("La lista de pagos no puede estar vacía!");
+        }
+        Date fecha = new Date();
+        Recibos recibo = new Recibos();
+        recibo.setFechaRecibo(fecha);
+        recibo.setIdCaja(caja);
+        Comprobantes comprobante = pagos.get(0).getPago().getIdComprobante();
+        BigDecimal montoTotal = BigDecimal.ZERO;
+        for (PagoValorDTO pv : pagos) {
+            montoTotal = montoTotal.add(pv.getPago().getMontoPago());
+        }
+        recibo.setIdPersona(comprobante.getIdPersona());
+        recibo.setIdUsuario(caja.getIdUsuario());
+        recibo.setMontoTotal(montoTotal);
+        Set<Comprobantes> comprobantesToEdit = new HashSet<>();
+        List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
+        for (PagoValorDTO pv : pagos) {
+            ComprobantesPagos compPago = pv.getPago();
+            RecibosDetalle reciboDet = new RecibosDetalle();
+            reciboDet.setIdRecibo(recibo);
+            reciboDet.setMontoPagado(compPago.getMontoPago());
+            reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+            reciboDet.setIdPagoComprobante(compPago);
+            if (pv.getCupon() != null) {
+                pv.getCupon().setFechaOrigen(fecha);
+                reciboDet.setIdValor(pv.getCupon());
+            }
+
+            compPago.setFechaPago(fecha);
+            compPago.setFechaUltimoPago(fecha);
+            compPago.setMontoPagado(compPago.getMontoPago());
+            recibosDetalleList.add(reciboDet);
+
+            comprobantesToEdit.add(pv.getPago().getIdComprobante());
+
+        }
+
+        for (Comprobantes c : comprobantesToEdit) {
+            c.setSaldo(BigDecimal.ZERO);
+            comprobantesFacade.edit(c);
+        }
+        recibo.setRecibosDetalles(recibosDetalleList);
+
+        recibosFacade.create(recibo);
+
+        CajasMovimientos movimiento = new CajasMovimientos();
+        movimiento.setFechaMovimiento(fecha);
+        String descMovimiento = String.format("Cobro de comprobantes del cliente %s - Recibo: %d",
+                comprobante.getIdPersona().getBusinessString(), recibo.getId());
+        movimiento.setDescripcion(descMovimiento);
+        movimiento.setIdCaja(caja);
+        movimiento.setMontoMovimiento(recibo.getMontoTotal());
+        cajasMovimientosFacade.create(movimiento);
+
+        cuentaCorrienteBean.registrarMovimientoCuenta(comprobante.getIdPersona(), recibo.getMontoTotal(), descMovimiento);
+        return recibo;
     }
 
 }

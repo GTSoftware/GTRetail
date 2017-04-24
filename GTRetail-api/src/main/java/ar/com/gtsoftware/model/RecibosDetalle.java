@@ -17,6 +17,7 @@ package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -55,7 +56,7 @@ public class RecibosDetalle extends BaseEntity {
     @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago")
     private NegocioFormasPago idFormaPago;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_valor", referencedColumnName = "id_valor")
     private Valores idValor;
 

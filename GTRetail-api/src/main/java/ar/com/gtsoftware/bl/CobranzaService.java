@@ -19,6 +19,8 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Recibos;
+import ar.com.gtsoftware.model.dto.PagoValorDTO;
+import java.util.List;
 
 /**
  * Capa de servicio para cobros de comprobantes
@@ -35,5 +37,14 @@ public interface CobranzaService {
      * @return el recibo generado por la cobranza
      */
     public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException;
+
+    /**
+     * Cobra totalmente uno o más comprobantes
+     *
+     * @param caja
+     * @param pagos
+     * @return
+     */
+    public Recibos cobrarComprobantes(Cajas caja, List<PagoValorDTO> pagos);
 
 }

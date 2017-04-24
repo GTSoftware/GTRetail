@@ -50,12 +50,10 @@ public class Cupones extends Valores {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaOrigen;
 
-    @NotNull
     @Column(name = "fecha_presentacion")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaPresentacion;
 
-    @NotNull
     @Column(name = "fecha_acreditacion")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaAcreditacion;
