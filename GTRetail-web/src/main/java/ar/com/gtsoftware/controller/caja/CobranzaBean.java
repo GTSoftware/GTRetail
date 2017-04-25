@@ -217,7 +217,7 @@ public class CobranzaBean implements Serializable {
                     Cupones cupon = new Cupones();
                     cupon.setCantCuotas(pago.getIdDetallePlan().getCuotas());
                     cupon.setCoeficiente(pago.getIdDetallePlan().getCoeficienteInteres());
-                    cupon.setMonto(pago.getMontoPago());
+                    cupon.setMonto(pago.getMontoPagoConSigno());
                     pagoValor.setCupon(cupon);
 
                 }

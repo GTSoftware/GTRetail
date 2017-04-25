@@ -121,7 +121,7 @@ public class CobranzaServiceImpl implements CobranzaService {
         Comprobantes comprobante = pagos.get(0).getPago().getIdComprobante();
         BigDecimal montoTotal = BigDecimal.ZERO;
         for (PagoValorDTO pv : pagos) {
-            montoTotal = montoTotal.add(pv.getPago().getMontoPago());
+            montoTotal = montoTotal.add(pv.getPago().getMontoPagoConSigno());
         }
         recibo.setIdPersona(comprobante.getIdPersona());
         recibo.setIdUsuario(caja.getIdUsuario());

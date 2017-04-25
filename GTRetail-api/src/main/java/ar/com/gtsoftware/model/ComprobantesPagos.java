@@ -178,4 +178,21 @@ public class ComprobantesPagos extends BaseEntity {
         this.productoRecargoItem = productoRecargoItem;
     }
 
+    /**
+     * Retorna el total con signo del pago
+     *
+     * @return
+     */
+    public BigDecimal getMontoPagoConSigno() {
+        return idComprobante.getTipoComprobante().getSigno().multiply(montoPago);
+    }
+
+    /**
+     * Retorna el monto pagado con signo del pago
+     *
+     * @return
+     */
+    public BigDecimal getMontoPagadoConSigno() {
+        return idComprobante.getTipoComprobante().getSigno().multiply(montoPagado);
+    }
 }

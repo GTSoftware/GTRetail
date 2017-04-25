@@ -52,7 +52,7 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
         CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
         Root<PersonasCuentaCorriente> cuenta = cq.from(PersonasCuentaCorriente.class);
         cq.select(cb.sum(cuenta.get(PersonasCuentaCorriente_.importeMovimiento)).alias("SUM"));
-        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona.getId());
+        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona);
         cq.where(p);
         BigDecimal result = em.createQuery(cq).getSingleResult();
         if (result == null) {
