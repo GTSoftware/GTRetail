@@ -188,4 +188,12 @@ public class Remito extends BaseEntity {
         this.detalleList = detalleList;
     }
 
+    public List<RemitoRecepcion> getRemitoRecepcionesList() {
+        return remitoRecepcionesList;
+    }
+
+    public void setRemitoRecepcionesList(List<RemitoRecepcion> remitoRecepcionesList) {
+        this.remitoRecepcionesList = remitoRecepcionesList;
+    }
+
 }
