@@ -25,7 +25,7 @@ import javax.persistence.Table;
  * @author fede
  */
 @Entity
-@Table(name = "remito_movimientos_tipos")
+@Table(name = "remitos_movimientos_tipos")
 @AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento", columnDefinition = "serial"))
 public class RemitoTipoMovimiento extends BaseEntity {
 

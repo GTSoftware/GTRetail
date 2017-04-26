@@ -28,7 +28,6 @@ import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -84,7 +83,6 @@ public class IngresoMercaderiaBean implements Serializable {
             return;
         }
 
-        remitoDetalle.setCantidad(BigDecimal.ONE);
         if (remitoCabecera.getDetalleList() == null) {
             remitoCabecera.setDetalleList(new ArrayList<>());
         }
