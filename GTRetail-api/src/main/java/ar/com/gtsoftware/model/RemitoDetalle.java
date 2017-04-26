@@ -32,6 +32,8 @@ import javax.persistence.Table;
 @AttributeOverride(name = "id", column = @Column(name = "id_remito_detalle", columnDefinition = "serial"))
 public class RemitoDetalle extends BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @JoinColumn(name = "id_remito_cabecera", referencedColumnName = "id_remito_cabecera")
     @ManyToOne
     private Remito remitoCabecera;

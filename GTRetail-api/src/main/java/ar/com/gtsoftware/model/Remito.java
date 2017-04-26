@@ -37,6 +37,8 @@ import javax.validation.constraints.NotNull;
 @AttributeOverride(name = "id", column = @Column(name = "id_remito", columnDefinition = "serial"))
 public class Remito extends BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
@@ -85,6 +87,9 @@ public class Remito extends BaseEntity {
 
     @OneToMany(mappedBy = "remitoCabecera")
     private List<RemitoDetalle> detalleList;
+
+    @OneToMany(mappedBy = "remito")
+    private List<RemitoRecepcion> remitoRecepcionesList;
 
     //-------Getter and Setter ----------------------------------------------
     public Personas getIdOrigenExterno() {

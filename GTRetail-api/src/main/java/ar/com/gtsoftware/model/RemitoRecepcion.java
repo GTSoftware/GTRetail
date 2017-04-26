@@ -20,6 +20,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -36,8 +37,11 @@ import javax.validation.constraints.NotNull;
 @AttributeOverride(name = "id", column = @Column(name = "id_recepcion", columnDefinition = "serial"))
 public class RemitoRecepcion extends BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @JoinColumn(name = "id_remito", referencedColumnName = "id_remito")
     @NotNull
+    @ManyToOne
     private Remito remito;
 
     @Column(name = "fecha")
@@ -45,7 +49,8 @@ public class RemitoRecepcion extends BaseEntity {
     private Date fecha;
 
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
-    @OneToMany
+    @ManyToOne
+    @NotNull
     private Usuarios idUsuario;
 
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")

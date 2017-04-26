@@ -29,6 +29,8 @@ import javax.persistence.Table;
 @AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento", columnDefinition = "serial"))
 public class RemitoTipoMovimiento extends BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(name = "nombre_tipo")
     private String nombreTipo;
 
