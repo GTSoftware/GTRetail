@@ -21,7 +21,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -54,11 +53,11 @@ public class RemitoRecepcion extends BaseEntity {
     private Usuarios idUsuario;
 
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
-    @OneToMany
+    @ManyToOne
     private Personas idPersona;
 
     @JoinColumn(name = "id_deposito", referencedColumnName = "id_deposito")
-    @OneToMany
+    @ManyToOne
     private Depositos idDeposito;
 
     //----------Getter and Setter ------------------------------
@@ -101,6 +100,10 @@ public class RemitoRecepcion extends BaseEntity {
 
     public Date getFecha() {
         return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
 }

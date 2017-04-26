@@ -18,6 +18,7 @@ package ar.com.gtsoftware.model;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -85,7 +86,7 @@ public class Remito extends BaseEntity {
     @ManyToOne
     private RemitoTipoMovimiento remitoTipoMovimiento;
 
-    @OneToMany(mappedBy = "remitoCabecera")
+    @OneToMany(mappedBy = "remitoCabecera", cascade = CascadeType.ALL)
     private List<RemitoDetalle> detalleList;
 
     @OneToMany(mappedBy = "remito")

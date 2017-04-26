@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.controller.productos;
 
+import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.eao.DepositosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.RemitoFacade;
@@ -29,10 +30,12 @@ import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 /**
@@ -56,6 +59,8 @@ public class IngresoMercaderiaBean implements Serializable {
 
     @EJB
     private RemitoRecepcionFacade remitoRecepcionFacade;
+    @ManagedProperty(value = "#{authBackingBean}")
+    private AuthBackingBean authBackingBean;
 
     @EJB
     private JSFUtil jsfUtil;
@@ -73,6 +78,10 @@ public class IngresoMercaderiaBean implements Serializable {
         proveedoresList.addAll(personasFacade.findAllBySearchFilter(psf));
         remitoCabecera.setDetalleList(new ArrayList<>());
         remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));//TODO: ID deposito Cableado por el momento
+        remitoCabecera.setIdUsuario(authBackingBean.getUserLoggedIn());
+        remitoCabecera.setFechaAlta(new Date());
+        remitoCabecera.setIsOrigenInterno(Boolean.FALSE);
+        remitoCabecera.setIsDestinoInterno(Boolean.TRUE);
 
     }
 
@@ -98,7 +107,9 @@ public class IngresoMercaderiaBean implements Serializable {
             return "";
         }
 
-        remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(1));
+        remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(2L));
+        remitoCabecera.setObservaciones(String.format("Ingreso de mercaderia del proveedor: %s",
+                remitoCabecera.getIdOrigenExterno()));
         remitoFacade.create(remitoCabecera);
 
         //REALIZA LA RECEPCION DEL REMITO
@@ -106,10 +117,11 @@ public class IngresoMercaderiaBean implements Serializable {
 
         recepcion.setRemito(remitoCabecera);
         recepcion.setIdPersona(remitoCabecera.getIdOrigenExterno());
+        recepcion.setIdUsuario(authBackingBean.getUserLoggedIn());
 
         remitoRecepcionFacade.create(recepcion);
 
-        return "/protected/index.xhtml";
+        return "/protected/index.xhtml?faces-redirect=true";
     }
 
     //---Getter and Setter ----------------------------------------------
@@ -135,6 +147,14 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public void setRemitoDetalle(RemitoDetalle remitoDetalle) {
         this.remitoDetalle = remitoDetalle;
+    }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
     }
 
 }

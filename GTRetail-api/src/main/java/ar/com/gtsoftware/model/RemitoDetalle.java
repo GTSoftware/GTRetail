@@ -34,7 +34,7 @@ public class RemitoDetalle extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @JoinColumn(name = "id_remito_cabecera", referencedColumnName = "id_remito_cabecera")
+    @JoinColumn(name = "id_remito", referencedColumnName = "id_remito")
     @ManyToOne
     private Remito remitoCabecera;
 
