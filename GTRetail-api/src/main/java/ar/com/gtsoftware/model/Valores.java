@@ -22,6 +22,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -43,6 +44,9 @@ public class Valores extends BaseEntity {
     @Column(name = "monto")
     private BigDecimal monto;
 
+    @OneToOne(mappedBy = "idValor")
+    private RecibosDetalle reciboDetalle;
+
     public Valores(Long id) {
         super(id);
     }
@@ -56,6 +60,14 @@ public class Valores extends BaseEntity {
 
     public void setMonto(BigDecimal monto) {
         this.monto = monto;
+    }
+
+    public RecibosDetalle getReciboDetalle() {
+        return reciboDetalle;
+    }
+
+    public void setReciboDetalle(RecibosDetalle reciboDetalle) {
+        this.reciboDetalle = reciboDetalle;
     }
 
 }

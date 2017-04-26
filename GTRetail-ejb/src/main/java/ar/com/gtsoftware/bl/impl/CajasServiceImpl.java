@@ -18,6 +18,7 @@ package ar.com.gtsoftware.bl.impl;
 import ar.com.gtsoftware.bl.CajasService;
 import ar.com.gtsoftware.eao.CajasArqueosFacade;
 import ar.com.gtsoftware.eao.CajasFacade;
+import ar.com.gtsoftware.eao.CuponesFacade;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasArqueos;
 import ar.com.gtsoftware.model.Usuarios;
@@ -40,6 +41,8 @@ public class CajasServiceImpl implements CajasService {
     private CajasFacade facade;
     @EJB
     private CajasArqueosFacade arqueosFacade;
+    @EJB
+    private CuponesFacade cuponesFacade;
 
     @Override
     public Cajas obtenerCajaActual(Usuarios usuario) {
@@ -94,6 +97,8 @@ public class CajasServiceImpl implements CajasService {
         if (caja != null && fechaCierre != null) {
             caja.setFechaCierre(fechaCierre);
             facade.edit(caja);
+            //Seteo la fecha de presentacion en los cupones
+            cuponesFacade.establecerFechaPresentacion(caja, fechaCierre);
             return true;
         }
         return false;

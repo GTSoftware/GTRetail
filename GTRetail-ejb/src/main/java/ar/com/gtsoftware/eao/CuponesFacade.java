@@ -15,12 +15,21 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.Cupones;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.model.Cupones_;
+import ar.com.gtsoftware.model.Recibos;
+import ar.com.gtsoftware.model.RecibosDetalle;
+import ar.com.gtsoftware.model.RecibosDetalle_;
+import ar.com.gtsoftware.model.Recibos_;
+import ar.com.gtsoftware.search.CuponesSearchFilter;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -29,7 +38,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class CuponesFacade extends AbstractFacade<Cupones, AbstractSearchFilter> {
+public class CuponesFacade extends AbstractFacade<Cupones, CuponesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,8 +53,34 @@ public class CuponesFacade extends AbstractFacade<Cupones, AbstractSearchFilter>
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Cupones> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Predicate createWhereFromSearchFilter(CuponesSearchFilter sf, CriteriaBuilder cb, Root<Cupones> root) {
+
+        Predicate p = null;
+        if (sf.getCaja() != null) {
+            Join<Cupones, RecibosDetalle> joinCup = root.join(Cupones_.reciboDetalle);
+            Join<RecibosDetalle, Recibos> joinRec = joinCup.join(RecibosDetalle_.idRecibo);
+            Predicate p1 = cb.equal(joinRec.get(Recibos_.idCaja), sf.getCaja());
+            p = appendAndPredicate(cb, p, p1);
+
+        }
+        if (sf.hasValidFechasOrigen()) {
+            Predicate p1 = cb.between(root.get(Cupones_.fechaOrigen), sf.getFechaOrigenDesde(), sf.getFechaOrigenHasta());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
+    }
+
+    public void establecerFechaPresentacion(Cajas idCaja, Date fechaPresentacion) {
+        CriteriaBuilder cb = this.em.getCriteriaBuilder();
+        CriteriaUpdate<Cupones> update = cb.createCriteriaUpdate(Cupones.class);
+        Root root = update.from(Cupones.class);
+        update.set(Cupones_.fechaPresentacion, fechaPresentacion);
+        CuponesSearchFilter sf = new CuponesSearchFilter(idCaja);
+        Predicate p = createWhereFromSearchFilter(sf, cb, root);
+        Predicate pNoPres = cb.isNull(root.get(Cupones_.fechaPresentacion));
+        p = appendAndPredicate(cb, p, pNoPres);
+        update.where(p);
+        this.em.createQuery(update).executeUpdate();
     }
 
 }
