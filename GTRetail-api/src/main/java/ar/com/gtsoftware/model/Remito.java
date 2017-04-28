@@ -64,8 +64,6 @@ public class Remito extends BaseEntity {
     @ManyToOne
     private Depositos idOrigenInterno;
 
-    @JoinColumn(name = "id_")
-
     @Column(name = "destino_is_interno")
     @NotNull
     private Boolean isDestinoInterno;
@@ -89,7 +87,7 @@ public class Remito extends BaseEntity {
     @OneToMany(mappedBy = "remitoCabecera", cascade = CascadeType.ALL)
     private List<RemitoDetalle> detalleList;
 
-    @OneToMany(mappedBy = "remito")
+    @OneToMany(mappedBy = "remito", cascade = CascadeType.ALL)
     private List<RemitoRecepcion> remitoRecepcionesList;
 
     //-------Getter and Setter ----------------------------------------------
