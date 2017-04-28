@@ -104,7 +104,7 @@ CREATE TABLE remitos_recepciones
 (
   id_recepcion serial primary key,
   id_remito integer NOT NULL,
-  fecha time without time zone NOT NULL,
+  fecha timestamp without time zone NOT NULL,
   id_usuario integer NOT NULL,
   id_persona integer, -- si el remito tiene salida, este campo no debe ser nulo, ya que debe ser entregado a una persona
   id_deposito integer, -- este campo no es nulo cuando el remito tiene como destino previsto un deposito.
