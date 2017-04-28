@@ -27,7 +27,7 @@
                                      >
 
                             <p:outputLabel value="#{msg.proveedor}: "/>
-                            <p:inputText value="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno.nombreFantasia}"
+                            <p:inputText value="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno.businessString}"
                                          disabled="true"
                                          />
 
@@ -217,7 +217,7 @@
                                           productoSeleccionado="#{ingresoMercaderiaBean.remitoDetalle.idProducto}"                                        />
 
 
-            <p:commandButton id="buscarPersonaOkButton" icon="fa fa-check-circle"
+            <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"
                              title="#{msg.ok}"
                              oncomplete="PF('productDialog').hide()"
                              update=":formContenido:productosGrid"
