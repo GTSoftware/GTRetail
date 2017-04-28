@@ -24,6 +24,7 @@ CREATE TABLE productos_x_depositos
   id_producto integer NOT NULL,
   id_deposito integer,
   stock numeric(19,2),
+  version integer not null default 0,
   CONSTRAINT fk_deposito FOREIGN KEY (id_deposito)
       REFERENCES depositos (id_deposito) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -88,6 +89,7 @@ CREATE TABLE remitos_detalle
   id_remito integer NOT NULL,
   id_producto integer NOT NULL,
   cantidad numeric(19,2) DEFAULT 0,
+  version integer not null default 0,
   CONSTRAINT fk_remito_detalle_producto FOREIGN KEY (id_producto)
       REFERENCES productos (id_producto) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -106,6 +108,7 @@ CREATE TABLE remitos_recepciones
   id_usuario integer NOT NULL,
   id_persona integer, -- si el remito tiene salida, este campo no debe ser nulo, ya que debe ser entregado a una persona
   id_deposito integer, -- este campo no es nulo cuando el remito tiene como destino previsto un deposito.
+  version integer not null default 0,
   CONSTRAINT fk_persona FOREIGN KEY (id_persona)
       REFERENCES personas (id_persona) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
