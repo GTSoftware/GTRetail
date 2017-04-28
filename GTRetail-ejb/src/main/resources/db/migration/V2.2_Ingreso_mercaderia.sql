@@ -34,7 +34,7 @@ CREATE TABLE productos_x_depositos
 );
 
 
-CREATE TABLE remito_movimientos_tipos
+CREATE TABLE remitos_movimientos_tipos
 (
   id_tipo_movimiento integer primary key,
   nombre_tipo character varying(60) NOT NULL,
@@ -123,9 +123,9 @@ CREATE TABLE remitos_recepciones
 COMMENT ON COLUMN remitos_recepciones.id_persona IS 'si el remito tiene salida, este campo no debe ser nulo, ya que debe ser entregado a una persona';
 COMMENT ON COLUMN remitos_recepciones.id_deposito IS 'este campo no es nulo cuando el remito tiene como destino previsto un deposito.';
 
-INSERT INTO remito_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (1, 'RECEPCIÓN DE PROVEEDOR', 0);
-INSERT INTO remito_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (2, 'VENTA', 0);
-INSERT INTO remito_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (3, 'TRASLADO', 0);
-INSERT INTO remito_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (4, 'AJUSTES', 0);
-INSERT INTO remito_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (6, 'BAJA POR MAL ESTADO', 0);
-INSERT INTO remito_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (5, 'BAJA POR ROBO/PÉRDIDA', 0);
+INSERT INTO remitos_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (1, 'RECEPCIÓN DE PROVEEDOR', 0);
+INSERT INTO remitos_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (2, 'VENTA', 0);
+INSERT INTO remitos_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (3, 'TRASLADO', 0);
+INSERT INTO remitos_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (4, 'AJUSTES', 0);
+INSERT INTO remitos_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (6, 'BAJA POR MAL ESTADO', 0);
+INSERT INTO remitos_movimientos_tipos (id_tipo_movimiento, nombre_tipo, version) VALUES (5, 'BAJA POR ROBO/PÉRDIDA', 0);
