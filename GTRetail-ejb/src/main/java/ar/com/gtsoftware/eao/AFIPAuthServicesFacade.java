@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.AFIPAuthServices;
 import ar.com.gtsoftware.model.AFIPAuthServices_;
 import ar.com.gtsoftware.search.AFIPAuthServicesSearchFilter;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,7 +55,7 @@ public class AFIPAuthServicesFacade extends AbstractFacade<AFIPAuthServices, AFI
         }
 
         if (asf.getNoExpirado() != null) {
-            Predicate p1 = cb.equal(cb.greaterThan(root.get(AFIPAuthServices_.fechaExpiracion),
+            Predicate p1 = cb.equal(cb.greaterThan(root.<Date>get(AFIPAuthServices_.fechaExpiracion),
                     cb.currentTimestamp()), asf.getNoExpirado());
             p = appendAndPredicate(cb, p, p1);
         }
