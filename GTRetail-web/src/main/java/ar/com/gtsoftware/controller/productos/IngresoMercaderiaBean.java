@@ -17,21 +17,16 @@ package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.eao.DepositosFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.eao.RemitoRecepcionFacade;
 import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
-import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Remito;
 import ar.com.gtsoftware.model.RemitoDetalle;
 import ar.com.gtsoftware.model.RemitoRecepcion;
-import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -49,16 +44,12 @@ public class IngresoMercaderiaBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private PersonasFacade personasFacade;
-    @EJB
     private RemitoFacade remitoFacade;
     @EJB
     private DepositosFacade depositosFacade;
     @EJB
     private RemitoTipoMovimientoFacade remitoTipoMovimientoFacade;
 
-    @EJB
-    private RemitoRecepcionFacade remitoRecepcionFacade;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
@@ -66,16 +57,12 @@ public class IngresoMercaderiaBean implements Serializable {
     private JSFUtil jsfUtil;
 
     private Remito remitoCabecera = new Remito();
-    private List<Personas> proveedoresList = new ArrayList();
+
     private RemitoDetalle remitoDetalle = new RemitoDetalle();
 
     @PostConstruct
     public void init() {
-        PersonasSearchFilter psf = new PersonasSearchFilter();
-        psf.setProveedor(true);
-        psf.setActivo(true);
-        psf.addSortField(new SortField("razonSocial", true));
-        proveedoresList.addAll(personasFacade.findAllBySearchFilter(psf));
+
         remitoCabecera.setDetalleList(new ArrayList<>());
         remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));//TODO: ID deposito Cableado por el momento
         remitoCabecera.setIdUsuario(authBackingBean.getUserLoggedIn());
@@ -109,17 +96,17 @@ public class IngresoMercaderiaBean implements Serializable {
 
         remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(2L));
         remitoCabecera.setObservaciones(String.format("Ingreso de mercaderia del proveedor: %s",
-                remitoCabecera.getIdOrigenExterno()));
-        remitoFacade.create(remitoCabecera);
+                remitoCabecera.getIdOrigenExterno().getBusinessString()));
 
-        //REALIZA LA RECEPCION DEL REMITO
         RemitoRecepcion recepcion = new RemitoRecepcion();
 
         recepcion.setRemito(remitoCabecera);
         recepcion.setIdPersona(remitoCabecera.getIdOrigenExterno());
         recepcion.setIdUsuario(authBackingBean.getUserLoggedIn());
+        recepcion.setIdDeposito(remitoCabecera.getIdDestinoPrevistoInterno());
 
-        remitoRecepcionFacade.create(recepcion);
+        remitoCabecera.setRemitoRecepcionesList(Arrays.asList(recepcion));
+        remitoFacade.create(remitoCabecera);
 
         return "/protected/index.xhtml?faces-redirect=true";
     }
@@ -131,14 +118,6 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public void setRemitoCabecera(Remito remitoCabecera) {
         this.remitoCabecera = remitoCabecera;
-    }
-
-    public List<Personas> getProveedoresList() {
-        return proveedoresList;
-    }
-
-    public void setProveedoresList(List<Personas> proveedoresList) {
-        this.proveedoresList = proveedoresList;
     }
 
     public RemitoDetalle getRemitoDetalle() {
