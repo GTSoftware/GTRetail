@@ -65,6 +65,16 @@ public abstract class AbstractSearchFilter implements Serializable {
     }
 
     /**
+     * Método conveniente que evita tener que instanciar un SortField
+     *
+     * @param field
+     * @param ascending
+     */
+    public void addSortField(String field, boolean ascending) {
+        addSortField(new SortField(field, ascending));
+    }
+
+    /**
      * Setea en nulo la lista de campos de ordenamiento
      */
     public void clearSortFields() {
