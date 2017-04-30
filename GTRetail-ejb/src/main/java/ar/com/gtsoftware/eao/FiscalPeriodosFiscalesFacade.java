@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -51,7 +52,7 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
         if (psf.getVigente() != null) {
 
             Predicate p3 = cb.between(cb.currentTimestamp(),
-                    root.get(FiscalPeriodosFiscales_.fechaInicioPeriodo), root.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
+                    root.<Date>get(FiscalPeriodosFiscales_.fechaInicioPeriodo), root.<Date>get(FiscalPeriodosFiscales_.fechaFinPeriodo));
             if (psf.getVigente()) {
                 p = appendAndPredicate(cb, p, p3);
             } else {

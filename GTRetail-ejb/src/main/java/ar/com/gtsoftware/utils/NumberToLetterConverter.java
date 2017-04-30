@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Esta clase provee la funcionalidad de convertir un numero representado en digitos a una representacion en letras.
  * Mejorado para leer centavos
@@ -115,6 +117,13 @@ public abstract class NumberToLetterConverter {
             converted.append(convertNumber(String.valueOf(cientos)));
         }
 
+        if (converted.toString().equals(UN_MILLON)) {
+            converted.append("DE");
+        }
+
+        if (converted.toString().equals(MIL)) {
+            converted.insert(0, UN + StringUtils.SPACE);
+        }
         converted.append(PESOS);
 
         // Descompone los centavos
