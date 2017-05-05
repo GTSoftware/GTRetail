@@ -68,7 +68,7 @@ public class NumberToLetterConverterTest {
     public void test1989ConvertNumberToLetter() {
         System.out.println("convertNumberToLetter 1989");
         double number = 1989;
-        String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE  PESOS";
+        String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -77,7 +77,7 @@ public class NumberToLetterConverterTest {
     public void testImporteConvertNumberToLetter() {
         System.out.println("convertNumberToLetter 125.43");
         double number = 125.43;
-        String expResult = "CIENTO VEINTICINCO  PESOS CON CUARENTA Y TRES CENTAVOS";
+        String expResult = "CIENTO VEINTICINCO PESOS CON CUARENTA Y TRES CENTAVOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -109,7 +109,7 @@ public class NumberToLetterConverterTest {
     public void testMil() {
         System.out.println("mil");
         double number = 1000;
-        String expResult = "UN MIL  PESOS";
+        String expResult = "UN MIL PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -118,7 +118,7 @@ public class NumberToLetterConverterTest {
     public void testMaxNumber() {
         System.out.println("testMaxNumber");
         double number = 9999999;
-        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE  PESOS";
+        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -128,6 +128,24 @@ public class NumberToLetterConverterTest {
         System.out.println("testUnMillon");
         double number = 1000000;
         String expResult = "UN MILLON DE PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testTwoMillon() {
+        System.out.println("testUnMillon");
+        double number = 2000000;
+        String expResult = "DOS MILLONES DE PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testOneMillonFiveHundred() {
+        System.out.println("testUnMillon");
+        double number = 1527654.32;
+        String expResult = "UN MILLON QUINIENTOS VEINTISIETE MIL SEISCIENTOS CINCUENTA Y CUATRO PESOS CON TREINTA Y DOS CENTAVOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }

@@ -117,7 +117,7 @@ public abstract class NumberToLetterConverter {
             converted.append(convertNumber(String.valueOf(cientos)));
         }
 
-        if (converted.toString().equals(UN_MILLON)) {
+        if (converted.toString().endsWith(MILLONES) || converted.toString().endsWith(UN_MILLON)) {
             converted.append("DE");
         }
 
@@ -140,7 +140,7 @@ public abstract class NumberToLetterConverter {
                     .append(CENTAVOS);
         }
 
-        return converted.toString();
+        return converted.toString().trim().replaceAll("\\s{2,}", " ");
     }
 
     /**
