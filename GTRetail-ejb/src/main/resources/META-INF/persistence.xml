@@ -1,106 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU" transaction-type="JTA">
-
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <jta-data-source>jdbc/retail</jta-data-source>
-        <class>ar.com.gtsoftware.model.GTEntity</class>
-        <class>ar.com.gtsoftware.model.BaseEntity</class>
-        <class>ar.com.gtsoftware.model.Bancos</class>
-        <class>ar.com.gtsoftware.model.BancosCuentaCorriente</class>
-        <class>ar.com.gtsoftware.model.BancosCuentas</class>
-        <class>ar.com.gtsoftware.model.BancosTiposCuenta</class>
-        <class>ar.com.gtsoftware.model.Cajas</class>
-        <class>ar.com.gtsoftware.model.CajasArqueos</class>
-        <class>ar.com.gtsoftware.model.CajasArqueosDetalle</class>
-        <class>ar.com.gtsoftware.model.CajasMovimientos</class>
-        <class>ar.com.gtsoftware.model.ContabilidadLibros</class>
-        <class>ar.com.gtsoftware.model.ContabilidadMonedas</class>
-        <class>ar.com.gtsoftware.model.ContabilidadPeriodosContables</class>
-        <class>ar.com.gtsoftware.model.ContabilidadPlanCuentas</class>
-        <class>ar.com.gtsoftware.model.ContabilidadRegistroContable</class>
-        <class>ar.com.gtsoftware.model.ContabilidadRegistroContableLineas</class>
-        <class>ar.com.gtsoftware.model.ContabilidadTiposComprobantes</class>
-        <class>ar.com.gtsoftware.model.ContabilidadTiposCuenta</class>
-        <class>ar.com.gtsoftware.model.ContabilidadTiposOperacion</class>
-        <class>ar.com.gtsoftware.model.Depositos</class>
-        <class>ar.com.gtsoftware.model.FiscalAlicuotasIva</class>
-        <class>ar.com.gtsoftware.model.FiscalLetrasComprobantes</class>
-        <class>ar.com.gtsoftware.model.FiscalLibroIvaVentas</class>
-        <class>ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas</class>
-        <class>ar.com.gtsoftware.model.FiscalPeriodosFiscales</class>
-        <class>ar.com.gtsoftware.model.FiscalMonedas</class>
-        <class>ar.com.gtsoftware.model.FiscalTiposComprobante</class>
-        <class>ar.com.gtsoftware.model.FiscalResponsabilidadesIva</class>
-        <class>ar.com.gtsoftware.model.LegalGeneros</class>
-        <class>ar.com.gtsoftware.model.LegalTiposDocumento</class>
-        <class>ar.com.gtsoftware.model.LegalTiposPersoneria</class>
-        <class>ar.com.gtsoftware.model.NegocioCondicionesOperaciones</class>
-        <class>ar.com.gtsoftware.model.NegocioFormasPago</class>
-        <class>ar.com.gtsoftware.model.NegocioTiposComprobante</class>
-        <class>ar.com.gtsoftware.model.Parametros</class>
-        <class>ar.com.gtsoftware.model.Personas</class>
-        <class>ar.com.gtsoftware.model.PersonasCuentaCorriente</class>
-        <class>ar.com.gtsoftware.model.PersonasImagenes</class>
-        <class>ar.com.gtsoftware.model.PersonasTelefonos</class>
-        <class>ar.com.gtsoftware.model.PersonasTiposImagenes</class>
-        <class>ar.com.gtsoftware.model.Privilegios</class>
-        <class>ar.com.gtsoftware.model.Productos</class>
-        <class>ar.com.gtsoftware.model.ProductosCaracteristicas</class>
-        <class>ar.com.gtsoftware.model.ProductosImagenes</class>
-        <class>ar.com.gtsoftware.model.ProductosMarcas</class>
-        <class>ar.com.gtsoftware.model.ProductosPorcentajes</class>
-        <class>ar.com.gtsoftware.model.ProductosRubros</class>
-        <class>ar.com.gtsoftware.model.ProductosSubRubros</class>
-        <class>ar.com.gtsoftware.model.ProductosTiposPorcentajes</class>
-        <class>ar.com.gtsoftware.model.ProductosTiposProveeduria</class>
-        <class>ar.com.gtsoftware.model.ProductosTiposUnidades</class>
-        <class>ar.com.gtsoftware.model.ProductosXCaracteristicas</class>
-        <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompra</class>
-        <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompraLineas</class>
-        <class>ar.com.gtsoftware.model.ProductosListasPrecios</class>
-        <class>ar.com.gtsoftware.model.ProductosPrecios</class>
-        <class>ar.com.gtsoftware.model.StockMovimientos</class>
-        <class>ar.com.gtsoftware.model.StockMovimientosTipos</class>
-        <class>ar.com.gtsoftware.model.Sucursales</class>
-        <class>ar.com.gtsoftware.model.UbicacionLocalidades</class>
-        <class>ar.com.gtsoftware.model.UbicacionPaises</class>
-        <class>ar.com.gtsoftware.model.UbicacionProvincias</class>
-        <class>ar.com.gtsoftware.model.Usuarios</class>
-        <class>ar.com.gtsoftware.model.UsuariosGrupos</class>
-        <class>ar.com.gtsoftware.model.Comprobantes</class>
-        <class>ar.com.gtsoftware.model.ComprobantesEstados</class>
-        <class>ar.com.gtsoftware.model.ComprobantesLineas</class>
-        <class>ar.com.gtsoftware.model.ComprobantesPagos</class>
-        <class>ar.com.gtsoftware.model.AFIPAuthServices</class>
-        <class>ar.com.gtsoftware.model.FiscalPuntosVenta</class>
-        <class>ar.com.gtsoftware.model.Valores</class>
-        <class>ar.com.gtsoftware.model.Cupones</class>
-        <class>ar.com.gtsoftware.model.Recibos</class>
-        <class>ar.com.gtsoftware.model.RecibosDetalle</class>
-        <class>ar.com.gtsoftware.model.NegocioPlanesPagoDetalle</class>
-        <class>ar.com.gtsoftware.model.NegocioPlanesPago</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
-        <validation-mode>CALLBACK</validation-mode>
-        <properties>
-
-            <!--CACHE-->
-            <property name="eclipselink.cache.shared.default" value="false"/>
-
-            <property name="eclipselink.jdbc.cache-statements" value="true"/>
-            <property name="eclipselink.target-database" value="PostgreSQL"/>
-            <property name="eclipselink.target-server" value="JBoss"/>
-            <property name="eclipselink.weaving" value="true"/>
-
-            <!--DISABLE FOR PRODUCTION-->
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
-            <property name="eclipselink.logging.level" value="FINEST"/>
-            <property name="eclipselink.logging.parameters" value="true"/>
-
-
-
-
-        </properties>
-    </persistence-unit>
+  <persistence-unit name="ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/retail</jta-data-source>
+    <class>ar.com.gtsoftware.model.GTEntity</class>
+    <class>ar.com.gtsoftware.model.BaseEntity</class>
+    <class>ar.com.gtsoftware.model.Bancos</class>
+    <class>ar.com.gtsoftware.model.BancosCuentaCorriente</class>
+    <class>ar.com.gtsoftware.model.BancosCuentas</class>
+    <class>ar.com.gtsoftware.model.BancosTiposCuenta</class>
+    <class>ar.com.gtsoftware.model.Cajas</class>
+    <class>ar.com.gtsoftware.model.CajasArqueos</class>
+    <class>ar.com.gtsoftware.model.CajasArqueosDetalle</class>
+    <class>ar.com.gtsoftware.model.CajasMovimientos</class>
+    <class>ar.com.gtsoftware.model.ContabilidadLibros</class>
+    <class>ar.com.gtsoftware.model.ContabilidadMonedas</class>
+    <class>ar.com.gtsoftware.model.ContabilidadPeriodosContables</class>
+    <class>ar.com.gtsoftware.model.ContabilidadPlanCuentas</class>
+    <class>ar.com.gtsoftware.model.ContabilidadRegistroContable</class>
+    <class>ar.com.gtsoftware.model.ContabilidadRegistroContableLineas</class>
+    <class>ar.com.gtsoftware.model.ContabilidadTiposComprobantes</class>
+    <class>ar.com.gtsoftware.model.ContabilidadTiposCuenta</class>
+    <class>ar.com.gtsoftware.model.ContabilidadTiposOperacion</class>
+    <class>ar.com.gtsoftware.model.Depositos</class>
+    <class>ar.com.gtsoftware.model.FiscalAlicuotasIva</class>
+    <class>ar.com.gtsoftware.model.FiscalLetrasComprobantes</class>
+    <class>ar.com.gtsoftware.model.FiscalLibroIvaVentas</class>
+    <class>ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas</class>
+    <class>ar.com.gtsoftware.model.FiscalPeriodosFiscales</class>
+    <class>ar.com.gtsoftware.model.FiscalMonedas</class>
+    <class>ar.com.gtsoftware.model.FiscalTiposComprobante</class>
+    <class>ar.com.gtsoftware.model.FiscalResponsabilidadesIva</class>
+    <class>ar.com.gtsoftware.model.LegalGeneros</class>
+    <class>ar.com.gtsoftware.model.LegalTiposDocumento</class>
+    <class>ar.com.gtsoftware.model.LegalTiposPersoneria</class>
+    <class>ar.com.gtsoftware.model.NegocioCondicionesOperaciones</class>
+    <class>ar.com.gtsoftware.model.NegocioFormasPago</class>
+    <class>ar.com.gtsoftware.model.NegocioTiposComprobante</class>
+    <class>ar.com.gtsoftware.model.Parametros</class>
+    <class>ar.com.gtsoftware.model.Personas</class>
+    <class>ar.com.gtsoftware.model.PersonasCuentaCorriente</class>
+    <class>ar.com.gtsoftware.model.PersonasImagenes</class>
+    <class>ar.com.gtsoftware.model.PersonasTelefonos</class>
+    <class>ar.com.gtsoftware.model.PersonasTiposImagenes</class>
+    <class>ar.com.gtsoftware.model.Privilegios</class>
+    <class>ar.com.gtsoftware.model.Productos</class>
+    <class>ar.com.gtsoftware.model.ProductosCaracteristicas</class>
+    <class>ar.com.gtsoftware.model.ProductosImagenes</class>
+    <class>ar.com.gtsoftware.model.ProductosMarcas</class>
+    <class>ar.com.gtsoftware.model.ProductosPorcentajes</class>
+    <class>ar.com.gtsoftware.model.ProductosRubros</class>
+    <class>ar.com.gtsoftware.model.ProductosSubRubros</class>
+    <class>ar.com.gtsoftware.model.ProductosTiposPorcentajes</class>
+    <class>ar.com.gtsoftware.model.ProductosTiposProveeduria</class>
+    <class>ar.com.gtsoftware.model.ProductosTiposUnidades</class>
+    <class>ar.com.gtsoftware.model.ProductosXCaracteristicas</class>
+    <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompra</class>
+    <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompraLineas</class>
+    <class>ar.com.gtsoftware.model.ProductosListasPrecios</class>
+    <class>ar.com.gtsoftware.model.ProductosPrecios</class>
+    <class>ar.com.gtsoftware.model.StockMovimientos</class>
+    <class>ar.com.gtsoftware.model.StockMovimientosTipos</class>
+    <class>ar.com.gtsoftware.model.Sucursales</class>
+    <class>ar.com.gtsoftware.model.UbicacionLocalidades</class>
+    <class>ar.com.gtsoftware.model.UbicacionPaises</class>
+    <class>ar.com.gtsoftware.model.UbicacionProvincias</class>
+    <class>ar.com.gtsoftware.model.Usuarios</class>
+    <class>ar.com.gtsoftware.model.UsuariosGrupos</class>
+    <class>ar.com.gtsoftware.model.Comprobantes</class>
+    <class>ar.com.gtsoftware.model.ComprobantesEstados</class>
+    <class>ar.com.gtsoftware.model.ComprobantesLineas</class>
+    <class>ar.com.gtsoftware.model.ComprobantesPagos</class>
+    <class>ar.com.gtsoftware.model.AFIPAuthServices</class>
+    <class>ar.com.gtsoftware.model.FiscalPuntosVenta</class>
+    <class>ar.com.gtsoftware.model.Valores</class>
+    <class>ar.com.gtsoftware.model.Cupones</class>
+    <class>ar.com.gtsoftware.model.Recibos</class>
+    <class>ar.com.gtsoftware.model.RecibosDetalle</class>
+    <class>ar.com.gtsoftware.model.NegocioPlanesPagoDetalle</class>
+    <class>ar.com.gtsoftware.model.NegocioPlanesPago</class>
+    <class>ar.com.gtsoftware.model.ProductoXDeposito</class>
+    <class>ar.com.gtsoftware.model.Remito</class>
+    <class>ar.com.gtsoftware.model.RemitoDetalle</class>
+    <class>ar.com.gtsoftware.model.RemitoRecepcion</class>
+    <class>ar.com.gtsoftware.model.RemitoTipoMovimiento</class>
+    <class>ar.com.gtsoftware.model.VentasCargosFijos</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+    <validation-mode>CALLBACK</validation-mode>
+    <properties>
+      <!--CACHE-->
+      <property name="eclipselink.cache.shared.default" value="false"/>
+      <property name="eclipselink.jdbc.cache-statements" value="true"/>
+      <property name="eclipselink.target-database" value="PostgreSQL"/>
+      <property name="eclipselink.target-server" value="JBoss"/>
+      <property name="eclipselink.weaving" value="true"/>
+      <!--DISABLE FOR PRODUCTION-->
+      <property name="eclipselink.logging.level.sql" value="FINE"/>
+      <property name="eclipselink.logging.level" value="FINEST"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+    </properties>
+  </persistence-unit>
 </persistence>
