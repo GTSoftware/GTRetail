@@ -16,9 +16,9 @@
 package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.CobranzaService;
-import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.CajasMovimientosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
+import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
 import ar.com.gtsoftware.eao.CuponesFacade;
 import ar.com.gtsoftware.eao.RecibosFacade;
 import ar.com.gtsoftware.model.Cajas;
@@ -54,61 +54,62 @@ public class CobranzaServiceImpl implements CobranzaService {
 
     @EJB
     private PersonasCuentaCorrienteServiceImpl cuentaCorrienteBean;
+    @EJB
+    private ComprobantesPagosFacade pagosFacade;
 
     @EJB
     private CuponesFacade cuponesFacade;
 
-    @Override
-    public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException {
-
-        Date fecha = new Date();
-        Recibos recibo = new Recibos();
-        recibo.setFechaRecibo(fecha);
-        recibo.setIdCaja(caja);
-        recibo.setIdPersona(comprobante.getIdPersona());
-        recibo.setIdUsuario(caja.getIdUsuario());
-        recibo.setMontoTotal(comprobante.getSaldoConSigno());
-//        RecibosDetalle reciboDet = new RecibosDetalle();
-//        reciboDet.setIdRecibo(recibo);
-//        reciboDet.setMontoPagado(comprobante.getSaldoConSigno());
-//        ComprobantesPagos compPago = comprobante.getPagosList().get(0);
-        List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
-        for (ComprobantesPagos compPago : comprobante.getPagosList()) {
-            RecibosDetalle reciboDet = new RecibosDetalle();
-            reciboDet.setIdRecibo(recibo);
-            reciboDet.setMontoPagado(compPago.getMontoPago());
-            reciboDet.setIdFormaPago(compPago.getIdFormaPago());
-            reciboDet.setIdPagoComprobante(compPago);
-
-            compPago.setFechaPago(fecha);
-            compPago.setFechaUltimoPago(fecha);
-            compPago.setMontoPagado(compPago.getMontoPago());
-            recibosDetalleList.add(reciboDet);
-        }
-        recibo.setRecibosDetalles(recibosDetalleList);
-//        reciboDet.setIdFormaPago(compPago.getIdFormaPago());
-//        reciboDet.setIdPagoComprobante(compPago);
-//        recibo.setRecibosDetalles(Arrays.asList(reciboDet));
-        comprobante.setSaldo(BigDecimal.ZERO);
-
-        comprobantesFacade.edit(comprobante);
-        recibosFacade.create(recibo);
-
-        CajasMovimientos movimiento = new CajasMovimientos();
-        movimiento.setFechaMovimiento(fecha);
-        String descMovimiento = String.format("Cobro de comprobante %d del cliente %s - Recibo: %d",
-                comprobante.getId(),
-                comprobante.getIdPersona().getBusinessString(), recibo.getId());
-        movimiento.setDescripcion(descMovimiento);
-        movimiento.setIdCaja(caja);
-        movimiento.setMontoMovimiento(recibo.getMontoTotal());
-        cajasMovimientosFacade.create(movimiento);
-
-        cuentaCorrienteBean.registrarMovimientoCuenta(comprobante.getIdPersona(), recibo.getMontoTotal(), descMovimiento);
-        return recibo;
-
-    }
-
+//    @Override
+//    public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException {
+//
+//        Date fecha = new Date();
+//        Recibos recibo = new Recibos();
+//        recibo.setFechaRecibo(fecha);
+//        recibo.setIdCaja(caja);
+//        recibo.setIdPersona(comprobante.getIdPersona());
+//        recibo.setIdUsuario(caja.getIdUsuario());
+//        recibo.setMontoTotal(comprobante.getSaldoConSigno());
+////        RecibosDetalle reciboDet = new RecibosDetalle();
+////        reciboDet.setIdRecibo(recibo);
+////        reciboDet.setMontoPagado(comprobante.getSaldoConSigno());
+////        ComprobantesPagos compPago = comprobante.getPagosList().get(0);
+//        List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
+//        for (ComprobantesPagos compPago : comprobante.getPagosList()) {
+//            RecibosDetalle reciboDet = new RecibosDetalle();
+//            reciboDet.setIdRecibo(recibo);
+//            reciboDet.setMontoPagado(compPago.getMontoPago());
+//            reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+//            reciboDet.setIdPagoComprobante(compPago);
+//
+//            compPago.setFechaPago(fecha);
+//            compPago.setFechaUltimoPago(fecha);
+//            compPago.setMontoPagado(compPago.getMontoPago());
+//            recibosDetalleList.add(reciboDet);
+//        }
+//        recibo.setRecibosDetalles(recibosDetalleList);
+////        reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+////        reciboDet.setIdPagoComprobante(compPago);
+////        recibo.setRecibosDetalles(Arrays.asList(reciboDet));
+//        comprobante.setSaldo(BigDecimal.ZERO);
+//
+//        comprobantesFacade.edit(comprobante);
+//        recibosFacade.create(recibo);
+//
+//        CajasMovimientos movimiento = new CajasMovimientos();
+//        movimiento.setFechaMovimiento(fecha);
+//        String descMovimiento = String.format("Cobro de comprobante %d del cliente %s - Recibo: %d",
+//                comprobante.getId(),
+//                comprobante.getIdPersona().getBusinessString(), recibo.getId());
+//        movimiento.setDescripcion(descMovimiento);
+//        movimiento.setIdCaja(caja);
+//        movimiento.setMontoMovimiento(recibo.getMontoTotal());
+//        cajasMovimientosFacade.create(movimiento);
+//
+//        cuentaCorrienteBean.registrarMovimientoCuenta(comprobante.getIdPersona(), recibo.getMontoTotal(), descMovimiento);
+//        return recibo;
+//
+//    }
     @Override
     public Recibos cobrarComprobantes(Cajas caja, List<PagoValorDTO> pagos) {
         if (CollectionUtils.isEmpty(pagos)) {
@@ -121,6 +122,9 @@ public class CobranzaServiceImpl implements CobranzaService {
         Comprobantes comprobante = pagos.get(0).getPago().getIdComprobante();
         BigDecimal montoTotal = BigDecimal.ZERO;
         for (PagoValorDTO pv : pagos) {
+            if (pv.getPago().getMontoPago().compareTo(pv.getMontoMaximo()) > 0) {
+                throw new IllegalArgumentException("El total de pagos excede al saldo disponible!");
+            }
             montoTotal = montoTotal.add(pv.getPago().getMontoPagoConSigno());
         }
         recibo.setIdPersona(comprobante.getIdPersona());
@@ -128,13 +132,16 @@ public class CobranzaServiceImpl implements CobranzaService {
         recibo.setMontoTotal(montoTotal);
         Set<Comprobantes> comprobantesToEdit = new HashSet<>();
         List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
+
         for (PagoValorDTO pv : pagos) {
+
             ComprobantesPagos compPago = pv.getPago();
+
             RecibosDetalle reciboDet = new RecibosDetalle();
             reciboDet.setIdRecibo(recibo);
             reciboDet.setMontoPagado(compPago.getMontoPago());
             reciboDet.setIdFormaPago(compPago.getIdFormaPago());
-            reciboDet.setIdPagoComprobante(compPago);
+
             if (pv.getCupon() != null) {
                 pv.getCupon().setFechaOrigen(fecha);
                 reciboDet.setIdValor(pv.getCupon());
@@ -143,6 +150,12 @@ public class CobranzaServiceImpl implements CobranzaService {
             compPago.setFechaPago(fecha);
             compPago.setFechaUltimoPago(fecha);
             compPago.setMontoPagado(compPago.getMontoPago());
+
+            if (compPago.isNew()) {
+                pagosFacade.create(compPago);
+            }
+            reciboDet.setIdPagoComprobante(compPago);
+
             recibosDetalleList.add(reciboDet);
 
             comprobantesToEdit.add(pv.getPago().getIdComprobante());
@@ -150,7 +163,11 @@ public class CobranzaServiceImpl implements CobranzaService {
         }
 
         for (Comprobantes c : comprobantesToEdit) {
-            c.setSaldo(BigDecimal.ZERO);
+            BigDecimal saldo = c.getTotal();
+            for (ComprobantesPagos cp : c.getPagosList()) {
+                saldo = saldo.subtract(cp.getMontoPagado());
+            }
+            c.setSaldo(saldo);
             comprobantesFacade.edit(c);
         }
         recibo.setRecibosDetalles(recibosDetalleList);

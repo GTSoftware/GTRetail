@@ -50,11 +50,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @AttributeOverride(name = "id", column = @Column(name = "id_comprobante"))
 @NamedEntityGraphs({
     @NamedEntityGraph(name = "lineas", attributeNodes = {
-        @NamedAttributeNode("comprobantesLineasList")}),
+        @NamedAttributeNode("comprobantesLineasList")})
+    ,
     @NamedEntityGraph(name = "pagos", attributeNodes = {
-        @NamedAttributeNode("pagosList")}),
+        @NamedAttributeNode("pagosList")})
+    ,
     @NamedEntityGraph(name = "todo", attributeNodes = {
-        @NamedAttributeNode("pagosList"),
+        @NamedAttributeNode("pagosList")
+        ,
         @NamedAttributeNode("comprobantesLineasList")})})
 public class Comprobantes extends BaseEntity {
 
@@ -284,6 +287,13 @@ public class Comprobantes extends BaseEntity {
 
     public void setPagosList(List<ComprobantesPagos> pagosList) {
         this.pagosList = pagosList;
+    }
+
+    public void addPago(ComprobantesPagos pago) {
+        if (pagosList == null) {
+            pagosList = new ArrayList<>();
+        }
+        pagosList.add(pago);
     }
 
     public BigDecimal getTotalConSigno() {

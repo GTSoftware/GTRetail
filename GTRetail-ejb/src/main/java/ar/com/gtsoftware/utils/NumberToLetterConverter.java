@@ -113,7 +113,9 @@ public abstract class NumberToLetterConverter {
         if (millon + miles + cientos == 0) {
             converted.append(CERO);
         }
-        if (cientos > 1) {
+        if (cientos == 100) {
+            converted.append(CIEN);
+        } else if (cientos > 1) {
             converted.append(convertNumber(String.valueOf(cientos)));
         }
 

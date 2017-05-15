@@ -16,7 +16,9 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ComprobantesPagos;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.model.ComprobantesPagos_;
+import ar.com.gtsoftware.model.Comprobantes_;
+import ar.com.gtsoftware.search.ComprobantesPagosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +31,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class ComprobantesPagosFacade extends AbstractFacade<ComprobantesPagos, AbstractSearchFilter> {
+public class ComprobantesPagosFacade extends AbstractFacade<ComprobantesPagos, ComprobantesPagosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,8 +46,23 @@ public class ComprobantesPagosFacade extends AbstractFacade<ComprobantesPagos, A
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ComprobantesPagos> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Predicate createWhereFromSearchFilter(ComprobantesPagosSearchFilter sf, CriteriaBuilder cb, Root<ComprobantesPagos> root) {
+        Predicate p = null;
+        if (sf.getIdComprobante() != null) {
+            Predicate p1 = cb.equal(root.get(ComprobantesPagos_.idComprobante).get(Comprobantes_.id), sf.getIdComprobante());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (sf.getConSaldo() != null) {
+            Predicate p1 = cb.equal(root.get(ComprobantesPagos_.montoPago), root.get(ComprobantesPagos_.montoPagado));
+            if (sf.getConSaldo()) {
+                p1 = p1.not();
+            }
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        return p;
+
     }
 
 }

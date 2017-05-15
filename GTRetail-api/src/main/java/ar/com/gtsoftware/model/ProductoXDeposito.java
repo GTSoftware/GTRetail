@@ -33,6 +33,8 @@ import javax.validation.constraints.NotNull;
 @AttributeOverride(name = "id", column = @Column(name = "id_remito", columnDefinition = "serial"))
 public class ProductoXDeposito extends BaseEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @JoinColumn(name = "id_producto", referencedColumnName = "id_column",
             insertable = false, updatable = false)
     @NotNull

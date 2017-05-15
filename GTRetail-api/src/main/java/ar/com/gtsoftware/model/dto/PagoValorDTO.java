@@ -18,6 +18,7 @@ package ar.com.gtsoftware.model.dto;
 import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.Cupones;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Relaciona un pago de comprobante junto con el valor (de ser necesario) requerido para la forma de pago.
@@ -30,7 +31,9 @@ public class PagoValorDTO implements Serializable {
 
     private ComprobantesPagos pago;
     private Cupones cupon;
+    private boolean montoEditable = false;
     private final int item;
+    private BigDecimal montoMaximo;
 
     public PagoValorDTO(int item) {
         this.item = item;
@@ -60,6 +63,22 @@ public class PagoValorDTO implements Serializable {
 
     public int getItem() {
         return item;
+    }
+
+    public boolean getMontoEditable() {
+        return montoEditable;
+    }
+
+    public void setMontoEditable(boolean montoEditable) {
+        this.montoEditable = montoEditable;
+    }
+
+    public BigDecimal getMontoMaximo() {
+        return montoMaximo;
+    }
+
+    public void setMontoMaximo(BigDecimal montoMaximo) {
+        this.montoMaximo = montoMaximo;
     }
 
     @Override

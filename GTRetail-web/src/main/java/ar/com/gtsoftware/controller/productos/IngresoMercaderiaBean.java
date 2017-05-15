@@ -108,6 +108,7 @@ public class IngresoMercaderiaBean implements Serializable {
         remitoCabecera.setRemitoRecepcionesList(Arrays.asList(recepcion));
         remitoFacade.create(remitoCabecera);
 
+        //TODO: Recorrer la lista de productos y actualziar el stock
         return "/protected/index.xhtml?faces-redirect=true";
     }
 

@@ -250,6 +250,10 @@
         <location>/resources/pages/error.xhtml</location>
     </error-page>
     <error-page>
+        <exception-type>java.lang.IllegalArgumentException</exception-type>
+        <location>/resources/pages/error.xhtml</location>
+    </error-page>
+    <error-page>
         <exception-type>org.jboss.weld.context.BusyConversationException</exception-type>
         <location>/resources/pages/error.xhtml?nocid=true</location>
     </error-page>

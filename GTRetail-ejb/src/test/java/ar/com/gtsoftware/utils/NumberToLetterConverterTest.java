@@ -106,6 +106,24 @@ public class NumberToLetterConverterTest {
     }
 
     @Test
+    public void testCien() {
+        System.out.println("cien");
+        double number = 100;
+        String expResult = "CIEN PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testDosCientos() {
+        System.out.println("2cien");
+        double number = 200;
+        String expResult = "DOSCIENTOS PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
     public void testMil() {
         System.out.println("mil");
         double number = 1000;
