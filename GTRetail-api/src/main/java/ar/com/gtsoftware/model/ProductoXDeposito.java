@@ -30,12 +30,12 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "productos_x_depositos")
-@AttributeOverride(name = "id", column = @Column(name = "id_remito", columnDefinition = "serial"))
+@AttributeOverride(name = "id", column = @Column(name = "id_producto_x_deposito", columnDefinition = "serial"))
 public class ProductoXDeposito extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_column",
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto",
             insertable = false, updatable = false)
     @NotNull
     @ManyToOne

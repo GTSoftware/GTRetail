@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.ProductoXDeposito;
+import ar.com.gtsoftware.model.ProductoXDeposito_;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosMarcas_;
 import ar.com.gtsoftware.model.ProductosRubros_;
@@ -22,13 +24,13 @@ import ar.com.gtsoftware.model.ProductosSubRubros_;
 import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
 import ar.com.gtsoftware.model.Productos_;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import java.math.BigDecimal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -132,14 +134,22 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getConStock() != null) {
+            //Subquery de existencias en depósitos
+
             Predicate pstk = null;
             if (psf.getConStock()) {
-                Predicate p1 = cb.gt(root.get(Productos_.stockActual), BigDecimal.ZERO);
+                Subquery<Long> subQStk = cb.createQuery().subquery(Long.class);
+                Root<ProductoXDeposito> fromSubQ = subQStk.from(ProductoXDeposito.class);
+
+                subQStk.select(fromSubQ.get(ProductoXDeposito_.id));
+                Predicate ps1 = cb.gt(fromSubQ.get(ProductoXDeposito_.stock), 0);
+                Predicate ps2 = cb.equal(fromSubQ.get(ProductoXDeposito_.producto), root);
+                subQStk.where(cb.and(ps1, ps2));
+
+                Predicate p1 = cb.exists(subQStk);
                 Predicate p2 = cb.isFalse(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
                 pstk = appendOrPredicate(cb, p1, p2);
-//            } else {
-//                Predicate p2 = cb.isFalse(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
-//                pstk = appendOrPredicate(cb, pstk, p2);
+
             }
             p = appendAndPredicate(cb, p, pstk);
         }
