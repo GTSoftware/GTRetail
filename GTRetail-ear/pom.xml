@@ -4,7 +4,7 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>4.0.2-SNAPSHOT</version>
+        <version>5.0.0</version>
     </parent>
 
 
