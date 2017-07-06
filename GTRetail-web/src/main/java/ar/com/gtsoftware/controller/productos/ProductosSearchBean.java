@@ -27,11 +27,22 @@ import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
@@ -39,7 +50,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "productosSearchBean")
 @ViewScoped
-public class ProductosSearchBean extends AbstractSearchBean<Productos> {
+public class ProductosSearchBean extends AbstractSearchBean<Productos, ProductosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,6 +92,24 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos> {
         return listasPrecio;
     }
 
+    public void imprimirEtiqueta(Productos prod) throws JRException, IOException {
+        List<Productos> productos = new ArrayList<>();
+
+        productos.add(prod);
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(productos);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/productoEtiqueta.jasper");
+
+        HashMap<String, Object> parameters = new HashMap<>();
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        httpServletResponse.addHeader("Content-disposition", String.format("attachment; filename=etiqueta-%s.pdf", prod.getId()));
+        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+        FacesContext.getCurrentInstance().responseComplete();
+    }
+
     public ProductosListasPrecios getListaSeleccionada() {
         return listaSeleccionada;
     }
@@ -102,7 +131,7 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos> {
     }
 
     @Override
-    protected AbstractFacade<Productos> getFacade() {
+    protected AbstractFacade<Productos, ProductosSearchFilter> getFacade() {
         return facade;
     }
 

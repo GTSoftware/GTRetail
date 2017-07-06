@@ -120,7 +120,7 @@ public class ImpresionVentasBean implements Serializable {
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-        httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
+        httpServletResponse.addHeader("Content-disposition", String.format("attachment; filename=venta-%d.pdf", ventaActual.getId()));
         ServletOutputStream servletStream = httpServletResponse.getOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
         FacesContext.getCurrentInstance().responseComplete();

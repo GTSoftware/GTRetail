@@ -26,6 +26,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -45,6 +48,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "comprobantes")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_comprobante"))
+@NamedEntityGraphs({
+    @NamedEntityGraph(name = "lineas", attributeNodes = {
+        @NamedAttributeNode("comprobantesLineasList")})
+    ,
+    @NamedEntityGraph(name = "pagos", attributeNodes = {
+        @NamedAttributeNode("pagosList")})
+    ,
+    @NamedEntityGraph(name = "todo", attributeNodes = {
+        @NamedAttributeNode("pagosList")
+        ,
+        @NamedAttributeNode("comprobantesLineasList")})})
 public class Comprobantes extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -86,7 +100,7 @@ public class Comprobantes extends BaseEntity {
     @JoinColumn(name = "id_negocio_tipo_comprobante", referencedColumnName = "id_negocio_tipo_comprobante")
     private NegocioTiposComprobante tipoComprobante;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante", orphanRemoval = true)
     private List<ComprobantesLineas> comprobantesLineasList;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(optional = false)
@@ -106,11 +120,13 @@ public class Comprobantes extends BaseEntity {
     @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_registro")
     @ManyToOne
     private FiscalLibroIvaVentas idRegistro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idComprobante")
-    private List<ComprobantesPagosLineas> comprobantesPagosLineasList;
 
     @Transient
     private BigDecimal totalConSigno;
+    @Transient
+    private BigDecimal saldoConSigno;
+    @OneToMany(mappedBy = "idComprobante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComprobantesPagos> pagosList;
 
     public Comprobantes() {
     }
@@ -167,7 +183,6 @@ public class Comprobantes extends BaseEntity {
         this.anulada = anulada;
     }
 
-    @XmlTransient
     public List<ComprobantesLineas> getComprobantesLineasList() {
         return comprobantesLineasList;
     }
@@ -184,6 +199,7 @@ public class Comprobantes extends BaseEntity {
         this.idUsuario = idUsuario;
     }
 
+    @XmlTransient
     public Sucursales getIdSucursal() {
         return idSucursal;
     }
@@ -208,21 +224,13 @@ public class Comprobantes extends BaseEntity {
         this.idCondicionComprobante = idCondicionComprobante;
     }
 
+    @XmlTransient
     public FiscalLibroIvaVentas getIdRegistro() {
         return idRegistro;
     }
 
     public void setIdRegistro(FiscalLibroIvaVentas idRegistro) {
         this.idRegistro = idRegistro;
-    }
-
-    @XmlTransient
-    public List<ComprobantesPagosLineas> getComprobantesPagosLineasList() {
-        return comprobantesPagosLineasList;
-    }
-
-    public void setComprobantesPagosLineasList(List<ComprobantesPagosLineas> comprobantesPagosLineasList) {
-        this.comprobantesPagosLineasList = comprobantesPagosLineasList;
     }
 
     public ComprobantesEstados getIdEstadoComprobante() {
@@ -272,6 +280,22 @@ public class Comprobantes extends BaseEntity {
         this.tipoComprobante = tipoComprobante;
     }
 
+    @XmlTransient
+    public List<ComprobantesPagos> getPagosList() {
+        return pagosList;
+    }
+
+    public void setPagosList(List<ComprobantesPagos> pagosList) {
+        this.pagosList = pagosList;
+    }
+
+    public void addPago(ComprobantesPagos pago) {
+        if (pagosList == null) {
+            pagosList = new ArrayList<>();
+        }
+        pagosList.add(pago);
+    }
+
     public BigDecimal getTotalConSigno() {
         if (total != null && tipoComprobante != null) {
             if (totalConSigno == null) {
@@ -279,5 +303,22 @@ public class Comprobantes extends BaseEntity {
             }
         }
         return totalConSigno;
+    }
+
+    public BigDecimal getSaldoConSigno() {
+        if (saldo != null && tipoComprobante != null) {
+            if (saldoConSigno == null) {
+                saldoConSigno = saldo.multiply(tipoComprobante.getSigno());
+            }
+        }
+        return saldoConSigno;
+    }
+
+    public String getBusinessString() {
+        if (idRegistro != null) {
+            return String.format("[%d] %s %s %s-%s", getId(), tipoComprobante.getNombreComprobante(), letra,
+                    idRegistro.getPuntoVentaFactura(), idRegistro.getNumeroFactura());
+        }
+        return String.format("[%d] %s", getId(), tipoComprobante.getNombreComprobante());
     }
 }

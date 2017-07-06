@@ -7,9 +7,9 @@
         <version>4.0.2-SNAPSHOT</version>
     </parent>
 
-    
+
     <artifactId>GTRetail-ear</artifactId>
-    
+
     <packaging>ear</packaging>
 
     <name>GTRetail-ear</name>
@@ -30,19 +30,17 @@
                     <fileNameMapping>no-version</fileNameMapping>
                 </configuration>
             </plugin>
-            <!-- The JBoss AS plugin deploys your ear to a local JBoss AS container -->
-            <!-- Due to Maven's lack of intelligence with EARs we need to configure
-            the jboss-as maven plugin to skip deployment for all modules. We then enable
-            it specifically in the ear module. -->
             <plugin>
-                <groupId>org.jboss.as.plugins</groupId>
-                <artifactId>jboss-as-maven-plugin</artifactId>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${wildfly.plugin.version}</version>
                 <configuration>
                     <skip>false</skip>
-                    <jbossHome>${jboss.directory}</jbossHome>
-                    <fileNames>
-                        <fileName>${basedir}/target/${project.artifactId}.ear</fileName>
-                    </fileNames>
+                    <force>true</force>
+                    <hostname>localhost</hostname>
+                    <port>9990</port>
+                    <username>admin</username>
+                    <password>admin123</password>
                 </configuration>
             </plugin>
 
@@ -67,6 +65,6 @@
 
             <type>jar</type>
         </dependency>
-        
+
     </dependencies>
 </project>

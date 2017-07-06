@@ -17,10 +17,10 @@ package ar.com.gtsoftware.utils;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -54,7 +54,7 @@ public class NumberToLetterConverterTest {
     public void testConvertNumberToLetter() {
         System.out.println("convertNumberToLetter");
         double number = 0.0;
-        String expResult = "CERO PESOS ";
+        String expResult = "CERO PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
@@ -68,7 +68,16 @@ public class NumberToLetterConverterTest {
     public void test1989ConvertNumberToLetter() {
         System.out.println("convertNumberToLetter 1989");
         double number = 1989;
-        String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE  PESOS ";
+        String expResult = "MIL NOVECIENTOS OCHENTA Y NUEVE PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testImporteConvertNumberToLetter() {
+        System.out.println("convertNumberToLetter 125.43");
+        double number = 125.43;
+        String expResult = "CIENTO VEINTICINCO PESOS CON CUARENTA Y TRES CENTAVOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -87,10 +96,38 @@ public class NumberToLetterConverterTest {
 
     }
 
+    @Test
     public void testUnCentavo() {
         System.out.println("unCentavo");
         double number = 0.01;
-        String expResult = "UN CENTAVO ";
+        String expResult = "CERO PESOS CON UN CENTAVO";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testCien() {
+        System.out.println("cien");
+        double number = 100;
+        String expResult = "CIEN PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testDosCientos() {
+        System.out.println("2cien");
+        double number = 200;
+        String expResult = "DOSCIENTOS PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testMil() {
+        System.out.println("mil");
+        double number = 1000;
+        String expResult = "UN MIL PESOS";
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }
@@ -99,7 +136,44 @@ public class NumberToLetterConverterTest {
     public void testMaxNumber() {
         System.out.println("testMaxNumber");
         double number = 9999999;
-        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE  PESOS ";
+        String expResult = "NUEVE MILLONES NOVECIENTOS NOVENTA Y NUEVE MIL NOVECIENTOS NOVENTA Y NUEVE PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testOneMillon() {
+        System.out.println("testUnMillon");
+        double number = 1000000;
+        String expResult = "UN MILLON DE PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testTwoMillon() {
+        System.out.println("testUnMillon");
+        double number = 2000000;
+        String expResult = "DOS MILLONES DE PESOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testOneMillonFiveHundred() {
+        System.out.println("testUnMillon");
+        double number = 1527654.32;
+        String expResult = "UN MILLON QUINIENTOS VEINTISIETE MIL SEISCIENTOS CINCUENTA Y CUATRO PESOS CON TREINTA Y DOS CENTAVOS";
+        String result = NumberToLetterConverter.convertNumberToLetter(number);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testOneMillonOneCent() {
+        System.out.println("testUnMillonUnCentavo");
+        double number = 1000000.01;
+        String expResult = "UN MILLON DE PESOS CON UN CENTAVO";
+
         String result = NumberToLetterConverter.convertNumberToLetter(number);
         assertEquals(expResult, result);
     }

@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +25,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -44,9 +44,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
-public class Productos extends BaseEntity implements Serializable {
+@NamedEntityGraph(name = "precios", attributeNodes = {
+    @NamedAttributeNode("porcentajes"),
+    @NamedAttributeNode("precios")})
 
-    private static final long serialVersionUID = 2L;
+public class Productos extends BaseEntity {
+
+    private static final long serialVersionUID = 3L;
 
     @Size(max = 100)
     @Column(name = "codigo_propio")
@@ -111,9 +115,11 @@ public class Productos extends BaseEntity implements Serializable {
     @ManyToOne(optional = false)
 //    @JoinFetch
     private ProductosRubros idRubro;
+
     @JoinColumn(name = "id_proveedor_habitual", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne
     private Personas idProveedorHabitual;
+
     @JoinColumn(name = "id_alicuota_iva", referencedColumnName = "id_alicuota_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     //  @JoinFetch
@@ -123,12 +129,11 @@ public class Productos extends BaseEntity implements Serializable {
     //@JoinFetch
     private ProductosMarcas idMarca;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
-    @OrderBy(value = "idListaPrecios")
+    @OneToMany(orphanRemoval = true, mappedBy = "idProducto", cascade = CascadeType.ALL)
+//    @OrderBy(value = "idListaPrecios")
     private List<ProductosPrecios> precios;
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idProducto", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductosPorcentajes> porcentajes;
 
     @Size(max = 60)
@@ -386,11 +391,6 @@ public class Productos extends BaseEntity implements Serializable {
 
     public void setCodigoFabricante(String codigoFabricante) {
         this.codigoFabricante = codigoFabricante;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("ar.com.gtsoftware.model.Productos[ idProducto= %s ]", this.getId());
     }
 
     @PrePersist

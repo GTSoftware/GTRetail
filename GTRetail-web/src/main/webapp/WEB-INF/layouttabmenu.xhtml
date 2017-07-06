@@ -1,0 +1,25 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:po="http://primefaces.org/olympos">
+
+    <ul id="layout-tab-menu">
+        <li><a href="#" class="active" rel="layout-menu"> <i class="icon-speedometer33"></i> <span class="layout-tab-menu-link-text"><span></span> Olympos Main Menu</span> </a></li>
+        <li><a href="#" rel="layout-messages"> <i class="icon-chat66"></i> <span class="layout-tab-menu-link-text"><span></span> Messages</span> </a></li>
+        <li><a href="#" rel="layout-settings"> <i class="icon-settings47"></i> <span class="layout-tab-menu-link-text"><span></span> Settings</span> </a></li>
+        <li><a href="#" rel="layout-tasks"> <i class="icon-travel17"></i> <span class="layout-tab-menu-link-text"><span></span> Tasks</span> </a></li>
+        <li><a href="#" rel="layout-users"> <i class="icon-male238"></i> <span class="layout-tab-menu-link-text"><span></span> Active Users</span> </a></li>
+        <li><a href="#" rel="layout-files"> <i class="icon-arrow66"></i> <span class="layout-tab-menu-link-text"><span></span> Cloud Files</span> </a></li>
+        <li><a href="#" rel="layout-todos"> <i class="icon-clipboard88"></i> <span class="layout-tab-menu-link-text"><span></span> My TODOs</span> </a></li>
+        <li><a href="#" rel="layout-events"> <i class="icon-event9"></i> <span class="layout-tab-menu-link-text"><span></span> My Events</span> </a></li>
+        <li><a href="#" rel="layout-addressbook"> <i class="icon-emails5"></i> <span class="layout-tab-menu-link-text"><span></span> My Address Book</span> </a></li>
+    </ul>
+    
+    <ui:include src="layoutmenu.xhtml"/>
+    
+    <ui:include src="othertabsubmenus.xhtml"/>
+
+</ui:composition>

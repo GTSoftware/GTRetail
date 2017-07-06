@@ -19,11 +19,12 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "sucursales")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_sucursal", columnDefinition = "serial"))
+@NamedEntityGraph(name = "depositos", attributeNodes = @NamedAttributeNode("depositosList"))
 public class Sucursales extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -65,12 +67,11 @@ public class Sucursales extends BaseEntity {
     @NotNull
     @Column(name = "activo")
     private boolean activo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
-    private List<Cajas> cajasList;
-    @OneToMany(mappedBy = "idSucursal")
-    private List<Usuarios> usuariosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
-    private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
+//
+//    @OneToMany(mappedBy = "idSucursal")
+//    private List<Usuarios> usuariosList;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
+//    private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
     @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private UbicacionProvincias idProvincia;
@@ -137,33 +138,24 @@ public class Sucursales extends BaseEntity {
         this.activo = activo;
     }
 
+//    @XmlTransient
+//    public List<Usuarios> getUsuariosList() {
+//        return usuariosList;
+//    }
+//
+//    public void setUsuariosList(List<Usuarios> usuariosList) {
+//        this.usuariosList = usuariosList;
+//    }
+//
+//    @XmlTransient
+//    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
+//        return proveedoresOrdenesCompraList;
+//    }
+//
+//    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
+//        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
+//    }
     @XmlTransient
-    public List<Cajas> getCajasList() {
-        return cajasList;
-    }
-
-    public void setCajasList(List<Cajas> cajasList) {
-        this.cajasList = cajasList;
-    }
-
-    @XmlTransient
-    public List<Usuarios> getUsuariosList() {
-        return usuariosList;
-    }
-
-    public void setUsuariosList(List<Usuarios> usuariosList) {
-        this.usuariosList = usuariosList;
-    }
-
-    @XmlTransient
-    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
-        return proveedoresOrdenesCompraList;
-    }
-
-    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
-        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-    }
-
     public UbicacionProvincias getIdProvincia() {
         return idProvincia;
     }
@@ -172,6 +164,7 @@ public class Sucursales extends BaseEntity {
         this.idProvincia = idProvincia;
     }
 
+    @XmlTransient
     public UbicacionPaises getIdPais() {
         return idPais;
     }
@@ -180,6 +173,7 @@ public class Sucursales extends BaseEntity {
         this.idPais = idPais;
     }
 
+    @XmlTransient
     public UbicacionLocalidades getIdLocalidad() {
         return idLocalidad;
     }
@@ -197,9 +191,8 @@ public class Sucursales extends BaseEntity {
         this.depositosList = depositosList;
     }
 
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Sucursales[ idSucursal=" + this.getId() + " ]";
+    public String getBusinessString() {
+        return String.format("[%d] %s", getId(), nombreSucursal);
     }
 
 }

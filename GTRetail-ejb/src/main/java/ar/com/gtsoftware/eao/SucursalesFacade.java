@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.model.Sucursales_;
+import ar.com.gtsoftware.search.SucursalesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +30,8 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class SucursalesFacade extends AbstractFacade<Sucursales> {
+public class SucursalesFacade extends AbstractFacade<Sucursales, SucursalesSearchFilter> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -45,23 +45,13 @@ public class SucursalesFacade extends AbstractFacade<Sucursales> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Sucursales> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Predicate createWhereFromSearchFilter(SucursalesSearchFilter sf, CriteriaBuilder cb, Root<Sucursales> root) {
+        Predicate p = null;
+        if (sf.getActiva() != null) {
+            Predicate p1 = cb.equal(root.get(Sucursales_.activo), sf.getActiva());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
     }
 
-    @Override
-    public List<Sucursales> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(Sucursales entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

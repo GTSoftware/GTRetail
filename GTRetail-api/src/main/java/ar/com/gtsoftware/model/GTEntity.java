@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Superclase para todas las entidades del sistema
@@ -32,6 +33,7 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Version
+    @XmlTransient
     private Integer version;
 
     /**
@@ -39,6 +41,7 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
      *
      * @return
      */
+    @XmlTransient
     public abstract boolean isNew();
 
     /**
@@ -61,6 +64,7 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
      *
      * @return
      */
+    @XmlTransient
     public abstract String getStringId();
 
     public Integer getVersion() {
@@ -80,13 +84,19 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (!(obj instanceof GTEntity)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        GTEntity other = (GTEntity) obj;
+        if ((getId() == null && other.getId() != null)
+                || (getId() != null && !this.getId().equals(other.getId()))) {
             return false;
         }
-        final FiscalPuntosVenta other = (FiscalPuntosVenta) obj;
-        return Objects.equals(this.getId(), other.getId());
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s [id=%s]", this.getClass().getName(), getId());
     }
 }

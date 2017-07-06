@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.ViewScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -39,6 +39,8 @@ public class UnidadesEditBean implements Serializable {
 
     @EJB
     private ProductosTiposUnidadesFacade facade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private ProductosTiposUnidades unidadActual = null;
 
@@ -51,7 +53,7 @@ public class UnidadesEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idUnidad = JSFUtil.getRequestParameterMap().get("idUnidad");
+        String idUnidad = jsfUtil.getRequestParameterMap().get("idUnidad");
 
         if (idUnidad == null) {
             nuevo();
@@ -76,11 +78,11 @@ public class UnidadesEditBean implements Serializable {
         try {
 
             facade.createOrEdit(unidadActual);
-            JSFUtil.addInfoMessage("Unidad guardada Exitosamente");
+            jsfUtil.addInfoMessage("Unidad guardada Exitosamente");
             unidadActual = facade.find(unidadActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }

@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="/WEB-INF/template.xhtml">
+
+    <!-- Contenido -->
+    <ui:define name="content">
+        <ui:insert >
+            <ui:include src="breadcrumb.xhtml" />
+        </ui:insert>
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Administración de Formas de pago</h1>
+                <div class="SeparatorFull"></div>
+                <h:form id="formContenido" >
+
+                    <div class="Container100 ui-fluid">
+                        <div class="Card">
+                            <p:focus for="textoBusquedaField"/>
+                            <p:panelGrid layout="grid"  columns="3"
+                                         style="border:0px !important; background:none;" styleClass="ui-panelgrid-blank">
+
+                                <p:inputText id="textoBusquedaField" value="#{formasPagoSearchBean.filter.nombre}"
+                                             placeholder="Términos de búsqueda"/>
+
+                                <p:commandButton  action="#{formasPagoSearchBean.doSearch()}"
+                                                  value="#{msg.buscar}"
+                                                  icon="fa fa-fw fa-search"
+                                                  update="formasPagoTable"/>
+                                <p:commandButton id="nuevoButton" action="formaPagoEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                 icon="fa fa-fw fa-plus"
+                                                 styleClass="GreenButton"/>
+                            </p:panelGrid >
+                        </div>
+                    </div>
+                    <div class="Container100 ui-fluid">
+                        <div class="Card">
+                            <div class="SeparatorFull"></div>
+                            <p:dataTable id="formasPagoTable" var="forma" value="#{formasPagoSearchBean.dataModel}"
+                                         rows="30"
+                                         lazy="true"
+                                         paginator="true"
+                                         sortMode="single"
+                                         emptyMessage="#{msg.busquedaSinResultados}"
+                                         rowKey="#{forma.id}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                         rowsPerPageTemplate="10,15,30,100"
+                                         scrollable="true"
+                                         reflow="true"
+                                         liveResize="true"
+                                         resizableColumns="true">
+
+                                <f:facet name="{Exporters}">
+                                    <h:commandLink title="xls">
+                                        <i class="fa fa-file-excel-o Fs24 Green" />
+                                        <p:dataExporter type="xls" target="formasPagoTable" fileName="formasPago" />
+                                    </h:commandLink>
+
+                                    <h:commandLink title="pdf">
+                                        <i class="fa fa-file-pdf-o Fs24 Red" />
+                                        <p:dataExporter type="pdf" target="formasPagoTable" fileName="formasPago"/>
+                                    </h:commandLink>
+
+                                    <h:commandLink title="csv">
+                                        <i class="fa fa-file-text-o Fs24 Blue" />
+                                        <p:dataExporter type="csv" target="formasPagoTable" fileName="formasPago" />
+                                    </h:commandLink>
+
+                                    <h:commandLink title="xml">
+                                        <i class="fa fa-file-code-o Fs24 Black" />
+                                        <p:dataExporter type="xml" target="formasPagoTable" fileName="formasPago" />
+                                    </h:commandLink>
+                                </f:facet>
+
+
+                                <p:column sortBy="#{forma.id}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.id}"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{forma.id}" />
+
+                                </p:column>
+
+                                <p:column sortBy="#{forma.nombreFormaPago}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.nombre}"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{forma.nombreFormaPago}" />
+
+                                </p:column>
+                                <p:column sortBy="#{forma.nombreCorto}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.nombre} corto"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{forma.nombreCorto}" />
+
+                                </p:column>
+
+                                <p:column sortBy="#{forma.venta}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Disp. Venta"/>
+                                    </f:facet>
+
+                                    <h:outputLabel value="#{forma.venta ? 'Sí': 'No'}"/>
+
+                                </p:column>
+
+                                <p:column sortBy="#{forma.compra}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="Disp. Compra"/>
+                                    </f:facet>
+                                    <h:outputLabel value="#{forma.compra ? 'Sí': 'No'}"/>
+
+
+                                </p:column>
+
+                                <p:column  exportable="false">
+                                    <f:facet name="header">
+                                        #{msg.editar}
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="formaPagoEdit"
+                                                     ajax="false" >
+                                        <f:param name="idFormaPago" value="#{forma.id}" />
+
+                                    </p:commandButton>
+
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+
+
+

@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.FiscalPuntosVenta_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class FiscalPuntosVentaFacade extends AbstractFacade<FiscalPuntosVenta> {
+public class FiscalPuntosVentaFacade extends AbstractFacade<FiscalPuntosVenta, FiscalPuntosVentaSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,16 +45,26 @@ public class FiscalPuntosVentaFacade extends AbstractFacade<FiscalPuntosVenta> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalPuntosVenta> root) {
-        FiscalPuntosVentaSearchFilter pvsf = (FiscalPuntosVentaSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(FiscalPuntosVentaSearchFilter pvsf, CriteriaBuilder cb, Root<FiscalPuntosVenta> root) {
 
         Predicate p = null;
         if (pvsf.getSucursal() != null) {
             Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.sucursal), pvsf.getSucursal());
             p = appendAndPredicate(cb, p, p1);
         }
+
         if (pvsf.getActivo() != null) {
             Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.activo), pvsf.getActivo());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (pvsf.getNroPuntoVenta() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.nroPuntoVenta), pvsf.getNroPuntoVenta());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (pvsf.getTipoPuntoVenta() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.tipo), pvsf.getTipoPuntoVenta());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

@@ -32,7 +32,7 @@ public class ComprobantesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer idVenta;
+    private Long idVenta;
     private Date fechaVentaDesde;
     private Date fechaVentaHasta;
     private Boolean anulada;
@@ -65,11 +65,11 @@ public class ComprobantesSearchFilter extends AbstractSearchFilter {
         this.anulada = anulada;
     }
 
-    public Integer getIdVenta() {
+    public Long getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(Integer idVenta) {
+    public void setIdVenta(Long idVenta) {
         this.idVenta = idVenta;
     }
 

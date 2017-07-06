@@ -13,25 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.model.Cajas_;
+import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.Recibos;
+import ar.com.gtsoftware.model.RecibosDetalle;
+import ar.com.gtsoftware.model.RecibosDetalle_;
+import ar.com.gtsoftware.model.Recibos_;
+import ar.com.gtsoftware.search.CajasSearchFilter;
+import java.math.BigDecimal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class CajasFacade extends AbstractFacade<Cajas> {
+public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
+
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -45,23 +55,48 @@ public class CajasFacade extends AbstractFacade<Cajas> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Cajas> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Predicate createWhereFromSearchFilter(CajasSearchFilter psf, CriteriaBuilder cb, Root<Cajas> root) {
+        Predicate p = null;
+        if (psf.getAbierta() != null) {
+            Predicate p1 = cb.isNotNull(root.get(Cajas_.fechaCierre));
+            if (psf.getAbierta()) {
+                p1 = cb.isNull(root.get(Cajas_.fechaCierre));
+            }
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(Cajas_.idSucursal), psf.getSucursal());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (psf.getUsuario() != null) {
+            Predicate p1 = cb.equal(root.get(Cajas_.idUsuario), psf.getUsuario());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
+
     }
 
-    @Override
-    public List<Cajas> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public BigDecimal obtenerMontoFormaPago(NegocioFormasPago formaPago, Cajas caja) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+        Root<RecibosDetalle> root = cq.from(RecibosDetalle.class);
+        Join<RecibosDetalle, Recibos> recibos = root.join(RecibosDetalle_.idRecibo, JoinType.INNER);
+        CriteriaBuilder.Coalesce<BigDecimal> coalesce = cb.coalesce();
+        coalesce.value(cb.sum(root.get(RecibosDetalle_.montoPagado)));
+        coalesce.value(BigDecimal.ZERO);
+        cq.select(coalesce);
+        Predicate p = cb.equal(recibos.get(Recibos_.idCaja), caja);
+        Predicate p1 = null;
+        if (formaPago != null) {
+            p1 = cb.equal(root.get(RecibosDetalle_.idFormaPago), formaPago);
+        }
+
+        p = appendAndPredicate(cb, p, p1);
+
+        cq.where(p);
+        TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+        return q.getSingleResult();
+
     }
 
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(Cajas entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

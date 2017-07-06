@@ -17,23 +17,21 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.model.NegocioFormasPago_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
+import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
+public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago, FormasPagoSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -47,50 +45,31 @@ public class NegocioFormasPagoFacade extends AbstractFacade<NegocioFormasPago> {
         super(NegocioFormasPago.class);
     }
 
-    public List<NegocioFormasPago> findFormasPagoVenta() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<NegocioFormasPago> cq = cb.createQuery(NegocioFormasPago.class);
-        Root<NegocioFormasPago> formaPago = cq.from(NegocioFormasPago.class);
-        cq.select(formaPago);
-        Predicate p = cb.equal(formaPago.get(NegocioFormasPago_.venta), true);
-        cq.where(p);
-        TypedQuery<NegocioFormasPago> q = em.createQuery(cq);
-
-        List<NegocioFormasPago> formasPagoList = q.getResultList();
-        return formasPagoList;
-    }
-
-    public List<NegocioFormasPago> findFormasPagoCompra() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<NegocioFormasPago> cq = cb.createQuery(NegocioFormasPago.class);
-        Root<NegocioFormasPago> formaPago = cq.from(NegocioFormasPago.class);
-        cq.select(formaPago);
-        Predicate p = cb.equal(formaPago.get(NegocioFormasPago_.compra), true);
-        cq.where(p);
-        TypedQuery<NegocioFormasPago> q = em.createQuery(cq);
-
-        List<NegocioFormasPago> formasPagoList = q.getResultList();
-        return formasPagoList;
-    }
-
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<NegocioFormasPago> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Predicate createWhereFromSearchFilter(FormasPagoSearchFilter sf, CriteriaBuilder cb, Root<NegocioFormasPago> root) {
+        Predicate p = null;
+        if (sf.getDisponibleCompra() != null) {
+            Predicate p1 = cb.equal(root.get(NegocioFormasPago_.compra), sf.getDisponibleCompra());
+            p = appendAndPredicate(cb, p, p1);
+        }
 
-    @Override
-    public List<NegocioFormasPago> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        if (sf.getRequierePlanes() != null) {
+            Predicate p1 = cb.equal(root.get(NegocioFormasPago_.requierePlan), sf.getRequierePlanes());
+            p = appendAndPredicate(cb, p, p1);
+        }
 
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        if (sf.getDisponibleVenta() != null) {
+            Predicate p1 = cb.equal(root.get(NegocioFormasPago_.venta), sf.getDisponibleVenta());
+            p = appendAndPredicate(cb, p, p1);
+        }
 
-    @Override
-    public void createOrEdit(NegocioFormasPago entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (StringUtils.isNotEmpty(sf.getNombre())) {
+            Predicate p1 = cb.like(cb.upper(root.get(NegocioFormasPago_.nombreFormaPago)), String.format("%%%s%%", sf.getNombre().toUpperCase()));
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        return p;
+
     }
 
 }

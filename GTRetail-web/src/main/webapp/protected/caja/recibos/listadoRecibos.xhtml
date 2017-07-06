@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">#{msg.recibos}</h1>
+                <div class="SeparatorFull" />
+                <h:form id="buscarClienteForm">
+                    <p:defaultCommand target="buscarButton"/>
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2">
+
+                        <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                        <p:calendar id="fechaDesdeField" value="#{recibosSearchBean.filter.fechaDesde}"
+                                    pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
+
+                        <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                        <p:calendar id="fechaHastaField" value="#{recibosSearchBean.filter.fechaHasta}"
+                                    pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
+<!--                        <p:inputText id="searchField" value="#{movimientosCajaSearchBean.filter.txt}" placeholder="#{msg.b.usqueda}"/>-->
+
+                        <p:outputLabel value="#{msg.soloMios}:" for="soloMiosField"/>
+                        <p:selectBooleanCheckbox id="soloMiosField" value="#{recibosSearchBean.soloMiosFilter}" />
+                    </p:panelGrid >
+                    <p:commandButton id="buscarButton" action="#{recibosSearchBean.doSearch()}" value="Buscar"
+                                     update="recibosTable" icon="fa fa-fw fa-search"/>
+                    <div class="SeparatorFull" />
+
+                    <p:dataTable id="recibosTable" value="#{recibosSearchBean.dataModel}" var="mov"
+                                 rows="10"
+                                 lazy="true"
+                                 paginator="true"
+                                 emptyMessage="#{msg.busquedaSinResultados}"
+                                 rowKey="#{mov.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowsPerPageTemplate="10,15,30,100"
+
+
+                                 scrollable="true"
+                                 reflow="true" >
+
+                        <f:facet name="{Exporters}">
+
+                            <h:commandLink title="xls">
+                                <i class="fa fa-file-excel-o Fs24 Green" />
+                                <p:dataExporter type="xls" target="recibosTable" fileName="recibos" />
+                            </h:commandLink>
+
+                            <h:commandLink title="pdf">
+                                <i class="fa fa-file-pdf-o Fs24 Red" />
+                                <p:dataExporter type="pdf" target="recibosTable" fileName="recibos"/>
+                            </h:commandLink>
+
+                            <h:commandLink title="csv">
+                                <i class="fa fa-file-text-o Fs24 Blue" />
+                                <p:dataExporter type="csv" target="recibosTable" fileName="recibos" />
+                            </h:commandLink>
+
+                            <h:commandLink title="xml">
+                                <i class="fa fa-file-code-o Fs24 Black" />
+                                <p:dataExporter type="xml" target="recibosTable" fileName="recibos" />
+                            </h:commandLink>
+                        </f:facet>
+
+                        <f:facet name="header" >
+                            #{msg.recibos}
+                        </f:facet>
+
+                        <p:column sortBy="#{mov.id}">
+                            <f:facet name="header" >
+                                #{msg.tablaId}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.id}"/>
+                        </p:column>
+                        <p:column sortBy="#{mov.fechaRecibo}"  >
+                            <f:facet name="header" >
+                                #{msg.fecha}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.fechaRecibo}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.montoTotal}" >
+                            <f:facet name="header" >
+                                #{msg.monto}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.montoTotal}">
+                                <f:convertNumber groupingUsed="true" type="currency"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.idPersona}">
+                            <f:facet name="header" >
+                                #{msg.razonSocial}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.idPersona.businessString}"/>
+                        </p:column>
+                        <p:column sortBy="#{mov.observaciones}">
+                            <f:facet name="header" >
+                                #{msg.observaciones}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.observaciones}"/>
+                        </p:column>
+                        <p:column exportable="false">
+                            <f:facet name="header" >
+                                #{msg.imprimir}
+                            </f:facet>
+                            <p:commandButton icon="fa fa-print" action="#{recibosSearchBean.imprimirRecibo(mov)}"
+                                             ajax="false"
+                                             title="Imprimir etiqueta">
+
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+            </div>
+        </div>
+    </div>
+</html>

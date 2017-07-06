@@ -15,20 +15,17 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
+ * Representa las formas de pago del negocio
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
@@ -56,18 +53,36 @@ public class NegocioFormasPago extends BaseEntity {
     @NotNull
     @Column(name = "compra")
     private boolean compra;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormaPago")
-    private List<ComprobantesPagos> ventasPagosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFormaPago")
-    private List<CajasMovimientos> cajasMovimientosList;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "requiere_plan")
+    private boolean requierePlan;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "requiere_valores")
+    private boolean requiereValores;
 
+    /**
+     * Constructor por defecto
+     */
     public NegocioFormasPago() {
     }
 
+    /**
+     *
+     * @param idFormaPago
+     */
     public NegocioFormasPago(Long idFormaPago) {
         super(idFormaPago);
     }
 
+    /**
+     *
+     * @param idFormaPago
+     * @param nombreFormaPago
+     * @param venta
+     * @param compra
+     */
     public NegocioFormasPago(Long idFormaPago, String nombreFormaPago, boolean venta, boolean compra) {
         super(idFormaPago);
         this.nombreFormaPago = nombreFormaPago;
@@ -75,54 +90,112 @@ public class NegocioFormasPago extends BaseEntity {
         this.compra = compra;
     }
 
+    /**
+     * Nombre de la forma de pago
+     *
+     * @return
+     */
     public String getNombreFormaPago() {
         return nombreFormaPago;
     }
 
+    /**
+     * Nombre de la forma de pago
+     *
+     * @param nombreFormaPago
+     */
     public void setNombreFormaPago(String nombreFormaPago) {
         this.nombreFormaPago = nombreFormaPago;
     }
 
+    /**
+     * Nombre corto
+     *
+     * @return
+     */
     public String getNombreCorto() {
         return nombreCorto;
     }
 
+    /**
+     * Nombre corto
+     *
+     * @param nombreCorto
+     */
     public void setNombreCorto(String nombreCorto) {
         this.nombreCorto = nombreCorto;
     }
 
+    /**
+     * Si se puede usar para la venta
+     *
+     * @return
+     */
     public boolean getVenta() {
         return venta;
     }
 
+    /**
+     * Si se puede usar para la venta
+     *
+     * @param venta
+     */
     public void setVenta(boolean venta) {
         this.venta = venta;
     }
 
+    /**
+     * Si se puede usar para la compra
+     *
+     * @return
+     */
     public boolean getCompra() {
         return compra;
     }
 
+    /**
+     * Si se puede usar para la compra
+     *
+     * @param compra
+     */
     public void setCompra(boolean compra) {
         this.compra = compra;
     }
 
-    @XmlTransient
-    public List<ComprobantesPagos> getVentasPagosList() {
-        return ventasPagosList;
+    /**
+     * Si requiere que tenga al menos un plan asociado para poder ser utilizado
+     *
+     * @return
+     */
+    public boolean getRequierePlan() {
+        return requierePlan;
     }
 
-    public void setVentasPagosList(List<ComprobantesPagos> ventasPagosList) {
-        this.ventasPagosList = ventasPagosList;
+    /**
+     * Si requiere que tenga al menos un plan asociado para poder ser utilizado
+     *
+     * @param requierePlan
+     */
+    public void setRequierePlan(boolean requierePlan) {
+        this.requierePlan = requierePlan;
     }
 
-    @XmlTransient
-    public List<CajasMovimientos> getCajasMovimientosList() {
-        return cajasMovimientosList;
+    /**
+     * Si la forma de pago requiere el ingreso de valores que la representen
+     *
+     * @return
+     */
+    public boolean getRequiereValores() {
+        return requiereValores;
     }
 
-    public void setCajasMovimientosList(List<CajasMovimientos> cajasMovimientosList) {
-        this.cajasMovimientosList = cajasMovimientosList;
+    /**
+     * Si la forma de pago requiere el ingreso de valores que la representen
+     *
+     * @param requiereValores
+     */
+    public void setRequiereValores(boolean requiereValores) {
+        this.requiereValores = requiereValores;
     }
 
 }

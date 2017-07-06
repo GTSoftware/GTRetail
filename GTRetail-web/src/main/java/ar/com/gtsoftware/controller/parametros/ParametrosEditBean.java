@@ -39,6 +39,8 @@ public class ParametrosEditBean implements Serializable {
 
     @EJB
     private ParametrosFacade parametrosFacade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private Parametros parametroActual;
 
@@ -52,10 +54,10 @@ public class ParametrosEditBean implements Serializable {
 
     public void init() {
 
-        if (JSFUtil.isPostback()) {
+        if (jsfUtil.isPostback()) {
             return;
         }
-        nombreParametro = JSFUtil.getRequestParameterMap().get("nombreParametro");
+        nombreParametro = jsfUtil.getRequestParameterMap().get("nombreParametro");
         if (StringUtils.isEmpty(nombreParametro)) {
             throw new IllegalArgumentException("El parámetro es nulo");
         }
@@ -72,7 +74,7 @@ public class ParametrosEditBean implements Serializable {
     public void edit() {
 
         parametrosFacade.edit(parametroActual);
-        JSFUtil.addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
+        jsfUtil.addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
                 parametroActual.getNombreParametro(), parametroActual.getValorParametro()));
 
     }

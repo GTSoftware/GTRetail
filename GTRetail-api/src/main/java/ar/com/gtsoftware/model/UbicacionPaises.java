@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
@@ -37,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "ubicacion_paises")
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_pais", columnDefinition = "serial"))
-public class UbicacionPaises extends BaseEntity implements Serializable {
+public class UbicacionPaises extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,16 +45,9 @@ public class UbicacionPaises extends BaseEntity implements Serializable {
     @Size(min = 1, max = 60)
     @Column(name = "nombre_pais")
     private String nombrePais;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPais")
-    private List<Bancos> bancosList;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPais")
     private List<UbicacionProvincias> ubicacionProvinciasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPais")
-    private List<Personas> personasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPais")
-    private List<Sucursales> sucursalesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPais")
-    private List<Depositos> depositosList;
 
     public UbicacionPaises() {
     }
@@ -78,15 +70,6 @@ public class UbicacionPaises extends BaseEntity implements Serializable {
     }
 
     @XmlTransient
-    public List<Bancos> getBancosList() {
-        return bancosList;
-    }
-
-    public void setBancosList(List<Bancos> bancosList) {
-        this.bancosList = bancosList;
-    }
-
-    @XmlTransient
     public List<UbicacionProvincias> getUbicacionProvinciasList() {
         return ubicacionProvinciasList;
     }
@@ -94,37 +77,4 @@ public class UbicacionPaises extends BaseEntity implements Serializable {
     public void setUbicacionProvinciasList(List<UbicacionProvincias> ubicacionProvinciasList) {
         this.ubicacionProvinciasList = ubicacionProvinciasList;
     }
-
-    @XmlTransient
-    public List<Personas> getPersonasList() {
-        return personasList;
-    }
-
-    public void setPersonasList(List<Personas> personasList) {
-        this.personasList = personasList;
-    }
-
-    @XmlTransient
-    public List<Sucursales> getSucursalesList() {
-        return sucursalesList;
-    }
-
-    public void setSucursalesList(List<Sucursales> sucursalesList) {
-        this.sucursalesList = sucursalesList;
-    }
-
-    @XmlTransient
-    public List<Depositos> getDepositosList() {
-        return depositosList;
-    }
-
-    public void setDepositosList(List<Depositos> depositosList) {
-        this.depositosList = depositosList;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.UbicacionPaises[ idPais=" + this.getId() + " ]";
-    }
-
 }

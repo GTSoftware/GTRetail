@@ -18,7 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.AFIPAuthServices;
 import ar.com.gtsoftware.model.AFIPAuthServices_;
 import ar.com.gtsoftware.search.AFIPAuthServicesSearchFilter;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Stateless
-public class AFIPAuthServicesFacade extends AbstractFacade<AFIPAuthServices> {
+public class AFIPAuthServicesFacade extends AbstractFacade<AFIPAuthServices, AFIPAuthServicesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -47,15 +47,15 @@ public class AFIPAuthServicesFacade extends AbstractFacade<AFIPAuthServices> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<AFIPAuthServices> root) {
-        AFIPAuthServicesSearchFilter asf = (AFIPAuthServicesSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(AFIPAuthServicesSearchFilter asf, CriteriaBuilder cb, Root<AFIPAuthServices> root) {
+
         Predicate p = null;
         if (StringUtils.isNotEmpty(asf.getService())) {
             p = cb.equal(root.get(AFIPAuthServices_.nombreServicio), asf.getService());
         }
 
         if (asf.getNoExpirado() != null) {
-            Predicate p1 = cb.equal(cb.greaterThan(root.get(AFIPAuthServices_.fechaExpiracion),
+            Predicate p1 = cb.equal(cb.greaterThan(root.<Date>get(AFIPAuthServices_.fechaExpiracion),
                     cb.currentTimestamp()), asf.getNoExpirado());
             p = appendAndPredicate(cb, p, p1);
         }

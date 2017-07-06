@@ -15,19 +15,21 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
 import ar.com.gtsoftware.controller.exceptions.ValidationException;
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.utils.HashUtils;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.bean.ManagedBean;
 
 /**
  * Controlador para el caso de uso de edición de usuarios
@@ -39,6 +41,11 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = "usuariosEditBean")
 @ViewScoped
 public class UsuariosEditBean implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     @EJB
     private UsuariosFacade usuarioFacade;
@@ -72,8 +79,8 @@ public class UsuariosEditBean implements Serializable {
             nuevo = false;
             if (usuarioActual == null) {
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Usuario inexistente!", logIn));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario inexistente!", logIn));
                 LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
             }
         }
@@ -111,8 +118,8 @@ public class UsuariosEditBean implements Serializable {
                     "Usuario guardado exitosamente!", usuarioActual.getLogin()));
 
         } catch (ValidationException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                    "Error de validación de datos!", ex.getMessage()));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error de validación de datos!", ex.getMessage()));
 
         }
 
@@ -127,12 +134,12 @@ public class UsuariosEditBean implements Serializable {
         try {
             usuarioFacade.remove(usuarioActual);
             usuarioActual = null;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Usuario eliminado exitosamente!", ""));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario eliminado exitosamente!", ""));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Error al borrar!", usuarioActual.getLogin()));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al borrar!", usuarioActual.getLogin()));
         }
     }
 

@@ -31,14 +31,14 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "rubrosSearchBean")
 @ViewScoped
-public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros> {
+public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros, RubrosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
     private ProductosRubrosFacade facade;
 
-    private final RubrosSearchFilter filter = new RubrosSearchFilter("%");
+    private final RubrosSearchFilter filter = new RubrosSearchFilter();
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -52,7 +52,7 @@ public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros> {
     }
 
     @Override
-    protected AbstractFacade<ProductosRubros> getFacade() {
+    protected AbstractFacade<ProductosRubros, RubrosSearchFilter> getFacade() {
         return facade;
     }
 

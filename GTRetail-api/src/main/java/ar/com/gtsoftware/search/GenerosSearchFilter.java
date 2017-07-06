@@ -23,6 +23,10 @@ import ar.com.gtsoftware.model.LegalTiposPersoneria;
  */
 public class GenerosSearchFilter extends AbstractSearchFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Integer idGenero;
     private String nombreGenero;
     private String simbolo;
@@ -41,8 +45,8 @@ public class GenerosSearchFilter extends AbstractSearchFilter {
 
     @Override
     public boolean hasFilter() {
-        return (idGenero != null) || (nombreGenero != null && !nombreGenero.isEmpty()) || (simbolo != null && !simbolo.isEmpty())
-                || (idTipoPersoneria != null);
+        return (idGenero != null) || (nombreGenero != null && !nombreGenero.isEmpty())
+                || (simbolo != null && !simbolo.isEmpty()) || (idTipoPersoneria != null);
     }
 
     public Integer getIdGenero() {

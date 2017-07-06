@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{msg.appName}</title>
+
+        <!--        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>-->
+        <h:outputScript name="js/nanoscroller.js" library="olympos-layout" />
+        <h:outputScript name="js/layout.js" library="olympos-layout" />
+
+        <ui:insert name="head"/>
+        <link rel="shortcut icon" href="#{resource['images/favicon.png']}" type="image/png"/>
+        <link rel="icon" href="#{resource['images/favicon.png']}" type="image/png"/>
+    </h:head>
+
+    <h:body styleClass="BlueTopbar">
+
+        <h:form >
+            <ui:include src="topbar.xhtml" />
+        </h:form>
+
+
+        <!-- LAYOUT CONTAINER -->
+
+        <div id="layout-container">
+            <div id="layout-container-row">
+
+                <!-- LAYOUT MENU COVER -->
+                <div id="layout-menu-cover" class="nano Animated03">
+                    <div id="layout-menu-cover-scroll-content" class="nano-content">
+
+                        <ui:include src="layouttabmenu.xhtml" />
+
+                    </div>
+                </div>
+
+                <!-- PORTLETS COVER -->
+                <div id="layout-portlets-cover">
+                    <h:form id="mesagesForm" >
+                        <p:messages id="msgs" autoUpdate="true" showSummary="true" showIcon="true"/>
+                    </h:form>
+                    <ui:insert name="content">
+                        Template
+                    </ui:insert>
+
+                    <ui:include src="footer.xhtml" />
+
+                </div>
+
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/core-layout.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/animate.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/olympos-font.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/font-awesome.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/olympos-layout.css" library="olympos-layout" />
+    </h:body>
+
+</html>

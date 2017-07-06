@@ -32,14 +32,14 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "clientesSearchBean")
 @ViewScoped
-public class ClientesSearchBean extends AbstractSearchBean<Personas> {
+public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
     private PersonasFacade facade;
 
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE);
 
     /**
      * Creates a new instance of ClientesSearchBean
@@ -48,7 +48,7 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas> {
     }
 
     @Override
-    protected AbstractFacade<Personas> getFacade() {
+    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
         return facade;
     }
 
@@ -71,5 +71,9 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas> {
 
     public String editarCliente(Personas p) {
         return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
+    }
+
+    public String verCuentaCorriente(Personas p) {
+        return String.format("clientesCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
 }

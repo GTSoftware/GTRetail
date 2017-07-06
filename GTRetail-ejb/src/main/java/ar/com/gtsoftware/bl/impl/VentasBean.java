@@ -18,12 +18,7 @@ package ar.com.gtsoftware.bl.impl;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
-import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
-import ar.com.gtsoftware.eao.ComprobantesPagosLineasFacade;
 import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.ComprobantesPagos;
-import ar.com.gtsoftware.model.ComprobantesPagosLineas;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -40,36 +35,31 @@ public class VentasBean {
     private ComprobantesFacade ventasFacade;
 
     @EJB
-    private ComprobantesPagosFacade pagosFacade;
-    @EJB
-    private ComprobantesPagosLineasFacade pagosLineasFacade;
-
-    @EJB
-    private PersonasCuentaCorrienteBean cuentaCorrienteBean;
+    private PersonasCuentaCorrienteServiceImpl cuentaCorrienteBean;
     @EJB
     private ComprobantesEstadosFacade estadosFacade;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
-    public void guardarVenta(Comprobantes venta, List<ComprobantesPagos> pagos) throws Exception {
+    public void guardarVenta(Comprobantes venta) throws Exception {
         if (venta.isNew()) { //TODO Evaluar para utilizar el mismo método en caso de una venta modificada
             //TODO Parametrizar estado inicial de venta
             venta.setIdEstadoComprobante(estadosFacade.find(2L)); //Aceptada
             ventasFacade.create(venta);
-            for (ComprobantesPagos pago : pagos) {
-                pago.setFechaPago(venta.getFechaComprobante());
-                pago.setIdPersona(venta.getIdPersona());
-                pago.setIdUsuario(venta.getIdUsuario());
-                pago.setIdSucursal(venta.getIdSucursal());
-                pagosFacade.create(pago);
-                ComprobantesPagosLineas lineaPago = new ComprobantesPagosLineas();
-                lineaPago.setIdPagoComprobante(pago);
-                lineaPago.setIdComprobante(venta);
-                lineaPago.setImporte(pago.getImporteTotalPagado());
-                pagosLineasFacade.create(lineaPago);
-            }
+//            for (ComprobantesPagos pago : pagos) {
+//                pago.setFechaPago(venta.getFechaComprobante());
+//                pago.setIdPersona(venta.getIdPersona());
+//                pago.setIdUsuario(venta.getIdUsuario());
+//                pago.setIdSucursal(venta.getIdSucursal());
+//                pagosFacade.create(pago);
+//                ComprobantesPagosLineas lineaPago = new ComprobantesPagosLineas();
+//                lineaPago.setIdPagoComprobante(pago);
+//                lineaPago.setIdComprobante(venta);
+//                lineaPago.setImporte(pago.getImporteTotalPagado());
+//                pagosLineasFacade.create(lineaPago);
+//            }
 
-            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().negate(), "Venta Nro: " + venta.getId());
+            cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(), venta.getTotal().multiply(venta.getTipoComprobante().getSigno()).negate(), String.format("Comprobante Nro: %d", venta.getId()));
         }
     }
 
@@ -89,10 +79,12 @@ public class VentasBean {
         if (venta.getIdRegistro() != null) {
             throw new ServiceException("Comprobante impreso fiscalmente!");
         }
-
+        if (venta.getTotal().subtract(venta.getSaldo()).signum() > 0) {
+            throw new ServiceException("Comprobante total o parcialmente cobrado!");
+        }
         venta.setAnulada(true);
         cuentaCorrienteBean.registrarMovimientoCuenta(venta.getIdPersona(),
-                venta.getTotal(), "Anulación venta Nro: " + venta.getId());
+                venta.getTotalConSigno(), String.format("Anulación comprobante Nro: %d", venta.getId()));
         ventasFacade.edit(venta);
     }
 

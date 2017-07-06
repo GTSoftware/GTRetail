@@ -32,16 +32,18 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "unidadesSearchBean")
 @ViewScoped
-public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidades> {
+public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidades, UnidadesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
     private ProductosTiposUnidadesFacade facade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private ProductosTiposUnidades unidad;
 
-    private final UnidadesSearchFilter filter = new UnidadesSearchFilter("%");
+    private final UnidadesSearchFilter filter = new UnidadesSearchFilter();
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -55,7 +57,7 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
     }
 
     @Override
-    protected AbstractFacade<ProductosTiposUnidades> getFacade() {
+    protected AbstractFacade<ProductosTiposUnidades, UnidadesSearchFilter> getFacade() {
         return facade;
     }
 
@@ -77,6 +79,6 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
 
     public void deleteUnidad() {
         facade.remove(unidad);
-        JSFUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
+        jsfUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
     }
 }

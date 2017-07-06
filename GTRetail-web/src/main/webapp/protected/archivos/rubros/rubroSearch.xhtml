@@ -6,114 +6,132 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    template="/WEB-INF/templates/template.xhtml">
+    template="/WEB-INF/template.xhtml">
 
     <!-- Contenido -->
     <ui:define name="content">
         <ui:insert >
             <ui:include src="breadcrumb.xhtml" />
         </ui:insert>
-        <h:form id="formContenido" >
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Administración de Rubros y SubRubros</h1>
+                <div class="SeparatorFull"></div>
+                <h:form id="formContenido" >
+
+                    <div class="Container100 ui-fluid">
+                        <div class="Card">
+                            <p:focus for="textoBusquedaField"/>
+                            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
+                                         style="border:0px !important; background:none;" >
+
+                                <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
+                                <p:inputText id="textoBusquedaField" value="#{rubrosSearchBean.filter.nombreRubro}"
+                                             placeholder="Términos de búsqueda"/>
+                                <p:commandButton  action="#{rubrosSearchBean.doSearch()}"
+                                                  value="#{msg.buscar}"
+                                                  icon="fa fa-fw fa-search"
+                                                  update="rubrosTable"/>
+                                <p:commandButton id="nuevoButton" action="rubroEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                 icon="fa fa-fw fa-plus"
+                                                 styleClass="GreenButton"/>
+                            </p:panelGrid >
+                        </div>
+                    </div>
+                    <div class="Container100 ui-fluid">
+                        <div class="Card">
+                            <div class="SeparatorFull"></div>
+                            <p:dataTable id="rubrosTable" var="rubro" value="#{rubrosSearchBean.dataModel}"
+                                         rows="30"
+                                         lazy="true"
+                                         paginator="true"
+                                         sortMode="single"
+                                         emptyMessage="#{msg.busquedaSinResultados}"
+                                         rowKey="#{rubro.id}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                         rowsPerPageTemplate="10,15,30,100"
+                                         style="width: 100%"
+                                         liveResize="true"
+                                         resizableColumns="true"
+                                         scrollable="true"
+                                         reflow="true">
 
 
-            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4"
-                         columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-1">
+                                <f:facet name="{Exporters}">
+                                    <h:commandLink title="xls">
+                                        <i class="fa fa-file-excel-o Fs24 Green" />
+                                        <p:dataExporter type="Exportar a xls" target="rubrosTable" fileName="rubros" />
+                                    </h:commandLink>
 
-                <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                <p:inputText id="textoBusquedaField" value="#{rubrosSearchBean.filter.nombreRubro}" size="50"/>
-                <p:commandButton  action="#{rubrosSearchBean.doSearch()}"
-                                  value="#{msg.buscar}"
-                                  icon="fa fa-fw fa-search"
-                                  update="rubrosTable"/>
-                <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
-                                 icon="fa fa-fw fa-plus" />
-            </p:panelGrid >
-            <p:dataTable id="rubrosTable" var="rubro" value="#{rubrosSearchBean.dataModel}"
-                         rows="30"
-                         lazy="true"
-                         paginator="true"
-                         sortMode="single"
-                         emptyMessage="#{msg.busquedaSinResultados}"
-                         rowKey="#{rubro.id}"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                         rowsPerPageTemplate="10,15,30,100"
-                         style="width: 100%"
+                                    <h:commandLink title="pdf">
+                                        <i class="fa fa-file-pdf-o Fs24 Red" />
+                                        <p:dataExporter type="Exportar a pdf" target="rubrosTable" fileName="rubros"/>
+                                    </h:commandLink>
 
-                         scrollable="true"
-                         reflow="true">
+                                    <h:commandLink title="csv">
+                                        <i class="fa fa-file-text-o Fs24 Blue" />
+                                        <p:dataExporter type="Exportar a csv" target="rubrosTable" fileName="rubros" />
+                                    </h:commandLink>
 
+                                    <h:commandLink title="xml">
+                                        <i class="fa fa-file-code-o Fs24 Black" />
+                                        <p:dataExporter type="Exportar a xml" target="rubrosTable" fileName="rubros" />
+                                    </h:commandLink>
+                                </f:facet>
 
-                <f:facet name="{Exporters}">
-                    <h:commandLink>
+                                <f:facet name="header">
+                                    #{msg.rubros}
+                                </f:facet>
 
-                        <p:graphicImage library="images" name="excel.png" width="24"/>
-                        <p:dataExporter type="xls" target="rubrosTable" fileName="rubros" />
-                    </h:commandLink>
+                                <p:column sortBy="#{rubro.id}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.id}"/>
+                                    </f:facet>
 
-                    <h:commandLink>
-                        <p:graphicImage library="images" name="pdf.png" width="24"/>
-                        <p:dataExporter type="pdf" target="rubrosTable" fileName="rubros"/>
-                    </h:commandLink>
+                                    <h:outputText value="#{rubro.id}" />
 
-                    <h:commandLink>
-                        <p:graphicImage library="images" name="csv.png" width="24"/>
-                        <p:dataExporter type="csv" target="rubrosTable" fileName="rubros" />
-                    </h:commandLink>
+                                </p:column>
 
-                    <h:commandLink>
-                        <p:graphicImage library="images" name="xml.png" width="24"/>
-                        <p:dataExporter type="xml" target="rubrosTable" fileName="rubros" />
-                    </h:commandLink>
-                </f:facet>
+                                <p:column sortBy="#{rubro.nombreRubro}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.nombre}"/>
+                                    </f:facet>
 
-                <f:facet name="header">
-                    #{msg.rubros}
-                </f:facet>
+                                    <h:outputText value="#{rubro.nombreRubro}" />
 
-                <p:column sortBy="#{rubro.id}" >
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.id}"/>
-                    </f:facet>
-
-                    <h:outputText value="#{rubro.id}" />
-
-                </p:column>
-
-                <p:column sortBy="#{rubro.nombreRubro}" >
-                    <f:facet name="header">
-                        <h:outputLabel value="#{msg.nombre}"/>
-                    </f:facet>
-
-                    <h:outputText value="#{rubro.nombreRubro}" />
-
-                </p:column>
+                                </p:column>
 
 
-                <p:column style="width:5%" exportable="false">
-                    <f:facet name="header">
-                        #{msg.editar}
-                    </f:facet>
-                    <p:commandButton icon="fa fa-fw fa-edit" action="rubroEdit"
-                                     ajax="false" >
-                        <f:param name="idRubro" value="#{rubro.id}" />
+                                <p:column  exportable="false">
+                                    <f:facet name="header">
+                                        #{msg.editar}
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="rubroEdit"
+                                                     ajax="false" >
+                                        <f:param name="idRubro" value="#{rubro.id}" />
 
-                    </p:commandButton>
+                                    </p:commandButton>
 
-                </p:column>
-                <p:column  style="width:5%" exportable="false">
-                    <f:facet name="header">
-                        #{msg.subRubros}
-                    </f:facet>
-                    <p:commandButton icon="fa fa-fw fa-eye" action="subrubroSearch"
-                                     ajax="false" >
-                        <f:param name="idRubro" value="#{rubro.id}" />
+                                </p:column>
+                                <p:column   exportable="false">
+                                    <f:facet name="header">
+                                        #{msg.subRubros}
+                                    </f:facet>
+                                    <p:commandButton icon="fa fa-fw fa-eye" action="subrubroSearch"
+                                                     ajax="false" >
+                                        <f:param name="idRubro" value="#{rubro.id}" />
 
-                    </p:commandButton>
+                                    </p:commandButton>
 
-                </p:column>
-            </p:dataTable>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
 
-        </h:form>
+                </h:form>
+
+            </div>
+        </div>
     </ui:define>
 
 </ui:composition>

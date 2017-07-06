@@ -22,6 +22,8 @@ import ar.com.gtsoftware.eao.FiscalLetrasComprobantesFacade;
 import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
 import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
+import ar.com.gtsoftware.eao.NegocioPlanesPagoDetalleFacade;
+import ar.com.gtsoftware.eao.NegocioPlanesPagoFacade;
 import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
@@ -35,15 +37,21 @@ import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
 import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
 import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.NegocioPlanesPago;
+import ar.com.gtsoftware.model.NegocioPlanesPagoDetalle;
 import ar.com.gtsoftware.model.NegocioTiposComprobante;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
+import ar.com.gtsoftware.search.PlanesPagoDetalleSearchFilter;
+import ar.com.gtsoftware.search.PlanesPagoSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -59,6 +67,7 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * MB para manejar el carrito de compras
@@ -102,13 +111,21 @@ public class ShopCartBean implements Serializable {
     private FiscalLetrasComprobantesFacade letrasComprobantesFacade;
     @EJB
     private FiscalResponsabilidadesIvaFacade responsabilidadesIvaFacade;
+    @EJB
+    private NegocioPlanesPagoFacade planesPagoFacade;
+    @EJB
+    private NegocioPlanesPagoDetalleFacade pagoDetalleFacade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
 
     private final NegocioTiposComprobanteSearchFilter tipoCompSf = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
 
-    private final List<ComprobantesPagos> pagos = new ArrayList<>();
+    private final PlanesPagoSearchFilter planesSearchFilter = new PlanesPagoSearchFilter(Boolean.TRUE);
+
+    private final PlanesPagoDetalleSearchFilter pagoDetalleSearchFilter = new PlanesPagoDetalleSearchFilter(Boolean.TRUE);
 
     private ComprobantesPagos pagoActual = new ComprobantesPagos();
 
@@ -128,12 +145,14 @@ public class ShopCartBean implements Serializable {
     private static final String ID_CLIENTE_DEFECTO_PARAM = "venta.pos.id_cliente.defecto";
     private static final String ID_CONDICION_DEFECTO_PARAM = "venta.pos.id_condicion.defecto";
     private static final String ID_FORMA_PAGO_DEFECTO_PARAM = "venta.pos.id_forma_pago.defecto";
+    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(true, null);
 
     private Productos productoRedondeo;
 
     private NegocioFormasPago formaPagoDefecto = null;
 
     private int cantDeccimalesRedondeo = 0;
+    private int redondeoIndex = 0;
 
     private final AtomicInteger itemCounter = new AtomicInteger(1);
 
@@ -147,13 +166,14 @@ public class ShopCartBean implements Serializable {
      * Inicializa la conversación
      */
     public void initConversation() {
-        if (!JSFUtil.isPostback() && conversation.isTransient()) {
+        if (!jsfUtil.isPostback() && conversation.isTransient()) {
             conversation.begin();
             venta = new Comprobantes();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             venta.setFechaComprobante(new Date());
             venta.setTotal(BigDecimal.ZERO);
+            venta.setPagosList(new ArrayList<>());
             Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
             Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
             Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
@@ -167,6 +187,7 @@ public class ShopCartBean implements Serializable {
             venta.setIdCondicionComprobante(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
             formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
             venta.setTipoComprobante(tiposComprobanteFacade.getTipoFactura());
+
         }
     }
 
@@ -196,7 +217,6 @@ public class ShopCartBean implements Serializable {
         if (index >= 0) {
             venta.getComprobantesLineasList().remove(index);
             calcularTotal();
-            JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoQuitadoCarritoSatisfactoriamente"));
         }
     }
 
@@ -204,7 +224,7 @@ public class ShopCartBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (ComprobantesPagos vp : pagos) {
+        for (ComprobantesPagos vp : venta.getPagosList()) {
             if (vp.getItem() == item) {
                 index = cont;
                 break;
@@ -212,15 +232,20 @@ public class ShopCartBean implements Serializable {
             cont++;
         }
         if (index >= 0) {
-            pagos.remove(index);
+            ComprobantesPagos pago = venta.getPagosList().get(index);
+            if (pago.getProductoRecargoItem() > 0) {
+                removeFromCart(pago.getProductoRecargoItem());
+            }
+            venta.getPagosList().remove(index);
             calcularTotalPagado();
         }
     }
 
     public void initPagos() {
-        if (!JSFUtil.isPostback()) {
-            if (pagos.isEmpty() && formaPagoDefecto != null) {
-                pagoActual.setImporteTotalPagado(venta.getTotal());
+        if (!jsfUtil.isPostback()) {
+            if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
+                pagoActual.setMontoPago(venta.getTotal());
+                pagoActual.setMontoPagado(BigDecimal.ZERO);
                 pagoActual.setIdFormaPago(formaPagoDefecto);
                 venta.setSaldo(venta.getTotal());
                 doAgregarPago();
@@ -234,26 +259,29 @@ public class ShopCartBean implements Serializable {
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
+            if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio())) {
+                return;
+            }
             producto = productosFacade.findFirstBySearchFilter(productosFilter);
         }
 
         if (producto == null) {
-            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
+            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
         ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
         if (precio == null) {
-            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoSinPrecio"));
+            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoSinPrecio"));
             return;
         }
 
         venta.addLineaVenta(crearLinea(producto, precio));
         calcularTotal();
-        //Init datos
+
         cantidad = BigDecimal.ONE;
         productosFilter.setCodigoPropio(null);
-        //Init datos
-        JSFUtil.addInfoMessage(JSFUtil.getBundle("msg").getString("productoAgregadoAlCarritoSatisfactoriamente"));
+        productosFilter.setIdProducto(null);
+
         ventaModificada = true;
         productoBusquedaSeleccionado = null;
     }
@@ -296,23 +324,27 @@ public class ShopCartBean implements Serializable {
     }
 
     private void cargarRedondeo(BigDecimal redondeo) {
-
-        venta.addLineaVenta(crearLineaRedondeo(redondeo));
+        ComprobantesLineas lineaRedondeo = crearLineaRedondeo(redondeo);
+        redondeoIndex = lineaRedondeo.getItem();
+        venta.addLineaVenta(lineaRedondeo);
 
     }
 
     private void eliminarRedondeo() {
-        int cont = 0;
-        int index = -1;
-        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
-            if (vl.getIdProducto().equals(productoRedondeo)) {
-                index = cont;
-                break;
+        if (redondeoIndex > 0) {
+            int cont = 0;
+            int index = -1;
+            for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
+                if (vl.getItem().equals(redondeoIndex)) {
+                    index = cont;
+                    break;
+                }
+                cont++;
             }
-            cont++;
-        }
-        if (index != -1) {
-            venta.getComprobantesLineasList().remove(index);
+            if (index != -1) {
+                venta.getComprobantesLineasList().remove(index);
+            }
+            redondeoIndex = 0;
         }
     }
 
@@ -331,18 +363,51 @@ public class ShopCartBean implements Serializable {
         return linea;
     }
 
+    private ComprobantesLineas crearLineaRecargo(BigDecimal recargo, NegocioPlanesPagoDetalle detallePlan) {
+        ComprobantesLineas linea = new ComprobantesLineas();
+        linea.setIdComprobante(venta);
+        linea.setCantidad(BigDecimal.ONE);
+        linea.setDescripcion(String.format("COSTO FINANCIERO POR %s EN: %s CUOTAS", detallePlan.getIdPlan().getNombre(),
+                detallePlan.getCuotas()));
+        linea.setIdProducto(productoRedondeo);
+        linea.setCantidadEntregada(BigDecimal.ONE);
+        linea.setCostoBrutoUnitario(BigDecimal.ZERO);
+        linea.setCostoNetoUnitario(BigDecimal.ZERO);
+        linea.setPrecioUnitario(recargo);
+        linea.setSubTotal(recargo);
+        linea.setItem(itemCounter.getAndIncrement());
+        return linea;
+    }
+
     public void doAgregarPago() {
         if (pagoActual.getIdFormaPago() != null) {
-            if (pagoActual.getImporteTotalPagado().signum() <= 0
-                    || pagoActual.getImporteTotalPagado().compareTo(venta.getSaldo()) > 0) {
-                JSFUtil.addErrorMessage("El monto del pago supera el saldo!");
+            if (pagoActual.getMontoPago().signum() <= 0
+                    || pagoActual.getMontoPago().compareTo(venta.getSaldo()) > 0) {
+                jsfUtil.addErrorMessage("El monto del pago supera el saldo!");
 
             } else {
 
+                if (pagoActual.getIdFormaPago().getRequierePlan()) {
+                    //Calcular el recargo por el pago
+                    //Agregar el producto de recargo
+                    //Resguardar el item
+                    //Agregar el pago recargado
+                    BigDecimal recargo = pagoActual.getMontoPago().multiply(pagoActual.getIdDetallePlan().getCoeficienteInteres()).subtract(pagoActual.getMontoPago()).setScale(2, RoundingMode.HALF_UP);
+
+                    ComprobantesLineas lineaRecargo = crearLineaRecargo(recargo, pagoActual.getIdDetallePlan());
+                    venta.getComprobantesLineasList().add(lineaRecargo);
+                    pagoActual.setProductoRecargoItem(lineaRecargo.getItem());
+                    pagoActual.setMontoPago(pagoActual.getMontoPago().multiply(pagoActual.getIdDetallePlan().getCoeficienteInteres()).setScale(2, RoundingMode.HALF_UP));
+                    calcularTotal();
+
+                }
+
                 pagoActual.setItem(itemCounter.getAndIncrement());
-                pagos.add(pagoActual);
+                pagoActual.setIdComprobante(venta);
+                venta.getPagosList().add(pagoActual);
                 pagoActual = new ComprobantesPagos();
-                pagoActual.setImporteTotalPagado(BigDecimal.ZERO);
+                pagoActual.setMontoPago(BigDecimal.ZERO);
+                pagoActual.setMontoPagado(BigDecimal.ZERO);
             }
         }
         calcularTotalPagado();
@@ -351,34 +416,34 @@ public class ShopCartBean implements Serializable {
     private void calcularTotalPagado() {
         venta.setSaldo(venta.getTotal());
         BigDecimal sumaPagos = BigDecimal.ZERO;
-        for (ComprobantesPagos p : pagos) {
-            sumaPagos = sumaPagos.add(p.getImporteTotalPagado());
+        for (ComprobantesPagos p : venta.getPagosList()) {
+            sumaPagos = sumaPagos.add(p.getMontoPago());
         }
         venta.setSaldo(venta.getTotal().subtract(sumaPagos));
-        pagoActual.setImporteTotalPagado(venta.getSaldo());
+        pagoActual.setMontoPago(venta.getSaldo());
     }
 
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
-            JSFUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
+            jsfUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
             return false;
         }
         if (venta.getIdPersona() == null) {
-            JSFUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
+            jsfUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
         if (venta.getTotal().signum() <= 0) {
-            JSFUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
+            jsfUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
             return false;
         }
         if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
-            JSFUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
+            jsfUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
         if (venta.getIdCondicionComprobante() != null) {
             if (venta.getIdCondicionComprobante().getPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
-                    JSFUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
+                    jsfUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
                 }
             }
@@ -404,7 +469,7 @@ public class ShopCartBean implements Serializable {
             try {
 
                 venta.setSaldo(venta.getTotal());
-                ventasBean.guardarVenta(venta, pagos);
+                ventasBean.guardarVenta(venta);
 
                 for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
 
@@ -419,12 +484,12 @@ public class ShopCartBean implements Serializable {
                     }
 
                 }
-                JSFUtil.addInfoMessage("Operación guardada exitosamente!");
+                jsfUtil.addInfoMessage("Operación guardada exitosamente!");
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
-                JSFUtil.addErrorMessage(ex.getMessage());
+                jsfUtil.addErrorMessage(ex.getMessage());
             }
         }
         return null;
@@ -464,11 +529,7 @@ public class ShopCartBean implements Serializable {
     }
 
     public List<NegocioFormasPago> getFormasPagoList() {
-        return formasPagoFacade.findFormasPagoVenta();
-    }
-
-    public List<ComprobantesPagos> getPagos() {
-        return pagos;
+        return formasPagoFacade.findAllBySearchFilter(formasPagoSearchFilter);
     }
 
     public List<ComprobantesEstados> getVentasEstados() {
@@ -487,4 +548,14 @@ public class ShopCartBean implements Serializable {
         return lista;
     }
 
+    public List<NegocioPlanesPago> getPlanesPagoList() {
+        planesSearchFilter.setIdFormaPago(pagoActual.getIdFormaPago());
+        return planesPagoFacade.findAllBySearchFilter(planesSearchFilter);
+    }
+
+    public List<NegocioPlanesPagoDetalle> getDetallePlan() {
+        pagoDetalleSearchFilter.setIdPlan(pagoActual.getIdPlan());
+        pagoDetalleSearchFilter.addSortField(new SortField("cuotas", true));
+        return pagoDetalleFacade.findAllBySearchFilter(pagoDetalleSearchFilter);
+    }
 }

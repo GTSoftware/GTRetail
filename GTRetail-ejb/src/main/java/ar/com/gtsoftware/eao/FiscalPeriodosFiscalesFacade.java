@@ -17,8 +17,8 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +31,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosFiscales> {
+public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosFiscales, FiscalPeriodosFiscalesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,17 +46,18 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalPeriodosFiscales> root) {
-        FiscalPeriodosFiscalesSearchFilter psf = (FiscalPeriodosFiscalesSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(FiscalPeriodosFiscalesSearchFilter psf, CriteriaBuilder cb, Root<FiscalPeriodosFiscales> root) {
 
         Predicate p = null;
         if (psf.getVigente() != null) {
-            Predicate p1
-                    = cb.greaterThanOrEqualTo(cb.currentTimestamp(), root.get(FiscalPeriodosFiscales_.fechaInicioPeriodo));
-            Predicate p2
-                    = cb.lessThanOrEqualTo(cb.currentTimestamp(), root.get(FiscalPeriodosFiscales_.fechaFinPeriodo));
-            p = appendAndPredicate(cb, p, p1);
-            p = appendAndPredicate(cb, p, p2);
+
+            Predicate p3 = cb.between(cb.currentTimestamp(),
+                    root.<Date>get(FiscalPeriodosFiscales_.fechaInicioPeriodo), root.<Date>get(FiscalPeriodosFiscales_.fechaFinPeriodo));
+            if (psf.getVigente()) {
+                p = appendAndPredicate(cb, p, p3);
+            } else {
+                p = appendAndPredicate(cb, p, cb.not(p3));
+            }
         }
         return p;
     }

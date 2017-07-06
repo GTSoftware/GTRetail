@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.faces.bean.ViewScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 /**
  * Controlador para el caso de uso de búsqueda de usuarios
@@ -34,6 +34,11 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = "usuariosSearchBean")
 @ViewScoped
 public class UsuariosSearchBean implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
     private UsuariosSearchFilter filter = new UsuariosSearchFilter();
 
@@ -52,7 +57,7 @@ public class UsuariosSearchBean implements Serializable {
 
     public void findUsuarios() {
         usuariosList.clear();
-        usuariosList.addAll(usuarioFacade.findBySearchFilter(filter));
+        usuariosList.addAll(usuarioFacade.findAllBySearchFilter(filter));
     }
 
     public UsuariosSearchFilter getFilter() {

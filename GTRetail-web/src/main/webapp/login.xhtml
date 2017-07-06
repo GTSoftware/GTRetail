@@ -2,36 +2,109 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
         <title>#{msg.appName}</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="shortcut icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
-        <link rel="icon" href="#{resource['images/favicon.ico']}" type="image/x-icon"/>
+        <ui:insert name="head" />
+        <link rel="shortcut icon" href="#{resource['images/favicon.png']}" type="image/png"/>
+        <link rel="icon" href="#{resource['images/favicon.png']}" type="image/png"/>
     </h:head>
 
 
-    <h:body>
-
+    <h:body styleClass="AquaBack">
         <form method="POST" action="j_security_check">
-            <div class="ui-grid ui-grid-responsive">
-                <p:graphicImage value="/resources/images/logo.png" />
-                <p:panel id="panel" header="#{msg.loginHeader}">
-                    <p:focus context="panel"/>
-                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid"  styleClass="ui-panelgrid-blank">
-                        <h:outputLabel for="j_username">#{msg.usuario}:</h:outputLabel>
-                        <p:inputText id="j_username" required="true" value="" title="El nombre de usuario"/>
-                        <h:outputLabel for="j_password">#{msg.password}:</h:outputLabel>
-                        <p:password id="j_password" required="true" value="" feedback="false" title="Su contraseña" />
-                    </p:panelGrid>
-                    <h:commandButton value="#{msg.logIn}" type="submit" title="#{msg.logInButtonTitle}"/>
-                </p:panel>
-                <div id="footer" >
-                    <h:outputLabel value="Version:  #{version.version} Build: #{version.build}" />
+            <p:focus for="j_username"/>
+            <div class="Wid70 MarAuto">
+                <div class="Wid70 MarAuto WidAutoOnMobile TexAlCenter">
+
+                    <div class="Wid70 MarAuto WidAutoOnMobile">
+                        <div class="EmptyBox30"></div>
+                        <div class="Container50 Responsive50">
+                            <a href="#" class="DispBlock  FloatNoneOnMobile">
+                                <h:graphicImage name="logo.svg" library="images" style="height: 100px" /></a>
+                        </div>
+                        <!--                    <div class="Container50 Responsive50">
+                                                <p:commandButton type="button" value="Create Free Account" styleClass="OrangeButton Fright FloatNoneOnMobile"/>
+                                            </div>-->
+                        <div class="EmptyBox10 ShowOnMobile"></div>
+
+                        <div class="EmptyBox10 ShowOnDesktop"></div>
+                        <div class="EmptyBox20 ShowOnMobile"></div>
+
+                        <div class="Wid100 FontLatoRegular White Fs18">Bienvenido de nuevo, por favor ingrese aquí !</div>
+                        <div class="EmptyBox30"></div>
+
+                        <div class="Card ui-fluid ShadowEffect">
+                            <div class="Container100">
+                                <p:inputText id="j_username" placeholder="Usuario" style="padding:15px !important;"/>
+                            </div>
+                            <div class="Container100">
+                                <p:password id="j_password" placeholder="Password" style="padding:15px !important;"/>
+                            </div>
+                            <!--                        <div class="Container100 TexAlLeft">
+                                                        <div class="EmptyBox10"></div>
+                                                        <p:selectManyCheckbox layout="responsive" columns="1">
+                                                            <f:selectItem itemLabel="Remember Me" itemValue="Remember Me" />
+                                                        </p:selectManyCheckbox>
+                                                    </div>-->
+                            <div class="EmptyBox20"></div>
+                            <div class="Container100">
+
+
+
+                                <h:commandButton type="submit"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only
+                                                 ui-button-text"
+                                                 style="background-color: #05c436 !important;"
+                                                 value="#{msg.logIn}">
+
+                                </h:commandButton>
+                            </div>
+
+                            <!--                        <div class="EmptyBox10"></div>
+                                                    <div class="Separator"></div>
+                                                    <div class="EmptyBox10"></div>
+
+                                                    <span class="DispBlock OvHidden FontLatoBold Fs16 Leaden">Or Sign In</span>
+                                                    <div class="EmptyBox10"></div>
+                                                    <div class="Container50 Responsive100">
+                                                        <p:commandButton type="button" icon="fa fa-facebook Fs16" value="With Facebook" styleClass="NavyButton White"/>
+                                                    </div>
+                                                    <div class="Container50 Responsive100">
+                                                        <p:commandButton type="button" icon="fa fa-twitter Fs16" value="With Twitter" styleClass="BlueButton White"/>
+                                                    </div>
+                                                    <div class="Container50 Responsive100">
+                                                        <p:commandButton type="button" icon="fa fa-google-plus Fs16" value="With Google Plus" styleClass="RedButton White"/>
+                                                    </div>
+                                                    <div class="Container50 Responsive100">
+                                                        <p:commandButton type="button" icon="fa fa-linkedin Fs16" value="With Linkedin" styleClass="AquaButton White"/>
+                                                    </div>-->
+                        </div>
+
+                        <div class="EmptyBox20"></div>
+                        <div class="Wid100 FontLatoRegular Fs12 TransparentWhite"> <i class="fa fa-copyright DispInlBlock"></i> GT Retail <br/>Version:  #{version.version} Build: #{version.build}.</div>
+                        <div class="EmptyBox30"></div>
+                    </div>
                 </div>
             </div>
-        </form>
 
+            <style>.ui-button-text, .ui-button-text-only .ui-button-text{padding:15px !important; transition:none !important;}</style>
+
+            <h:outputStylesheet name="css/core-layout.css" library="olympos-layout" />
+            <h:outputStylesheet name="css/font-awesome.css" library="olympos-layout" />
+            <h:outputStylesheet name="css/animate.css" library="olympos-layout" />
+            <h:outputStylesheet name="css/olympos-layout.css" library="olympos-layout" />
+            <h:outputStylesheet name="css/olympos-font.css" library="olympos-layout" />
+
+        </form>
     </h:body>
 
 </html>

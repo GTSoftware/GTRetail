@@ -17,9 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Personas_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class PersonasFacade extends AbstractFacade<Personas> {
+public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -47,14 +45,8 @@ public class PersonasFacade extends AbstractFacade<Personas> {
     }
 
     @Override
-    public List<Personas> findAllBySearchFilter(AbstractSearchFilter psf) {
-        return findBySearchFilter(psf, 1, Integer.MAX_VALUE);
-    }
+    protected Predicate createWhereFromSearchFilter(PersonasSearchFilter psf, CriteriaBuilder cb, Root<Personas> persona) {
 
-    @Override
-    protected Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Personas> persona) {
-
-        PersonasSearchFilter psf = (PersonasSearchFilter) sf;
         Predicate p = null;
         if (psf.getIdPersona() != null) {
             p = cb.equal(persona.get(Personas_.id), psf.getIdPersona());

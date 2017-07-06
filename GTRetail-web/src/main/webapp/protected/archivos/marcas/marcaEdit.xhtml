@@ -6,42 +6,51 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
-    template="/WEB-INF/templates/template.xhtml">
+    template="/WEB-INF/template.xhtml">
 
     <!-- Contenido -->
     <ui:define name="content">
         <ui:insert >
             <ui:include src="breadcrumb.xhtml" />
         </ui:insert>
-        <h:form id="formContenido" >
-            <p:panel header="Editar marca" >
+        <div class="Container100 Responsive100 NoIndent">
+            <div class="Container100 ui-fluid">
+                <div class="Card">
+                    <h1 class="CardBigTopic TexAlCenter">Editar marca</h1>
+                    <h:form id="formContenido" >
 
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="grid" columns="3"
-                             columnClasses="ui-grid-col-1,ui-grid-col-5">
 
-                    <h:outputLabel for="idField" value="#{msg.id}:" />
-                    <h:outputLabel id="idField" value="#{marcasEditBean.marcaActual.id}" />
-                    <h:outputLabel  />
+                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank" columns="3">
 
-                    <h:outputLabel for="nombreField" value="#{msg.nombre}:" />
+                            <h:outputLabel for="idField" value="#{msg.id}:" />
+                            <h:outputLabel id="idField" value="#{marcasEditBean.marcaActual.id}" />
+                            <h:outputLabel  />
 
-                    <p:inputText id="nombreField"
-                                 value="#{marcasEditBean.marcaActual.nombreMarca}"
-                                 maxlength="100" required="true" requiredMessage="#{msg.campoRequerido}"
-                                 converter="#{stringFormatConverter}"/>
-                    <p:message for="nombreField"  />
+                            <h:outputLabel for="nombreField" value="#{msg.nombre}:" />
 
-                </p:panelGrid >
-            </p:panel>
-            <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank"  columns="2"
-                         columnClasses="ui-grid-col-1,ui-grid-col-1">
-                <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{marcasEditBean.doGuardar()}"
-                                 update="@form" />
-                <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
-                                 action="marcaSearch.xhtml?faces-redirect=true"
-                                 ajax="false" immediate="true"/>
-            </p:panelGrid>
-        </h:form>
+                            <p:inputText id="nombreField"
+                                         value="#{marcasEditBean.marcaActual.nombreMarca}"
+                                         maxlength="100" required="true" requiredMessage="#{msg.campoRequerido}"
+                                         converter="#{stringFormatConverter}"/>
+                            <p:message for="nombreField"  />
+
+                        </p:panelGrid >
+
+                        <div class="SeparatorFull"></div>
+                        <p:panelGrid layout="grid" columns="2"  style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{marcasEditBean.doGuardar()}"
+                                             update="@form" />
+
+                            <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                             action="marcaSearch.xhtml?faces-redirect=true"
+                                             ajax="false" immediate="true" styleClass="RedButton"/>
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </ui:define>
 
 </ui:composition>

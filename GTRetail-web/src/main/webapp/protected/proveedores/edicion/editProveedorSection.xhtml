@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                >
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Edición de proveedores</h1>
+                <div class="SeparatorFull" />
+                <h:form id="editClienteForm">
+
+
+
+                    <p:tabView id="tabPersona" scrollable="true">
+                        <p:tab title="#{msg.datosFiliatorios}">
+
+                            <p:panelGrid id="datosBasicosGrid" layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="3">
+
+                                <h:outputLabel for="idClienteField" value="#{msg.idProveedor}:"/>
+                                <h:outputLabel id="idClienteField" value="#{proveedoresEditBean.proveedorActual.id}"/>
+                                <h:outputLabel/>
+
+                                <h:outputLabel for="tipoPersoneriaField" value="#{msg.tipoPersoneria}:"/>
+                                <p:selectOneMenu id="tipoPersoneriaField" required="true" requiredMessage="#{msg.tipoPersoneriaRequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idTipoPersoneria}"
+                                                 converter="omnifaces.SelectItemsIndexConverter"
+                                                 filter="true" filterMatchMode="contains">
+                                    <p:ajax event="valueChange"
+                                            update="datosBasicosGrid"
+                                            process="@this"
+                                            global="false"
+                                            />
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+                                    <f:selectItems value="#{proveedoresEditBean.tiposPersoneriaList}" var="personeria"
+                                                   itemLabel="#{personeria.nombreTipo}" itemValue="#{personeria}"/>
+
+                                </p:selectOneMenu>
+                                <p:message for="tipoPersoneriaField"/>
+
+
+                                <h:outputLabel for="razonSocialField" value="#{msg.razonSocial}:"
+                                               rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 2}"
+                                               />
+                                <p:inputText id="razonSocialField" value="#{proveedoresEditBean.proveedorActual.razonSocial}" maxlength="200"
+                                             rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 2}"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="razonSocialField" rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 2}"/>
+
+                                <h:outputLabel for="nombreFantasiaField" value="#{msg.nombreFantasia}:"/>
+                                <p:inputText id="nombreFantasiaField" value="#{proveedoresEditBean.proveedorActual.nombreFantasia}"
+                                             maxlength="200"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="nombreFantasiaField"/>
+
+                                <h:outputLabel for="apellidoField" value="#{msg.apellidos}:"
+                                               rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 1}"/>
+                                <p:inputText id="apellidoField" value="#{proveedoresEditBean.proveedorActual.apellidos}" maxlength="50"
+                                             rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 1}"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="apellidoField" rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 1}"/>
+
+                                <h:outputLabel for="nombreField" value="#{msg.nombres}:"
+                                               rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 1}"
+                                               converter="#{stringFormatConverter}"/>
+                                <p:inputText id="nombreField" value="#{proveedoresEditBean.proveedorActual.nombres}" maxlength="50"
+                                             rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 1}"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="nombreField" rendered="#{proveedoresEditBean.proveedorActual.idTipoPersoneria.id eq 1}"/>
+
+
+
+                                <h:outputLabel for="responsabilidadIVAField" value="#{msg.responsabilidadIVA}:"/>
+                                <p:selectOneMenu id="responsabilidadIVAField" required="true"
+                                                 requiredMessage="#{msg.responsabilidadIVARequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idResponsabilidadIva}"
+                                                 converter="omnifaces.SelectItemsIndexConverter">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+                                    <f:selectItems value="#{proveedoresEditBean.responsabilidadesIVAList}" var="responsabilidadIva"
+                                                   itemLabel="#{responsabilidadIva.nombreResponsabildiad}" itemValue="#{responsabilidadIva}"/>
+                                </p:selectOneMenu>
+                                <p:message for="responsabilidadIVAField"/>
+
+
+                                <h:outputLabel for="generoField" value="#{msg.genero}:"/>
+                                <p:selectOneMenu id="generoField" required="true" requiredMessage="#{msg.generoRequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idGenero}"
+                                                 converter="omnifaces.SelectItemsIndexConverter">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+                                    <f:selectItems value="#{proveedoresEditBean.generosList}" var="genero"
+                                                   itemLabel="#{genero.nombreGenero.concat(' - ').concat(genero.simbolo)}"
+                                                   itemValue="#{genero}"/>
+                                </p:selectOneMenu>
+                                <p:message for="generoField"/>
+
+                                <h:outputLabel for="tipoDocumentoField" value="#{msg.tipoDocumento}:"/>
+                                <p:selectOneMenu id="tipoDocumentoField" required="true" requiredMessage="#{msg.tipoDocumentoRequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idTipoDocumento}"
+                                                 converter="omnifaces.SelectItemsIndexConverter">
+                                    <f:selectItems value="#{proveedoresEditBean.tiposDocumentoList}" var="tipoDoc"
+                                                   itemLabel="#{tipoDoc.nombreTipoDocumento}" itemValue="#{tipoDoc}"/>
+                                </p:selectOneMenu>
+                                <p:message for="tipoDocumentoField"/>
+
+                                <h:outputLabel for="nroDocField" value="#{msg.documento}:"/>
+                                <p:inputText id="nroDocField" value="#{proveedoresEditBean.proveedorActual.documento}" required="true"
+                                             requiredMessage="#{msg.documentoRequerido}" maxlength="11">
+                                    <f:validateLongRange minimum="1" maximum="99999999999"/>
+                                </p:inputText>
+                                <p:message for="nroDocField"/>
+                            </p:panelGrid>
+
+                            <p:panelGrid id="ubicacionGrid" layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="3">
+
+                                <h:outputLabel for="paisField" value="#{msg.pais}:"/>
+                                <p:selectOneMenu id="paisField" required="true" requiredMessage="#{msg.paisRequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idPais}"
+                                                 converter="omnifaces.SelectItemsIndexConverter"
+                                                 filter="true" filterMatchMode="contains">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+                                    <f:selectItems value="#{proveedoresEditBean.paisesList}" var="pais" itemLabel="#{pais.nombrePais}"
+                                                   itemValue="#{pais}"/>
+                                    <p:ajax update="provinciaField localidadField"
+                                            process="@this" global="false"/>
+                                </p:selectOneMenu>
+                                <p:message for="paisField"/>
+
+
+                                <h:outputLabel for="provinciaField" value="#{msg.provincia}:"/>
+                                <p:selectOneMenu id="provinciaField" required="true" requiredMessage="#{msg.provinciaRequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idProvincia}"
+                                                 converter="omnifaces.SelectItemsIndexConverter"
+                                                 filter="true" filterMatchMode="contains">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+                                    <f:selectItems value="#{proveedoresEditBean.provinciasList}" var="prov" itemLabel="#{prov.nombreProvincia}"
+                                                   itemValue="#{prov}"/>
+                                    <p:ajax update="localidadField"
+                                            process="@this" global="false"/>
+                                </p:selectOneMenu>
+                                <p:message for="provinciaField"/>
+
+                                <h:outputLabel for="localidadField" value="#{msg.localidad}:"/>
+                                <p:selectOneMenu id="localidadField" required="true" requiredMessage="#{msg.localidadRequerido}"
+                                                 value="#{proveedoresEditBean.proveedorActual.idLocalidad}"
+                                                 converter="omnifaces.SelectItemsIndexConverter"
+                                                 filter="true" filterMatchMode="contains">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+                                    <f:selectItems value="#{proveedoresEditBean.localidadesList}" var="loca"
+                                                   itemLabel="#{loca.nombreLocalidad.concat(' - ').concat(loca.codigoPostal)}"
+                                                   itemValue="#{loca}"/>
+                                </p:selectOneMenu>
+                                <p:message for="localidadField"/>
+
+
+                                <h:outputLabel for="calleField" value="#{msg.calle}:"/>
+                                <p:inputText id="calleField" value="#{proveedoresEditBean.proveedorActual.calle}" required="true"
+                                             requiredMessage="#{msg.calleRequerido}" maxlength="100"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="calleField"/>
+
+                                <h:outputLabel for="alturaField" value="#{msg.altura}:"/>
+                                <p:inputText id="alturaField" value="#{proveedoresEditBean.proveedorActual.altura}"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="alturaField"/>
+
+                                <h:outputLabel for="pisoField" value="#{msg.depto}:"/>
+                                <p:inputText id="pisoField" value="#{proveedoresEditBean.proveedorActual.piso}"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="pisoField"/>
+
+                                <h:outputLabel for="deptoField" value="#{msg.piso}:"/>
+                                <p:inputText id="deptoField" value="#{proveedoresEditBean.proveedorActual.depto}"
+                                             converter="#{stringFormatConverter}"/>
+                                <p:message for="deptoField"/>
+                            </p:panelGrid>
+
+                            <p:panelGrid id="datosExtraGrid" layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="3">
+                                <h:outputLabel for="emailField" value="#{msg.email}:"/>
+                                <p:inputText id="emailField" value="#{proveedoresEditBean.proveedorActual.email}"
+                                             required="false">
+                                    <f:validateRegex pattern="^$|^[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"/>
+                                </p:inputText>
+                                <p:message for="emailField"/>
+
+
+                                <h:outputLabel for="fechaAlta" value="#{msg.fechaAlta}:"/>
+                                <p:calendar id="fechaAlta" value="#{proveedoresEditBean.proveedorActual.fechaAlta}" readonly="true" required="false"
+                                            pattern="dd/MM/yyyy"/>
+                                <p:message for="fechaAlta"/>
+
+                                <h:outputLabel for="clienteField" value="#{msg.cliente}:"/>
+                                <p:selectBooleanCheckbox id="clienteField" value="#{proveedoresEditBean.proveedorActual.cliente}"
+                                                         required="false"/>
+                                <p:message for="clienteField"/>
+
+                                <h:outputLabel for="activoField" value="#{msg.activo}:"/>
+                                <p:selectBooleanCheckbox id="activoField" value="#{proveedoresEditBean.proveedorActual.activo}"
+                                                         required="false"/>
+                                <p:message for="activoField"/>
+
+                                <h:outputLabel for="sucursalField" value="#{msg.sucursal}:"/>
+                                <h:outputLabel id="sucursalField" value="#{proveedoresEditBean.proveedorActual.idSucursal.nombreSucursal}"/>
+                                <h:outputLabel/>
+
+                            </p:panelGrid>
+
+                        </p:tab>
+                        <p:tab title="#{msg.contacto}">
+
+
+                            <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"
+                                             value="#{msg.nuevo}" icon="fa fa-fw fa-plus" global="false"/>
+
+                            <p:dataTable id="telefonosTable" value="#{proveedoresEditBean.telefonos}" var="telefono"
+                                         rows="15"
+                                         paginator="true"
+                                         sortMode="multiple"
+                                         emptyMessage="#{msg.telefonosEmpty}"
+                                         rowKey="#{telefono.id}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,15,30"
+                                         style="width: 100%"
+                                         resizableColumns="true"
+                                         scrollable="true"
+                                         editable="true"
+                                         reflow="true">
+
+                                <p:column sortBy="#{telefono.numero}">
+                                    <f:facet name="header">
+                                        #{msg.telefonoNumero}
+                                    </f:facet>
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{telefono.numero}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:inputMask id="telefonoField" value="#{telefono.numero}" mask="(099?9) 999999?999"
+                                                         required="true" maxlength="50" style="width:100%"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+
+                                </p:column>
+                                <p:column sortBy="#{telefono.referencia}">
+                                    <f:facet name="header">
+                                        #{msg.telefonoReferencia}
+                                    </f:facet>
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{telefono.referencia}"/></f:facet>
+                                        <f:facet name="input"><p:inputText id="referenciaField" value="#{telefono.referencia}"
+                                                                           maxlength="100" style="width:100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msg.acciones}
+                                    </f:facet>
+                                    <h:panelGroup>
+                                        <p:rowEditor/>
+                                        <p:commandButton icon="ui-icon-trash" action="#{proveedoresEditBean.borrarTelefono(telefono)}"
+                                                         update="telefonosTable" process="@this"/>
+                                    </h:panelGroup>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:tab>
+                    </p:tabView>
+
+                    <div class="SeparatorFull" />
+
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2">
+                        <p:commandButton id="guardarButton"
+                                         value="#{msg.guardar}"
+                                         icon="fa fa-fw fa-save"
+                                         action="#{proveedoresEditBean.doGuardarCliente()}"
+                                         update="@form"/>
+
+                        <p:commandButton id="cancelarButton"
+                                         value="#{msg.cancelar}"
+                                         icon="ui-icon-cancel"
+                                         action="/protected/clientes/index.xhtml?faces-redirect=true"
+                                         immediate="true"
+                                         ajax="false"
+                                         styleClass="RedButton"/>
+                    </p:panelGrid>
+                </h:form>
+
+                <h:form id="addTelefonoForm">
+                    <p:dialog id="addTelefonoDialog" header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true">
+                        <h:outputLabel value="#{proveedoresEditBean.telefonoActual.id}"/>
+                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" id="gridTelefono" columns="3">
+                            <h:outputLabel for="telefonoValueField" value="#{msg.telefonoNumero}"/>
+                            <p:inputMask id="telefonoValueField" value="#{proveedoresEditBean.telefonoActual.numero}"
+                                         mask="(099?9) 999999?999"
+                                         required="true" maxlength="50"/>
+                            <p:message for="telefonoValueField"/>
+
+                            <h:outputLabel for="referenciaValueField" value="#{msg.telefonoReferencia}"/>
+                            <p:inputText id="referenciaValueField" value="#{proveedoresEditBean.telefonoActual.referencia}" maxlength="100"
+                                         converter="#{stringFormatConverter}"/>
+                            <p:message for="referenciaValueField"/>
+
+                        </p:panelGrid>
+                        <p:separator/>
+                        <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"
+                                         action="#{proveedoresEditBean.grabarTelefono()}"
+                                         update=":editClienteForm:tabPersona:telefonosTable"
+                                         onsuccess="PF('dlgAddTelefono').hide();"
+                                         process="@form"/>
+
+                        <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" immediate="true"
+                                         onclick="PF('dlgAddTelefono').hide();"/>
+                        <h:outputLabel value="#{proveedoresEditBean.telefonoActual.idPersona}"/>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </div>
+</ui:composition>
+

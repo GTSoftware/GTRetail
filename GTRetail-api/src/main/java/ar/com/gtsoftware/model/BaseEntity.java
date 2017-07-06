@@ -33,8 +33,10 @@ public abstract class BaseEntity extends GTEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @TableGenerator(name = "Numeraciones", table = "numeraciones", allocationSize = 1,
+//            pkColumnName = "tabla", valueColumnName = "id")
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     public BaseEntity(Long id) {
@@ -59,26 +61,6 @@ public abstract class BaseEntity extends GTEntity<Long> {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BaseEntity)) {
-            return false;
-        }
-        BaseEntity other = (BaseEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String getStringId() {
         if (id != null) {
             return id.toString();
@@ -96,11 +78,6 @@ public abstract class BaseEntity extends GTEntity<Long> {
             }
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s[%d]", this.getClass().getSimpleName(), id);
     }
 
 }

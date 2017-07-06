@@ -37,7 +37,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "subRubrosSearchBean")
 @ViewScoped
-public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros> {
+public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros, SubRubroSearchFilter> {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(SubRubrosSearchBean.class.getName());
@@ -46,10 +46,12 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros> 
     private ProductosSubRubrosFacade facade;
     @EJB
     private ProductosRubrosFacade rubrosFacade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private ProductosRubros rubro;
 
-    private final SubRubroSearchFilter filter = new SubRubroSearchFilter("%");
+    private final SubRubroSearchFilter filter = new SubRubroSearchFilter();
 
     /**
      * Creates a new instance of SubRubrosSearchBean
@@ -60,7 +62,7 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros> 
     @PostConstruct
     public void init() {
 
-        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
+        String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
 
         if (idRubro == null) {
             throw new RuntimeException("No hay parámetro!");
@@ -83,7 +85,7 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros> 
     }
 
     @Override
-    protected AbstractFacade<ProductosSubRubros> getFacade() {
+    protected AbstractFacade<ProductosSubRubros, SubRubroSearchFilter> getFacade() {
         return facade;
     }
 

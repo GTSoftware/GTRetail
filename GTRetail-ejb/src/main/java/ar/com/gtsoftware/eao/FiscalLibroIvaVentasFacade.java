@@ -17,9 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.IVAVentasSearchFilter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,7 +34,7 @@ import javax.persistence.criteria.Root;
  * @version 1.0.0
  */
 @Stateless
-public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas> {
+public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas, IVAVentasSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -51,8 +49,7 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
     }
 
     /**
-     * Retorna la ultima factura registrada con la letra y el punto de venta
-     * pasados por parametro
+     * Retorna la ultima factura registrada con la letra y el punto de venta pasados por parametro
      *
      * @param letra
      * @param puntoVenta
@@ -78,60 +75,22 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
 
     }
 
-    /**
-     * Retorna la lista de facturas que corresponden con los criterios de
-     * filtrado
-     *
-     * @param ivavsf
-     * @return una lista de facturas
-     */
-    public List<FiscalLibroIvaVentas> findBySearchFilter(IVAVentasSearchFilter ivavsf) {
-        if (ivavsf.hasFilter()) {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<FiscalLibroIvaVentas> cq = cb.createQuery(FiscalLibroIvaVentas.class);
-            Root<FiscalLibroIvaVentas> registroIVA = cq.from(FiscalLibroIvaVentas.class);
-            cq.select(registroIVA);
-            Predicate p = null;
-            if (ivavsf.getPeriodo() != null) {
-                Predicate p1 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.idPeriodoFiscal), ivavsf.getPeriodo());
-                p = appendAndPredicate(cb, p1, p);
-            }
-            if (ivavsf.hasFechasDesdeHasta()) {
-                Predicate p1 = cb.between(registroIVA.get(FiscalLibroIvaVentas_.fechaFactura), ivavsf.getFechaDesde(), ivavsf.getFechaHasta());
-                p = appendAndPredicate(cb, p1, p);
-            }
-            if (ivavsf.getAnuladas() != null) {
-                Predicate p1 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.anulada), ivavsf.getAnuladas());
-                p = appendAndPredicate(cb, p1, p);
-            }
-            cq.where(p);
-            cq.orderBy(cb.asc(registroIVA.get(FiscalLibroIvaVentas_.fechaFactura)),
-                    cb.asc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));
-            TypedQuery<FiscalLibroIvaVentas> q = em.createQuery(cq);
-            List<FiscalLibroIvaVentas> registroIVAList = q.getResultList();
-            return registroIVAList;
+    @Override
+    public Predicate createWhereFromSearchFilter(IVAVentasSearchFilter ivavsf, CriteriaBuilder cb, Root<FiscalLibroIvaVentas> root) {
+        Predicate p = null;
+        if (ivavsf.getPeriodo() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLibroIvaVentas_.idPeriodoFiscal), ivavsf.getPeriodo());
+            p = appendAndPredicate(cb, p1, p);
         }
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalLibroIvaVentas> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<FiscalLibroIvaVentas> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(FiscalLibroIvaVentas entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (ivavsf.hasFechasDesdeHasta()) {
+            Predicate p1 = cb.between(root.get(FiscalLibroIvaVentas_.fechaFactura), ivavsf.getFechaDesde(), ivavsf.getFechaHasta());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        if (ivavsf.getAnuladas() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLibroIvaVentas_.anulada), ivavsf.getAnuladas());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        return p;
     }
 
 }

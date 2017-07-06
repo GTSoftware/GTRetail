@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Edición de #{msg.puntoVenta}</h1>
+                <div class="SeparatorFull" />
+
+                <h:form id="editPuntoVentaForm">
+                    <p:panelGrid id="editGrid" layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="3">
+
+                        <h:outputLabel value="#{msg.nro}:" />
+                        <p:inputText id="nroPuntoVentaField" value="#{puntoVentaEditBean.puntoVentaActual.nroPuntoVenta}"
+                                     required="true" requiredMessage="#{msg.ingresarValor}"
+                                     label="#{msg.nro}">
+                            <f:validateLongRange minimum="1" maximum="9999" />
+                        </p:inputText>
+                        <p:message for="nroPuntoVentaField"/>
+
+                        <h:outputLabel value="#{msg.tipo}:" />
+                        <p:selectOneMenu id="tipoPvField" value="#{puntoVentaEditBean.puntoVentaActual.tipo}"
+                                         converter="omnifaces.SelectItemsIndexConverter"
+                                         required="true" requiredMessage="#{msg.ingresarValor}">
+                            <f:selectItems value="#{puntoVentaEditBean.tiposPuntosVenta}" var="tipo" itemLabel="#{tipo}"
+                                           itemValue="#{tipo}"/>
+
+                        </p:selectOneMenu>
+                        <p:message for="tipoPvField"/>
+
+                        <h:outputLabel value="#{msg.descripcion}:" />
+                        <p:inputText id="descripcionField" value="#{puntoVentaEditBean.puntoVentaActual.descripcion}"
+                                     label="#{msg.nro}">
+                        </p:inputText>
+                        <p:message for="descripcionField"/>
+
+                        <h:outputLabel value="#{msg.sucursal}:" />
+                        <p:selectOneMenu id="sucursalField" value="#{puntoVentaEditBean.puntoVentaActual.sucursal}"
+                                         converter="omnifaces.SelectItemsIndexConverter"
+                                         required="true" requiredMessage="#{msg.ingresarValor}">
+                            <f:selectItems value="#{puntoVentaEditBean.sucursalesList}" var="sucu" itemLabel="#{sucu.businessString}"
+                                           itemValue="#{sucu}"/>
+
+                        </p:selectOneMenu>
+                        <p:message for="sucursalField"/>
+
+                        <h:outputLabel value="#{msg.activo}:" />
+                        <p:selectBooleanCheckbox id="activoField" value="#{puntoVentaEditBean.puntoVentaActual.activo}"
+                                                 itemLabel="#{msg.activo}"/>
+                        <p:message for="activoField"/>
+
+                    </p:panelGrid>
+                    <div class="SeparatorFull" />
+
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2">
+                        <p:commandButton id="guardarButton"
+                                         value="#{msg.guardar}"
+                                         icon="fa fa-fw fa-save"
+                                         action="#{puntoVentaEditBean.doGuardar}"
+                                         update="@form"
+                                         ajax="true"
+                                         />
+
+                        <p:commandButton id="cancelarButton"
+                                         value="#{msg.cancelar}"
+                                         icon="ui-icon-cancel"
+                                         action="/protected/fiscal/puntos_venta/index.xhtml?faces-redirect=true"
+                                         immediate="true"
+                                         ajax="false"
+                                         styleClass="RedButton"/>
+                    </p:panelGrid >
+
+                </h:form>
+
+            </div>
+        </div>
+    </div>
+</html>

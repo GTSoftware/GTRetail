@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>GT Retail</title>
+
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+
+        <h:outputScript name="js/maps.js" library="olympos-layout" />
+        <h:outputScript name="js/nanoscroller.js" library="olympos-layout" />
+        <h:outputScript name="js/layout.js" library="olympos-layout" />
+
+    </h:head>
+
+    <h:body styleClass="NavyTopbar PopupMenu OvXHidden">
+
+        <ui:include src="WEB-INF/topbar.xhtml"/>
+
+        <!-- LAYOUT CONTAINER -->
+
+        <div id="layout-container">
+            <div id="layout-container-row">
+
+                <!-- LAYOUT MENU COVER -->
+                <div id="layout-menu-cover" class="nano Animated03">
+                    <div id="layout-menu-cover-scroll-content" class="nano-content">
+
+                        <ui:include src="WEB-INF/layouttabmenuforsite.xhtml" />
+
+                    </div>
+                </div>
+
+                <!-- Content Start-->
+
+                <div class="Container100 NoIndent NavyBack TexAlCenter" id="highlight">
+                    <div class="Wid80 MarAuto">
+                        <div class="EmptyBox100 ShowOnDesktop"></div>
+                        <div class="EmptyBox60 ShowOnMobile"></div>
+                        <h:graphicImage name="logo.svg" library="images" style="height:40px;"/>
+                        <div class="EmptyBox50"></div>
+                        <h1 class="FontLatoRegular Fs40 White TexAlCenter FontNormal">CONFIABILIDAD Y EFICIENCIA A SU SERVICIO</h1>
+                        <div class="EmptyBox20"></div>
+                        <span class="DispBlock TexAlCenter Fs20 FontLatoLight White">“ Nosotros nos ocupamos de sus operaciones.<br/>
+                            Usted de su negocio. ”</span>
+                        <div class="EmptyBox60"></div>
+                        <!--                        <div class="Wid40 MarAuto WidAutoOnMobile ui-fluid">
+                                                    <div class="Container50 Responsive50"><p:button value="Dashboard Sample 1" styleClass="GreenButton" href="dashboard-banking.xhtml"/></div>
+                                                    <div class="Container50 Responsive50"><p:button value="Dashboard Sample 2" styleClass="OrangeButton" href="dashboard-supplychain.xhtml"/></div>
+                                                </div>-->
+                        <div class="EmptyBox70 ShowOnDesktop"></div>
+                        <div class="EmptyBox40 ShowOnMobile"></div>
+
+                        <div class="EmptyBox100 ShowOnDesktop"></div>
+                    </div>
+                </div>
+
+                <div class="Wid100 Flex FlexWrap" id="colorboxes">
+
+                    <div class="Container33 Responsive100 NoIndent RedBack TexAlCenter Flex Zoom1point05x">
+                        <div class="Container100">
+                            <div class="EmptyBox60"></div>
+                            <i class="icon-leaf13 White Opac60 Fs100"></i>
+                            <div class="EmptyBox30"></div>
+                            <h2 class="FontLatoRegular Fs40 White Opac60">Simple Design</h2>
+                            <div class="EmptyBox10"></div>
+                            <p class="FontLatoRegular Wid60 Fs14 MarAuto White">Olympos blends a high design standard with unique innovations to achieve maximum usability based on the proven operation style of its predecessors.</p>
+                            <p:button value="Learn More" styleClass="NavyButton" href="dashboard-banking.xhtml"/>
+                            <div class="EmptyBox60"></div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive100 NoIndent BlueBack TexAlCenter Flex Zoom1point05x">
+                        <div class="Container100">
+                            <div class="EmptyBox60"></div>
+                            <i class="icon-award80 White Opac60 Fs100"></i>
+                            <div class="EmptyBox30"></div>
+                            <h2 class="FontLatoRegular Fs40 White Opac60">Functionality</h2>
+                            <div class="EmptyBox10"></div>
+                            <p class="FontLatoRegular Wid60 Fs14 MarAuto White">Olympos integrates a full range of new features to meet different user demands. These functions have been designed solely to deliver a superb user experience in every detail.</p>
+                            <p:button value="Learn More" styleClass="NavyButton" href="dashboard-supplychain.xhtml"/>
+                            <div class="EmptyBox60"></div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive100 NoIndent GreenBack TexAlCenter Flex Zoom1point05x">
+                        <div class="Container100">
+                            <div class="EmptyBox60"></div>
+                            <i class="icon-updated White Opac60 Fs100"></i>
+                            <div class="EmptyBox30"></div>
+                            <h2 class="FontLatoRegular Fs40 White Opac60">Performance</h2>
+                            <div class="EmptyBox10"></div>
+                            <p class="FontLatoRegular Wid60 Fs14 MarAuto White">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                            <p:button value="Learn More" styleClass="NavyButton" href="dashboard-banking.xhtml"/>
+                            <div class="EmptyBox60"></div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive100 NoIndent OrangeBack TexAlCenter Flex Zoom1point05x">
+                        <div class="Container100">
+                            <div class="EmptyBox60"></div>
+                            <i class="icon-target21 White Opac60 Fs100"></i>
+                            <div class="EmptyBox30"></div>
+                            <h2 class="FontLatoRegular Fs40 White Opac60">User Friendly</h2>
+                            <div class="EmptyBox10"></div>
+                            <p class="FontLatoRegular Wid60 Fs14 MarAuto White">Olympos blends a high design standard with unique innovations to achieve maximum usability based on the proven operation style of its predecessors.</p>
+                            <p:button value="Learn More" styleClass="NavyButton" href="dashboard-supplychain.xhtml"/>
+                            <div class="EmptyBox60"></div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive100 NoIndent PurpleBack TexAlCenter Flex Zoom1point05x">
+                        <div class="Container100">
+                            <div class="EmptyBox60"></div>
+                            <i class="icon-tablet-screen1 White Opac60 Fs100"></i>
+                            <div class="EmptyBox30"></div>
+                            <h2 class="FontLatoRegular Fs40 White Opac60">Responsive</h2>
+                            <div class="EmptyBox10"></div>
+                            <p class="FontLatoRegular Wid60 Fs14 MarAuto White">Olympos integrates a full range of new features to meet different user demands. These functions have been designed solely to deliver a superb user experience in every detail.</p>
+                            <p:button value="Learn More" styleClass="NavyButton" href="dashboard-banking.xhtml"/>
+                            <div class="EmptyBox60"></div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive100 NoIndent AquaBack TexAlCenter Flex Zoom1point05x">
+                        <div class="Container100">
+                            <div class="EmptyBox60"></div>
+                            <i class="icon-tree40 White Opac60 Fs100"></i>
+                            <div class="EmptyBox30"></div>
+                            <h2 class="FontLatoRegular Fs40 White Opac60">Cross-Browser</h2>
+                            <div class="EmptyBox10"></div>
+                            <p class="FontLatoRegular Wid60 Fs14 MarAuto White">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                            <p:button value="Learn More" styleClass="NavyButton" href="dashboard-banking.xhtml"/>
+                            <div class="EmptyBox60"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="Container100 NoIndent LeadenBack" id="pricingtables" style=" padding:0px 3rem;">
+
+                    <div class="EmptyBox50"></div>
+
+                    <h1 class="FontLatoBold Fs26 White TexAlCenter">Pricing Tables</h1>
+                    <div class="EmptyBox30"></div>
+
+                    <div class="Wid80 MarAuto Responsive100 Flex FlexWrap">
+
+                        <div class="Container25 TexAlCenter Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="Container100 FontDosisSemibold Black Opac80" style="font-size:2.4rem;">Standard</div>
+                                <div class="Separator"></div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Container100 FontLatoBold Black Opac80" style="font-size:4rem;">$20<span class="Fs30 Leaden">/mo*</span></div>
+                                <div class="Container100 FontLatoRegular Leaden Fs16">Basic customer support for<br/> small business</div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Separator"></div>
+                                <div class="Container100 FontLatoBold Leaden Fs16">$25 for monthly</div>
+                                <div class="Container100 ui-fluid"> <p:button value="Get Started" styleClass="GreenButton Fleft"/> </div>
+                                <div class="Wid100 OvHidden" style="height:2rem;"></div>
+                            </div>
+                        </div>
+
+                        <div class="Container25 TexAlCenter Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="Container100 FontDosisSemibold Red" style="font-size:2.4rem;">Pro</div>
+                                <div class="Separator"></div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Container100 FontLatoBold Black Opac80" style="font-size:4rem;">$30<span class="Fs30 Leaden">/mo*</span></div>
+                                <div class="Container100 FontLatoRegular Leaden Fs16">All-in-one customer support<br/> for small business</div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Separator"></div>
+                                <div class="Container100 FontLatoBold Leaden Fs16">$35 for monthly</div>
+                                <div class="Container100 ui-fluid"> <p:button value="Get Started" styleClass="RedButton Fleft"/> </div>
+                                <div class="Wid100 OvHidden" style="height:2rem;"></div>
+                            </div>
+                        </div>
+
+                        <div class="Container25 TexAlCenter Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="Container100 FontDosisSemibold Black Opac80" style="font-size:2.4rem;">Business</div>
+                                <div class="Separator"></div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Container100 FontLatoBold Black Opac80" style="font-size:4rem;">$150<span class="Fs30 Leaden">/mo*</span></div>
+                                <div class="Container100 FontLatoRegular Leaden Fs16">Business class customer <br/>support + One to one help</div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Separator"></div>
+                                <div class="Container100 FontLatoBold Leaden Fs16">$155 for monthly</div>
+                                <div class="Container100 ui-fluid"> <p:button value="Get Started" styleClass="GreenButton Fleft"/> </div>
+                                <div class="Wid100 OvHidden" style="height:2rem;"></div>
+                            </div>
+                        </div>
+
+                        <div class="Container25 TexAlCenter Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="Container100 FontDosisSemibold Black Opac80" style="font-size:2.4rem;">Business Plus</div>
+                                <div class="Separator"></div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Container100 FontLatoBold Black Opac80" style="font-size:4rem;">$500<span class="Fs30 Leaden">/mo*</span></div>
+                                <div class="Container100 FontLatoRegular Leaden Fs16">Business class customer <br/>support + One to one help</div>
+                                <div class="Wid100 OvHidden" style="height:3rem;"></div>
+                                <div class="Separator"></div>
+                                <div class="Container100 FontLatoBold Leaden Fs16">$555 for monthly</div>
+                                <div class="Container100 ui-fluid"> <p:button value="Get Started" styleClass="GreenButton Fleft"/> </div>
+                                <div class="Wid100 OvHidden" style="height:2rem;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="EmptyBox50"></div>
+
+                </div>
+
+                <div class="Wid100 Flex FlexWrap" id="products" style="background-color:#f2f2f2;">
+                    <div class="Container100 TexAlCenter">
+                        <h1 class="Card FontLatoBold Fs26 Black Opac80">Products Specifications</h1>
+                    </div>
+
+                    <div class="Container33 Responsive50 NoIndent TexAlCenter Flex FlexWrap">
+                        <div class="Container50 Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="EmptyBox10"></div>
+                                <i class="icon-medical55 Red Fs100"></i>
+                                <div class="EmptyBox20"></div>
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 1</h2>
+                                <div class="EmptyBox10"></div>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p:button value="Learn More" styleClass="OrangeButton" href="dashboard-banking.xhtml"/>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Container50 Responsive50 NoIndent Flex FlexWrap">
+                            <div class="Container100 Flex">
+                                <div class="Card Zoom1point05x">
+                                    <div class="EmptyBox10"></div>
+                                    <i class="icon-presentation18 Red Fs60"></i>
+                                    <div class="EmptyBox20"></div>
+                                    <h2 class="FontLatoRegular Fs20 Blue">Product Spec 2</h2>
+                                    <div class="EmptyBox10"></div>
+                                    <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                    <p:button value="Learn More" styleClass="GreenButton" href="dashboard-banking.xhtml"/>
+                                    <div class="EmptyBox10"></div>
+                                </div>
+                            </div>
+                            <div class="Container50 Responsive100 Flex ShowOnDesktop">
+                                <div class="Card Zoom1point05x">
+                                    <i class="icon-smartphone22 Red Fs60"></i>
+                                </div>
+                            </div>
+                            <div class="Container50 Responsive100 Flex ShowOnDesktop">
+                                <div class="Card Zoom1point05x">
+                                    <i class="icon-triangle26 Red Fs60"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Container100 Flex">
+                            <div class="Card Zoom1point05x">
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 3</h2>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive50 NoIndent TexAlCenter Flex FlexWrap">
+                        <div class="Container50 Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="EmptyBox10"></div>
+                                <i class="icon-zip23 Red Fs60"></i>
+                                <div class="EmptyBox20"></div>
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 4</h2>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p:button value="Learn More" styleClass="PurpleButton" href="dashboard-banking.xhtml"/>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Container50 Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="EmptyBox10"></div>
+                                <i class="icon-loop12 Red Fs60"></i>
+                                <div class="EmptyBox20"></div>
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 5</h2>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p:button value="Learn More" styleClass="NavyButton" href="dashboard-banking.xhtml"/>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Container50 Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="EmptyBox10"></div>
+                                <i class="icon-computers3 Red Fs60"></i>
+                                <div class="EmptyBox20"></div>
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 6</h2>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p:button value="Learn More" styleClass="BlueButton" href="dashboard-banking.xhtml"/>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Container50 Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="EmptyBox10"></div>
+                                <i class="icon-website22 Red Fs60"></i>
+                                <div class="EmptyBox20"></div>
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 7</h2>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p:button value="Learn More" styleClass="OrangeButton" href="dashboard-banking.xhtml"/>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="Container33 Responsive100 NoIndent TexAlCenter Flex FlexWrap">
+                        <div class="Container50 Responsive50 Flex">
+                            <div class="Card Zoom1point05x">
+                                <div class="EmptyBox20"></div>
+                                <i class="icon-cloud393 Red Fs60"></i>
+                                <div class="EmptyBox20"></div>
+                                <h2 class="FontLatoRegular Fs20 Blue">Product Spec 8</h2>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.
+                                    Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                <p:button value="Learn More" styleClass="BlueButton" href="dashboard-banking.xhtml"/>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Container50 Responsive50 NoIndent Flex FlexWrap">
+                            <div class="Container100 Flex">
+                                <div class="Card Zoom1point05x">
+                                    <div class="EmptyBox10"></div>
+                                    <i class="icon-google122 Red Fs60"></i>
+                                    <div class="EmptyBox20"></div>
+                                    <h2 class="FontLatoRegular Fs20 Blue">Product Spec 9</h2>
+                                    <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                    <p:button value="Learn More" styleClass="YellowButton" href="dashboard-banking.xhtml"/>
+                                    <div class="EmptyBox10"></div>
+                                </div>
+                            </div>
+                            <div class="Container100 Flex">
+                                <div class="Card Zoom1point05x">
+                                    <div class="EmptyBox10"></div>
+                                    <i class="icon-mail97 Red Fs60"></i>
+                                    <div class="EmptyBox20"></div>
+                                    <h2 class="FontLatoRegular Fs20 Blue">Product Spec 10</h2>
+                                    <p class="FontLatoRegular Fs14 MarAuto">Olympos is faster, more stable, and rock-solid. We have introduced multiple leading technologies to optimize system stability and speed, and a better user experience.</p>
+                                    <p:button value="Learn More" styleClass="RedButton" href="dashboard-banking.xhtml"/>
+                                    <div class="EmptyBox10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="Container100 NoIndent" id="contactinfo">
+
+                    <p:gmap center="40.7117299, -74.0097789" zoom="14" type="ROADMAP" model="#{markersView.simpleModel3}" style="height:600px;" styleClass="Container100 NoIndent" />
+
+                    <div class="Wid100 MarAuto OvHidden AquaBack">
+                        <div class="Container100 TexAlCenter">
+                            <div class="Wid100 OvHidden" style="height:2rem;"></div>
+                            <div class="Wid100 MarAuto DispBlock OvHidden FontLatoBold White" style="font-size:2.0rem;">We Are Here !</div>
+                            <div class="Wid100 OvHidden" style="height:0.5rem;"></div>
+                            <div class="Wid100 MarAuto DispBlock OvHidden FontLatoRegular Fs20 Black Opac80">PO Box 16122, Canal Street West, New York 8007, USA</div>
+                            <div class="Wid100 OvHidden" style="height:1rem;"></div>
+                            <div class="Container100 ui-fluid"> <p:button value="Contact Us" styleClass="OrangeButton MarAuto" style="max-width:250px;"/> </div>
+                            <div class="Wid100 OvHidden" style="height:2rem;"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Content End-->
+
+                <ui:include src="WEB-INF/footer.xhtml" />
+
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/core-layout.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/font-awesome.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/animate.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/olympos-layout.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/olympos-font.css" library="olympos-layout" />
+    </h:body>
+
+</html>

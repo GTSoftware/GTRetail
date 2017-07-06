@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class ProductosSubRubrosFacade extends AbstractFacade<ProductosSubRubros> {
+public class ProductosSubRubrosFacade extends AbstractFacade<ProductosSubRubros, SubRubroSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,9 +45,8 @@ public class ProductosSubRubrosFacade extends AbstractFacade<ProductosSubRubros>
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosSubRubros> root) {
+    public Predicate createWhereFromSearchFilter(SubRubroSearchFilter psf, CriteriaBuilder cb, Root<ProductosSubRubros> root) {
 
-        SubRubroSearchFilter psf = (SubRubroSearchFilter) sf;
         Predicate p = null;
         if (psf.getNombreSubRubro() != null) {
             String s = psf.getNombreSubRubro().toUpperCase();

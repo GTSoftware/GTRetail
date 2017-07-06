@@ -129,14 +129,13 @@ public class Personas extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
-    @OneToMany(mappedBy = "idProveedorHabitual")
-    private List<Productos> productosList;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
-    private List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
+
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
+//    private List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
     private List<PersonasTelefonos> personasTelefonosList;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
-    private List<PersonasCuentaCorriente> personasCuentaCorrienteList;
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
+//    private List<PersonasCuentaCorriente> personasCuentaCorrienteList;
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
@@ -345,24 +344,14 @@ public class Personas extends BaseEntity implements Serializable {
         this.idResponsabilidadIva = idResponsabilidadIva;
     }
 
-    @XmlTransient
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
-    }
-
-    @XmlTransient
-    public List<FiscalLibroIvaVentas> getFiscalLibroIvaVentasList() {
-        return fiscalLibroIvaVentasList;
-    }
-
-    public void setFiscalLibroIvaVentasList(List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList) {
-        this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
-    }
-
+//    @XmlTransient
+//    public List<FiscalLibroIvaVentas> getFiscalLibroIvaVentasList() {
+//        return fiscalLibroIvaVentasList;
+//    }
+//
+//    public void setFiscalLibroIvaVentasList(List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList) {
+//        this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
+//    }
     @XmlTransient
     public List<PersonasTelefonos> getPersonasTelefonosList() {
         return personasTelefonosList;
@@ -372,15 +361,14 @@ public class Personas extends BaseEntity implements Serializable {
         this.personasTelefonosList = personasTelefonosList;
     }
 
-    @XmlTransient
-    public List<PersonasCuentaCorriente> getPersonasCuentaCorrienteList() {
-        return personasCuentaCorrienteList;
-    }
-
-    public void setPersonasCuentaCorrienteList(List<PersonasCuentaCorriente> personasCuentaCorrienteList) {
-        this.personasCuentaCorrienteList = personasCuentaCorrienteList;
-    }
-
+//    @XmlTransient
+//    public List<PersonasCuentaCorriente> getPersonasCuentaCorrienteList() {
+//        return personasCuentaCorrienteList;
+//    }
+//
+//    public void setPersonasCuentaCorrienteList(List<PersonasCuentaCorriente> personasCuentaCorrienteList) {
+//        this.personasCuentaCorrienteList = personasCuentaCorrienteList;
+//    }
     public Sucursales getIdSucursal() {
         return idSucursal;
     }
@@ -395,11 +383,6 @@ public class Personas extends BaseEntity implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Personas[ idPersona=" + this.getId() + " ]";
     }
 
     public String getBusinessString() {

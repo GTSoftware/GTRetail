@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalMonedas;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
-public class FiscalMonedasFacade extends AbstractFacade<FiscalMonedas> {
+public class FiscalMonedasFacade extends AbstractFacade<FiscalMonedas, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,21 +45,6 @@ public class FiscalMonedasFacade extends AbstractFacade<FiscalMonedas> {
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalMonedas> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<FiscalMonedas> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(FiscalMonedas entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

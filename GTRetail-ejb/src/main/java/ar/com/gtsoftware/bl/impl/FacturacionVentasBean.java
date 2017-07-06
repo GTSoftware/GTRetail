@@ -214,9 +214,7 @@ public class FacturacionVentasBean {
         if (ultimaFactura != null) {
             nro = Integer.parseInt(ultimaFactura.getNumeroFactura());
             nro++;
-//            return formatNumeroFactura(String.valueOf("00000000" + nro));
         }
-//        return "00000001";
         return StringUtils.leftPad(String.valueOf(nro), 8, "0");
     }
 
@@ -228,9 +226,6 @@ public class FacturacionVentasBean {
      */
     private String formatNumeroFactura(String nroFactura) {
         return StringUtils.leftPad(nroFactura, 8, "0");
-//        String proxNum = String.valueOf("00000000".concat(nroFactura));
-//        proxNum = proxNum.substring(proxNum.length() - 8);
-//        return proxNum;
     }
 
     /**
@@ -241,9 +236,6 @@ public class FacturacionVentasBean {
      */
     private String formatPuntoVenta(String puntoVenta) {
         return StringUtils.leftPad(puntoVenta, 4, "0");
-//        String proxNum = String.valueOf("00000000".concat(puntoVenta));
-//        proxNum = proxNum.substring(proxNum.length() - 4);
-//        return proxNum;
     }
 
     /**

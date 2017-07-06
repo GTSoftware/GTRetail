@@ -17,13 +17,18 @@ package ar.com.gtsoftware.auth;
 
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.model.UsuariosGrupos;
+import ar.com.gtsoftware.search.UsuariosSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
-import java.security.Principal;
-import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+import org.apache.commons.lang.StringUtils;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.MenuModel;
 
 /**
  *
@@ -38,56 +43,75 @@ public class AuthBackingBean implements Serializable {
     @EJB
     private UsuariosFacade usuariosFacade;
 
-    private Usuarios usuarioLogueado;
-    private static Logger LOG = Logger.getLogger(AuthBackingBean.class.getName());
+    @EJB
+    private JSFUtil jSFUtil;
 
-    /**
-     * Creates a new instance of AuthBackingBean
-     */
+    private Usuarios usuarioLogueado;
+
+    private MenuModel rolesMenuModel;
+
     public AuthBackingBean() {
     }
 
-    public String logout() {
+    /**
+     * Creates a new instance of AuthBackingBean
+     *
+     * @param usuariosFacade
+     * @param jSFUtil
+     */
+    public AuthBackingBean(UsuariosFacade usuariosFacade, JSFUtil jSFUtil) {
+        this.usuariosFacade = usuariosFacade;
+        this.jSFUtil = jSFUtil;
+    }
 
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "login?faces-redirect=true";
+    @PostConstruct
+    public void init() {
+
+        rolesMenuModel = new DefaultMenuModel();
+
+        DefaultMenuItem cambiarClaveMi = new DefaultMenuItem("Cambiar clave");
+        cambiarClaveMi.setIcon("fa fa-fw fa-lock");
+        cambiarClaveMi.setCommand(String.format("/protected/user/changePassword.xhtml%s", JSFUtil.JSF_REDIRECT_ESCAPED));
+        rolesMenuModel.addElement(cambiarClaveMi);
+
+        DefaultMenuItem salirMi = new DefaultMenuItem("Salir");
+        salirMi.setIcon("fa fa-fw fa-power-off");
+        salirMi.setCommand("#{authBackingBean.logout}");
+        rolesMenuModel.addElement(salirMi);
+
+        for (UsuariosGrupos rol : getUserLoggedIn().getUsuariosGruposList()) {
+            DefaultMenuItem rolMi = new DefaultMenuItem(String.format("Rol: %s", rol.getNombreGrupo()));
+            rolesMenuModel.addElement(rolMi);
+        }
+
+    }
+
+    public void logout() {
+        jSFUtil.logOut("/index.html");
     }
 
     public Usuarios getUserLoggedIn() {
         if (usuarioLogueado == null) {
-            Principal usuP = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+            String usuP = jSFUtil.getUserPrincipalName();
 
-            if (usuP != null) {
-                Usuarios usuario = usuariosFacade.findByLogIn(usuP.getName());
+            if (StringUtils.isNotEmpty(usuP)) {
+                UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP);
+                sf.setNamedEntityGraph("rolesUsuarios");
+
+                Usuarios usuario = usuariosFacade.findFirstBySearchFilter(sf);
                 if (usuario != null) {
                     usuarioLogueado = usuario;
                     return usuario;
                 }
             }
-            Usuarios usu = new Usuarios();
-            usu.setNombreUsuario("ANONYMOUS");
+            throw new RuntimeException("Usuario no encontrado!");
 
-            return usu;
         }
         return usuarioLogueado;
     }
-    /*
-     public boolean tienePrivilegio(Integer idPrivilegio) {
-     HashMap<Integer, String> privilegios = obtenerPrivilegiosUsuario(getUserLoggedIn());
-     if (privilegios != null && !privilegios.isEmpty()) {
-     privilegios.containsKey(idPrivilegio);
-     }
-     return false;
-     }
 
-     private HashMap<Integer, String> obtenerPrivilegiosUsuario(Usuarios usuario) {
-     HashMap<Integer, String> privilegiosList = new HashMap<Integer, String>();
-     for (UsuariosGrupos g : usuario.getUsuariosGruposList()) {
-     for (Privilegios p : g.getPrivilegiosList()) {
-     privilegiosList.put(p.getIdPrivilegio(), p.getNombrePrivilegio());
-     }
-     }
-     return privilegiosList;
-     }
-     */
+    public MenuModel getRolesMenuModel() {
+        return rolesMenuModel;
+    }
+
 }

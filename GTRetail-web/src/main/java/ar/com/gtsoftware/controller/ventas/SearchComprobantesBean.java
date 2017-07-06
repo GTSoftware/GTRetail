@@ -46,7 +46,7 @@ import org.apache.commons.lang3.time.DateUtils;
  */
 @ManagedBean(name = "searchComprobantesBean")
 @ViewScoped
-public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes> {
+public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes, ComprobantesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
@@ -136,7 +136,7 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes> {
     }
 
     @Override
-    protected AbstractFacade<Comprobantes> getFacade() {
+    protected AbstractFacade<Comprobantes, ComprobantesSearchFilter> getFacade() {
         return ventasFacade;
     }
 

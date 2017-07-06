@@ -1,0 +1,59 @@
+<ui:composition
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+
+    <!-- LAYOUT TOPBAR COVER -->
+    <div id="layout-topbar-cover">
+        <div id="layout-topbar-row">
+            <div id="layout-topbar-left">
+                <a href="index.xhtml" id="logo"><h:graphicImage name="logo.svg" id="logo" library="images" /></a>
+            </div>
+            <div id="layout-topbar-right">
+
+                <a id="menu-resize-btn" class="topbar-link Animated03"><h:graphicImage name="images/menu-resize-btn-icon.svg" id="menu-resize-btn" library="olympos-layout" /></a>
+                <a id="mobile-menu-btn" class="topbar-link Animated03"><h:graphicImage name="images/menu-btn-icon.svg" id="menu-btn-icon" library="olympos-layout" /></a>
+
+                <!--                <a id="" class="topbar-link Animated03 Fright"><i class="icon-user7"></i></a>-->
+
+                <div class="  Animated03 Fright" >
+
+
+                    <p:outputLabel id="usuarioSucursalLabel" value="#{msg.sucursal}: #{authBackingBean.userLoggedIn.idSucursal.nombreSucursal}"
+                                   style="color: #ffffff;font-size: small;"
+                                   />
+
+                    <p:spacer />
+
+                    <p:commandButton id="rolesButton" type="button"
+                                     icon="fa fa-user"
+                                     value="#{authBackingBean.userLoggedIn.nombreUsuario}"
+
+                                     >
+
+                        <p:menu overlay="true" trigger="rolesButton" my="left top" at="left bottom" model="#{authBackingBean.rolesMenuModel}">
+
+                        </p:menu>
+
+
+                    </p:commandButton>
+
+
+
+                                 <!--<a id="" class="topbar-link Animated03 Fright">#{authBackingBean.userLoggedIn.nombreUsuario}</a>-->
+                </div>
+                <!--                <div id="search-bar">
+                                    <input type="text" placeholder="Search"></input>
+                                    <a id="search-btn" class="Animated03"><i class="icon-zoom64"></i></a>
+                                </div>-->
+
+
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

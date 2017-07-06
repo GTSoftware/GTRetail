@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      >
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">#{msg.movimientosCaja}</h1>
+                <div class="SeparatorFull" />
+                <h:form id="buscarClienteForm">
+                    <p:defaultCommand target="buscarButton"/>
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="3">
+
+
+<!--                        <p:inputText id="searchField" value="#{movimientosCajaSearchBean.filter.txt}" placeholder="#{msg.b.usqueda}"/>-->
+                        <p:commandButton id="buscarButton" action="#{movimientosCajaSearchBean.doSearch()}" value="Buscar"
+                                         update="movimientosTable" icon="fa fa-fw fa-search"/>
+
+
+
+                    </p:panelGrid >
+                    <div class="SeparatorFull" />
+
+                    <p:dataTable id="movimientosTable" value="#{movimientosCajaSearchBean.dataModel}" var="mov"
+                                 rows="10"
+                                 lazy="true"
+                                 paginator="true"
+                                 emptyMessage="#{msg.busquedaSinResultados}"
+                                 rowKey="#{mov.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowsPerPageTemplate="10,15,30,100"
+
+
+                                 scrollable="true"
+                                 reflow="true" >
+
+                        <f:facet name="{Exporters}">
+
+                            <h:commandLink title="xls">
+                                <i class="fa fa-file-excel-o Fs24 Green" />
+                                <p:dataExporter type="xls" target="movimientosTable" fileName="movimientos" />
+                            </h:commandLink>
+
+                            <h:commandLink title="pdf">
+                                <i class="fa fa-file-pdf-o Fs24 Red" />
+                                <p:dataExporter type="pdf" target="movimientosTable" fileName="movimientos"/>
+                            </h:commandLink>
+
+                            <h:commandLink title="csv">
+                                <i class="fa fa-file-text-o Fs24 Blue" />
+                                <p:dataExporter type="csv" target="movimientosTable" fileName="movimientos" />
+                            </h:commandLink>
+
+                            <h:commandLink title="xml">
+                                <i class="fa fa-file-code-o Fs24 Black" />
+                                <p:dataExporter type="xml" target="movimientosTable" fileName="movimientos" />
+                            </h:commandLink>
+                        </f:facet>
+
+                        <f:facet name="header" >
+                            #{msg.movimientosCaja}
+                        </f:facet>
+
+                        <p:column sortBy="#{mov.id}">
+                            <f:facet name="header" >
+                                #{msg.tablaId}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.id}"/>
+                        </p:column>
+                        <p:column sortBy="#{mov.fechaMovimiento}"  >
+                            <f:facet name="header" >
+                                #{msg.fecha}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.fechaMovimiento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.montoMovimiento}" >
+                            <f:facet name="header" >
+                                #{msg.monto}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.montoMovimiento}">
+                                <f:convertNumber groupingUsed="true" type="currency"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{mov.descripcion}">
+                            <f:facet name="header" >
+                                #{msg.descripcion}
+                            </f:facet>
+                            <p:outputLabel value="#{mov.descripcion}"/>
+                        </p:column>
+
+
+
+
+                    </p:dataTable>
+
+                </h:form>
+
+            </div>
+        </div>
+    </div>
+</html>

@@ -18,13 +18,11 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.PersonasCuentaCorrienteSearchFilter;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -35,7 +33,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuentaCorriente> {
+public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuentaCorriente, PersonasCuentaCorrienteSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -54,7 +52,7 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
         CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
         Root<PersonasCuentaCorriente> cuenta = cq.from(PersonasCuentaCorriente.class);
         cq.select(cb.sum(cuenta.get(PersonasCuentaCorriente_.importeMovimiento)).alias("SUM"));
-        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona.getId());
+        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona);
         cq.where(p);
         BigDecimal result = em.createQuery(cq).getSingleResult();
         if (result == null) {
@@ -63,36 +61,15 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
         return result;
     }
 
-    public List<PersonasCuentaCorriente> getUltimosMovimientos(Personas persona) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<PersonasCuentaCorriente> cq = cb.createQuery(PersonasCuentaCorriente.class);
-        Root<PersonasCuentaCorriente> cuenta = cq.from(PersonasCuentaCorriente.class);
-        cq.select(cuenta);
-        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona.getId());
-        cq.where(p);
-        cq.orderBy(cb.desc(cuenta.get(PersonasCuentaCorriente_.fechaMovimiento)));
-        TypedQuery<PersonasCuentaCorriente> q = em.createQuery(cq);
-        q.setMaxResults(100);
-        return q.getResultList();
+    @Override
+    public Predicate createWhereFromSearchFilter(PersonasCuentaCorrienteSearchFilter sf, CriteriaBuilder cb,
+            Root<PersonasCuentaCorriente> root) {
+        Predicate p = null;
+        if (sf.getPersona() != null) {
+            Predicate p1 = cb.equal(root.get(PersonasCuentaCorriente_.idPersona), sf.getPersona());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        return p;
     }
 
-    @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<PersonasCuentaCorriente> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<PersonasCuentaCorriente> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(PersonasCuentaCorriente entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

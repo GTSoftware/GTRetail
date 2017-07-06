@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalTiposComprobante;
 import ar.com.gtsoftware.model.FiscalTiposComprobante_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.FiscalTiposComprobanteSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,7 +31,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
-public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComprobante> {
+public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComprobante, FiscalTiposComprobanteSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -47,8 +46,8 @@ public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComp
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<FiscalTiposComprobante> root) {
-        FiscalTiposComprobanteSearchFilter ftsf = (FiscalTiposComprobanteSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(FiscalTiposComprobanteSearchFilter ftsf, CriteriaBuilder cb, Root<FiscalTiposComprobante> root) {
+
         Predicate p = null;
         if (StringUtils.isNotEmpty(ftsf.getLetra())) {
             Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.letra), ftsf.getLetra());

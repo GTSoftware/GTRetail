@@ -12,39 +12,7 @@
 
 
     <dependencies>
-        <!-- Import the EJB API, we use provided scope as the API is included in JBoss EAP 6 -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Annotation processor to generate the JPA 2.0 metamodel classes for
-        typesafe criteria queries -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Annotation processor that raising compilation errors whenever constraint
-        annotations are incorrectly used. -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.beanio</groupId>
             <artifactId>beanio</artifactId>
@@ -53,8 +21,24 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>5.2.2.Final</version>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <build>
@@ -69,5 +53,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

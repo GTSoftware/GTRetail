@@ -35,7 +35,7 @@ import javax.persistence.criteria.Root;
  * @version 1.0.0
  */
 @Stateless
-public class FiscalLibroIvaVentasLineasFacade extends AbstractFacade<FiscalLibroIvaVentasLineas> {
+public class FiscalLibroIvaVentasLineasFacade extends AbstractFacade<FiscalLibroIvaVentasLineas, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;

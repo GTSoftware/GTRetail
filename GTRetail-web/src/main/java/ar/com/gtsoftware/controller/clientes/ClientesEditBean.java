@@ -40,6 +40,7 @@ import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,6 +82,9 @@ public class ClientesEditBean implements Serializable {
     private UbicacionLocalidadesFacade localidadesFacade;
     @EJB
     private UbicacionProvinciasFacade provinciasFacade;
+
+    @EJB
+    private JSFUtil jsfUtil;
     private Personas clienteActual;
     private PersonasTelefonos telefonoActual = new PersonasTelefonos();
     private List<PersonasTelefonos> telefonos = new ArrayList<>();
@@ -96,7 +100,7 @@ public class ClientesEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = jsfUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {
@@ -115,6 +119,7 @@ public class ClientesEditBean implements Serializable {
     public void nuevo() {
         clienteActual = new Personas();
         clienteActual.setCliente(true);
+        clienteActual.setActivo(true);
         clienteActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
     }
 
@@ -165,7 +170,7 @@ public class ClientesEditBean implements Serializable {
     }
 
     public List<LegalGeneros> getGenerosList() {
-        return generosFacade.findBySearchFilter(new GenerosSearchFilter(clienteActual.getIdTipoPersoneria()));
+        return generosFacade.findAllBySearchFilter(new GenerosSearchFilter(clienteActual.getIdTipoPersoneria()));
 
     }
 
@@ -178,13 +183,19 @@ public class ClientesEditBean implements Serializable {
     }
 
     public List<UbicacionProvincias> getProvinciasList() {
-        ProvinciasSearchFilter psf = new ProvinciasSearchFilter(clienteActual.getIdPais());
-        return provinciasFacade.findBySearchFilter(psf);
+        if (clienteActual.getIdPais() != null) {
+            ProvinciasSearchFilter psf = new ProvinciasSearchFilter(clienteActual.getIdPais());
+            return provinciasFacade.findAllBySearchFilter(psf);
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public List<UbicacionLocalidades> getLocalidadesList() {
-        LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
-        return localidadesFacade.findBySearchFilter(lsf);
+        if (clienteActual.getIdProvincia() != null) {
+            LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
+            return localidadesFacade.findAllBySearchFilter(lsf);
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public PersonasTelefonos getTelefonoActual() {

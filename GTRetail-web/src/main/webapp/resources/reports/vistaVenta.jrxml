@@ -37,9 +37,6 @@
     <field name="id_1" class="java.lang.Integer">
         <fieldDescription><![CDATA[id]]></fieldDescription>
     </field>
-    <field name="comprobantesPagosLineasList" class="java.util.List">
-        <fieldDescription><![CDATA[comprobantesPagosLineasList]]></fieldDescription>
-    </field>
     <field name="comprobantesLineasList" class="java.util.List">
         <fieldDescription><![CDATA[comprobantesLineasList]]></fieldDescription>
     </field>

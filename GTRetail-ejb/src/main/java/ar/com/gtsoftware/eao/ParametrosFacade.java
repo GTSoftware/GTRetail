@@ -18,7 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Parametros_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,7 +34,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class ParametrosFacade extends AbstractFacade<Parametros> {
+public class ParametrosFacade extends AbstractFacade<Parametros, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -50,8 +50,9 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
 
     /**
      * Busca el parámetro con exactamente el nombre especificado
+     *
      * @param nombre
-     * @return 
+     * @return
      */
     public Parametros findParametroByName(String nombre) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -71,8 +72,9 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
 
     /**
      * Busca los parámetros que coincidan con txt
+     *
      * @param txt
-     * @return 
+     * @return
      */
     public List<Parametros> findParametros(String txt) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -88,26 +90,11 @@ public class ParametrosFacade extends AbstractFacade<Parametros> {
         if (!paramList.isEmpty()) {
             return paramList;
         }
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Parametros> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Parametros> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(Parametros entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

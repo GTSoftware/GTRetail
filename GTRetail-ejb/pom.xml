@@ -14,59 +14,22 @@
 
 
     <dependencies>
-        <!-- Import the CDI API, we use provided scope as the API is included in JBoss EAP 6 -->
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
-        <!-- Import the Common Annotations API (JSR-250), we use provided scope
-        as the API is included in JBoss EAP 6 -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.annotation</groupId>
-            <artifactId>jboss-annotations-api_1.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Import the EJB API, we use provided scope as the API is included in JBoss EAP 6 -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-core</artifactId>
-            <scope>test</scope>
-            <type>jar</type>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
-            <version>4.0.2-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${apache-commons-lang3.version}</version>
+
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -85,7 +48,30 @@
             <version>1.54</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
 
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- Annotation processor to generate the JPA 2.0 metamodel classes for
+        typesafe criteria queries -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
+            <version>${eclipselink.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <!-- Build Configuration -->
     <build>
@@ -122,13 +108,13 @@
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <version>9.3-1102-jdbc41</version>
+                        <version>9.4.1209.jre7</version>
                         <scope>compile</scope>
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <user>retail</user>
-                    <password>retail</password>
+                    <user>postgres</user>
+                    <password>postgres</password>
                     <url>jdbc:postgresql://localhost/retail</url>
                     <schemas>
                         <schema>public</schema>
@@ -137,6 +123,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>

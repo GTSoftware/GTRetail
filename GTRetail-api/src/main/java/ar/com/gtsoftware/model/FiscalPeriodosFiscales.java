@@ -104,9 +104,4 @@ public class FiscalPeriodosFiscales extends BaseEntity {
         this.periodoCerrado = periodoCerrado;
     }
 
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.FiscalPeriodosFiscales[ idPeriodoFiscal=" + this.getId() + " ]";
-    }
-
 }

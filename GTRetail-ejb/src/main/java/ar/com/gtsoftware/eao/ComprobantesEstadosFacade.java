@@ -29,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ComprobantesEstadosFacade extends AbstractFacade<ComprobantesEstados> {
+public class ComprobantesEstadosFacade extends AbstractFacade<ComprobantesEstados, AbstractSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;

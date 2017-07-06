@@ -15,33 +15,7 @@
 
     <dependencies>
 
-        <!-- Import the JSF API, we use provided scope as the API is included in JBoss EAP -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.faces</groupId>
-            <artifactId>jboss-jsf-api_2.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
-        <!-- Import the CDI API, we use provided scope as the API is included in JBoss EAP -->
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Import the JPA API, we use provided scope as the API is included in JBoss EAP -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Import the EJB API, we use provided scope as the API is included in JBoss EAP -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -51,8 +25,8 @@
 
         <dependency>
             <groupId>org.primefaces.themes</groupId>
-            <artifactId>all-themes</artifactId>
-            <version>${primefaces-themes.version}</version>
+            <artifactId>olympos-theme</artifactId>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
@@ -64,7 +38,6 @@
             <artifactId>GTRetail-ejb</artifactId>
             <type>ejb</type>
             <scope>provided</scope>
-            <version>4.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -75,6 +48,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
             <scope>provided</scope>
+            <version>4.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
@@ -85,24 +59,14 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>5.6.1</version>
+            <version>${jasperreports.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports-fonts</artifactId>
-            <version>5.6.1</version>
+            <version>${jasperreports-fonts.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <type>jar</type>
-        </dependency>
+
         <dependency>
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
@@ -129,6 +93,26 @@
             <version>3.12</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -143,7 +127,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
+                <version>${version.war.plugin}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -173,7 +157,7 @@
                     <dependency>
                         <groupId>net.sf.jasperreports</groupId>
                         <artifactId>jasperreports</artifactId>
-                        <version>5.6.0</version>
+                        <version>${jasperreports.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>com.lowagie</groupId>
@@ -185,12 +169,12 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
+    <!--    <repositories>
         <repository>
             <url>http://repository.primefaces.org/</url>
             <id>PrimeFaces-maven-lib</id>
             <layout>default</layout>
             <name>Repository for library PrimeFaces-maven-lib</name>
         </repository>
-    </repositories>
+    </repositories>-->
 </project>

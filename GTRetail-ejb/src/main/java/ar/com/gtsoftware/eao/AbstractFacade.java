@@ -19,11 +19,15 @@ import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -36,17 +40,21 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  * @param <T>
+ * @param <S>
  */
-public abstract class AbstractFacade<T extends GTEntity> {
+public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSearchFilter> {
 
     private final Class<T> entityClass;
 
     private static final Logger LOG = Logger.getLogger(AbstractFacade.class.getName());
+    private static final String LOAD_GRAPH = "javax.persistence.loadgraph";
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -60,21 +68,27 @@ public abstract class AbstractFacade<T extends GTEntity> {
         getEntityManager().flush();
     }
 
-    public void edit(T entity) {
+    public T edit(T entity) {
         constraintViolationsDetected(entity);
-        getEntityManager().merge(entity);
+        T mergedEntity = getEntityManager().merge(entity);
         getEntityManager().flush();
+        return mergedEntity;
 
     }
 
     public void remove(T entity) {
-        getEntityManager().remove(getEntityManager().merge(entity));
+        getEntityManager().refresh(entity);
+        getEntityManager().remove(entity);
         getEntityManager().flush();
 
     }
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
+    }
+
+    public T find(Object id, String entityGraph) {
+        return getEntityManager().find(entityClass, id, createHints(entityGraph));
     }
 
     public List<T> findAll() {
@@ -100,13 +114,36 @@ public abstract class AbstractFacade<T extends GTEntity> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    protected abstract Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<T> root);
+    protected abstract Predicate createWhereFromSearchFilter(S sf, CriteriaBuilder cb, Root<T> root);
 
-    public List<T> findAllBySearchFilter(AbstractSearchFilter sf) {
+    private Map<String, Object> createHints(S sf) {
+        if (sf.hasNamedEntityGraph()) {
+            return createHints(sf.getNamedEntityGraph());
+        }
+        return Collections.EMPTY_MAP;
+    }
+
+    private Map<String, Object> createHints(String namedEntityGraph) {
+        if (StringUtils.isNotEmpty(namedEntityGraph)) {
+            Map<String, Object> hints = new HashMap<>();
+            List<EntityGraph<? super T>> graphs = getEntityManager().getEntityGraphs(this.entityClass);
+            for (EntityGraph<? super T> eg : graphs) {
+                if (eg.getName().equalsIgnoreCase(namedEntityGraph)) {
+                    hints.put(LOAD_GRAPH, eg);
+                    break;
+                }
+            }
+            return hints;
+
+        }
+        return Collections.EMPTY_MAP;
+    }
+
+    public List<T> findAllBySearchFilter(S sf) {
         return findBySearchFilter(sf, 0, countBySearchFilter(sf));
     }
 
-    public List<T> findBySearchFilter(AbstractSearchFilter sf, int firstResult, int maxResults) {
+    public List<T> findBySearchFilter(S sf, int firstResult, int maxResults) {
 
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
@@ -124,12 +161,17 @@ public abstract class AbstractFacade<T extends GTEntity> {
         TypedQuery<T> q = getEntityManager().createQuery(cq);
         q.setMaxResults(maxResults);
         q.setFirstResult(firstResult);
+        Map<String, Object> hints = createHints(sf);
+
+        if (!hints.isEmpty()) {
+            hints.forEach((x, y) -> q.setHint(x, y));
+        }
         List<T> resultList = q.getResultList();
         return resultList;
 
     }
 
-    protected List<Order> createOrderFromSearchFilter(AbstractSearchFilter sf, Root<T> root, CriteriaBuilder cb) {
+    protected List<Order> createOrderFromSearchFilter(S sf, Root<T> root, CriteriaBuilder cb) {
         List<Order> orders = new ArrayList<>();
         for (SortField sof : sf.getSortFields()) {
             Order ord;
@@ -161,7 +203,7 @@ public abstract class AbstractFacade<T extends GTEntity> {
      * @param sf el filtro de búsqueda
      * @return la cantidad de elementos encontrados
      */
-    public int countBySearchFilter(AbstractSearchFilter sf) {
+    public int countBySearchFilter(S sf) {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
         cq.select(getEntityManager().getCriteriaBuilder().count(rt));
@@ -176,12 +218,13 @@ public abstract class AbstractFacade<T extends GTEntity> {
     /**
      * Devuelve el primer elemento encontrado por el filtro de búsqueda.
      *
+     *
      * @param sf el filtro de búsuqeda
      * @return el primer elemento o null si no encuentra ninguno.
      */
-    public T findFirstBySearchFilter(AbstractSearchFilter sf) {
+    public T findFirstBySearchFilter(S sf) {
         List<T> results = findBySearchFilter(sf, 0, 1);
-        if (results.isEmpty()) {
+        if (CollectionUtils.isEmpty(results)) {
             return null;
         }
         return results.get(0);
@@ -243,16 +286,19 @@ public abstract class AbstractFacade<T extends GTEntity> {
      * Crea o edita la entidad pasada como parámetro según sea necesario
      *
      * @param entity
+     * @return T
      */
-    public void createOrEdit(T entity) {
+    public T createOrEdit(T entity) {
         if (entity == null) {
-            return;
+            throw new IllegalArgumentException("Null entity passed to persist!");
         }
         if (entity.isNew()) {
             create(entity);
         } else {
-            edit(entity);
+            T edit = edit(entity);
+            return edit;
         }
+        return entity;
     }
 
     private boolean constraintViolationsDetected(T entity) {
@@ -263,7 +309,8 @@ public abstract class AbstractFacade<T extends GTEntity> {
             Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
             while (iterator.hasNext()) {
                 ConstraintViolation<T> cv = iterator.next();
-                LOG.log(Level.SEVERE, "{0}.{1} {2}", new Object[]{cv.getRootBeanClass().getName(), cv.getPropertyPath(), cv.getMessage()});
+                LOG.log(Level.SEVERE, "{0}.{1} {2}",
+                        new Object[]{cv.getRootBeanClass().getName(), cv.getPropertyPath(), cv.getMessage()});
             }
             return true;
         } else {

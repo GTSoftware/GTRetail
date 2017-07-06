@@ -17,6 +17,7 @@ package ar.com.gtsoftware.converters;
 
 import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.model.GTEntity;
+import ar.com.gtsoftware.search.AbstractSearchFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
@@ -28,8 +29,9 @@ import javax.faces.convert.Converter;
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @param <T>
+ * @param <S>
  */
-public abstract class AbstractEntityConverter<T extends GTEntity> implements Converter {
+public abstract class AbstractEntityConverter<T extends GTEntity<?>, S extends AbstractSearchFilter> implements Converter {
 
     private final Class<T> entityClass;
 
@@ -58,12 +60,14 @@ public abstract class AbstractEntityConverter<T extends GTEntity> implements Con
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object value) {
         if (value == null) {
             return null;
         }
         try {
+
             T entity = (T) value;
             return entity.getStringId();
         } catch (ClassCastException ex) {
@@ -71,5 +75,5 @@ public abstract class AbstractEntityConverter<T extends GTEntity> implements Con
         }
     }
 
-    protected abstract AbstractFacade<T> getFacade();
+    protected abstract AbstractFacade<T, S> getFacade();
 }

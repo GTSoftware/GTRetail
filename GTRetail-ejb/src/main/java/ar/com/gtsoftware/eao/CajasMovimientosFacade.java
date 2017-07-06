@@ -15,17 +15,12 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasMovimientos;
-import ar.com.gtsoftware.model.CajasMovimientos_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.math.BigDecimal;
-import java.util.List;
+import ar.com.gtsoftware.search.CajasMovimientosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -34,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class CajasMovimientosFacade extends AbstractFacade<CajasMovimientos> {
+public class CajasMovimientosFacade extends AbstractFacade<CajasMovimientos, CajasMovimientosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -48,38 +43,10 @@ public class CajasMovimientosFacade extends AbstractFacade<CajasMovimientos> {
         super(CajasMovimientos.class);
     }
 
-    public BigDecimal findSaldoCaja(Cajas caja) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
-        Root<CajasMovimientos> cuenta = cq.from(CajasMovimientos.class);
-        cq.select(cb.sum(cuenta.get(CajasMovimientos_.importeMovimiento)).alias("SUM"));
-        Predicate p = cb.equal(cuenta.get(CajasMovimientos_.idCaja), caja);
-        cq.where(p);
-        BigDecimal result = em.createQuery(cq).getSingleResult();
-        if (result == null) {
-            return BigDecimal.ZERO;
-        }
-        return result;
-    }
-
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<CajasMovimientos> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Predicate createWhereFromSearchFilter(CajasMovimientosSearchFilter psf, CriteriaBuilder cb, Root<CajasMovimientos> root) {
+        return null;
 
-    @Override
-    public List<CajasMovimientos> findAllBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int countBySearchFilter(AbstractSearchFilter sf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createOrEdit(CajasMovimientos entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

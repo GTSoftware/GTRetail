@@ -1,23 +1,78 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:rich="http://richfaces.org/rich"
-                xmlns:a4j="http://richfaces.org/a4j"
-                template="/WEB-INF/templates/error_tpl.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{msg.appName}</title>
+        <ui:insert name="head" />
+        <link rel="shortcut icon" href="#{resource['images/favicon.png']}" type="image/png"/>
+        <link rel="icon" href="#{resource['images/favicon.png']}" type="image/png"/>
+    </h:head>
 
-    <ui:define name="content">
-        <p:separator/>
-        <h:form>
+    <h:body styleClass="BlackBack">
 
-            <h1>El recurso solicitado no existe</h1>
-            <br/>
-            <legend>El recurso solicitado no existe en este servidor.</legend>
+        <div class="Wid80 MarAuto">
+            <div class="Wid70 MarAuto WidAutoOnMobile TexAlCenter">
 
-        </h:form>
-    </ui:define>
-</ui:composition>
+                <div class="EmptyBox100 ShowOnDesktop"></div>
+                <div class="EmptyBox20 ShowOnMobile"></div>
+                <div class="Wid50 MarAuto WidAutoOnMobile">
+                    <div class="Wid100 FontLatoRegular White Fs18">Lo sentimos, pero el recurso que estabas buscando <br/> no se ha podido encontrar.</div>
+                    <div class="EmptyBox30"></div>
+                    <div class="Card ui-fluid ShadowEffect">
+                        <div class="EmptyBox20"></div>
+                        <div class="Container100">
+                            <i class="icon-cone Fs100 Aqua"></i>
+                        </div>
+                        <div class="Container100 FontLatoBlack Fs30 Aqua">
+                            404 Page Not Found !
+                        </div>
+                        <div class="EmptyBox10"></div>
+                        <div class="Container100">
+                            <p:button value="Volver al inicio" styleClass="BlueButton" href="/index.html"/>
+                        </div>
+
+                        <div class="EmptyBox10"></div>
+                        <!--                        <div class="Separator"></div>
+                                                <div class="EmptyBox10"></div>
+
+                                                <span class="DispBlock OvHidden FontLatoBold Fs16 SoftGray">Or Contact With Admin</span>
+                                                <div class="EmptyBox10"></div>
+                                                <div class="Container100">
+                                                    <p:inputText placeholder="Your E-Mail" style="padding:15px !important;"/>
+                                                </div>
+                                                <div class="Container100">
+                                                    <p:inputTextarea rows="3" placeholder="Your Message" style="padding:15px !important;"/>
+                                                </div>
+                                                <div class="Container100">
+                                                    <p:commandButton type="button"  value="Send To Admin" styleClass="OrangeButton"/>
+                                                </div>-->
+
+                    </div>
+
+                    <div class="EmptyBox20"></div>
+                    <div class="Wid100 FontLatoRegular Fs12 TransparentWhite"> <i class="fa fa-copyright DispInlBlock"></i> GT Retail <br/>Version:  #{version.version} Build: #{version.build}.</div>
+                    <div class="EmptyBox30"></div>
+                </div>
+            </div>
+        </div>
+
+        <style>.ui-button-text, .ui-button-text-only .ui-button-text{padding:15px !important; transition:none !important;}</style>
+
+        <h:outputStylesheet name="css/core-layout.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/font-awesome.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/animate.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/olympos-layout.css" library="olympos-layout" />
+        <h:outputStylesheet name="css/olympos-font.css" library="olympos-layout" />
+    </h:body>
+
+</html>

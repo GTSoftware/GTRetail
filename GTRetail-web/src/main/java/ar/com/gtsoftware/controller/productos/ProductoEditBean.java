@@ -86,6 +86,9 @@ public class ProductoEditBean implements Serializable {
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
 
+    @EJB
+    private JSFUtil jsfUtil;
+
     private Productos productoActual;
 
     private List<ProductosMarcas> listMarcas = new ArrayList<>();
@@ -112,11 +115,12 @@ public class ProductoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idProducto = JSFUtil.getRequestParameterMap().get("idProducto");
-        String duplicar = JSFUtil.getRequestParameterMap().get("duplicar");
+        String idProducto = jsfUtil.getRequestParameterMap().get("idProducto");
+        String duplicar = jsfUtil.getRequestParameterMap().get("duplicar");
         if (idProducto == null) {
             nuevo();
         } else {
+
             productoActual = productosFacade.find(Long.parseLong(idProducto));
 
             if (productoActual == null) {
@@ -126,7 +130,7 @@ public class ProductoEditBean implements Serializable {
             }
             if (duplicar != null && duplicar.equals("1")) {
                 productoActual.setId(null);
-                //TODO ver como duplicar todos los datos
+                // TODO ver como duplicar todos los datos
             }
         }
         initDatos();
@@ -195,7 +199,7 @@ public class ProductoEditBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
 
         }
     }
@@ -215,7 +219,7 @@ public class ProductoEditBean implements Serializable {
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
 
         }
 
@@ -235,12 +239,13 @@ public class ProductoEditBean implements Serializable {
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }
 
     public void doGuardar() {
+
         try {
 
             if (productoActual.isNew()) {
@@ -248,12 +253,13 @@ public class ProductoEditBean implements Serializable {
                 actualizarPrecios();
 
             }
+
             productosFacade.createOrEdit(productoActual);
-            JSFUtil.addInfoMessage("Producto guardado Exitosamente");
+            jsfUtil.addInfoMessage("Producto guardado Exitosamente");
             productoActual = productosFacade.find(productoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfUtil.addErrorMessage("Error al guardar");
         }
 
     }
@@ -261,7 +267,8 @@ public class ProductoEditBean implements Serializable {
     public void actualizarPrecios() {
         BigDecimal costoAdquisicionNeto = productoActual.getCostoAdquisicionNeto();
         BigDecimal costoFinal = costoAdquisicionNeto;
-        BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN).add(BigDecimal.ONE);
+        BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN)
+                .add(BigDecimal.ONE);
         if (productoActual.getPorcentajes() != null) {
             for (ProductosPorcentajes pp : productoActual.getPorcentajes()) {
                 if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
@@ -301,9 +308,8 @@ public class ProductoEditBean implements Serializable {
         }
         if (!listaExistente) {
             ProductosPrecios pp = new ProductosPrecios();
-
-            pp.setIdProducto(productoActual);
             pp.setIdListaPrecios(listaSeleccionada);
+            pp.setIdProducto(productoActual);
             productoActual.getPrecios().add(pp);
         }
 

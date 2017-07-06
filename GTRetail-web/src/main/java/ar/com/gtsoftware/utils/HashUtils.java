@@ -20,6 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.commons.codec.binary.Base64;
  */
 public abstract class HashUtils {
 
-    private static final Logger log = Logger.getLogger(HashUtils.class.getName());
+    private static final Logger LOG = Logger.getLogger(HashUtils.class.getName());
 
     public static String getHash(String message) {
         try {
@@ -37,9 +38,9 @@ public abstract class HashUtils {
             byte[] digest = sha.digest();
             String hash = Base64.encodeBase64String(digest);
             return hash;
-            
+
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            Logger.getLogger(HashUtils.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return null;
     }

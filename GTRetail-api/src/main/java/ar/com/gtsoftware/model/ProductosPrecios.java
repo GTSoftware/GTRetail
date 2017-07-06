@@ -15,15 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
-import ar.com.gtsoftware.model.pk.ProductosPreciosPK;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -31,6 +28,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -39,32 +37,31 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
-@Table(name = "productos_precios")
+@Table(name = "productos_precios", uniqueConstraints = @UniqueConstraint(columnNames = {"id_producto", "id_lista_precio"}))
 @XmlRootElement
-public class ProductosPrecios extends GTEntity {
+@AttributeOverride(name = "id", column = @Column(name = "productos_precios_id", columnDefinition = "serial"))
+public class ProductosPrecios extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
 
-    @Id
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false, columnDefinition = "int4")
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    @ManyToOne(optional = false)
     private Productos idProducto;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio", updatable = false,
-            columnDefinition = "int4")
+    @JoinColumn(name = "id_lista_precio", referencedColumnName = "id_lista_precio")
+    @ManyToOne(optional = false)
     private ProductosListasPrecios idListaPrecios;
+
     @Basic(optional = false)
-    @Column(name = "utilidad", scale = 4, precision = 8)
+    @Column(name = "utilidad")
     private BigDecimal utilidad;
 
     @Basic(optional = false)
-    @Column(name = "precio", scale = 4, precision = 19)
+    @Column(name = "precio")
     private BigDecimal precio;
 
     @Basic(optional = false)
-    @Column(name = "neto", scale = 4, precision = 19)
+    @Column(name = "neto")
     private BigDecimal neto;
 
     @Basic(optional = false)
@@ -73,28 +70,7 @@ public class ProductosPrecios extends GTEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    @Override
-    public boolean isNew() {
-        return idProducto == null && idListaPrecios == null;
-    }
-
     public ProductosPrecios() {
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public ProductosListasPrecios getIdListaPrecios() {
-        return idListaPrecios;
-    }
-
-    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
-        this.idListaPrecios = idListaPrecios;
     }
 
     public BigDecimal getUtilidad() {
@@ -121,62 +97,6 @@ public class ProductosPrecios extends GTEntity {
         this.neto = neto;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.idProducto);
-        hash = 59 * hash + Objects.hashCode(this.idListaPrecios);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ProductosPrecios other = (ProductosPrecios) obj;
-        if (!Objects.equals(this.idProducto, other.idProducto)) {
-            return false;
-        }
-        if (!Objects.equals(this.idListaPrecios, other.idListaPrecios)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public ProductosPreciosPK getId() {
-        if (isNew()) {
-            return null;
-        }
-        return new ProductosPreciosPK(idProducto, idListaPrecios);
-    }
-
-    @Override
-    public ProductosPreciosPK calculateId(String id) {
-
-        if (id != null) {
-            String[] pkStr = id.split("-");
-            if (pkStr.length == 2) {
-                ProductosPreciosPK pk = new ProductosPreciosPK();
-                pk.setIdProducto(new Productos(Long.parseLong(pkStr[0])));
-                pk.setIdListaPrecios(new ProductosListasPrecios(Long.parseLong(pkStr[1])));
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getStringId() {
-        if (isNew()) {
-            return null;
-        }
-        return new ProductosPreciosPK(idProducto, idListaPrecios).toString();
-    }
-
     public Date getFechaModificacion() {
         return fechaModificacion;
     }
@@ -190,4 +110,21 @@ public class ProductosPrecios extends GTEntity {
     protected void onUpdate() {
         fechaModificacion = new Date();
     }
+
+    public Productos getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Productos idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public ProductosListasPrecios getIdListaPrecios() {
+        return idListaPrecios;
+    }
+
+    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
+        this.idListaPrecios = idListaPrecios;
+    }
+
 }

@@ -17,7 +17,6 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosPorcentajes;
 import ar.com.gtsoftware.model.ProductosPorcentajes_;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.ProductosPorcentajesSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-public class ProductosPorcentajesFacade extends AbstractFacade<ProductosPorcentajes> {
+public class ProductosPorcentajesFacade extends AbstractFacade<ProductosPorcentajes, ProductosPorcentajesSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -46,8 +45,8 @@ public class ProductosPorcentajesFacade extends AbstractFacade<ProductosPorcenta
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<ProductosPorcentajes> root) {
-        ProductosPorcentajesSearchFilter psf = (ProductosPorcentajesSearchFilter) sf;
+    public Predicate createWhereFromSearchFilter(ProductosPorcentajesSearchFilter psf, CriteriaBuilder cb, Root<ProductosPorcentajes> root) {
+
         Predicate p = null;
         if (psf.getProducto() != null) {
             Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idProducto), psf.getProducto());
