@@ -1,12 +1,21 @@
 --Elimino tablas viejas de pagos que no se utilizaban
-DROP TABLE comprobantes_pagos_lineas;
+DROP TABLE IF EXISTS recibos_detalle;
+DROP TABLE IF EXISTS recibos;
+DROP TABLE IF EXISTS comprobantes_pagos_lineas;
 
-DROP TABLE comprobantes_pagos;
+DROP TABLE IF EXISTS comprobantes_pagos;
 
-DROP TABLE cajas_movimientos;
+DROP TABLE IF EXISTS cajas_movimientos;
 
-DROP TABLE cajas_categorias_movimientos;
-DROP TABLE cajas;
+DROP TABLE IF EXISTS cajas_categorias_movimientos;
+DROP TABLE IF EXISTS cajas;
+DROP TABLE IF EXISTS negocio_planes_pago_listas;
+DROP TABLE IF EXISTS negocio_planes_pago_detalle;
+drop table if exists negocio_planes_pago;
+drop table if exists cupones;
+drop table if exists valores;
+
+
 
 --Tabla para manejar la generación de ID en vez de el secuencial
 -- create table numeraciones (
@@ -16,8 +25,8 @@ DROP TABLE cajas;
 
 -- comment on table numeraciones is 'Generador de ID para las tablas';
 
-alter table negocio_formas_pago add column requiere_plan boolean not null default false;
-alter table negocio_formas_pago add column requiere_valores boolean not null default false;
+alter table negocio_formas_pago add column IF NOT EXISTS requiere_plan boolean not null default false;
+alter table negocio_formas_pago add column IF NOT EXISTS requiere_valores boolean not null default false;
 
 comment on column negocio_formas_pago.requiere_plan is 'Si requiere que tenga al menos un plan asociado para poder ser utilizado';
 comment on column negocio_formas_pago.requiere_valores is 'Si la forma de pago requiere el ingreso de valores que la representen';
@@ -154,7 +163,7 @@ create table recibos_detalle (
 comment on table recibos_detalle is 'Detalle de los valores y comprobantes asociados al recibo';
 -- insert into numeraciones values ('recibos_detalle',0);
 
-DROP TABLE comprobantes_estados_historico;
+DROP TABLE IF EXISTS comprobantes_estados_historico;
 --Arreglos para generación de índices por medio de tabla de numeraciones
 -- DROP SEQUENCE bancos_cuenta_corriente_id_movimiento_seq CASCADE; INSERT INTO numeraciones VALUES ('bancos_cuenta_corriente',COALESCE((SELECT MAX(id_movimiento)+1 FROM bancos_cuenta_corriente),1));
 -- DROP SEQUENCE bancos_cuentas_id_cuenta_banco_seq CASCADE; INSERT INTO numeraciones VALUES ('bancos_cuentas',COALESCE((SELECT MAX(id_cuenta_banco)+1 FROM bancos_cuentas),1));
@@ -213,8 +222,9 @@ DROP TABLE comprobantes_estados_historico;
 
 
 alter table productos_precios drop constraint productos_precios_pkey;
+alter table productos_precios drop constraint IF EXISTS productos_precios_unique;
 
-alter table productos_precios add column productos_precios_id serial primary key;
+alter table productos_precios add column IF NOT EXISTS productos_precios_id serial primary key;
 
 alter table productos_precios add constraint productos_precios_unique unique (id_producto, id_lista_precio);
 

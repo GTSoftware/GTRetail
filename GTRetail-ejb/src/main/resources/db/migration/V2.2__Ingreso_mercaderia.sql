@@ -75,7 +75,7 @@ CREATE TABLE remitos
       REFERENCES usuarios (id_usuario) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_remitos_movimientos_tipos FOREIGN KEY (id_tipo_movimiento)
-      REFERENCES remito_movimientos_tipos (id_tipo_movimiento) MATCH SIMPLE
+      REFERENCES remitos_movimientos_tipos (id_tipo_movimiento) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
