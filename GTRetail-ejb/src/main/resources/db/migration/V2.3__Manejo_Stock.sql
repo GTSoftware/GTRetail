@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2017 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.model.enums;
-
 /**
- * Tipos posibles de puntos de venta
- *
- * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
+ * Author:  Rodrigo
+ * Created: Jul 14, 2017
  */
-public enum TiposPuntosVenta {
-
-    MANUAL, CONTROLADOR_FISCAL, ELECTRONICO, CONTROLADOR_FISCAL_V2;
-
-}
