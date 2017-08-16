@@ -22,8 +22,8 @@ CREATE TABLE productos_x_depositos
 (
   id_producto_x_deposito serial primary key,
   id_producto integer NOT NULL,
-  id_deposito integer,
-  stock numeric(19,2),
+  id_deposito integer NOT NULL,
+  stock numeric(19,2) NOT NULL,
   version integer not null default 0,
   CONSTRAINT fk_deposito FOREIGN KEY (id_deposito)
       REFERENCES depositos (id_deposito) MATCH SIMPLE
@@ -56,7 +56,7 @@ CREATE TABLE remitos
   destino_previsto_interno integer,
   destino_previsto_externo integer,
   destino_is_interno boolean,
-  fecha_cierre time without time zone,
+  fecha_cierre timestamp without time zone,
   id_tipo_movimiento integer NOT NULL,
   version integer NOT NULL DEFAULT 0,
   CONSTRAINT fk_destino_persona FOREIGN KEY (destino_previsto_externo)

@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Depositos extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+    private static final String BUSINESS_STRING = "[%d] %s Suc: %s";
 
     @Basic(optional = false)
     @NotNull
@@ -168,5 +169,9 @@ public class Depositos extends BaseEntity {
     @PrePersist
     protected void onCreate() {
         fechaAlta = new Date();
+    }
+
+    public String getBusinessString() {
+        return String.format(BUSINESS_STRING, this.getId(), nombreDeposito, idSucursal.getBusinessString());
     }
 }

@@ -15,6 +15,17 @@
  */
 package ar.com.gtsoftware.controller.productos;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.eao.DepositosFacade;
 import ar.com.gtsoftware.eao.RemitoFacade;
@@ -23,15 +34,6 @@ import ar.com.gtsoftware.model.Remito;
 import ar.com.gtsoftware.model.RemitoDetalle;
 import ar.com.gtsoftware.model.RemitoRecepcion;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -64,7 +66,13 @@ public class IngresoMercaderiaBean implements Serializable {
     public void init() {
 
         remitoCabecera.setDetalleList(new ArrayList<>());
-        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));//TODO: ID deposito Cableado por el momento
+        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));// TODO:
+                                                                             // ID
+                                                                             // deposito
+                                                                             // Cableado
+                                                                             // por
+                                                                             // el
+                                                                             // momento
         remitoCabecera.setIdUsuario(authBackingBean.getUserLoggedIn());
         remitoCabecera.setFechaAlta(new Date());
         remitoCabecera.setIsOrigenInterno(Boolean.FALSE);
@@ -108,11 +116,10 @@ public class IngresoMercaderiaBean implements Serializable {
         remitoCabecera.setRemitoRecepcionesList(Arrays.asList(recepcion));
         remitoFacade.create(remitoCabecera);
 
-        //TODO: Recorrer la lista de productos y actualziar el stock
         return "/protected/index.xhtml?faces-redirect=true";
     }
 
-    //---Getter and Setter ----------------------------------------------
+    // ---Getter and Setter ----------------------------------------------
     public Remito getRemitoCabecera() {
         return remitoCabecera;
     }

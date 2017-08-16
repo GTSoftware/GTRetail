@@ -195,4 +195,28 @@ public class Remito extends BaseEntity {
         this.remitoRecepcionesList = remitoRecepcionesList;
     }
 
+    /**
+     * Devuelve la representación en Stirng del origen del remito.
+     *
+     * @return un String que representa el origen
+     */
+    public String getNombreOrigen() {
+        if (this.isOrigenInterno) {
+            return String.format("INTERNO: %s", this.getIdOrigenInterno().getBusinessString());
+        }
+        return String.format("EXTERNO: %s", this.getIdOrigenExterno().getBusinessString());
+    }
+
+    /**
+     * Devuelve la representación en Stirng del destino del remito.
+     *
+     * @return un String que representa el destino
+     */
+    public String getNombreDestino() {
+        if (this.isDestinoInterno) {
+            return String.format("INTERNO: %s", this.getIdDestinoPrevistoInterno().getBusinessString());
+        }
+        return String.format("EXTERNO: %s", this.getIdDestinoPrevistoExterno().getBusinessString());
+    }
+
 }

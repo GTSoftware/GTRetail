@@ -34,10 +34,7 @@
                     <p:menuitem id="actualizacionMasivaPreciosItem" value="#{msg.actualizacionMasivaPrecios}"
                                 action="/protected/productos/precios/actualizarPrecios.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
-                    <p:menuitem id="ingresoMercaderiaItem"
-                                value="#{msg.ingresoMercaderia}"
-                                action="/protected/ingreso_mercaderia/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+
                 </p:submenu>
 
                 <p:submenu id="fiscalItem" label="#{msg.fiscal}" icon="fa fa-fw fa-book">
@@ -74,6 +71,21 @@
                     <p:menuitem id="planesPagoItem" value="#{msg.planesPago}"
                                 action="/protected/archivos/planes_pago/planPagoSearch.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
+                </p:submenu>
+                <p:submenu id="stockSubMenu" label="#{msg.stock}" icon="fa fa-fw fa-box">
+                    <p:menuitem id="nuevoRemitoItem" value="#{msg.nuevoRemito}"
+                                action="/protected/stock/remitos/nuevo/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+                    <p:menuitem id="ingresoMercaderiaItem"
+                                value="#{msg.ingresoMercaderia}"
+                                action="/protected/stock/ingreso_mercaderia/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+
+                    <p:menuitem id="listadoRemitosItem"
+                                value="#{msg.remitoListado}"
+                                action="/protected/stock/remitos/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
+
                 </p:submenu>
 
                 <p:submenu id="cajaSubMenu" label="#{msg.caja}" icon="fa fa-fw fa-bank">

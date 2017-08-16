@@ -36,18 +36,38 @@ public abstract class AbstractSearchFilter implements Serializable {
 
     private String namedEntityGraph;
 
+    /**
+     * Devuelve true si existe al menos un filtro de búsqueda establecido.
+     *
+     * @return true si hay algún filtro para buscar entidades.
+     */
     public boolean hasFilter() {
         return false;
     }
 
+    /**
+     * Devuelve true si existen atributos de ordenamientos para las entidades.
+     *
+     * @return true si hay atributos de ordenamiento.
+     */
     public boolean hasOrderFields() {
         return CollectionUtils.isNotEmpty(sortFields);
     }
 
+    /**
+     * Devuelve true si existen entity graph
+     *
+     * @return
+     */
     public boolean hasNamedEntityGraph() {
         return StringUtils.isNotEmpty(namedEntityGraph);
     }
 
+    /**
+     * Retorna el listado de atributos de ordenamiento.
+     *
+     * @return
+     */
     public List<SortField> getSortFields() {
         return sortFields;
     }
@@ -81,10 +101,20 @@ public abstract class AbstractSearchFilter implements Serializable {
         sortFields = null;
     }
 
+    /**
+     * Retorna el nombre del Entity graph
+     *
+     * @return
+     */
     public String getNamedEntityGraph() {
         return namedEntityGraph;
     }
 
+    /**
+     * Establece el nombde del entity graph
+     *
+     * @param namedEntityGraph
+     */
     public void setNamedEntityGraph(String namedEntityGraph) {
         this.namedEntityGraph = namedEntityGraph;
     }

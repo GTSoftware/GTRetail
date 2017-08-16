@@ -28,13 +28,17 @@ limitations under the License.
 
         <composite:attribute name="productoSeleccionado" type="ar.com.gtsoftware.model.Productos" />
         <composite:attribute name="listaPrecios" type="ar.com.gtsoftware.model.ProductosListasPrecios" />
+        <composite:attribute name="soloConStock" type="java.lang.Boolean" />
+        <composite:attribute name="puedeComprarse" type="java.lang.Boolean" />
+        <composite:attribute name="puedeVenderse" type="java.lang.Boolean" />
 
 
     </composite:interface>
 
     <composite:implementation>
 
-        <f:event type="preRenderView" listener="#{productosSearchBean.setListaSeleccionada(cc.attrs.listaPrecios)}" />
+        <f:event type="preRenderView" listener="#{productosSearchBean.setParametros(cc.attrs.listaPrecios,
+                                                  cc.attrs.soloConStock,cc.attrs.puedeVenderse,cc.attrs.puedeComprarse)}" />
 
         <div class="Container100 ui-fluid">
 

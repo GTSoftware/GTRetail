@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 GT Software.
+ * Copyright 2014 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,20 @@
 package ar.com.gtsoftware.search;
 
 /**
+ * SearchFilter para la entidad Depositos
  *
- * @author fede
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-public class RemitoSearhFilter extends AbstractSearchFilter {
+public class DepositosSearchFilter extends AbstractSearchFilter {
+
+    private static final long serialVersionUID = 1L;
+
+    public DepositosSearchFilter() {
+    }
+
+    @Override
+    public boolean hasFilter() {
+        return false;
+    }
 
 }

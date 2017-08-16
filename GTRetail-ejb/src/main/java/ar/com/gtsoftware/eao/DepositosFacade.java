@@ -16,7 +16,7 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Depositos;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.search.DepositosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +29,7 @@ import javax.persistence.criteria.Root;
  * @author rodrigo
  */
 @Stateless
-public class DepositosFacade extends AbstractFacade<Depositos, AbstractSearchFilter> {
+public class DepositosFacade extends AbstractFacade<Depositos, DepositosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,7 +44,7 @@ public class DepositosFacade extends AbstractFacade<Depositos, AbstractSearchFil
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Depositos> root) {
+    public Predicate createWhereFromSearchFilter(DepositosSearchFilter sf, CriteriaBuilder cb, Root<Depositos> root) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

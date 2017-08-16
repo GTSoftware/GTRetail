@@ -16,7 +16,8 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.search.RemitoSearhFilter;
+import ar.com.gtsoftware.model.Remito_;
+import ar.com.gtsoftware.search.RemitoSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +30,7 @@ import javax.persistence.criteria.Root;
  * @author fede
  */
 @Stateless
-public class RemitoFacade extends AbstractFacade<Remito, RemitoSearhFilter> {
+public class RemitoFacade extends AbstractFacade<Remito, RemitoSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,8 +45,18 @@ public class RemitoFacade extends AbstractFacade<Remito, RemitoSearhFilter> {
     }
 
     @Override
-    protected Predicate createWhereFromSearchFilter(RemitoSearhFilter sf, CriteriaBuilder cb, Root<Remito> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected Predicate createWhereFromSearchFilter(RemitoSearchFilter sf, CriteriaBuilder cb, Root<Remito> root) {
+        Predicate p = null;
+        if (sf.hasFechaEntreFechasAltaFilter()) {
+            Predicate p1 = cb.between(root.get(Remito_.fechaAlta), sf.getFechaAltaDesde(), sf.getFechaAltaHasta());
+            p = appendAndPredicate(cb, p1, p);
+        }
+
+        if (sf.getTipoMovimiento() != null) {
+            Predicate p1 = cb.equal(root.get(Remito_.remitoTipoMovimiento), sf.getTipoMovimiento());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        return p;
     }
 
 }

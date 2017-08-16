@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.controller.clientes;
+package ar.com.gtsoftware.controller.personas;
 
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
@@ -27,24 +27,25 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
+ * SearchBean para buscar personas activas sin importar si son proveedores o clientes
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@ManagedBean(name = "clientesSearchBean")
+@ManagedBean(name = "personasSearchBean")
 @ViewScoped
-public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
+public class PersonasSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
     private PersonasFacade facade;
 
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, null, null);
 
     /**
-     * Creates a new instance of ClientesSearchBean
+     * Creates a new instance of PersonasSearchBean
      */
-    public ClientesSearchBean() {
+    public PersonasSearchBean() {
     }
 
     @Override
@@ -64,16 +65,9 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSea
         return filter;
     }
 
-    public List<Personas> findClientesByString(String query) {
+    public List<Personas> findPersonaByString(String query) {
         filter.setTxt(query);
         return facade.findBySearchFilter(filter, 0, 15);
     }
 
-    public String editarCliente(Personas p) {
-        return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
-    }
-
-    public String verCuentaCorriente(Personas p) {
-        return String.format("clientesCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
-    }
 }

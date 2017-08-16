@@ -27,6 +27,7 @@ import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -55,6 +56,9 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     private static final long serialVersionUID = 1L;
 
     @EJB
+    private JSFUtil jsfUtil;
+
+    @EJB
     private ProductosFacade facade;
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
@@ -69,7 +73,7 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     /**
      * Por defecto creamos un filtro para productos a la venta activos
      */
-    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE, Boolean.TRUE);
+    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -108,6 +112,16 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
         ServletOutputStream servletStream = httpServletResponse.getOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
         FacesContext.getCurrentInstance().responseComplete();
+    }
+
+    public void setParametros(ProductosListasPrecios lista, Boolean soloConStock, Boolean puedeVenderse, Boolean puedeComprarse) {
+        if (jsfUtil.isPostback()) {
+            return;
+        }
+        listaSeleccionada = lista;
+        filter.setConStock(soloConStock);
+        filter.setPuedeVenderse(puedeVenderse);
+        filter.setPuedeComprarse(puedeComprarse);
     }
 
     public ProductosListasPrecios getListaSeleccionada() {

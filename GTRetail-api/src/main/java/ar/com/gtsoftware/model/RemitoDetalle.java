@@ -16,12 +16,14 @@
 package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -44,6 +46,9 @@ public class RemitoDetalle extends BaseEntity {
 
     @Column(name = "cantidad")
     private BigDecimal cantidad;
+
+    @Transient
+    private int nroLinea;
 
     // Getter and Setter ----------------------------------------------
     public Remito getRemitoCabecera() {
@@ -68,6 +73,26 @@ public class RemitoDetalle extends BaseEntity {
 
     public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
+    }
+
+    /**
+     * El número de linea utilizado para ubicar las líneas antes de que se han
+     * guardado en la bd
+     * 
+     * @return
+     */
+    public int getNroLinea() {
+        return nroLinea;
+    }
+
+    /**
+     * El número de linea utilizado para ubicar las líneas antes de que se han
+     * guardado en la bd
+     * 
+     * @param nroLinea
+     */
+    public void setNroLinea(int nroLinea) {
+        this.nroLinea = nroLinea;
     }
 
 }

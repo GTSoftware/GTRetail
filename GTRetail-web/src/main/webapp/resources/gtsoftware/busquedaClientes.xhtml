@@ -34,8 +34,8 @@ limitations under the License.
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
                              columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
                     <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                    <p:inputText id="textoBusquedaField" value="#{personasSearchBean.filter.txt}" size="50"/>
-                    <p:commandButton  action="#{personasSearchBean.doSearch()}"
+                    <p:inputText id="textoBusquedaField" value="#{clientesSearchBean.filter.txt}" size="50"/>
+                    <p:commandButton  action="#{clientesSearchBean.doSearch()}"
                                       process="@this"
                                       value="#{msg.buscar}"
                                       icon="fa fa-fw fa-search"
@@ -46,7 +46,7 @@ limitations under the License.
 
                 <p:dataTable id="personasTable"
                              var="persona"
-                             value="#{personasSearchBean.dataModel}"
+                             value="#{clientesSearchBean.dataModel}"
                              rows="5"
                              lazy="true"
                              paginator="true"

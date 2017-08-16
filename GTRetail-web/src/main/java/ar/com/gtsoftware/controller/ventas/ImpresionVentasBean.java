@@ -108,6 +108,8 @@ public class ImpresionVentasBean implements Serializable {
         if (ventaActual.getIdRegistro().getCae() != null) {
             String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistro(), cuit);
             parameters.put("codigobarras", codigoBarras);
+        } else {
+            parameters.put("codigobarras", ventaActual.getIdRegistro().getNumeroFactura());
         }
         if (ventaActual.getIdRegistro().getLetraFactura().equals("A")) {
             parameters.put("subreport", "vistaVentas_lineasNeto.jasper");

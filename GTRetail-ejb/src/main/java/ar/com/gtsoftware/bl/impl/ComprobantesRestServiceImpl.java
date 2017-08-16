@@ -120,7 +120,7 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
         }
         try {
             facturacionBean.registrarFacturaVenta(comprobante,
-                    puntoVenta, String.valueOf(registro.getNumeroComprobante()),
+                    puntoVenta, registro.getNumeroComprobante(),
                     periodo, new Date());
         } catch (ServiceException ex) {
             Logger.getLogger(ComprobantesRestServiceImpl.class.getName()).log(Level.SEVERE, null, ex);

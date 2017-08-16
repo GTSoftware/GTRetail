@@ -27,6 +27,7 @@ import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.ComprobantesLineas;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
+import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
@@ -75,6 +76,8 @@ public class VerComprobantesBean implements Serializable {
     private final List<FiscalPuntosVenta> puntosVentaList = new ArrayList<>();
 
     private FiscalPuntosVenta puntoVentaSeleccionado;
+    private long numeroComprobante;
+    private boolean permitirCargarNroComprobante = false;
     private static final Logger LOG = Logger.getLogger(VerComprobantesBean.class.getName());
 
     /**
@@ -90,21 +93,20 @@ public class VerComprobantesBean implements Serializable {
         String idVenta = jsfUtil.getRequestParameterMap().get("idComprobante");
         if (idVenta == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
-        } else {
-            ventaActual = ventasFacade.find(Long.parseLong(idVenta));
-            if (ventaActual == null) {
-
-                jsfUtil.addErrorMessage("Venta inexistente!");
-                LOG.log(Level.INFO, "Cliente inexistente!");
-            } else {
-                lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
-
-                //puntoVentaComprobante = authBackingBean.getUserLoggedIn().getPuntoVenta();
-                //numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(ventaActual.getLetra(), puntoVentaComprobante);
-                puntosVentaList.addAll(puntosVentaFacade.findAllBySearchFilter(new FiscalPuntosVentaSearchFilter(
-                        authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE)));
-            }
         }
+        ventaActual = ventasFacade.find(Long.parseLong(idVenta));
+        if (ventaActual == null) {
+
+            throw new IllegalArgumentException("Venta inexistente");
+
+        }
+        lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
+
+        //puntoVentaComprobante = authBackingBean.getUserLoggedIn().getPuntoVenta();
+        //numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(ventaActual.getLetra(), puntoVentaComprobante);
+        puntosVentaList.addAll(puntosVentaFacade.findAllBySearchFilter(new FiscalPuntosVentaSearchFilter(
+                authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE)));
+
     }
 
     /**
@@ -120,14 +122,15 @@ public class VerComprobantesBean implements Serializable {
             jsfUtil.addErrorMessage("Debe seleccionar un punto de venta.");
         }
         try {
-            String numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(ventaActual.getLetra(),
-                    puntoVentaSeleccionado.getNroPuntoVenta().toString());
 
             facturacionBean.registrarFacturaVenta(ventaActual,
-                    puntoVentaSeleccionado, numeroComprobante,
-                    periodo, new Date());
+                    puntoVentaSeleccionado,
+                    numeroComprobante,
+                    periodo,
+                    new Date());
             ventaActual = ventasFacade.find(ventaActual.getId());
-            jsfUtil.addInfoMessage("Factura registrada correctamente");
+            jsfUtil.addInfoMessage(String.format("Factura registrada correctamente: %s",
+                    ventaActual.getIdRegistro().getNumeroFactura()));
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             jsfUtil.addErrorMessage(ex.getMessage());
@@ -184,6 +187,31 @@ public class VerComprobantesBean implements Serializable {
 
     public void setPuntoVentaSeleccionado(FiscalPuntosVenta puntoVentaSeleccionado) {
         this.puntoVentaSeleccionado = puntoVentaSeleccionado;
+    }
+
+    public long getNumeroComprobante() {
+        return numeroComprobante;
+    }
+
+    public void setNumeroComprobante(long numeroComprobante) {
+        this.numeroComprobante = numeroComprobante;
+    }
+
+    public boolean isPermitirCargarNroComprobante() {
+        return permitirCargarNroComprobante;
+    }
+
+    public void setPermitirCargarNroComprobante(boolean permitirCargarNroComprobante) {
+        this.permitirCargarNroComprobante = permitirCargarNroComprobante;
+    }
+
+    public void cargarNumeroComprobante() {
+        permitirCargarNroComprobante = false;
+        if (puntoVentaSeleccionado.getTipo().equals(TiposPuntosVenta.MANUAL)) {
+            numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(ventaActual.getLetra(),
+                    puntoVentaSeleccionado.getNroPuntoVenta());
+            permitirCargarNroComprobante = true;
+        }
     }
 
 }
