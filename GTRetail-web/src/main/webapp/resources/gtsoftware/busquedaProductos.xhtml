@@ -46,7 +46,7 @@ limitations under the License.
 
                 <p:fragment>
 
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
                                  style="border:0px !important; background:none;">
 
 
@@ -62,6 +62,9 @@ limitations under the License.
                                            itemValue="#{lista}"/>
 
                         </p:selectOneMenu>-->
+                        <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
+                                                 itemLabel="#{msg.soloConStock}"/>
+
                         <p:commandButton  action="#{productosSearchBean.doSearch()}"
                                           process="@this"
                                           value="#{msg.buscar}"
@@ -109,7 +112,7 @@ limitations under the License.
                             <f:facet name="header">
                                 #{msg.stock}
                             </f:facet>
-                            <h:outputText value="0" >
+                            <h:outputText value="#{productosSearchBean.getStockSucursal(pro)}" >
                                 <f:convertNumber groupingUsed="true" type="number"/>
                             </h:outputText>
                         </p:column>
@@ -136,14 +139,14 @@ limitations under the License.
                             <h:outputText value="#{pro.ubicacion}" />
                         </p:column>
 
-                        <p:column headerText="#{msg.stock}" style="text-align: right; width: 5%" >
+<!--                        <p:column headerText="#{msg.stock}" style="text-align: right; width: 5%" >
                             <f:facet name="header">
-                                #{msg.stock}
-                            </f:facet>
-                            <h:outputText value="#{pro.stockActual}" >
-                                <f:convertNumber groupingUsed="true" type="number"/>
-                            </h:outputText>
-                        </p:column>
+                        #{msg.stock}
+                    </f:facet>
+                    <h:outputText value="#{pro.stockActual}" >
+                        <f:convertNumber groupingUsed="true" type="number"/>
+                    </h:outputText>
+                </p:column>-->
                     </p:dataTable>
                 </p:fragment>
             </h:form>

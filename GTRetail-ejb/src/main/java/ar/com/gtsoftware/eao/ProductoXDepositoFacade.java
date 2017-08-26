@@ -15,13 +15,16 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.Depositos_;
 import ar.com.gtsoftware.model.ProductoXDeposito;
 import ar.com.gtsoftware.model.ProductoXDeposito_;
 import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
+import java.math.BigDecimal;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -47,19 +50,52 @@ public class ProductoXDepositoFacade extends AbstractFacade<ProductoXDeposito, P
     @Override
     protected Predicate createWhereFromSearchFilter(ProductoXDepositoSearchFilter sf, CriteriaBuilder cb, Root<ProductoXDeposito> root) {
 
-        Predicate p = null, p1;
+        Predicate p = null;
 
-        if (sf.hasFilter()) {
-            if (sf.hasIdDeposito()) {
-                p1 = cb.equal(root.get(ProductoXDeposito_.producto), sf.getIdProducto());
-                p = appendAndPredicate(cb, p, p1);
-            }
-            if (sf.hasIdDeposito()) {
-                p1 = cb.equal(root.get(ProductoXDeposito_.deposito), sf.getIdDeposito());
-                p = appendAndPredicate(cb, p, p1);
-            }
+        if (sf.hasIdProducto()) {
+            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.producto), sf.getIdProducto());
+            p = appendAndPredicate(cb, p, p1);
         }
+
+        if (sf.hasIdDeposito()) {
+            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.deposito), sf.getIdDeposito());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (sf.hasIdSucursal()) {
+            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.deposito).get(Depositos_.idSucursal),
+                    sf.getIdSucursal());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
         return p;
+    }
+
+    /**
+     * Devuelve la sumatoria de stock según el filtro pasado por parámetro
+     *
+     * @param sf
+     * @return la suma del stock
+     */
+    public BigDecimal getStockBySearchFilter(ProductoXDepositoSearchFilter sf) {
+        if (sf == null) {
+            return null;
+        }
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+        Root<ProductoXDeposito> root = cq.from(ProductoXDeposito.class);
+        CriteriaBuilder.Coalesce<BigDecimal> coalesce = cb.coalesce();
+        coalesce.value(cb.sum(root.get(ProductoXDeposito_.stock)));
+        coalesce.value(BigDecimal.ZERO);
+        cq.select(coalesce.alias("CANT_STOCK"));
+        if (sf.hasFilter()) {
+            cq.where(createWhereFromSearchFilter(sf, cb, root));
+        }
+        BigDecimal result = em.createQuery(cq).getSingleResult();
+        if (result == null) {
+            return BigDecimal.ZERO;
+        }
+        return result;
     }
 
 }
