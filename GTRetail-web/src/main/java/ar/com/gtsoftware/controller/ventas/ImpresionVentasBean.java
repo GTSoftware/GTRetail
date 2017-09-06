@@ -18,6 +18,7 @@ package ar.com.gtsoftware.controller.ventas;
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.Parametros;
+import ar.com.gtsoftware.model.Remito;
 import ar.com.gtsoftware.utils.GeneradorCodigoBarraFE;
 import java.io.IOException;
 import java.io.Serializable;
@@ -142,5 +143,31 @@ public class ImpresionVentasBean implements Serializable {
             result.put(p.getNombreParametro(), p.getValorParametro());
         }
         return result;
+    }
+
+    /**
+     * Muestra el remito como PDF
+     *
+     * @param remito
+     * @throws IOException
+     * @throws JRException
+     */
+    public void imprimirRemito(Remito remito) throws IOException, JRException {
+        List<Remito> remitos = new ArrayList<>();
+
+        remitos.add(remito);
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(remitos);
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/remito.jasper");
+
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.putAll(cargarParametros());
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        httpServletResponse.addHeader("Content-disposition", String.format("attachment; filename=remito-%d.pdf", remito.getId()));
+        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+        FacesContext.getCurrentInstance().responseComplete();
     }
 }

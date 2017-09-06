@@ -214,10 +214,15 @@
                                                                                                 <f:param name="idProducto" value="#{producto.id}"/>
                                                                                                 <f:param name="duplicar" value="1"/>
                                                                                             </p:commandButton>-->
-                                <p:commandButton icon="fa fa-print"   ajax="false"
-                                                 title="Imprimir">
+
+
+                                <p:commandButton icon="fa fa-print" action="#{impresionVentasBean.imprimirRemito(remito)}"
+                                                 ajax="false" immediate="true"
+                                                 title="Imprimir Remito">
 
                                 </p:commandButton>
+
+
                             </p:panelGrid>
 
                         </p:column>
