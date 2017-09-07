@@ -154,3 +154,6 @@ DECLARE
   ON remitos_recepciones
   FOR EACH ROW
   EXECUTE PROCEDURE actualizar_existencias_remitos_recep();
+
+--Quito esta columna por quedar obsoleta
+ALTER TABLE productos DROP COLUMN stock_actual;

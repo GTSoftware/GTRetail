@@ -45,7 +45,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
 @NamedEntityGraph(name = "precios", attributeNodes = {
-    @NamedAttributeNode("porcentajes"),
+    @NamedAttributeNode("porcentajes")
+    ,
     @NamedAttributeNode("precios")})
 
 public class Productos extends BaseEntity {
@@ -148,11 +149,6 @@ public class Productos extends BaseEntity {
     @NotNull
     @Column(name = "stock_minimo", scale = 2, precision = 19)
     private BigDecimal stockMinimo;
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "stock_actual", scale = 2, precision = 19)
-    private BigDecimal stockActual;
 
     @Transient
     private BigDecimal precioVenta;
@@ -375,14 +371,6 @@ public class Productos extends BaseEntity {
 
     public void setStockMinimo(BigDecimal stockMinimo) {
         this.stockMinimo = stockMinimo;
-    }
-
-    public BigDecimal getStockActual() {
-        return stockActual;
-    }
-
-    public void setStockActual(BigDecimal stockActual) {
-        this.stockActual = stockActual;
     }
 
     public String getCodigoFabricante() {

@@ -161,11 +161,11 @@
 
                         </p:column>
 
-                        <p:column headerText="#{msg.stock}" style="text-align: right; " >
+                        <p:column headerText="#{msg.stock} sucursal" style="text-align: right; " >
                             <f:facet name="header">
-                                <h:outputLabel value="#{msg.stock}"/>
+                                <h:outputLabel value="#{msg.stock} sucursal"/>
                             </f:facet>
-                            <h:outputText value="#{producto.stockActual}" >
+                            <h:outputText value="#{productosSearchBean.getStockSucursal(producto)}" >
                                 <f:convertNumber groupingUsed="true" type="number"/>
                             </h:outputText>
                         </p:column>

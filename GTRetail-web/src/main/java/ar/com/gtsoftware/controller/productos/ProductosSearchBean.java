@@ -85,11 +85,6 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
 
     /**
-     * Filtro para obtener el stock
-     */
-    private final ProductoXDepositoSearchFilter stockFilter = new ProductoXDepositoSearchFilter();
-
-    /**
      * Creates a new instance of ProductosSearchBean
      */
     public ProductosSearchBean() {
@@ -187,9 +182,17 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     }
 
     public BigDecimal getStockSucursal(Productos producto) {
-        stockFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-        stockFilter.setIdProducto(producto);
+        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
+        stFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+        stFilter.setIdProducto(producto);
 
-        return stockFacade.getStockBySearchFilter(stockFilter);
+        return stockFacade.getStockBySearchFilter(stFilter);
+    }
+
+    public BigDecimal getStockTotal(Productos producto) {
+        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
+        stFilter.setIdProducto(producto);
+
+        return stockFacade.getStockBySearchFilter(stFilter);
     }
 }
