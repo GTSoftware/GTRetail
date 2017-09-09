@@ -16,6 +16,8 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Remito;
+import ar.com.gtsoftware.model.RemitoDetalle;
+import ar.com.gtsoftware.model.RemitoDetalle_;
 import ar.com.gtsoftware.model.Remito_;
 import ar.com.gtsoftware.search.RemitoSearchFilter;
 import javax.ejb.Stateless;
@@ -24,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  *
@@ -54,6 +57,21 @@ public class RemitoFacade extends AbstractFacade<Remito, RemitoSearchFilter> {
 
         if (sf.getTipoMovimiento() != null) {
             Predicate p1 = cb.equal(root.get(Remito_.remitoTipoMovimiento), sf.getTipoMovimiento());
+            p = appendAndPredicate(cb, p1, p);
+        }
+
+        if (sf.getIdProducto() != null) {
+            Subquery<Long> subQRemDetProd = cb.createQuery().subquery(Long.class);
+            Root<RemitoDetalle> fromSubQ = subQRemDetProd.from(RemitoDetalle.class);
+
+            subQRemDetProd.select(fromSubQ.get(RemitoDetalle_.id));
+
+            Predicate ps1 = cb.equal(fromSubQ.get(RemitoDetalle_.idProducto), sf.getIdProducto());
+            Predicate ps2 = cb.equal(fromSubQ.get(RemitoDetalle_.remitoCabecera), root);
+            subQRemDetProd.where(cb.and(ps1, ps2));
+
+            Predicate p1 = cb.exists(subQRemDetProd);
+
             p = appendAndPredicate(cb, p1, p);
         }
         return p;

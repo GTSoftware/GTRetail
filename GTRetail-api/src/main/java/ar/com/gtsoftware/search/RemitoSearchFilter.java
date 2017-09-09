@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.search;
 
+import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.RemitoTipoMovimiento;
 import java.util.Date;
 
@@ -30,10 +31,11 @@ public class RemitoSearchFilter extends AbstractSearchFilter {
     private Date fechaAltaDesde;
     private Date fechaAltaHasta;
     private RemitoTipoMovimiento tipoMovimiento;
+    private Productos idProducto;
 
     @Override
     public boolean hasFilter() {
-        return hasFechaEntreFechasAltaFilter() || tipoMovimiento != null;
+        return hasFechaEntreFechasAltaFilter() || tipoMovimiento != null || idProducto != null;
     }
 
     /**
@@ -97,6 +99,24 @@ public class RemitoSearchFilter extends AbstractSearchFilter {
      */
     public void setTipoMovimiento(RemitoTipoMovimiento tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
+    }
+
+    /**
+     * El producto esté dentro de alguno de los detalles del remito
+     *
+     * @return
+     */
+    public Productos getIdProducto() {
+        return idProducto;
+    }
+
+    /**
+     * El producto esté dentro de alguno de los detalles del remito
+     *
+     * @param idProducto
+     */
+    public void setIdProducto(Productos idProducto) {
+        this.idProducto = idProducto;
     }
 
 }

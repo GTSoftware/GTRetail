@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
 
     <div class="Container100 Responsive100 NoIndent">
         <div class="Container100 ui-fluid">
@@ -31,21 +32,34 @@
 
                                 <h:outputLabel for="tipoMovimientoField"
                                                value="#{msg.tipoMovimiento}:" />
-                                <p:selectOneMenu id="tipoMovimientoField" required="true"
+                                <p:selectOneMenu id="tipoMovimientoField" required="false"
                                                  requiredMessage="#{msg.ingresarValor} de tipo de movimiento"
                                                  value="#{remitosSearchBean.filter.tipoMovimiento}"
                                                  converter="omnifaces.SelectItemsIndexConverter" filter="true"
                                                  filterMatchMode="contains">
 
-                                    <f:selectItem noSelectionOption="true"
-                                                  itemLabel="#{msg.seleccionarUno}" />
+                                    <f:selectItem noSelectionOption="false"
+                                                  itemLabel="#{msg.todos}" itemValue="#{null}" />
                                     <f:selectItems value="#{remitosSearchBean.tiposMovimientoList}"
                                                    var="tipoMov" itemLabel="#{tipoMov.nombreTipo}"
                                                    itemValue="#{tipoMov}" />
 
                                 </p:selectOneMenu>
 
+                                <p:outputLabel value="Producto:" for="productoField"/>
+                                <h:panelGroup >
+                                    <p:inputText id="productoField"
+                                                 value="#{remitosSearchBean.filter.idProducto.descripcion}"
+                                                 placeholder="Presione el boton azul para buscar un producto"
+                                                 disabled="true">
+                                        <p:commandButton id="buscarProductoButton" icon="fa fa-fw fa-search"
+                                                         title="#{msg.buscar} productos"
+                                                         oncomplete="PF('dlgBusProd').show()" process="@none"
+                                                         global="false" />
+                                    </p:inputText>
+                                </h:panelGroup>
                             </p:panelGrid >
+
 
                         </p:tab>
 
@@ -211,12 +225,33 @@
                                 </p:column>
 
 
-
-
                             </p:dataTable>
                         </p:rowExpansion>
                     </p:dataTable>
 
+                </h:form>
+                <h:form id="dialogsForm">
+                    <!--DIALOGO DE BUSQUEDA DE PRODUCTOS-->
+                    <p:dialog id="busquedaProductosDialog"
+                              header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                              modal="true" dynamic="true">
+                        <gtsoftware:busquedaProductos
+                            productoSeleccionado="#{remitosSearchBean.filter.idProducto}"
+                            soloConStock="#{null}" puedeComprarse="#{null}"
+                            puedeVenderse="#{null}" />
+
+                        <div class="SeparatorFull" />
+
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('dlgBusProd').hide()" update=":formContenido"
+                                         immediate="true" process="@this"
+                                         actionListener="#{nuevoRemitoBean.agregarProducto()}" />
+
+                        <p:commandButton value="#{msg.cancelar}" immediate="true"
+                                         icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                         styleClass="RedButton" />
+
+                    </p:dialog>
                 </h:form>
             </div>
         </div>
