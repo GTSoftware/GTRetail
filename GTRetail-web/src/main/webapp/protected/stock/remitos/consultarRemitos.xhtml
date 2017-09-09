@@ -50,54 +50,7 @@
                         </p:tab>
 
                         <p:tab title="#{msg.busquedaAvanzada}" >
-                            <!--
-                                                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                                                     styleClass="ui-panelgrid-blank" columns="2">
-                                                            <p:outputLabel value="#{msg.cliente}:" for="razonSocialField"/>
-                                                            <h:panelGroup >
-                                                                <p:autoComplete id="razonSocialField"
-                                                                                value="#{searchComprobantesBean.filter.idPersona}"
-                                                                                completeMethod="#{searchComprobantesBean.findClientesByString}"
-                                                                                var="cli" itemLabel="#{cli.razonSocial}"
-                                                                                itemValue="#{cli}"
-                                                                                converter="#{personasConverter}"
-                                                                                forceSelection="true"
-                                                                                minQueryLength="3"
-                                                                                >
 
-                                                                </p:autoComplete>
-                                                                <p:commandButton id="buscarClienteButton" icon="fa fa-fw fa-search"
-                                                                                 update=":busquedaPersonasDialogForm:busquedaPersonasDialog"
-                                                                                 oncomplete="PF('clientesDialog').show()"
-                                                                                 process="@this" />
-                                                            </h:panelGroup>
-
-                                                            <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoCompField"/>
-                                                            <p:autoComplete id="tipoCompField" multiple="true"
-                                                                            value="#{searchComprobantesBean.filter.tiposComprobante}"
-                                                                            completeMethod="#{searchComprobantesBean.autocompleteTiposComp}"
-                                                                            var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}"
-                                                                            itemValue="#{tipoComp}"
-                                                                            forceSelection="true"
-                                                                            minQueryLength="2"
-                                                                            >
-                                                                <o:converter converterId="omnifaces.ListConverter"
-                                                                             list="#{searchComprobantesBean.tiposCompList}"/>
-                                                                <p:ajax event="query" global="false"/>
-
-                                                                <p:column>
-                                                                    <h:outputText value="#{tipoComp.nombreComprobante}" />
-                                                                </p:column>
-
-                                                            </p:autoComplete>
-
-                                                            <h:outputLabel for="nroFacturaField" value="#{msg.factura}:" />
-                                                            <p:inputText  id="nroFacturaField"  value="#{searchComprobantesBean.filter.numeroFactura}"
-                                                                          converter="#{stringFormatConverter}"/>
-
-                                                            <h:outputLabel for="anuladasField" value="#{msg.anulada}s" />
-                                                            <p:selectBooleanCheckbox  id="anuladasField"  value="#{searchComprobantesBean.filter.anulada}"/>
-                                                        </p:panelGrid>-->
                         </p:tab>
                     </p:tabView>
                     <p:commandButton id="buscarButton" action="#{remitosSearchBean.doSearch()}"
@@ -151,6 +104,9 @@
                         <f:facet name="header" >
                             #{msg.remitoListado}
                         </f:facet>
+                        <p:column  exportable="false">
+                            <p:rowToggler />
+                        </p:column>
 
                         <p:column sortBy="#{remito.id}" >
                             <f:facet name="header">
@@ -217,7 +173,48 @@
 
                         </p:column>
 
+                        <p:rowExpansion >
+                            <p:dataTable id="remitoDetalleTable" value="#{remito.detalleList}" var="lineaRemito"
+                                         reflow="true"
+                                         emptyMessage="#{msg.productosNoCargados}"
+                                         >
 
+                                <p:column style="text-align: right;">
+                                    <f:facet name="header">
+                                        #{msg.tablaId}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.id}" />
+                                </p:column>
+                                <p:column style="text-align: left; ">
+                                    <f:facet name="header">
+                                        #{msg.codigo}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.codigoPropio}" />
+                                </p:column>
+                                <p:column style="text-align: left;">
+                                    <f:facet name="header">
+                                        #{msg.tablaDescripcion}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.descripcion}" />
+                                </p:column>
+                                <p:column style="text-align: right; ">
+                                    <f:facet name="header">
+                                        #{msg.tablaCantidad}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.cantidad}" />
+                                </p:column>
+                                <p:column style="text-align: left; ">
+                                    <f:facet name="header">
+                                        #{msg.tablaUnidad}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                                </p:column>
+
+
+
+
+                            </p:dataTable>
+                        </p:rowExpansion>
                     </p:dataTable>
 
                 </h:form>
