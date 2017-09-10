@@ -15,65 +15,55 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
+import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.eao.AbstractFacade;
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- * Controlador para el caso de uso de búsqueda de usuarios
+ * Bena para búsqueda de usuarios
  *
- * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
+ * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "usuariosSearchBean")
 @ViewScoped
-public class UsuariosSearchBean implements Serializable {
+public class UsuariosSearchBean extends AbstractSearchBean<Usuarios, UsuariosSearchFilter> {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
 
-    private UsuariosSearchFilter filter = new UsuariosSearchFilter();
+    private final UsuariosSearchFilter filter = new UsuariosSearchFilter();
 
     @EJB
     private UsuariosFacade usuarioFacade;
 
-    private List<Usuarios> usuariosList = new ArrayList<>();
-
-    private static final Logger LOG = Logger.getLogger(UsuariosSearchBean.class.getName());
-
     /**
-     * Creates a new instance of ConfigurarPisosBean
+     * Creates a new instance of UsuariosSearchBean
      */
     public UsuariosSearchBean() {
     }
 
-    public void findUsuarios() {
-        usuariosList.clear();
-        usuariosList.addAll(usuarioFacade.findAllBySearchFilter(filter));
-    }
-
+    @Override
     public UsuariosSearchFilter getFilter() {
         return filter;
     }
 
-    public void setFilter(UsuariosSearchFilter filter) {
-        this.filter = filter;
+    @Override
+    protected AbstractFacade<Usuarios, UsuariosSearchFilter> getFacade() {
+        return usuarioFacade;
     }
 
-    public List<Usuarios> getUsuariosList() {
-        return usuariosList;
-    }
-
-    public void setUsuariosList(List<Usuarios> usuariosList) {
-        this.usuariosList = usuariosList;
+    @Override
+    protected void prepareSearchFilter() {
+        if (!filter.hasOrderFields()) {
+            filter.addSortField("login", true);
+        }
     }
 
 }
