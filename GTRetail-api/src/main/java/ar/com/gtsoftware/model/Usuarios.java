@@ -69,10 +69,6 @@ public class Usuarios extends BaseEntity implements Serializable {
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
-    @Basic(optional = true)
-    @Size(min = 4, max = 4)
-    @Column(name = "punto_venta")
-    private String puntoVenta;//TODO: Esto quedó obsoleto
     @ManyToMany(mappedBy = "usuariosList")
     private List<UsuariosGrupos> usuariosGruposList;
 
@@ -220,24 +216,6 @@ public class Usuarios extends BaseEntity implements Serializable {
      */
     public void setIdSucursal(Sucursales idSucursal) {
         this.idSucursal = idSucursal;
-    }
-
-    /**
-     * Devuelve el punto de venta por defecto del usuario
-     *
-     * @return
-     */
-    public String getPuntoVenta() {
-        return puntoVenta;
-    }
-
-    /**
-     * Establece el punto de venta por defecto del usuario
-     *
-     * @param puntoVenta
-     */
-    public void setPuntoVenta(String puntoVenta) {
-        this.puntoVenta = puntoVenta;
     }
 
 }

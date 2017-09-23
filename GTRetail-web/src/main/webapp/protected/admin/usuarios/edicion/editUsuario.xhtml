@@ -91,7 +91,8 @@ limitations under the License.
                                          action="#{usuariosEditBean.doGuardarUsuario()}"
                                          update="@form"
                                          ajax="true"
-                                         icon="fa fa-fw fa-save"/>
+                                         icon="fa fa-fw fa-save"
+                                         styleClass="GreenButton"/>
                         <p:commandButton id="eliminarButton"
                                          value="#{msg.borrar}"
                                          action="#{usuariosEditBean.doEliminarUsuario()}"
@@ -114,7 +115,8 @@ limitations under the License.
                                          action="/protected/admin/usuarios/index.xhtml?faces-redirect=true"
                                          ajax="false"
                                          immediate="true"
-                                         icon="fa fa-fw fa-ban"/>
+                                         icon="fa fa-fw fa-ban"
+                                         />
                     </p:panelGrid >
 
                 </h:form>

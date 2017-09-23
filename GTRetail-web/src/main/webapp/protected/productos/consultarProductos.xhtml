@@ -17,10 +17,10 @@
                     <p:defaultCommand target="buscarButton"/>
 
                     <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                 styleClass="ui-panelgrid-blank" columns="7"
+                                 styleClass="ui-panelgrid-blank" columns="7" id="panelBusqueda"
                                  >
 
-                        <p:outputLabel for="searchField" value="#{msg.busqueda}:"/>
+                        <p:outputLabel id="searchFieldLabel" for="searchField" value="#{msg.busqueda}:"/>
 
 
                         <p:autoComplete id="searchField" value="#{productosSearchBean.filter.txt}"
@@ -33,6 +33,7 @@
                                         autoHighlight="false"
                                         style="width: 100%"
                                         inputStyle="width: 100%"
+                                        placeholder="Ingrese los términos de búsqueda"
                                         />
                         <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
                                                  itemLabel="#{msg.soloConStock}"/>
