@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
 
     <div class="Container100 Responsive100 NoIndent">
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Ingresar Mercaderia</h1>
+                <h1 class="CardBigTopic TexAlCenter">Ingreso de Mercaderias</h1>
                 <div class="SeparatorFull" />
 
                 <h:form id="formContenido">
 
 
-                    <p:panel header="#{msg.proveedores}">
+                    <p:panel header="#{msg.proveedor}">
 
                         <p:panelGrid layout="grid"
                                      id="proveedorGrid"
@@ -27,16 +28,23 @@
                                      >
 
                             <p:outputLabel value="#{msg.proveedor}: "/>
-                            <p:inputText value="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno.businessString}"
-                                         disabled="true"
-                                         />
+                            <p:autoComplete id="origenExternoField"
+                                            value="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno}"
+                                            completeMethod="#{personasSearchBean.findPersonaByString}"
+                                            var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
+                                            converter="#{personasConverter}" forceSelection="true"
+                                            required="true" requiredMessage="#{msg.ingresarValor} de origen"
+                                            minQueryLength="3" queryDelay="1000" onclick="this.select();"
+                                            placeholder="Ingrese algún dato del proveedor para buscarlo"
+                                            >
+                            </p:autoComplete>
 
-
-                            <p:commandButton id="buscarProveedorButton" icon="fa fa-fw fa-search"
-                                             title="#{msg.buscar} proveedores"
+                            <p:commandButton id="buscarProveedorButton"
+                                             icon="fa fa-fw fa-search"
                                              oncomplete="PF('proveedoresDialog').show()"
-                                             process="@none"
-                                             global="false"/>
+                                             immediate="true"
+                                             />
+
 
                         </p:panelGrid >
                     </p:panel>
@@ -46,62 +54,52 @@
 
                     <p:panel header="#{msg.productos}">
 
-                        <p:panelGrid layout="grid"
-                                     id="productosGrid"
-                                     style="border:0px !important; background:none;"
-                                     styleClass="ui-panelgrid-blank"
-                                     columns="2"
-                                     columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-1"
-                                     >
-
-                            <p:outputLabel value="#{msg.codigo}: "/>
-
-                            <p:panelGrid layout="grid"
-                                         id="detalleGrid"
-                                         style="border:0px !important; background:none;"
-                                         styleClass="ui-panelgrid-blank" columns="2"
-                                         >
-                                <p:outputLabel
-                                    value="#{ingresoMercaderiaBean.remitoDetalle.idProducto.id}"
-                                    />
-                                <p:commandButton id="buscarProductoButton"
-                                                 icon="fa fa-fw fa-search"
-                                                 title="#{msg.buscar} productos"
-
-                                                 oncomplete="PF('productDialog').show()"
-                                                 process="@none"
-                                                 global="false"/>
-
-                            </p:panelGrid>
+                        <!--DETALLE DEL REMITO-->
+                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank"
+                                     columns="3" style="border:0px !important; background:none;"
+                                     id="productosGrid">
 
 
+                            <p:inputText id="idField"
+                                         value="#{ingresoMercaderiaBean.productosFilter.idProducto}"
+                                         placeholder="Id">
 
-                            <p:outputLabel value="#{msg.descripcion}"/>
-                            <p:inputText value="#{ingresoMercaderiaBean.remitoDetalle.idProducto.descripcion}"/>
+                            </p:inputText>
 
-                            <p:outputLabel value="#{msg.cantidad}"/>
-                            <p:inputText value="#{ingresoMercaderiaBean.remitoDetalle.cantidad}"
-                                         required="true"
-                                         requiredMessage="Debe ingresar una cantidad">
-                                <f:validateDoubleRange minimum="0.01"
-                                                       maximum="9999999999999999999.99" />
+                            <p:inputText id="codigoField"
+                                         value="#{ingresoMercaderiaBean.productosFilter.codigoPropio}"
+                                         placeholder="Código">
+
                             </p:inputText>
 
 
 
+                            <p:inputText id="cantidadField" required="true"
+                                         value="#{ingresoMercaderiaBean.cantidad}" placeholder="Cantidad">
+                                <f:validateDoubleRange minimum="0.01"
+                                                       maximum="9999999999999999999.99" />
+
+                            </p:inputText>
+                            <p:selectBooleanCheckbox id="unidadesCompraCheck" value="#{ingresoMercaderiaBean.unidadesCompra}"
+                                                     itemLabel="Unidades de compra"/>
+
                         </p:panelGrid>
+                        <div class="Container25 ui-fluid">
+                            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
+                                             title="#{msg.insertar}"
+                                             action="#{ingresoMercaderiaBean.agregarLinea()}" update="@form"
+                                             global="false" styleClass="GreenButton" />
+
+                            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                                             title="#{msg.buscar} productos"
+                                             oncomplete="PF('productDialog').show()" process="@none"
+                                             global="false" />
+                        </div>
+
 
                     </p:panel>
 
-                    <div class="EmptyBox10" />
-                    <p:commandButton id="addDetalleButton"
-                                     icon="fa fa-plus-square"
-                                     value="#{msg.agregarLinea}"
-                                     action="#{ingresoMercaderiaBean.agregarLinea()}"
-                                     update="productosTable productosGrid"
-                                     immediate="false"
 
-                                     />
 
                     <div class="EmptyBox10"/>
                     <p:panel header="#{msg.detalle}">
@@ -153,8 +151,27 @@
                                 </p:cellEditor>
 
                             </p:column>
+                            <p:column style="text-align: right; ">
+                                <f:facet name="header">
+                                    #{msg.unidadVenta}
+                                </f:facet>
+                                <h:outputText value="#{lineaDetalle.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                            </p:column>
 
+                            <p:column  exportable="false" >
+                                <f:facet name="header">
+                                    #{msg.borrar}
+                                </f:facet>
+                                <p:commandButton id="borrarItemButton"
+                                                 icon="fa fa-fw fa-trash"
+                                                 process="@this"
+                                                 action="#{ingresoMercaderiaBean.eliminarItem(lineaDetalle.nroLinea)}"
+                                                 update="productosTable"
+                                                 global="false"
+                                                 >
 
+                                </p:commandButton>
+                            </p:column>
 
                         </p:dataTable>
                         <div class="EmptyBox20"/>
@@ -170,59 +187,67 @@
 
 
                 </h:form>
+
+                <h:form id="busquedasForm">
+
+                    <p:dialog header="#{msg.proveedores}"
+                              widgetVar="proveedoresDialog"
+                              resizable="true"
+                              id="proveedoresDialog"
+                              closeOnEscape="true"
+                              showEffect="fade"
+                              hideEffect="clip"
+                              modal="true">
+
+
+
+
+                        <gtsoftware:busquedaProveedor id="busqueProveedores"
+                                                      personaSeleccionada="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno}"
+
+                                                      />
+
+                        <div class="SeparatorFull" />
+                        <p:commandButton id="buscarPersonaOkButton" icon="fa fa-check-circle"
+                                         title="#{msg.ok}"
+                                         oncomplete="PF('proveedoresDialog').hide()"
+                                         update=":formContenido:proveedorGrid"
+                                         styleClass="GreenButton"
+                                         global="false"/>
+
+
+                    </p:dialog>
+
+                    <p:dialog header="#{msg.productos}"
+                              widgetVar="productDialog"
+                              resizable="true"
+                              id="productDialog"
+                              closeOnEscape="true"
+                              showEffect="fade"
+                              hideEffect="clip"
+                              modal="true">
+
+
+
+
+                        <gtsoftware:busquedaProductos id="busquedaProducto"
+                                                      productoSeleccionado="#{ingresoMercaderiaBean.productoBusquedaSeleccionado}"                                        />
+
+                        <div class="SeparatorFull" />
+                        <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"
+                                         title="#{msg.ok}"
+                                         oncomplete="PF('productDialog').hide()"
+                                         styleClass="GreenButton"
+                                         update=":formContenido"
+                                         global="false"/>
+
+
+                    </p:dialog>
+                </h:form>
             </div>
         </div>
     </div>
 
-    <p:dialog header="#{msg.proveedores}"
-              widgetVar="proveedoresDialog"
-              resizable="true"
-              id="proveedoresDialog"
-              closeOnEscape="true"
-              showEffect="fade"
-              hideEffect="clip"
-              modal="true">
-        <h:form id="buscarProveedoresForm">
 
 
-
-            <gtsoftware:busquedaProveedor id="busqueProveedores"
-                                          personaSeleccionada="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno}"
-
-                                          />
-
-
-            <p:commandButton id="buscarPersonaOkButton" icon="fa fa-check-circle"
-                             title="#{msg.ok}"
-                             oncomplete="PF('proveedoresDialog').hide()"
-                             update=":formContenido:proveedorGrid"
-                             global="false"/>
-        </h:form>
-
-    </p:dialog>
-
-    <p:dialog header="#{msg.productos}"
-              widgetVar="productDialog"
-              resizable="true"
-              id="productDialog"
-              closeOnEscape="true"
-              showEffect="fade"
-              hideEffect="clip"
-              modal="true">
-        <h:form id="buscarProductForm">
-
-
-
-            <gtsoftware:busquedaProductos id="busquedaProducto"
-                                          productoSeleccionado="#{ingresoMercaderiaBean.remitoDetalle.idProducto}"                                        />
-
-
-            <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"
-                             title="#{msg.ok}"
-                             oncomplete="PF('productDialog').hide()"
-                             update=":formContenido:productosGrid"
-                             global="false"/>
-        </h:form>
-
-    </p:dialog>
-</html>
+</ui:composition>

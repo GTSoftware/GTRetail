@@ -227,10 +227,22 @@ public class Productos extends BaseEntity {
         this.annosAmortizacion = annosAmortizacion;
     }
 
+    /**
+     * El coeficiente de cuantas unidades de compra representan a unidades de venta. X unidades de compra son Y unidades
+     * de venta. Lo normal es 1.
+     *
+     * @return
+     */
     public BigDecimal getUnidadesCompraUnidadesVenta() {
         return unidadesCompraUnidadesVenta;
     }
 
+    /**
+     * El coeficiente de cuantas unidades de compra representan a unidades de venta. X unidades de compra son Y unidades
+     * de venta. Lo normal es 1.
+     *
+     * @param unidadesCompraUnidadesVenta
+     */
     public void setUnidadesCompraUnidadesVenta(BigDecimal unidadesCompraUnidadesVenta) {
         this.unidadesCompraUnidadesVenta = unidadesCompraUnidadesVenta;
     }

@@ -15,27 +15,31 @@
  */
 package ar.com.gtsoftware.controller.productos;
 
+import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.eao.DepositosFacade;
+import ar.com.gtsoftware.eao.ProductosFacade;
+import ar.com.gtsoftware.eao.RemitoFacade;
+import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
+import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.Remito;
+import ar.com.gtsoftware.model.RemitoDetalle;
+import ar.com.gtsoftware.model.RemitoRecepcion;
+import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-
-import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.eao.DepositosFacade;
-import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.RemitoDetalle;
-import ar.com.gtsoftware.model.RemitoRecepcion;
-import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.lang.StringUtils;
 
 /**
+ * Bean para el ingreso rápido de mercadería
  *
  * @author fede
  */
@@ -51,28 +55,28 @@ public class IngresoMercaderiaBean implements Serializable {
     private DepositosFacade depositosFacade;
     @EJB
     private RemitoTipoMovimientoFacade remitoTipoMovimientoFacade;
+    @EJB
+    private ProductosFacade productosFacade;
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
     @EJB
     private JSFUtil jsfUtil;
+    private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
+    private Productos productoBusquedaSeleccionado = null;
+    private BigDecimal cantidad = BigDecimal.ONE;
+    private int numeradorLinea = 1;
+    private boolean unidadesCompra = true;
 
     private Remito remitoCabecera = new Remito();
-
-    private RemitoDetalle remitoDetalle = new RemitoDetalle();
 
     @PostConstruct
     public void init() {
 
         remitoCabecera.setDetalleList(new ArrayList<>());
-        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));// TODO:
-                                                                             // ID
-                                                                             // deposito
-                                                                             // Cableado
-                                                                             // por
-                                                                             // el
-                                                                             // momento
+        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));// TODO: ID Deposito cableado
+
         remitoCabecera.setIdUsuario(authBackingBean.getUserLoggedIn());
         remitoCabecera.setFechaAlta(new Date());
         remitoCabecera.setIsOrigenInterno(Boolean.FALSE);
@@ -82,24 +86,46 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public void agregarLinea() {
 
-        if (remitoDetalle.getIdProducto() == null) {
-            jsfUtil.addErrorMessage("Debe seleccionar un producto antes.");
+        Productos producto;
+        if (productoBusquedaSeleccionado != null) {
+            producto = productoBusquedaSeleccionado;
+        } else {
+            if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio())) {
+                return;
+            }
+            producto = productosFacade.findFirstBySearchFilter(productosFilter);
+        }
+
+        if (producto == null) {
+            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 
-        if (remitoCabecera.getDetalleList() == null) {
-            remitoCabecera.setDetalleList(new ArrayList<>());
-        }
-        remitoDetalle.setRemitoCabecera(remitoCabecera);
-        remitoCabecera.getDetalleList().add(remitoDetalle);
-        remitoDetalle = new RemitoDetalle();
+        remitoCabecera.getDetalleList().add(crearLineaDetalleRemito(producto));
+        cantidad = BigDecimal.ONE;
+        productosFilter.setCodigoPropio(null);
+        productosFilter.setIdProducto(null);
 
+        productoBusquedaSeleccionado = null;
+
+    }
+
+    private RemitoDetalle crearLineaDetalleRemito(Productos producto) {
+        RemitoDetalle detalle = new RemitoDetalle();
+        if (unidadesCompra) {
+            cantidad = cantidad.multiply(producto.getUnidadesCompraUnidadesVenta());
+        }
+        detalle.setCantidad(cantidad);
+        detalle.setIdProducto(producto);
+        detalle.setRemitoCabecera(remitoCabecera);
+        detalle.setNroLinea(numeradorLinea++);
+        return detalle;
     }
 
     public String confirmarIngreso() {
         if (remitoCabecera.getDetalleList().isEmpty()) {
-            jsfUtil.addErrorMessage("Debe ingresar algunas lineas.");
-            return "";
+            jsfUtil.addErrorMessage("Debe ingresar los productos.");
+            return StringUtils.EMPTY;
         }
 
         remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(2L));
@@ -116,7 +142,28 @@ public class IngresoMercaderiaBean implements Serializable {
         remitoCabecera.setRemitoRecepcionesList(Arrays.asList(recepcion));
         remitoFacade.create(remitoCabecera);
 
-        return "/protected/index.xhtml?faces-redirect=true";
+        return "/protected/stock/remitos/index.xhtml?faces-redirect=true";
+    }
+
+    /**
+     * Borra el ítem con el número pasado por parámetro
+     *
+     * @param nroItem
+     */
+    public void eliminarItem(int nroItem) {
+        int index = -1;
+        int cont = 0;
+
+        for (RemitoDetalle vl : remitoCabecera.getDetalleList()) {
+            if (vl.getNroLinea() == nroItem) {
+                index = cont;
+                break;
+            }
+            cont++;
+        }
+        if (index >= 0) {
+            remitoCabecera.getDetalleList().remove(index);
+        }
     }
 
     // ---Getter and Setter ----------------------------------------------
@@ -128,20 +175,50 @@ public class IngresoMercaderiaBean implements Serializable {
         this.remitoCabecera = remitoCabecera;
     }
 
-    public RemitoDetalle getRemitoDetalle() {
-        return remitoDetalle;
-    }
-
-    public void setRemitoDetalle(RemitoDetalle remitoDetalle) {
-        this.remitoDetalle = remitoDetalle;
-    }
-
     public AuthBackingBean getAuthBackingBean() {
         return authBackingBean;
     }
 
     public void setAuthBackingBean(AuthBackingBean authBackingBean) {
         this.authBackingBean = authBackingBean;
+    }
+
+    public ProductosSearchFilter getProductosFilter() {
+        return productosFilter;
+    }
+
+    public BigDecimal getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Productos getProductoBusquedaSeleccionado() {
+        return productoBusquedaSeleccionado;
+    }
+
+    public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
+        this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
+    }
+
+    /**
+     * Establece si se debe considerar la cantidad ingresada como unidades de compra
+     *
+     * @return
+     */
+    public boolean getUnidadesCompra() {
+        return unidadesCompra;
+    }
+
+    /**
+     * Establece si se debe considerar la cantidad ingresada como unidades de compra
+     *
+     * @param unidadesCompra
+     */
+    public void setUnidadesCompra(boolean unidadesCompra) {
+        this.unidadesCompra = unidadesCompra;
     }
 
 }
