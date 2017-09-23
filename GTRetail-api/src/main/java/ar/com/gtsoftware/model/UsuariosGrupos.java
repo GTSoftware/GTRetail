@@ -18,6 +18,7 @@ package ar.com.gtsoftware.model;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -46,10 +47,7 @@ public class UsuariosGrupos extends BaseEntity {
     @Size(min = 1, max = 100)
     @Column(name = "nombre_grupo")
     private String nombreGrupo;
-    @JoinTable(name = "usuarios_gruposx", joinColumns = {
-        @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo", columnDefinition = "int4")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "usuariosGruposList", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Usuarios> usuariosList;
     @JoinTable(name = "privilegios_gruposx", joinColumns = {
         @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo", columnDefinition = "int4")}, inverseJoinColumns = {

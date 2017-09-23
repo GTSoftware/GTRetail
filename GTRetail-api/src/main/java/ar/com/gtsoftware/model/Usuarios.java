@@ -20,9 +20,11 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
@@ -69,7 +71,12 @@ public class Usuarios extends BaseEntity implements Serializable {
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
-    @ManyToMany(mappedBy = "usuariosList")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(name = "usuarios_gruposx",
+            joinColumns = {
+                @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")})
     private List<UsuariosGrupos> usuariosGruposList;
 
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")

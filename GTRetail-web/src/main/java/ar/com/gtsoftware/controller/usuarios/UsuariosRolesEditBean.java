@@ -127,7 +127,9 @@ public class UsuariosRolesEditBean implements Serializable {
             if (usuarioActual.getUsuariosGruposList() == null) {
                 usuarioActual.setUsuariosGruposList(new ArrayList<>());
             }
-            usuarioActual.getUsuariosGruposList().add(rol);
+            List<UsuariosGrupos> roles = usuarioActual.getUsuariosGruposList();
+            roles.add(rol);
+            usuarioActual.setUsuariosGruposList(roles);
             doGuardarUsuario();
         }
     }
@@ -135,8 +137,9 @@ public class UsuariosRolesEditBean implements Serializable {
     public void quitarRol(UsuariosGrupos rol) {
         if (usuarioActual != null) {
             if (usuarioActual.getUsuariosGruposList() != null) {
-
-                usuarioActual.getUsuariosGruposList().remove(rol);
+                List<UsuariosGrupos> roles = usuarioActual.getUsuariosGruposList();
+                roles.remove(rol);
+                usuarioActual.setUsuariosGruposList(roles);
                 doGuardarUsuario();
             }
         }
