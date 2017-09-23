@@ -4,10 +4,11 @@
     <parent>
         <artifactId>GTRetail</artifactId>
         <groupId>ar.com.gtsoftware</groupId>
-        <version>5.0.1-SNAPSHOT</version>
+        <version>5.1.0</version>
     </parent>
 
     <artifactId>GTRetail-web</artifactId>
+  <version>5.0.1</version>
     <packaging>war</packaging>
 
     <name>GTRetail-web</name>
@@ -48,7 +49,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
             <scope>provided</scope>
-            <version>5.0.1-SNAPSHOT</version>
+            <version>5.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
