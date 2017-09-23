@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail</artifactId>
-    <version>5.1.1-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>GTRetail</name>
     <description>Sistema de gestión empresarial para PyMEs</description>
@@ -72,7 +72,7 @@
             <dependency>
                 <groupId>ar.com.gtsoftware</groupId>
                 <artifactId>GTRetail-ejb</artifactId>
-                <version>5.0.2-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <type>ejb</type>
             </dependency>
 
@@ -81,14 +81,14 @@
             <dependency>
                 <groupId>ar.com.gtsoftware</groupId>
                 <artifactId>GTRetail-web</artifactId>
-                <version>5.0.2-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <type>war</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>ar.com.gtsoftware</groupId>
                 <artifactId>GTRetail-api</artifactId>
-                <version>5.0.2-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
