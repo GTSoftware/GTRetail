@@ -24,6 +24,7 @@ import ar.com.gtsoftware.search.SucursalesSearchFilter;
 import ar.com.gtsoftware.utils.HashUtils;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,6 +99,7 @@ public class UsuariosEditBean implements Serializable {
 
     private void nuevoUsuario() {
         usuarioActual = new Usuarios();
+        usuarioActual.setFechaAlta(new Date());
         nuevo = true;
     }
 
