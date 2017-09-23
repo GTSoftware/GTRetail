@@ -18,15 +18,14 @@ package ar.com.gtsoftware.auth;
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.utils.HashUtils;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * Controlador para el cambio de claves de los usuarios
@@ -46,6 +45,8 @@ public class ChangePasswordBean implements Serializable {
 
     @EJB
     private UsuariosFacade usuarioFacade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private String oldPassword;
     private String newPassword;
@@ -83,32 +84,32 @@ public class ChangePasswordBean implements Serializable {
 
     private boolean cambioValido() {
         if (oldPassword == null || newPassword == null || newPasswordRepeat == null) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cambio de clave", "Se deben completar todos los campos"));
+            jsfUtil.addErrorMessage("Se deben completar todos los campos");
 
             return false;
         }
         if (newPassword.length() < 6) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cambio de clave", "La clave debe tener 6 o más caracteres"));
+            jsfUtil.addErrorMessage("La clave debe tener 6 o más caracteres");
+
             return false;
         }
         String oldPassHashed = HashUtils.getHash(oldPassword);
         if (!oldPassHashed.equals(authBackingBean.getUserLoggedIn().getPassword())) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cambio de clave", "La contraseña anterior debe coincidir"));
+
+            jsfUtil.addErrorMessage("La contraseña anterior debe coincidir");
+
             return false;
         }
         if (!newPassword.equals(newPasswordRepeat)) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cambio de clave", "La clave de control no coincide"));
+            jsfUtil.addErrorMessage("La clave de control no coincide");
+
             return false;
         }
         String newPassHashed = HashUtils.getHash(newPassword);
 
         if (newPassHashed.equals(oldPassHashed)) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cambio de clave", "La nueva clave no puede ser la misma que la anterior"));
+            jsfUtil.addErrorMessage("La nueva clave no puede ser la misma que la anterior");
+
             return false;
         }
         return true;
@@ -123,14 +124,14 @@ public class ChangePasswordBean implements Serializable {
                 usuarioFacade.edit(usuario);
             } catch (Exception ex) {
                 Logger.getLogger(ChangePasswordBean.class.getName()).log(Level.SEVERE, null, ex);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cambio de clave", "La clave no pudo ser actualizada"));
+                jsfUtil.addErrorMessage("La clave no pudo ser actualizada");
+
             }
             oldPassword = null;
             newPassword = null;
             newPasswordRepeat = null;
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Cambio de clave", "La clave fue actualizada exitosamente"));
+            jsfUtil.addInfoMessage("La clave fue actualizada exitosamente");
+
         }
     }
 

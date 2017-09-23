@@ -36,7 +36,14 @@
                             </p:autoComplete>
                             <p:commandButton id="buscarPersonasButton" icon="fa fa-fw fa-search"
                                              oncomplete="PF('clientesDialog').show()"
+                                             title="Buscar  cliente"
                                              immediate="true" />
+                            <p:button id="altaPersonasButton" icon="fa fa-fw fa-plus"
+
+                                      title="Alta de clientes"
+                                      styleClass="GreenButton"
+                                      href="/protected/clientes/edicion/index.xhtml"
+                                      target="_blank"/>
                         </h:panelGroup>
 
                         <p:outputLabel value="#{msg.responsabilidadIVA}:"/>
@@ -101,9 +108,9 @@
                           dynamic="true"
                           showEffect="fade" hideEffect="clip" modal="true">
 
-                    <gtsoftware:busquedaPersonas personaSeleccionada="#{shopCartBean.venta.idPersona}"
+                    <gtsoftware:busquedaClientes personaSeleccionada="#{shopCartBean.venta.idPersona}"
                                                  >
-                    </gtsoftware:busquedaPersonas>
+                    </gtsoftware:busquedaClientes>
 
                     <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                      oncomplete="PF('clientesDialog').hide()"
@@ -119,6 +126,7 @@
 
                 </p:dialog>
             </h:form>
+
         </div>
     </div>
 

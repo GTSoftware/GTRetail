@@ -62,6 +62,7 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
         cq.select(registroIVA);
         Predicate p1 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.letraFactura), letra);
         Predicate p2 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.puntoVentaFactura), puntoVenta);
+        //Predicate p3 = cb.equal(registroIVA.get(FiscalLibroIvaVentas_.codigoTipoComprobante), tipoComp);
 
         cq.where(cb.and(p1, p2));
         cq.orderBy(cb.desc(registroIVA.get(FiscalLibroIvaVentas_.numeroFactura)));

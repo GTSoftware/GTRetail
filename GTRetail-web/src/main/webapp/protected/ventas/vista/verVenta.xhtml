@@ -147,19 +147,30 @@
                                                  converter="omnifaces.SelectItemsIndexConverter"
                                                  style="width: 100%">
 
+                                    <p:ajax listener="#{verComprobantesBean.cargarNumeroComprobante()}"
+                                            update="nroCompFragment"/>
+
                                     <f:selectItems value="#{verComprobantesBean.puntosVentaList}"
                                                    var="punto"
                                                    itemValue="#{punto}"
                                                    itemLabel="#{punto.businessString}"/>
                                 </p:selectOneMenu>
 
+                                <p:fragment id="nroCompFragment" >
+                                    <p:outputLabel for="numeroComprobanteField" value="#{msg.numero} #{msg.factura}:"
+                                                   rendered="#{verComprobantesBean.permitirCargarNroComprobante}"/>
 
-
+                                    <p:inputText id="numeroComprobanteField" value="#{verComprobantesBean.numeroComprobante}"
+                                                 rendered="#{verComprobantesBean.permitirCargarNroComprobante}" >
+                                        <f:convertNumber minIntegerDigits="1" maxIntegerDigits="8" type="number"/>
+                                    </p:inputText>
+                                </p:fragment>
                             </p:panelGrid >
 
                             <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                                              oncomplete="PF('facturarDialog').hide()"
-                                             update="@all"
+                                             onclick="PF('facturarDialog').hide()"
+                                             update=":opcionesForm :facturarForm :vistaVentaComposite"
                                              action="#{verComprobantesBean.registrarFactura()}"/>
 
                         </p:dialog>

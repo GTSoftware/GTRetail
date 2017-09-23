@@ -30,6 +30,8 @@ import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
+import ar.com.gtsoftware.eao.RemitoFacade;
+import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.ComprobantesEstados;
 import ar.com.gtsoftware.model.ComprobantesLineas;
@@ -44,6 +46,9 @@ import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
+import ar.com.gtsoftware.model.Remito;
+import ar.com.gtsoftware.model.RemitoDetalle;
+import ar.com.gtsoftware.model.RemitoRecepcion;
 import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
@@ -57,6 +62,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -117,6 +123,10 @@ public class ShopCartBean implements Serializable {
     private NegocioPlanesPagoDetalleFacade pagoDetalleFacade;
     @EJB
     private JSFUtil jsfUtil;
+    @EJB
+    private RemitoTipoMovimientoFacade tipoMovimientoFacade;
+    @EJB
+    private RemitoFacade remitoFacade;
 
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
@@ -470,20 +480,8 @@ public class ShopCartBean implements Serializable {
 
                 venta.setSaldo(venta.getTotal());
                 ventasBean.guardarVenta(venta);
+                generarRemitoEntrega(venta);
 
-                for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
-
-                    Productos product = vl.getIdProducto();
-                    if (product.getIdTipoProveeduria().getControlStock()) {
-                        product.setStockActual(product.getStockActual().subtract(vl.getCantidad().multiply(venta.getTipoComprobante().getSigno())));
-                        if (product.getStockActual().signum() < 0) {
-                            product.setStockActual(BigDecimal.ZERO);
-                        }
-                        productosFacade.edit(product);
-
-                    }
-
-                }
                 jsfUtil.addInfoMessage("Operación guardada exitosamente!");
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";
@@ -493,6 +491,62 @@ public class ShopCartBean implements Serializable {
             }
         }
         return null;
+    }
+
+    /**
+     * Genera el remito de egreso/ingreso según corresponda por la totalidad de los ítems del comprobante
+     *
+     * @param remitoDetalle
+     */
+    private void generarRemitoEntrega(Comprobantes venta) {
+        Remito rem = new Remito();
+        List<RemitoDetalle> remitoDetalle = new ArrayList<>();
+        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
+
+            Productos product = vl.getIdProducto();
+            if (product.getIdTipoProveeduria().getControlStock()) {
+                int nroLineaRem = 0;
+                //Armo las lineas de remitos
+                RemitoDetalle rd = new RemitoDetalle();
+                rd.setCantidad(vl.getCantidad());
+                rd.setIdProducto(product);
+                rd.setNroLinea(nroLineaRem++);
+                rd.setRemitoCabecera(rem);
+
+                remitoDetalle.add(rd);
+            }
+        }
+
+        rem.setDetalleList(remitoDetalle);
+        rem.setFechaAlta(venta.getFechaComprobante());
+        rem.setFechaCierre(venta.getFechaComprobante());
+        RemitoRecepcion recepcion = new RemitoRecepcion();
+        recepcion.setFecha(venta.getFechaComprobante());
+        recepcion.setRemito(rem);
+        recepcion.setIdUsuario(venta.getIdUsuario());
+
+        //Verifico el origen y destino del remito a generar
+        if (venta.getTipoComprobante().getSigno().signum() > 0) {
+            rem.setIsDestinoInterno(false);
+            rem.setIsOrigenInterno(true);
+            rem.setIdDestinoPrevistoExterno(venta.getIdPersona());
+            //Tomo el primer depósito por defecto, esto debería venir de la UI
+            rem.setIdOrigenInterno(venta.getIdSucursal().getDepositosList().get(0));
+            recepcion.setIdPersona(venta.getIdPersona());
+        } else {
+            rem.setIsDestinoInterno(true);
+            rem.setIsOrigenInterno(false);
+            rem.setIdOrigenExterno(venta.getIdPersona());
+            //Tomo el primer depósito por defecto, esto debería venir de la UI
+            rem.setIdDestinoPrevistoInterno(venta.getIdSucursal().getDepositosList().get(0));
+            recepcion.setIdDeposito(rem.getIdDestinoPrevistoInterno());
+        }
+        rem.setObservaciones(String.format("Remito generado automáticamente por comprobante nro: %d", venta.getId()));
+        //TODO: Seteado en Venta por defecto pero debería ir el que corresponda.
+        rem.setRemitoTipoMovimiento(tipoMovimientoFacade.find(2L));
+        rem.setRemitoRecepcionesList(Arrays.asList(recepcion));
+        rem.setIdUsuario(venta.getIdUsuario());
+        remitoFacade.createOrEdit(rem);
     }
 
     public BigDecimal getCantidad() {

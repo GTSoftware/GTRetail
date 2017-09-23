@@ -2,6 +2,7 @@ package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.eao.FiscalAlicuotasIvaFacade;
 import ar.com.gtsoftware.eao.PersonasFacade;
+import ar.com.gtsoftware.eao.ProductoXDepositoFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosMarcasFacade;
@@ -12,6 +13,7 @@ import ar.com.gtsoftware.eao.ProductosTiposProveeduriaFacade;
 import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.model.ProductoXDeposito;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosMarcas;
@@ -24,6 +26,7 @@ import ar.com.gtsoftware.model.ProductosTiposProveeduria;
 import ar.com.gtsoftware.model.ProductosTiposUnidades;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
@@ -87,6 +90,9 @@ public class ProductoEditBean implements Serializable {
     private ProductosListasPreciosFacade listasPreciosFacade;
 
     @EJB
+    private ProductoXDepositoFacade prodXDepoFacade;
+
+    @EJB
     private JSFUtil jsfUtil;
 
     private Productos productoActual;
@@ -100,6 +106,7 @@ public class ProductoEditBean implements Serializable {
     private List<ProductosTiposProveeduria> listTipoProveeduria = new ArrayList<>();
     private List<ProductosTiposPorcentajes> tiposPorcentajesList = new ArrayList<>();
     private List<ProductosListasPrecios> listasPrecios = new ArrayList<>();
+    private List<ProductoXDeposito> stockXDepo = null;
 
     private ProductosRubros productosRubrosNuevo = new ProductosRubros();
     private ProductosTiposProveeduria tiposProveeduria = new ProductosTiposProveeduria();
@@ -452,4 +459,17 @@ public class ProductoEditBean implements Serializable {
         this.tipoPorcentajeSeleccionado = tipoPorcentajeSeleccionado;
     }
 
+    public List<ProductoXDeposito> getStockPorDeposito() {
+        if (stockXDepo == null) {
+            if (productoActual == null) {
+                stockXDepo = new ArrayList<>();
+            } else if (productoActual.getId() == null) {
+                stockXDepo = new ArrayList<>();
+            }
+            ProductoXDepositoSearchFilter sf = new ProductoXDepositoSearchFilter();
+            sf.setIdProducto(productoActual);
+            stockXDepo = prodXDepoFacade.findAllBySearchFilter(sf);
+        }
+        return stockXDepo;
+    }
 }

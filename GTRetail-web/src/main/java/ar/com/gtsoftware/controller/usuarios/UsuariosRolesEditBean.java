@@ -15,24 +15,22 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
 import ar.com.gtsoftware.controller.exceptions.ValidationException;
 import ar.com.gtsoftware.eao.UsuariosFacade;
 import ar.com.gtsoftware.eao.UsuariosGruposFacade;
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.model.UsuariosGrupos;
+import ar.com.gtsoftware.utils.JSFUtil;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * Controlador para el caso de uso de edición de usuarios
@@ -46,7 +44,7 @@ import ar.com.gtsoftware.model.UsuariosGrupos;
 public class UsuariosRolesEditBean implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -56,11 +54,14 @@ public class UsuariosRolesEditBean implements Serializable {
     @EJB
     private UsuariosGruposFacade rolFacade;
 
+    @EJB
+    private JSFUtil jsfUtil;
+
     private Usuarios usuarioActual;
 
     private static final Logger LOG = Logger.getLogger(UsuariosRolesEditBean.class.getName());
 
-    private static final String RESERVED_USERNAME = "system";
+    private static final String RESERVED_USERNAME = "admin";
 
     /**
      * Creates a new instance of UsuariosEditBean
@@ -73,17 +74,14 @@ public class UsuariosRolesEditBean implements Serializable {
 
         String logIn = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("login");
         if (logIn == null) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario inexistente!", logIn));
+
             LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
             usuarioActual = null;
         } else {
-            usuarioActual = usuarioFacade.find(logIn);
+            usuarioActual = usuarioFacade.find(Long.parseLong(logIn));
             if (usuarioActual == null) {
-
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario inexistente!", logIn));
                 LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
+                throw new IllegalArgumentException(String.format("Usuario inexistente: %s", logIn));
             }
         }
 
@@ -103,13 +101,12 @@ public class UsuariosRolesEditBean implements Serializable {
                 throw new ValidationException("No se permite modificar el usuario reservado");
             }
             usuarioFacade.createOrEdit(usuarioActual);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Usuario guardado exitosamente!", usuarioActual.getLogin()));
+            jsfUtil.addInfoMessage("Usuario guardado exitosamente!");
 
         } catch (ValidationException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", ex.getMessage()));
+            jsfUtil.addErrorMessage(String.format("Error al guardar: %s", ex.getMessage()));
+
         }
 
     }
@@ -128,7 +125,7 @@ public class UsuariosRolesEditBean implements Serializable {
     public void asignarRol(UsuariosGrupos rol) {
         if (usuarioActual != null) {
             if (usuarioActual.getUsuariosGruposList() == null) {
-                usuarioActual.setUsuariosGruposList(new ArrayList<UsuariosGrupos>());
+                usuarioActual.setUsuariosGruposList(new ArrayList<>());
             }
             usuarioActual.getUsuariosGruposList().add(rol);
             doGuardarUsuario();

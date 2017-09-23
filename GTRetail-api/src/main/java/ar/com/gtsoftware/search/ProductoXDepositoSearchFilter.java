@@ -17,6 +17,7 @@ package ar.com.gtsoftware.search;
 
 import ar.com.gtsoftware.model.Depositos;
 import ar.com.gtsoftware.model.Productos;
+import ar.com.gtsoftware.model.Sucursales;
 
 /**
  *
@@ -24,19 +25,27 @@ import ar.com.gtsoftware.model.Productos;
  */
 public class ProductoXDepositoSearchFilter extends AbstractSearchFilter {
 
+    private static final long serialVersionUID = 1L;
+
     private Depositos idDeposito;
     private Productos idProducto;
+    private Sucursales idSucursal;
 
+    @Override
     public boolean hasFilter() {
-        return hasIdDeposito() || hasIdProducto();
+        return hasIdDeposito() || hasIdProducto() || hasIdSucursal();
     }
 
     public boolean hasIdProducto() {
-        return idDeposito != null;
+        return idProducto != null;
     }
 
     public boolean hasIdDeposito() {
         return idDeposito != null;
+    }
+
+    public boolean hasIdSucursal() {
+        return idSucursal != null;
     }
 
     //----Getter  and Setter ------------------------------------------
@@ -54,6 +63,14 @@ public class ProductoXDepositoSearchFilter extends AbstractSearchFilter {
 
     public void setIdProducto(Productos idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public Sucursales getIdSucursal() {
+        return idSucursal;
+    }
+
+    public void setIdSucursal(Sucursales idSucursal) {
+        this.idSucursal = idSucursal;
     }
 
 }

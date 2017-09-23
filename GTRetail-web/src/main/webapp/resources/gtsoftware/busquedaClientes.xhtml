@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2014 GT Software.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <composite:interface>
+
+        <composite:attribute name="personaSeleccionada" type="ar.com.gtsoftware.model.Personas" />
+
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form id="busquedaPersonasForm" >
+            <p:fragment>
+                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
+                             columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1">
+                    <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
+                    <p:inputText id="textoBusquedaField" value="#{clientesSearchBean.filter.txt}" size="50"/>
+                    <p:commandButton  action="#{clientesSearchBean.doSearch()}"
+                                      process="@this"
+                                      value="#{msg.buscar}"
+                                      icon="fa fa-fw fa-search"
+                                      update="personasTable"/>
+                </p:panelGrid >
+
+                <p:separator />
+
+                <p:dataTable id="personasTable"
+                             var="persona"
+                             value="#{clientesSearchBean.dataModel}"
+                             rows="5"
+                             lazy="true"
+                             paginator="true"
+                             selectionMode="single"
+                             selection="#{cc.attrs.personaSeleccionada}"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{persona.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30"
+                             style="width: 100%"
+                             resizableColumns="true"
+                             scrollable="true"
+                             sortMode="single"
+                             reflow="true">
+
+                    <p:ajax event="rowSelect" global="false" />
+                    <p:column style="text-align: left; width:5%" sortBy="#{persona.id}" >
+                        <f:facet name="header">
+                            #{msg.tablaId}
+                        </f:facet>
+                        <h:outputText value="#{persona.id}" />
+                    </p:column>
+
+                    <p:column sortBy="#{persona.razonSocial}">
+                        <f:facet name="header">
+                            #{msg.razonSocial}
+                        </f:facet>
+                        <h:outputText value="#{persona.razonSocial}" />
+                    </p:column>
+
+                    <p:column headerText="Documento" style="width:24%" sortBy="#{persona.documento}">
+                        <f:facet name="header">
+                            #{msg.documento}
+                        </f:facet>
+                        <h:outputText value="#{persona.idTipoDocumento.nombreTipoDocumento} - #{persona.documento}" />
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.direccion}
+                        </f:facet>
+                        <h:outputText value="#{persona.calle} #{persona.altura} #{msg.piso}: #{persona.piso} #{msg.depto}: #{persona.depto}"  />
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.provincia}
+                        </f:facet>
+                        <h:outputText value="#{persona.idProvincia.nombreProvincia}" />
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.localidad}
+                        </f:facet>
+                        <h:outputText value="#{persona.idLocalidad.nombreLocalidad}" />
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.responsabilidadIVA}
+                        </f:facet>
+                        <h:outputText value="#{persona.idResponsabilidadIva.nombreResponsabildiad}" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:fragment>
+        </h:form>
+    </composite:implementation>
+</html>

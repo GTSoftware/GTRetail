@@ -15,21 +15,24 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
+import ar.com.gtsoftware.controller.exceptions.ValidationException;
+import ar.com.gtsoftware.eao.SucursalesFacade;
+import ar.com.gtsoftware.eao.UsuariosFacade;
+import ar.com.gtsoftware.model.Sucursales;
+import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.search.SucursalesSearchFilter;
+import ar.com.gtsoftware.utils.HashUtils;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
-import ar.com.gtsoftware.controller.exceptions.ValidationException;
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.utils.HashUtils;
 
 /**
  * Controlador para el caso de uso de edición de usuarios
@@ -43,12 +46,18 @@ import ar.com.gtsoftware.utils.HashUtils;
 public class UsuariosEditBean implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     @EJB
     private UsuariosFacade usuarioFacade;
+    @EJB
+    private JSFUtil jsfUtil;
+    @EJB
+    private SucursalesFacade sucursalesFacade;
+
+    private List<Sucursales> sucursalesList;
 
     private Usuarios usuarioActual;
 
@@ -60,7 +69,7 @@ public class UsuariosEditBean implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(UsuariosEditBean.class.getName());
 
-    private static final String RESERVED_USERNAME = "system";
+    private static final String RESERVED_USERNAME = "admin";
 
     /**
      * Creates a new instance of UsuariosEditBean
@@ -75,20 +84,22 @@ public class UsuariosEditBean implements Serializable {
         if (logIn == null) {
             nuevoUsuario();
         } else {
-            usuarioActual = usuarioFacade.find(logIn);
+            usuarioActual = usuarioFacade.find(Long.parseLong(logIn));
             nuevo = false;
             if (usuarioActual == null) {
-
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario inexistente!", logIn));
-                LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
+                LOG.log(Level.SEVERE, "Usuario inexistente! {0}", logIn);
+                throw new IllegalArgumentException(String.format("Usuario inexistente: %s", logIn));
             }
         }
+        SucursalesSearchFilter sucSF = new SucursalesSearchFilter(true);
+        sucSF.addSortField("nombreSucursal", true);
+        sucursalesList = sucursalesFacade.findAllBySearchFilter(sucSF);
 
     }
 
     private void nuevoUsuario() {
         usuarioActual = new Usuarios();
+        usuarioActual.setFechaAlta(new Date());
         nuevo = true;
     }
 
@@ -114,12 +125,10 @@ public class UsuariosEditBean implements Serializable {
             usuarioActual.setNombreUsuario(usuarioActual.getNombreUsuario().toUpperCase());
             usuarioActual.setLogin(usuarioActual.getLogin().toLowerCase());
             usuarioFacade.createOrEdit(usuarioActual);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Usuario guardado exitosamente!", usuarioActual.getLogin()));
+            jsfUtil.addInfoMessage(String.format("Usuario guardado exitosamente: %s", usuarioActual.getLogin()));
 
         } catch (ValidationException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Error de validación de datos!", ex.getMessage()));
+            jsfUtil.addErrorMessage(String.format("Error de validación de datos: %s", ex.getMessage()));
 
         }
 
@@ -127,19 +136,19 @@ public class UsuariosEditBean implements Serializable {
 
     public void doEliminarUsuario() {
         if (usuarioActual.getLogin().equals(RESERVED_USERNAME)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "El usuario reservado no puede borrarse!", usuarioActual.getLogin()));
+            jsfUtil.addErrorMessage("El usuario reservado no puede borrarse!");
+
             return;
         }
         try {
             usuarioFacade.remove(usuarioActual);
             usuarioActual = null;
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario eliminado exitosamente!", ""));
+            jsfUtil.addInfoMessage("Usuario eliminado exitosamente!");
+
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al borrar!", usuarioActual.getLogin()));
+            jsfUtil.addErrorMessage("Error al borrar!");
+
         }
     }
 
@@ -187,6 +196,15 @@ public class UsuariosEditBean implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    /**
+     * La lista de sucursales activas en las que se puede encontrar un usuario
+     *
+     * @return
+     */
+    public List<Sucursales> getSucursalesList() {
+        return sucursalesList;
     }
 
 }

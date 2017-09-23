@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -51,7 +52,7 @@ public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilte
         if (psf.getIdPersona() != null) {
             p = cb.equal(persona.get(Personas_.id), psf.getIdPersona());
         }
-        if (psf.getTxt() != null && !psf.getTxt().isEmpty()) {
+        if (StringUtils.isNotEmpty(psf.getTxt())) {
             String s = psf.getTxt().toUpperCase();
             Predicate p1 = cb.like(persona.get(Personas_.razonSocial), String.format("%%%s%%", s));
             Predicate p2 = cb.like(persona.get(Personas_.apellidos), String.format("%%%s%%", s));

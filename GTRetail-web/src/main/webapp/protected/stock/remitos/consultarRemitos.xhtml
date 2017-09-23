@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Consulta de Remitos</h1>
+                <div class="SeparatorFull" />
+
+                <h:form id="formContenido">
+                    <p:tabView id="busquedaTab">
+                        <p:defaultCommand target="buscarButton"/>
+
+                        <p:tab title="#{msg.busquedaBasica}">
+                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                         styleClass="ui-panelgrid-blank" columns="2">
+
+                                <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                                <p:calendar id="fechaDesdeField" value="#{remitosSearchBean.filter.fechaAltaDesde}"
+                                            pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
+
+                                <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                                <p:calendar id="fechaHastaField" value="#{remitosSearchBean.filter.fechaAltaHasta}"
+                                            pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" />
+
+                                <h:outputLabel for="tipoMovimientoField"
+                                               value="#{msg.tipoMovimiento}:" />
+                                <p:selectOneMenu id="tipoMovimientoField" required="false"
+                                                 requiredMessage="#{msg.ingresarValor} de tipo de movimiento"
+                                                 value="#{remitosSearchBean.filter.tipoMovimiento}"
+                                                 converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                                 filterMatchMode="contains">
+
+                                    <f:selectItem noSelectionOption="false"
+                                                  itemLabel="#{msg.todos}" itemValue="#{null}" />
+                                    <f:selectItems value="#{remitosSearchBean.tiposMovimientoList}"
+                                                   var="tipoMov" itemLabel="#{tipoMov.nombreTipo}"
+                                                   itemValue="#{tipoMov}" />
+
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Producto:" for="productoField"/>
+                                <h:panelGroup >
+                                    <p:inputText id="productoField"
+                                                 value="#{remitosSearchBean.filter.idProducto.descripcion}"
+                                                 placeholder="Presione el boton azul para buscar un producto"
+                                                 disabled="true">
+                                        <p:commandButton id="buscarProductoButton" icon="fa fa-fw fa-search"
+                                                         title="#{msg.buscar} productos"
+                                                         oncomplete="PF('dlgBusProd').show()" process="@none"
+                                                         global="false" />
+                                    </p:inputText>
+                                </h:panelGroup>
+                            </p:panelGrid >
+
+
+                        </p:tab>
+
+                        <p:tab title="#{msg.busquedaAvanzada}" >
+
+                        </p:tab>
+                    </p:tabView>
+                    <p:commandButton id="buscarButton" action="#{remitosSearchBean.doSearch()}"
+                                     value="#{msg.buscar}"
+                                     update="@form"
+                                     icon="fa fa-fw fa-search"
+                                     />
+
+                    <div class="SeparatorFull" />
+
+                    <p:dataTable id="remitosTable" value="#{remitosSearchBean.dataModel}" var="remito"
+                                 rows="30"
+                                 lazy="true"
+                                 paginator="true"
+                                 sortMode="single"
+                                 emptyMessage="#{msg.busquedaSinResultados}"
+                                 rowKey="#{remito.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowsPerPageTemplate="10,15,30,100"
+
+                                 selection="#{remitosSearchBean.elemento}"
+                                 selectionMode="single"
+
+                                 scrollable="true"
+                                 reflow="true"
+                                 liveResize="true"
+                                 > 
+
+                        <f:facet name="{Exporters}">
+                            <h:commandLink title="xls">
+                                <i class="fa fa-file-excel-o Fs24 Green" />
+                                <p:dataExporter type="xls" target="remitosTable" fileName="remitos" />
+                            </h:commandLink>
+
+                            <h:commandLink title="pdf">
+                                <i class="fa fa-file-pdf-o Fs24 Red" />
+                                <p:dataExporter type="pdf" target="remitosTable" fileName="remitos"/>
+                            </h:commandLink>
+
+                            <h:commandLink title="csv">
+                                <i class="fa fa-file-text-o Fs24 Blue" />
+                                <p:dataExporter type="csv" target="remitosTable" fileName="remitos" />
+                            </h:commandLink>
+
+                            <h:commandLink title="xml">
+                                <i class="fa fa-file-code-o Fs24 Black" />
+                                <p:dataExporter type="xml" target="remitosTable" fileName="remitos" />
+                            </h:commandLink>
+                        </f:facet>
+
+                        <f:facet name="header" >
+                            #{msg.remitoListado}
+                        </f:facet>
+                        <p:column  exportable="false">
+                            <p:rowToggler />
+                        </p:column>
+
+                        <p:column sortBy="#{remito.id}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.id}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.id}"/>
+                        </p:column>
+
+
+                        <p:column sortBy="#{remito.fechaAlta}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.fechaAlta}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.fechaAlta}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a" />
+                            </h:outputLabel>
+                        </p:column>
+                        <p:column sortBy="#{remito.idUsuario}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.usuario}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.idUsuario.nombreUsuario}"/>
+
+                        </p:column>
+                        <p:column sortBy="#{remito.observaciones}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.observaciones}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.observaciones}"/>
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.origen}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.nombreOrigen}"/>
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.destino}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.nombreDestino}"/>
+                        </p:column>
+                        <p:column sortBy="#{remito.remitoTipoMovimiento}">
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.tipoMovimiento}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{remito.remitoTipoMovimiento.nombreTipo}"/>
+                        </p:column>
+
+                        <p:column  exportable="false" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.acciones}"/>
+                            </f:facet>
+                            <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
+
+                                <p:commandButton icon="fa fa-print" action="#{impresionVentasBean.imprimirRemito(remito)}"
+                                                 ajax="false" immediate="true"
+                                                 title="Imprimir Remito">
+
+                                </p:commandButton>
+
+
+                            </p:panelGrid>
+
+                        </p:column>
+
+                        <p:rowExpansion >
+                            <p:dataTable id="remitoDetalleTable" value="#{remito.detalleList}" var="lineaRemito"
+                                         reflow="true"
+                                         emptyMessage="#{msg.productosNoCargados}"
+                                         >
+
+                                <p:column style="text-align: right;">
+                                    <f:facet name="header">
+                                        #{msg.tablaId}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.id}" />
+                                </p:column>
+                                <p:column style="text-align: left; ">
+                                    <f:facet name="header">
+                                        #{msg.codigo}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.codigoPropio}" />
+                                </p:column>
+                                <p:column style="text-align: left;">
+                                    <f:facet name="header">
+                                        #{msg.tablaDescripcion}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.descripcion}" />
+                                </p:column>
+                                <p:column style="text-align: right; ">
+                                    <f:facet name="header">
+                                        #{msg.tablaCantidad}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.cantidad}" />
+                                </p:column>
+                                <p:column style="text-align: left; ">
+                                    <f:facet name="header">
+                                        #{msg.tablaUnidad}
+                                    </f:facet>
+                                    <h:outputText value="#{lineaRemito.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </p:rowExpansion>
+                    </p:dataTable>
+
+                </h:form>
+                <h:form id="dialogsForm">
+                    <!--DIALOGO DE BUSQUEDA DE PRODUCTOS-->
+                    <p:dialog id="busquedaProductosDialog"
+                              header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                              modal="true" dynamic="true">
+                        <gtsoftware:busquedaProductos
+                            productoSeleccionado="#{remitosSearchBean.filter.idProducto}"
+                            soloConStock="#{null}" puedeComprarse="#{null}"
+                            puedeVenderse="#{null}" />
+
+                        <div class="SeparatorFull" />
+
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('dlgBusProd').hide()" update=":formContenido"
+                                         immediate="true" process="@this"
+                                         actionListener="#{nuevoRemitoBean.agregarProducto()}" />
+
+                        <p:commandButton value="#{msg.cancelar}" immediate="true"
+                                         icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                         styleClass="RedButton" />
+
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </div>
+</html>

@@ -69,22 +69,13 @@ public class Usuarios extends BaseEntity implements Serializable {
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
-    @Basic(optional = true)
-    @Size(min = 4, max = 4)
-    @Column(name = "punto_venta")
-    private String puntoVenta;
     @ManyToMany(mappedBy = "usuariosList")
     private List<UsuariosGrupos> usuariosGruposList;
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-//    private List<StockMovimientos> stockMovimientosList;
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-//    private List<ProductosImagenes> productosImagenesList;
+
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne
     private Sucursales idSucursal;
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-//    private List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList;
     /**
      * Crea un nuevo objeto Usuario
      */
@@ -210,36 +201,6 @@ public class Usuarios extends BaseEntity implements Serializable {
     }
 
     /**
-     *
-     * @return
-     */
-//    @XmlTransient
-//    public List<StockMovimientos> getStockMovimientosList() {
-//        return stockMovimientosList;
-//    }
-    /**
-     *
-     * @param stockMovimientosList
-     */
-//    public void setStockMovimientosList(List<StockMovimientos> stockMovimientosList) {
-//        this.stockMovimientosList = stockMovimientosList;
-//    }
-    /**
-     *
-     * @return
-     */
-//    @XmlTransient
-//    public List<ProductosImagenes> getProductosImagenesList() {
-//        return productosImagenesList;
-//    }
-    /**
-     *
-     * @param productosImagenesList
-     */
-//    public void setProductosImagenesList(List<ProductosImagenes> productosImagenesList) {
-//        this.productosImagenesList = productosImagenesList;
-//    }
-    /**
      * Devuelve la sucursal a la que pertenece el usuario
      *
      * @return
@@ -255,39 +216,6 @@ public class Usuarios extends BaseEntity implements Serializable {
      */
     public void setIdSucursal(Sucursales idSucursal) {
         this.idSucursal = idSucursal;
-    }
-
-    /**
-     *
-     * @return
-     */
-//    @XmlTransient
-//    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
-//        return proveedoresOrdenesCompraList;
-//    }
-    /**
-     *
-     * @param proveedoresOrdenesCompraList
-     */
-//    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
-//        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-//    }
-    /**
-     * Devuelve el punto de venta por defecto del usuario
-     *
-     * @return
-     */
-    public String getPuntoVenta() {
-        return puntoVenta;
-    }
-
-    /**
-     * Establece el punto de venta por defecto del usuario
-     *
-     * @param puntoVenta
-     */
-    public void setPuntoVenta(String puntoVenta) {
-        this.puntoVenta = puntoVenta;
     }
 
 }

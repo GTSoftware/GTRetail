@@ -22,6 +22,6 @@ package ar.com.gtsoftware.model.enums;
  */
 public enum TiposPuntosVenta {
 
-    MANUAL, CONTROLADOR_FISCAL, ELECTRONICO;
+    MANUAL, CONTROLADOR_FISCAL, ELECTRONICO, CONTROLADOR_FISCAL_V2;
 
 }

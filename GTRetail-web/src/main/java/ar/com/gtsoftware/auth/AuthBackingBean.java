@@ -28,6 +28,8 @@ import javax.faces.bean.SessionScoped;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSeparator;
+import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 
 /**
@@ -79,10 +81,19 @@ public class AuthBackingBean implements Serializable {
         salirMi.setCommand("#{authBackingBean.logout}");
         rolesMenuModel.addElement(salirMi);
 
+        DefaultSeparator separator = new DefaultSeparator();
+        rolesMenuModel.addElement(separator);
+
+        DefaultSubMenu rolesSubMenu = new DefaultSubMenu("Roles");
+
         for (UsuariosGrupos rol : getUserLoggedIn().getUsuariosGruposList()) {
-            DefaultMenuItem rolMi = new DefaultMenuItem(String.format("Rol: %s", rol.getNombreGrupo()));
-            rolesMenuModel.addElement(rolMi);
+            DefaultMenuItem rolMi = new DefaultMenuItem(rol.getNombreGrupo());
+            rolesSubMenu.addElement(rolMi);
         }
+
+        rolesSubMenu.setExpanded(false);
+
+        rolesMenuModel.addElement(rolesSubMenu);
 
     }
 

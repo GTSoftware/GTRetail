@@ -21,94 +21,115 @@ limitations under the License.
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       >
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">#{msg.usuariosAdministracion}</h1>
+                <div class="SeparatorFull" />
 
-    <h:form id="searchUserForm">
-        <p:messages id="msgField"/>
-        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
-            <p:outputLabel value="#{msg.terminosBusqueda}:" for="txtBusField"/>
+                <h:form id="searchUserForm">
+                    <p:messages id="msgField"/>
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2" >
 
-            <p:inputText id="txtBusField"
-                         value="#{usuariosSearchBean.filter.text}"
-                         required="true"/>
+                        <p:outputLabel value="#{msg.terminosBusqueda}:" for="txtBusField"/>
 
-
-            <p:commandButton id="buscarButton"
-                             value="#{msg.buscar}"
-                             action="#{usuariosSearchBean.findUsuarios()}"
-                             update="@form"
-                             ajax="true"
-                             icon="fa fa-fw fa-search"/>
-
-            <p:commandButton id="nuevoButton"
-                             value="#{msg.nuevo}"
-                             action="edicion/index.xhtml"
-                             ajax="false"
-                             immediate="true"
-                             icon="fa fa-fw fa-plus"/>
-        </p:panelGrid >
+                        <p:inputText id="txtBusField"
+                                     value="#{usuariosSearchBean.filter.text}"/>
 
 
-        <p:separator/>
+                        <p:commandButton id="buscarButton"
+                                         value="#{msg.buscar}"
+                                         action="#{usuariosSearchBean.doSearch()}"
+                                         update="tablaUsuarios"
+                                         icon="fa fa-fw fa-search"/>
+
+                        <p:commandButton id="nuevoButton"
+                                         value="#{msg.nuevo}"
+                                         action="edicion/index.xhtml"
+                                         ajax="false"
+                                         immediate="true"
+                                         icon="fa fa-fw fa-plus"
+                                         styleClass="GreenButton"/>
+                    </p:panelGrid >
 
 
-        <p:dataTable id="tablaUsuarios"
-                     rendered="#{usuariosSearchBean.usuariosList ne null}"
-                     value="#{usuariosSearchBean.usuariosList}"
-                     var="item"
-                     rows="15"
-                     paginator="true"
-                     sortMode="multiple"
-                     rowKey="#{item.login}"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                     rowsPerPageTemplate="10,15,30"
-                     style="width: 100%"
-                     resizableColumns="true"
-                     scrollable="true"
-                     reflow="true" >
-            <f:facet name="header">
-                <h:outputText value="#{msg.listadoUsuarios}"/>
-            </f:facet>
-            <f:facet name="{Exporters}">
-                <h:commandLink>
-                    <p:graphicImage library="images" name="excel.png" title="Exportar a excel" width="24"/>
-                    <p:dataExporter type="xls" target="tablaUsuarios" fileName="usuarios" />
-                </h:commandLink>
-            </f:facet>
+                    <p:separator/>
+
+
+                    <p:dataTable id="tablaUsuarios"
+                                 value="#{usuariosSearchBean.dataModel}"
+                                 lazy="true"
+                                 var="item"
+                                 rows="15"
+                                 paginator="true"
+                                 rowKey="#{item.login}"
+                                 emptyMessage="#{msg.busquedaSinResultados}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowsPerPageTemplate="10,15,30"
+                                 resizableColumns="true"
+                                 scrollable="true"
+                                 reflow="true" >
+                        <f:facet name="header">
+                            <h:outputText value="#{msg.listadoUsuarios}"/>
+                        </f:facet>
+                        <f:facet name="{Exporters}">
+
+                            <h:commandLink title="xls">
+                                <i class="fa fa-file-excel-o Fs24 Green" />
+                                <p:dataExporter type="xls" target="tablaUsuarios" fileName="usuarios" />
+                            </h:commandLink>
+
+                            <h:commandLink title="pdf">
+                                <i class="fa fa-file-pdf-o Fs24 Red" />
+                                <p:dataExporter type="pdf" target="tablaUsuarios" fileName="usuarios"/>
+                            </h:commandLink>
+
+                            <h:commandLink title="csv">
+                                <i class="fa fa-file-text-o Fs24 Blue" />
+                                <p:dataExporter type="csv" target="tablaUsuarios" fileName="usuarios" />
+                            </h:commandLink>
+
+                            <h:commandLink title="xml">
+                                <i class="fa fa-file-code-o Fs24 Black" />
+                                <p:dataExporter type="xml" target="tablaUsuarios" fileName="usuarios" />
+                            </h:commandLink>
+                        </f:facet>
 
 
 
-            <p:column headerText="#{msg.usuariosLogIn}" sortBy="#{item.login}">
-                <h:outputText value="#{item.login}" >
+                        <p:column headerText="#{msg.usuariosLogIn}" sortBy="#{item.login}">
+                            <h:outputText value="#{item.login}" >
 
-                </h:outputText>
-            </p:column>
-            <p:column headerText="#{msg.nombre}" sortBy="#{item.nombreUsuario}" >
-                <h:outputText value="#{item.nombreUsuario}" >
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{msg.nombre}" sortBy="#{item.nombreUsuario}" >
+                            <h:outputText value="#{item.nombreUsuario}" >
 
-                </h:outputText>
-            </p:column>
-            <p:column headerText="#{msg.sucursal}" sortBy="#{item.idSucursal.nombreSucursal}" >
-                <h:outputText value="#{item.idSucursal.nombreSucursal}" >
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{msg.sucursal}" sortBy="#{item.idSucursal.nombreSucursal}" >
+                            <h:outputText value="#{item.idSucursal.nombreSucursal}" >
 
-                </h:outputText>
-            </p:column>
+                            </h:outputText>
+                        </p:column>
 
 
-            <p:column exportable="false">
-                <p:commandButton id="editarButton"
-                                 action="edicion/index.xhtml"
-                                 ajax="false"
-                                 icon="fa fa-fw fa-edit">
-                    <f:param name="login" value="#{item.login}"/>
+                        <p:column exportable="false">
+                            <p:commandButton id="editarButton"
+                                             action="edicion/index.xhtml"
+                                             ajax="false"
+                                             icon="fa fa-fw fa-edit">
+                                <f:param name="login" value="#{item.id}"/>
 
-                </p:commandButton>
-            </p:column>
+                            </p:commandButton>
+                        </p:column>
 
-            <f:facet name="footer">
-                <h:outputText value="Cantidad de Usuarios #{usuariosSearchBean.usuariosList.size()}"/>
-            </f:facet>
-        </p:dataTable>
 
-    </h:form>
+                    </p:dataTable>
 
+                </h:form>
+            </div>
+        </div>
+    </div>
 </html>

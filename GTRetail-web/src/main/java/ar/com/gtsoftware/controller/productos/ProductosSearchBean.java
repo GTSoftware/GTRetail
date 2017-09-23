@@ -15,18 +15,22 @@
  */
 package ar.com.gtsoftware.controller.productos;
 
+import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
+import ar.com.gtsoftware.eao.ProductoXDepositoFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
 import ar.com.gtsoftware.eao.ProductosPreciosFacade;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
+import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
@@ -55,21 +60,29 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     private static final long serialVersionUID = 1L;
 
     @EJB
+    private JSFUtil jsfUtil;
+
+    @EJB
     private ProductosFacade facade;
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
     @EJB
     private ProductosPreciosFacade preciosFacade;
+    @EJB
+    private ProductoXDepositoFacade stockFacade;
 
     private ProductosListasPrecios listaSeleccionada;
 
     private ProductosPreciosSearchFilter preciosSF;
 
     private List<ProductosListasPrecios> listasPrecio;
+
+    @ManagedProperty(value = "#{authBackingBean}")
+    private AuthBackingBean authBackingBean;
     /**
      * Por defecto creamos un filtro para productos a la venta activos
      */
-    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE, Boolean.TRUE);
+    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -110,6 +123,16 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
         FacesContext.getCurrentInstance().responseComplete();
     }
 
+    public void setParametros(ProductosListasPrecios lista, Boolean soloConStock, Boolean puedeVenderse, Boolean puedeComprarse) {
+        if (jsfUtil.isPostback()) {
+            return;
+        }
+        listaSeleccionada = lista;
+        filter.setConStock(soloConStock);
+        filter.setPuedeVenderse(puedeVenderse);
+        filter.setPuedeComprarse(puedeComprarse);
+    }
+
     public ProductosListasPrecios getListaSeleccionada() {
         return listaSeleccionada;
     }
@@ -148,5 +171,28 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     @Override
     public ProductosSearchFilter getFilter() {
         return filter;
+    }
+
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
+    }
+
+    public BigDecimal getStockSucursal(Productos producto) {
+        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
+        stFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
+        stFilter.setIdProducto(producto);
+
+        return stockFacade.getStockBySearchFilter(stFilter);
+    }
+
+    public BigDecimal getStockTotal(Productos producto) {
+        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
+        stFilter.setIdProducto(producto);
+
+        return stockFacade.getStockBySearchFilter(stFilter);
     }
 }

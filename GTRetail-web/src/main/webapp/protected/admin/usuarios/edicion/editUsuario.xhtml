@@ -22,76 +22,106 @@ limitations under the License.
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       >
 
-    <h:form id="userEditForm">
-        <p:messages id="msgField"/>
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">#{msg.usuariosAdministracion}</h1>
+                <div class="SeparatorFull" />
 
-        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
-            <!-- LogIn -->
-            <p:outputLabel value="#{msg.usuariosLogIn}:" for="logInField"/>
+                <h:form id="userEditForm">
 
-            <p:inputText id="logInField"
-                         value="#{usuariosEditBean.usuarioActual.login}"
-                         required="true"
-                         disabled="#{not usuariosEditBean.nuevo}"
-                         label="#{msg.usuariosLogIn}"
-                         maxlength="30"/>
 
-            <p:outputLabel value="#{msg.usuariosNombreReal}:" for="nombreRealField"/>
-            <!-- Nombre -->
-            <p:inputText id="nombreRealField"
-                         label="#{msg.usuariosNombreReal}"
-                         value="#{usuariosEditBean.usuarioActual.nombreUsuario}"
-                         required="true"
-                         maxlength="100"/>
-            <!-- Contraseña -->
-            <p:outputLabel value="#{msg.password}:" for="passwordField"/>
-            <p:password id="passwordField" 
-                        required="#{usuariosEditBean.nuevo}"
-                        label="#{msg.password}"
-                        value="#{usuariosEditBean.newPassword}"/>
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+                        <!-- LogIn -->
+                        <p:outputLabel value="#{msg.usuariosLogIn}:" for="logInField"/>
 
-            <p:outputLabel value="Repetir #{msg.password}:" for="passwordRepeatField"/>
-            <p:password id="passwordRepeatField" 
-                        required="#{usuariosEditBean.nuevo}"
-                        label="Repetir #{msg.password}"
-                        value="#{usuariosEditBean.passwordRepeat}"/>
+                        <p:inputText id="logInField"
+                                     value="#{usuariosEditBean.usuarioActual.login}"
+                                     required="true"
+                                     disabled="#{not usuariosEditBean.nuevo}"
+                                     label="#{msg.usuariosLogIn}"
+                                     maxlength="30"/>
 
-            <!-- TODO Sucursal-->
+                        <p:outputLabel value="#{msg.usuariosNombreReal}:" for="nombreRealField"/>
+                        <!-- Nombre -->
+                        <p:inputText id="nombreRealField"
+                                     label="#{msg.usuariosNombreReal}"
+                                     value="#{usuariosEditBean.usuarioActual.nombreUsuario}"
+                                     required="true"
+                                     maxlength="100"/>
+                        <!-- Contraseña -->
+                        <p:outputLabel value="#{msg.password}:" for="passwordField"/>
+                        <p:password id="passwordField"
+                                    required="#{usuariosEditBean.nuevo}"
+                                    label="#{msg.password}"
+                                    value="#{usuariosEditBean.newPassword}"
+                                    feedback="true"
+                                    match="passwordRepeatField"/>
 
-        </p:panelGrid >
-        <p:separator/>
-        <!-- Botones de guardar y cancelar-->
-        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4" >
-            <p:commandButton id="guardarButton"
-                             value="#{msg.guardar}"
-                             action="#{usuariosEditBean.doGuardarUsuario()}"
-                             update="@form"
-                             ajax="true"
-                             icon="fa fa-fw fa-save"/>
-            <p:commandButton id="eliminarButton"
-                             value="#{msg.eliminar}"
-                             action="#{usuariosEditBean.doEliminarUsuario()}"
-                             update="@form"
-                             ajax="true"
-                             rendered="#{not usuariosEditBean.nuevo}"
-                             icon="ui-icon-trash"/>
-            <p:commandButton id="editarRolesButton"
-                             value="#{msg.usuariosEditRoles}"
-                             action="/protected/admin/usuarios/roles/index.xhtml"
-                             ajax="false"
-                             rendered="#{not usuariosEditBean.nuevo}"
-                             icon="ui-icon-person">
-                <f:param name="login" value="#{usuariosEditBean.usuarioActual.login}" />
-            </p:commandButton>
+                        <p:outputLabel value="Repetir #{msg.password}:" for="passwordRepeatField"/>
+                        <p:password id="passwordRepeatField"
+                                    required="#{usuariosEditBean.nuevo}"
+                                    label="Repetir #{msg.password}"
+                                    value="#{usuariosEditBean.passwordRepeat}"
+                                    />
 
-            <p:commandButton id="cancelarButton"
-                             value="#{msg.cancelar}"
-                             action="/protected/admin/usuarios/index.xhtml?faces-redirect=true"
-                             ajax="false"
-                             immediate="true"
-                             icon="ui-icon-close"/>
-        </p:panelGrid >
-        
-    </h:form>
+                        <!-- Sucursal-->
+                        <h:outputLabel for="sucursalField"
+                                       value="#{msg.sucursal}:" />
+                        <p:selectOneMenu id="sucursalField" required="true"
+                                         requiredMessage="#{msg.ingresarValor} de sucursal"
+                                         value="#{usuariosEditBean.usuarioActual.idSucursal}"
+                                         converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                         filterMatchMode="contains">
+
+                            <f:selectItem noSelectionOption="true"
+                                          itemLabel="#{msg.ingresarValor}" itemValue="#{null}" />
+                            <f:selectItems value="#{usuariosEditBean.sucursalesList}"
+                                           var="suc" itemLabel="#{suc.businessString}"
+                                           itemValue="#{suc}" />
+
+                        </p:selectOneMenu>
+
+                    </p:panelGrid >
+                    <p:separator/>
+                    <!-- Botones de guardar y cancelar-->
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4" >
+                        <p:commandButton id="guardarButton"
+                                         value="#{msg.guardar}"
+                                         action="#{usuariosEditBean.doGuardarUsuario()}"
+                                         update="@form"
+                                         ajax="true"
+                                         icon="fa fa-fw fa-save"
+                                         styleClass="GreenButton"/>
+                        <p:commandButton id="eliminarButton"
+                                         value="#{msg.borrar}"
+                                         action="#{usuariosEditBean.doEliminarUsuario()}"
+                                         update="@form"
+                                         ajax="true"
+                                         rendered="#{not usuariosEditBean.nuevo}"
+                                         icon="fa fa-fw fa-trash"
+                                         styleClass="RedButton"/>
+                        <p:commandButton id="editarRolesButton"
+                                         value="#{msg.usuariosEditRoles}"
+                                         action="/protected/admin/usuarios/roles/index.xhtml"
+                                         ajax="false"
+                                         rendered="#{not usuariosEditBean.nuevo}"
+                                         icon="fa fa-fw fa-user">
+                            <f:param name="login" value="#{usuariosEditBean.usuarioActual.id}" />
+                        </p:commandButton>
+
+                        <p:commandButton id="cancelarButton"
+                                         value="#{msg.cancelar}"
+                                         action="/protected/admin/usuarios/index.xhtml?faces-redirect=true"
+                                         ajax="false"
+                                         immediate="true"
+                                         icon="fa fa-fw fa-ban"
+                                         />
+                    </p:panelGrid >
+
+                </h:form>
+            </div>
+        </div>
+    </div>
 
 </html>

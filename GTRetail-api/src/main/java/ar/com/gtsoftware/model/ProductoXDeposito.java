@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- *
+ * Reperesenta a las existencias de stock de un determinado producto en un
+ * depósito determinado
+ * 
  * @author fede
  */
 @Entity
@@ -35,22 +38,21 @@ public class ProductoXDeposito extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto",
-            insertable = false, updatable = false)
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", insertable = false, updatable = false)
     @NotNull
     @ManyToOne
     private Productos producto;
 
-    @JoinColumn(name = "id_deposito", referencedColumnName = "id_deposito",
-            insertable = false, updatable = false)
+    @JoinColumn(name = "id_deposito", referencedColumnName = "id_deposito", insertable = false, updatable = false)
     @NotNull
     @ManyToOne
     private Depositos deposito;
 
+    @NotNull
     @Column(name = "stock")
     private BigDecimal stock;
 
-    //-----Getter and Setter--------------------------------------------
+    // -----Getter and Setter--------------------------------------------
     public Productos getProducto() {
         return producto;
     }

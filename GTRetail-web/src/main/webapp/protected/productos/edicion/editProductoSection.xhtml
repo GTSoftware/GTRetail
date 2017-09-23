@@ -596,16 +596,43 @@
                                 </p:inputText>
                                 <p:message for="stockMinimoField"/>
 
-                                <h:outputLabel for="stockActualField"
-                                               value="#{msg.stockActual}:"  />
-                                <p:inputText id="stockActualField"
-                                             value="#{productoEditBean.productoActual.stockActual}"
-                                             label="#{msg.stockActual}" required="true">
-                                    <f:validateDoubleRange
-                                        maximum="9999999999999999999.99" />
-                                </p:inputText>
-                                <p:message for="stockActualField"/>
                             </p:panelGrid >
+                            <div>
+                                <p:dataTable id="existenciasTable" var="stk" value="#{productoEditBean.stockPorDeposito}"
+                                             rows="10"
+                                             lazy="false"
+                                             paginator="true"
+                                             emptyMessage="No hay existencias..."
+                                             selectionMode="single"
+                                             rowKey="#{stk.id}"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15,30,100"
+                                             liveResize="true"
+                                             resizableColumns="true"
+                                             scrollable="true"
+                                             sortMode="single"
+                                             reflow="true">
+
+
+                                    <p:column >
+                                        <f:facet name="header">
+                                            Depósito
+                                        </f:facet>
+                                        <h:outputText value="#{stk.deposito.businessString}" />
+                                    </p:column>
+                                    <p:column style="width:30%">
+                                        <f:facet name="header">
+                                            #{msg.stock}
+                                        </f:facet>
+                                        <h:outputText value="#{stk.stock}" >
+                                            <f:convertNumber groupingUsed="true" />
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </div>
+
+
                         </p:tab>
                         <!--Proveedor-->
                         <p:tab id='ProveedorTab' title="Proveedor">

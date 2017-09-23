@@ -75,7 +75,7 @@ public class FacturacionVentasBean {
      */
     public void registrarFacturaVenta(Comprobantes venta,
             FiscalPuntosVenta puntoVentaComprobante,
-            String numeroComprobante,
+            long numeroComprobante,
             FiscalPeriodosFiscales periodoFiscal,
             Date fechaFactura) throws ServiceException {
         if (periodoFiscal == null) {
@@ -108,7 +108,7 @@ public class FacturacionVentasBean {
         registro.setIdPeriodoFiscal(periodoFiscal);
         registro.setLetraFactura(venta.getLetra());
         registro.setNumeroFactura(formatNumeroFactura(numeroComprobante));
-        registro.setPuntoVentaFactura(formatPuntoVenta(puntoVentaComprobante.getNroPuntoVenta().toString()));
+        registro.setPuntoVentaFactura(formatPuntoVenta(puntoVentaComprobante.getNroPuntoVenta()));
         registro.setTotalFactura(venta.getTotal().multiply(venta.getTipoComprobante().getSigno()));
 
         registro.setCodigoTipoComprobante(tipoCompFiscal);
@@ -195,7 +195,7 @@ public class FacturacionVentasBean {
                 puntoVentaComprobante.getNroPuntoVenta(),
                 Integer.parseInt(registro.getCodigoTipoComprobante().getCodigoTipoComprobante()));
 
-        registro.setNumeroFactura(formatNumeroFactura(String.valueOf(ultimoNro + 1)));
+        registro.setNumeroFactura(formatNumeroFactura(ultimoNro + 1));
         CAEResponse caeDto = WSFEClient.solicitarCAE(loginTicket, cuit, registro, endpoint);
         registro.setCae(caeDto.getCae());
         registro.setFechaVencimientoCae(caeDto.getFechaVencimientoCae());
@@ -208,14 +208,14 @@ public class FacturacionVentasBean {
      * @param puntoVenta
      * @return número de factura disponible
      */
-    public String obtenerProximoNumeroFactura(String letra, String puntoVenta) {
-        FiscalLibroIvaVentas ultimaFactura = ivaVentasFacade.findUltimaFactura(letra, puntoVenta);
-        int nro = 1;
+    public long obtenerProximoNumeroFactura(String letra, int puntoVenta) {
+        FiscalLibroIvaVentas ultimaFactura = ivaVentasFacade.findUltimaFactura(letra, formatPuntoVenta(puntoVenta));
+        long nro = 1;
         if (ultimaFactura != null) {
-            nro = Integer.parseInt(ultimaFactura.getNumeroFactura());
+            nro = Long.parseLong(ultimaFactura.getNumeroFactura());
             nro++;
         }
-        return StringUtils.leftPad(String.valueOf(nro), 8, "0");
+        return nro;
     }
 
     /**
@@ -224,8 +224,8 @@ public class FacturacionVentasBean {
      * @param nroFactura
      * @return
      */
-    private String formatNumeroFactura(String nroFactura) {
-        return StringUtils.leftPad(nroFactura, 8, "0");
+    private String formatNumeroFactura(long nroFactura) {
+        return StringUtils.leftPad(String.valueOf(nroFactura), 8, "0");
     }
 
     /**
@@ -234,8 +234,8 @@ public class FacturacionVentasBean {
      * @param puntoVenta
      * @return
      */
-    private String formatPuntoVenta(String puntoVenta) {
-        return StringUtils.leftPad(puntoVenta, 4, "0");
+    private String formatPuntoVenta(int puntoVenta) {
+        return StringUtils.leftPad(String.valueOf(puntoVenta), 4, "0");
     }
 
     /**
