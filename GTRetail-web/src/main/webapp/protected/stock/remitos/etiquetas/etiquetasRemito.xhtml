@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Generación de etiquetas</h1>
+                <div class="SeparatorFull" />
+                <h:form id="impresionEtiquetasForm">
+
+
+
+
+
+                    <!--LISTA DE ETIQUETAS-->
+
+                    <p:dataTable id="etiquetasTable" var="etiqueta"
+                                 value="#{etiquetasRemitoBean.etiquetas}" paginator="false"
+                                 sortMode="single" emptyMessage="#{msg.productosNoCargados}"
+                                 editable="true" editMode="cell" reflow="true"
+                                 liveResize="true">
+
+
+                        <p:column style="text-align: right; ">
+                            <f:facet name="header">
+                                #{msg.nro}
+                            </f:facet>
+                            <h:outputText value="#{etiqueta.nroItem}" />
+                        </p:column>
+                        <p:column style="text-align: left; ">
+                            <f:facet name="header">
+                                #{msg.codigo}
+                            </f:facet>
+                            <h:outputText value="#{etiqueta.producto.codigoPropio}" />
+                        </p:column>
+                        <p:column style="text-align: left; ">
+                            <f:facet name="header">
+                                #{msg.tablaDescripcion}
+                            </f:facet>
+                            <h:outputText id="decripcionProd"
+                                          value="#{etiqueta.producto.descripcion}" />
+                            <p:tooltip id="toolTipFade" for="decripcionProd"
+                                       value="#{etiqueta.producto.observaciones}" />
+                        </p:column>
+                        <p:column style="text-align: right;">
+                            <f:facet name="header">
+                                #{msg.tablaCantidad} de etiquetas
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{etiqueta.cantidad}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="cantidadProdTabField"
+                                                 value="#{etiqueta.cantidad}">
+                                        <f:validateLongRange minimum="0" />
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+
+                        </p:column>
+
+
+
+                    </p:dataTable>
+
+                    <div class="SeparatorFull" />
+
+                    <p:panelGrid layout="grid"
+                                 style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2">
+                        <p:commandButton id="imprimirButton" value="#{msg.imprimir}"
+                                         icon="fa fa-fw fa-print"
+                                         action="#{etiquetasRemitoBean.imprimirEtiquetas()}"
+                                         ajax="false" />
+
+                        <p:commandButton id="cancelarButton" value="#{msg.cancelar}"
+                                         icon="ui-icon-cancel"
+                                         action="/protected/stock/remitos/index.xhtml?faces-redirect=true"
+                                         immediate="true" ajax="false" styleClass="RedButton" />
+                    </p:panelGrid>
+
+                </h:form>
+
+                <h:form id="buscarPersonasForm">
+                    <p:dialog id='personaOrigenExternoDialog'
+                              header="Búsqueda de personas"
+                              widgetVar="personaOrigenExternoDialog" resizable="true"
+                              closeOnEscape="true" dynamic="true" showEffect="fade"
+                              hideEffect="clip" modal="true">
+
+                        <gtsoftware:busquedaPersonas
+                            personaSeleccionada="#{nuevoRemitoBean.newRemito.idOrigenExterno}">
+                        </gtsoftware:busquedaPersonas>
+
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('personaOrigenExternoDialog').hide()"
+                                         update=":nuevoRemitoForm:origenFragment" immediate="true"
+                                         process="@this" />
+
+                        <p:commandButton value="#{msg.cancelar}" immediate="true"
+                                         icon="fa fa-fw fa-ban"
+                                         onclick="PF('personaOrigenExternoDialog').hide();" global="false"
+                                         styleClass="RedButton" />
+
+                    </p:dialog>
+                    <p:dialog id='personaDestinoExternoDialog'
+                              header="Búsqueda de personas"
+                              widgetVar="personaDestinoExternoDialog" resizable="true"
+                              closeOnEscape="true" dynamic="true" showEffect="fade"
+                              hideEffect="clip" modal="true">
+
+                        <gtsoftware:busquedaPersonas
+                            personaSeleccionada="#{nuevoRemitoBean.newRemito.idDestinoPrevistoExterno}">
+                        </gtsoftware:busquedaPersonas>
+
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('personaDestinoExternoDialog').hide()"
+                                         update=":nuevoRemitoForm:destinoFragment" immediate="true"
+                                         process="@this" />
+
+                        <p:commandButton value="#{msg.cancelar}" immediate="true"
+                                         icon="fa fa-fw fa-ban"
+                                         onclick="PF('personaDestinoExternoDialog').hide();"
+                                         global="false" styleClass="RedButton" />
+
+                    </p:dialog>
+                    <!--DIALOGO DE BUSQUEDA DE PRODUCTOS-->
+                    <p:dialog id="busquedaProductosDialog"
+                              header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                              modal="true" dynamic="true">
+                        <gtsoftware:busquedaProductos
+                            productoSeleccionado="#{nuevoRemitoBean.productoBusquedaSeleccionado}"
+                            soloConStock="#{null}" puedeComprarse="#{null}"
+                            puedeVenderse="#{null}" />
+                        <div class="SeparatorFull" />
+
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('dlgBusProd').hide()" update=":nuevoRemitoForm"
+                                         immediate="true" process="@this"
+                                         actionListener="#{nuevoRemitoBean.agregarProducto()}" />
+
+                        <p:commandButton value="#{msg.cancelar}" immediate="true"
+                                         icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                         styleClass="RedButton" />
+
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </div>
+</ui:composition>
+

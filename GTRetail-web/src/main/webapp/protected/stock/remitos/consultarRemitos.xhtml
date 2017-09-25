@@ -181,6 +181,13 @@
                                                  title="Imprimir Remito">
 
                                 </p:commandButton>
+                                <p:commandButton icon="fa fa-print" action="etiquetas/index"
+                                                 ajax="false" immediate="true"
+                                                 styleClass="GreenButton"
+                                                 title="Imprimir Etiquetas">
+                                    <f:param name="idRemito" value="#{remito.id}" />
+
+                                </p:commandButton>
 
 
                             </p:panelGrid>
