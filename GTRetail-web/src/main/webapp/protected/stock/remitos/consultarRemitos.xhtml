@@ -245,10 +245,11 @@
                         <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                          oncomplete="PF('dlgBusProd').hide()" update=":formContenido"
                                          immediate="true" process="@this"
-                                         actionListener="#{nuevoRemitoBean.agregarProducto()}" />
+                                         />
 
                         <p:commandButton value="#{msg.cancelar}" immediate="true"
                                          icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                         actionListener="#{remitosSearchBean.eliminarProductoBusqueda()}"
                                          styleClass="RedButton" />
 
                     </p:dialog>

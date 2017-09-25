@@ -91,4 +91,7 @@ public class RemitosSearchBean extends AbstractSearchBean<Remito, RemitoSearchFi
         return tiposMovimientoList;
     }
 
+    public void eliminarProductoBusqueda() {
+        filter.setIdProducto(null);
+    }
 }
