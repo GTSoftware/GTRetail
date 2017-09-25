@@ -65,13 +65,13 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros, 
         String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
 
         if (idRubro == null) {
-            throw new RuntimeException("No hay parámetro!");
+            throw new RuntimeException("No hay parámetro de Rubro!");
         } else {
             rubro = rubrosFacade.find(Long.parseLong(idRubro));
 
             if (rubro == null) {
-                LOG.log(Level.SEVERE, "Unidad inexistente!");
-                throw new RuntimeException("Unidad inexistente!");
+                LOG.log(Level.SEVERE, "Rubro inexistente!");
+                throw new RuntimeException("Rubro inexistente!");
 
             }
 

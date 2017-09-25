@@ -16,7 +16,7 @@
         </ui:insert>
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Administración de SubRubros</h1>
+                <h1 class="CardBigTopic TexAlCenter">Administración de SubRubros del Rubro: #{subRubrosSearchBean.rubro.nombreRubro}</h1>
                 <div class="SeparatorFull"></div>
                 <h:form id="formContenido" >
 
@@ -34,8 +34,10 @@
                                                   value="#{msg.buscar}"
                                                   icon="fa fa-fw fa-search"
                                                   update="subRubrosTable"/>
-                                <p:commandButton id="nuevoButton" action="unidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
-                                                 icon="fa fa-fw fa-plus" styleClass="GreenButton" />
+                                <p:commandButton id="nuevoButton" action="sub-rubroEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                 icon="fa fa-fw fa-plus" styleClass="GreenButton" >
+                                    <f:param name="idRubro" value="#{subRubrosSearchBean.rubro.id}" />
+                                </p:commandButton>
                             </p:panelGrid >
                         </div>
                     </div>
@@ -108,8 +110,9 @@
                                     <f:facet name="header">
                                         #{msg.editar}
                                     </f:facet>
-                                    <p:commandButton icon="fa fa-fw fa-edit" action="subRubroEdit"
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="sub-rubroEdit"
                                                      ajax="false" >
+                                        <f:param name="idRubro" value="#{subRubro.idRubro.id}" />
                                         <f:param name="idSubRubro" value="#{subRubro.id}" />
 
                                     </p:commandButton>
