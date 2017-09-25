@@ -249,6 +249,7 @@
 
                         <p:commandButton value="#{msg.cancelar}" immediate="true"
                                          icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                         update=":formContenido"
                                          actionListener="#{remitosSearchBean.eliminarProductoBusqueda()}"
                                          styleClass="RedButton" />
 
