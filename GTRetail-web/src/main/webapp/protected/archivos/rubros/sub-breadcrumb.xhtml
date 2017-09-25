@@ -5,12 +5,14 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
-    <h:form id="breadcrumb" >
-        <p:breadCrumb>
-            <p:menuitem value="#{msg.home}" url="/protected/index.xhtml" />
-            <p:menuitem value="#{msg.archivo}" />
-            <p:menuitem value="#{msg.rubros}" url="/protected/archivos/rubros/rubroSearch.xhtml" />
-            <p:menuitem value="#{msg.subRubros}" />
-        </p:breadCrumb>
-    </h:form>
+    <div class="Container100 ui-fluid">
+        <h:form id="breadcrumb" >
+            <p:breadCrumb>
+                <p:menuitem value="#{msg.home}" url="/protected/index.xhtml" />
+                <p:menuitem value="#{msg.archivo}" />
+                <p:menuitem value="#{msg.rubros}" url="/protected/archivos/rubros/rubroSearch.xhtml" />
+                <p:menuitem value="#{msg.subRubros}" />
+            </p:breadCrumb>
+        </h:form>
+    </div>
 </ui:composition>
