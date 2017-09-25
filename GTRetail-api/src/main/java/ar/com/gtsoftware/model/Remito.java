@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -216,7 +217,15 @@ public class Remito extends BaseEntity {
         if (this.isDestinoInterno) {
             return String.format("INTERNO: %s", this.getIdDestinoPrevistoInterno().getBusinessString());
         }
-        return String.format("EXTERNO: %s", this.getIdDestinoPrevistoExterno().getBusinessString());
+        return String.format("EXTERNO: %s Dirección: %s %s Piso: %s Depto: %s (%s) %s - %s",
+                this.getIdDestinoPrevistoExterno().getBusinessString(),
+                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getCalle()),
+                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getAltura()),
+                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getPiso(), "-"),
+                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getDepto(), "-"),
+                this.getIdDestinoPrevistoExterno().getIdLocalidad().getCodigoPostal(),
+                this.getIdDestinoPrevistoExterno().getIdLocalidad().getNombreLocalidad(),
+                this.getIdDestinoPrevistoExterno().getIdProvincia().getNombreProvincia());
     }
 
 }

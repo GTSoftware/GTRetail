@@ -177,16 +177,16 @@
                 <reportElement x="5" y="125" width="94" height="20" uuid="2c1ab704-1b1e-4f27-b477-724efeccae0c"/>
                 <text><![CDATA[Destino previsto:]]></text>
             </staticText>
-            <textField>
-                <reportElement x="99" y="125" width="450" height="20" uuid="02ff1174-0bca-48c4-955a-36c5a4afb255"/>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="99" y="125" width="450" height="30" uuid="02ff1174-0bca-48c4-955a-36c5a4afb255"/>
                 <textFieldExpression><![CDATA[$F{nombreDestino}]]></textFieldExpression>
             </textField>
             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                <reportElement x="99" y="145" width="456" height="51" uuid="a5175927-8bfa-4816-93f6-0e3edb7b99dd"/>
+                <reportElement x="99" y="155" width="456" height="41" uuid="a5175927-8bfa-4816-93f6-0e3edb7b99dd"/>
                 <textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
             </textField>
             <staticText>
-                <reportElement x="5" y="145" width="94" height="20" uuid="6772ad99-c27d-4ff4-ba89-81ac5ab52dfe"/>
+                <reportElement x="5" y="155" width="94" height="20" uuid="6772ad99-c27d-4ff4-ba89-81ac5ab52dfe"/>
                 <text><![CDATA[Observaciones:]]></text>
             </staticText>
         </band>
