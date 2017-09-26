@@ -15,7 +15,7 @@
         </ui:insert>
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Administración de Países</h1>
+                <h1 class="CardBigTopic TexAlCenter">Administración de Provincias</h1>
                 <div class="SeparatorFull"></div>
                 <h:form id="formContenido" >
 
@@ -26,13 +26,13 @@
                                          style="border:0px !important; background:none;" >
 
                                 <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                                <p:inputText id="textoBusquedaField" value="#{paisesSearchBean.filter.nombrePais}"
+                                <p:inputText id="textoBusquedaField" value="#{provinciasSearchBean.filter.nombreProvincia}"
                                              placeholder="Términos de búsqueda"/>
-                                <p:commandButton  action="#{paisesSearchBean.doSearch()}"
+                                <p:commandButton  action="#{provinciasSearchBean.doSearch()}"
                                                   value="#{msg.buscar}"
                                                   icon="fa fa-fw fa-search"
-                                                  update="paisesTable"/>
-                                <p:commandButton id="nuevoButton" action="paisEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                  update="provinciasTable"/>
+                                <p:commandButton id="nuevoButton" action="provinciaEdit.xhtml" value="#{msg.nuevo}" ajax="false"
                                                  icon="fa fa-fw fa-plus"
                                                  styleClass="GreenButton"/>
                             </p:panelGrid >
@@ -41,7 +41,7 @@
                     <div class="Container100 ui-fluid">
                         <div class="Card">
                             <div class="SeparatorFull"></div>
-                            <p:dataTable id="paisesTable" var="pais" value="#{paisesSearchBean.dataModel}"
+                            <p:dataTable id="provinciasTable" var="provincia" value="#{provinciasSearchBean.dataModel}"
                                          rows="30"
                                          lazy="true"
                                          paginator="true"
@@ -82,21 +82,29 @@
                                     #{msg.rubros}
                                 </f:facet>
 
-                                <p:column sortBy="#{pais.id}" >
+                                <p:column sortBy="#{provincia.id}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.id}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{pais.id}" />
+                                    <h:outputText value="#{provincia.id}" />
 
                                 </p:column>
 
-                                <p:column sortBy="#{pais.nombrePais}" >
+                                <p:column sortBy="#{provincia.nombreProvincia}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.nombre}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{pais.nombrePais}" />
+                                    <h:outputText value="#{provincia.nombreProvincia}" />
+
+                                </p:column>
+                                <p:column sortBy="#{provincia.idPais}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.nombre}"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{provincia.idPais.nombrePais}" />
 
                                 </p:column>
 
@@ -105,9 +113,9 @@
                                     <f:facet name="header">
                                         #{msg.editar}
                                     </f:facet>
-                                    <p:commandButton icon="fa fa-fw fa-edit" action="paisEdit"
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="provinciaEdit"
                                                      ajax="false" >
-                                        <f:param name="idPais" value="#{pais.id}" />
+                                        <f:param name="idProvincia" value="#{provincia.id}" />
 
                                     </p:commandButton>
 
