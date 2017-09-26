@@ -16,6 +16,7 @@
 package ar.com.gtsoftware.search;
 
 import ar.com.gtsoftware.model.UbicacionProvincias;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -24,17 +25,20 @@ import ar.com.gtsoftware.model.UbicacionProvincias;
 public class LocalidadesSearchFilter extends AbstractSearchFilter {
 
     /**
-     * 
+     *
      */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private Integer idLocalidad;
     private String nombreLocalidad;
     private UbicacionProvincias idProvincia;
 
     @Override
     public boolean hasFilter() {
-        return (idLocalidad != null) || (nombreLocalidad != null && !nombreLocalidad.isEmpty())
+        return (idLocalidad != null) || (StringUtils.isNotEmpty(nombreLocalidad))
                 || (idProvincia != null);
+    }
+
+    public LocalidadesSearchFilter() {
     }
 
     public LocalidadesSearchFilter(Integer idLocalidad) {

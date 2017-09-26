@@ -15,7 +15,7 @@
         </ui:insert>
         <div class="Container100 ui-fluid">
             <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Administración de Provincias</h1>
+                <h1 class="CardBigTopic TexAlCenter">Administración de Localidades</h1>
                 <div class="SeparatorFull"></div>
                 <h:form id="formContenido" >
 
@@ -26,13 +26,13 @@
                                          style="border:0px !important; background:none;" >
 
                                 <p:outputLabel for="textoBusquedaField" value="#{msg.busqueda}:"/>
-                                <p:inputText id="textoBusquedaField" value="#{provinciasSearchBean.filter.nombreProvincia}"
+                                <p:inputText id="textoBusquedaField" value="#{localidadesSearchBean.filter.nombreLocalidad}"
                                              placeholder="Términos de búsqueda"/>
-                                <p:commandButton  action="#{provinciasSearchBean.doSearch()}"
+                                <p:commandButton  action="#{localidadesSearchBean.doSearch()}"
                                                   value="#{msg.buscar}"
                                                   icon="fa fa-fw fa-search"
-                                                  update="provinciasTable"/>
-                                <p:commandButton id="nuevoButton" action="provinciaEdit.xhtml" value="#{msg.nuevo}" ajax="false"
+                                                  update="localidadesTable"/>
+                                <p:commandButton id="nuevoButton" action="localidadEdit.xhtml" value="#{msg.nuevo}" ajax="false"
                                                  icon="fa fa-fw fa-plus"
                                                  styleClass="GreenButton"/>
                             </p:panelGrid >
@@ -41,13 +41,13 @@
                     <div class="Container100 ui-fluid">
                         <div class="Card">
                             <div class="SeparatorFull"></div>
-                            <p:dataTable id="provinciasTable" var="provincia" value="#{provinciasSearchBean.dataModel}"
+                            <p:dataTable id="localidadesTable" var="localidad" value="#{localidadesSearchBean.dataModel}"
                                          rows="30"
                                          lazy="true"
                                          paginator="true"
                                          sortMode="single"
                                          emptyMessage="#{msg.busquedaSinResultados}"
-                                         rowKey="#{provincia.id}"
+                                         rowKey="#{localidad.id}"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                                          rowsPerPageTemplate="10,15,30,100"
                                          liveResize="true"
@@ -82,29 +82,45 @@
                                     #{msg.rubros}
                                 </f:facet>
 
-                                <p:column sortBy="#{provincia.id}" >
+                                <p:column sortBy="#{localidad.id}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.id}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{provincia.id}" />
+                                    <h:outputText value="#{localidad.id}" />
 
                                 </p:column>
 
-                                <p:column sortBy="#{provincia.nombreProvincia}" >
+                                <p:column sortBy="#{localidad.nombreLocalidad}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.nombre}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{provincia.nombreProvincia}" />
+                                    <h:outputText value="#{localidad.nombreLocalidad}" />
 
                                 </p:column>
-                                <p:column sortBy="#{provincia.idPais}" >
+                                <p:column sortBy="#{localidad.codigoPostal}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.codigo} postal"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{localidad.codigoPostal}" />
+
+                                </p:column>
+                                <p:column sortBy="#{localidad.idProvincia}" >
+                                    <f:facet name="header">
+                                        <h:outputLabel value="#{msg.provincia}"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{localidad.idProvincia.nombreProvincia}" />
+
+                                </p:column>
+                                <p:column sortBy="#{localidad.idProvincia.idPais}" >
                                     <f:facet name="header">
                                         <h:outputLabel value="#{msg.pais}"/>
                                     </f:facet>
 
-                                    <h:outputText value="#{provincia.idPais.nombrePais}" />
+                                    <h:outputText value="#{localidad.idProvincia.idPais.nombrePais}" />
 
                                 </p:column>
 
@@ -113,9 +129,9 @@
                                     <f:facet name="header">
                                         #{msg.editar}
                                     </f:facet>
-                                    <p:commandButton icon="fa fa-fw fa-edit" action="provinciaEdit"
+                                    <p:commandButton icon="fa fa-fw fa-edit" action="localidadEdit"
                                                      ajax="false" >
-                                        <f:param name="idProvincia" value="#{provincia.id}" />
+                                        <f:param name="idLocalidad" value="#{localidad.id}" />
 
                                     </p:commandButton>
 

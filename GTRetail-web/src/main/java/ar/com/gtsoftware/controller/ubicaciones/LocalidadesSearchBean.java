@@ -17,10 +17,13 @@ package ar.com.gtsoftware.controller.ubicaciones;
 
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
+import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
 import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
 import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
+import ar.com.gtsoftware.model.UbicacionLocalidades;
 import ar.com.gtsoftware.model.UbicacionPaises;
 import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import java.util.List;
@@ -32,42 +35,46 @@ import javax.faces.bean.ViewScoped;
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-@ManagedBean(name = "provinciasSearchBean")
+@ManagedBean(name = "localidadesSearchBean")
 @ViewScoped
-public class ProvinciasSearchBean extends AbstractSearchBean<UbicacionProvincias, ProvinciasSearchFilter> {
+public class LocalidadesSearchBean extends AbstractSearchBean<UbicacionLocalidades, LocalidadesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private UbicacionProvinciasFacade facade;
+    private UbicacionLocalidadesFacade facade;
 
     @EJB
     private UbicacionPaisesFacade paisesFacade;
 
-    private final ProvinciasSearchFilter filter = new ProvinciasSearchFilter();
+    @EJB
+    private UbicacionProvinciasFacade provinciasFacade;
+
+    private final LocalidadesSearchFilter filter = new LocalidadesSearchFilter();
 
     private List<UbicacionPaises> paises;
+    private List<UbicacionProvincias> provincias;
 
     /**
      * Creates a new instance of ParametrosEditBean
      */
-    public ProvinciasSearchBean() {
+    public LocalidadesSearchBean() {
     }
 
     @Override
-    public ProvinciasSearchFilter getFilter() {
+    public LocalidadesSearchFilter getFilter() {
         return filter;
     }
 
     @Override
-    protected AbstractFacade<UbicacionProvincias, ProvinciasSearchFilter> getFacade() {
+    protected AbstractFacade<UbicacionLocalidades, LocalidadesSearchFilter> getFacade() {
         return facade;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField("nombreProvincia", true);
+            filter.addSortField("nombreLocalidad", true);
         }
 
     }
@@ -81,9 +88,25 @@ public class ProvinciasSearchBean extends AbstractSearchBean<UbicacionProvincias
         if (paises == null) {
             PaisesSearchFilter pSf = new PaisesSearchFilter();
             pSf.addSortField("nombrePais", true);
-            paises = paisesFacade.findAllBySearchFilter(pSf);
+            paises = paisesFacade.findAll();
         }
         return paises;
+    }
+
+    /**
+     * Obtiene la lista de provincias para poder filtrar por una provincia determinada
+     *
+     * @return la lista de todos las provincias del pais seleccionado
+     */
+    public List<UbicacionProvincias> getProvincias() {
+        //TODO: Para los futuros filtros de búsqueda
+        if (provincias == null) {
+            ProvinciasSearchFilter pSf = new ProvinciasSearchFilter();
+            pSf.addSortField("nombreProvincia", true);
+
+            provincias = provinciasFacade.findAllBySearchFilter(pSf);
+        }
+        return provincias;
     }
 
 }
