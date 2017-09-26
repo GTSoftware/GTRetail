@@ -14,7 +14,7 @@
                             <p:menuitem id="om_db_b" value="Dashboard Banking" icon="icon-website22" />
                         </p:submenu>-->
 
-            <p:submenu id="sistemaMenu" label="#{msg.sistema}" icon="fa fa-fw fa-gears" >
+            <p:submenu id="sistemaMenu" label="#{msg.sistema}" icon="fa fa-fw fa-dashboard" >
                 <p:submenu id="archivoSubMenu" label="#{msg.archivo}" icon="fa fa-fw fa-folder-open" >
 
 
@@ -38,7 +38,7 @@
                                     immediate="true" ajax="false"/>
                     </p:submenu>
 
-                    <p:submenu id="clasificadoresSubMenu" label="#{msg.clasificadores}" >
+                    <p:submenu id="clasificadoresSubMenu" label="#{msg.clasificadores}" icon="fa fa-fw fa-bookmark" >
                         <p:menuitem id="marcasItem" value="#{msg.marcas}"
                                     action="/protected/archivos/marcas/marcaSearch.xhtml?faces-redirect=true"
                                     immediate="true" ajax="false"/>
@@ -49,23 +49,44 @@
                                     action="/protected/archivos/rubros/rubroSearch.xhtml?faces-redirect=true"
                                     immediate="true" ajax="false"/>
                     </p:submenu>
+
+                    <p:submenu id="ubicacionesSubMenu" label="#{msg.ubicacion}es" icon="fa fa-fw fa-globe" >
+                        <p:menuitem id="paisesItem" value="#{msg.pais}es"
+                                    action="/protected/archivos/ubicaciones/paises/index.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                        <p:menuitem id="provinciasItem" value="#{msg.provincia}s"
+                                    action="/protected/archivos/ubicaciones/provincias/index.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                        <p:menuitem id="localidadesItem" value="#{msg.localidad}es"
+                                    action="/protected/archivos/ubicaciones/localidades/index.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                    </p:submenu>
                 </p:submenu>
 
 
                 <p:submenu id="clienteItem" label="#{msg.clientes}" icon="fa fa-fw fa-users">
-                    <p:menuitem value="#{msg.clientesConsulta}" action="/protected/clientes/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
+                    <p:menuitem value="#{msg.clientesConsulta}"
+                                action="/protected/clientes/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-search"/>
                 </p:submenu>
                 <p:submenu id="proveedorItem" label="#{msg.proveedores}" icon="fa fa-fw fa-users">
-                    <p:menuitem value="#{msg.proveedoresConsulta}" action="/protected/proveedores/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
+                    <p:menuitem value="#{msg.proveedoresConsulta}"
+                                action="/protected/proveedores/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-search"/>
                 </p:submenu>
 
                 <p:submenu id="productosSubMenu" label="#{msg.productos}" icon="fa fa-fw fa-tags" >
                     <p:menuitem id="busquedaProductosItem" value="#{msg.busquedaProductos}"
                                 action="/protected/productos/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-search"/>
+
                     <p:menuitem id="actualizacionMasivaPreciosItem" value="#{msg.actualizacionMasivaPrecios}"
                                 action="/protected/productos/precios/actualizarPrecios.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-usd"/>
 
                 </p:submenu>
 
@@ -73,10 +94,12 @@
                     <p:menuitem id="nuevoRemitoItem" value="#{msg.nuevoRemito}"
                                 action="/protected/stock/remitos/nuevo/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
+
                     <p:menuitem id="ingresoMercaderiaItem"
                                 value="#{msg.ingresoMercaderia}"
                                 action="/protected/stock/ingreso_mercaderia/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-download"/>
 
                     <p:menuitem id="listadoRemitosItem"
                                 value="#{msg.remitoListado}"
@@ -101,7 +124,9 @@
                 <p:submenu id="cajaSubMenu" label="#{msg.caja}" icon="fa fa-fw fa-bank">
                     <p:menuitem id="movimientosCajaItem" value="#{msg.movimientosCaja}"
                                 action="/protected/caja/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-list"/>
+
                     <p:menuitem id="recibosMenuItem" value="#{msg.recibos}"
                                 action="/protected/caja/recibos/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
@@ -110,7 +135,8 @@
                                 immediate="true" ajax="false"/>
                     <p:menuitem id="arqueoItem" value="#{msg.arqueo}"
                                 action="/protected/caja/arqueo/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-bank"/>
 
                 </p:submenu>
 
@@ -118,7 +144,8 @@
                 <p:submenu id="ventasSubMenu" label="#{msg.ventas}" icon="fa fa-fw fa-opencart" >
                     <p:menuitem id="listadoVentasItem" value="#{msg.ventasListado}"
                                 action="/protected/ventas/index.xhtml?faces-redirect=true"
-                                immediate="true" ajax="false"/>
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-list"/>
 
 
                     <p:menuitem id="nuevoCarritoItem" value="#{msg.startNewCart}"
