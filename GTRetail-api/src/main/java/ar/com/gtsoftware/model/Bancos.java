@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
@@ -26,8 +25,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * Clase que almacena la información de los bancos
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0
  */
 @Entity
@@ -46,172 +43,100 @@ import javax.xml.bind.annotation.XmlTransient;
 @AttributeOverride(name = "id", column = @Column(name = "id_banco", columnDefinition = "serial"))
 public class Bancos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "razon_social")
     private String razonSocial;
-    @Size(max = 500)
-    @Column(name = "direccion")
-    private String direccion;
-    @Size(max = 20)
-    @Column(name = "telefono_fijo")
-    private String telefonoFijo;
-    @Size(max = 20)
-    @Column(name = "celular")
-    private String celular;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 11)
-    @Column(name = "cuit")
-    private String cuit;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha_alta")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaAlta;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "activo")
-    private boolean activo;
+
     @Size(max = 1024)
     @Column(name = "observaciones")
     private String observaciones;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanco")
     private List<BancosCuentas> bancosCuentasList;
-    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", columnDefinition = "int4")
+    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     @ManyToOne(optional = false)
-    private UbicacionProvincias idProvincia;
-    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais", columnDefinition = "int4")
-    @ManyToOne(optional = false)
-    private UbicacionPaises idPais;
-    @JoinColumn(name = "id_localidad", referencedColumnName = "id_localidad", columnDefinition = "int4")
-    @ManyToOne(optional = false)
-    private UbicacionLocalidades idLocalidad;
-    @JoinColumn(name = "id_responsabilidad_iva", referencedColumnName = "id_resoponsabildiad_iva", columnDefinition = "int4")
-    @ManyToOne(optional = false)
-    private FiscalResponsabilidadesIva idResponsabilidadIva;
+    private Personas idPersona;
 
+    /**
+     * Constructor por defecto
+     */
     public Bancos() {
     }
 
-    public Bancos(String razonSocial, String cuit, Date fechaAlta, boolean activo) {
-        this.razonSocial = razonSocial;
-        this.cuit = cuit;
-        this.fechaAlta = fechaAlta;
-        this.activo = activo;
-    }
-
+    /**
+     * El nombre de la entidad financiera
+     *
+     * @return
+     */
     public String getRazonSocial() {
         return razonSocial;
     }
 
+    /**
+     * El nombre de la entidad financiera
+     *
+     * @param razonSocial
+     */
     public void setRazonSocial(String razonSocial) {
         this.razonSocial = razonSocial;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getTelefonoFijo() {
-        return telefonoFijo;
-    }
-
-    public void setTelefonoFijo(String telefonoFijo) {
-        this.telefonoFijo = telefonoFijo;
-    }
-
-    public String getCelular() {
-        return celular;
-    }
-
-    public void setCelular(String celular) {
-        this.celular = celular;
-    }
-
-    public String getCuit() {
-        return cuit;
-    }
-
-    public void setCuit(String cuit) {
-        this.cuit = cuit;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
+    /**
+     * Observaciones asociadas a la entidad
+     *
+     * @return
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Observaciones asociadas a la entidad
+     *
+     * @param observaciones
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Las cuentas asociadas a la entidad
+     *
+     * @return
+     */
     @XmlTransient
     public List<BancosCuentas> getBancosCuentasList() {
         return bancosCuentasList;
     }
 
+    /**
+     * Las cuentas asociadas a la entidad
+     *
+     * @param bancosCuentasList
+     */
     public void setBancosCuentasList(List<BancosCuentas> bancosCuentasList) {
         this.bancosCuentasList = bancosCuentasList;
     }
 
-    public UbicacionProvincias getIdProvincia() {
-        return idProvincia;
+    /**
+     * El proveedor asociado a la entidad bancaria que contiene todos sus datos fiscales
+     *
+     * @return
+     */
+    public Personas getIdPersona() {
+        return idPersona;
     }
 
-    public void setIdProvincia(UbicacionProvincias idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    public UbicacionPaises getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(UbicacionPaises idPais) {
-        this.idPais = idPais;
-    }
-
-    public UbicacionLocalidades getIdLocalidad() {
-        return idLocalidad;
-    }
-
-    public void setIdLocalidad(UbicacionLocalidades idLocalidad) {
-        this.idLocalidad = idLocalidad;
-    }
-
-    public FiscalResponsabilidadesIva getIdResponsabilidadIva() {
-        return idResponsabilidadIva;
-    }
-
-    public void setIdResponsabilidadIva(FiscalResponsabilidadesIva idResponsabilidadIva) {
-        this.idResponsabilidadIva = idResponsabilidadIva;
-    }
-
-    @Override
-    public String toString() {
-        return "ar.com.gtsoftware.model.Bancos[ idBanco=" + this.getId() + " ]";
+    /**
+     * El proveedor asociado a la entidad bancaria que contiene todos sus datos fiscales
+     *
+     * @param idPersona
+     */
+    public void setIdPersona(Personas idPersona) {
+        this.idPersona = idPersona;
     }
 
 }

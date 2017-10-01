@@ -18,14 +18,18 @@ package ar.com.gtsoftware.controller.caja;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.CajasService;
 import ar.com.gtsoftware.bl.CobranzaService;
+import ar.com.gtsoftware.eao.BancosFacade;
 import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
 import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
+import ar.com.gtsoftware.model.Bancos;
 import ar.com.gtsoftware.model.Cajas;
+import ar.com.gtsoftware.model.ChequesTerceros;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.Cupones;
 import ar.com.gtsoftware.model.Recibos;
 import ar.com.gtsoftware.model.dto.PagoValorDTO;
+import ar.com.gtsoftware.search.BancosSearchFilter;
 import ar.com.gtsoftware.search.ComprobantesPagosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import java.io.Serializable;
@@ -58,6 +62,8 @@ public class CobranzaBean implements Serializable {
 
     @EJB
     private CobranzaService cobranzaServiceImpl;
+    @EJB
+    private BancosFacade bancosFacade;
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
@@ -80,6 +86,11 @@ public class CobranzaBean implements Serializable {
     private List<Comprobantes> selectedComprobantes;
 
     private List<PagoValorDTO> pagosValores;
+
+    private boolean hayCupones = false;
+    private boolean hayCheques = false;
+
+    private List<Bancos> bancosList;
 
     /**
      * Creates a new instance of CobranzaBean
@@ -110,41 +121,6 @@ public class CobranzaBean implements Serializable {
         return cajaActual;
     }
 
-//    public void cobrarComprobante() {
-//        RequestContext.getCurrentInstance().execute("PF('cobrarComprobanteDialog').hide();");
-//        if (cajaActual == null) {
-//            jsfUtil.addErrorMessage("No hay una caja abierta.");
-//            return;
-//        }
-//
-//        if (comprobanteACobrar == null) {
-//            return;
-//        }
-//        if (!comprobanteACobrar.getIdCondicionComprobante().getPagoTotal()) {
-//            jsfUtil.addErrorMessage("No implementado para cobranza de comprobantes en CC!");
-//            return;
-//        }
-//        boolean requiereValores = comprobanteACobrar.getPagosList().stream().anyMatch(p -> p.getIdFormaPago().getRequiereValores());
-//        if (requiereValores) {
-//            jsfUtil.addErrorMessage("Se requiere ingresar valores!");
-//            return;
-//        }
-//        try {
-//            reciboActual = cobranzaServiceImpl.cobrarComprobante(cajaActual, comprobanteACobrar);
-//            jsfUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
-//            RequestContext.getCurrentInstance().execute("PF('cobrarComprobanteDialog').hide();");
-//            RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
-//        } catch (ServiceException ex) {
-//            LOG.log(Level.SEVERE, null, ex);
-//        }
-//    }
-//    public Comprobantes getComprobanteACobrar() {
-//        return comprobanteACobrar;
-//    }
-//    public void setComprobanteACobrar(Comprobantes comprobanteACobrar) {
-//        this.comprobanteACobrar = comprobanteACobrar;
-//
-//    }
     public RecibosSearchBean getRecibosSearchBean() {
         return recibosSearchBean;
     }
@@ -185,6 +161,8 @@ public class CobranzaBean implements Serializable {
                 return false;
             }
         }
+
+        //TODO Validar que se completen todos los campos requeridos de las formas de pago
 //        //Deben ser bien todos de pago contado o todos de corriente
 //        boolean allContado = selectedComprobantes.stream().allMatch(x -> x.getIdCondicionComprobante().getPagoTotal());
 //        boolean allCuentaCorriente = selectedComprobantes.stream().allMatch(x -> !x.getIdCondicionComprobante().getPagoTotal());
@@ -193,7 +171,6 @@ public class CobranzaBean implements Serializable {
 //            jsfUtil.addErrorMessage("Los comprobantes a cobrar deben ser todos de cuenta corriente o todos de contado.");
 //            return false;
 //        }
-
         return true;
     }
 
@@ -219,23 +196,31 @@ public class CobranzaBean implements Serializable {
             for (ComprobantesPagos pago : pagosFacade.findAllBySearchFilter(pagosFilter)) {
                 BigDecimal saldoPago = pago.getMontoPago().subtract(pago.getMontoPagado());
                 montoPorCubrir = montoPorCubrir.subtract(saldoPago);
-                PagoValorDTO pagoValor = new PagoValorDTO(item++, pago, null);
+                PagoValorDTO pagoValor = new PagoValorDTO(item++, pago);
                 pagoValor.setMontoMaximo(saldoPago);
                 if (pago.getIdFormaPago().getRequiereValores()) {
-                    //Supongo que siempre es con tarjeta, después veo como hago lo de cheques
-                    //TODO: cable para que detecte el tipo de pago y mande a una lista distinta de DTOs
-                    Cupones cupon = new Cupones();
-                    cupon.setCantCuotas(pago.getIdDetallePlan().getCuotas());
-                    cupon.setCoeficiente(pago.getIdDetallePlan().getCoeficienteInteres());
-                    cupon.setMonto(pago.getMontoPagoConSigno());
-                    pagoValor.setCupon(cupon);
+                    //Cheque == 4
+                    if (pago.getIdFormaPago().getId() != 4) {
+
+                        Cupones cupon = new Cupones();
+                        cupon.setCantCuotas(pago.getIdDetallePlan().getCuotas());
+                        cupon.setCoeficiente(pago.getIdDetallePlan().getCoeficienteInteres());
+                        cupon.setMonto(pago.getMontoPagoConSigno());
+                        pagoValor.setCupon(cupon);
+                        hayCupones = true;
+                    } else {
+                        ChequesTerceros chq = new ChequesTerceros();
+                        chq.setMonto(pago.getMontoPagoConSigno());
+                        pagoValor.setCheque(chq);
+                        hayCheques = true;
+                    }
 
                 }
 
                 pagosValores.add(pagoValor);
             }
             if (montoPorCubrir.signum() > 0) {
-                //} else {
+
                 ComprobantesPagos cp = new ComprobantesPagos();
                 cp.setIdComprobante(comp);
                 //Cableado para efectivo...
@@ -244,12 +229,12 @@ public class CobranzaBean implements Serializable {
 
                 comp.addPago(cp);
 
-                PagoValorDTO pagoValor = new PagoValorDTO(item++, cp, null);
+                PagoValorDTO pagoValor = new PagoValorDTO(item++, cp);
                 pagoValor.setMontoEditable(true);
                 pagoValor.setMontoMaximo(montoPorCubrir);
                 pagosValores.add(pagoValor);
             }
-            //}
+
         }
     }
 
@@ -257,4 +242,35 @@ public class CobranzaBean implements Serializable {
         return pagosValores;
     }
 
+    /**
+     * Si existe alguna forma de pago con cupones devuelve true.
+     *
+     * @return
+     */
+    public boolean getHayCupones() {
+        return hayCupones;
+    }
+
+    /**
+     * Si existe alguna forma de pago con cheques devuelve true.
+     *
+     * @return
+     */
+    public boolean getHayCheques() {
+        return hayCheques;
+    }
+
+    /**
+     * Busca los bancos
+     *
+     * @return
+     */
+    public List<Bancos> getBancosList() {
+        if (bancosList == null) {
+            BancosSearchFilter sf = new BancosSearchFilter();
+            sf.addSortField("razonSocial", true);
+            bancosList = bancosFacade.findAllBySearchFilter(sf);
+        }
+        return bancosList;
+    }
 }

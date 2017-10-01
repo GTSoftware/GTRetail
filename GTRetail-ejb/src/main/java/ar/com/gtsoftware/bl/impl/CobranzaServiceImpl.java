@@ -147,6 +147,10 @@ public class CobranzaServiceImpl implements CobranzaService {
                 reciboDet.setIdValor(pv.getCupon());
             }
 
+            if (pv.getCheque() != null) {
+                reciboDet.setIdValor(pv.getCheque());
+            }
+
             compPago.setFechaPago(fecha);
             compPago.setFechaUltimoPago(fecha);
             compPago.setMontoPagado(compPago.getMontoPago());

@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.model.dto;
 
+import ar.com.gtsoftware.model.ChequesTerceros;
 import ar.com.gtsoftware.model.ComprobantesPagos;
 import ar.com.gtsoftware.model.Cupones;
 import java.io.Serializable;
@@ -31,6 +32,7 @@ public class PagoValorDTO implements Serializable {
 
     private ComprobantesPagos pago;
     private Cupones cupon;
+    private ChequesTerceros cheque;
     private boolean montoEditable = false;
     private final int item;
     private BigDecimal montoMaximo;
@@ -39,10 +41,22 @@ public class PagoValorDTO implements Serializable {
         this.item = item;
     }
 
+    public PagoValorDTO(int item, ComprobantesPagos pago) {
+        this.item = item;
+        this.pago = pago;
+
+    }
+
     public PagoValorDTO(int item, ComprobantesPagos pago, Cupones valor) {
         this.item = item;
         this.pago = pago;
         this.cupon = valor;
+    }
+
+    public PagoValorDTO(int item, ComprobantesPagos pago, ChequesTerceros valor) {
+        this.item = item;
+        this.pago = pago;
+        this.cheque = valor;
     }
 
     public ComprobantesPagos getPago() {
@@ -79,6 +93,14 @@ public class PagoValorDTO implements Serializable {
 
     public void setMontoMaximo(BigDecimal montoMaximo) {
         this.montoMaximo = montoMaximo;
+    }
+
+    public ChequesTerceros getCheque() {
+        return cheque;
+    }
+
+    public void setCheque(ChequesTerceros cheque) {
+        this.cheque = cheque;
     }
 
     @Override
