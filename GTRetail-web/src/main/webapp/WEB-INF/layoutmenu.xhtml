@@ -138,6 +138,17 @@
                                 immediate="true" ajax="false"
                                 icon="fa fa-fw fa-bank"/>
 
+                    <p:submenu id="valoresSubMenu" label="#{msg.valores}" icon="fa fa-fw fa-ticket" >
+
+                        <p:menuitem id="cuponesItem" value="#{msg.cupones}"
+                                    action="/protected/archivos/marcas/marcaSearch.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+
+                        <p:menuitem id="chequesItem" value="#{msg.cheques}"
+                                    action="/protected/caja/valores/cheques/index.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                    </p:submenu>
+
                 </p:submenu>
 
 

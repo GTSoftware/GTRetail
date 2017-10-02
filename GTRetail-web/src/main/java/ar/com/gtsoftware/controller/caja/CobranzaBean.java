@@ -239,6 +239,7 @@ public class CobranzaBean implements Serializable {
     }
 
     public List<PagoValorDTO> getPagosValores() {
+        //TODO: Sería bueno separar cada lista según el tipo de pago para que en la vista quede mejor presentado.
         return pagosValores;
     }
 
