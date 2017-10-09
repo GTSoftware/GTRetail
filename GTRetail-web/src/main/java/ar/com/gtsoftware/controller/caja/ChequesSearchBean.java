@@ -21,6 +21,8 @@ import ar.com.gtsoftware.eao.ChequesTercerosFacade;
 import ar.com.gtsoftware.model.ChequesTerceros;
 import ar.com.gtsoftware.search.ChequesTercerosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -38,6 +40,8 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, Chequ
 
     @EJB
     private ChequesTercerosFacade facade;
+    @EJB
+    private JSFUtil jsfUtil;
 
     private final ChequesTercerosSearchFilter filter = new ChequesTercerosSearchFilter();
 
@@ -64,4 +68,17 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, Chequ
         return filter;
     }
 
+    /**
+     * Marca el cheque como cobrado a la fecha de hoy.
+     *
+     * @param cheque
+     */
+    public void cobrarCheque(ChequesTerceros cheque) {
+        if (cheque == null) {
+            return;
+        }
+        cheque.setFechaCobro(new Date());
+        facade.edit(cheque);
+        jsfUtil.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
+    }
 }

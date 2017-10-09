@@ -143,7 +143,15 @@
                             <p:outputLabel value="#{chq.notas}"/>
                         </p:column>
 
+                        <p:column exportable="false">
+                            <f:facet name="header" >
+                                Cobrar
+                            </f:facet>
+                            <p:commandButton icon="fa fa-money" action="#{chequesSearchBean.cobrarCheque(chq)}"  ajax="false"
+                                             title="Marcar como cobrado">
 
+                            </p:commandButton>
+                        </p:column>
 
 
                     </p:dataTable>
