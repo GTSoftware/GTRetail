@@ -20,6 +20,7 @@ import ar.com.gtsoftware.eao.DepositosFacade;
 import ar.com.gtsoftware.eao.ProductosFacade;
 import ar.com.gtsoftware.eao.RemitoFacade;
 import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
+import ar.com.gtsoftware.model.Depositos;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.Remito;
 import ar.com.gtsoftware.model.RemitoDetalle;
@@ -31,6 +32,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -70,18 +72,27 @@ public class IngresoMercaderiaBean implements Serializable {
     private boolean unidadesCompra = true;
 
     private Remito remitoCabecera = new Remito();
+    private List<Depositos> depositosList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
 
         remitoCabecera.setDetalleList(new ArrayList<>());
-        remitoCabecera.setIdDestinoPrevistoInterno(depositosFacade.find(2L));// TODO: ID Deposito cableado
 
         remitoCabecera.setIdUsuario(authBackingBean.getUserLoggedIn());
         remitoCabecera.setFechaAlta(new Date());
         remitoCabecera.setIsOrigenInterno(Boolean.FALSE);
         remitoCabecera.setIsDestinoInterno(Boolean.TRUE);
 
+        depositosList = authBackingBean.getUserLoggedIn().getIdSucursal().getDepositosList();
+
+    }
+
+    public void productoSelected() {
+        if (productoBusquedaSeleccionado == null) {
+            return;
+        }
+        productosFilter.setIdProducto(productoBusquedaSeleccionado.getId());
     }
 
     public void agregarLinea() {
@@ -119,6 +130,10 @@ public class IngresoMercaderiaBean implements Serializable {
         detalle.setIdProducto(producto);
         detalle.setRemitoCabecera(remitoCabecera);
         detalle.setNroLinea(numeradorLinea++);
+
+        productosFilter.setIdProducto(null);
+        productosFilter.setCodigoPropio(null);
+
         return detalle;
     }
 
@@ -128,7 +143,7 @@ public class IngresoMercaderiaBean implements Serializable {
             return StringUtils.EMPTY;
         }
 
-        remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(2L));
+        remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(1L));
         remitoCabecera.setObservaciones(String.format("Ingreso de mercaderia del proveedor: %s",
                 remitoCabecera.getIdOrigenExterno().getBusinessString()));
 
@@ -201,6 +216,7 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
         this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
+        productoSelected();
     }
 
     /**
@@ -219,6 +235,14 @@ public class IngresoMercaderiaBean implements Serializable {
      */
     public void setUnidadesCompra(boolean unidadesCompra) {
         this.unidadesCompra = unidadesCompra;
+    }
+
+    public List<Depositos> getDepositosList() {
+        return depositosList;
+    }
+
+    public void setDepositosList(List<Depositos> depositosList) {
+        this.depositosList = depositosList;
     }
 
 }
