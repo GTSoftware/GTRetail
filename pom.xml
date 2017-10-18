@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ar.com.gtsoftware</groupId>
     <artifactId>GTRetail</artifactId>
-    <version>5.1.2-SNAPSHOT</version>
+    <version>5.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>GTRetail</name>
     <description>Sistema de gestión empresarial para PyMEs</description>
@@ -179,11 +179,11 @@
 
         <antlr.version>2.7.7</antlr.version>
         <dom4j.version>2.0.0-RC1</dom4j.version>
-        <primefaces.version>6.0</primefaces.version>
+        <primefaces.version>6.1</primefaces.version>
         <primefaces-themes.version>1.0.10</primefaces-themes.version>
         <apache-commons-lang3.version>3.4</apache-commons-lang3.version>
         <beanio.version>2.1.0</beanio.version>
-        <omnifaces.version>2.4</omnifaces.version>
+        <omnifaces.version>2.6.4</omnifaces.version>
 
 
 
@@ -198,6 +198,6 @@
         <jasperreports.version>6.2.1</jasperreports.version>
         <jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
         <wildfly.plugin.version>1.0.2.Final</wildfly.plugin.version>
-        <eclipselink.version>2.6.4</eclipselink.version>
+        <eclipselink.version>2.7.0</eclipselink.version>
     </properties>
 </project>

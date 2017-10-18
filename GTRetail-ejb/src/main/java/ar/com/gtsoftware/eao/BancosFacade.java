@@ -16,20 +16,22 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Bancos;
-import ar.com.gtsoftware.search.AbstractSearchFilter;
+import ar.com.gtsoftware.model.Bancos_;
+import ar.com.gtsoftware.search.BancosSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author rodrigo
  */
 @Stateless
-public class BancosFacade extends AbstractFacade<Bancos, AbstractSearchFilter> {
+public class BancosFacade extends AbstractFacade<Bancos, BancosSearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -44,8 +46,14 @@ public class BancosFacade extends AbstractFacade<Bancos, AbstractSearchFilter> {
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(AbstractSearchFilter sf, CriteriaBuilder cb, Root<Bancos> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Predicate createWhereFromSearchFilter(BancosSearchFilter sf, CriteriaBuilder cb, Root<Bancos> root) {
+        Predicate p = null;
+        if (StringUtils.isNotEmpty(sf.getNombreBanco())) {
+            String s = sf.getNombreBanco().toUpperCase();
+            p = cb.like(root.get(Bancos_.razonSocial), String.format("%%%s%%", s));
+        }
+
+        return p;
     }
 
 }

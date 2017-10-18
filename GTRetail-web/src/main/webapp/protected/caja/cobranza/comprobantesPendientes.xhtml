@@ -496,12 +496,12 @@
                                     <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
                                 </h:outputText>-->
                             </p:column>
-                            <p:column headerText="Cuotas">
+                            <p:column headerText="Cuotas" rendered="#{cobranzaBean.hayCupones}">
                                 <h:outputText value="#{pago.pago.idDetallePlan.cuotas}" >
 
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Código de Autorizacion">
+                            <p:column headerText="Código de Autorizacion" rendered="#{cobranzaBean.hayCupones}">
 
                                 <p:cellEditor>
                                     <f:facet name="output">
@@ -514,7 +514,7 @@
                                 </p:cellEditor>
                             </p:column>
 
-                            <p:column headerText="Nro Cupón">
+                            <p:column headerText="Nro Cupón" rendered="#{cobranzaBean.hayCupones}">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="#{pago.cupon.nroCupon}" />
@@ -526,7 +526,7 @@
                                 </p:cellEditor>
 
                             </p:column>
-                            <p:column headerText="Nro Lote">
+                            <p:column headerText="Nro Lote" rendered="#{cobranzaBean.hayCupones}">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="#{pago.cupon.nroLote}" />
@@ -538,7 +538,7 @@
                                 </p:cellEditor>
 
                             </p:column>
-                            <p:column headerText="Notas">
+                            <p:column headerText="Notas Cupon" rendered="#{cobranzaBean.hayCupones}">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="#{pago.cupon.notas}" />
@@ -551,7 +551,123 @@
 
 
                             </p:column>
+                            <!--Cheques-->
 
+                            <p:column headerText="Nro Cheque" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.nroCheque}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="nroChequeInput" value="#{pago.cheque.nroCheque}" required="true" style="width:96%"
+                                                     disabled="#{empty pago.cheque}" maxlength="30"/>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="CUIT Originante" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.cuitOriginante}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="cuitOrigenInput" value="#{pago.cheque.cuitOriginante}"
+                                                     required="true" style="width:96%"
+                                                     disabled="#{empty pago.cheque}" maxlength="11"
+                                                     converter="#{stringFormatConverter}">
+                                            <!--TODO: Validar que esto sea un CUIT-->
+                                            <f:validateLength minimum="11" maximum="11" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Originante" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.razonSocialOriginante}" />
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="nombreOrigenInput" value="#{pago.cheque.razonSocialOriginante}"
+                                                     required="true" style="width:96%"
+                                                     disabled="#{empty pago.cheque}" maxlength="200"
+                                                     converter="#{stringFormatConverter}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Fecha Origen" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.fechaOrigen}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:calendar id="fechaOrigenField" value="#{pago.cheque.fechaOrigen}"
+                                                    pattern="dd/MM/yyyy" showButtonPanel="true" style="width:96%"
+                                                    disabled="#{empty pago.cheque}"
+                                                    required="true"/>
+
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Fecha Vencimiento" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.fechaVencimiento}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:calendar id="fechaVencimientoField" value="#{pago.cheque.fechaVencimiento}"
+                                                    pattern="dd/MM/yyyy" showButtonPanel="true" style="width:96%"
+                                                    disabled="#{empty pago.cheque}"
+                                                    required="true"/>
+
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Banco" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.idBanco.razonSocial}" >
+
+                                        </h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu id="bancoField" required="true" requiredMessage="#{msg.campoRequerido}"
+                                                         value="#{pago.cheque.idBanco}"
+                                                         converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                                         disabled="#{empty pago.cheque}">
+
+                                            <f:selectItems value="#{cobranzaBean.bancosList}" var="bco"
+                                                           itemLabel="#{bco.razonSocial}"
+                                                           itemValue="#{bco}"/>
+
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
+                            <p:column headerText="Notas Cheque" rendered="#{cobranzaBean.hayCheques}">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{pago.cheque.notas}" >
+
+                                        </h:outputText>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="notasChequeInput" value="#{pago.cheque.notas}"
+                                                     style="width:96%"
+                                                     disabled="#{empty pago.cheque}" maxlength="255"/>
+
+                                    </f:facet>
+                                </p:cellEditor>
+
+                            </p:column>
 
                         </p:dataTable>
 

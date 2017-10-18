@@ -74,6 +74,7 @@ import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 /**
  * MB para manejar el carrito de compras
@@ -515,6 +516,9 @@ public class ShopCartBean implements Serializable {
 
                 remitoDetalle.add(rd);
             }
+        }
+        if (CollectionUtils.isEmpty(remitoDetalle)) {
+            return;
         }
 
         rem.setDetalleList(remitoDetalle);

@@ -52,8 +52,7 @@ public class FiscalResponsabilidadesIva extends BaseEntity {
     private List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIvaEmisor")
     private List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIva")
-    private List<Bancos> bancosList;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIva")
     private List<Personas> personasList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIva")
@@ -95,15 +94,6 @@ public class FiscalResponsabilidadesIva extends BaseEntity {
 
     public void setFiscalLetrasComprobantesList1(List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList1) {
         this.fiscalLetrasComprobantesList1 = fiscalLetrasComprobantesList1;
-    }
-
-    @XmlTransient
-    public List<Bancos> getBancosList() {
-        return bancosList;
-    }
-
-    public void setBancosList(List<Bancos> bancosList) {
-        this.bancosList = bancosList;
     }
 
     @XmlTransient

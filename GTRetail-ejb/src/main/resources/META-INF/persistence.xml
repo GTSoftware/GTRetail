@@ -22,6 +22,7 @@
         <class>ar.com.gtsoftware.model.ContabilidadTiposComprobantes</class>
         <class>ar.com.gtsoftware.model.ContabilidadTiposCuenta</class>
         <class>ar.com.gtsoftware.model.ContabilidadTiposOperacion</class>
+        <class>ar.com.gtsoftware.model.ChequesTerceros</class>
         <class>ar.com.gtsoftware.model.Depositos</class>
         <class>ar.com.gtsoftware.model.FiscalAlicuotasIva</class>
         <class>ar.com.gtsoftware.model.FiscalLetrasComprobantes</class>

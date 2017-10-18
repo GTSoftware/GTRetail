@@ -128,7 +128,7 @@ public class ProveedoresEditBean implements Serializable {
             proveedorActual.setPersonasTelefonosList(telefonos);
             proveedorActual = clientesService.guardarCliente(proveedorActual);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardar",
-                    "Cliente guardado exitosamente."));
+                    "Proveedor guardado exitosamente."));
 
         } catch (ServiceException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar:", e.getMessage()));
