@@ -248,7 +248,9 @@
                                  styleClass="ui-panelgrid-blank" columns="2">
                         <p:commandButton id="guardarButton" value="#{msg.guardar}"
                                          icon="fa fa-fw fa-save"
-                                         action="#{nuevoRemitoBean.doGuardarRemito()}" update="@form" />
+                                         action="#{nuevoRemitoBean.doGuardarRemito()}" update="@form"
+                                         onclick="PF('guardarButton').disable();"
+                                         oncomplete="PF('guardarButton').enable();"/>
 
                         <p:commandButton id="cancelarButton" value="#{msg.cancelar}"
                                          icon="ui-icon-cancel"

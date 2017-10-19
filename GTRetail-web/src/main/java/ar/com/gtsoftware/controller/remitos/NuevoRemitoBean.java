@@ -122,10 +122,10 @@ public class NuevoRemitoBean implements Serializable {
         return tiposMovimientoList;
     }
 
-    public void doGuardarRemito() {
+    public String doGuardarRemito() {
 
         if (!validarRemito()) {
-            return;
+            return StringUtils.EMPTY;
         }
         Date hoy = new Date();
         newRemito.setFechaAlta(hoy);
@@ -144,7 +144,9 @@ public class NuevoRemitoBean implements Serializable {
 
         remitoFacade.createOrEdit(newRemito);
 
-        jsfUtil.addInfoMessage(String.format("Remito guardado exitosamente ID: %d", newRemito.getId()));
+        return "/protected/stock/remitos/index.xhtml?faces-redirect=true";
+
+        //jsfUtil.addInfoMessage(String.format("Remito guardado exitosamente ID: %d", newRemito.getId()));
     }
 
     public boolean validarRemito() {
