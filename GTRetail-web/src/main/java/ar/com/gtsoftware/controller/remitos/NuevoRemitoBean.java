@@ -156,6 +156,22 @@ public class NuevoRemitoBean implements Serializable {
             jsfUtil.addErrorMessage("El remito debe tener al menos un producto");
             return false;
         }
+        if (newRemito.getIsOrigenInterno() && newRemito.getIdOrigenInterno() == null) {
+            jsfUtil.addErrorMessage("Debe seleccionar el ORIGEN para el remito");
+            return false;
+        }
+        if (!newRemito.getIsOrigenInterno() && newRemito.getIdOrigenExterno() == null) {
+            jsfUtil.addErrorMessage("Debe seleccionar el ORIGEN para el remito");
+            return false;
+        }
+        if (newRemito.getIsDestinoInterno() && newRemito.getIdDestinoPrevistoInterno() == null) {
+            jsfUtil.addErrorMessage("Debe seleccionar el DESTINO para el remito");
+            return false;
+        }
+        if (!newRemito.getIsDestinoInterno() && newRemito.getIdDestinoPrevistoExterno() == null) {
+            jsfUtil.addErrorMessage("Debe seleccionar el DESTINO para el remito");
+            return false;
+        }
         return true;
     }
 
