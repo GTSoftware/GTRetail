@@ -6,7 +6,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
+                xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
 
     <div class="Container100 Responsive100 NoIndent">
         <div class="Container100 ui-fluid">
@@ -49,6 +49,38 @@
                         </p:panelGrid >
                     </p:panel>
 
+                    <p:panel header="#{msg.deposito}">
+
+                        <p:panelGrid layout="grid"
+                                     id="depositoGrid"
+                                     style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank"
+                                     columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-1"
+                                     columns="3"
+                                     >
+
+                            <p:outputLabel value="#{msg.deposito}: "/>
+
+                            <p:selectOneMenu id="depositoSelect"
+                                             required="true"
+                                             requiredMessage="#{msg.ingresarValor} del deposito"
+                                             value="#{ingresoMercaderiaBean.remitoCabecera.idDestinoPrevistoInterno}"
+                                             converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                             filterMatchMode="contains">
+
+                                <f:selectItem noSelectionOption="true"
+                                              itemLabel="#{msg.seleccionarUno}" />
+                                <f:selectItems value="#{ingresoMercaderiaBean.depositosList}"
+                                               var="depo" itemLabel="#{depo.businessString}"
+                                               itemValue="#{depo}" />
+
+                            </p:selectOneMenu>
+
+
+
+                        </p:panelGrid >
+                    </p:panel>
+
 
                     <div class="SeparatorFull" />
 
@@ -82,8 +114,8 @@
                             </p:inputText>
                             <p:selectBooleanCheckbox id="unidadesCompraCheck" value="#{ingresoMercaderiaBean.unidadesCompra}"
                                                      itemLabel="Unidades de compra"/>
-
                         </p:panelGrid>
+
                         <div class="Container25 ui-fluid">
                             <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                                              title="#{msg.insertar}"
@@ -95,6 +127,7 @@
                                              oncomplete="PF('productDialog').show()" process="@none"
                                              global="false" />
                         </div>
+
 
 
                     </p:panel>
@@ -217,6 +250,10 @@
 
 
                     </p:dialog>
+                </h:form>
+
+                <h:form >
+
 
                     <p:dialog header="#{msg.productos}"
                               widgetVar="productDialog"
@@ -228,22 +265,23 @@
                               modal="true">
 
 
-
-
                         <gtsoftware:busquedaProductos id="busquedaProducto"
                                                       productoSeleccionado="#{ingresoMercaderiaBean.productoBusquedaSeleccionado}"                                        />
 
                         <div class="SeparatorFull" />
                         <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"
                                          title="#{msg.ok}"
+                                         action="#{ingresoMercaderiaBean.productoSelected()}"
                                          oncomplete="PF('productDialog').hide()"
                                          styleClass="GreenButton"
-                                         update=":formContenido"
-                                         global="false"/>
+                                         update=":formContenido:productosGrid"
+                                         global="false"
+                                         />
 
 
                     </p:dialog>
                 </h:form>
+
             </div>
         </div>
     </div>

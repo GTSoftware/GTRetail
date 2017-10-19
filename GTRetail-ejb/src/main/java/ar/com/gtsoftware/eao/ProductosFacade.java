@@ -70,7 +70,10 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
             if (StringUtils.isNumeric(psf.getTxt())) {
 
                 Predicate pId = cb.equal(root.get(Productos_.id), Long.parseLong(psf.getTxt()));
+                Predicate pCodigo = cb.like(root.get(Productos_.codigoPropio), psf.getTxt());
+
                 p = appendOrPredicate(cb, p, pId);
+                p = appendOrPredicate(cb, p, pCodigo);
 
             } else {
 
