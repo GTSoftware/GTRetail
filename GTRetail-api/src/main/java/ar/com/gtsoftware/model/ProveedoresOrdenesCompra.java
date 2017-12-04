@@ -26,6 +26,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,9 +50,14 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "fecha_orden_compra")
+    @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaOrdenCompra;
+    private Date fechaAlta;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha_modificacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModificacion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_estimada_recepcion")
@@ -59,27 +66,33 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "total")
+    @Column(name = "total_orden_compra")
     private BigDecimal total;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "monto_iva_total")
+    private BigDecimal totalIVA;
     @Size(max = 1024)
     @Column(name = "observaciones")
     private String observaciones;
-    @Basic(optional = false)
+
     @NotNull
-    @Column(name = "anulada")
-    private boolean anulada;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Usuarios idUsuario;
-    @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
+    @NotNull
+    @JoinColumn(name = "id_estado_orden_compra", referencedColumnName = "id_estado_orden_compra", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    private Sucursales idSucursal;
+    private ProveedoresOrdenesCompraEstados idEstadoOrdenCompra;
+
+    @NotNull
     @JoinColumn(name = "id_proveedor", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idProveedor;
-    @JoinColumn(name = "id_condicion_compra", referencedColumnName = "id_condicion", columnDefinition = "int4")
+    @JoinColumn(name = "id_transporte", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
-    private NegocioCondicionesOperaciones idCondicionCompra;
+    private Personas idTransporte;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenCompra")
     private List<ProveedoresOrdenesCompraLineas> proveedoresOrdenesCompraLineasList;
 
@@ -92,18 +105,18 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
 
     public ProveedoresOrdenesCompra(Long idOrdenCompra, Date fechaOrdenCompra, Date fechaEstimadaRecepcion, BigDecimal total, boolean anulada) {
         super(idOrdenCompra);
-        this.fechaOrdenCompra = fechaOrdenCompra;
+        this.fechaAlta = fechaOrdenCompra;
         this.fechaEstimadaRecepcion = fechaEstimadaRecepcion;
         this.total = total;
-        this.anulada = anulada;
+
     }
 
-    public Date getFechaOrdenCompra() {
-        return fechaOrdenCompra;
+    public Date getFechaAlta() {
+        return fechaAlta;
     }
 
-    public void setFechaOrdenCompra(Date fechaOrdenCompra) {
-        this.fechaOrdenCompra = fechaOrdenCompra;
+    public void setFechaAlta(Date fechaAlta) {
+        this.fechaAlta = fechaAlta;
     }
 
     public Date getFechaEstimadaRecepcion() {
@@ -130,14 +143,6 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
         this.observaciones = observaciones;
     }
 
-    public boolean getAnulada() {
-        return anulada;
-    }
-
-    public void setAnulada(boolean anulada) {
-        this.anulada = anulada;
-    }
-
     public Usuarios getIdUsuario() {
         return idUsuario;
     }
@@ -146,28 +151,12 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
         this.idUsuario = idUsuario;
     }
 
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
     public Personas getIdProveedor() {
         return idProveedor;
     }
 
     public void setIdProveedor(Personas idProveedor) {
         this.idProveedor = idProveedor;
-    }
-
-    public NegocioCondicionesOperaciones getIdCondicionCompra() {
-        return idCondicionCompra;
-    }
-
-    public void setIdCondicionCompra(NegocioCondicionesOperaciones idCondicionCompra) {
-        this.idCondicionCompra = idCondicionCompra;
     }
 
     @XmlTransient
@@ -179,4 +168,46 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
         this.proveedoresOrdenesCompraLineasList = proveedoresOrdenesCompraLineasList;
     }
 
+    public BigDecimal getTotalIVA() {
+        return totalIVA;
+    }
+
+    public void setTotalIVA(BigDecimal totalIVA) {
+        this.totalIVA = totalIVA;
+    }
+
+    public ProveedoresOrdenesCompraEstados getIdEstadoOrdenCompra() {
+        return idEstadoOrdenCompra;
+    }
+
+    public void setIdEstadoOrdenCompra(ProveedoresOrdenesCompraEstados idEstadoOrdenCompra) {
+        this.idEstadoOrdenCompra = idEstadoOrdenCompra;
+    }
+
+    public Personas getIdTransporte() {
+        return idTransporte;
+    }
+
+    public void setIdTransporte(Personas idTransporte) {
+        this.idTransporte = idTransporte;
+    }
+
+    public Date getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(Date fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        this.fechaModificacion = new Date();
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.fechaAlta = new Date();
+        this.fechaModificacion = new Date();
+    }
 }

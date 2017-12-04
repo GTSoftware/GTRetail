@@ -95,7 +95,7 @@ create table proveedores_ordenes_compra_lineas (
     id_tipo_unidad integer not null,
     cantidad_recibida numeric(19,2) not null,
     precio_compra_unitario numeric(19,4) not null,
-    subtotal_compra numeric(19,4) not null,
+    sub_total numeric(19,4) not null,
     version integer not null default 0,
     CONSTRAINT proveedores_ordenes_compra_lineas_id_orden_compra_fk FOREIGN KEY (id_orden_compra)
       REFERENCES proveedores_ordenes_compra (id_orden_compra) MATCH SIMPLE

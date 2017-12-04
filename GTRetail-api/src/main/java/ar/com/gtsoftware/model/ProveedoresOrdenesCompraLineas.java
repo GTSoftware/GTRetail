@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "proveedores_ordenes_compra_lineas")
 @XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea", columnDefinition = "serial"))
+@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra_linea", columnDefinition = "serial"))
 public class ProveedoresOrdenesCompraLineas extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -45,20 +45,28 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
     private BigDecimal precioCompraUnitario;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "cantidad")
-    private BigDecimal cantidad;
+    @Column(name = "cantidad_pedida")
+    private BigDecimal cantidadPedida;
     @Basic(optional = false)
     @NotNull
     @Column(name = "sub_total")
     private BigDecimal subTotal;
+    @NotNull
     @Column(name = "cantidad_recibida")
     private BigDecimal cantidadRecibida;
+    @NotNull
     @JoinColumn(name = "id_orden_compra", referencedColumnName = "id_orden_compra", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ProveedoresOrdenesCompra idOrdenCompra;
+
+    @NotNull
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
+    @NotNull
+    @JoinColumn(name = "id_tipo_unidad", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
+    @ManyToOne(optional = false)
+    private ProductosTiposUnidades idTipoUnidad;
 
     public ProveedoresOrdenesCompraLineas() {
     }
@@ -70,7 +78,7 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
     public ProveedoresOrdenesCompraLineas(Long idLinea, BigDecimal precioCompraUnitario, BigDecimal cantidad, BigDecimal subTotal) {
         super(idLinea);
         this.precioCompraUnitario = precioCompraUnitario;
-        this.cantidad = cantidad;
+        this.cantidadPedida = cantidad;
         this.subTotal = subTotal;
     }
 
@@ -82,12 +90,12 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
         this.precioCompraUnitario = precioCompraUnitario;
     }
 
-    public BigDecimal getCantidad() {
-        return cantidad;
+    public BigDecimal getCantidadPedida() {
+        return cantidadPedida;
     }
 
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
+    public void setCantidadPedida(BigDecimal cantidadPedida) {
+        this.cantidadPedida = cantidadPedida;
     }
 
     public BigDecimal getSubTotal() {
@@ -120,6 +128,14 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
 
     public void setIdProducto(Productos idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public ProductosTiposUnidades getIdTipoUnidad() {
+        return idTipoUnidad;
+    }
+
+    public void setIdTipoUnidad(ProductosTiposUnidades idTipoUnidad) {
+        this.idTipoUnidad = idTipoUnidad;
     }
 
 }
