@@ -45,6 +45,7 @@ create table proveedores_ordenes_compra (
     id_orden_compra serial primary key,
     id_proveedor integer not null, --El proveedor al cual se le realiza el pedido
     fecha_alta timestamp without time zone NOT NULL,
+    fecha_modificacion timestamp without time zone not null,
     id_usuario integer NOT NULL, --El usuario que carga la OC
     id_transporte integer, --El proveedor que sería la empresa de transportes que se encarga de traer la mercadería.
     id_estado_orden_compra integer not null,
