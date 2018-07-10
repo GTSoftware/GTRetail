@@ -17,47 +17,17 @@ package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.impl.VentasBean;
-import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
-import ar.com.gtsoftware.eao.FiscalLetrasComprobantesFacade;
-import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
-import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.eao.NegocioPlanesPagoDetalleFacade;
-import ar.com.gtsoftware.eao.NegocioPlanesPagoFacade;
-import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
-import ar.com.gtsoftware.eao.ParametrosFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
-import ar.com.gtsoftware.eao.ProductosPreciosFacade;
-import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.ComprobantesEstados;
-import ar.com.gtsoftware.model.ComprobantesLineas;
-import ar.com.gtsoftware.model.ComprobantesPagos;
-import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
-import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.model.NegocioPlanesPago;
-import ar.com.gtsoftware.model.NegocioPlanesPagoDetalle;
-import ar.com.gtsoftware.model.NegocioTiposComprobante;
-import ar.com.gtsoftware.model.Parametros;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
-import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.RemitoDetalle;
-import ar.com.gtsoftware.model.RemitoRecepcion;
-import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
-import ar.com.gtsoftware.search.FormasPagoSearchFilter;
-import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
-import ar.com.gtsoftware.search.PlanesPagoDetalleSearchFilter;
-import ar.com.gtsoftware.search.PlanesPagoSearchFilter;
-import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
-import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.eao.*;
+import ar.com.gtsoftware.model.*;
+import ar.com.gtsoftware.search.*;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -68,13 +38,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.util.CollectionUtils;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * MB para manejar el carrito de compras
@@ -122,8 +87,6 @@ public class ShopCartBean implements Serializable {
     private NegocioPlanesPagoFacade planesPagoFacade;
     @EJB
     private NegocioPlanesPagoDetalleFacade pagoDetalleFacade;
-    @EJB
-    private JSFUtil jsfUtil;
     @EJB
     private RemitoTipoMovimientoFacade tipoMovimientoFacade;
     @EJB
@@ -177,7 +140,7 @@ public class ShopCartBean implements Serializable {
      * Inicializa la conversación
      */
     public void initConversation() {
-        if (!jsfUtil.isPostback() && conversation.isTransient()) {
+        if (!isPostback() && conversation.isTransient()) {
             conversation.begin();
             venta = new Comprobantes();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
@@ -253,7 +216,7 @@ public class ShopCartBean implements Serializable {
     }
 
     public void initPagos() {
-        if (!jsfUtil.isPostback()) {
+        if (!isPostback()) {
             if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
                 pagoActual.setMontoPagado(BigDecimal.ZERO);
@@ -277,12 +240,12 @@ public class ShopCartBean implements Serializable {
         }
 
         if (producto == null) {
-            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
+            addErrorMessage(getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
         ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
         if (precio == null) {
-            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoSinPrecio"));
+            addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
             return;
         }
 
@@ -394,7 +357,7 @@ public class ShopCartBean implements Serializable {
         if (pagoActual.getIdFormaPago() != null) {
             if (pagoActual.getMontoPago().signum() <= 0
                     || pagoActual.getMontoPago().compareTo(venta.getSaldo()) > 0) {
-                jsfUtil.addErrorMessage("El monto del pago supera el saldo!");
+                addErrorMessage("El monto del pago supera el saldo!");
 
             } else {
 
@@ -436,25 +399,25 @@ public class ShopCartBean implements Serializable {
 
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
-            jsfUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
+            addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
             return false;
         }
         if (venta.getIdPersona() == null) {
-            jsfUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
+            addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
         if (venta.getTotal().signum() <= 0) {
-            jsfUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
+            addErrorMessage("El total del comprobante debe ser mayor que cero.");
             return false;
         }
         if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
-            jsfUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
+            addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
         if (venta.getIdCondicionComprobante() != null) {
             if (venta.getIdCondicionComprobante().getPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
-                    jsfUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
+                    addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
                 }
             }
@@ -483,12 +446,12 @@ public class ShopCartBean implements Serializable {
                 ventasBean.guardarVenta(venta);
                 generarRemitoEntrega(venta);
 
-                jsfUtil.addInfoMessage("Operación guardada exitosamente!");
+                addInfoMessage("Operación guardada exitosamente!");
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
-                jsfUtil.addErrorMessage(ex.getMessage());
+                addErrorMessage(ex.getMessage());
             }
         }
         return null;
@@ -496,8 +459,6 @@ public class ShopCartBean implements Serializable {
 
     /**
      * Genera el remito de egreso/ingreso según corresponda por la totalidad de los ítems del comprobante
-     *
-     * @param remitoDetalle
      */
     private void generarRemitoEntrega(Comprobantes venta) {
         Remito rem = new Remito();

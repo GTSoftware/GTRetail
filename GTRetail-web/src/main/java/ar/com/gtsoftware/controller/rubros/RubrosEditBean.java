@@ -40,8 +40,6 @@ public class RubrosEditBean implements Serializable {
 
     @EJB
     private ProductosRubrosFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private ProductosRubros rubroActual = null;
 
@@ -54,7 +52,7 @@ public class RubrosEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
+        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
 
         if (idRubro == null) {
             nuevo();
@@ -79,11 +77,11 @@ public class RubrosEditBean implements Serializable {
         try {
 
             facade.createOrEdit(rubroActual);
-            jsfUtil.addInfoMessage("Rubro guardada Exitosamente");
+            JSFUtil.addInfoMessage("Rubro guardada Exitosamente");
             rubroActual = facade.find(rubroActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }

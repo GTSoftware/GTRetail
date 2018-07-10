@@ -40,8 +40,6 @@ public class RemitosSearchBean extends AbstractSearchBean<Remito, RemitoSearchFi
 
     private static final long serialVersionUID = 1L;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
     @EJB
     private RemitoFacade facade;
@@ -62,7 +60,7 @@ public class RemitosSearchBean extends AbstractSearchBean<Remito, RemitoSearchFi
 
     @PostConstruct
     public void init() {
-        if (jsfUtil.isPostback()) {
+        if (JSFUtil.isPostback()) {
             return;
         }
 

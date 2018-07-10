@@ -16,18 +16,11 @@
 package ar.com.gtsoftware.model;
 
 import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
@@ -67,6 +60,9 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
     @JoinColumn(name = "id_tipo_unidad", referencedColumnName = "id_tipo_unidad", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ProductosTiposUnidades idTipoUnidad;
+
+    @Transient
+    private int nroLinea;
 
     public ProveedoresOrdenesCompraLineas() {
     }
@@ -138,4 +134,23 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
         this.idTipoUnidad = idTipoUnidad;
     }
 
+    /**
+     * El número de linea utilizado para ubicar las líneas antes de que se han
+     * guardado en la bd
+     *
+     * @return
+     */
+    public int getNroLinea() {
+        return nroLinea;
+    }
+
+    /**
+     * El número de linea utilizado para ubicar las líneas antes de que se han
+     * guardado en la bd
+     *
+     * @param nroLinea
+     */
+    public void setNroLinea(int nroLinea) {
+        this.nroLinea = nroLinea;
+    }
 }

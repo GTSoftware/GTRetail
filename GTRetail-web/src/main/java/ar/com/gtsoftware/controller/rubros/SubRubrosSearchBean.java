@@ -46,8 +46,6 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros, 
     private ProductosSubRubrosFacade facade;
     @EJB
     private ProductosRubrosFacade rubrosFacade;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private ProductosRubros rubro;
 
@@ -62,7 +60,7 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubros, 
     @PostConstruct
     public void init() {
 
-        String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
+        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
 
         if (idRubro == null) {
             throw new RuntimeException("No hay parámetro de Rubro!");

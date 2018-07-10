@@ -60,8 +60,6 @@ public class PlanesPagoEditBean implements Serializable {
 
     @EJB
     private ProductosListasPreciosFacade listasPreciosFacade;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private final List<NegocioFormasPago> formasPagoList = new ArrayList<>();
     private final List<ProductosListasPrecios> listasPrecio = new ArrayList<>();
@@ -75,7 +73,7 @@ public class PlanesPagoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idPlan = jsfUtil.getRequestParameterMap().get("idPlanPago");
+        String idPlan = JSFUtil.getRequestParameterMap().get("idPlanPago");
 
         if (idPlan == null) {
             nuevo();
@@ -111,11 +109,11 @@ public class PlanesPagoEditBean implements Serializable {
         try {
 
             facade.createOrEdit(planPagoActual);
-            jsfUtil.addInfoMessage("Plan de pago guardado Exitosamente");
+            JSFUtil.addInfoMessage("Plan de pago guardado Exitosamente");
             planPagoActual = facade.find(planPagoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }

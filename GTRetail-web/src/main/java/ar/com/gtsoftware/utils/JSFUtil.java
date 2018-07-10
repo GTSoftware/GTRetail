@@ -36,14 +36,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Utility Bean for JSF.
+ * Utility for JSF.
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @version 2.0.0
  * @since 1.0.0
  */
-@Stateless
-public class JSFUtil {
+
+public abstract class JSFUtil {
 
     private static final Logger LOG = Logger.getLogger(JSFUtil.class.getName());
 
@@ -64,8 +64,10 @@ public class JSFUtil {
 
     public static final String MS_EXCEL_2007_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
+
     // Properties ---------------------------------------------------------------------------------
     // Actions ------------------------------------------------------------------------------------
+
     public static String getActionAttribute(ActionEvent event, String name) {
         return (String) event.getComponent().getAttributes().get(name);
     }
@@ -151,7 +153,7 @@ public class JSFUtil {
      *
      * @param localizedMessage
      */
-    public void addErrorMessage(String localizedMessage) {
+    public static void addErrorMessage(String localizedMessage) {
         addMessage(localizedMessage, FacesMessage.SEVERITY_ERROR);
     }
 
@@ -160,7 +162,7 @@ public class JSFUtil {
      *
      * @param localizedMessage
      */
-    public void addInfoMessage(String localizedMessage) {
+    public static void addInfoMessage(String localizedMessage) {
         addMessage(localizedMessage, FacesMessage.SEVERITY_INFO);
     }
 
@@ -170,7 +172,7 @@ public class JSFUtil {
      * @param localizedMessage
      * @param severity
      */
-    public void addMessage(String localizedMessage, Severity severity) {
+    public static void addMessage(String localizedMessage, Severity severity) {
         addMessage(null, localizedMessage, severity);
     }
 
@@ -181,7 +183,7 @@ public class JSFUtil {
      * @param localizedMessage
      * @param severity
      */
-    public void addMessage(String clientId, String localizedMessage, Severity severity) {
+    public static void addMessage(String clientId, String localizedMessage, Severity severity) {
         FacesContext context = FacesContext.getCurrentInstance();
         UIComponent componet = null;
         if (clientId != null) {
@@ -199,19 +201,19 @@ public class JSFUtil {
         }
     }
 
-    public HttpSession getSession() {
+    public static HttpSession getSession() {
         return (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
     }
 
-    public HttpServletRequest getRequest() {
+    public static HttpServletRequest getRequest() {
         return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
     }
 
-    public HttpServletResponse getResponse() {
+    public static HttpServletResponse getResponse() {
         return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     }
 
-    public void redirect(String uri) {
+    public static void redirect(String uri) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         try {
             ec.redirect(ec.getRequestContextPath() + uri);
@@ -225,7 +227,7 @@ public class JSFUtil {
      *
      * @return
      */
-    public boolean isPostback() {
+    public static boolean isPostback() {
         return FacesContext.getCurrentInstance().isPostback();
     }
 
@@ -234,7 +236,7 @@ public class JSFUtil {
      *
      * @return
      */
-    public String getUserPrincipalName() {
+    public static String getUserPrincipalName() {
         return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
     }
 
@@ -243,7 +245,7 @@ public class JSFUtil {
      *
      * @return
      */
-    public Map<String, String> getRequestParameterMap() {
+    public static Map<String, String> getRequestParameterMap() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     }
 
@@ -252,7 +254,7 @@ public class JSFUtil {
      *
      * @return
      */
-    public Map<String, Object> getSessionParameterMap() {
+    public static Map<String, Object> getSessionParameterMap() {
         return FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
     }
 
@@ -262,7 +264,7 @@ public class JSFUtil {
      * @param role
      * @return
      */
-    public boolean isUserInRole(String role) {
+    public static boolean isUserInRole(String role) {
         return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role);
     }
 
@@ -272,7 +274,7 @@ public class JSFUtil {
      * @param messajeBundle el mesaje bundle para utilizar
      * @return un ResourceBundle
      */
-    public ResourceBundle getDefaultLocaleBundle(String messajeBundle) {
+    public static ResourceBundle getDefaultLocaleBundle(String messajeBundle) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Locale locale = facesContext.getViewRoot().getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle(messajeBundle, locale);
@@ -285,7 +287,7 @@ public class JSFUtil {
      * @param varName el barName que figura en faces-config
      * @return un ResourceBundle
      */
-    public ResourceBundle getBundle(String varName) {
+    public static ResourceBundle getBundle(String varName) {
         FacesContext context = FacesContext.getCurrentInstance();
         Application app = context.getApplication();
         ResourceBundle bundle = app.getResourceBundle(context, varName);
@@ -297,7 +299,7 @@ public class JSFUtil {
      *
      * @param redirectTo
      */
-    public void logOut(String redirectTo) {
+    public static void logOut(String redirectTo) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();
         try {

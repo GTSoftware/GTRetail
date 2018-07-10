@@ -82,8 +82,6 @@ public class ProveedoresEditBean implements Serializable {
     private UbicacionLocalidadesFacade localidadesFacade;
     @EJB
     private UbicacionProvinciasFacade provinciasFacade;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private Personas proveedorActual;
     private PersonasTelefonos telefonoActual = new PersonasTelefonos();
@@ -100,7 +98,7 @@ public class ProveedoresEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String idPersona = jsfUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {

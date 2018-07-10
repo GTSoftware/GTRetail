@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">Consulta de #{msg.ordenesCompra}</h1>
+            <div class="SeparatorFull"/>
+            <h:form id="buscarClienteForm">
+                <p:defaultCommand target="buscarButton"/>
+                <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                             styleClass="ui-panelgrid-blank" columns="3">
+
+
+                    <p:inputText id="searchField" value="#{ordenesCompraSearchBean.filter.txt}"
+                                 placeholder="#{msg.busqueda}"/>
+
+                    <p:commandButton id="buscarButton" action="#{ordenesCompraSearchBean.doSearch()}" value="Buscar"
+                                     update="ordenesCompraTable" icon="fa fa-fw fa-search"/>
+                    <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false"
+                                     icon="fa fa-fw fa-plus"
+                                     styleClass="GreenButton">
+
+                    </p:commandButton>
+
+                </p:panelGrid>
+                <div class="SeparatorFull"/>
+
+                <p:dataTable id="ordenesCompraTable" value="#{ordenesCompraSearchBean.dataModel}" var="ordenCompra"
+                             rows="10"
+                             lazy="true"
+                             paginator="true"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{ordenCompra.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="10,15,30,100"
+
+
+                             scrollable="true"
+                             reflow="true">
+
+                    <f:facet name="{Exporters}">
+
+                        <h:commandLink title="xls">
+                            <i class="fa fa-file-excel-o Fs24 Green"/>
+                            <p:dataExporter type="xls" target="ordenesCompraTable" fileName="ordenesCompra"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="pdf">
+                            <i class="fa fa-file-pdf-o Fs24 Red"/>
+                            <p:dataExporter type="pdf" target="ordenesCompraTable" fileName="ordenesCompra"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="csv">
+                            <i class="fa fa-file-text-o Fs24 Blue"/>
+                            <p:dataExporter type="csv" target="ordenesCompraTable" fileName="ordenesCompra"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="xml">
+                            <i class="fa fa-file-code-o Fs24 Black"/>
+                            <p:dataExporter type="xml" target="ordenesCompraTable" fileName="ordenesCompra"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <f:facet name="header">
+                        #{msg.ordenCompraListado}
+                    </f:facet>
+
+                    <p:column sortBy="#{ordenCompra.id}">
+                        <f:facet name="header">
+                            #{msg.tablaId}
+                        </f:facet>
+                        <p:outputLabel value="#{ordenCompra.id}"/>
+                    </p:column>
+                    <p:column sortBy="#{ordenCompra.idProveedor.razonSocial}">
+                        <f:facet name="header">
+                            #{msg.proveedor}
+                        </f:facet>
+                        <p:outputLabel value="#{ordenCompra.idProveedor.businessString}"/>
+                    </p:column>
+                    <p:column sortBy="#{ordenCompra.fechaAlta}">
+                        <f:facet name="header">
+                            #{msg.fecha}
+                        </f:facet>
+                        <p:outputLabel value="#{ordenCompra.fechaAlta}"/>
+                    </p:column>
+                    <p:column sortBy="#{ordenCompra.total}">
+                        <f:facet name="header">
+                            #{msg.total}
+                        </f:facet>
+                        <p:outputLabel value="#{ordenCompra.total}"/>
+                    </p:column>
+                    <p:column sortBy="#{ordenCompra.observaciones}">
+                        <f:facet name="header">
+                            #{msg.observaciones}
+                        </f:facet>
+                        <p:outputLabel value="#{ordenCompra.observaciones}"/>
+                    </p:column>
+
+
+                    <p:column exportable="false">
+                        <f:facet name="header">
+                            #{msg.acciones}
+                        </f:facet>
+                        <!-- <p:panelGrid columns="1" layout="grid"  styleClass="ui-panelgrid-blank">
+                             <p:commandButton id="editarClienteButton"
+                                              icon="fa fa-fw fa-edit" action="#{proveedoresSearchBean.editarProveedor(cliente)}"
+                                              ajax="false"
+
+                                              title="#{msg.editar}">
+                                 <f:param name="idPersona" value="#{cliente.id}"/>
+                             </p:commandButton>
+
+                             <p:commandButton id="verCCButton"
+                                              icon="fa fa-fw fa-bank" action="#{proveedoresSearchBean.verCuentaCorriente(cliente)}"
+                                              ajax="false"
+
+                                              title="#{msg.verCuentaCorriente}">
+
+                             </p:commandButton>
+
+                         </p:panelGrid>-->
+
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </h:form>
+
+        </div>
+    </div>
+</div>
+</html>

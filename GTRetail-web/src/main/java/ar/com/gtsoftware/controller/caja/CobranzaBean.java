@@ -46,6 +46,8 @@ import javax.faces.bean.ViewScoped;
 import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.context.RequestContext;
 
+import static ar.com.gtsoftware.utils.JSFUtil.*;
+
 /**
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
@@ -70,9 +72,6 @@ public class CobranzaBean implements Serializable {
 
     @ManagedProperty(value = "#{recibosSearchBean}")
     private RecibosSearchBean recibosSearchBean;
-
-    @EJB
-    private JSFUtil jsfUtil;
 
     private Cajas cajaActual;
 
@@ -151,13 +150,13 @@ public class CobranzaBean implements Serializable {
 
     private boolean validarComprobantesSeleccionados() {
         if (CollectionUtils.isEmpty(selectedComprobantes)) {
-            jsfUtil.addErrorMessage("No hay comprobantes seleccionados.");
+            addErrorMessage("No hay comprobantes seleccionados.");
             return false;
         }
         Long idPersona = selectedComprobantes.get(0).getIdPersona().getId();
         for (Comprobantes c : selectedComprobantes) {
             if (!Objects.equals(idPersona, c.getIdPersona().getId())) {
-                jsfUtil.addErrorMessage("Debe seleccionar comprobatnes de un mismo cliente.");
+                addErrorMessage("Debe seleccionar comprobatnes de un mismo cliente.");
                 return false;
             }
         }
@@ -168,7 +167,7 @@ public class CobranzaBean implements Serializable {
 //        boolean allCuentaCorriente = selectedComprobantes.stream().allMatch(x -> !x.getIdCondicionComprobante().getPagoTotal());
 //
 //        if (!(allContado || allCuentaCorriente)) {
-//            jsfUtil.addErrorMessage("Los comprobantes a cobrar deben ser todos de cuenta corriente o todos de contado.");
+//            addErrorMessage("Los comprobantes a cobrar deben ser todos de cuenta corriente o todos de contado.");
 //            return false;
 //        }
         return true;
@@ -178,7 +177,7 @@ public class CobranzaBean implements Serializable {
         if (validarComprobantesSeleccionados()) {
 
             reciboActual = cobranzaServiceImpl.cobrarComprobantes(cajaActual, pagosValores);
-            jsfUtil.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
+            addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
             RequestContext.getCurrentInstance().execute("PF('cobrarComprobantesDialog').hide();");
             RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
         }

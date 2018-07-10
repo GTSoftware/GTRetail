@@ -23,16 +23,17 @@ import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import ar.com.gtsoftware.search.PersonasCuentaCorrienteSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "cuentaCorrienteSearchBean")
@@ -47,8 +48,6 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     @EJB
     private PersonasFacade personasFacade;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
     private final PersonasCuentaCorrienteSearchFilter filter = new PersonasCuentaCorrienteSearchFilter();
 
@@ -59,17 +58,17 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     }
 
     public void init() {
-        if (jsfUtil.isPostback()) {
+        if (isPostback()) {
             return;
         }
-        String idPersona = jsfUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {
             Personas persona = personasFacade.find(Long.parseLong(idPersona));
             if (persona == null) {
 
-                jsfUtil.addErrorMessage("Cliente inexistente!");
+                addErrorMessage("Cliente inexistente!");
                 LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
                 filter.setPersona(persona);

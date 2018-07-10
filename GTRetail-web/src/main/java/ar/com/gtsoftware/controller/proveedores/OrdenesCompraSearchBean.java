@@ -13,68 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.com.gtsoftware.controller.clientes;
+package ar.com.gtsoftware.controller.proveedores;
 
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
+import ar.com.gtsoftware.eao.ProveedoresOrdenesCompraFacade;
 import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.model.ProveedoresOrdenesCompra;
+import ar.com.gtsoftware.search.OrdenCompraSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 
 /**
+ * SearchBean para Ordenes de compra
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@ManagedBean(name = "clientesSearchBean")
+@ManagedBean(name = "ordenesCompraSearchBean")
 @ViewScoped
-public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
+public class OrdenesCompraSearchBean extends AbstractSearchBean<ProveedoresOrdenesCompra, OrdenCompraSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private PersonasFacade facade;
+    private ProveedoresOrdenesCompraFacade facade;
 
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private final OrdenCompraSearchFilter filter = new OrdenCompraSearchFilter();
 
     /**
-     * Creates a new instance of ClientesSearchBean
+     * Creates a new instance of OrdenesCompraSearchBean
      */
-    public ClientesSearchBean() {
+    public OrdenesCompraSearchBean() {
     }
 
     @Override
-    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
+    protected AbstractFacade<ProveedoresOrdenesCompra, OrdenCompraSearchFilter> getFacade() {
         return facade;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("razonSocial", true));
+            filter.addSortField(new SortField("fechaAlta", false));
         }
     }
 
     @Override
-    public PersonasSearchFilter getFilter() {
+    public OrdenCompraSearchFilter getFilter() {
         return filter;
     }
 
-    public List<Personas> findClientesByString(String query) {
-        filter.setTxt(query);
-        return facade.findBySearchFilter(filter, 0, 15);
-    }
 
-    public String editarCliente(Personas p) {
-        return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
-    }
-
-    public String verCuentaCorriente(Personas p) {
-        return String.format("clientesCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
-    }
 }

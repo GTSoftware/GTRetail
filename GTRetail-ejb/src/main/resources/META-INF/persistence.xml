@@ -57,6 +57,7 @@
         <class>ar.com.gtsoftware.model.ProductosTiposUnidades</class>
         <class>ar.com.gtsoftware.model.ProductosXCaracteristicas</class>
         <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompra</class>
+        <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompraEstados</class>
         <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompraLineas</class>
         <class>ar.com.gtsoftware.model.ProductosListasPrecios</class>
         <class>ar.com.gtsoftware.model.ProductosPrecios</class>

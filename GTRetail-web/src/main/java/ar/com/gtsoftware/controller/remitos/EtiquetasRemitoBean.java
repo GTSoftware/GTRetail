@@ -51,8 +51,6 @@ public class EtiquetasRemitoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
     @EJB
     private RemitoFacade remitoFacade;
@@ -73,7 +71,7 @@ public class EtiquetasRemitoBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRemito = jsfUtil.getRequestParameterMap().get("idRemito");
+        String idRemito = JSFUtil.getRequestParameterMap().get("idRemito");
         if (StringUtils.isEmpty(idRemito)) {
             throw new IllegalArgumentException("IdRemito nulo!");
         }

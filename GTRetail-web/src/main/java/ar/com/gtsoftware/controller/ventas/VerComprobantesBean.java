@@ -42,6 +42,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import static ar.com.gtsoftware.utils.JSFUtil.*;
+
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -70,8 +72,6 @@ public class VerComprobantesBean implements Serializable {
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private final List<FiscalPuntosVenta> puntosVentaList = new ArrayList<>();
 
@@ -87,10 +87,10 @@ public class VerComprobantesBean implements Serializable {
     }
 
     public void init() {
-        if (jsfUtil.isPostback()) {
+        if (isPostback()) {
             return;
         }
-        String idVenta = jsfUtil.getRequestParameterMap().get("idComprobante");
+        String idVenta = getRequestParameterMap().get("idComprobante");
         if (idVenta == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         }
@@ -116,10 +116,10 @@ public class VerComprobantesBean implements Serializable {
         FiscalPeriodosFiscalesSearchFilter psf = new FiscalPeriodosFiscalesSearchFilter(Boolean.TRUE);
         FiscalPeriodosFiscales periodo = periodosFiscalesFacade.findFirstBySearchFilter(psf);
         if (periodo == null) {
-            jsfUtil.addErrorMessage("No hay un período fiscal configurado!");
+            addErrorMessage("No hay un período fiscal configurado!");
         }
         if (puntoVentaSeleccionado == null) {
-            jsfUtil.addErrorMessage("Debe seleccionar un punto de venta.");
+            addErrorMessage("Debe seleccionar un punto de venta.");
         }
         try {
 
@@ -129,11 +129,11 @@ public class VerComprobantesBean implements Serializable {
                     periodo,
                     new Date());
             ventaActual = ventasFacade.find(ventaActual.getId());
-            jsfUtil.addInfoMessage(String.format("Factura registrada correctamente: %s",
+            addInfoMessage(String.format("Factura registrada correctamente: %s",
                     ventaActual.getIdRegistro().getNumeroFactura()));
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            jsfUtil.addErrorMessage(ex.getMessage());
+            addErrorMessage(ex.getMessage());
         }
 
     }
@@ -144,11 +144,11 @@ public class VerComprobantesBean implements Serializable {
     public void anularVenta() {
         try {
             ventasBean.anularVenta(ventaActual);
-            jsfUtil.addInfoMessage("Factura anulada correctamente");
+            addInfoMessage("Factura anulada correctamente");
 
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            jsfUtil.addErrorMessage(ex.getMessage());
+            addErrorMessage(ex.getMessage());
 
         }
     }

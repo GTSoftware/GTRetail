@@ -40,8 +40,7 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, Chequ
 
     @EJB
     private ChequesTercerosFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
+
 
     private final ChequesTercerosSearchFilter filter = new ChequesTercerosSearchFilter();
 
@@ -79,6 +78,6 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, Chequ
         }
         cheque.setFechaCobro(new Date());
         facade.edit(cheque);
-        jsfUtil.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
+        JSFUtil.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
     }
 }

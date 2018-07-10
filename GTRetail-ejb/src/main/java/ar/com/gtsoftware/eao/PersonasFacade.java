@@ -18,21 +18,22 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Personas_;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
 public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilter> {
 
+    private static final String LIKE_FORMAT = "%%%s%%";
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -54,11 +55,11 @@ public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilte
         }
         if (StringUtils.isNotEmpty(psf.getTxt())) {
             String s = psf.getTxt().toUpperCase();
-            Predicate p1 = cb.like(persona.get(Personas_.razonSocial), String.format("%%%s%%", s));
-            Predicate p2 = cb.like(persona.get(Personas_.apellidos), String.format("%%%s%%", s));
-            Predicate p3 = cb.like(persona.get(Personas_.nombres), String.format("%%%s%%", s));
-            Predicate p4 = cb.like(persona.get(Personas_.nombreFantasia), String.format("%%%s%%", s));
-            Predicate p5 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", s));
+            Predicate p1 = cb.like(persona.get(Personas_.razonSocial), String.format(LIKE_FORMAT, s));
+            Predicate p2 = cb.like(persona.get(Personas_.apellidos), String.format(LIKE_FORMAT, s));
+            Predicate p3 = cb.like(persona.get(Personas_.nombres), String.format(LIKE_FORMAT, s));
+            Predicate p4 = cb.like(persona.get(Personas_.nombreFantasia), String.format(LIKE_FORMAT, s));
+            Predicate p5 = cb.like(persona.get(Personas_.documento), String.format(LIKE_FORMAT, s));
 
             if (p == null) {
                 p = cb.or(p1, p2, p3, p4, p5);
@@ -67,7 +68,7 @@ public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilte
             }
         }
         if (psf.getDocumento() != null && psf.getIdTipoDocumento() != null) {
-            Predicate p1 = cb.like(persona.get(Personas_.documento), String.format("%%%s%%", psf.getDocumento()));
+            Predicate p1 = cb.like(persona.get(Personas_.documento), String.format(LIKE_FORMAT, psf.getDocumento()));
             p = appendAndPredicate(cb, p, p1);
             p1 = cb.equal(persona.get(Personas_.idTipoDocumento), psf.getIdTipoDocumento());
             p = appendAndPredicate(cb, p, p1);
@@ -104,7 +105,7 @@ public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilte
         p = appendAndPredicate(cb, p, cb.equal(rt.get(Personas_.documento), persona.getDocumento()));
         cq.where(p);
         javax.persistence.Query q = getEntityManager().createQuery(cq);
-        return ((Long) q.getSingleResult()).intValue() > 0;
+        return ((Long) q.getSingleResult()) > 0L;
     }
 
 }

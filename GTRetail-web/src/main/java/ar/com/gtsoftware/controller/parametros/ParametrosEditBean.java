@@ -17,17 +17,18 @@ package ar.com.gtsoftware.controller.parametros;
 
 import ar.com.gtsoftware.eao.ParametrosFacade;
 import ar.com.gtsoftware.model.Parametros;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang3.StringUtils;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "parametrosEditBean")
@@ -39,8 +40,7 @@ public class ParametrosEditBean implements Serializable {
 
     @EJB
     private ParametrosFacade parametrosFacade;
-    @EJB
-    private JSFUtil jsfUtil;
+
 
     private Parametros parametroActual;
 
@@ -54,10 +54,10 @@ public class ParametrosEditBean implements Serializable {
 
     public void init() {
 
-        if (jsfUtil.isPostback()) {
+        if (isPostback()) {
             return;
         }
-        nombreParametro = jsfUtil.getRequestParameterMap().get("nombreParametro");
+        nombreParametro = getRequestParameterMap().get("nombreParametro");
         if (StringUtils.isEmpty(nombreParametro)) {
             throw new IllegalArgumentException("El parámetro es nulo");
         }
@@ -74,7 +74,7 @@ public class ParametrosEditBean implements Serializable {
     public void edit() {
 
         parametrosFacade.edit(parametroActual);
-        jsfUtil.addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
+        addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
                 parametroActual.getNombreParametro(), parametroActual.getValorParametro()));
 
     }

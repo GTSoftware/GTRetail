@@ -54,8 +54,6 @@ public class UsuariosRolesEditBean implements Serializable {
     @EJB
     private UsuariosGruposFacade rolFacade;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
     private Usuarios usuarioActual;
 
@@ -101,11 +99,11 @@ public class UsuariosRolesEditBean implements Serializable {
                 throw new ValidationException("No se permite modificar el usuario reservado");
             }
             usuarioFacade.createOrEdit(usuarioActual);
-            jsfUtil.addInfoMessage("Usuario guardado exitosamente!");
+            JSFUtil.addInfoMessage("Usuario guardado exitosamente!");
 
         } catch (ValidationException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            jsfUtil.addErrorMessage(String.format("Error al guardar: %s", ex.getMessage()));
+            JSFUtil.addErrorMessage(String.format("Error al guardar: %s", ex.getMessage()));
 
         }
 

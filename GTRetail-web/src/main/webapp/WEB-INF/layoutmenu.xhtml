@@ -1,10 +1,10 @@
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:po="http://primefaces.org/olympos">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:po="http://primefaces.org/olympos">
 
     <h:form id="menuform">
         <po:menu>
@@ -14,14 +14,17 @@
                             <p:menuitem id="om_db_b" value="Dashboard Banking" icon="icon-website22" />
                         </p:submenu>-->
 
-            <p:submenu id="sistemaMenu" label="#{msg.sistema}" icon="fa fa-fw fa-dashboard" >
-                <p:submenu id="archivoSubMenu" label="#{msg.archivo}" icon="fa fa-fw fa-folder-open" >
+            <p:submenu id="sistemaMenu" label="#{msg.sistema}" icon="fa fa-fw fa-dashboard">
+                <p:submenu id="archivoSubMenu" label="#{msg.archivo}" icon="fa fa-fw fa-folder-open">
 
 
+                    <p:menuitem value="#{msg.parametros}" icon="fa fa-fw fa-gears"
+                                action="/protected/parametros/parametroSearch.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"/>
 
-                    <p:menuitem value="#{msg.parametros}" icon="fa fa-fw fa-gears" action="/protected/parametros/parametroSearch.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
-
-                    <p:menuitem value="#{msg.usuariosAdministracion}" icon="fa fa-fw fa-users" action="/protected/admin/usuarios/index.xhtml?faces-redirect=true" immediate="true" ajax="false"/>
+                    <p:menuitem value="#{msg.usuariosAdministracion}" icon="fa fa-fw fa-users"
+                                action="/protected/admin/usuarios/index.xhtml?faces-redirect=true" immediate="true"
+                                ajax="false"/>
 
                     <p:submenu id="fiscalItem" label="#{msg.fiscal}" icon="fa fa-fw fa-book">
                         <p:menuitem id="periodosFiscalesItem" value="#{msg.periodosFiscales}"
@@ -38,7 +41,7 @@
                                     immediate="true" ajax="false"/>
                     </p:submenu>
 
-                    <p:submenu id="clasificadoresSubMenu" label="#{msg.clasificadores}" icon="fa fa-fw fa-bookmark" >
+                    <p:submenu id="clasificadoresSubMenu" label="#{msg.clasificadores}" icon="fa fa-fw fa-bookmark">
                         <p:menuitem id="marcasItem" value="#{msg.marcas}"
                                     action="/protected/archivos/marcas/marcaSearch.xhtml?faces-redirect=true"
                                     immediate="true" ajax="false"/>
@@ -50,7 +53,7 @@
                                     immediate="true" ajax="false"/>
                     </p:submenu>
 
-                    <p:submenu id="ubicacionesSubMenu" label="#{msg.ubicacion}es" icon="fa fa-fw fa-globe" >
+                    <p:submenu id="ubicacionesSubMenu" label="#{msg.ubicacion}es" icon="fa fa-fw fa-globe">
                         <p:menuitem id="paisesItem" value="#{msg.pais}es"
                                     action="/protected/archivos/ubicaciones/paises/index.xhtml?faces-redirect=true"
                                     immediate="true" ajax="false"/>
@@ -75,9 +78,14 @@
                                 action="/protected/proveedores/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"
                                 icon="fa fa-fw fa-search"/>
+
+                    <p:menuitem value="#{msg.ordenesCompra}"
+                                action="/protected/proveedores/ordenes_compra/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-cubes"/>
                 </p:submenu>
 
-                <p:submenu id="productosSubMenu" label="#{msg.productos}" icon="fa fa-fw fa-tags" >
+                <p:submenu id="productosSubMenu" label="#{msg.productos}" icon="fa fa-fw fa-tags">
                     <p:menuitem id="busquedaProductosItem" value="#{msg.busquedaProductos}"
                                 action="/protected/productos/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"
@@ -109,7 +117,6 @@
                 </p:submenu>
 
 
-
                 <p:submenu id="preciosSubMenu" label="#{msg.precio}s" icon="fa fa-fw fa-money">
                     <p:menuitem id="formasPagoItem" value="#{msg.formaPago}"
                                 action="/protected/archivos/formas_pago/formaPagoSearch.xhtml?faces-redirect=true"
@@ -118,7 +125,6 @@
                                 action="/protected/archivos/planes_pago/planPagoSearch.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
                 </p:submenu>
-
 
 
                 <p:submenu id="cajaSubMenu" label="#{msg.caja}" icon="fa fa-fw fa-bank">
@@ -138,7 +144,7 @@
                                 immediate="true" ajax="false"
                                 icon="fa fa-fw fa-bank"/>
 
-                    <p:submenu id="valoresSubMenu" label="#{msg.valores}" icon="fa fa-fw fa-ticket" >
+                    <p:submenu id="valoresSubMenu" label="#{msg.valores}" icon="fa fa-fw fa-ticket">
 
                         <p:menuitem id="cuponesItem" value="#{msg.cupones}"
                                     action="/protected/archivos/marcas/marcaSearch.xhtml?faces-redirect=true"
@@ -152,7 +158,7 @@
                 </p:submenu>
 
 
-                <p:submenu id="ventasSubMenu" label="#{msg.ventas}" icon="fa fa-fw fa-opencart" >
+                <p:submenu id="ventasSubMenu" label="#{msg.ventas}" icon="fa fa-fw fa-opencart">
                     <p:menuitem id="listadoVentasItem" value="#{msg.ventasListado}"
                                 action="/protected/ventas/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"

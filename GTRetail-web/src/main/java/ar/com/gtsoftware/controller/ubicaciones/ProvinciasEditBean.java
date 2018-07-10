@@ -48,8 +48,6 @@ public class ProvinciasEditBean implements Serializable {
     @EJB
     private UbicacionPaisesFacade paisesFacade;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
     private List<UbicacionPaises> paises;
 
@@ -64,7 +62,7 @@ public class ProvinciasEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idProvincia = jsfUtil.getRequestParameterMap().get("idProvincia");
+        String idProvincia = JSFUtil.getRequestParameterMap().get("idProvincia");
 
         if (StringUtils.isEmpty(idProvincia)) {
             nuevo();
@@ -89,11 +87,11 @@ public class ProvinciasEditBean implements Serializable {
         try {
 
             facade.createOrEdit(provinciaActual);
-            jsfUtil.addInfoMessage("Provincia guardada Exitosamente");
+            JSFUtil.addInfoMessage("Provincia guardada Exitosamente");
             provinciaActual = facade.find(provinciaActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }

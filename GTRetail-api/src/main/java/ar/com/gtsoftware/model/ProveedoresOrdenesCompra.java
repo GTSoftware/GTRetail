@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
@@ -61,7 +60,7 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_estimada_recepcion")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaEstimadaRecepcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)

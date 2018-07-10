@@ -40,8 +40,6 @@ public class PaisesEditBean implements Serializable {
 
     @EJB
     private UbicacionPaisesFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private UbicacionPaises paisActual = null;
 
@@ -54,7 +52,7 @@ public class PaisesEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idPais = jsfUtil.getRequestParameterMap().get("idPais");
+        String idPais = JSFUtil.getRequestParameterMap().get("idPais");
 
         if (StringUtils.isEmpty(idPais)) {
             nuevo();
@@ -79,11 +77,11 @@ public class PaisesEditBean implements Serializable {
         try {
 
             facade.createOrEdit(paisActual);
-            jsfUtil.addInfoMessage("País guardado Exitosamente");
+            JSFUtil.addInfoMessage("País guardado Exitosamente");
             paisActual = facade.find(paisActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }

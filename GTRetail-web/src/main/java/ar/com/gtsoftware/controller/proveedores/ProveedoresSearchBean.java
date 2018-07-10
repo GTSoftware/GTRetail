@@ -24,6 +24,7 @@ import ar.com.gtsoftware.search.SortField;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 
 /**
@@ -42,7 +43,7 @@ public class ProveedoresSearchBean extends AbstractSearchBean<Personas, Personas
     private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, null, Boolean.TRUE);
 
     /**
-     * Creates a new instance of ProveedoresSearchBean
+     * Creates a new instance of ProveedoresRSSearchBean
      */
     public ProveedoresSearchBean() {
     }

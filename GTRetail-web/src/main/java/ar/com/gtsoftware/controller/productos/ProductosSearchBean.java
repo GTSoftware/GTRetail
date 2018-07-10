@@ -59,8 +59,6 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
 
     private static final long serialVersionUID = 1L;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
     @EJB
     private ProductosFacade facade;
@@ -124,7 +122,7 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     }
 
     public void setParametros(ProductosListasPrecios lista, Boolean soloConStock, Boolean puedeVenderse, Boolean puedeComprarse) {
-        if (jsfUtil.isPostback()) {
+        if (JSFUtil.isPostback()) {
             return;
         }
         listaSeleccionada = lista;

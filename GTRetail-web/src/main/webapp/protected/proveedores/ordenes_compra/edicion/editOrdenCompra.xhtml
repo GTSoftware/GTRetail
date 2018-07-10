@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware"
+>
+
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">#{msg.ordenCompra}</h1>
+                <div class="SeparatorFull"/>
+
+                <h:form id="editOCForm">
+
+
+                    <div class="Container25 Fleft">
+                        <p:panelGrid layout="grid"
+                                     id="proveedorGrid"
+                                     style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank"
+                                     columns="1"
+                        >
+
+                            <p:autoComplete id="proveedorField"
+                                            value="#{ordenesCompraEditBean.ordenCompraActual.idProveedor}"
+                                            completeMethod="#{proveedoresRSSearchBean.findPersonaByString}"
+                                            var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
+                                            converter="#{personasConverter}" forceSelection="true"
+                                            required="true" requiredMessage="#{msg.ingresarValor}"
+                                            minQueryLength="3" queryDelay="1000" onclick="this.select();"
+                                            placeholder="#{msg.proveedor}"
+                            >
+                            </p:autoComplete>
+
+
+                            <p:calendar id="fechaRecepcionField"
+                                        placeholder="#{msg.fechaEstimadaRecepcion}"
+                                        value="#{ordenesCompraEditBean.ordenCompraActual.fechaEstimadaRecepcion}"
+                                        pattern="dd/MM/yyyy" showButtonPanel="true"
+                                        required="true"
+                                        mindate="#{now}"/>
+
+
+                            <p:inputTextarea id="obsevacionesField" maxlength="1024"
+                                             placeholder="#{msg.observaciones}"
+                                             value="#{ordenesCompraEditBean.ordenCompraActual.observaciones}"
+                            />
+
+
+                            <p:autoComplete id="transporteField"
+                                            value="#{ordenesCompraEditBean.ordenCompraActual.idTransporte}"
+                                            completeMethod="#{proveedoresRSSearchBean.findPersonaByString}"
+                                            var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
+                                            converter="#{personasConverter}" forceSelection="true"
+                                            required="false" requiredMessage="#{msg.ingresarValor}"
+                                            minQueryLength="3" queryDelay="1000" onclick="this.select();"
+                                            placeholder="#{msg.transporte}"
+                            >
+                            </p:autoComplete>
+
+                        </p:panelGrid>
+                    </div>
+
+
+                    <div class="Container75 Fright ">
+                        <p:panelGrid layout="grid"
+                                     id="cargaProductoGrid"
+                                     style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid-blank"
+                                     columns="3">
+
+                            <p:inputText id="idField"
+                                         value="#{ordenesCompraEditBean.productosFilter.idProducto}"
+                                         placeholder="Id">
+
+                            </p:inputText>
+
+                            <p:inputText id="codigoField"
+                                         value="#{ordenesCompraEditBean.productosFilter.codigoPropio}"
+                                         placeholder="Código">
+
+                            </p:inputText>
+
+
+                            <p:inputText id="cantidadField" required="true"
+                                         value="#{ordenesCompraEditBean.cantidad}" placeholder="Cantidad">
+                                <f:validateDoubleRange minimum="0.01"
+                                                       maximum="9999999999999999999.99"/>
+
+                            </p:inputText>
+
+
+                        </p:panelGrid>
+
+                        <div class="Container25 ui-fluid">
+                            <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
+                                             title="#{msg.insertar}"
+                                             action="#{ordenesCompraEditBean.agregarLinea()}" update="@form"
+                                             global="false" styleClass="GreenButton"/>
+
+                            <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
+                                             title="#{msg.buscar} productos"
+                                             oncomplete="PF('productDialog').show()" process="@none"
+                                             global="false"/>
+                        </div>
+
+                        <div class="EmptyBox20"/>
+
+                        <p:remoteCommand name="onCellEdit" update="detalleOCTable" immediate="true"/>
+                        <p:dataTable id="detalleOCTable"
+                                     value="#{ordenesCompraEditBean.ordenCompraActual.proveedoresOrdenesCompraLineasList}"
+                                     var="linea"
+                                     emptyMessage="#{msg.ordenCopraSinDetalles}"
+                                     sortMode="single"
+                                     paginator="false"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                     liveResize="true"
+                                     scrollable="true"
+                                     editable="true"
+                                     editMode="cell"
+                                     reflow="true">
+
+                            <p:ajax event="cellEdit"
+                                    listener="#{ordenesCompraEditBean.calcularTotal()}"
+                                    global="false"
+                                    oncomplete="onCellEdit()"
+                            />
+
+                            <p:column sortBy="#{linea.cantidadPedida}">
+                                <f:facet name="header">
+                                    #{msg.cantidadPedida}
+                                </f:facet>
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{linea.cantidadPedida}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="cantidadProdTabField" value="#{linea.cantidadPedida}">
+                                            <f:validateDoubleRange minimum="0.01"
+                                                                   maximum="9999999999999999999.99"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column sortBy="#{linea.cantidadRecibida}">
+                                <f:facet name="header">
+                                    #{msg.cantidadRecibida}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.cantidadRecibida}"/>
+                            </p:column>
+                            <p:column sortBy="#{linea.idTipoUnidad.nombreUnidad}">
+                                <f:facet name="header">
+                                    #{msg.unidadVenta}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.idTipoUnidad.nombreUnidad}"/>
+                            </p:column>
+                            <p:column sortBy="#{linea.idProducto.descripcion}">
+                                <f:facet name="header">
+                                    #{msg.producto}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.idProducto.descripcion}"/>
+                            </p:column>
+                            <p:column sortBy="#{linea.precioCompraUnitario}">
+                                <f:facet name="header">
+                                    #{msg.precioUnitario}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.precioCompraUnitario}"/>
+                            </p:column>
+
+                            <p:column sortBy="#{linea.subTotal}">
+                                <f:facet name="header">
+                                    #{msg.subTotal}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.subTotal}"/>
+                            </p:column>
+
+
+                            <p:column exportable="false">
+                                <f:facet name="header">
+                                    #{msg.acciones}
+                                </f:facet>
+
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                    </div>
+
+                </h:form>
+
+                <h:form>
+
+
+                    <p:dialog header="#{msg.productos}"
+                              widgetVar="productDialog"
+                              resizable="true"
+                              id="productDialog"
+                              closeOnEscape="true"
+                              showEffect="fade"
+                              hideEffect="clip"
+                              modal="true">
+
+
+                        <gtsoftware:busquedaProductos id="busquedaProducto"
+                                                      productoSeleccionado="#{ordenesCompraEditBean.productoBusquedaSeleccionado}"/>
+
+                        <div class="SeparatorFull"/>
+                        <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"
+                                         title="#{msg.ok}"
+                                         action="#{ordenesCompraEditBean.productoSelected()}"
+                                         oncomplete="PF('productDialog').hide()"
+                                         styleClass="GreenButton"
+                                         update=":editOCForm:cargaProductoGrid"
+                                         global="false"
+                        />
+
+
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //<![CDATA[
+        jQuery(document).ready(function () {
+            Olympos.changeBodyClass('SlimMenu');
+            return false;
+        });
+        //]]>
+    </script>
+</ui:composition>
+

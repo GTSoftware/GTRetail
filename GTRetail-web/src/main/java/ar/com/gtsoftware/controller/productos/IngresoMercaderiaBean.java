@@ -63,8 +63,6 @@ public class IngresoMercaderiaBean implements Serializable {
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
-    @EJB
-    private JSFUtil jsfUtil;
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
     private Productos productoBusquedaSeleccionado = null;
     private BigDecimal cantidad = BigDecimal.ONE;
@@ -108,7 +106,7 @@ public class IngresoMercaderiaBean implements Serializable {
         }
 
         if (producto == null) {
-            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
+            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 
@@ -139,7 +137,7 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public String confirmarIngreso() {
         if (remitoCabecera.getDetalleList().isEmpty()) {
-            jsfUtil.addErrorMessage("Debe ingresar los productos.");
+            JSFUtil.addErrorMessage("Debe ingresar los productos.");
             return StringUtils.EMPTY;
         }
 

@@ -45,8 +45,6 @@ public class AuthBackingBean implements Serializable {
     @EJB
     private UsuariosFacade usuariosFacade;
 
-    @EJB
-    private JSFUtil jSFUtil;
 
     private Usuarios usuarioLogueado;
 
@@ -63,7 +61,6 @@ public class AuthBackingBean implements Serializable {
      */
     public AuthBackingBean(UsuariosFacade usuariosFacade, JSFUtil jSFUtil) {
         this.usuariosFacade = usuariosFacade;
-        this.jSFUtil = jSFUtil;
     }
 
     @PostConstruct
@@ -98,12 +95,12 @@ public class AuthBackingBean implements Serializable {
     }
 
     public void logout() {
-        jSFUtil.logOut("/index.html");
+        JSFUtil.logOut("/index.html");
     }
 
     public Usuarios getUserLoggedIn() {
         if (usuarioLogueado == null) {
-            String usuP = jSFUtil.getUserPrincipalName();
+            String usuP = JSFUtil.getUserPrincipalName();
 
             if (StringUtils.isNotEmpty(usuP)) {
                 UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP);

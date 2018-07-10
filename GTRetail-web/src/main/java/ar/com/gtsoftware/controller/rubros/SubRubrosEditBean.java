@@ -45,8 +45,6 @@ public class SubRubrosEditBean implements Serializable {
     private ProductosSubRubrosFacade facade;
     @EJB
     private ProductosRubrosFacade rubrosFacade;
-    @EJB
-    private JSFUtil jsfUtil;
 
     private ProductosSubRubros subRubroActual = null;
     private ProductosRubros rubroActual = null;
@@ -60,8 +58,8 @@ public class SubRubrosEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
-        String idSubRubro = jsfUtil.getRequestParameterMap().get("idSubRubro");
+        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
+        String idSubRubro = JSFUtil.getRequestParameterMap().get("idSubRubro");
 
         if (StringUtils.isEmpty(idRubro)) {
             throw new IllegalArgumentException("IdRubro nulo!");
@@ -95,11 +93,11 @@ public class SubRubrosEditBean implements Serializable {
         try {
 
             facade.createOrEdit(subRubroActual);
-            jsfUtil.addInfoMessage("SubRubro guardado Exitosamente");
+            JSFUtil.addInfoMessage("SubRubro guardado Exitosamente");
             subRubroActual = facade.find(subRubroActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }

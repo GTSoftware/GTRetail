@@ -53,8 +53,6 @@ public class UsuariosEditBean implements Serializable {
     @EJB
     private UsuariosFacade usuarioFacade;
     @EJB
-    private JSFUtil jsfUtil;
-    @EJB
     private SucursalesFacade sucursalesFacade;
 
     private List<Sucursales> sucursalesList;
@@ -125,10 +123,10 @@ public class UsuariosEditBean implements Serializable {
             usuarioActual.setNombreUsuario(usuarioActual.getNombreUsuario().toUpperCase());
             usuarioActual.setLogin(usuarioActual.getLogin().toLowerCase());
             usuarioFacade.createOrEdit(usuarioActual);
-            jsfUtil.addInfoMessage(String.format("Usuario guardado exitosamente: %s", usuarioActual.getLogin()));
+            JSFUtil.addInfoMessage(String.format("Usuario guardado exitosamente: %s", usuarioActual.getLogin()));
 
         } catch (ValidationException ex) {
-            jsfUtil.addErrorMessage(String.format("Error de validación de datos: %s", ex.getMessage()));
+            JSFUtil.addErrorMessage(String.format("Error de validación de datos: %s", ex.getMessage()));
 
         }
 
@@ -136,18 +134,18 @@ public class UsuariosEditBean implements Serializable {
 
     public void doEliminarUsuario() {
         if (usuarioActual.getLogin().equals(RESERVED_USERNAME)) {
-            jsfUtil.addErrorMessage("El usuario reservado no puede borrarse!");
+            JSFUtil.addErrorMessage("El usuario reservado no puede borrarse!");
 
             return;
         }
         try {
             usuarioFacade.remove(usuarioActual);
             usuarioActual = null;
-            jsfUtil.addInfoMessage("Usuario eliminado exitosamente!");
+            JSFUtil.addInfoMessage("Usuario eliminado exitosamente!");
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            jsfUtil.addErrorMessage("Error al borrar!");
+            JSFUtil.addErrorMessage("Error al borrar!");
 
         }
     }

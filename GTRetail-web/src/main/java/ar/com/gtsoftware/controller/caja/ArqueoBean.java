@@ -25,22 +25,23 @@ import ar.com.gtsoftware.model.CajasArqueos;
 import ar.com.gtsoftware.model.CajasArqueosDetalle;
 import ar.com.gtsoftware.model.NegocioFormasPago;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang3.StringUtils;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "arqueoBean")
@@ -52,9 +53,6 @@ public class ArqueoBean implements Serializable {
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-
-    @EJB
-    private JSFUtil jsfUtil;
 
     private Cajas cajaActual;
 
@@ -89,8 +87,8 @@ public class ArqueoBean implements Serializable {
         Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
 
         if (cajaAbierta == null) {
-            jsfUtil.addErrorMessage("El usuario no tiene una caja abierta para poder realizar el arqueo.");
-            jsfUtil.redirect("/protected/index.xhtml");
+            addErrorMessage("El usuario no tiene una caja abierta para poder realizar el arqueo.");
+            redirect("/protected/index.xhtml");
 
             return;
         }
@@ -125,9 +123,9 @@ public class ArqueoBean implements Serializable {
             arqueoActual.agregarDetalleArqueo(detalleArqueoActual);
             detalleArqueoActual = new CajasArqueosDetalle();
             detalleArqueoActual.setItem(++itemId);
-            jsfUtil.addInfoMessage("Se ha agregado el monto al arqueo con éxito");
+            addInfoMessage("Se ha agregado el monto al arqueo con éxito");
         } else {
-            jsfUtil.addErrorMessage("Ya se ha ingresado esa forma de pago!");
+            addErrorMessage("Ya se ha ingresado esa forma de pago!");
 
         }
     }
@@ -192,7 +190,7 @@ public class ArqueoBean implements Serializable {
         }
         String errores = sb.toString();
         if (StringUtils.isNotEmpty(errores)) {
-            jsfUtil.addErrorMessage(errores);
+            addErrorMessage(errores);
             return false;
         }
 
@@ -214,7 +212,7 @@ public class ArqueoBean implements Serializable {
         arqueosFacade.create(arqueoActual);
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
-        jsfUtil.addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
+        addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
 
     }
 
