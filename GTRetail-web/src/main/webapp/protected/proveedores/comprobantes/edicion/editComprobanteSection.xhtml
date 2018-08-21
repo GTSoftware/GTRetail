@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">#{msg.proveedor_comprobante}</h1>
+                <div class="SeparatorFull"/>
+                <h:form id="editComprobanteForm">
+
+                    <p:panelGrid layout="grid"
+                                 id="proveedorGrid"
+                                 styleClass="ui-panelgrid-blank"
+                                 columns="2">
+
+                        <p:outputLabel value="#{msg.proveedor}:" for="proveedorField"/>
+                        <p:autoComplete id="proveedorField"
+                                        value="#{proveedorComprobanteEditBean.comprobanteActual.idProveedor}"
+                                        completeMethod="#{proveedoresRSSearchBean.findPersonaByString}"
+                                        var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
+                                        converter="#{personasConverter}" forceSelection="true"
+                                        required="true" requiredMessage="#{msg.ingresarValor}"
+                                        minQueryLength="3" queryDelay="1000" onclick="this.select();"
+                                        placeholder="#{msg.proveedor}"
+                        >
+                        </p:autoComplete>
+
+                        <p:outputLabel value="#{msg.fecha_comprobante}:" for="fechaComprobanteField"/>
+                        <p:calendar id="fechaComprobanteField"
+                                    placeholder="#{msg.fecha_comprobante}"
+                                    value="#{proveedorComprobanteEditBean.comprobanteActual.fechaComprobante}"
+                                    pattern="dd/MM/yyyy" showButtonPanel="true"
+                                    required="true"
+                                    maxdate="#{now}"/>
+
+
+                        <p:outputLabel value="#{msg.periodoFiscal}:" for="periodoFiscalField"/>
+                        <p:selectOneMenu id="periodoFiscalField" required="true"
+                                         requiredMessage="#{msg.campoRequerido}"
+                                         value="#{proveedorComprobanteEditBean.comprobanteActual.idRegistro.idPeriodoFiscal}"
+                                         converter="omnifaces.SelectItemsIndexConverter">
+                            <f:selectItems value="#{proveedorComprobanteEditBean.periodosFiscalesList}"
+                                           var="periodo" itemLabel="#{periodo.nombrePeriodo}"
+                                           itemValue="#{periodo}"/>
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoComprobanteField"/>
+                        <p:selectOneMenu id="tipoComprobanteField" required="true"
+                                         requiredMessage="#{msg.campoRequerido}"
+                                         value="#{proveedorComprobanteEditBean.comprobanteActual.tipoComprobante}"
+                                         converter="omnifaces.SelectItemsIndexConverter" filter="true">
+
+                            <f:selectItems value="#{proveedorComprobanteEditBean.tiposComprobanteList}" var="tipoComp"
+                                           itemLabel="#{tipoComp.nombreComprobante}"
+                                           itemValue="#{tipoComp}"/>
+
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="#{msg.letraFactura}:" for="letraField"/>
+                        <p:outputLabel id="letraField" value="#{proveedorComprobanteEditBean.comprobanteActual.letra}"/>
+
+
+                        <p:outputLabel value="#{msg.puntoVenta}:" for="puntoVentaField"/>
+
+                        <p:inputText id="puntoVentaField"
+                                     value="#{proveedorComprobanteEditBean.comprobanteActual.idRegistro.puntoVentaFactura}"
+                                     maxlength="5"
+                                     required="true">
+
+                            <f:validateLongRange minimum="1"
+                                                 maximum="99999"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="#{msg.numero}:" for="nroComprobanteField"/>
+
+                        <p:inputText id="nroComprobanteField"
+                                     value="#{proveedorComprobanteEditBean.comprobanteActual.idRegistro.numeroFactura}"
+                                     maxlength="9"
+                                     required="true">
+
+                            <f:validateLongRange minimum="1"
+                                                 maximum="999999999"/>
+                        </p:inputText>
+
+
+                    </p:panelGrid>
+
+                    <div class="EmptyBox10"/>
+
+                    <p:commandButton id="agregarAlicuotaButton" value="#{msg.agregar_alicuota}"
+                                     icon="fa fa-fw fa-plus"
+                                     action="#{proveedorComprobanteEditBean.nuevaAlicuota}"
+                                     onclick="PF('alicuotaDialog').show()"
+                                     styleClass="GreenButton"/>
+
+                    <div class="EmptyBox10"/>
+
+                    <p:dataTable id="pagosTable"
+                                 value="#{proveedorComprobanteEditBean.comprobanteActual.idRegistro.fiscalLibroIvaComprasLineasList}"
+                                 var="alicuota"
+                                 rows="10"
+                                 emptyMessage="#{msg.comprobante_sin_alicuotas}"
+                                 rowsPerPageTemplate="5,10,15,30"
+                                 resizableColumns="true"
+                                 reflow="true"
+                                 liveResize="true">
+
+                        <f:facet name="header">
+                            #{msg.comprobante_alicutoas}
+                        </f:facet>
+                        <p:column headerText="#{msg.alicuotaIVA}">
+                            <h:outputText value="#{alicuota.idAlicuotaIva.nombreAlicuotaIva}"/>
+                        </p:column>
+                        <p:column headerText="#{msg.importe_iva}" style="text-align: right">
+                            <h:outputText value="#{alicuota.importeIva}">
+
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{msg.neto_gravado}">
+                            <h:outputText value="#{alicuota.netoGravado}">
+
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{msg.no_gravado}">
+                            <h:outputText value="#{alicuota.noGravado}">
+
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                #{msg.borrar}
+                            </f:facet>
+                            <p:commandButton icon="fa fa-fw fa-trash" update="@form"
+                                             action="#{proveedorComprobanteEditBean.eliminarAlicuota(alicuota.item)}"
+                                             global="false"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <div class="EmptyBox20"/>
+
+                    <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
+
+                        <p:outputLabel for="importePerecepcionIngBrField" value="#{msg.percepcion_ingresos_brutos}:"/>
+
+                        <p:inputText id="importePerecepcionIngBrField"
+                                     value="#{proveedorComprobanteEditBean.comprobanteActual.idRegistro.importePercepcionIngresosBrutos}"
+                                     required="true">
+
+                            <p:ajax event="blur" listener="#{proveedorComprobanteEditBean.actualizarTotal}"
+                                    update="totalField"/>
+
+                            <f:validateDoubleRange minimum="0.00"
+                                                   maximum="9999999999999999999.99"/>
+                        </p:inputText>
+
+                        <p:outputLabel for="importePerecepcionIvaField" value="#{msg.percepcion_iva}:"/>
+
+                        <p:inputText id="importePerecepcionIvaField"
+                                     value="#{proveedorComprobanteEditBean.comprobanteActual.idRegistro.importePercepcionIva}"
+                                     required="true">
+
+                            <p:ajax event="blur" listener="#{proveedorComprobanteEditBean.actualizarTotal}"
+                                    update="totalField"/>
+
+                            <f:validateDoubleRange minimum="0.00"
+                                                   maximum="9999999999999999999.99"/>
+                        </p:inputText>
+
+                    </p:panelGrid>
+
+                    <div class="EmptyBox20"/>
+
+                    <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
+
+                        <p:outputLabel value="#{msg.total}:" for="totalField"
+                                       style="text-align:right; font-size: larger"/>
+
+                        <p:outputLabel id="totalField" value="#{proveedorComprobanteEditBean.comprobanteActual.total}"
+                                       style=" font-size: xx-large">
+
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </p:outputLabel>
+                    </p:panelGrid>
+
+                    <div class="EmptyBox20"/>
+
+                    <p:inputTextarea value="#{proveedorComprobanteEditBean.comprobanteActual.observaciones}"
+                                     placeholder="#{msg.observaciones}"
+                                     maxlength="1024"/>
+
+                    <div class="EmptyBox30"/>
+
+                    <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"
+                                     action="#{proveedorComprobanteEditBean.guardar()}"/>
+
+                </h:form>
+
+                <h:form id="nuevaAlicuotaForm">
+                    <p:dialog header="#{msg.alicuotaIVA}"
+                              widgetVar="alicuotaDialog"
+                              resizable="true"
+                              id="alicuotaDialog"
+                              closeOnEscape="true"
+                              showEffect="fade"
+                              hideEffect="clip"
+                              modal="true">
+
+                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
+
+                            <p:outputLabel for="tipoAlicuotaField" value="#{msg.tipo}:"/>
+                            <p:selectOneMenu id="tipoAlicuotaField" required="true"
+                                             requiredMessage="#{msg.campoRequerido}"
+                                             value="#{proveedorComprobanteEditBean.lineaLibro.idAlicuotaIva}"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             style="width: 100%">
+
+                                <f:selectItems value="#{proveedorComprobanteEditBean.alicuotasIVA}"
+                                               var="ali"
+                                               itemValue="#{ali}"
+                                               itemLabel="#{ali.nombreAlicuotaIva}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="importeAlicuotaField" value="#{msg.importe_alicuota}:"/>
+                            <p:inputText id="importeAlicuotaField"
+                                         value="#{proveedorComprobanteEditBean.lineaLibro.importeIva}"
+                                         label="#{msg.importe_alicuota}">
+
+                                <f:validateDoubleRange minimum="0.01"
+                                                       maximum="9999999999999999999.99"/>
+                            </p:inputText>
+
+
+                        </p:panelGrid>
+
+                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                         oncomplete="PF('alicuotaDialog').hide()"
+                                         onclick="PF('alicuotaDialog').hide()"
+                                         update=":editComprobanteForm"
+                                         action="#{proveedorComprobanteEditBean.agregarAlicuota()}"/>
+
+                    </p:dialog>
+
+
+                </h:form>
+            </div>
+        </div>
+    </div>
+</ui:composition>
+

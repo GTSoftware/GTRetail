@@ -45,7 +45,7 @@ public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosF
 
     private FiscalPeriodosFiscales periodoActual;
 
-    private final FiscalPeriodosFiscalesSearchFilter filter = new FiscalPeriodosFiscalesSearchFilter(null);
+    private final FiscalPeriodosFiscalesSearchFilter filter = new FiscalPeriodosFiscalesSearchFilter();
 
     /**
      * Creates a new instance of PeriodosFiscalesEditBean

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,19 @@ import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.Sucursales;
 import ar.com.gtsoftware.model.dto.RegistrarFacturaDTO;
-import ar.com.gtsoftware.model.dto.ResultadoDTO;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.service.rest.ComprobantesEndpoint;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.lang3.time.DateUtils;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import org.apache.commons.lang3.time.DateUtils;
+import javax.ws.rs.core.Response;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementación de la API REST para ventas
@@ -61,21 +60,21 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
 
     @Override
-    public List<Comprobantes> getPendientesFacturar(Long idSucursal) {
+    public Response getPendientesFacturar(Long idSucursal) {
 
         Date desde = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
         Date hasta = DateUtils.addHours(desde, 24);
-        return getPendientesFacturar(idSucursal, desde, hasta);
+        return Response.ok(getPendientesFacturar(idSucursal, desde, hasta)).build();
     }
 
     @Override
-    public List<Comprobantes> getPendientesFacturar(Long idSucursal, Date fechaDesde, Date hasta) {
+    public Response getPendientesFacturar(Long idSucursal, Date fechaDesde, Date hasta) {
         if (idSucursal == null) {
-            return Collections.EMPTY_LIST;
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
         Sucursales sucursal = sucursalesFacade.find(idSucursal);
         if (sucursal == null) {
-            return Collections.EMPTY_LIST;
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
         ComprobantesSearchFilter csf = new ComprobantesSearchFilter();
         csf.setAnulada(Boolean.FALSE);
@@ -84,11 +83,11 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
         csf.setFechaVentaDesde(fechaDesde);
         csf.setFechaVentaHasta(hasta);
         csf.addSortField(new SortField("fechaComprobante", false));
-        return comprobantesFacade.findBySearchFilter(csf, 0, 100);
+        return Response.ok(comprobantesFacade.findBySearchFilter(csf, 0, 100)).build();
     }
 
     @Override
-    public Comprobantes getPendienteFacturar(Long idComprobante) {
+    public Response getPendienteFacturar(Long idComprobante) {
         if (idComprobante == null) {
             return null;
         }
@@ -96,27 +95,27 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
         csf.setAnulada(Boolean.FALSE);
         csf.setIdVenta(idComprobante);
         csf.setFacturada(Boolean.FALSE);
-        return comprobantesFacade.findFirstBySearchFilter(csf);
+        return Response.ok(comprobantesFacade.findFirstBySearchFilter(csf)).build();
     }
 
     @Override
-    public ResultadoDTO registrarFacturacion(RegistrarFacturaDTO registro) {
+    public Response registrarFacturacion(RegistrarFacturaDTO registro) {
         if (registro.getNumeroComprobante() == null) {
-            return new ResultadoDTO("Número de comprobante inválido");
+            return Response.status(Response.Status.BAD_REQUEST).entity("Número de comprobante inválido").build();
         }
 
         Comprobantes comprobante = comprobantesFacade.find(registro.getIdComprobante());
         if (comprobante == null) {
-            return new ResultadoDTO("Comprobante inexistente");
+            return Response.status(Response.Status.NOT_FOUND).entity("Comprobante inexistente").build();
         }
         FiscalPuntosVenta puntoVenta = puntosVentaFacade.find(registro.getPuntoVenta());
         if (puntoVenta == null) {
-            return new ResultadoDTO("Punto de venta inexistente");
+            return Response.status(Response.Status.NOT_FOUND).entity("Punto de venta inexistente").build();
         }
-        FiscalPeriodosFiscalesSearchFilter psf = new FiscalPeriodosFiscalesSearchFilter(Boolean.TRUE);
+        FiscalPeriodosFiscalesSearchFilter psf = FiscalPeriodosFiscalesSearchFilter.builder().vigente(Boolean.TRUE).build();
         FiscalPeriodosFiscales periodo = periodosFiscalesFacade.findFirstBySearchFilter(psf);
         if (periodo == null) {
-            return new ResultadoDTO("No hay un periodo fiscal configurado");
+            return Response.status(Response.Status.NOT_FOUND).entity("No hay un periodo fiscal configurado").build();
         }
         try {
             facturacionBean.registrarFacturaVenta(comprobante,
@@ -124,9 +123,9 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
                     periodo, new Date());
         } catch (ServiceException ex) {
             Logger.getLogger(ComprobantesRestServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResultadoDTO(ex.getMessage());
+            return Response.serverError().entity(ex.getMessage()).build();
         }
-        return new ResultadoDTO("0");
+        return Response.ok("0").build();
     }
 
 }

@@ -18,32 +18,13 @@ package ar.com.gtsoftware.controller.clientes;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.ClientesService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
-import ar.com.gtsoftware.eao.LegalGenerosFacade;
-import ar.com.gtsoftware.eao.LegalTiposDocumentoFacade;
-import ar.com.gtsoftware.eao.LegalTiposPersoneriaFacade;
-import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
-import ar.com.gtsoftware.model.LegalGeneros;
-import ar.com.gtsoftware.model.LegalTiposDocumento;
-import ar.com.gtsoftware.model.LegalTiposPersoneria;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.PersonasTelefonos;
-import ar.com.gtsoftware.model.UbicacionLocalidades;
-import ar.com.gtsoftware.model.UbicacionPaises;
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.eao.*;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -51,9 +32,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "clientesEditBean")
@@ -105,7 +91,7 @@ public class ClientesEditBean implements Serializable {
             clienteActual = clientesService.find(Long.parseLong(idPersona));
             if (clienteActual == null) {
                 nuevo();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cliente inexistente!", "Cliente inexistente!"));
+                JSFUtil.addMessage("Cliente inexistente!", FacesMessage.SEVERITY_ERROR);
                 Logger.getLogger(ClientesEditBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
             } else {
                 telefonos = clientesService.obtenerTelefonos(clienteActual);
@@ -185,7 +171,7 @@ public class ClientesEditBean implements Serializable {
             ProvinciasSearchFilter psf = new ProvinciasSearchFilter(clienteActual.getIdPais());
             return provinciasFacade.findAllBySearchFilter(psf);
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     public List<UbicacionLocalidades> getLocalidadesList() {
@@ -193,7 +179,7 @@ public class ClientesEditBean implements Serializable {
             LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(clienteActual.getIdProvincia());
             return localidadesFacade.findAllBySearchFilter(lsf);
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     public PersonasTelefonos getTelefonoActual() {

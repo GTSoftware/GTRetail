@@ -95,7 +95,8 @@ public class ShopCartBean implements Serializable {
     private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
             Boolean.TRUE);
 
-    private final NegocioTiposComprobanteSearchFilter tipoCompSf = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
+    private final NegocioTiposComprobanteSearchFilter tipoCompSf =  NegocioTiposComprobanteSearchFilter.builder()
+            .activo(true).build();
 
     private final PlanesPagoSearchFilter planesSearchFilter = new PlanesPagoSearchFilter(Boolean.TRUE);
 
@@ -427,9 +428,9 @@ public class ShopCartBean implements Serializable {
     }
 
     private void establecerLetraComprobante() {
-        FiscalLetrasComprobantesSearchFilter lsf = new FiscalLetrasComprobantesSearchFilter(
-                venta.getIdPersona().getIdResponsabilidadIva(),
-                responsabilidadesIvaFacade.find(2L));
+        FiscalLetrasComprobantesSearchFilter lsf = FiscalLetrasComprobantesSearchFilter.builder()
+                .ivaReceptor(venta.getIdPersona().getIdResponsabilidadIva())
+                .ivaEmisor(responsabilidadesIvaFacade.find(2L)).build();
         FiscalLetrasComprobantes letra = letrasComprobantesFacade.findFirstBySearchFilter(lsf);
         venta.setLetra(letra.getLetraComprobante());
     }

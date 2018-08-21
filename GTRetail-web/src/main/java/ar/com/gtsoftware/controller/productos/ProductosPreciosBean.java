@@ -36,6 +36,7 @@ import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.SubRubroSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -46,7 +47,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "productosPreciosBean")
@@ -99,9 +99,9 @@ public class ProductosPreciosBean implements Serializable {
 
     public List<Personas> getProveedoresList() {
         if (proveedoresList == null) {
-            PersonasSearchFilter psf = new PersonasSearchFilter();
-            psf.setProveedor(true);
-            psf.setActivo(true);
+            PersonasSearchFilter psf = PersonasSearchFilter.builder()
+                    .proveedor(true)
+                    .activo(true).build();
             psf.addSortField(new SortField("razonSocial", true));
             proveedoresList = new ArrayList<>();
             proveedoresList.addAll(personasFacade.findAllBySearchFilter(psf));

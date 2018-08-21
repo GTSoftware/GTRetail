@@ -153,9 +153,9 @@ public class ProductoEditBean implements Serializable {
         listMarcas.addAll(productosMarcasFacade.findAllBySearchFilter(msf));
 
         listTipoUnidades.addAll(productosTiposUnidadesFacade.findAll());
-        PersonasSearchFilter psf = new PersonasSearchFilter();
-        psf.setProveedor(true);
-        psf.setActivo(true);
+        PersonasSearchFilter psf = PersonasSearchFilter.builder()
+                .proveedor(true)
+                .activo(true).build();
         psf.addSortField(new SortField("razonSocial", true));
         listProveedores.addAll(personasFacade.findAllBySearchFilter(psf));
 

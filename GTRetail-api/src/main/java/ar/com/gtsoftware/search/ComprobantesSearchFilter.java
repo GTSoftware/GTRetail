@@ -20,6 +20,8 @@ import ar.com.gtsoftware.model.NegocioTiposComprobante;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Sucursales;
 import ar.com.gtsoftware.model.Usuarios;
+import org.apache.commons.collections.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -165,6 +167,6 @@ public class ComprobantesSearchFilter extends AbstractSearchFilter {
     }
 
     public boolean hasTiposComprobanteFilter() {
-        return tiposComprobante != null && !tiposComprobante.isEmpty();
+        return CollectionUtils.isNotEmpty(tiposComprobante);
     }
 }

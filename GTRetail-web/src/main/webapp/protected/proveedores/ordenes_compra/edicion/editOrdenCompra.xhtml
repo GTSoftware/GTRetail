@@ -22,8 +22,7 @@
                                      id="proveedorGrid"
                                      style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank"
-                                     columns="1"
-                        >
+                                     columns="1">
 
                             <p:autoComplete id="proveedorField"
                                             value="#{ordenesCompraEditBean.ordenCompraActual.idProveedor}"
@@ -96,7 +95,7 @@
 
                         </p:panelGrid>
 
-                        <div class="Container25 ui-fluid">
+                        <div>
                             <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                                              title="#{msg.insertar}"
                                              action="#{ordenesCompraEditBean.agregarLinea()}" update="@form"
@@ -104,13 +103,14 @@
 
                             <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
                                              title="#{msg.buscar} productos"
-                                             oncomplete="PF('productDialog').show()" process="@none"
+                                             oncomplete="PF('productDialog').show()"
+                                             process="proveedorField"
                                              global="false"/>
                         </div>
 
                         <div class="EmptyBox20"/>
 
-                        <p:remoteCommand name="onCellEdit" update="detalleOCTable" immediate="true"/>
+                        <p:remoteCommand name="onCellEdit" update="@form detalleOCTable" immediate="true"/>
                         <p:dataTable id="detalleOCTable"
                                      value="#{ordenesCompraEditBean.ordenCompraActual.proveedoresOrdenesCompraLineasList}"
                                      var="linea"
@@ -191,6 +191,30 @@
 
                     </div>
 
+                    <div class="EmptyBox40"/>
+
+                    <div class="Container50 Fright">
+
+                        <div class="Container25 Fright">
+                            <h:outputLabel value="#{msg.total}:" styleClass="FontLatoBold Fs20"/>
+
+                            <br/>
+                            <h:outputLabel value="#{msg.iva}:"/>
+                        </div>
+                        <div class="Container25 TexAlLeft">
+
+                            <h:outputText value="#{ordenesCompraEditBean.ordenCompraActual.total}" styleClass="FontLatoBold Fs20">
+                                <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                            </h:outputText>
+                            <br/>
+
+                            <h:outputText value="#{ordenesCompraEditBean.ordenCompraActual.totalIVA}">
+                                <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                            </h:outputText>
+                        </div>
+
+                    </div>
+
                 </h:form>
 
                 <h:form>
@@ -207,7 +231,10 @@
 
 
                         <gtsoftware:busquedaProductos id="busquedaProducto"
-                                                      productoSeleccionado="#{ordenesCompraEditBean.productoBusquedaSeleccionado}"/>
+                                                      model="#{ordenesCompraEditBean}"
+                                                      paraCompras="true"
+                                                      puedeComprarse="true"
+                                                      proveedor="#{ordenesCompraEditBean.ordenCompraActual.idProveedor}"/>
 
                         <div class="SeparatorFull"/>
                         <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"

@@ -113,10 +113,10 @@ public class VerComprobantesBean implements Serializable {
      * Registra la factura en el libro de IVA Ventas
      */
     public void registrarFactura() {
-        FiscalPeriodosFiscalesSearchFilter psf = new FiscalPeriodosFiscalesSearchFilter(Boolean.TRUE);
+        FiscalPeriodosFiscalesSearchFilter psf =  FiscalPeriodosFiscalesSearchFilter.builder().vigente(Boolean.TRUE).build();
         FiscalPeriodosFiscales periodo = periodosFiscalesFacade.findFirstBySearchFilter(psf);
         if (periodo == null) {
-            addErrorMessage("No hay un período fiscal configurado!");
+            addErrorMessage("No hay un período vigente fiscal configurado!");
         }
         if (puntoVentaSeleccionado == null) {
             addErrorMessage("Debe seleccionar un punto de venta.");

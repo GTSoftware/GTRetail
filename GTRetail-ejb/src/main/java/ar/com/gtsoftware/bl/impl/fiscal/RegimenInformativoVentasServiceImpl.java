@@ -29,7 +29,7 @@ import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
-import ar.com.gtsoftware.search.IVAVentasSearchFilter;
+import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
 
         }
 
-        IVAVentasSearchFilter filter = new IVAVentasSearchFilter();
+        LibroIVASearchFilter filter = new LibroIVASearchFilter();
         filter.setPeriodo(fiscalPeriodosFiscales);
         filter.setAnuladas(Boolean.FALSE);//Sin anuladas
 

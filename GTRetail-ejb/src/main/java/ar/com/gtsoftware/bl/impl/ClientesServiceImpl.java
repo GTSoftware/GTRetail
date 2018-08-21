@@ -112,8 +112,8 @@ public class ClientesServiceImpl implements ClientesService {
         if (cliente.getIdTipoDocumento().getId() == 2 && !ValidadorCUIT.getValidate(cliente.getDocumento())) {
             throw new ServiceException("El número de CUIT ingresado no es válido!");
         }
-        PersonasSearchFilter psf = new PersonasSearchFilter(cliente.getIdTipoDocumento(),
-                cliente.getDocumento(), Boolean.TRUE, Boolean.TRUE, null);
+        PersonasSearchFilter psf = PersonasSearchFilter.builder().idTipoDocumento(cliente.getIdTipoDocumento())
+                .documento(cliente.getDocumento()).activo(true).cliente(true).build();
         int result = personasFacade.countBySearchFilter(psf);
         if (cliente.isNew()) {
             if (result > 0) {

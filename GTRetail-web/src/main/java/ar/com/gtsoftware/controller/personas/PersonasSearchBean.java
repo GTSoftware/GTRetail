@@ -40,7 +40,7 @@ public class PersonasSearchBean extends AbstractSearchBean<Personas, PersonasSea
     @EJB
     private PersonasFacade facade;
 
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, null, null);
+    private final PersonasSearchFilter filter = PersonasSearchFilter.builder().activo(true).build();
 
     /**
      * Creates a new instance of PersonasSearchBean

@@ -28,6 +28,7 @@ import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,10 +39,10 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.DataModel;
+
 import org.apache.commons.lang3.time.DateUtils;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "searchComprobantesBean")
@@ -58,8 +59,11 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes, Com
     private PersonasFacade clientesFacade;
     @EJB
     private NegocioTiposComprobanteFacade tiposComprobanteFacade;
-    private final PersonasSearchFilter personasSearchFilter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
-    private final NegocioTiposComprobanteSearchFilter tiposComprobanteSearchFilter = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
+    private final PersonasSearchFilter personasSearchFilter = PersonasSearchFilter.builder()
+            .activo(true)
+            .cliente(true).build();
+    private final NegocioTiposComprobanteSearchFilter tiposComprobanteSearchFilter = NegocioTiposComprobanteSearchFilter.builder()
+            .activo(true).build();
 
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,13 @@ import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "clientesSearchBean")
@@ -40,7 +39,8 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSea
     @EJB
     private PersonasFacade facade;
 
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private final PersonasSearchFilter filter = PersonasSearchFilter.builder()
+            .activo(true).cliente(true).build();
 
     /**
      * Creates a new instance of ClientesSearchBean

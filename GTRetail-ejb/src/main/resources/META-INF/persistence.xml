@@ -32,6 +32,8 @@
         <class>ar.com.gtsoftware.model.FiscalMonedas</class>
         <class>ar.com.gtsoftware.model.FiscalTiposComprobante</class>
         <class>ar.com.gtsoftware.model.FiscalResponsabilidadesIva</class>
+        <class>ar.com.gtsoftware.model.FiscalLibroIvaCompras</class>
+        <class>ar.com.gtsoftware.model.FiscalLibroIvaComprasLineas</class>
         <class>ar.com.gtsoftware.model.LegalGeneros</class>
         <class>ar.com.gtsoftware.model.LegalTiposDocumento</class>
         <class>ar.com.gtsoftware.model.LegalTiposPersoneria</class>
@@ -59,6 +61,7 @@
         <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompra</class>
         <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompraEstados</class>
         <class>ar.com.gtsoftware.model.ProveedoresOrdenesCompraLineas</class>
+        <class>ar.com.gtsoftware.model.ProveedoresComprobantes</class>
         <class>ar.com.gtsoftware.model.ProductosListasPrecios</class>
         <class>ar.com.gtsoftware.model.ProductosPrecios</class>
         <class>ar.com.gtsoftware.model.StockMovimientos</class>

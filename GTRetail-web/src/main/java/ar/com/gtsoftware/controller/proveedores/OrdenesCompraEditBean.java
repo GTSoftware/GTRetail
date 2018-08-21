@@ -165,6 +165,8 @@ public class OrdenesCompraEditBean implements Serializable {
         ordenCompraActual = new ProveedoresOrdenesCompra();
         ordenCompraActual.setIdUsuario(authBackingBean.getUserLoggedIn());
         ordenCompraActual.setProveedoresOrdenesCompraLineasList(new ArrayList<>());
+        ordenCompraActual.setTotalIVA(BigDecimal.ZERO);
+        ordenCompraActual.setTotal(BigDecimal.ZERO);
     }
 
     public void productoSelected() {

@@ -15,11 +15,9 @@
  */
 package ar.com.gtsoftware.service.rest;
 
-import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.dto.RegistrarFacturaDTO;
-import ar.com.gtsoftware.model.dto.ResultadoDTO;
+
 import java.util.Date;
-import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,12 +25,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-@Path("/ventas")
+@Path("/v1/ventas")
+@Produces(value = MediaType.APPLICATION_JSON)
 public interface ComprobantesEndpoint {
 
     /**
@@ -43,8 +43,7 @@ public interface ComprobantesEndpoint {
      */
     @GET
     @Path("/pendientes")
-    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Comprobantes> getPendientesFacturar(@QueryParam("sucursal") Long idSucursal);
+    Response getPendientesFacturar(@QueryParam("sucursal") Long idSucursal);
 
     /**
      * Retorna el comprobante que esté pendiente de facturar con ese id.
@@ -54,8 +53,7 @@ public interface ComprobantesEndpoint {
      */
     @GET
     @Path("/pendiente")
-    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Comprobantes getPendienteFacturar(@QueryParam("idComprobante") Long idComprobante);
+    Response getPendienteFacturar(@QueryParam("idComprobante") Long idComprobante);
 
     /**
      * Retorna la lista de comprobantes pendientes de facturar entre las fechas pasadas por parámetro.
@@ -67,8 +65,7 @@ public interface ComprobantesEndpoint {
      */
     @GET
     @Path("/pendientes")
-    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<Comprobantes> getPendientesFacturar(@QueryParam("sucursal") Long idSucursal,
+    Response getPendientesFacturar(@QueryParam("sucursal") Long idSucursal,
             @QueryParam("desde") Date fechaDesde,
             @QueryParam("hasta") Date hasta);
 
@@ -80,7 +77,6 @@ public interface ComprobantesEndpoint {
      */
     @POST
     @Path("/registrar")
-    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public ResultadoDTO registrarFacturacion(RegistrarFacturaDTO registro);
+    @Consumes(value = MediaType.APPLICATION_JSON)
+    Response registrarFacturacion(RegistrarFacturaDTO registro);
 }

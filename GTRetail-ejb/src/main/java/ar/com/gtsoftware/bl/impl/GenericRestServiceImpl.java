@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,26 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
-import ar.com.gtsoftware.model.dto.ResultadoDTO;
 import ar.com.gtsoftware.service.rest.GenericEndpoint;
+
 import java.time.LocalDateTime;
 import javax.ejb.Stateless;
+import javax.ws.rs.core.Response;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Stateless
 public class GenericRestServiceImpl implements GenericEndpoint {
 
     @Override
-    public ResultadoDTO getPing() {
-        return new ResultadoDTO("pong");
+    public Response getPing() {
+        return Response.ok("{\"result\": \"pong\"}").build();
     }
 
     @Override
-    public LocalDateTime getDate() {
-        return LocalDateTime.now();
+    public Response getDate() {
+        return Response.ok(LocalDateTime.now()).build();
     }
 
 }

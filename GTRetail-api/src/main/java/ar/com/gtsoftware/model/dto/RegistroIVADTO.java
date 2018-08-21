@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.model.dto;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,9 +27,14 @@ import java.util.Objects;
  * Clase que almacena la información de un registro de IVA de manera resumida
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RegistroIVADTO implements Serializable {
 
     private static final long serialVersionUID = 3L;
@@ -45,14 +52,10 @@ public class RegistroIVADTO implements Serializable {
     private BigDecimal totalIva;
     private BigDecimal otrosTributos;
     private BigDecimal exento;
+    private BigDecimal percepcionIva;
+    private BigDecimal percepcionIngresosBrutos;
     private List<ImportesAlicuotasIVA> totalAlicuota;
     private BigDecimal totalFactura;
-
-    /**
-     * Crea un nuevo objeto Factura
-     */
-    public RegistroIVADTO() {
-    }
 
     /**
      * Devuelve el identificador de la factura

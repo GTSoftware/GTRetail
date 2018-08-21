@@ -18,6 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
+
 import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
@@ -58,6 +58,10 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
             } else {
                 p = appendAndPredicate(cb, p, cb.not(p3));
             }
+        }
+        if (psf.getCerrado() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPeriodosFiscales_.periodoCerrado), psf.getCerrado());
+            p = appendAndPredicate(cb, p, p1);
         }
         return p;
     }

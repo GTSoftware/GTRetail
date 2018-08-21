@@ -22,140 +22,157 @@ limitations under the License.
 
       xmlns:p="http://primefaces.org/ui">
 
-    <composite:interface>
+<composite:interface>
 
 
+    <composite:attribute name="model" shortDescription="El Bean en el que se debe establecer la seleccion">
+        <composite:attribute name="productoBusquedaSeleccionado" type="ar.com.gtsoftware.model.Productos"/>
 
-        <composite:attribute name="productoSeleccionado" type="ar.com.gtsoftware.model.Productos" />
-        <composite:attribute name="listaPrecios" type="ar.com.gtsoftware.model.ProductosListasPrecios" />
-        <composite:attribute name="soloConStock" type="java.lang.Boolean" />
-        <composite:attribute name="puedeComprarse" type="java.lang.Boolean" />
-        <composite:attribute name="puedeVenderse" type="java.lang.Boolean" />
+    </composite:attribute>
+    <composite:attribute name="proveedor" type="ar.com.gtsoftware.model.Personas"/>
+    <composite:attribute name="listaPrecios" type="ar.com.gtsoftware.model.ProductosListasPrecios"/>
+    <composite:attribute name="soloConStock" type="java.lang.Boolean"/>
+    <composite:attribute name="puedeComprarse" type="java.lang.Boolean"/>
+    <composite:attribute name="puedeVenderse" type="java.lang.Boolean"/>
+    <composite:attribute name="paraCompras" type="java.lang.Boolean" default="false"/>
 
+</composite:interface>
 
-    </composite:interface>
+<composite:implementation>
 
-    <composite:implementation>
-
-        <f:event type="preRenderView" listener="#{productosSearchBean.setParametros(cc.attrs.listaPrecios,
-                                                  cc.attrs.soloConStock,cc.attrs.puedeVenderse,cc.attrs.puedeComprarse)}" />
-
-        <div class="Container100 ui-fluid">
-
-            <h:form id="busquedaProductosForm" >
-
-                <p:fragment>
-
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
-                                 style="border:0px !important; background:none;">
+    <!--<f:event type="preRenderView" listener="#{productosSearchBean.setParametros(cc.attrs.listaPrecios,
+                                                  cc.attrs.soloConStock,cc.attrs.puedeVenderse,cc.attrs.puedeComprarse,
+                                                  cc.attrs.proveedor)}"/>-->
 
 
-                        <p:inputText id="cadenaBusquedaProdField"
-                                     value="#{productosSearchBean.filter.txt}"
-                                     placeholder="Ingrese los términos de búsqueda."/>
-    <!--                    <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
-                                         required="true" requiredMessage="#{msg.seleccionarUno}"
-                                         converter="#{productosListasPreciosConverter}"
-                                         >
+    <div class="Container100 ui-fluid">
 
-                            <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
-                                           itemValue="#{lista}"/>
+        <h:form id="busquedaProductosForm">
 
-                        </p:selectOneMenu>-->
-                        <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
-                                                 itemLabel="#{msg.soloConStock}"/>
+            <p:fragment>
 
-                        <p:commandButton  action="#{productosSearchBean.doSearch()}"
-                                          process="@this"
-                                          value="#{msg.buscar}"
-                                          update="productosBusquedaTable"
-                                          icon="fa fa-fw fa-search"/>
-                    </p:panelGrid >
-
-                    <p:separator />
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="3"
+                             style="border:0px !important; background:none;">
 
 
+                    <p:inputText id="cadenaBusquedaProdField"
+                                 value="#{productosSearchBean.filter.txt}"
+                                 placeholder="Ingrese los términos de búsqueda."/>
+                    <!--                    <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
+                                                         required="true" requiredMessage="#{msg.seleccionarUno}"
+                                                         converter="#{productosListasPreciosConverter}"
+                                                         >
 
-                    <p:dataTable id="productosBusquedaTable" var="pro" value="#{productosSearchBean.dataModel}"
-                                 rows="5"
-                                 lazy="true"
-                                 paginator="true"
-                                 emptyMessage="#{msg.busquedaSinResultados}"
-                                 selectionMode="single"
-                                 selection="#{cc.attrs.productoSeleccionado}"
-                                 rowKey="#{pro.id}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,15,30,100"
-                                 liveResize="true"
-                                 resizableColumns="true"
-                                 scrollable="true"
-                                 sortMode="single"
-                                 reflow="true">
+                                            <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
+                                                           itemValue="#{lista}"/>
 
-                        <p:ajax event="rowSelect" global="false" />
+                                        </p:selectOneMenu>-->
+                    <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
+                                             itemLabel="#{msg.soloConStock}"/>
 
-                        <p:column style="width:5%">
-                            <f:facet name="header">
-                                #{msg.id}
-                            </f:facet>
-                            <h:outputText value="#{pro.id}" />
-                        </p:column>
-                        <p:column  >
-                            <f:facet name="header">
-                                #{msg.codigo}
-                            </f:facet>
-                            <h:outputText value="#{pro.codigoPropio}" />
-                        </p:column>
+                    <p:selectBooleanCheckbox id="sinStockField" value="#{productosSearchBean.filter.stockDebajoMinimo}"
+                                             itemLabel="#{msg.stockBajoMinimo}"
+                                             rendered="#{cc.attrs.paraCompras}"/>
 
-                        <p:column  >
-                            <f:facet name="header">
-                                #{msg.descripcion}
-                            </f:facet>
-                            <h:outputText value="#{pro.descripcion}" />
-                        </p:column>
 
-                        <p:column headerText="Stock" style="text-align: right">
-                            <f:facet name="header">
-                                #{msg.stock}
-                            </f:facet>
-                            <h:outputText value="#{productosSearchBean.getStockSucursal(pro)}" >
-                                <f:convertNumber groupingUsed="true" type="number"/>
-                            </h:outputText>
-                        </p:column>
+                    <p:commandButton action="#{productosSearchBean.doSearch()}"
+                                     process="cadenaBusquedaProdField, conStockField"
+                                     value="#{msg.buscar}"
+                                     update="productosBusquedaTable"
+                                     icon="fa fa-fw fa-search"/>
+                </p:panelGrid>
 
-                        <p:column style="text-align: right; font-size: large; font-weight: bold ">
-                            <f:facet name="header">
-                                #{msg.precioUnitario}
-                            </f:facet>
-                            <h:outputText value="#{productosSearchBean.getPrecio(pro)}" style="font-size: medium; font-weight: bold">
-                                <f:convertNumber groupingUsed="true" type="currency"
-                                                 currencySymbol="$"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column  >
-                            <f:facet name="header">
-                                #{msg.unidadVenta}
-                            </f:facet>
-                            <h:outputText value="#{pro.idTipoUnidadVenta.nombreUnidad}" />
-                        </p:column>
-                        <p:column  >
-                            <f:facet name="header">
-                                #{msg.ubicacion}
-                            </f:facet>
-                            <h:outputText value="#{pro.ubicacion}" />
-                        </p:column>
+                <p:separator/>
 
-<!--                        <p:column headerText="#{msg.stock}" style="text-align: right; width: 5%" >
-                            <f:facet name="header">
-                        #{msg.stock}
-                    </f:facet>
-                    <h:outputText value="#{pro.stockActual}" >
-                        <f:convertNumber groupingUsed="true" type="number"/>
-                    </h:outputText>
-                </p:column>-->
-                    </p:dataTable>
-                </p:fragment>
-            </h:form>
-        </div>
-    </composite:implementation>
+
+                <p:dataTable id="productosBusquedaTable" var="pro" value="#{productosSearchBean.dataModel}"
+                             rows="5"
+                             lazy="true"
+                             paginator="true"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             selectionMode="single"
+                             selection="#{cc.attrs.model.productoBusquedaSeleccionado}"
+                             rowKey="#{pro.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15,30,100"
+                             liveResize="true"
+                             resizableColumns="true"
+                             scrollable="true"
+                             sortMode="single"
+                             reflow="true">
+
+                    <p:ajax event="rowSelect" global="false" process="productosBusquedaTable"/>
+
+                    <p:column style="width:5%">
+                        <f:facet name="header">
+                            #{msg.id}
+                        </f:facet>
+                        <h:outputText value="#{pro.id}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.codigo}
+                        </f:facet>
+                        <h:outputText value="#{pro.codigoPropio}"/>
+                    </p:column>
+
+                    <p:column rendered="#{cc.attrs.paraCompras}">
+                        <f:facet name="header">
+                            #{msg.codigoFabrica}
+                        </f:facet>
+                        <h:outputText value="#{pro.codigoFabricante}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.descripcion}
+                        </f:facet>
+                        <h:outputText value="#{pro.descripcion}"/>
+                    </p:column>
+
+                    <p:column headerText="Stock" style="text-align: right">
+                        <f:facet name="header">
+                            #{msg.stock}
+                        </f:facet>
+                        <h:outputText value="#{productosSearchBean.getStockSucursal(pro)}">
+                            <f:convertNumber groupingUsed="true" type="number"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="text-align: right; font-size: large; font-weight: bold ">
+                        <f:facet name="header">
+                            #{msg.precioUnitario}
+                        </f:facet>
+                        <h:outputText value="#{productosSearchBean.getPrecio(pro)}"
+                                      style="font-size: medium; font-weight: bold">
+                            <f:convertNumber groupingUsed="true" type="currency"
+                                             currencySymbol="$"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.unidadVenta}
+                        </f:facet>
+                        <h:outputText value="#{pro.idTipoUnidadVenta.nombreUnidad}"/>
+                    </p:column>
+                    <p:column rendered="#{not cc.attrs.paraCompras}">
+                        <f:facet name="header">
+                            #{msg.ubicacion}
+                        </f:facet>
+                        <h:outputText value="#{pro.ubicacion}"/>
+                    </p:column>
+                    <p:column rendered="#{cc.attrs.paraCompras}">
+                        <f:facet name="header">
+                            #{msg.proveedor}
+                        </f:facet>
+                        <h:outputText value="#{pro.idProveedorHabitual.razonSocial}"/>
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </p:fragment>
+        </h:form>
+    </div>
+</composite:implementation>
 </html>

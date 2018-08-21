@@ -18,32 +18,13 @@ package ar.com.gtsoftware.controller.proveedores;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.ClientesService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
-import ar.com.gtsoftware.eao.LegalGenerosFacade;
-import ar.com.gtsoftware.eao.LegalTiposDocumentoFacade;
-import ar.com.gtsoftware.eao.LegalTiposPersoneriaFacade;
-import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
-import ar.com.gtsoftware.model.LegalGeneros;
-import ar.com.gtsoftware.model.LegalTiposDocumento;
-import ar.com.gtsoftware.model.LegalTiposPersoneria;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.PersonasTelefonos;
-import ar.com.gtsoftware.model.UbicacionLocalidades;
-import ar.com.gtsoftware.model.UbicacionPaises;
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.eao.*;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -51,9 +32,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "proveedoresEditBean")
@@ -105,8 +91,8 @@ public class ProveedoresEditBean implements Serializable {
             proveedorActual = clientesService.find(Long.parseLong(idPersona));
             if (proveedorActual == null) {
                 nuevo();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cliente inexistente!", "Cliente inexistente!"));
-                Logger.getLogger(ProveedoresEditBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
+                JSFUtil.addErrorMessage("Cliente inexistente!");
+                LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
                 telefonos = clientesService.obtenerTelefonos(proveedorActual);
             }
@@ -129,7 +115,7 @@ public class ProveedoresEditBean implements Serializable {
                     "Proveedor guardado exitosamente."));
 
         } catch (ServiceException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar:", e.getMessage()));
+            JSFUtil.addErrorMessage("Error al guardar: " + e.getMessage());
             LOG.log(Level.INFO, e.getMessage(), e);
         }
     }
@@ -185,7 +171,7 @@ public class ProveedoresEditBean implements Serializable {
             ProvinciasSearchFilter psf = new ProvinciasSearchFilter(proveedorActual.getIdPais());
             return provinciasFacade.findAllBySearchFilter(psf);
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     public List<UbicacionLocalidades> getLocalidadesList() {
@@ -193,7 +179,7 @@ public class ProveedoresEditBean implements Serializable {
             LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(proveedorActual.getIdProvincia());
             return localidadesFacade.findAllBySearchFilter(lsf);
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     public PersonasTelefonos getTelefonoActual() {

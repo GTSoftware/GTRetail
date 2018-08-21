@@ -17,40 +17,34 @@ package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ProductoXDepositoFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
-import ar.com.gtsoftware.eao.ProductosPreciosFacade;
+import ar.com.gtsoftware.eao.*;
+import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Productos;
 import ar.com.gtsoftware.model.ProductosListasPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
-import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
-import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
-import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import ar.com.gtsoftware.search.*;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.Application;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "productosSearchBean")
@@ -77,10 +71,13 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+
+
     /**
      * Por defecto creamos un filtro para productos a la venta activos
      */
-    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
+    private final ProductosSearchFilter filter = new ProductosSearchFilter(true, null,
+            null, null);
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -121,14 +118,24 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
         FacesContext.getCurrentInstance().responseComplete();
     }
 
-    public void setParametros(ProductosListasPrecios lista, Boolean soloConStock, Boolean puedeVenderse, Boolean puedeComprarse) {
-        if (JSFUtil.isPostback()) {
-            return;
-        }
-        listaSeleccionada = lista;
-        filter.setConStock(soloConStock);
-        filter.setPuedeVenderse(puedeVenderse);
-        filter.setPuedeComprarse(puedeComprarse);
+    @PostConstruct
+    private void initParamsFromComposite() {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Application app = FacesContext.getCurrentInstance().getApplication();
+        listaSeleccionada = app.evaluateExpressionGet(fc,
+                "#{cc.attrs.listaPrecios}", ProductosListasPrecios.class);
+
+
+        filter.setConStock(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.soloConStock}", Boolean.class));
+        filter.setPuedeVenderse(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.puedeVenderse}", Boolean.class));
+        filter.setPuedeComprarse(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.puedeComprarse}", Boolean.class));
+        filter.setIdProveedorHabitual(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.proveedor}", Personas.class));
+
     }
 
     public ProductosListasPrecios getListaSeleccionada() {
@@ -193,4 +200,5 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
 
         return stockFacade.getStockBySearchFilter(stFilter);
     }
+
 }

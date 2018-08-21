@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,25 @@
  */
 package ar.com.gtsoftware.search;
 
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import lombok.*;
+
 import java.util.Date;
 
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
-
 /**
- * Clase que sirve para encapsular los distintos criterios de búsqueda para la
- * clase FiscalLibroIvaVentas
+ * Clase que sirve para encapsular los distintos criterios de búsqueda para generar los Libros de IVA
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
-public class IVAVentasSearchFilter extends AbstractSearchFilter {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class LibroIVASearchFilter extends AbstractSearchFilter {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private FiscalPeriodosFiscales periodo;
     private Date fechaDesde;
@@ -43,47 +45,9 @@ public class IVAVentasSearchFilter extends AbstractSearchFilter {
         return (periodo != null) || (fechaDesde != null && fechaHasta != null) || (anuladas != null);
     }
 
-    public IVAVentasSearchFilter() {
-    }
-
-    public IVAVentasSearchFilter(Boolean anuladas) {
-        this.anuladas = anuladas;
-    }
-
-    public FiscalPeriodosFiscales getPeriodo() {
-        return periodo;
-    }
-
-    public void setPeriodo(FiscalPeriodosFiscales periodo) {
-        this.periodo = periodo;
-    }
-
-    public Date getFechaDesde() {
-        return fechaDesde;
-    }
-
-    public void setFechaDesde(Date fechaDesde) {
-        this.fechaDesde = fechaDesde;
-    }
-
-    public Date getFechaHasta() {
-        return fechaHasta;
-    }
-
-    public void setFechaHasta(Date fechaHasta) {
-        this.fechaHasta = fechaHasta;
-    }
 
     public boolean hasFechasDesdeHasta() {
         return (fechaDesde != null && fechaHasta != null) && (fechaDesde.compareTo(fechaHasta) <= 0);
-    }
-
-    public Boolean getAnuladas() {
-        return anuladas;
-    }
-
-    public void setAnuladas(Boolean anuladas) {
-        this.anuladas = anuladas;
     }
 
 }

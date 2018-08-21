@@ -16,6 +16,8 @@
 package ar.com.gtsoftware.model.dto;
 
 import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -25,6 +27,11 @@ import java.util.Objects;
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ImportesResponsabilidad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,60 +42,6 @@ public class ImportesResponsabilidad implements Serializable {
     private BigDecimal netoGravadoTotal;
     private BigDecimal noGravadoTotal;
 
-    public ImportesResponsabilidad() {
-    }
-
-    public ImportesResponsabilidad(FiscalResponsabilidadesIva responsabilidadIva) {
-        this.responsabilidadIva = responsabilidadIva;
-    }
-
-    public ImportesResponsabilidad(FiscalResponsabilidadesIva responsabilidadIva, BigDecimal importeTotal, BigDecimal ivaTotal, BigDecimal netoGravadoTotal, BigDecimal noGravadoTotal) {
-        this.responsabilidadIva = responsabilidadIva;
-        this.importeTotal = importeTotal;
-        this.ivaTotal = ivaTotal;
-        this.netoGravadoTotal = netoGravadoTotal;
-        this.noGravadoTotal = noGravadoTotal;
-    }
-
-    public FiscalResponsabilidadesIva getResponsabilidadIva() {
-        return responsabilidadIva;
-    }
-
-    public void setResponsabilidadIva(FiscalResponsabilidadesIva responsabilidadIva) {
-        this.responsabilidadIva = responsabilidadIva;
-    }
-
-    public BigDecimal getImporteTotal() {
-        return importeTotal;
-    }
-
-    public void setImporteTotal(BigDecimal importeTotal) {
-        this.importeTotal = importeTotal;
-    }
-
-    public BigDecimal getIvaTotal() {
-        return ivaTotal;
-    }
-
-    public void setIvaTotal(BigDecimal ivaTotal) {
-        this.ivaTotal = ivaTotal;
-    }
-
-    public BigDecimal getNetoGravadoTotal() {
-        return netoGravadoTotal;
-    }
-
-    public void setNetoGravadoTotal(BigDecimal netoGravadoTotal) {
-        this.netoGravadoTotal = netoGravadoTotal;
-    }
-
-    public BigDecimal getNoGravadoTotal() {
-        return noGravadoTotal;
-    }
-
-    public void setNoGravadoTotal(BigDecimal noGravadoTotal) {
-        this.noGravadoTotal = noGravadoTotal;
-    }
 
     @Override
     public int hashCode() {

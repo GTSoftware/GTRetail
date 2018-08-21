@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.model.dto;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -29,13 +31,18 @@ import java.util.Objects;
  * @since 1.0.0
  * @version 1.0.0
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LibroIVADTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Date fechaDesde;
     private Date fechaHasta;
-    private Date fechaGeneracion;
+    private final Date fechaGeneracion = new Date();
 
     private List<RegistroIVADTO> facturasList;
     private BigDecimal importeTotal;
@@ -43,24 +50,6 @@ public class LibroIVADTO implements Serializable {
     private List<ImportesResponsabilidad> totalesIVAResponsabilidad;
     private List<ImportesAlicuotasIVA> totalesAlicuota;
 
-    /**
-     * Crea un nuevo Libro de IVA
-     */
-    public LibroIVADTO() {
-        this.fechaGeneracion = GregorianCalendar.getInstance().getTime();
-    }
-
-    /**
-     * Crea un nuevo Libro de IVA con las fechas especificadas
-     *
-     * @param fechaDesde
-     * @param fechaHasta
-     */
-    public LibroIVADTO(Date fechaDesde, Date fechaHasta) {
-        this.fechaGeneracion = GregorianCalendar.getInstance().getTime();
-        this.fechaDesde = fechaDesde;
-        this.fechaHasta = fechaHasta;
-    }
 
     /**
      * Devuelve la fecha desde
@@ -107,14 +96,6 @@ public class LibroIVADTO implements Serializable {
         return fechaGeneracion;
     }
 
-    /**
-     * Establece la fecha de generacion del libro
-     *
-     * @param fechaGeneracion
-     */
-    public void setFechaGeneracion(Date fechaGeneracion) {
-        this.fechaGeneracion = fechaGeneracion;
-    }
 
     /**
      * Devuelve la lista de facturas

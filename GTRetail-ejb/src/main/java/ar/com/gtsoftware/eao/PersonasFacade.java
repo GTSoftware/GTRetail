@@ -73,16 +73,16 @@ public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilte
             p1 = cb.equal(persona.get(Personas_.idTipoDocumento), psf.getIdTipoDocumento());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.isCliente() != null) {
-            Predicate p1 = cb.equal(persona.get(Personas_.cliente), psf.isCliente());
+        if (psf.getCliente() != null) {
+            Predicate p1 = cb.equal(persona.get(Personas_.cliente), psf.getCliente());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.isProveedor() != null) {
-            Predicate p1 = cb.equal(persona.get(Personas_.proveedor), psf.isProveedor());
+        if (psf.getProveedor() != null) {
+            Predicate p1 = cb.equal(persona.get(Personas_.proveedor), psf.getProveedor());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.isActivo() != null) {
-            Predicate p1 = cb.equal(persona.get(Personas_.activo), psf.isActivo());
+        if (psf.getActivo() != null) {
+            Predicate p1 = cb.equal(persona.get(Personas_.activo), psf.getActivo());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

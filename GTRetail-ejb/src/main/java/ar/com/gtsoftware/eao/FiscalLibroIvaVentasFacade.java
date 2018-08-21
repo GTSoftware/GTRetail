@@ -17,7 +17,7 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
-import ar.com.gtsoftware.search.IVAVentasSearchFilter;
+import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,7 +34,7 @@ import javax.persistence.criteria.Root;
  * @version 1.0.0
  */
 @Stateless
-public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas, IVAVentasSearchFilter> {
+public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas, LibroIVASearchFilter> {
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -77,7 +77,7 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(IVAVentasSearchFilter ivavsf, CriteriaBuilder cb, Root<FiscalLibroIvaVentas> root) {
+    public Predicate createWhereFromSearchFilter(LibroIVASearchFilter ivavsf, CriteriaBuilder cb, Root<FiscalLibroIvaVentas> root) {
         Predicate p = null;
         if (ivavsf.getPeriodo() != null) {
             Predicate p1 = cb.equal(root.get(FiscalLibroIvaVentas_.idPeriodoFiscal), ivavsf.getPeriodo());

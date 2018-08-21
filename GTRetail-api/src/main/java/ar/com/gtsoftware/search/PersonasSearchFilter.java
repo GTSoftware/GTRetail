@@ -16,11 +16,17 @@
 package ar.com.gtsoftware.search;
 
 import ar.com.gtsoftware.model.LegalTiposDocumento;
+import lombok.*;
 
 /**
  *
  * @author rodrigo
  */
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonasSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -41,23 +47,6 @@ public class PersonasSearchFilter extends AbstractSearchFilter {
     private Boolean cliente;
     private Boolean proveedor;
 
-    public PersonasSearchFilter() {
-    }
-
-    public PersonasSearchFilter(Boolean activo, Boolean cliente, Boolean proveedor) {
-        this.activo = activo;
-        this.cliente = cliente;
-        this.proveedor = proveedor;
-    }
-
-    public PersonasSearchFilter(LegalTiposDocumento idTipoDocumento, String documento, Boolean activo, Boolean cliente, Boolean proveedor) {
-        this.idTipoDocumento = idTipoDocumento;
-        this.documento = documento;
-        this.activo = activo;
-        this.cliente = cliente;
-        this.proveedor = proveedor;
-    }
-
     @Override
     public boolean hasFilter() {
         return (txt != null && !txt.isEmpty()) || (idPersona != null) || (razonSocial != null && !razonSocial.isEmpty())
@@ -66,92 +55,5 @@ public class PersonasSearchFilter extends AbstractSearchFilter {
                 || (activo != null) || (cliente != null) || (proveedor != null);
     }
 
-    public String getTxt() {
-        return txt;
-    }
-
-    public void setTxt(String txt) {
-        this.txt = txt;
-    }
-
-    public Integer getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Integer idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public String getRazonSocial() {
-        return razonSocial;
-    }
-
-    public void setRazonSocial(String razonSocial) {
-        this.razonSocial = razonSocial;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getNombreFantasia() {
-        return nombreFantasia;
-    }
-
-    public void setNombreFantasia(String nombreFantasia) {
-        this.nombreFantasia = nombreFantasia;
-    }
-
-    public LegalTiposDocumento getIdTipoDocumento() {
-        return idTipoDocumento;
-    }
-
-    public void setIdTipoDocumento(LegalTiposDocumento idTipoDocumento) {
-        this.idTipoDocumento = idTipoDocumento;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
-
-    public Boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public Boolean isCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Boolean cliente) {
-        this.cliente = cliente;
-    }
-
-    public Boolean isProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(Boolean proveedor) {
-        this.proveedor = proveedor;
-    }
 
 }

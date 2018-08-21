@@ -1,3 +1,4 @@
+<!--
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +9,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     template="/WEB-INF/template.xhtml">
 
-    <!-- Contenido -->
+    &lt;!&ndash; Contenido &ndash;&gt;
     <ui:define name="content">
         <ui:insert >
             <ui:include src="breadcrumb.xhtml" />
@@ -19,6 +20,17 @@
     </ui:define>
 
 </ui:composition>
+-->
 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
 
-
+<h:head>
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{dashboardDispatcher.dispatch}"/>
+    </f:metadata>
+</h:head>
+</html>

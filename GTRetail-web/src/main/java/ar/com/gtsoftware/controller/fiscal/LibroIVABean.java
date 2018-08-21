@@ -1,22 +1,25 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
+
 package ar.com.gtsoftware.controller.fiscal;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.bl.impl.LibroIVAVentasBean;
+import ar.com.gtsoftware.bl.impl.LibroIVAComprasServiceImpl;
+import ar.com.gtsoftware.bl.impl.LibroIVAVentasServiceImpl;
 import ar.com.gtsoftware.eao.FiscalAlicuotasIvaFacade;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
@@ -24,29 +27,9 @@ import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
 import ar.com.gtsoftware.model.dto.LibroIVADTO;
 import ar.com.gtsoftware.model.dto.RegistroIVADTO;
-import ar.com.gtsoftware.search.IVAVentasSearchFilter;
+import ar.com.gtsoftware.search.LibroIVASearchFilter;
+import ar.com.gtsoftware.service.fiscal.LibroIVAService;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -56,25 +39,40 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
- * @since 1.0.2
  * @version 1.0.0
+ * @since 1.0.2
  */
 @ManagedBean(name = "libroIVABean")
 @ViewScoped
-public class LibroIVABean {
+public class LibroIVABean implements Serializable {
 
     @EJB
-    private LibroIVAVentasBean libroIVAVentasBean;
+    private LibroIVAVentasServiceImpl libroIVAVentasBean;
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
+    @EJB
+    private LibroIVAComprasServiceImpl libroIVAComprasBean;
 
     @EJB
     private FiscalAlicuotasIvaFacade alicuotasFacade;
 
-    private final IVAVentasSearchFilter ivaVentasFilter = new IVAVentasSearchFilter();
+    private final LibroIVASearchFilter ivaVentasFilter = new LibroIVASearchFilter();
 
     public LibroIVABean() {
     }
@@ -83,10 +81,7 @@ public class LibroIVABean {
         return periodosFiscalesFacade.findAll();
     }
 
-    @Deprecated
-    /**
-     * No se utiliza más pues es preferible generarlo en excel
-     */
+    /*@Deprecated
     public void imprimirLibroIvaVentas() throws IOException, JRException {
         try {
             LibroIVADTO libro = libroIVAVentasBean.obtenerLibroIVA(ivaVentasFilter);
@@ -108,14 +103,15 @@ public class LibroIVABean {
         } catch (ServiceException ex) {
             Logger.getLogger(LibroIVABean.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
-    public void exportIVAVentaExcel() throws IOException, ServiceException {
+    private void generarLibroIVA(LibroIVAService service, final String titulo, final String filename)
+            throws IOException, ServiceException {
         // TODO ver la forma de mejorar esto para achicar el método
         // Agregar totales por categoría de IVA
         // Agregar encabezado con título
 
-        LibroIVADTO libro = libroIVAVentasBean.obtenerLibroIVA(ivaVentasFilter);
+        LibroIVADTO libro = service.obtenerLibroIVA(ivaVentasFilter);
 
         Row row = null;
         Cell cell = null;
@@ -133,12 +129,12 @@ public class LibroIVABean {
             dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
             moneyStyle.setDataFormat(createHelper.createDataFormat().getFormat("$ #.##"));
 
-            Sheet sheet = wb.createSheet("Libro IVA Ventas");
+            Sheet sheet = wb.createSheet(titulo);
             int nroFila = 0;
 
             row = sheet.createRow(nroFila++);
             cell = row.createCell(0);
-            cell.setCellValue("Libro de IVA Ventas");
+            cell.setCellValue(titulo);
             cell.setCellStyle(styleHeader);
 
             row = sheet.createRow(nroFila++);
@@ -168,6 +164,8 @@ public class LibroIVABean {
             columnNames.add("Neto Gravado");
             columnNames.add("No Grav.");
             columnNames.add("IVA Total");
+            columnNames.add("Perc. IVA");
+            columnNames.add("Perc. Ing.Br.");
             HashMap<FiscalAlicuotasIva, Integer> columnaAlicuota = new HashMap<>();
             //Nombres de columna para encabezados por cada alicuota
             for (FiscalAlicuotasIva al : alicuotasFacade.findAll()) {
@@ -222,6 +220,14 @@ public class LibroIVABean {
                 cell.setCellValue(fact.getTotalIva().doubleValue());
                 cell.setCellStyle(moneyStyle);
 
+                cell = row.createCell(colNum++);
+                cell.setCellValue(fact.getPercepcionIva().doubleValue());
+                cell.setCellStyle(moneyStyle);
+
+                cell = row.createCell(colNum++);
+                cell.setCellValue(fact.getPercepcionIngresosBrutos().doubleValue());
+                cell.setCellStyle(moneyStyle);
+
                 for (ImportesAlicuotasIVA al : fact.getTotalAlicuota()) {
 
                     cell = row.createCell(columnaAlicuota.get(al.getAlicuota()));
@@ -241,7 +247,7 @@ public class LibroIVABean {
             nroFila = nroFila + 3;
             row = sheet.createRow(nroFila++);
             cell = row.createCell(0);
-            cell.setCellValue("Alícuota");
+            cell.setCellValue("Alicuota");
             cell.setCellStyle(styleHeader);
             cell = row.createCell(1);
             cell.setCellValue("Importe");
@@ -268,8 +274,8 @@ public class LibroIVABean {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             ExternalContext externalContext = facesContext.getExternalContext();
             externalContext.setResponseContentType(JSFUtil.MS_EXCEL_2007_MIME_TYPE);
-            externalContext.setResponseHeader("Content-Disposition", String
-                    .format("attachment; filename=IVAVentas-%s.xlsx", dateFormat.format(libro.getFechaGeneracion())));
+            externalContext.setResponseHeader("Content-Disposition",
+                    String.format("attachment; filename=%s-%s.xlsx", filename, dateFormat.format(libro.getFechaGeneracion())));
 
             wb.write(externalContext.getResponseOutputStream());
             facesContext.responseComplete();
@@ -277,7 +283,23 @@ public class LibroIVABean {
 
     }
 
-    public IVAVentasSearchFilter getIvaVentasFilter() {
+    public void exportIVAVentaExcel() {
+        try {
+            generarLibroIVA(libroIVAVentasBean, "Libro IVA Ventas", "IVA_Ventas");
+        } catch (IOException | ServiceException e) {
+            JSFUtil.addErrorMessage("Error al generar el libro: " + e.getMessage());
+        }
+    }
+
+    public void exportIVAComprasExcel() {
+        try {
+            generarLibroIVA(libroIVAComprasBean, "Libro IVA Compras", "IVA_Compras");
+        } catch (IOException | ServiceException e) {
+            JSFUtil.addErrorMessage("Error al generar el libro: " + e.getMessage());
+        }
+    }
+
+    public LibroIVASearchFilter getIvaVentasFilter() {
         return ivaVentasFilter;
     }
 

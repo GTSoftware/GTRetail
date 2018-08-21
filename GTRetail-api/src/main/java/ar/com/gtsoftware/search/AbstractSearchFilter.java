@@ -111,7 +111,7 @@ public abstract class AbstractSearchFilter implements Serializable {
     }
 
     /**
-     * Establece el nombde del entity graph
+     * Establece el nombre del entity graph
      *
      * @param namedEntityGraph
      */

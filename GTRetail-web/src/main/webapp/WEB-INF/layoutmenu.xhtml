@@ -33,8 +33,11 @@
                         <p:menuitem id="puntosVentaItem" value="#{msg.puntosVenta}"
                                     action="/protected/fiscal/puntos_venta/index.xhtml?faces-redirect=true"
                                     immediate="true" ajax="false"/>
-                        <p:menuitem id="ivaVentasItem" value="#{msg.liborIVAVentas}"
+                        <p:menuitem id="ivaVentasItem" value="#{msg.libro_iva_ventas}"
                                     action="/protected/fiscal/libros/ivaVentas.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"/>
+                        <p:menuitem id="ivaComprasItem" value="#{msg.libro_iva_compras}"
+                                    action="/protected/fiscal/libros/ivaCompras.xhtml?faces-redirect=true"
                                     immediate="true" ajax="false"/>
                         <p:menuitem id="regimenInformativoItem" value="#{msg.regimenInformativo}"
                                     action="/protected/fiscal/regimenInformativo/regimenInformativoCV.xhtml?faces-redirect=true"
@@ -83,6 +86,11 @@
                                 action="/protected/proveedores/ordenes_compra/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"
                                 icon="fa fa-fw fa-cubes"/>
+
+                    <p:menuitem value="#{msg.comprobantes}"
+                                action="/protected/proveedores/comprobantes/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-list"/>
                 </p:submenu>
 
                 <p:submenu id="productosSubMenu" label="#{msg.productos}" icon="fa fa-fw fa-tags">

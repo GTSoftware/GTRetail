@@ -26,9 +26,7 @@
 
                 <p:focus for="idField"  />
                 <p:panelGrid
-                    layout="grid"  styleClass="ui-panelgrid-blank" columns="3"
-                    style="border:0px !important; background:none;"
-                    >
+                    layout="grid"  styleClass="ui-panelgrid-blank" columns="3" >
 
 
                     <p:inputText id="idField"
@@ -235,7 +233,7 @@
                 <h:form id="busquedaProductosForm" >
                     <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
                               modal="true" dynamic="true" >
-                        <gtsoftware:busquedaProductos productoSeleccionado="#{shopCartBean.productoBusquedaSeleccionado}"
+                        <gtsoftware:busquedaProductos model="#{shopCartBean}"
                                                       listaPrecios="#{shopCartBean.lista}"
                                                       soloConStock="true"
                                                       />

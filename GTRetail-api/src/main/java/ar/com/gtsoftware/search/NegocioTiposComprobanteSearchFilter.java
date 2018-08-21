@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -22,6 +23,11 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class NegocioTiposComprobanteSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -32,26 +38,6 @@ public class NegocioTiposComprobanteSearchFilter extends AbstractSearchFilter {
     @Override
     public boolean hasFilter() {
         return activo != null || StringUtils.isNotEmpty(nombre);
-    }
-
-    public NegocioTiposComprobanteSearchFilter(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
 }
