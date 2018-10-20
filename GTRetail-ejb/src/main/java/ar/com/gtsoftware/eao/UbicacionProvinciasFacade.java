@@ -15,9 +15,11 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.UbicacionPaises_;
 import ar.com.gtsoftware.model.UbicacionProvincias;
 import ar.com.gtsoftware.model.UbicacionProvincias_;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -35,13 +36,13 @@ public class UbicacionProvinciasFacade extends AbstractFacade<UbicacionProvincia
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public UbicacionProvinciasFacade() {
+        super(UbicacionProvincias.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public UbicacionProvinciasFacade() {
-        super(UbicacionProvincias.class);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class UbicacionProvinciasFacade extends AbstractFacade<UbicacionProvincia
             p = appendOrPredicate(cb, p, p1);
         }
         if (psf.getIdPais() != null) {
-            Predicate p1 = cb.equal(root.get(UbicacionProvincias_.idPais), psf.getIdPais());
+            Predicate p1 = cb.equal(root.get(UbicacionProvincias_.idPais).get(UbicacionPaises_.id), psf.getIdPais());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

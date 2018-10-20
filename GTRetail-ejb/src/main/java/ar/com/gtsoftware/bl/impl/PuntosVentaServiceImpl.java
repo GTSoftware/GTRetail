@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,21 @@ package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
 import ar.com.gtsoftware.eao.SucursalesFacade;
+import ar.com.gtsoftware.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.mappers.FiscalPuntosVentaMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import ar.com.gtsoftware.service.rest.PuntosVentaEndpoint;
-import java.util.Collections;
-import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Stateless
@@ -39,23 +42,27 @@ public class PuntosVentaServiceImpl implements PuntosVentaEndpoint {
 
     @EJB
     private SucursalesFacade sucursalesFacade;
+    @Inject
+    private FiscalPuntosVentaMapper fiscalPuntosVentaMapper;
 
     @Override
-    public List<FiscalPuntosVenta> getPuntosVentaActivos(Long idSucursal) {
+    public Response getPuntosVentaActivos(Long idSucursal) {
         if (idSucursal == null) {
-            return Collections.EMPTY_LIST;
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
         Sucursales sucursal = sucursalesFacade.find(idSucursal);
         if (sucursal == null) {
-            return Collections.EMPTY_LIST;
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        FiscalPuntosVentaSearchFilter sf = new FiscalPuntosVentaSearchFilter(sucursal, Boolean.TRUE);
+        FiscalPuntosVentaSearchFilter sf = FiscalPuntosVentaSearchFilter.builder()
+                .idSucursal(idSucursal)
+                .activo(true).build();
         sf.setTipoPuntoVenta(TiposPuntosVenta.CONTROLADOR_FISCAL);
+        List<FiscalPuntosVenta> puntosVenta = facade.findAllBySearchFilter(sf);
 
-        return facade.findAllBySearchFilter(sf);
+        return Response.ok(fiscalPuntosVentaMapper.entitiesToDtos(puntosVenta,
+                new CycleAvoidingMappingContext())).build();
 
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 }

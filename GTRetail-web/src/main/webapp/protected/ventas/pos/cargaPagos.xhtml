@@ -12,11 +12,9 @@
     <div class="Container100 ui-fluid">
         <div class="Card">
             <h1 class="CardBigTopic TexAlCenter">Forma de pago</h1>
-            <div class="SeparatorFull"></div>
+            <div class="SeparatorFull"/>
             <h:form id="cargaPagosForm" >
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
-
-                             style="border:0px !important; background:none;">
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
 
                     <h:outputLabel value="#{msg.tipoComprobante}:" />
                     <p:selectOneMenu id="tipoComprobanteField" required="true" requiredMessage="#{msg.campoRequerido}"
@@ -63,9 +61,7 @@
                     <p:message for="importePagoField" />
 
                     <p:fragment id="planFragment"  >
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
-
-                                     style="border:0px !important; background:none;">
+                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2" >
 
                             <h:outputLabel for="planPagoField" value="#{msg.planPago}:" />
                             <p:selectOneMenu id="planPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"

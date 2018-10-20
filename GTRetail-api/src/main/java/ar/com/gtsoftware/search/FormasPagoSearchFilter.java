@@ -15,6 +15,7 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -22,6 +23,11 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FormasPagoSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -37,44 +43,5 @@ public class FormasPagoSearchFilter extends AbstractSearchFilter {
                 || requierePlanes != null;
     }
 
-    public FormasPagoSearchFilter() {
-    }
-
-    public FormasPagoSearchFilter(Boolean disponibleVenta, Boolean disponibleCompra) {
-        this.disponibleVenta = disponibleVenta;
-        this.disponibleCompra = disponibleCompra;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Boolean getDisponibleVenta() {
-        return disponibleVenta;
-    }
-
-    public void setDisponibleVenta(Boolean disponibleVenta) {
-        this.disponibleVenta = disponibleVenta;
-    }
-
-    public Boolean getDisponibleCompra() {
-        return disponibleCompra;
-    }
-
-    public void setDisponibleCompra(Boolean disponibleCompra) {
-        this.disponibleCompra = disponibleCompra;
-    }
-
-    public Boolean getRequierePlanes() {
-        return requierePlanes;
-    }
-
-    public void setRequierePlanes(Boolean requierePlanes) {
-        this.requierePlanes = requierePlanes;
-    }
 
 }

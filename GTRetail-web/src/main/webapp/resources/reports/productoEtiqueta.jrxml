@@ -12,10 +12,10 @@
     <field name="codigoPropio" class="java.lang.String">
         <fieldDescription><![CDATA[codigoPropio]]></fieldDescription>
     </field>
-    <field name="idMarca" class="ar.com.gtsoftware.model.ProductosMarcas">
+    <field name="idMarca" class="ar.com.gtsoftware.dto.model.ProductosMarcasDto">
         <fieldDescription><![CDATA[idMarca]]></fieldDescription>
     </field>
-    <field name="idProveedorHabitual" class="ar.com.gtsoftware.model.Personas"/>
+    <field name="idProveedorHabitual" class="ar.com.gtsoftware.dto.model.PersonasDto"/>
     <field name="id" class="java.lang.Long"/>
     <field name="codigoFabricante" class="java.lang.String"/>
     <background>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,48 +15,26 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.NegocioTiposComprobante;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FiscalTiposComprobanteSearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 1L;
 
     private String letra;
-
-    private NegocioTiposComprobante tipoComprobante;
+    private Long idTipoComprobante;
 
     @Override
     public boolean hasFilter() {
-        return StringUtils.isNotEmpty(letra) || tipoComprobante != null;
-    }
-
-    public FiscalTiposComprobanteSearchFilter() {
-    }
-
-    public FiscalTiposComprobanteSearchFilter(String letra, NegocioTiposComprobante tipoComprobante) {
-        this.letra = letra;
-        this.tipoComprobante = tipoComprobante;
-    }
-
-    public String getLetra() {
-        return letra;
-    }
-
-    public void setLetra(String letra) {
-        this.letra = letra;
-    }
-
-    public NegocioTiposComprobante getTipoComprobante() {
-        return tipoComprobante;
-    }
-
-    public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
+        return StringUtils.isNotEmpty(letra) || idTipoComprobante != null;
     }
 
 }

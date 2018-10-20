@@ -15,9 +15,12 @@
  */
 package ar.com.gtsoftware.bl;
 
-import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.model.Recibos;
-import ar.com.gtsoftware.model.dto.PagoValorDTO;
+import ar.com.gtsoftware.dto.PagoValorDTO;
+import ar.com.gtsoftware.dto.model.CajasDto;
+import ar.com.gtsoftware.dto.model.RecibosDto;
+
+import javax.ejb.Remote;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -25,16 +28,9 @@ import java.util.List;
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Remote
 public interface CobranzaService {
 
-    /**
-     * Método de prueba para generar una cobranza de un comprobante con el medio de pago efectivo en su totalidad
-     *
-     * @param caja
-     * @param comprobante
-     * @return el recibo generado por la cobranza
-     */
-//    public Recibos cobrarComprobante(Cajas caja, Comprobantes comprobante) throws ServiceException;
     /**
      * Cobra totalmente uno o más comprobantes
      *
@@ -42,6 +38,6 @@ public interface CobranzaService {
      * @param pagos
      * @return
      */
-    public Recibos cobrarComprobantes(Cajas caja, List<PagoValorDTO> pagos);
+    RecibosDto cobrarComprobantes(@NotNull CajasDto caja, List<PagoValorDTO> pagos);
 
 }

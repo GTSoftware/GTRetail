@@ -1,45 +1,27 @@
+/*
+ * Copyright 2018 GT Software.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package ar.com.gtsoftware.controller.productos;
 
-import ar.com.gtsoftware.eao.FiscalAlicuotasIvaFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.eao.ProductoXDepositoFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
-import ar.com.gtsoftware.eao.ProductosMarcasFacade;
-import ar.com.gtsoftware.eao.ProductosRubrosFacade;
-import ar.com.gtsoftware.eao.ProductosSubRubrosFacade;
-import ar.com.gtsoftware.eao.ProductosTiposPorcentajesFacade;
-import ar.com.gtsoftware.eao.ProductosTiposProveeduriaFacade;
-import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
-import ar.com.gtsoftware.model.FiscalAlicuotasIva;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.ProductoXDeposito;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
-import ar.com.gtsoftware.model.ProductosMarcas;
-import ar.com.gtsoftware.model.ProductosPorcentajes;
-import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.model.ProductosRubros;
-import ar.com.gtsoftware.model.ProductosSubRubros;
-import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
-import ar.com.gtsoftware.model.ProductosTiposProveeduria;
-import ar.com.gtsoftware.model.ProductosTiposUnidades;
-import ar.com.gtsoftware.search.MarcasSearchFilter;
-import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
-import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
-import ar.com.gtsoftware.search.RubrosSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.search.SubRubroSearchFilter;
+import ar.com.gtsoftware.bl.*;
+import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.search.*;
 import ar.com.gtsoftware.utils.JSFUtil;
-import ar.com.gtsoftware.utils.UtilUI;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -47,6 +29,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -58,72 +49,53 @@ public class ProductoEditBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final BigDecimal CIEN = new BigDecimal(100);
-
-    @EJB
-    private ProductosFacade productosFacade;
-
-    @EJB
-    private FiscalAlicuotasIvaFacade fiscalAlicuotasIvaFacade;
-
-    @EJB
-    private ProductosRubrosFacade productosRubrosFacade;
-
-    @EJB
-    private ProductosSubRubrosFacade productosSubRubrosFacade;
-
-    @EJB
-    private ProductosTiposUnidadesFacade productosTiposUnidadesFacade;
-
-    @EJB
-    private PersonasFacade personasFacade;
-
-    @EJB
-    private ProductosTiposProveeduriaFacade productosTiposProveeduriaFacade;
-
-    @EJB
-    private ProductosMarcasFacade productosMarcasFacade;
-
-    @EJB
-    private ProductosTiposPorcentajesFacade tiposPorcentajesFacade;
-
-    @EJB
-    private ProductosListasPreciosFacade listasPreciosFacade;
-
-    @EJB
-    private ProductoXDepositoFacade prodXDepoFacade;
-
-    @EJB
-    private JSFUtil jsfUtil;
-
-    private Productos productoActual;
-
-    private List<ProductosMarcas> listMarcas = new ArrayList<>();
-    private List<FiscalAlicuotasIva> listAlicuotaIVA = new ArrayList<>();
-    private List<ProductosRubros> listRubros = new ArrayList<>();
-    private List<ProductosSubRubros> listSubRubros = new ArrayList<>();
-    private List<ProductosTiposUnidades> listTipoUnidades = new ArrayList<>();
-    private List<Personas> listProveedores = new ArrayList<>();
-    private List<ProductosTiposProveeduria> listTipoProveeduria = new ArrayList<>();
-    private List<ProductosTiposPorcentajes> tiposPorcentajesList = new ArrayList<>();
-    private List<ProductosListasPrecios> listasPrecios = new ArrayList<>();
-    private List<ProductoXDeposito> stockXDepo = null;
-
-    private ProductosRubros productosRubrosNuevo = new ProductosRubros();
-    private ProductosTiposProveeduria tiposProveeduria = new ProductosTiposProveeduria();
-    private ProductosMarcas nuevaMarca = new ProductosMarcas();
-    private ProductosListasPrecios listaSeleccionada;
-    private ProductosTiposPorcentajes tipoPorcentajeSeleccionado;
-
-    private ProductosSubRubros productosSubRubrosNuevo = new ProductosSubRubros();
-    private final SubRubroSearchFilter subRubroSearchFilter = new SubRubroSearchFilter();
-
     private static final Logger LOG = Logger.getLogger(ProductoEditBean.class.getName());
+    private final SubRubroSearchFilter subRubroSearchFilter = new SubRubroSearchFilter();
+    @EJB
+    private ProductosService productosFacade;
+    @EJB
+    private FiscalAlicuotasIvaService fiscalAlicuotasIvaFacade;
+    @EJB
+    private ProductosRubrosService productosRubrosFacade;
+    @EJB
+    private ProductosSubRubrosService productosSubRubrosFacade;
+    @EJB
+    private ProductosTiposUnidadesService productosTiposUnidadesFacade;
+    @EJB
+    private PersonasService personasFacade;
+    @EJB
+    private ProductosTiposProveeduriaService productosTiposProveeduriaFacade;
+    @EJB
+    private ProductosMarcasService productosMarcasFacade;
+    @EJB
+    private ProductosTiposPorcentajesService tiposPorcentajesFacade;
+    @EJB
+    private ProductosListasPreciosService listasPreciosFacade;
+    @EJB
+    private ProductoXDepositoService prodXDepoFacade;
+    private ProductosDto productoActual;
+    private List<ProductosMarcasDto> listMarcas = new ArrayList<>();
+    private List<FiscalAlicuotasIvaDto> listAlicuotaIVA = new ArrayList<>();
+    private List<ProductosRubrosDto> listRubros = new ArrayList<>();
+    private List<ProductosSubRubrosDto> listSubRubros = new ArrayList<>();
+    private List<ProductosTiposUnidadesDto> listTipoUnidades = new ArrayList<>();
+    private List<PersonasDto> listProveedores = new ArrayList<>();
+    private List<ProductosTiposProveeduriaDto> listTipoProveeduria = new ArrayList<>();
+    private List<ProductosTiposPorcentajesDto> tiposPorcentajesList = new ArrayList<>();
+    private List<ProductosListasPreciosDto> listasPrecios = new ArrayList<>();
+    private List<ProductoXDepositoDto> stockXDepo = null;
+    private ProductosRubrosDto productosRubrosNuevo = new ProductosRubrosDto();
+    private ProductosTiposProveeduriaDto tiposProveeduria = new ProductosTiposProveeduriaDto();
+    private ProductosMarcasDto nuevaMarca = new ProductosMarcasDto();
+    private ProductosListasPreciosDto listaSeleccionada;
+    private ProductosTiposPorcentajesDto tipoPorcentajeSeleccionado;
+    private ProductosSubRubrosDto productosSubRubrosNuevo = new ProductosSubRubrosDto();
 
     @PostConstruct
     public void init() {
 
-        String idProducto = jsfUtil.getRequestParameterMap().get("idProducto");
-        String duplicar = jsfUtil.getRequestParameterMap().get("duplicar");
+        String idProducto = JSFUtil.getRequestParameterMap().get("idProducto");
+        String duplicar = JSFUtil.getRequestParameterMap().get("duplicar");
         if (idProducto == null) {
             nuevo();
         } else {
@@ -155,9 +127,9 @@ public class ProductoEditBean implements Serializable {
         listMarcas.addAll(productosMarcasFacade.findAllBySearchFilter(msf));
 
         listTipoUnidades.addAll(productosTiposUnidadesFacade.findAll());
-        PersonasSearchFilter psf = new PersonasSearchFilter();
-        psf.setProveedor(true);
-        psf.setActivo(true);
+        PersonasSearchFilter psf = PersonasSearchFilter.builder()
+                .proveedor(true)
+                .activo(true).build();
         psf.addSortField(new SortField("razonSocial", true));
         listProveedores.addAll(personasFacade.findAllBySearchFilter(psf));
 
@@ -165,27 +137,27 @@ public class ProductoEditBean implements Serializable {
 
         tiposPorcentajesList.addAll(tiposPorcentajesFacade.findAll());
 
-        subRubroSearchFilter.addSortField(new SortField("nombreSubRubro", true));
+        subRubroSearchFilter.addSortField("nombreSubRubro", true);
 
         if (productoActual != null) {
-            subRubroSearchFilter.setProductosRubros(productoActual.getIdRubro());
+            subRubroSearchFilter.setIdProductosRubros(productoActual.getIdRubro().getId());
             listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
         }
-        ProductosListasPreciosSearchFilter plpsf = new ProductosListasPreciosSearchFilter();
-        plpsf.setActiva(Boolean.TRUE);
+        ProductosListasPreciosSearchFilter plpsf = ProductosListasPreciosSearchFilter.builder().activa(true).build();
+
         listasPrecios.addAll(listasPreciosFacade.findAllBySearchFilter(plpsf));
     }
 
     public void cargarSubRubros(ValueChangeEvent event) {
         listSubRubros.clear();
-        subRubroSearchFilter.setProductosRubros((ProductosRubros) event.getNewValue());
+        subRubroSearchFilter.setIdProductosRubros(((ProductosRubrosDto) event.getNewValue()).getId());
 
         listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
 
     }
 
     public void nuevo() {
-        productoActual = new Productos();
+        productoActual = new ProductosDto();
         productoActual.setPrecios(new ArrayList<>());
         productoActual.setPorcentajes(new ArrayList<>());
         productoActual.setUnidadesCompraUnidadesVenta(BigDecimal.ONE);
@@ -194,59 +166,59 @@ public class ProductoEditBean implements Serializable {
 
     public void nuevoRubro() {
 
-        productosRubrosNuevo = new ProductosRubros();
+        productosRubrosNuevo = new ProductosRubrosDto();
 
     }
 
     public void doGuardarRubro() {
 
         try {
-            productosRubrosFacade.create(productosRubrosNuevo);
+            productosRubrosFacade.createOrEdit(productosRubrosNuevo);
             listRubros.add(productosRubrosNuevo);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
 
         }
     }
 
     public void nuevoSubRubro() {
-        productosSubRubrosNuevo = new ProductosSubRubros();
+        productosSubRubrosNuevo = new ProductosSubRubrosDto();
         productosSubRubrosNuevo.setIdRubro(productoActual.getIdRubro());
 
     }
 
     public void doGuardarSubRubro() {
         try {
-            productosSubRubrosFacade.create(productosSubRubrosNuevo);
+            productosSubRubrosFacade.createOrEdit(productosSubRubrosNuevo);
             listSubRubros.add(productosSubRubrosNuevo);
 
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
 
         }
 
     }
 
     public void cargarNuevaMarca() {
-        nuevaMarca = new ProductosMarcas();
+        nuevaMarca = new ProductosMarcasDto();
     }
 
     public void doGuardarMarca() {
 
         try {
 
-            productosMarcasFacade.create(nuevaMarca);
+            productosMarcasFacade.createOrEdit(nuevaMarca);
             listMarcas.add(nuevaMarca);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
@@ -255,18 +227,18 @@ public class ProductoEditBean implements Serializable {
 
         try {
 
-            if (productoActual.isNew()) {
+            if (productoActual.getId() == null) {
 
                 actualizarPrecios();
 
             }
 
             productosFacade.createOrEdit(productoActual);
-            jsfUtil.addInfoMessage("Producto guardado Exitosamente");
+            JSFUtil.addInfoMessage("Producto guardado Exitosamente");
             productoActual = productosFacade.find(productoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
@@ -277,8 +249,8 @@ public class ProductoEditBean implements Serializable {
         BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN)
                 .add(BigDecimal.ONE);
         if (productoActual.getPorcentajes() != null) {
-            for (ProductosPorcentajes pp : productoActual.getPorcentajes()) {
-                if (pp.getIdTipoPorcentaje().getIsPorcentaje()) {
+            for (ProductosPorcentajesDto pp : productoActual.getPorcentajes()) {
+                if (pp.getIdTipoPorcentaje().isPorcentaje()) {
                     costoFinal = costoFinal.add(costoFinal.multiply(pp.getValor().divide(CIEN)));
                 } else {
                     costoFinal = costoFinal.add(pp.getValor());
@@ -287,7 +259,7 @@ public class ProductoEditBean implements Serializable {
         }
         productoActual.setCostoFinal(costoFinal);
         if (productoActual.getPrecios() != null) {
-            for (ProductosPrecios p : productoActual.getPrecios()) {
+            for (ProductosPreciosDto p : productoActual.getPrecios()) {
                 BigDecimal utilidad = p.getUtilidad().divide(CIEN);
                 p.setNeto(costoFinal.add(costoFinal.multiply(utilidad)));
                 p.setPrecio(p.getNeto().multiply(coeficienteIVA).setScale(2, RoundingMode.HALF_UP));
@@ -297,24 +269,24 @@ public class ProductoEditBean implements Serializable {
 
     public void addPorcentaje() {
         if (tipoPorcentajeSeleccionado != null) {
-            ProductosPorcentajes pp = new ProductosPorcentajes();
+            ProductosPorcentajesDto pp = new ProductosPorcentajesDto();
             pp.setIdProducto(productoActual);
             pp.setIdTipoPorcentaje(tipoPorcentajeSeleccionado);
             pp.setValor(BigDecimal.ZERO);
-            pp.setFechaModificacion(UtilUI.getNow());
+            pp.setFechaModificacion(new Date());
             productoActual.getPorcentajes().add(pp);
         }
     }
 
     public void addLista() {
         boolean listaExistente = false;
-        for (ProductosPrecios p : productoActual.getPrecios()) {
+        for (ProductosPreciosDto p : productoActual.getPrecios()) {
             if (p.getIdListaPrecios().equals(listaSeleccionada)) {
                 listaExistente = true;
             }
         }
         if (!listaExistente) {
-            ProductosPrecios pp = new ProductosPrecios();
+            ProductosPreciosDto pp = new ProductosPreciosDto();
             pp.setIdListaPrecios(listaSeleccionada);
             pp.setIdProducto(productoActual);
             productoActual.getPrecios().add(pp);
@@ -322,152 +294,150 @@ public class ProductoEditBean implements Serializable {
 
     }
 
-    public void removePorcentaje(ProductosPorcentajes pp) {
+    public void removePorcentaje(ProductosPorcentajesDto pp) {
         productoActual.getPorcentajes().remove(pp);
         actualizarPrecios();
     }
 
-    public void removePrecio(ProductosPrecios pre) {
+    public void removePrecio(ProductosPreciosDto pre) {
         productoActual.getPrecios().remove(pre);
     }
 
-    public Productos getProductoActual() {
+    public ProductosDto getProductoActual() {
         return productoActual;
     }
 
-    public void setProductoActual(Productos productoActual) {
+    public void setProductoActual(ProductosDto productoActual) {
         this.productoActual = productoActual;
     }
 
-    public List<FiscalAlicuotasIva> getListAlicuotaIVA() {
+    public List<FiscalAlicuotasIvaDto> getListAlicuotaIVA() {
         return listAlicuotaIVA;
     }
 
-    public void setListAlicuotaIVA(List<FiscalAlicuotasIva> listAlicuotaIVA) {
+    public void setListAlicuotaIVA(List<FiscalAlicuotasIvaDto> listAlicuotaIVA) {
         this.listAlicuotaIVA = listAlicuotaIVA;
     }
 
-    public List<ProductosRubros> getListRubros() {
+    public List<ProductosRubrosDto> getListRubros() {
         return listRubros;
     }
 
-    public void setListRubros(List<ProductosRubros> listRubros) {
+    public void setListRubros(List<ProductosRubrosDto> listRubros) {
         this.listRubros = listRubros;
     }
 
-    public List<ProductosSubRubros> getListSubRubros() {
+    public List<ProductosSubRubrosDto> getListSubRubros() {
         return listSubRubros;
     }
 
-    public void setListSubRubros(List<ProductosSubRubros> listSubRubros) {
+    public void setListSubRubros(List<ProductosSubRubrosDto> listSubRubros) {
         this.listSubRubros = listSubRubros;
     }
 
-    public ProductosSubRubros getProductosSubRubrosNuevo() {
+    public ProductosSubRubrosDto getProductosSubRubrosNuevo() {
         return productosSubRubrosNuevo;
     }
 
-    public void setProductosSubRubrosNuevo(ProductosSubRubros productosSubRubrosNuevo) {
+    public void setProductosSubRubrosNuevo(ProductosSubRubrosDto productosSubRubrosNuevo) {
         this.productosSubRubrosNuevo = productosSubRubrosNuevo;
     }
 
-    public ProductosRubros getProductosRubrosNuevo() {
+    public ProductosRubrosDto getProductosRubrosNuevo() {
         return productosRubrosNuevo;
     }
 
-    public void setProductosRubrosNuevo(ProductosRubros productosRubrosNuevo) {
+    public void setProductosRubrosNuevo(ProductosRubrosDto productosRubrosNuevo) {
         this.productosRubrosNuevo = productosRubrosNuevo;
     }
 
-    public List<ProductosMarcas> getListMarcas() {
+    public List<ProductosMarcasDto> getListMarcas() {
         return listMarcas;
     }
 
-    public void setListMarcas(List<ProductosMarcas> listMarcas) {
+    public void setListMarcas(List<ProductosMarcasDto> listMarcas) {
         this.listMarcas = listMarcas;
     }
 
-    public List<ProductosTiposUnidades> getListTipoUnidades() {
+    public List<ProductosTiposUnidadesDto> getListTipoUnidades() {
         return listTipoUnidades;
     }
 
-    public void setListTipoUnidades(List<ProductosTiposUnidades> listTipoUnidades) {
+    public void setListTipoUnidades(List<ProductosTiposUnidadesDto> listTipoUnidades) {
         this.listTipoUnidades = listTipoUnidades;
     }
 
-    public List<Personas> getListProveedores() {
+    public List<PersonasDto> getListProveedores() {
         return listProveedores;
     }
 
-    public void setListProveedores(List<Personas> listProveedores) {
+    public void setListProveedores(List<PersonasDto> listProveedores) {
         this.listProveedores = listProveedores;
     }
 
-    public ProductosTiposProveeduria getTiposProveeduria() {
+    public ProductosTiposProveeduriaDto getTiposProveeduria() {
         return tiposProveeduria;
     }
 
-    public void setTiposProveeduria(ProductosTiposProveeduria tiposProveeduria) {
+    public void setTiposProveeduria(ProductosTiposProveeduriaDto tiposProveeduria) {
         this.tiposProveeduria = tiposProveeduria;
     }
 
-    public List<ProductosTiposProveeduria> getListTipoProveeduria() {
+    public List<ProductosTiposProveeduriaDto> getListTipoProveeduria() {
         return listTipoProveeduria;
     }
 
-    public void setListTipoProveeduria(List<ProductosTiposProveeduria> listTipoProveeduria) {
+    public void setListTipoProveeduria(List<ProductosTiposProveeduriaDto> listTipoProveeduria) {
         this.listTipoProveeduria = listTipoProveeduria;
     }
 
-    public ProductosMarcas getNuevaMarca() {
+    public ProductosMarcasDto getNuevaMarca() {
         return nuevaMarca;
     }
 
-    public void setNuevaMarca(ProductosMarcas nuevaMarca) {
+    public void setNuevaMarca(ProductosMarcasDto nuevaMarca) {
         this.nuevaMarca = nuevaMarca;
     }
 
-    public List<ProductosTiposPorcentajes> getTiposPorcentajesList() {
+    public List<ProductosTiposPorcentajesDto> getTiposPorcentajesList() {
         return tiposPorcentajesList;
     }
 
-    public void setTiposPorcentajesList(List<ProductosTiposPorcentajes> tiposPorcentajesList) {
+    public void setTiposPorcentajesList(List<ProductosTiposPorcentajesDto> tiposPorcentajesList) {
         this.tiposPorcentajesList = tiposPorcentajesList;
     }
 
-    public List<ProductosListasPrecios> getListasPrecios() {
+    public List<ProductosListasPreciosDto> getListasPrecios() {
         return listasPrecios;
     }
 
-    public void setListasPrecios(List<ProductosListasPrecios> listasPrecios) {
+    public void setListasPrecios(List<ProductosListasPreciosDto> listasPrecios) {
         this.listasPrecios = listasPrecios;
     }
 
-    public ProductosListasPrecios getListaSeleccionada() {
+    public ProductosListasPreciosDto getListaSeleccionada() {
         return listaSeleccionada;
     }
 
-    public void setListaSeleccionada(ProductosListasPrecios listaSeleccionada) {
+    public void setListaSeleccionada(ProductosListasPreciosDto listaSeleccionada) {
         this.listaSeleccionada = listaSeleccionada;
     }
 
-    public ProductosTiposPorcentajes getTipoPorcentajeSeleccionado() {
+    public ProductosTiposPorcentajesDto getTipoPorcentajeSeleccionado() {
         return tipoPorcentajeSeleccionado;
     }
 
-    public void setTipoPorcentajeSeleccionado(ProductosTiposPorcentajes tipoPorcentajeSeleccionado) {
+    public void setTipoPorcentajeSeleccionado(ProductosTiposPorcentajesDto tipoPorcentajeSeleccionado) {
         this.tipoPorcentajeSeleccionado = tipoPorcentajeSeleccionado;
     }
 
-    public List<ProductoXDeposito> getStockPorDeposito() {
+    public List<ProductoXDepositoDto> getStockPorDeposito() {
         if (stockXDepo == null) {
-            if (productoActual == null) {
-                stockXDepo = new ArrayList<>();
-            } else if (productoActual.getId() == null) {
-                stockXDepo = new ArrayList<>();
+            if (productoActual == null || productoActual.getId() == null) {
+                stockXDepo = Collections.emptyList();
             }
             ProductoXDepositoSearchFilter sf = new ProductoXDepositoSearchFilter();
-            sf.setIdProducto(productoActual);
+            sf.setIdProducto(productoActual.getId());
             stockXDepo = prodXDepoFacade.findAllBySearchFilter(sf);
         }
         return stockXDepo;

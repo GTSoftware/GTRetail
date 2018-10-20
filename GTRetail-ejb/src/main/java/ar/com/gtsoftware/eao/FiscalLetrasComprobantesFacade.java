@@ -17,7 +17,9 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
 import ar.com.gtsoftware.model.FiscalLetrasComprobantes_;
+import ar.com.gtsoftware.model.FiscalResponsabilidadesIva_;
 import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -48,12 +49,12 @@ public class FiscalLetrasComprobantesFacade extends AbstractFacade<FiscalLetrasC
     public Predicate createWhereFromSearchFilter(FiscalLetrasComprobantesSearchFilter lsf, CriteriaBuilder cb, Root<FiscalLetrasComprobantes> root) {
 
         Predicate p = null;
-        if (lsf.getIvaEmisor() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaEmisor), lsf.getIvaEmisor());
+        if (lsf.getIdRespIvaEmisor() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaEmisor).get(FiscalResponsabilidadesIva_.id), lsf.getIdRespIvaEmisor());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (lsf.getIvaReceptor() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaReceptor), lsf.getIvaReceptor());
+        if (lsf.getIdRespIvaReceptor() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLetrasComprobantes_.idResponsabilidadIvaReceptor).get(FiscalResponsabilidadesIva_.id), lsf.getIdRespIvaReceptor());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

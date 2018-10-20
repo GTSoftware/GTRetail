@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,65 +16,28 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.bl.impl.VentasBean;
-import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
-import ar.com.gtsoftware.eao.FiscalLetrasComprobantesFacade;
-import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
-import ar.com.gtsoftware.eao.NegocioCondicionesOperacionesFacade;
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.eao.NegocioPlanesPagoDetalleFacade;
-import ar.com.gtsoftware.eao.NegocioPlanesPagoFacade;
-import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
-import ar.com.gtsoftware.eao.ParametrosFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
-import ar.com.gtsoftware.eao.ProductosPreciosFacade;
-import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.ComprobantesEstados;
-import ar.com.gtsoftware.model.ComprobantesLineas;
-import ar.com.gtsoftware.model.ComprobantesPagos;
-import ar.com.gtsoftware.model.FiscalLetrasComprobantes;
-import ar.com.gtsoftware.model.NegocioCondicionesOperaciones;
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.model.NegocioPlanesPago;
-import ar.com.gtsoftware.model.NegocioPlanesPagoDetalle;
-import ar.com.gtsoftware.model.NegocioTiposComprobante;
-import ar.com.gtsoftware.model.Parametros;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
-import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.RemitoDetalle;
-import ar.com.gtsoftware.model.RemitoRecepcion;
-import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
-import ar.com.gtsoftware.search.FormasPagoSearchFilter;
-import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
-import ar.com.gtsoftware.search.PlanesPagoDetalleSearchFilter;
-import ar.com.gtsoftware.search.PlanesPagoSearchFilter;
-import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
-import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ar.com.gtsoftware.bl.*;
+import ar.com.gtsoftware.dto.RegistroVentaDto;
+import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.search.*;
+import org.apache.commons.lang.StringUtils;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.util.CollectionUtils;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * MB para manejar el carrito de compras
@@ -87,85 +50,59 @@ public class ShopCartBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ShopCartBean.class.getName());
-
-    @Inject
-    private Conversation conversation;
-
-    @Inject
-    private AuthBackingBean authBackingBean;
-    @EJB
-    private ProductosFacade productosFacade;
-
-    @EJB
-    private ProductosPreciosFacade preciosFacade;
-    @EJB
-    private ParametrosFacade parametrosFacade;
-    @EJB
-    private ProductosListasPreciosFacade listasPreciosFacade;
-    @EJB
-    private PersonasFacade personasFacade;
-    @EJB
-    private NegocioCondicionesOperacionesFacade condicionesOperacionesFacade;
-    @EJB
-    private NegocioFormasPagoFacade formasPagoFacade;
-    @EJB
-    private ComprobantesEstadosFacade estadosFacade;
-    @EJB
-    private NegocioTiposComprobanteFacade tiposComprobanteFacade;
-    @EJB
-    private VentasBean ventasBean;
-    @EJB
-    private FiscalLetrasComprobantesFacade letrasComprobantesFacade;
-    @EJB
-    private FiscalResponsabilidadesIvaFacade responsabilidadesIvaFacade;
-    @EJB
-    private NegocioPlanesPagoFacade planesPagoFacade;
-    @EJB
-    private NegocioPlanesPagoDetalleFacade pagoDetalleFacade;
-    @EJB
-    private JSFUtil jsfUtil;
-    @EJB
-    private RemitoTipoMovimientoFacade tipoMovimientoFacade;
-    @EJB
-    private RemitoFacade remitoFacade;
-
-    private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, Boolean.TRUE,
-            Boolean.TRUE);
-
-    private final NegocioTiposComprobanteSearchFilter tipoCompSf = new NegocioTiposComprobanteSearchFilter(Boolean.TRUE);
-
-    private final PlanesPagoSearchFilter planesSearchFilter = new PlanesPagoSearchFilter(Boolean.TRUE);
-
-    private final PlanesPagoDetalleSearchFilter pagoDetalleSearchFilter = new PlanesPagoDetalleSearchFilter(Boolean.TRUE);
-
-    private ComprobantesPagos pagoActual = new ComprobantesPagos();
-
-    private BigDecimal cantidad = BigDecimal.ONE;
-
-    private Comprobantes venta;
-
-    private Productos productoBusquedaSeleccionado = null;
-
-    private boolean ventaModificada = false;
-
-    private ProductosListasPrecios lista;
-
     private static final String ID_LISTA_PARAM = "venta.pos.id_lista";
     private static final String CANT_DECIMALES_REDONDEO_PARAM = "venta.pos.redondear.cant_decimales";
     private static final String ID_PRODUCTO_REDONDEO_PARAM = "venta.pos.redondeo.id_producto";
     private static final String ID_CLIENTE_DEFECTO_PARAM = "venta.pos.id_cliente.defecto";
     private static final String ID_CONDICION_DEFECTO_PARAM = "venta.pos.id_condicion.defecto";
     private static final String ID_FORMA_PAGO_DEFECTO_PARAM = "venta.pos.id_forma_pago.defecto";
-    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(true, null);
 
-    private Productos productoRedondeo;
-
-    private NegocioFormasPago formaPagoDefecto = null;
-
-    private int cantDeccimalesRedondeo = 0;
-    private int redondeoIndex = 0;
-
+    private final ProductosSearchFilter productosFilter = ProductosSearchFilter.builder()
+            .activo(true)
+            .puedeVenderse(true)
+            .conStock(true).build();
+    private final NegocioTiposComprobanteSearchFilter tipoCompSf = NegocioTiposComprobanteSearchFilter.builder()
+            .activo(true).build();
+    private final PlanesPagoSearchFilter planesSearchFilter = PlanesPagoSearchFilter.builder().activo(true).build();
+    private final PlanesPagoDetalleSearchFilter pagoDetalleSearchFilter = PlanesPagoDetalleSearchFilter.builder().activo(true).build();
+    private final FormasPagoSearchFilter formasPagoSearchFilter = FormasPagoSearchFilter.builder()
+            .disponibleVenta(true).build();
     private final AtomicInteger itemCounter = new AtomicInteger(1);
+    @Inject
+    private Conversation conversation;
+    @Inject
+    private AuthBackingBean authBackingBean;
+    @EJB
+    private ProductosService productosFacade;
+    @EJB
+    private ParametrosService parametrosFacade;
+    @EJB
+    private ProductosListasPreciosService listasPreciosFacade;
+    @EJB
+    private PersonasService personasFacade;
+    @EJB
+    private NegocioCondicionesOperacionesService condicionesOperacionesFacade;
+    @EJB
+    private NegocioFormasPagoService formasPagoFacade;
+
+    @EJB
+    private NegocioTiposComprobanteService tiposComprobanteFacade;
+
+    @EJB
+    private NegocioPlanesPagoService planesPagoFacade;
+    @EJB
+    private NegocioPlanesPagoDetalleService pagoDetalleFacade;
+    @EJB
+    private VentasService ventasService;
+    private ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
+    private BigDecimal cantidad = BigDecimal.ONE;
+    private ComprobantesDto venta;
+    private ProductosDto productoBusquedaSeleccionado = null;
+    private ProductosListasPreciosDto lista;
+    private ProductosDto productoRedondeo;
+    private NegocioFormasPagoDto formaPagoDefecto = null;
+    private int cantDecimalesRedondeo = 0;
+    private int redondeoIndex = 0;
 
     /**
      * Creates a new instance of ShopCartBean
@@ -177,22 +114,24 @@ public class ShopCartBean implements Serializable {
      * Inicializa la conversación
      */
     public void initConversation() {
-        if (!jsfUtil.isPostback() && conversation.isTransient()) {
+        if (!isPostback() && conversation.isTransient()) {
             conversation.begin();
-            venta = new Comprobantes();
+            venta = new ComprobantesDto();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             venta.setFechaComprobante(new Date());
             venta.setTotal(BigDecimal.ZERO);
             venta.setPagosList(new ArrayList<>());
-            Parametros listaParam = parametrosFacade.find(ID_LISTA_PARAM);
-            Parametros cantDecimalesParam = parametrosFacade.find(CANT_DECIMALES_REDONDEO_PARAM);
-            Parametros idProdRedondeoParam = parametrosFacade.find(ID_PRODUCTO_REDONDEO_PARAM);
-            Parametros idClienteParam = parametrosFacade.find(ID_CLIENTE_DEFECTO_PARAM);
-            Parametros idCondicionParam = parametrosFacade.find(ID_CONDICION_DEFECTO_PARAM);
-            Parametros idFormaPagoParam = parametrosFacade.find(ID_FORMA_PAGO_DEFECTO_PARAM);
+
+            ParametrosDto listaParam = parametrosFacade.findParametroByName(ID_LISTA_PARAM);
+            ParametrosDto cantDecimalesParam = parametrosFacade.findParametroByName(CANT_DECIMALES_REDONDEO_PARAM);
+            ParametrosDto idProdRedondeoParam = parametrosFacade.findParametroByName(ID_PRODUCTO_REDONDEO_PARAM);
+            ParametrosDto idClienteParam = parametrosFacade.findParametroByName(ID_CLIENTE_DEFECTO_PARAM);
+            ParametrosDto idCondicionParam = parametrosFacade.findParametroByName(ID_CONDICION_DEFECTO_PARAM);
+            ParametrosDto idFormaPagoParam = parametrosFacade.findParametroByName(ID_FORMA_PAGO_DEFECTO_PARAM);
+
             lista = listasPreciosFacade.find(Long.parseLong(listaParam.getValorParametro()));
-            cantDeccimalesRedondeo = cantDecimalesParam == null ? 2 : Integer.parseInt(cantDecimalesParam.getValorParametro());
+            cantDecimalesRedondeo = cantDecimalesParam == null ? 2 : Integer.parseInt(cantDecimalesParam.getValorParametro());
             productoRedondeo = idProdRedondeoParam == null ? null : productosFacade.find(Long.parseLong(idProdRedondeoParam.getValorParametro()));
             venta.setIdPersona(personasFacade.find(Long.parseLong(idClienteParam.getValorParametro())));
             venta.setIdCondicionComprobante(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
@@ -218,7 +157,7 @@ public class ShopCartBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
+        for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
             if (vl.getItem() == item) {
                 index = cont;
                 break;
@@ -235,7 +174,7 @@ public class ShopCartBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (ComprobantesPagos vp : venta.getPagosList()) {
+        for (ComprobantesPagosDto vp : venta.getPagosList()) {
             if (vp.getItem() == item) {
                 index = cont;
                 break;
@@ -243,7 +182,7 @@ public class ShopCartBean implements Serializable {
             cont++;
         }
         if (index >= 0) {
-            ComprobantesPagos pago = venta.getPagosList().get(index);
+            ComprobantesPagosDto pago = venta.getPagosList().get(index);
             if (pago.getProductoRecargoItem() > 0) {
                 removeFromCart(pago.getProductoRecargoItem());
             }
@@ -253,7 +192,7 @@ public class ShopCartBean implements Serializable {
     }
 
     public void initPagos() {
-        if (!jsfUtil.isPostback()) {
+        if (!isPostback()) {
             if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
                 pagoActual.setMontoPagado(BigDecimal.ZERO);
@@ -266,51 +205,54 @@ public class ShopCartBean implements Serializable {
 
     public void addToCart() {
 
-        Productos producto;
+        ProductosDto producto;
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
             if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio())) {
                 return;
             }
+            productosFilter.setIdListaPrecio(lista.getId());
             producto = productosFacade.findFirstBySearchFilter(productosFilter);
         }
 
         if (producto == null) {
-            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
+            addErrorMessage(getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
-        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
-        if (precio == null) {
-            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoSinPrecio"));
+//        ProductosPreciosDto precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
+//        if (precio == null) {
+//            addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
+//            return;
+//        }
+        if (producto.getPrecioVenta() == null) {
+            addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
             return;
         }
-
-        venta.addLineaVenta(crearLinea(producto, precio));
+        venta.addLineaVenta(crearLinea(producto));
         calcularTotal();
 
         cantidad = BigDecimal.ONE;
         productosFilter.setCodigoPropio(null);
         productosFilter.setIdProducto(null);
 
-        ventaModificada = true;
         productoBusquedaSeleccionado = null;
     }
 
-    private ComprobantesLineas crearLinea(Productos prod, ProductosPrecios precio) {
-        ComprobantesLineas linea = new ComprobantesLineas();
+    private ComprobantesLineasDto crearLinea(ProductosDto prod) {
+        ComprobantesLineasDto linea = new ComprobantesLineasDto();
         linea.setIdComprobante(venta);
         linea.setCantidad(cantidad);
         linea.setDescripcion(prod.getDescripcion());
         linea.setIdProducto(prod);
         linea.setCantidadEntregada(BigDecimal.ZERO);
-        if (!prod.getIdTipoProveeduria().getControlStock()) {
+        if (!prod.getIdTipoProveeduria().isControlStock()) {
             linea.setCantidadEntregada(linea.getCantidad());
         }
         linea.setCostoBrutoUnitario(prod.getCostoAdquisicionNeto());
         linea.setCostoNetoUnitario(prod.getCostoFinal());
-        linea.setPrecioUnitario(precio.getPrecio());
-        linea.setSubTotal(cantidad.multiply(precio.getPrecio()));
+        linea.setPrecioUnitario(prod.getPrecioVenta());
+        linea.setSubTotal(cantidad.multiply(linea.getIdProducto().getPrecioVenta()));
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
@@ -318,15 +260,15 @@ public class ShopCartBean implements Serializable {
     public void calcularTotal() {
         BigDecimal total = BigDecimal.ZERO;
         eliminarRedondeo();
-        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
+        for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
 
             vl.setSubTotal(vl.getCantidad().multiply(vl.getPrecioUnitario()));
             total = total.add(vl.getSubTotal());
 
         }
 
-        BigDecimal totalRedondeado = total.setScale(cantDeccimalesRedondeo, RoundingMode.HALF_UP);
-        BigDecimal redondeo = totalRedondeado.subtract(total).setScale(cantDeccimalesRedondeo, RoundingMode.HALF_UP);
+        BigDecimal totalRedondeado = total.setScale(cantDecimalesRedondeo, RoundingMode.HALF_UP);
+        BigDecimal redondeo = totalRedondeado.subtract(total).setScale(cantDecimalesRedondeo, RoundingMode.HALF_UP);
         if (redondeo.signum() > 0 && productoRedondeo != null) {
             cargarRedondeo(redondeo);
         }
@@ -335,7 +277,7 @@ public class ShopCartBean implements Serializable {
     }
 
     private void cargarRedondeo(BigDecimal redondeo) {
-        ComprobantesLineas lineaRedondeo = crearLineaRedondeo(redondeo);
+        ComprobantesLineasDto lineaRedondeo = crearLineaRedondeo(redondeo);
         redondeoIndex = lineaRedondeo.getItem();
         venta.addLineaVenta(lineaRedondeo);
 
@@ -345,7 +287,7 @@ public class ShopCartBean implements Serializable {
         if (redondeoIndex > 0) {
             int cont = 0;
             int index = -1;
-            for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
+            for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
                 if (vl.getItem().equals(redondeoIndex)) {
                     index = cont;
                     break;
@@ -359,8 +301,8 @@ public class ShopCartBean implements Serializable {
         }
     }
 
-    private ComprobantesLineas crearLineaRedondeo(BigDecimal redondeo) {
-        ComprobantesLineas linea = new ComprobantesLineas();
+    private ComprobantesLineasDto crearLineaRedondeo(BigDecimal redondeo) {
+        ComprobantesLineasDto linea = new ComprobantesLineasDto();
         linea.setIdComprobante(venta);
         linea.setCantidad(BigDecimal.ONE);
         linea.setDescripcion(productoRedondeo.getDescripcion());
@@ -374,8 +316,8 @@ public class ShopCartBean implements Serializable {
         return linea;
     }
 
-    private ComprobantesLineas crearLineaRecargo(BigDecimal recargo, NegocioPlanesPagoDetalle detallePlan) {
-        ComprobantesLineas linea = new ComprobantesLineas();
+    private ComprobantesLineasDto crearLineaRecargo(BigDecimal recargo, NegocioPlanesPagoDetalleDto detallePlan) {
+        ComprobantesLineasDto linea = new ComprobantesLineasDto();
         linea.setIdComprobante(venta);
         linea.setCantidad(BigDecimal.ONE);
         linea.setDescripcion(String.format("COSTO FINANCIERO POR %s EN: %s CUOTAS", detallePlan.getIdPlan().getNombre(),
@@ -394,18 +336,18 @@ public class ShopCartBean implements Serializable {
         if (pagoActual.getIdFormaPago() != null) {
             if (pagoActual.getMontoPago().signum() <= 0
                     || pagoActual.getMontoPago().compareTo(venta.getSaldo()) > 0) {
-                jsfUtil.addErrorMessage("El monto del pago supera el saldo!");
+                addErrorMessage("El monto del pago supera el saldo!");
 
             } else {
 
-                if (pagoActual.getIdFormaPago().getRequierePlan()) {
+                if (pagoActual.getIdFormaPago().isRequierePlan()) {
                     //Calcular el recargo por el pago
                     //Agregar el producto de recargo
                     //Resguardar el item
                     //Agregar el pago recargado
                     BigDecimal recargo = pagoActual.getMontoPago().multiply(pagoActual.getIdDetallePlan().getCoeficienteInteres()).subtract(pagoActual.getMontoPago()).setScale(2, RoundingMode.HALF_UP);
 
-                    ComprobantesLineas lineaRecargo = crearLineaRecargo(recargo, pagoActual.getIdDetallePlan());
+                    ComprobantesLineasDto lineaRecargo = crearLineaRecargo(recargo, pagoActual.getIdDetallePlan());
                     venta.getComprobantesLineasList().add(lineaRecargo);
                     pagoActual.setProductoRecargoItem(lineaRecargo.getItem());
                     pagoActual.setMontoPago(pagoActual.getMontoPago().multiply(pagoActual.getIdDetallePlan().getCoeficienteInteres()).setScale(2, RoundingMode.HALF_UP));
@@ -416,7 +358,7 @@ public class ShopCartBean implements Serializable {
                 pagoActual.setItem(itemCounter.getAndIncrement());
                 pagoActual.setIdComprobante(venta);
                 venta.getPagosList().add(pagoActual);
-                pagoActual = new ComprobantesPagos();
+                pagoActual = new ComprobantesPagosDto();
                 pagoActual.setMontoPago(BigDecimal.ZERO);
                 pagoActual.setMontoPagado(BigDecimal.ZERO);
             }
@@ -427,7 +369,7 @@ public class ShopCartBean implements Serializable {
     private void calcularTotalPagado() {
         venta.setSaldo(venta.getTotal());
         BigDecimal sumaPagos = BigDecimal.ZERO;
-        for (ComprobantesPagos p : venta.getPagosList()) {
+        for (ComprobantesPagosDto p : venta.getPagosList()) {
             sumaPagos = sumaPagos.add(p.getMontoPago());
         }
         venta.setSaldo(venta.getTotal().subtract(sumaPagos));
@@ -436,25 +378,25 @@ public class ShopCartBean implements Serializable {
 
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
-            jsfUtil.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
+            addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
             return false;
         }
         if (venta.getIdPersona() == null) {
-            jsfUtil.addErrorMessage("Por favor cargue un cliente para poder continuar.");
+            addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
         if (venta.getTotal().signum() <= 0) {
-            jsfUtil.addErrorMessage("El total del comprobante debe ser mayor que cero.");
+            addErrorMessage("El total del comprobante debe ser mayor que cero.");
             return false;
         }
         if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
-            jsfUtil.addErrorMessage("Por favor cargue productos para poder continuar.");
+            addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
         if (venta.getIdCondicionComprobante() != null) {
-            if (venta.getIdCondicionComprobante().getPagoTotal()) {
+            if (venta.getIdCondicionComprobante().isPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
-                    jsfUtil.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
+                    addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
                 }
             }
@@ -463,94 +405,28 @@ public class ShopCartBean implements Serializable {
         return true;
     }
 
-    private void establecerLetraComprobante() {
-        FiscalLetrasComprobantesSearchFilter lsf = new FiscalLetrasComprobantesSearchFilter(
-                venta.getIdPersona().getIdResponsabilidadIva(),
-                responsabilidadesIvaFacade.find(2L));
-        FiscalLetrasComprobantes letra = letrasComprobantesFacade.findFirstBySearchFilter(lsf);
-        venta.setLetra(letra.getLetraComprobante());
-    }
 
     public String guardarVenta() {
         if (validarVenta()) {
-            establecerLetraComprobante();
-            venta.setFechaComprobante(new Date());
+
+
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
             try {
 
-                venta.setSaldo(venta.getTotal());
-                ventasBean.guardarVenta(venta);
-                generarRemitoEntrega(venta);
 
-                jsfUtil.addInfoMessage("Operación guardada exitosamente!");
+                RegistroVentaDto registroVentaDto = ventasService.guardarVenta(venta, true);
+
+                addInfoMessage("Operación: " + registroVentaDto.getIdComprobante()
+                        + " guardada exitosamente");
                 endConversation();
                 return "/protected/ventas/index?faces-redirect=true";
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
-                jsfUtil.addErrorMessage(ex.getMessage());
+                addErrorMessage(ex.getMessage());
             }
         }
         return null;
-    }
-
-    /**
-     * Genera el remito de egreso/ingreso según corresponda por la totalidad de los ítems del comprobante
-     *
-     * @param remitoDetalle
-     */
-    private void generarRemitoEntrega(Comprobantes venta) {
-        Remito rem = new Remito();
-        List<RemitoDetalle> remitoDetalle = new ArrayList<>();
-        for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
-
-            Productos product = vl.getIdProducto();
-            if (product.getIdTipoProveeduria().getControlStock()) {
-                int nroLineaRem = 0;
-                //Armo las lineas de remitos
-                RemitoDetalle rd = new RemitoDetalle();
-                rd.setCantidad(vl.getCantidad());
-                rd.setIdProducto(product);
-                rd.setNroLinea(nroLineaRem++);
-                rd.setRemitoCabecera(rem);
-
-                remitoDetalle.add(rd);
-            }
-        }
-        if (CollectionUtils.isEmpty(remitoDetalle)) {
-            return;
-        }
-
-        rem.setDetalleList(remitoDetalle);
-        rem.setFechaAlta(venta.getFechaComprobante());
-        rem.setFechaCierre(venta.getFechaComprobante());
-        RemitoRecepcion recepcion = new RemitoRecepcion();
-        recepcion.setFecha(venta.getFechaComprobante());
-        recepcion.setRemito(rem);
-        recepcion.setIdUsuario(venta.getIdUsuario());
-
-        //Verifico el origen y destino del remito a generar
-        if (venta.getTipoComprobante().getSigno().signum() > 0) {
-            rem.setIsDestinoInterno(false);
-            rem.setIsOrigenInterno(true);
-            rem.setIdDestinoPrevistoExterno(venta.getIdPersona());
-            //Tomo el primer depósito por defecto, esto debería venir de la UI
-            rem.setIdOrigenInterno(venta.getIdSucursal().getDepositosList().get(0));
-            recepcion.setIdPersona(venta.getIdPersona());
-        } else {
-            rem.setIsDestinoInterno(true);
-            rem.setIsOrigenInterno(false);
-            rem.setIdOrigenExterno(venta.getIdPersona());
-            //Tomo el primer depósito por defecto, esto debería venir de la UI
-            rem.setIdDestinoPrevistoInterno(venta.getIdSucursal().getDepositosList().get(0));
-            recepcion.setIdDeposito(rem.getIdDestinoPrevistoInterno());
-        }
-        rem.setObservaciones(String.format("Remito generado automáticamente por comprobante nro: %d", venta.getId()));
-        //TODO: Seteado en Venta por defecto pero debería ir el que corresponda.
-        rem.setRemitoTipoMovimiento(tipoMovimientoFacade.find(2L));
-        rem.setRemitoRecepcionesList(Arrays.asList(recepcion));
-        rem.setIdUsuario(venta.getIdUsuario());
-        remitoFacade.createOrEdit(rem);
     }
 
     public BigDecimal getCantidad() {
@@ -565,55 +441,52 @@ public class ShopCartBean implements Serializable {
         return productosFilter;
     }
 
-    public Comprobantes getVenta() {
+    public ComprobantesDto getVenta() {
         return venta;
     }
 
-    public Productos getProductoBusquedaSeleccionado() {
+    public ProductosDto getProductoBusquedaSeleccionado() {
         return productoBusquedaSeleccionado;
     }
 
-    public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
+    public void setProductoBusquedaSeleccionado(ProductosDto productoBusquedaSeleccionado) {
         this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
     }
 
-    public List<NegocioCondicionesOperaciones> getCondicionesVentaList() {
+    public List<NegocioCondicionesOperacionesDto> getCondicionesVentaList() {
         return condicionesOperacionesFacade.findAll();
     }
 
-    public List<NegocioTiposComprobante> getTiposComprobanteList() {
+    public List<NegocioTiposComprobanteDto> getTiposComprobanteList() {
 
         return tiposComprobanteFacade.findAllBySearchFilter(tipoCompSf);
     }
 
-    public List<NegocioFormasPago> getFormasPagoList() {
+    public List<NegocioFormasPagoDto> getFormasPagoList() {
         return formasPagoFacade.findAllBySearchFilter(formasPagoSearchFilter);
     }
 
-    public List<ComprobantesEstados> getVentasEstados() {
-        return estadosFacade.findAll();
-    }
 
-    public ComprobantesPagos getPagoActual() {
+    public ComprobantesPagosDto getPagoActual() {
         return pagoActual;
     }
 
-    public void setPagoActual(ComprobantesPagos pagoActual) {
+    public void setPagoActual(ComprobantesPagosDto pagoActual) {
         this.pagoActual = pagoActual;
     }
 
-    public ProductosListasPrecios getLista() {
+    public ProductosListasPreciosDto getLista() {
         return lista;
     }
 
-    public List<NegocioPlanesPago> getPlanesPagoList() {
-        planesSearchFilter.setIdFormaPago(pagoActual.getIdFormaPago());
+    public List<NegocioPlanesPagoDto> getPlanesPagoList() {
+        planesSearchFilter.setIdFormaPago(pagoActual.getIdFormaPago().getId());
         return planesPagoFacade.findAllBySearchFilter(planesSearchFilter);
     }
 
-    public List<NegocioPlanesPagoDetalle> getDetallePlan() {
-        pagoDetalleSearchFilter.setIdPlan(pagoActual.getIdPlan());
-        pagoDetalleSearchFilter.addSortField(new SortField("cuotas", true));
+    public List<NegocioPlanesPagoDetalleDto> getDetallePlan() {
+        pagoDetalleSearchFilter.setIdPlan(pagoActual.getIdPlan().getId());
+        pagoDetalleSearchFilter.addSortField("cuotas", true);
         return pagoDetalleFacade.findAllBySearchFilter(pagoDetalleSearchFilter);
     }
 }

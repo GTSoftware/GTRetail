@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.NegocioFormasPago;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -23,57 +23,23 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PlanesPagoSearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 1L;
 
-    private NegocioFormasPago idFormaPago;
+    private Long idFormaPago;
     private String nombre;
     private Boolean activo;
 
     @Override
     public boolean hasFilter() {
-        return StringUtils.isNotEmpty(nombre) || activo != null || idFormaPago != null;
-    }
-
-    public PlanesPagoSearchFilter() {
-    }
-
-    public PlanesPagoSearchFilter(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public PlanesPagoSearchFilter(NegocioFormasPago idFormaPago, Boolean activo) {
-        this.idFormaPago = idFormaPago;
-        this.activo = activo;
-    }
-
-    public PlanesPagoSearchFilter(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+        return StringUtils.isNotEmpty(nombre)
+                || activo != null
+                || idFormaPago != null;
     }
 
 }

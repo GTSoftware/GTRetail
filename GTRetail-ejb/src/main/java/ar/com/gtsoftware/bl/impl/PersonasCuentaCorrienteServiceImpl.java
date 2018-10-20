@@ -15,38 +15,63 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.bl.PersonasCuentaCorrienteService;
+import ar.com.gtsoftware.dto.model.PersonasCuentaCorrienteDto;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.eao.PersonasCuentaCorrienteFacade;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.mappers.GenericMapper;
+import ar.com.gtsoftware.mappers.PersonasCuentaCorrienteMapper;
+import ar.com.gtsoftware.mappers.PersonasMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
+import ar.com.gtsoftware.search.PersonasCuentaCorrienteSearchFilter;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
-@LocalBean
-public class PersonasCuentaCorrienteServiceImpl {
+public class PersonasCuentaCorrienteServiceImpl
+        extends AbstractBasicEntityService<PersonasCuentaCorrienteDto, PersonasCuentaCorrienteSearchFilter, PersonasCuentaCorriente>
+        implements PersonasCuentaCorrienteService {
 
     @EJB
     private PersonasCuentaCorrienteFacade cuentaCorrienteFacade;
 
-    public void registrarMovimientoCuenta(Personas persona, BigDecimal importe, String descripcion) {
+    @Inject
+    private PersonasCuentaCorrienteMapper mapper;
+
+    @Inject
+    private PersonasMapper personasMapper;
+
+    @Override
+    public void registrarMovimientoCuenta(PersonasDto personaDto, BigDecimal importe, String descripcion) {
         PersonasCuentaCorriente cc = new PersonasCuentaCorriente();
         cc.setDescripcionMovimiento(descripcion);
         cc.setFechaMovimiento(new Date());
         cc.setImporteMovimiento(importe);
-        cc.setIdPersona(persona);
+        cc.setIdPersona(personasMapper.dtoToEntity(personaDto, new CycleAvoidingMappingContext()));
         //cc.setIdRegistroContable(null);
         cuentaCorrienteFacade.create(cc);
     }
 
-    public BigDecimal obtenerSaldoPersona(Personas persona) {
-        return cuentaCorrienteFacade.getSaldoPersona(persona);
+    @Override
+    public BigDecimal getSaldoPersona(long idPersona) {
+        return cuentaCorrienteFacade.getSaldoPersona(idPersona);
     }
 
+    @Override
+    protected PersonasCuentaCorrienteFacade getFacade() {
+        return cuentaCorrienteFacade;
+    }
+
+    @Override
+    protected GenericMapper<PersonasCuentaCorriente, PersonasCuentaCorrienteDto> getMapper() {
+        return mapper;
+    }
 }

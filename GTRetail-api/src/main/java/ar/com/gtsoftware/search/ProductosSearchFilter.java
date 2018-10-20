@@ -15,19 +15,19 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Depositos;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
-import ar.com.gtsoftware.model.ProductosMarcas;
-import ar.com.gtsoftware.model.ProductosRubros;
-import ar.com.gtsoftware.model.ProductosSubRubros;
-import ar.com.gtsoftware.model.ProductosTiposProveeduria;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.validation.constraints.Size;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -39,20 +39,16 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private Boolean activo;
     private Boolean puedeComprarse;
     private Boolean puedeVenderse;
-    private ProductosSubRubros idSubRubro;
-    private ProductosRubros idRubro;
-    private Personas idProveedorHabitual;
-    private Depositos conStockEnDeposito;
-    private ProductosListasPrecios listaPrecio;
-    private ProductosTiposProveeduria idTipoProveeduria;
-    private ProductosMarcas idMarca;
+    private Long idSubRubro;
+    private Long idRubro;
+    private Long idProveedorHabitual;
+    private Long idConStockEnDeposito;
+    private Long idListaPrecio;
+    private Long idTipoProveeduria;
+    private Long idMarca;
     private Boolean conStock;
+    private Boolean stockDebajoMinimo;
 
-    public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse) {
-        this.activo = activo;
-        this.puedeComprarse = puedeComprarse;
-        this.puedeVenderse = puedeVenderse;
-    }
 
     public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse, Boolean soloConStock) {
         this.activo = activo;
@@ -61,127 +57,22 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
         this.conStock = soloConStock;
     }
 
-    public ProductosSearchFilter() {
-    }
-
     @Override
     public boolean hasFilter() {
-        return (txt != null && !txt.isEmpty()) || (idProducto != null) || (codigoPropio != null && !codigoPropio.isEmpty())
-                || (activo != null) || (puedeComprarse != null) || (puedeVenderse != null) || (idRubro != null) || (idSubRubro != null)
-                || (idProveedorHabitual != null) || (conStockEnDeposito != null) || (listaPrecio != null) || (idTipoProveeduria != null)
-                || (idMarca != null) || (conStock != null);
-    }
-
-    public String getTxt() {
-        return txt;
-    }
-
-    public void setTxt(String txt) {
-        this.txt = txt;
-    }
-
-    public Long getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public String getCodigoPropio() {
-        return codigoPropio;
-    }
-
-    public void setCodigoPropio(String codigoPropio) {
-        this.codigoPropio = codigoPropio;
-    }
-
-    public Boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public Boolean getPuedeComprarse() {
-        return puedeComprarse;
-    }
-
-    public void setPuedeComprarse(Boolean puedeComprarse) {
-        this.puedeComprarse = puedeComprarse;
-    }
-
-    public Boolean getPuedeVenderse() {
-        return puedeVenderse;
-    }
-
-    public void setPuedeVenderse(Boolean puedeVenderse) {
-        this.puedeVenderse = puedeVenderse;
-    }
-
-    public ProductosSubRubros getIdSubRubro() {
-        return idSubRubro;
-    }
-
-    public void setIdSubRubro(ProductosSubRubros idSubRubro) {
-        this.idSubRubro = idSubRubro;
-    }
-
-    public ProductosRubros getIdRubro() {
-        return idRubro;
-    }
-
-    public void setIdRubro(ProductosRubros idRubro) {
-        this.idRubro = idRubro;
-    }
-
-    public Personas getIdProveedorHabitual() {
-        return idProveedorHabitual;
-    }
-
-    public void setIdProveedorHabitual(Personas idProveedorHabitual) {
-        this.idProveedorHabitual = idProveedorHabitual;
-    }
-
-    public Depositos getConStockEnDeposito() {
-        return conStockEnDeposito;
-    }
-
-    public void setConStockEnDeposito(Depositos conStockenDeposito) {
-        this.conStockEnDeposito = conStockenDeposito;
-    }
-
-    public ProductosListasPrecios getListaPrecio() {
-        return listaPrecio;
-    }
-
-    public void setListaPrecio(ProductosListasPrecios listaPrecio) {
-        this.listaPrecio = listaPrecio;
-    }
-
-    public ProductosTiposProveeduria getIdTipoProveeduria() {
-        return idTipoProveeduria;
-    }
-
-    public void setIdTipoProveeduria(ProductosTiposProveeduria idTipoProveeduria) {
-        this.idTipoProveeduria = idTipoProveeduria;
-    }
-
-    public ProductosMarcas getIdMarca() {
-        return idMarca;
-    }
-
-    public void setIdMarca(ProductosMarcas idMarca) {
-        this.idMarca = idMarca;
-    }
-
-    public Boolean getConStock() {
-        return conStock;
-    }
-
-    public void setConStock(Boolean conStock) {
-        this.conStock = conStock;
+        return (StringUtils.isNotEmpty(txt)
+                || idProducto != null
+                || StringUtils.isNotEmpty(codigoPropio)
+                || activo != null || puedeComprarse != null
+                || puedeVenderse != null
+                || idRubro != null
+                || idSubRubro != null
+                || idProveedorHabitual != null
+                || idConStockEnDeposito != null
+                || idListaPrecio != null)
+                || idTipoProveeduria != null
+                || idMarca != null
+                || conStock != null
+                || stockDebajoMinimo != null;
     }
 
 }

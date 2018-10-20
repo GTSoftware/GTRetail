@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,59 +15,32 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Cajas;
+import lombok.*;
+
 import java.util.Date;
 
 /**
- * SearchFilter para Cupones
+ * SearchFilter para CuponesDto
  *
  * @author Rodrigo M. Tato Rothamel
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CuponesSearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 1L;
-
-    private Cajas caja;
+    private Long idCaja;
     private Date fechaOrigenDesde, fechaOrigenHasta;
-
-    public CuponesSearchFilter() {
-    }
 
     @Override
     public boolean hasFilter() {
-        return caja != null
+        return idCaja != null
                 || hasValidFechasOrigen();
     }
 
-    public CuponesSearchFilter(Cajas caja) {
-        this.caja = caja;
-    }
-
-    public Cajas getCaja() {
-        return caja;
-    }
-
-    public void setCaja(Cajas caja) {
-        this.caja = caja;
-    }
-
-    public Date getFechaOrigenDesde() {
-        return fechaOrigenDesde;
-    }
-
-    public void setFechaOrigenDesde(Date fechaOrigenDesde) {
-        this.fechaOrigenDesde = fechaOrigenDesde;
-    }
-
-    public Date getFechaOrigenHasta() {
-        return fechaOrigenHasta;
-    }
-
-    public void setFechaOrigenHasta(Date fechaOrigenHasta) {
-        this.fechaOrigenHasta = fechaOrigenHasta;
-    }
-
     public boolean hasValidFechasOrigen() {
-        return fechaOrigenDesde != null && fechaOrigenHasta != null;
+        return fechaOrigenDesde != null && fechaOrigenHasta != null && (fechaOrigenHasta.compareTo(fechaOrigenDesde) >= 0);
     }
 }

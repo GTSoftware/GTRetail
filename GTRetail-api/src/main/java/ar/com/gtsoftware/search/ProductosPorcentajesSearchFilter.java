@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,47 +15,27 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosTiposPorcentajes;
+import lombok.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductosPorcentajesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private Productos producto;
-    private ProductosTiposPorcentajes tipoPorcentaje;
+    private Long idProducto;
+    private Long idTipoPorcentaje;
 
     @Override
     public boolean hasFilter() {
-        return producto != null || tipoPorcentaje != null;
+        return idProducto != null || idTipoPorcentaje != null;
     }
 
-    public ProductosPorcentajesSearchFilter() {
-    }
-
-    public ProductosPorcentajesSearchFilter(Productos producto, ProductosTiposPorcentajes tipoPorcentaje) {
-        this.producto = producto;
-        this.tipoPorcentaje = tipoPorcentaje;
-    }
-
-    public Productos getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Productos producto) {
-        this.producto = producto;
-    }
-
-    public ProductosTiposPorcentajes getTipoPorcentaje() {
-        return tipoPorcentaje;
-    }
-
-    public void setTipoPorcentaje(ProductosTiposPorcentajes tipoPorcentaje) {
-        this.tipoPorcentaje = tipoPorcentaje;
-    }
 
 }

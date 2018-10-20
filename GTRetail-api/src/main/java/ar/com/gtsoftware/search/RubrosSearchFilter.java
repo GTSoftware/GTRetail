@@ -15,34 +15,27 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RubrosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
     private String nombreRubro;
 
-    public RubrosSearchFilter() {
-    }
-
-    public RubrosSearchFilter(String nombreMarca) {
-        this.nombreRubro = nombreMarca;
-    }
-
     @Override
     public boolean hasFilter() {
-        return nombreRubro != null;
-    }
-
-    public String getNombreRubro() {
-        return nombreRubro;
-    }
-
-    public void setNombreRubro(String nombreRubro) {
-        this.nombreRubro = nombreRubro;
+        return isNotEmpty(nombreRubro);
     }
 
 }

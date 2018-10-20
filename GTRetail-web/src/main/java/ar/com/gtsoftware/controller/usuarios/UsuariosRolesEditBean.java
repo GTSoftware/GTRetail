@@ -15,29 +15,27 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
-import ar.com.gtsoftware.controller.exceptions.ValidationException;
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.eao.UsuariosGruposFacade;
-import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.model.UsuariosGrupos;
+import ar.com.gtsoftware.bl.UsuariosService;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
+import ar.com.gtsoftware.dto.model.UsuariosGruposDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controlador para el caso de uso de edición de usuarios
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
- * @since 2.0.1
  * @version 1.0.0
+ * @since 2.0.1
  */
 @ManagedBean(name = "usuariosRolesEditBean")
 @ViewScoped
@@ -47,21 +45,12 @@ public class UsuariosRolesEditBean implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private UsuariosFacade usuarioFacade;
-
-    @EJB
-    private UsuariosGruposFacade rolFacade;
-
-    @EJB
-    private JSFUtil jsfUtil;
-
-    private Usuarios usuarioActual;
-
     private static final Logger LOG = Logger.getLogger(UsuariosRolesEditBean.class.getName());
-
     private static final String RESERVED_USERNAME = "admin";
+    @EJB
+    private UsuariosService usuarioFacade;
+
+    private UsuariosDto usuarioActual;
 
     /**
      * Creates a new instance of UsuariosEditBean
@@ -72,7 +61,7 @@ public class UsuariosRolesEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String logIn = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("login");
+        String logIn = JSFUtil.getRequestParameterMap().get("login");
         if (logIn == null) {
 
             LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);
@@ -87,61 +76,30 @@ public class UsuariosRolesEditBean implements Serializable {
 
     }
 
-    public Usuarios getUsuarioActual() {
+    public UsuariosDto getUsuarioActual() {
         return usuarioActual;
     }
 
-    public void setUsuarioActual(Usuarios usuarioActual) {
+    public void setUsuarioActual(UsuariosDto usuarioActual) {
         this.usuarioActual = usuarioActual;
     }
 
-    private void doGuardarUsuario() {
-        try {
-            if (usuarioActual.getLogin().equals(RESERVED_USERNAME)) {
-                throw new ValidationException("No se permite modificar el usuario reservado");
-            }
-            usuarioFacade.createOrEdit(usuarioActual);
-            jsfUtil.addInfoMessage("Usuario guardado exitosamente!");
-
-        } catch (ValidationException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            jsfUtil.addErrorMessage(String.format("Error al guardar: %s", ex.getMessage()));
-
-        }
-
+    public List<UsuariosGruposDto> getRolesDisponibles() {
+        return usuarioFacade.obtenerRolesDisponibles();
     }
 
-    public List<UsuariosGrupos> getRolesDisponibles() {
-        return rolFacade.findAll();
-    }
-
-    public List<UsuariosGrupos> getRolesUsuario() {
+    public List<UsuariosGruposDto> getRolesUsuario() {
         if (usuarioActual == null) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
-        return usuarioActual.getUsuariosGruposList();
+        return usuarioFacade.obtenerRolesUsuario(usuarioActual.getId());
     }
 
-    public void asignarRol(UsuariosGrupos rol) {
-        if (usuarioActual != null) {
-            if (usuarioActual.getUsuariosGruposList() == null) {
-                usuarioActual.setUsuariosGruposList(new ArrayList<>());
-            }
-            List<UsuariosGrupos> roles = usuarioActual.getUsuariosGruposList();
-            roles.add(rol);
-            usuarioActual.setUsuariosGruposList(roles);
-            doGuardarUsuario();
-        }
+    public void asignarRol(UsuariosGruposDto rol) {
+        usuarioFacade.agregarRol(usuarioActual.getId(), rol.getId());
     }
 
-    public void quitarRol(UsuariosGrupos rol) {
-        if (usuarioActual != null) {
-            if (usuarioActual.getUsuariosGruposList() != null) {
-                List<UsuariosGrupos> roles = usuarioActual.getUsuariosGruposList();
-                roles.remove(rol);
-                usuarioActual.setUsuariosGruposList(roles);
-                doGuardarUsuario();
-            }
-        }
+    public void quitarRol(UsuariosGruposDto rol) {
+        usuarioFacade.quitarRol(usuarioActual.getId(), rol.getId());
     }
 }

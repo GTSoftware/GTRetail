@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 package ar.com.gtsoftware.controller.parametros;
 
-import ar.com.gtsoftware.eao.ParametrosFacade;
-import ar.com.gtsoftware.model.Parametros;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import ar.com.gtsoftware.bl.ParametrosService;
+import ar.com.gtsoftware.dto.model.ParametrosDto;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "parametrosSearchBean")
@@ -35,8 +35,8 @@ public class ParametrosSearchBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private ParametrosFacade parametrosFacade;
-    private List<Parametros> parametrosList = new ArrayList<>();
+    private ParametrosService parametrosFacade;
+    private List<ParametrosDto> parametrosList = new ArrayList<>();
     private String txt;
 
     /**
@@ -45,11 +45,11 @@ public class ParametrosSearchBean implements Serializable {
     public ParametrosSearchBean() {
     }
 
-    public List<Parametros> getParametrosList() {
+    public List<ParametrosDto> getParametrosList() {
         return parametrosList;
     }
 
-    public void setParametrosList(List<Parametros> parametrosList) {
+    public void setParametrosList(List<ParametrosDto> parametrosList) {
         this.parametrosList = parametrosList;
     }
 
@@ -66,7 +66,7 @@ public class ParametrosSearchBean implements Serializable {
         this.txt = txt;
     }
 
-    public String editParametro(Parametros param) {
+    public String editParametro(ParametrosDto param) {
         return String.format("parametroEdit.xhtml?faces-redirect=true;&nombreParametro=%s", param.getNombreParametro());
     }
 }

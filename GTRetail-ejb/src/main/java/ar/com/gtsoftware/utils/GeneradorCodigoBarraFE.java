@@ -16,10 +16,10 @@
 package ar.com.gtsoftware.utils;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
+
 import java.text.SimpleDateFormat;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 public class GeneradorCodigoBarraFE {
@@ -29,7 +29,11 @@ public class GeneradorCodigoBarraFE {
     public static String calcularCodigoBarras(FiscalLibroIvaVentas registro, String cuitEmpresa) {
         StringBuilder result = new StringBuilder();
 
-        result.append(cuitEmpresa).append(registro.getCodigoTipoComprobante().getCodigoTipoComprobante()).append(registro.getPuntoVentaFactura()).append(registro.getCae()).append(AMD.format(registro.getFechaVencimientoCae()));
+        result.append(cuitEmpresa)
+                .append(registro.getCodigoTipoComprobante().getCodigoTipoComprobante())
+                .append(registro.getPuntoVentaFactura())
+                .append(registro.getCae())
+                .append(AMD.format(registro.getFechaVencimientoCae()));
         int digito = calcularDigitoVerificador(result.toString());
 
         result.append(String.valueOf(digito));

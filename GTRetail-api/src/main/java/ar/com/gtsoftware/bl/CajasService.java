@@ -15,8 +15,13 @@
  */
 package ar.com.gtsoftware.bl;
 
-import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.dto.model.CajasDto;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
+import ar.com.gtsoftware.search.CajasSearchFilter;
+
+import javax.ejb.Remote;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -24,7 +29,9 @@ import java.util.Date;
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-public interface CajasService {
+@Remote
+public interface CajasService
+        extends EntityService<CajasDto, CajasSearchFilter> {
 
     /**
      * Obtiene la caja abierta actual del usuario para la sucursal en la que se encuentre configurado. Devuelve null en
@@ -33,7 +40,7 @@ public interface CajasService {
      * @param usuario
      * @return la caja abierta del usuario.
      */
-    public Cajas obtenerCajaActual(Usuarios usuario);
+    CajasDto obtenerCajaActual(UsuariosDto usuario);
 
     /**
      * Realiza la apertura de caja en función de los saldos del último arqueo del usuario. Si la caja ya estaba abierta
@@ -42,7 +49,7 @@ public interface CajasService {
      * @param usuario
      * @return la nueva caja abierta
      */
-    public Cajas abrirCaja(Usuarios usuario);
+    CajasDto abrirCaja(UsuariosDto usuario);
 
     /**
      * Marca la caja pasada como parámetro como cerrada y devuelve true si se pudo realizar el guardado en la base de
@@ -52,6 +59,14 @@ public interface CajasService {
      * @param fechaCierre
      * @return
      */
-    public boolean cerrarCaja(Cajas caja, Date fechaCierre);
+    boolean cerrarCaja(@NotNull CajasDto caja, @NotNull Date fechaCierre);
+
+    /**
+     * Retorna el total que hay en la caja segùn el filtro. El paràmetro de idCaja en el filtro es requerido.
+     *
+     * @param csf
+     * @return
+     */
+    BigDecimal obtenerTotalEnCaja(@NotNull CajasSearchFilter csf);
 
 }

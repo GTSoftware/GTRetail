@@ -9,16 +9,16 @@
     <field name="id" class="java.lang.Long">
         <fieldDescription><![CDATA[id]]></fieldDescription>
     </field>
-    <field name="idFormaPago" class="ar.com.gtsoftware.model.NegocioFormasPago">
+    <field name="idFormaPago" class="ar.com.gtsoftware.dto.model.NegocioFormasPagoDto">
         <fieldDescription><![CDATA[idFormaPago]]></fieldDescription>
     </field>
-    <field name="idPagoComprobante" class="ar.com.gtsoftware.model.ComprobantesPagos">
+    <field name="idPagoComprobante" class="ar.com.gtsoftware.dto.model.ComprobantesPagosDto">
         <fieldDescription><![CDATA[idPagoComprobante]]></fieldDescription>
     </field>
-    <field name="idRecibo" class="ar.com.gtsoftware.model.Recibos">
+    <field name="idRecibo" class="ar.com.gtsoftware.dto.model.RecibosDto">
         <fieldDescription><![CDATA[idRecibo]]></fieldDescription>
     </field>
-    <field name="idValor" class="ar.com.gtsoftware.model.Valores">
+    <field name="idValor" class="ar.com.gtsoftware.dto.model.ValoresDto">
         <fieldDescription><![CDATA[idValor]]></fieldDescription>
     </field>
     <field name="montoPagado" class="java.math.BigDecimal">
@@ -57,7 +57,7 @@
             </textField>
             <textField>
                 <reportElement x="153" y="0" width="239" height="20" uuid="d9eaae7d-9a4f-4edb-a653-45a724eed560"/>
-                <textFieldExpression><![CDATA[$F{idPagoComprobante}.getIdComprobante().getBusinessString()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{idPagoComprobante}.getIdComprobante().toString()]]></textFieldExpression>
             </textField>
         </band>
     </detail>

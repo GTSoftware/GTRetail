@@ -38,13 +38,13 @@
                         <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
                                                  itemLabel="#{msg.soloConStock}"/>
 
-                        <p:selectOneMenu id="listaField" value="#{productosSearchBean.listaSeleccionada}"
+                        <p:selectOneMenu id="listaField" value="#{productosSearchBean.filter.idListaPrecio}"
                                          required="true" requiredMessage="#{msg.seleccionarUno}"
                                          converter="omnifaces.SelectItemsIndexConverter"
                                          >
 
                             <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
-                                           itemValue="#{lista}"/>
+                                           itemValue="#{lista.id}"/>
 
                         </p:selectOneMenu>
                         <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}" value="Buscar"
@@ -144,11 +144,11 @@
                         </p:column>
 
 
-                        <p:column sortBy="#{productosSearchBean.getPrecio(producto)}" >
+                        <p:column  >
                             <f:facet name="header">
                                 <h:outputLabel value="#{msg.precioUnitario}"/>
                             </f:facet>
-                            <h:outputLabel value="#{productosSearchBean.getPrecio(producto)}" style="font-size: medium; font-weight: bold">
+                            <h:outputLabel value="#{producto.precioVenta}" style="font-size: medium; font-weight: bold">
                                 <f:convertNumber type="currency" groupingUsed="true"
                                                  currencySymbol="$ "/>
                             </h:outputLabel>
@@ -162,11 +162,11 @@
 
                         </p:column>
 
-                        <p:column headerText="#{msg.stock} sucursal" style="text-align: right; " >
+                        <p:column headerText="#{msg.stockTotal}" style="text-align: right; " >
                             <f:facet name="header">
-                                <h:outputLabel value="#{msg.stock} sucursal"/>
+                                <h:outputLabel value="#{msg.stockTotal}"/>
                             </f:facet>
-                            <h:outputText value="#{productosSearchBean.getStockSucursal(producto)}" >
+                            <h:outputText value="#{producto.stockActual}" >
                                 <f:convertNumber groupingUsed="true" type="number"/>
                             </h:outputText>
                         </p:column>

@@ -16,73 +16,53 @@
 package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.ProductosListasPreciosService;
+import ar.com.gtsoftware.bl.ProductosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ProductoXDepositoFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
-import ar.com.gtsoftware.eao.ProductosPreciosFacade;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
-import ar.com.gtsoftware.model.ProductosPrecios;
-import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
+import ar.com.gtsoftware.dto.model.ProductosDto;
+import ar.com.gtsoftware.dto.model.ProductosListasPreciosDto;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
-import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.Application;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "productosSearchBean")
 @ViewScoped
-public class ProductosSearchBean extends AbstractSearchBean<Productos, ProductosSearchFilter> {
+public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, ProductosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
+    private final ProductosSearchFilter filter = ProductosSearchFilter.builder()
+            .activo(true).build();
     @EJB
-    private JSFUtil jsfUtil;
-
+    private ProductosService service;
     @EJB
-    private ProductosFacade facade;
-    @EJB
-    private ProductosListasPreciosFacade listasPreciosFacade;
-    @EJB
-    private ProductosPreciosFacade preciosFacade;
-    @EJB
-    private ProductoXDepositoFacade stockFacade;
+    private ProductosListasPreciosService listasPreciosService;
 
-    private ProductosListasPrecios listaSeleccionada;
-
-    private ProductosPreciosSearchFilter preciosSF;
-
-    private List<ProductosListasPrecios> listasPrecio;
-
+    private ProductosListasPreciosDto listaSeleccionada;
+    private List<ProductosListasPreciosDto> listasPrecio;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-    /**
-     * Por defecto creamos un filtro para productos a la venta activos
-     */
-    private final ProductosSearchFilter filter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -90,25 +70,24 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
     public ProductosSearchBean() {
     }
 
-    public List<Productos> autocompleteProductos(String query) {
+    public List<ProductosDto> autocompleteProductos(String query) {
         filter.setTxt(query);
-        return facade.findBySearchFilter(filter, 0, 5);
+        return service.findBySearchFilter(filter, 0, 5);
     }
 
-    public List<ProductosListasPrecios> getListasPrecio() {
+    public List<ProductosListasPreciosDto> getListasPrecio() {
         if (listasPrecio == null) {
             ProductosListasPreciosSearchFilter sf = new ProductosListasPreciosSearchFilter();
             sf.setActiva(true);
-            sf.addSortField(new SortField("id", true));
-            listasPrecio = listasPreciosFacade.findAllBySearchFilter(sf);
+            sf.addSortField("id", true);
+            listasPrecio = listasPreciosService.findAllBySearchFilter(sf);
         }
         return listasPrecio;
     }
 
-    public void imprimirEtiqueta(Productos prod) throws JRException, IOException {
-        List<Productos> productos = new ArrayList<>();
+    public void imprimirEtiqueta(ProductosDto prod) throws JRException, IOException {
+        List<ProductosDto> productos = Collections.singletonList(prod);
 
-        productos.add(prod);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(productos);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/productoEtiqueta.jasper");
 
@@ -123,45 +102,55 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
         FacesContext.getCurrentInstance().responseComplete();
     }
 
-    public void setParametros(ProductosListasPrecios lista, Boolean soloConStock, Boolean puedeVenderse, Boolean puedeComprarse) {
-        if (jsfUtil.isPostback()) {
-            return;
-        }
-        listaSeleccionada = lista;
-        filter.setConStock(soloConStock);
-        filter.setPuedeVenderse(puedeVenderse);
-        filter.setPuedeComprarse(puedeComprarse);
+    @PostConstruct
+    private void initParamsFromComposite() {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Application app = FacesContext.getCurrentInstance().getApplication();
+        listaSeleccionada = app.evaluateExpressionGet(fc,
+                "#{cc.attrs.listaPrecios}", ProductosListasPreciosDto.class);
+
+
+        filter.setConStock(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.soloConStock}", Boolean.class));
+        filter.setPuedeVenderse(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.puedeVenderse}", Boolean.class));
+        filter.setPuedeComprarse(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.puedeComprarse}", Boolean.class));
+        filter.setIdProveedorHabitual(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.proveedor}", Long.class));
+
     }
 
-    public ProductosListasPrecios getListaSeleccionada() {
+    public ProductosListasPreciosDto getListaSeleccionada() {
         return listaSeleccionada;
     }
 
-    public void setListaSeleccionada(ProductosListasPrecios listaSeleccionada) {
+    public void setListaSeleccionada(ProductosListasPreciosDto listaSeleccionada) {
         this.listaSeleccionada = listaSeleccionada;
     }
-
-    public BigDecimal getPrecio(Productos producto) {
-        if (preciosSF == null) {
-            preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
-        }
-        preciosSF.setProducto(producto);
-        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(preciosSF);
-        if (precio == null) {
-            return null;
-        }
-        return precio.getPrecio();
-    }
+//
+//    public BigDecimal getPrecio(ProductosDto producto) {
+//        if (preciosSF == null) {
+//            preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
+//        }
+//        preciosSF.setProducto(producto);
+//        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(preciosSF);
+//        if (precio == null) {
+//            return null;
+//        }
+//        return precio.getPrecio();
+//    }
 
     @Override
-    protected AbstractFacade<Productos, ProductosSearchFilter> getFacade() {
-        return facade;
+    protected ProductosService getService() {
+        return service;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("descripcion", true));
+            filter.addSortField("descripcion", true);
         }
         if (listaSeleccionada == null) {
             listaSeleccionada = getListasPrecio().get(0);
@@ -181,18 +170,19 @@ public class ProductosSearchBean extends AbstractSearchBean<Productos, Productos
         this.authBackingBean = authBackingBean;
     }
 
-    public BigDecimal getStockSucursal(Productos producto) {
-        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
-        stFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-        stFilter.setIdProducto(producto);
+//    public BigDecimal getStockSucursal(ProductosDto producto) {
+//        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
+//        stFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal().getId());
+//        stFilter.setIdProducto(producto.getId());
+//
+//        return stockFacade.getStockBySearchFilter(stFilter);
+//    }
 
-        return stockFacade.getStockBySearchFilter(stFilter);
-    }
+//    public BigDecimal getStockTotal(ProductosDto producto) {
+//        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
+//        stFilter.setIdProducto(producto);
+//
+//        return stockFacade.getStockBySearchFilter(stFilter);
+//    }
 
-    public BigDecimal getStockTotal(Productos producto) {
-        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
-        stFilter.setIdProducto(producto);
-
-        return stockFacade.getStockBySearchFilter(stFilter);
-    }
 }

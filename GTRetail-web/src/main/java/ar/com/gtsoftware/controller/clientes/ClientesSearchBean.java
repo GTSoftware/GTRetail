@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,29 @@
  */
 package ar.com.gtsoftware.controller.clientes;
 
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "clientesSearchBean")
 @ViewScoped
-public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
+public class ClientesSearchBean extends AbstractSearchBean<PersonasDto, PersonasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
+    private final PersonasSearchFilter filter = PersonasSearchFilter.builder()
+            .activo(true).cliente(true).build();
     @EJB
-    private PersonasFacade facade;
-
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, Boolean.TRUE, null);
+    private PersonasService service;
 
     /**
      * Creates a new instance of ClientesSearchBean
@@ -48,8 +46,8 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSea
     }
 
     @Override
-    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
-        return facade;
+    protected PersonasService getService() {
+        return service;
     }
 
     @Override
@@ -64,16 +62,16 @@ public class ClientesSearchBean extends AbstractSearchBean<Personas, PersonasSea
         return filter;
     }
 
-    public List<Personas> findClientesByString(String query) {
+    public List<PersonasDto> findClientesByString(String query) {
         filter.setTxt(query);
-        return facade.findBySearchFilter(filter, 0, 15);
+        return service.findBySearchFilter(filter, 0, 15);
     }
 
-    public String editarCliente(Personas p) {
+    public String editarCliente(PersonasDto p) {
         return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
 
-    public String verCuentaCorriente(Personas p) {
+    public String verCuentaCorriente(PersonasDto p) {
         return String.format("clientesCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
 }

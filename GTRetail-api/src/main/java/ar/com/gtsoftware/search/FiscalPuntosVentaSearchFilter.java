@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,62 +15,30 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.enums.TiposPuntosVenta;
+import lombok.*;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FiscalPuntosVentaSearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 2L;
-
-    private Sucursales sucursal;
+    private Long idSucursal;
     private Boolean activo;
     private Integer nroPuntoVenta;
     private TiposPuntosVenta tipoPuntoVenta;
 
     @Override
     public boolean hasFilter() {
-        return sucursal != null || activo != null || nroPuntoVenta != null || tipoPuntoVenta != null;
-    }
-
-    public FiscalPuntosVentaSearchFilter(Sucursales sucursal, Boolean activo) {
-        this.sucursal = sucursal;
-        this.activo = activo;
-    }
-
-    public Sucursales getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(Sucursales sucursal) {
-        this.sucursal = sucursal;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public Integer getNroPuntoVenta() {
-        return nroPuntoVenta;
-    }
-
-    public void setNroPuntoVenta(Integer nroPuntoVenta) {
-        this.nroPuntoVenta = nroPuntoVenta;
-    }
-
-    public TiposPuntosVenta getTipoPuntoVenta() {
-        return tipoPuntoVenta;
-    }
-
-    public void setTipoPuntoVenta(TiposPuntosVenta tipoPuntoVenta) {
-        this.tipoPuntoVenta = tipoPuntoVenta;
+        return idSucursal != null
+                || activo != null
+                || nroPuntoVenta != null
+                || tipoPuntoVenta != null;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,62 +15,28 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LocalidadesSearchFilter extends AbstractSearchFilter {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 2L;
-    private Integer idLocalidad;
+    private Long idLocalidad;
     private String nombreLocalidad;
-    private UbicacionProvincias idProvincia;
+    private Long idProvincia;
 
     @Override
     public boolean hasFilter() {
-        return (idLocalidad != null) || (StringUtils.isNotEmpty(nombreLocalidad))
-                || (idProvincia != null);
-    }
-
-    public LocalidadesSearchFilter() {
-    }
-
-    public LocalidadesSearchFilter(Integer idLocalidad) {
-        this.idLocalidad = idLocalidad;
-    }
-
-    public LocalidadesSearchFilter(UbicacionProvincias idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    public Integer getIdLocalidad() {
-        return idLocalidad;
-    }
-
-    public void setIdLocalidad(Integer idLocalidad) {
-        this.idLocalidad = idLocalidad;
-    }
-
-    public String getNombreLocalidad() {
-        return nombreLocalidad;
-    }
-
-    public void setNombreLocalidad(String nombreLocalidad) {
-        this.nombreLocalidad = nombreLocalidad;
-    }
-
-    public UbicacionProvincias getIdProvincia() {
-        return idProvincia;
-    }
-
-    public void setIdProvincia(UbicacionProvincias idProvincia) {
-        this.idProvincia = idProvincia;
+        return idLocalidad != null
+                || StringUtils.isNotEmpty(nombreLocalidad)
+                || idProvincia != null;
     }
 
 }

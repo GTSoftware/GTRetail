@@ -15,58 +15,33 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.Usuarios;
+import lombok.*;
 
 /**
  * SearchFilter para cajas
  *
  * @author Rodrigo M. Tato Rothamel
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CajasSearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 1L;
-
-    private Usuarios usuario;
-    private Sucursales sucursal;
+    private Long idCaja;
+    private Long idUsuario;
+    private Long idSucursal;
     private Boolean abierta;
-
-    public CajasSearchFilter() {
-    }
+    private Long idFormaPago;
 
     @Override
     public boolean hasFilter() {
-        return usuario != null || sucursal != null || abierta != null;
-    }
-
-    public CajasSearchFilter(Usuarios usuario, Sucursales sucursal, Boolean abierta) {
-        this.usuario = usuario;
-        this.sucursal = sucursal;
-        this.abierta = abierta;
-    }
-
-    public Usuarios getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
-    }
-
-    public Sucursales getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(Sucursales sucursal) {
-        this.sucursal = sucursal;
-    }
-
-    public Boolean getAbierta() {
-        return abierta;
-    }
-
-    public void setAbierta(Boolean abierta) {
-        this.abierta = abierta;
+        return idUsuario != null
+                || idSucursal != null
+                || abierta != null
+                || idCaja != null
+                || idFormaPago != null;
     }
 
 }

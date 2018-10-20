@@ -15,43 +15,26 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
+import lombok.*;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FiscalLetrasComprobantesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private FiscalResponsabilidadesIva ivaReceptor;
-    private FiscalResponsabilidadesIva ivaEmisor;
+    private Long idRespIvaReceptor;
+    private Long idRespIvaEmisor;
 
     @Override
     public boolean hasFilter() {
-        return ivaReceptor != null || ivaEmisor != null;
-    }
-
-    public FiscalLetrasComprobantesSearchFilter(FiscalResponsabilidadesIva ivaReceptor, FiscalResponsabilidadesIva ivaEmisor) {
-        this.ivaReceptor = ivaReceptor;
-        this.ivaEmisor = ivaEmisor;
-    }
-
-    public FiscalResponsabilidadesIva getIvaReceptor() {
-        return ivaReceptor;
-    }
-
-    public void setIvaReceptor(FiscalResponsabilidadesIva ivaReceptor) {
-        this.ivaReceptor = ivaReceptor;
-    }
-
-    public FiscalResponsabilidadesIva getIvaEmisor() {
-        return ivaEmisor;
-    }
-
-    public void setIvaEmisor(FiscalResponsabilidadesIva ivaEmisor) {
-        this.ivaEmisor = ivaEmisor;
+        return idRespIvaReceptor != null || idRespIvaEmisor != null;
     }
 
 }

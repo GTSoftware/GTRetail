@@ -15,26 +15,16 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.model.Cupones;
-import ar.com.gtsoftware.model.Cupones_;
-import ar.com.gtsoftware.model.Recibos;
-import ar.com.gtsoftware.model.RecibosDetalle;
-import ar.com.gtsoftware.model.RecibosDetalle_;
-import ar.com.gtsoftware.model.Recibos_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.CuponesSearchFilter;
-import java.util.Date;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -56,10 +46,10 @@ public class CuponesFacade extends AbstractFacade<Cupones, CuponesSearchFilter> 
     public Predicate createWhereFromSearchFilter(CuponesSearchFilter sf, CriteriaBuilder cb, Root<Cupones> root) {
 
         Predicate p = null;
-        if (sf.getCaja() != null) {
+        if (sf.getIdCaja() != null) {
             Join<Cupones, RecibosDetalle> joinCup = root.join(Cupones_.reciboDetalle);
             Join<RecibosDetalle, Recibos> joinRec = joinCup.join(RecibosDetalle_.idRecibo);
-            Predicate p1 = cb.equal(joinRec.get(Recibos_.idCaja), sf.getCaja());
+            Predicate p1 = cb.equal(joinRec.get(Recibos_.idCaja).get(Cajas_.id), sf.getIdCaja());
             p = appendAndPredicate(cb, p, p1);
 
         }
@@ -75,7 +65,8 @@ public class CuponesFacade extends AbstractFacade<Cupones, CuponesSearchFilter> 
         CriteriaUpdate<Cupones> update = cb.createCriteriaUpdate(Cupones.class);
         Root root = update.from(Cupones.class);
         update.set(Cupones_.fechaPresentacion, fechaPresentacion);
-        CuponesSearchFilter sf = new CuponesSearchFilter(idCaja);
+        CuponesSearchFilter sf = CuponesSearchFilter.builder()
+                .idCaja(idCaja.getId()).build();
         Predicate p = createWhereFromSearchFilter(sf, cb, root);
         Predicate pNoPres = cb.isNull(root.get(Cupones_.fechaPresentacion));
         p = appendAndPredicate(cb, p, pNoPres);

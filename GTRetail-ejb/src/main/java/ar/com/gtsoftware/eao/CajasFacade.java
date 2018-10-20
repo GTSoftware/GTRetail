@@ -15,28 +15,18 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.model.Cajas_;
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.model.Recibos;
-import ar.com.gtsoftware.model.RecibosDetalle;
-import ar.com.gtsoftware.model.RecibosDetalle_;
-import ar.com.gtsoftware.model.Recibos_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.CajasSearchFilter;
-import java.math.BigDecimal;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
@@ -57,6 +47,12 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
     @Override
     public Predicate createWhereFromSearchFilter(CajasSearchFilter psf, CriteriaBuilder cb, Root<Cajas> root) {
         Predicate p = null;
+
+        if (psf.getIdCaja() != null) {
+            Predicate p1 = cb.equal(root.get(Cajas_.id), psf.getIdCaja());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
         if (psf.getAbierta() != null) {
             Predicate p1 = cb.isNotNull(root.get(Cajas_.fechaCierre));
             if (psf.getAbierta()) {
@@ -64,19 +60,23 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
             }
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.getSucursal() != null) {
-            Predicate p1 = cb.equal(root.get(Cajas_.idSucursal), psf.getSucursal());
+        if (psf.getIdSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(Cajas_.idSucursal).get(Sucursales_.id), psf.getIdSucursal());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.getUsuario() != null) {
-            Predicate p1 = cb.equal(root.get(Cajas_.idUsuario), psf.getUsuario());
+        if (psf.getIdUsuario() != null) {
+            Predicate p1 = cb.equal(root.get(Cajas_.idUsuario).get(Usuarios_.id), psf.getIdUsuario());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;
 
     }
 
-    public BigDecimal obtenerMontoFormaPago(NegocioFormasPago formaPago, Cajas caja) {
+    public BigDecimal obtenerTotalDeCaja(@NotNull CajasSearchFilter csf) {
+        if (csf.getIdCaja() == null) {
+            throw new IllegalArgumentException("El idCaja no debe ser nulo");
+        }
+
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
         Root<RecibosDetalle> root = cq.from(RecibosDetalle.class);
@@ -85,10 +85,10 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
         coalesce.value(cb.sum(root.get(RecibosDetalle_.montoPagado)));
         coalesce.value(BigDecimal.ZERO);
         cq.select(coalesce);
-        Predicate p = cb.equal(recibos.get(Recibos_.idCaja), caja);
+        Predicate p = cb.equal(recibos.get(Recibos_.idCaja).get(Cajas_.id), csf.getIdCaja());
         Predicate p1 = null;
-        if (formaPago != null) {
-            p1 = cb.equal(root.get(RecibosDetalle_.idFormaPago), formaPago);
+        if (csf.getIdFormaPago() != null) {
+            p1 = cb.equal(root.get(RecibosDetalle_.idFormaPago).get(NegocioFormasPago_.id), csf.getIdFormaPago());
         }
 
         p = appendAndPredicate(cb, p, p1);
@@ -98,5 +98,6 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
         return q.getSingleResult();
 
     }
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,34 +15,27 @@
  */
 package ar.com.gtsoftware.controller.marcas;
 
+import ar.com.gtsoftware.bl.ProductosMarcasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ProductosMarcasFacade;
-import ar.com.gtsoftware.model.ProductosMarcas;
+import ar.com.gtsoftware.dto.model.ProductosMarcasDto;
 import ar.com.gtsoftware.search.MarcasSearchFilter;
-import ar.com.gtsoftware.search.SortField;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "marcasSearchBean")
 @ViewScoped
-public class MarcasSearchBean extends AbstractSearchBean<ProductosMarcas, MarcasSearchFilter> {
+public class MarcasSearchBean extends AbstractSearchBean<ProductosMarcasDto, MarcasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private ProductosMarcasFacade facade;
-
     private final MarcasSearchFilter filter = new MarcasSearchFilter();
+    @EJB
+    private ProductosMarcasService facade;
 
-    /**
-     * Creates a new instance of ParametrosEditBean
-     */
     public MarcasSearchBean() {
     }
 
@@ -52,14 +45,14 @@ public class MarcasSearchBean extends AbstractSearchBean<ProductosMarcas, Marcas
     }
 
     @Override
-    protected AbstractFacade<ProductosMarcas, MarcasSearchFilter> getFacade() {
+    protected ProductosMarcasService getService() {
         return facade;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("nombreMarca", true));
+            filter.addSortField("nombreMarca", true);
         }
 
     }

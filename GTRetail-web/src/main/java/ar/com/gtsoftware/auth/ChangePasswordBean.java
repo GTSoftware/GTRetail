@@ -15,24 +15,25 @@
  */
 package ar.com.gtsoftware.auth;
 
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.utils.HashUtils;
+import ar.com.gtsoftware.bl.UsuariosService;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controlador para el cambio de claves de los usuarios
  *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 @ManagedBean(name = "changePasswordBean")
 @ViewScoped
@@ -44,9 +45,7 @@ public class ChangePasswordBean implements Serializable {
     private AuthBackingBean authBackingBean;
 
     @EJB
-    private UsuariosFacade usuarioFacade;
-    @EJB
-    private JSFUtil jsfUtil;
+    private UsuariosService usuarioService;
 
     private String oldPassword;
     private String newPassword;
@@ -83,55 +82,36 @@ public class ChangePasswordBean implements Serializable {
     }
 
     private boolean cambioValido() {
-        if (oldPassword == null || newPassword == null || newPasswordRepeat == null) {
-            jsfUtil.addErrorMessage("Se deben completar todos los campos");
+        if (StringUtils.isEmpty(oldPassword)
+                || StringUtils.isEmpty(newPassword)
+                || StringUtils.isEmpty(newPasswordRepeat)) {
 
+            JSFUtil.addErrorMessage("Se deben completar todos los campos");
             return false;
         }
-        if (newPassword.length() < 6) {
-            jsfUtil.addErrorMessage("La clave debe tener 6 o más caracteres");
 
-            return false;
-        }
-        String oldPassHashed = HashUtils.getHash(oldPassword);
-        if (!oldPassHashed.equals(authBackingBean.getUserLoggedIn().getPassword())) {
-
-            jsfUtil.addErrorMessage("La contraseña anterior debe coincidir");
-
-            return false;
-        }
         if (!newPassword.equals(newPasswordRepeat)) {
-            jsfUtil.addErrorMessage("La clave de control no coincide");
+            JSFUtil.addErrorMessage("La clave de control no coincide");
 
             return false;
         }
-        String newPassHashed = HashUtils.getHash(newPassword);
 
-        if (newPassHashed.equals(oldPassHashed)) {
-            jsfUtil.addErrorMessage("La nueva clave no puede ser la misma que la anterior");
-
-            return false;
-        }
         return true;
     }
 
     public void actualizarClave() {
         if (cambioValido()) {
-            String newPassHashed = HashUtils.getHash(newPassword);
-            Usuarios usuario = authBackingBean.getUserLoggedIn();
-            usuario.setPassword(newPassHashed);
-            try {
-                usuarioFacade.edit(usuario);
-            } catch (Exception ex) {
-                Logger.getLogger(ChangePasswordBean.class.getName()).log(Level.SEVERE, null, ex);
-                jsfUtil.addErrorMessage("La clave no pudo ser actualizada");
 
+            try {
+                usuarioService.changePassword(authBackingBean.getUserLoggedIn().getId(), newPassword);
+            } catch (ServiceException ex) {
+                Logger.getLogger(ChangePasswordBean.class.getName()).log(Level.SEVERE, null, ex);
+                JSFUtil.addErrorMessage(ex.getMessage());
             }
             oldPassword = null;
             newPassword = null;
             newPasswordRepeat = null;
-            jsfUtil.addInfoMessage("La clave fue actualizada exitosamente");
-
+            JSFUtil.addInfoMessage("La clave fue actualizada exitosamente");
         }
     }
 

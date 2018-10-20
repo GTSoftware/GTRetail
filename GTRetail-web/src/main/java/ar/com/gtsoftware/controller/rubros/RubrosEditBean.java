@@ -15,16 +15,17 @@
  */
 package ar.com.gtsoftware.controller.rubros;
 
-import ar.com.gtsoftware.eao.ProductosRubrosFacade;
-import ar.com.gtsoftware.model.ProductosRubros;
+import ar.com.gtsoftware.bl.ProductosRubrosService;
+import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * EditBean para Rubros de productos
@@ -39,11 +40,9 @@ public class RubrosEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(RubrosEditBean.class.getName());
 
     @EJB
-    private ProductosRubrosFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
+    private ProductosRubrosService service;
 
-    private ProductosRubros rubroActual = null;
+    private ProductosRubrosDto rubroActual = null;
 
     /**
      * Creates a new instance of MarcasEditBean
@@ -54,12 +53,12 @@ public class RubrosEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
+        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
 
         if (idRubro == null) {
             nuevo();
         } else {
-            rubroActual = facade.find(Long.parseLong(idRubro));
+            rubroActual = service.find(Long.parseLong(idRubro));
 
             if (rubroActual == null) {
                 LOG.log(Level.SEVERE, "Rubro inexistente!");
@@ -72,23 +71,23 @@ public class RubrosEditBean implements Serializable {
     }
 
     private void nuevo() {
-        rubroActual = new ProductosRubros();
+        rubroActual = new ProductosRubrosDto();
     }
 
     public void doGuardar() {
         try {
 
-            facade.createOrEdit(rubroActual);
-            jsfUtil.addInfoMessage("Rubro guardada Exitosamente");
-            rubroActual = facade.find(rubroActual.getId());
+            service.createOrEdit(rubroActual);
+            JSFUtil.addInfoMessage("Rubro guardada Exitosamente");
+            rubroActual = service.find(rubroActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
 
-    public ProductosRubros getRubroActual() {
+    public ProductosRubrosDto getRubroActual() {
         return rubroActual;
     }
 

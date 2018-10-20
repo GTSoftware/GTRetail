@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.Usuarios;
+import lombok.*;
+
 import java.util.Date;
 
 /**
@@ -24,68 +24,25 @@ import java.util.Date;
  *
  * @author Rodrigo M. Tato Rothamel
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CajasArqueosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private Usuarios usuario;
-    private Sucursales sucursal;
+    private Long idUsuario;
+    private Long idSucursal;
     private Boolean controlado;
     private Date fechaArqueoDesde, fechaArqueoHasta;
 
-    public CajasArqueosSearchFilter() {
-    }
 
     @Override
     public boolean hasFilter() {
-        return usuario != null || sucursal != null || controlado != null
+        return idUsuario != null || idSucursal != null || controlado != null
                 || hasValidFechasArqueo();
-    }
-
-    public CajasArqueosSearchFilter(Usuarios usuario, Sucursales sucursal, Boolean controlado) {
-        this.usuario = usuario;
-        this.sucursal = sucursal;
-        this.controlado = controlado;
-    }
-
-    public Usuarios getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
-    }
-
-    public Sucursales getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(Sucursales sucursal) {
-        this.sucursal = sucursal;
-    }
-
-    public Boolean getControlado() {
-        return controlado;
-    }
-
-    public void setControlado(Boolean controlado) {
-        this.controlado = controlado;
-    }
-
-    public Date getFechaArqueoDesde() {
-        return fechaArqueoDesde;
-    }
-
-    public void setFechaArqueoDesde(Date fechaArqueoDesde) {
-        this.fechaArqueoDesde = fechaArqueoDesde;
-    }
-
-    public Date getFechaArqueoHasta() {
-        return fechaArqueoHasta;
-    }
-
-    public void setFechaArqueoHasta(Date fechaArqueoHasta) {
-        this.fechaArqueoHasta = fechaArqueoHasta;
     }
 
     public boolean hasValidFechasArqueo() {

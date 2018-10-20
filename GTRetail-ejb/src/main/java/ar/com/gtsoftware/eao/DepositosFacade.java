@@ -16,7 +16,10 @@
 package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.Depositos;
+import ar.com.gtsoftware.model.Depositos_;
+import ar.com.gtsoftware.model.Sucursales_;
 import ar.com.gtsoftware.search.DepositosSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,8 +27,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -34,18 +38,32 @@ public class DepositosFacade extends AbstractFacade<Depositos, DepositosSearchFi
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
     public DepositosFacade() {
         super(Depositos.class);
     }
 
     @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    @Override
     public Predicate createWhereFromSearchFilter(DepositosSearchFilter sf, CriteriaBuilder cb, Root<Depositos> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Predicate p = null;
+
+        if (sf.getActivo() != null) {
+            Predicate p1 = cb.equal(root.get(Depositos_.activo), sf.getActivo());
+            p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (sf.getIdSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(Depositos_.idSucursal).get(Sucursales_.id), sf.getIdSucursal());
+            p = appendAndPredicate(cb, p, p1);
+        }
+        if (isNotEmpty(sf.getNombreDeposito())) {
+            throw new UnsupportedOperationException("La busqueda por nombre de deposito no està implementada aun");
+        }
+        return p;
     }
 
 }

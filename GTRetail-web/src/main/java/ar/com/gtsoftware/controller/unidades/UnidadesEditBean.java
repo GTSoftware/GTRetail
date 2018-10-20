@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 package ar.com.gtsoftware.controller.unidades;
 
-import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
-import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.bl.ProductosTiposUnidadesService;
+import ar.com.gtsoftware.dto.model.ProductosTiposUnidadesDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "unidadesEditBean")
@@ -38,22 +38,17 @@ public class UnidadesEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(UnidadesEditBean.class.getName());
 
     @EJB
-    private ProductosTiposUnidadesFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
+    private ProductosTiposUnidadesService facade;
 
-    private ProductosTiposUnidades unidadActual = null;
+    private ProductosTiposUnidadesDto unidadActual = null;
 
-    /**
-     * Creates a new instance of MarcasEditBean
-     */
     public UnidadesEditBean() {
     }
 
     @PostConstruct
     public void init() {
 
-        String idUnidad = jsfUtil.getRequestParameterMap().get("idUnidad");
+        String idUnidad = JSFUtil.getRequestParameterMap().get("idUnidad");
 
         if (idUnidad == null) {
             nuevo();
@@ -71,23 +66,23 @@ public class UnidadesEditBean implements Serializable {
     }
 
     private void nuevo() {
-        unidadActual = new ProductosTiposUnidades();
+        unidadActual = new ProductosTiposUnidadesDto();
     }
 
     public void doGuardar() {
         try {
 
             facade.createOrEdit(unidadActual);
-            jsfUtil.addInfoMessage("Unidad guardada Exitosamente");
+            JSFUtil.addInfoMessage("Unidad guardada Exitosamente");
             unidadActual = facade.find(unidadActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
 
-    public ProductosTiposUnidades getUnidadActual() {
+    public ProductosTiposUnidadesDto getUnidadActual() {
         return unidadActual;
     }
 

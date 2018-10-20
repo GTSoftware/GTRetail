@@ -23,19 +23,22 @@ import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
 import ar.com.gtsoftware.model.FiscalTiposComprobante;
 import ar.com.gtsoftware.model.LegalTiposDocumento;
 import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.dto.fiscal.AuthTicket;
-import ar.com.gtsoftware.model.dto.fiscal.CAEResponse;
+import ar.com.gtsoftware.dto.fiscal.AuthTicket;
+import ar.com.gtsoftware.dto.fiscal.CAEResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  *
@@ -115,8 +118,8 @@ public class WSFEClientTest {
         comprobante.setIdPersona(p);
 
         CAEResponse solicitarCAE = WSFEClient.solicitarCAE(loginTicket, cuit, comprobante, ENDPOINT);
-        Assert.assertNotNull(solicitarCAE);
-        Assert.assertTrue("CAE debe ser mayor que 0", solicitarCAE.getCae() > 0);
+        assertNotNull(solicitarCAE);
+        assertTrue("CAE debe ser mayor que 0", solicitarCAE.getCae() > 0);
     }
 
     @Test
@@ -131,7 +134,7 @@ public class WSFEClientTest {
 
         String cuit = "20342577157";
         int utlimoComp = WSFEClient.obtenerUltimoComprobanteAutorizado(loginTicket, cuit, ENDPOINT, 1, 6);
-        Assert.assertTrue("Error, debería ser cero o mayor que cero", utlimoComp >= 0);
+        assertTrue("Error, debería ser cero o mayor que cero", utlimoComp >= 0);
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,93 +15,40 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Sucursales;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UsuariosSearchFilter extends AbstractSearchFilter {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-
-    private Integer idUsuario;
-
+    private Long idUsuario;
     private String nombreUsuario;
-
     private String login;
-
     private String password;
-    private Sucursales idSucursal;
-
+    private Long idSucursal;
     private String text;
 
-    public UsuariosSearchFilter() {
-    }
-
-    public UsuariosSearchFilter(String login) {
-        this.login = login;
-    }
 
     @Override
     public boolean hasFilter() {
-        return (idUsuario != null) || (nombreUsuario != null) || (login != null) || (idSucursal != null)
-                || (password != null) || (hasTextFilter());
+        return idUsuario != null
+                || nombreUsuario != null
+                || login != null
+                || idSucursal != null
+                || password != null
+                || hasTextFilter();
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 
     public boolean hasTextFilter() {
-        return text != null && !text.isEmpty();
+        return StringUtils.isNotEmpty(text);
     }
 
 }

@@ -15,17 +15,17 @@
  */
 package ar.com.gtsoftware.controller.caja;
 
+import ar.com.gtsoftware.bl.ChequesTercerosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ChequesTercerosFacade;
-import ar.com.gtsoftware.model.ChequesTerceros;
+import ar.com.gtsoftware.dto.model.ChequesTercerosDto;
 import ar.com.gtsoftware.search.ChequesTercerosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.Date;
 
 /**
  * Search Bean para cheques de terceros
@@ -34,16 +34,12 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "chequesSearchBean")
 @ViewScoped
-public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, ChequesTercerosSearchFilter> {
+public class ChequesSearchBean extends AbstractSearchBean<ChequesTercerosDto, ChequesTercerosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private ChequesTercerosFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
-
     private final ChequesTercerosSearchFilter filter = new ChequesTercerosSearchFilter();
+    @EJB
+    private ChequesTercerosService chequesTercerosService;
 
     /**
      * Creates a new instance of ChequesSearchBean
@@ -52,8 +48,8 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, Chequ
     }
 
     @Override
-    protected AbstractFacade<ChequesTerceros, ChequesTercerosSearchFilter> getFacade() {
-        return facade;
+    protected ChequesTercerosService getService() {
+        return chequesTercerosService;
     }
 
     @Override
@@ -73,12 +69,12 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTerceros, Chequ
      *
      * @param cheque
      */
-    public void cobrarCheque(ChequesTerceros cheque) {
+    public void cobrarCheque(ChequesTercerosDto cheque) {
         if (cheque == null) {
             return;
         }
         cheque.setFechaCobro(new Date());
-        facade.edit(cheque);
-        jsfUtil.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
+        chequesTercerosService.createOrEdit(cheque);
+        JSFUtil.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,34 +16,14 @@
 package ar.com.gtsoftware.controller.proveedores;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.bl.ClientesService;
+import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.eao.FiscalResponsabilidadesIvaFacade;
-import ar.com.gtsoftware.eao.LegalGenerosFacade;
-import ar.com.gtsoftware.eao.LegalTiposDocumentoFacade;
-import ar.com.gtsoftware.eao.LegalTiposPersoneriaFacade;
-import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
-import ar.com.gtsoftware.model.LegalGeneros;
-import ar.com.gtsoftware.model.LegalTiposDocumento;
-import ar.com.gtsoftware.model.LegalTiposPersoneria;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.PersonasTelefonos;
-import ar.com.gtsoftware.model.UbicacionLocalidades;
-import ar.com.gtsoftware.model.UbicacionPaises;
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -51,9 +31,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "proveedoresEditBean")
@@ -61,63 +45,54 @@ import javax.faces.context.FacesContext;
 public class ProveedoresEditBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(ProveedoresEditBean.class.getName());
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-
     @EJB
     private ClientesService clientesService;
+    @EJB
+    private LegalTiposPersoneriaService legalTiposPersoneriaFacade;
+    @EJB
+    private FiscalResponsabilidadesIvaService responsabilidadesIvaFacade;
+    @EJB
+    private LegalGenerosService generosFacade;
+    @EJB
+    private LegalTiposDocumentoService tiposDocumentoFacade;
+    @EJB
+    private UbicacionPaisesService paisesFacade;
+    @EJB
+    private UbicacionLocalidadesService localidadesFacade;
+    @EJB
+    private UbicacionProvinciasService provinciasFacade;
+    //private PersonasTelefonos telefonoActual = new PersonasTelefonos();
+    //private List<PersonasTelefonos> telefonos = new ArrayList<>();
+    private PersonasDto proveedorActual;
 
-    @EJB
-    private LegalTiposPersoneriaFacade legalTiposPersoneriaFacade;
-    @EJB
-    private FiscalResponsabilidadesIvaFacade responsabilidadesIvaFacade;
-    @EJB
-    private LegalGenerosFacade generosFacade;
-    @EJB
-    private LegalTiposDocumentoFacade tiposDocumentoFacade;
-    @EJB
-    private UbicacionPaisesFacade paisesFacade;
-    @EJB
-    private UbicacionLocalidadesFacade localidadesFacade;
-    @EJB
-    private UbicacionProvinciasFacade provinciasFacade;
-    @EJB
-    private JSFUtil jsfUtil;
-
-    private Personas proveedorActual;
-    private PersonasTelefonos telefonoActual = new PersonasTelefonos();
-    private List<PersonasTelefonos> telefonos = new ArrayList<>();
-
-    private static final Logger LOG = Logger.getLogger(ProveedoresEditBean.class.getName());
-
-    /**
-     * Creates a new instance of ClientesEditBean
-     */
     public ProveedoresEditBean() {
     }
 
     @PostConstruct
     private void init() {
 
-        String idPersona = jsfUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {
             proveedorActual = clientesService.find(Long.parseLong(idPersona));
             if (proveedorActual == null) {
                 nuevo();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cliente inexistente!", "Cliente inexistente!"));
-                Logger.getLogger(ProveedoresEditBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
+                JSFUtil.addErrorMessage("Cliente inexistente!");
+                LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
-                telefonos = clientesService.obtenerTelefonos(proveedorActual);
+                //telefonos = clientesService.obtenerTelefonos(proveedorActual);
             }
         }
 
     }
 
     public void nuevo() {
-        proveedorActual = new Personas();
+        proveedorActual = new PersonasDto();
         proveedorActual.setProveedor(true);
         proveedorActual.setActivo(true);
         proveedorActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
@@ -125,86 +100,92 @@ public class ProveedoresEditBean implements Serializable {
 
     public void doGuardarCliente() {
         try {
-            proveedorActual.setPersonasTelefonosList(telefonos);
+            //proveedorActual.setPersonasTelefonosList(telefonos);
             proveedorActual = clientesService.guardarCliente(proveedorActual);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardar",
                     "Proveedor guardado exitosamente."));
 
         } catch (ServiceException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar:", e.getMessage()));
+            JSFUtil.addErrorMessage("Error al guardar: " + e.getMessage());
             LOG.log(Level.INFO, e.getMessage(), e);
         }
     }
 
-    public List<PersonasTelefonos> getTelefonos() {
-        return telefonos;
-    }
+//    public List<PersonasTelefonos> getTelefonos() {
+//        return telefonos;
+//    }
+//
+//    public void grabarTelefono() {
+//        if (telefonoActual != null) {
+//            telefonoActual.setIdPersona(proveedorActual);
+//            telefonos.add(telefonoActual);
+//        }
+//        telefonoActual = new PersonasTelefonos();
+//    }
 
-    public void grabarTelefono() {
-        if (telefonoActual != null) {
-            telefonoActual.setIdPersona(proveedorActual);
-            telefonos.add(telefonoActual);
-        }
-        telefonoActual = new PersonasTelefonos();
-    }
+//    public void borrarTelefono(PersonasTelefonos pt) {
+//
+//        telefonos.remove(pt);
+//    }
 
-    public void borrarTelefono(PersonasTelefonos pt) {
-
-        telefonos.remove(pt);
-    }
-
-    public Personas getProveedorActual() {
+    public PersonasDto getProveedorActual() {
         return proveedorActual;
     }
 
-    public void setProveedorActual(Personas proveedorActual) {
+    public void setProveedorActual(PersonasDto proveedorActual) {
         this.proveedorActual = proveedorActual;
     }
 
-    public List<LegalTiposPersoneria> getTiposPersoneriaList() {
+    public List<LegalTiposPersoneriaDto> getTiposPersoneriaList() {
         return legalTiposPersoneriaFacade.findAll();
     }
 
-    public List<FiscalResponsabilidadesIva> getResponsabilidadesIVAList() {
+    public List<FiscalResponsabilidadesIvaDto> getResponsabilidadesIVAList() {
         return responsabilidadesIvaFacade.findAll();
     }
 
-    public List<LegalGeneros> getGenerosList() {
-        return generosFacade.findAllBySearchFilter(new GenerosSearchFilter(proveedorActual.getIdTipoPersoneria()));
+    public List<LegalGenerosDto> getGenerosList() {
+        if (proveedorActual.getIdTipoPersoneria() == null) {
+            return generosFacade.findAll();
+        }
+        return generosFacade.findAllBySearchFilter(GenerosSearchFilter.builder()
+                .idTipoPersoneria(proveedorActual.getIdTipoPersoneria().getId()).build());
 
     }
 
-    public List<LegalTiposDocumento> getTiposDocumentoList() {
+    public List<LegalTiposDocumentoDto> getTiposDocumentoList() {
         return tiposDocumentoFacade.findAll();
     }
 
-    public List<UbicacionPaises> getPaisesList() {
+    public List<UbicacionPaisesDto> getPaisesList() {
         return paisesFacade.findAll();
     }
 
-    public List<UbicacionProvincias> getProvinciasList() {
+    public List<UbicacionProvinciasDto> getProvinciasList() {
         if (proveedorActual.getIdPais() != null) {
-            ProvinciasSearchFilter psf = new ProvinciasSearchFilter(proveedorActual.getIdPais());
+            ProvinciasSearchFilter psf = ProvinciasSearchFilter.builder()
+                    .idPais(proveedorActual.getIdPais().getId()).build();
             return provinciasFacade.findAllBySearchFilter(psf);
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
-    public List<UbicacionLocalidades> getLocalidadesList() {
+    public List<UbicacionLocalidadesDto> getLocalidadesList() {
         if (proveedorActual.getIdProvincia() != null) {
-            LocalidadesSearchFilter lsf = new LocalidadesSearchFilter(proveedorActual.getIdProvincia());
+            LocalidadesSearchFilter lsf = LocalidadesSearchFilter.builder()
+                    .idProvincia(proveedorActual.getIdProvincia().getId()).build();
             return localidadesFacade.findAllBySearchFilter(lsf);
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
-    public PersonasTelefonos getTelefonoActual() {
-        return telefonoActual;
-    }
-
-    public void setTelefonoActual(PersonasTelefonos telefonoActual) {
-        this.telefonoActual = telefonoActual;
-    }
+//    public PersonasTelefonos getTelefonoActual() {
+//        return telefonoActual;
+//    }
+//
+//    public void setTelefonoActual(PersonasTelefonos telefonoActual) {
+//        this.telefonoActual = telefonoActual;
+//    }
 
     public AuthBackingBean getAuthBackingBean() {
         return authBackingBean;

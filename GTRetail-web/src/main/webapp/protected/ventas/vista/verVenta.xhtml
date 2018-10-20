@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
-    xmlns:f="http://java.sun.com/jsf/core"
-    template="/WEB-INF/template.xhtml">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
+        xmlns:f="http://java.sun.com/jsf/core"
+        template="/WEB-INF/template.xhtml">
 
 
     <ui:define name="meta">
 
-        <f:metadata >
+        <f:metadata>
 
             <f:event listener="#{verComprobantesBean.init()}"
                      type="preRenderView">
@@ -26,17 +27,17 @@
 
     <!-- Contenido -->
     <ui:define name="content">
-        <ui:insert >
-            <ui:include src="breadcrumb.xhtml" />
+        <ui:insert>
+            <ui:include src="breadcrumb.xhtml"/>
         </ui:insert>
 
         <div class="Container100 Responsive100 NoIndent">
             <div class="Container100 ui-fluid">
                 <div class="Card">
                     <h1 class="CardBigTopic TexAlCenter">Vista de comprobante</h1>
-                    <div class="SeparatorFull" />
+                    <div class="SeparatorFull"/>
 
-                    <h:form id="opcionesForm" >
+                    <h:form id="opcionesForm">
                         <p:panel header="#{msg.acciones}">
                             <!-- Facturar-->
                             <p:commandButton id="facturarButton"
@@ -46,7 +47,7 @@
                                              update=":facturarForm:facturarDialog"
                                              oncomplete="PF('facturarDialog').show()"
                                              process="@none"
-                                             />
+                            />
                             <!-- Imprimir factura -->
                             <p:commandButton id="imprimirFacturaButton"
                                              value="#{msg.imprimirFactura}"
@@ -54,13 +55,13 @@
                                              rendered="#{not empty verComprobantesBean.ventaActual.idRegistro}"
                                              action="#{impresionVentasBean.imprimirFactura(verComprobantesBean.ventaActual)}"
                                              ajax="false"
-                                             />
+                            />
                             <!-- Imprimir presupuesto -->
                             <p:commandButton value="#{msg.presupuesto}"
                                              icon="ui-icon-print"
                                              action="#{impresionVentasBean.imprimirPresupuesto(verComprobantesBean.ventaActual)}"
                                              ajax="false"
-                                             />
+                            />
 
                             <!-- Anular Venta -->
                             <p:commandButton value="#{msg.anularVenta}"
@@ -68,7 +69,7 @@
                                              rendered="#{verComprobantesBean.ventaActual.idRegistro eq null}"
                                              onclick="PF('confirmationAnularVenta').show()"
                                              styleClass="RedButton"
-                                             >
+                            >
 
                             </p:commandButton>
                             <!-- Cuadro de confirmación para Anular factura -->
@@ -91,7 +92,7 @@
                                                  onclick="PF('confirmation').hide()"
                                                  styleClass="ui-confirmdialog-no"
                                                  icon="ui-icon-close"
-                                                 />
+                                />
 
                             </p:confirmDialog>
                             <!-- Cuadro de confirmación para Anular Venta -->
@@ -114,13 +115,13 @@
                                                  onclick="PF('confirmationAnularVenta').hide()"
                                                  styleClass="ui-confirmdialog-no"
                                                  icon="ui-icon-close"
-                                                 />
+                                />
 
                             </p:confirmDialog>
                         </p:panel>
                     </h:form>
 
-                    <h:form id="facturarForm" >
+                    <h:form id="facturarForm">
                         <p:dialog header="#{msg.facturar}"
                                   widgetVar="facturarDialog"
                                   resizable="true"
@@ -131,12 +132,13 @@
                                   hideEffect="clip"
                                   modal="true">
 
-                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                            <p:panelGrid layout="grid"
                                          styleClass="ui-panelgrid-blank" columns="2">
 
 
                                 <p:outputLabel for="letraFacturaField" value="#{msg.letraFactura}:"/>
-                                <p:inputText id="letraFacturaField" value="#{verComprobantesBean.ventaActual.letra}" size="1" readonly="true"/>
+                                <p:inputText id="letraFacturaField" value="#{verComprobantesBean.ventaActual.letra}"
+                                             size="1" readonly="true"/>
 
                                 <p:outputLabel for="pvFacturaField" value="#{msg.puntoVenta}:"/>
 
@@ -156,16 +158,17 @@
                                                    itemLabel="#{punto.businessString}"/>
                                 </p:selectOneMenu>
 
-                                <p:fragment id="nroCompFragment" >
+                                <p:fragment id="nroCompFragment">
                                     <p:outputLabel for="numeroComprobanteField" value="#{msg.numero} #{msg.factura}:"
                                                    rendered="#{verComprobantesBean.permitirCargarNroComprobante}"/>
 
-                                    <p:inputText id="numeroComprobanteField" value="#{verComprobantesBean.numeroComprobante}"
-                                                 rendered="#{verComprobantesBean.permitirCargarNroComprobante}" >
+                                    <p:inputText id="numeroComprobanteField"
+                                                 value="#{verComprobantesBean.numeroComprobante}"
+                                                 rendered="#{verComprobantesBean.permitirCargarNroComprobante}">
                                         <f:convertNumber minIntegerDigits="1" maxIntegerDigits="8" type="number"/>
                                     </p:inputText>
                                 </p:fragment>
-                            </p:panelGrid >
+                            </p:panelGrid>
 
                             <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
                                              oncomplete="PF('facturarDialog').hide()"
@@ -180,8 +183,8 @@
 
                     <gtsoftware:vistaVenta id="vistaVentaComposite"
                                            venta="#{verComprobantesBean.ventaActual}"
-                                           lineasVenta="#{verComprobantesBean.lineasVenta}"
-                                           >
+                                           lineasVenta="#{verComprobantesBean.ventaActual.comprobantesLineasList}"
+                    >
                     </gtsoftware:vistaVenta>
 
 

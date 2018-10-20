@@ -15,10 +15,18 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductosListasPreciosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -27,37 +35,12 @@ public class ProductosListasPreciosSearchFilter extends AbstractSearchFilter {
 
     private Boolean activa;
 
+
     @Override
     public boolean hasFilter() {
-        return nombre != null || activa != null;
+        return isNotEmpty(nombre)
+                || activa != null;
     }
 
-    public ProductosListasPreciosSearchFilter() {
-    }
-
-    public ProductosListasPreciosSearchFilter(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public ProductosListasPreciosSearchFilter(String nombre, Boolean activa) {
-        this.nombre = nombre;
-        this.activa = activa;
-    }
-
-    public Boolean getActiva() {
-        return activa;
-    }
-
-    public void setActiva(Boolean activa) {
-        this.activa = activa;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
 }

@@ -17,8 +17,7 @@
                     <p:tabView id="tabPersona" scrollable="true">
                         <p:tab title="#{msg.datosFiliatorios}">
 
-                            <p:panelGrid id="datosBasicosGrid" layout="grid"  style="border:0px !important; background:none;"
-                                         styleClass="ui-panelgrid-blank" columns="3">
+                            <p:panelGrid id="datosBasicosGrid" layout="grid" styleClass="ui-panelgrid-blank" columns="3">
 
                                 <h:outputLabel for="idClienteField" value="#{msg.idProveedor}:"/>
                                 <h:outputLabel id="idClienteField" value="#{proveedoresEditBean.proveedorActual.id}"/>
@@ -210,62 +209,62 @@
                             </p:panelGrid>
 
                         </p:tab>
-                        <p:tab title="#{msg.contacto}">
+                        <!--<p:tab title="#{msg.contacto}">-->
 
 
-                            <p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"
-                                             value="#{msg.nuevo}" icon="fa fa-fw fa-plus" global="false"/>
+                            <!--<p:commandButton id="nuevoTelefonoButton" immediate="true" onclick="PF('dlgAddTelefono').show();"-->
+                                             <!--value="#{msg.nuevo}" icon="fa fa-fw fa-plus" global="false"/>-->
 
-                            <p:dataTable id="telefonosTable" value="#{proveedoresEditBean.telefonos}" var="telefono"
-                                         rows="15"
-                                         paginator="true"
-                                         sortMode="multiple"
-                                         emptyMessage="#{msg.telefonosEmpty}"
-                                         rowKey="#{telefono.id}"
-                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,15,30"
-                                         style="width: 100%"
-                                         resizableColumns="true"
-                                         scrollable="true"
-                                         editable="true"
-                                         reflow="true">
+                            <!--<p:dataTable id="telefonosTable" value="#{proveedoresEditBean.telefonos}" var="telefono"-->
+                                         <!--rows="15"-->
+                                         <!--paginator="true"-->
+                                         <!--sortMode="multiple"-->
+                                         <!--emptyMessage="#{msg.telefonosEmpty}"-->
+                                         <!--rowKey="#{telefono.id}"-->
+                                         <!--paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"-->
+                                         <!--rowsPerPageTemplate="10,15,30"-->
+                                         <!--style="width: 100%"-->
+                                         <!--resizableColumns="true"-->
+                                         <!--scrollable="true"-->
+                                         <!--editable="true"-->
+                                         <!--reflow="true">-->
 
-                                <p:column sortBy="#{telefono.numero}">
-                                    <f:facet name="header">
-                                        #{msg.telefonoNumero}
-                                    </f:facet>
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{telefono.numero}"/></f:facet>
-                                        <f:facet name="input">
-                                            <p:inputMask id="telefonoField" value="#{telefono.numero}" mask="(099?9) 999999?999"
-                                                         required="true" maxlength="50" style="width:100%"/>
-                                        </f:facet>
-                                    </p:cellEditor>
+                                <!--<p:column sortBy="#{telefono.numero}">-->
+                                    <!--<f:facet name="header">-->
+                                        <!--#{msg.telefonoNumero}-->
+                                    <!--</f:facet>-->
+                                    <!--<p:cellEditor>-->
+                                        <!--<f:facet name="output"><h:outputText value="#{telefono.numero}"/></f:facet>-->
+                                        <!--<f:facet name="input">-->
+                                            <!--<p:inputMask id="telefonoField" value="#{telefono.numero}" mask="(099?9) 999999?999"-->
+                                                         <!--required="true" maxlength="50" style="width:100%"/>-->
+                                        <!--</f:facet>-->
+                                    <!--</p:cellEditor>-->
 
-                                </p:column>
-                                <p:column sortBy="#{telefono.referencia}">
-                                    <f:facet name="header">
-                                        #{msg.telefonoReferencia}
-                                    </f:facet>
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{telefono.referencia}"/></f:facet>
-                                        <f:facet name="input"><p:inputText id="referenciaField" value="#{telefono.referencia}"
-                                                                           maxlength="100" style="width:100%"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        #{msg.acciones}
-                                    </f:facet>
-                                    <h:panelGroup>
-                                        <p:rowEditor/>
-                                        <p:commandButton icon="ui-icon-trash" action="#{proveedoresEditBean.borrarTelefono(telefono)}"
-                                                         update="telefonosTable" process="@this"/>
-                                    </h:panelGroup>
-                                </p:column>
-                            </p:dataTable>
+                                <!--</p:column>-->
+                                <!--<p:column sortBy="#{telefono.referencia}">-->
+                                    <!--<f:facet name="header">-->
+                                        <!--#{msg.telefonoReferencia}-->
+                                    <!--</f:facet>-->
+                                    <!--<p:cellEditor>-->
+                                        <!--<f:facet name="output"><h:outputText value="#{telefono.referencia}"/></f:facet>-->
+                                        <!--<f:facet name="input"><p:inputText id="referenciaField" value="#{telefono.referencia}"-->
+                                                                           <!--maxlength="100" style="width:100%"/></f:facet>-->
+                                    <!--</p:cellEditor>-->
+                                <!--</p:column>-->
+                                <!--<p:column>-->
+                                    <!--<f:facet name="header">-->
+                                        <!--#{msg.acciones}-->
+                                    <!--</f:facet>-->
+                                    <!--<h:panelGroup>-->
+                                        <!--<p:rowEditor/>-->
+                                        <!--<p:commandButton icon="ui-icon-trash" action="#{proveedoresEditBean.borrarTelefono(telefono)}"-->
+                                                         <!--update="telefonosTable" process="@this"/>-->
+                                    <!--</h:panelGroup>-->
+                                <!--</p:column>-->
+                            <!--</p:dataTable>-->
 
-                        </p:tab>
+                        <!--</p:tab>-->
                     </p:tabView>
 
                     <div class="SeparatorFull" />
@@ -288,34 +287,34 @@
                     </p:panelGrid>
                 </h:form>
 
-                <h:form id="addTelefonoForm">
-                    <p:dialog id="addTelefonoDialog" header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true">
-                        <h:outputLabel value="#{proveedoresEditBean.telefonoActual.id}"/>
-                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" id="gridTelefono" columns="3">
-                            <h:outputLabel for="telefonoValueField" value="#{msg.telefonoNumero}"/>
-                            <p:inputMask id="telefonoValueField" value="#{proveedoresEditBean.telefonoActual.numero}"
-                                         mask="(099?9) 999999?999"
-                                         required="true" maxlength="50"/>
-                            <p:message for="telefonoValueField"/>
+                <!--<h:form id="addTelefonoForm">-->
+                    <!--<p:dialog id="addTelefonoDialog" header="#{msg.telefonos}" widgetVar="dlgAddTelefono" modal="true" dynamic="true">-->
+                        <!--<h:outputLabel value="#{proveedoresEditBean.telefonoActual.id}"/>-->
+                        <!--<p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" id="gridTelefono" columns="3">-->
+                            <!--<h:outputLabel for="telefonoValueField" value="#{msg.telefonoNumero}"/>-->
+                            <!--<p:inputMask id="telefonoValueField" value="#{proveedoresEditBean.telefonoActual.numero}"-->
+                                         <!--mask="(099?9) 999999?999"-->
+                                         <!--required="true" maxlength="50"/>-->
+                            <!--<p:message for="telefonoValueField"/>-->
 
-                            <h:outputLabel for="referenciaValueField" value="#{msg.telefonoReferencia}"/>
-                            <p:inputText id="referenciaValueField" value="#{proveedoresEditBean.telefonoActual.referencia}" maxlength="100"
-                                         converter="#{stringFormatConverter}"/>
-                            <p:message for="referenciaValueField"/>
+                            <!--<h:outputLabel for="referenciaValueField" value="#{msg.telefonoReferencia}"/>-->
+                            <!--<p:inputText id="referenciaValueField" value="#{proveedoresEditBean.telefonoActual.referencia}" maxlength="100"-->
+                                         <!--converter="#{stringFormatConverter}"/>-->
+                            <!--<p:message for="referenciaValueField"/>-->
 
-                        </p:panelGrid>
-                        <p:separator/>
-                        <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"
-                                         action="#{proveedoresEditBean.grabarTelefono()}"
-                                         update=":editClienteForm:tabPersona:telefonosTable"
-                                         onsuccess="PF('dlgAddTelefono').hide();"
-                                         process="@form"/>
+                        <!--</p:panelGrid>-->
+                        <!--<p:separator/>-->
+                        <!--<p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"-->
+                                         <!--action="#{proveedoresEditBean.grabarTelefono()}"-->
+                                         <!--update=":editClienteForm:tabPersona:telefonosTable"-->
+                                         <!--onsuccess="PF('dlgAddTelefono').hide();"-->
+                                         <!--process="@form"/>-->
 
-                        <p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" immediate="true"
-                                         onclick="PF('dlgAddTelefono').hide();"/>
-                        <h:outputLabel value="#{proveedoresEditBean.telefonoActual.idPersona}"/>
-                    </p:dialog>
-                </h:form>
+                        <!--<p:commandButton value="#{msg.cancelar}" icon="ui-icon-cancel" immediate="true"-->
+                                         <!--onclick="PF('dlgAddTelefono').hide();"/>-->
+                        <!--<h:outputLabel value="#{proveedoresEditBean.telefonoActual.idPersona}"/>-->
+                    <!--</p:dialog>-->
+                <!--</h:form>-->
             </div>
         </div>
     </div>

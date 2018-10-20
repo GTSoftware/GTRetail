@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,26 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Personas;
+import lombok.*;
 
 /**
- *
  * @author rodrigo
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PersonasCuentaCorrienteSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private Personas persona;
+    private Long idPersona;
 
-    public PersonasCuentaCorrienteSearchFilter() {
-    }
 
     @Override
     public boolean hasFilter() {
-        return persona != null;
-    }
-
-    public Personas getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Personas persona) {
-        this.persona = persona;
+        return idPersona != null;
     }
 
 }

@@ -68,7 +68,7 @@ import org.bouncycastle.util.Store;
 import org.xml.sax.InputSource;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.model.dto.fiscal.AuthTicket;
+import ar.com.gtsoftware.dto.fiscal.AuthTicket;
 
 /**
  * Clase para obtener acceso al servicio de autorización y autenticación de AFIP

@@ -15,19 +15,21 @@
  */
 package ar.com.gtsoftware.controller.rubros;
 
-import ar.com.gtsoftware.eao.ProductosRubrosFacade;
-import ar.com.gtsoftware.eao.ProductosSubRubrosFacade;
-import ar.com.gtsoftware.model.ProductosRubros;
-import ar.com.gtsoftware.model.ProductosSubRubros;
+import ar.com.gtsoftware.bl.ProductosRubrosService;
+import ar.com.gtsoftware.bl.ProductosSubRubrosService;
+import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
+import ar.com.gtsoftware.dto.model.ProductosSubRubrosDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang.StringUtils;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * EditBean para Rubros de productos
@@ -42,14 +44,12 @@ public class SubRubrosEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(SubRubrosEditBean.class.getName());
 
     @EJB
-    private ProductosSubRubrosFacade facade;
+    private ProductosSubRubrosService service;
     @EJB
-    private ProductosRubrosFacade rubrosFacade;
-    @EJB
-    private JSFUtil jsfUtil;
+    private ProductosRubrosService rubrosService;
 
-    private ProductosSubRubros subRubroActual = null;
-    private ProductosRubros rubroActual = null;
+    private ProductosSubRubrosDto subRubroActual = null;
+    private ProductosRubrosDto rubroActual = null;
 
     /**
      * Creates a new instance of MarcasEditBean
@@ -60,21 +60,21 @@ public class SubRubrosEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRubro = jsfUtil.getRequestParameterMap().get("idRubro");
-        String idSubRubro = jsfUtil.getRequestParameterMap().get("idSubRubro");
+        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
+        String idSubRubro = JSFUtil.getRequestParameterMap().get("idSubRubro");
 
-        if (StringUtils.isEmpty(idRubro)) {
+        if (isEmpty(idRubro)) {
             throw new IllegalArgumentException("IdRubro nulo!");
         }
-        rubroActual = rubrosFacade.find(Long.parseLong(idRubro));
+        rubroActual = rubrosService.find(Long.parseLong(idRubro));
         if (rubroActual == null) {
             throw new IllegalArgumentException("Rubro inexistente!");
         }
 
-        if (StringUtils.isEmpty(idSubRubro)) {
+        if (isEmpty(idSubRubro)) {
             nuevo();
         } else {
-            subRubroActual = facade.find(Long.parseLong(idSubRubro));
+            subRubroActual = service.find(Long.parseLong(idSubRubro));
 
             if (subRubroActual == null) {
                 LOG.log(Level.SEVERE, "SubRubro inexistente!");
@@ -87,28 +87,27 @@ public class SubRubrosEditBean implements Serializable {
     }
 
     private void nuevo() {
-        subRubroActual = new ProductosSubRubros();
-        subRubroActual.setIdRubro(rubroActual);
+        subRubroActual = ProductosSubRubrosDto.builder()
+                .idRubro(rubroActual).build();
     }
 
     public void doGuardar() {
         try {
 
-            facade.createOrEdit(subRubroActual);
-            jsfUtil.addInfoMessage("SubRubro guardado Exitosamente");
-            subRubroActual = facade.find(subRubroActual.getId());
+            subRubroActual = service.createOrEdit(subRubroActual);
+            JSFUtil.addInfoMessage("SubRubro guardado Exitosamente");
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
 
-    public ProductosSubRubros getSubRubroActual() {
+    public ProductosSubRubrosDto getSubRubroActual() {
         return subRubroActual;
     }
 
-    public ProductosRubros getRubroActual() {
+    public ProductosRubrosDto getRubroActual() {
         return rubroActual;
     }
 

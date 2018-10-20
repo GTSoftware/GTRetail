@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,47 +15,27 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
+import lombok.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductosPreciosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private Productos producto;
-    private ProductosListasPrecios lista;
+    private Long idProducto;
+    private Long idListaPrecios;
 
     @Override
     public boolean hasFilter() {
-        return producto != null || lista != null;
+        return idProducto != null || idListaPrecios != null;
     }
 
-    public ProductosPreciosSearchFilter() {
-    }
-
-    public ProductosPreciosSearchFilter(Productos producto, ProductosListasPrecios lista) {
-        this.producto = producto;
-        this.lista = lista;
-    }
-
-    public Productos getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Productos producto) {
-        this.producto = producto;
-    }
-
-    public ProductosListasPrecios getLista() {
-        return lista;
-    }
-
-    public void setLista(ProductosListasPrecios lista) {
-        this.lista = lista;
-    }
 
 }

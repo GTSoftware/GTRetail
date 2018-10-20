@@ -15,31 +15,29 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
+
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SucursalesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
     private Boolean activa;
-
-    public SucursalesSearchFilter(Boolean activa) {
-        this.activa = activa;
-    }
+    private String nombre;
 
     @Override
     public boolean hasFilter() {
-        return activa != null;
+        return activa != null
+                || StringUtils.isNotEmpty(nombre);
     }
 
-    public Boolean getActiva() {
-        return activa;
-    }
-
-    public void setActiva(Boolean activa) {
-        this.activa = activa;
-    }
 
 }

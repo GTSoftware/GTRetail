@@ -15,9 +15,11 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.ProductosRubros_;
 import ar.com.gtsoftware.model.ProductosSubRubros;
 import ar.com.gtsoftware.model.ProductosSubRubros_;
 import ar.com.gtsoftware.search.SubRubroSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -52,8 +53,8 @@ public class ProductosSubRubrosFacade extends AbstractFacade<ProductosSubRubros,
             String s = psf.getNombreSubRubro().toUpperCase();
             p = cb.like(root.get(ProductosSubRubros_.nombreSubRubro), String.format("%%%s%%", s));
         }
-        if (psf.getProductosRubros() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosSubRubros_.idRubro), psf.getProductosRubros());
+        if (psf.getIdProductosRubros() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosSubRubros_.idRubro).get(ProductosRubros_.id), psf.getIdProductosRubros());
             p = appendAndPredicate(cb, p1, p);
         }
         return p;

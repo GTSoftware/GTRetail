@@ -7,6 +7,8 @@
         <param-value>mojarra-2.2.8-12</param-value>-->
     </context-param>
 
+    <!--<distributable/>-->
+
     <servlet>
         <servlet-name>facesServlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

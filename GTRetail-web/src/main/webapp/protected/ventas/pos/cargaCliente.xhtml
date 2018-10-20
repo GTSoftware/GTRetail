@@ -10,11 +10,10 @@
     <div class="Container100 ui-fluid">
         <div class="Card">
             <h1 class="CardBigTopic TexAlCenter">Selección del cliente</h1>
-            <div class="SeparatorFull"></div>
+            <div class="SeparatorFull"/>
             <h:form id="cargaClienteForm" >
                 <p:fragment id="clienteFragment">
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clienteActualPanel" columns="2"
-                                 style="border:0px !important; background:none;">
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" id="clienteActualPanel" columns="2">
 
                         <p:outputLabel for='razonSocialField'
                                        value="#{msg.razonSocial}:"/>
@@ -23,7 +22,7 @@
                                             value="#{shopCartBean.venta.idPersona}"
                                             completeMethod="#{clientesSearchBean.findClientesByString}"
                                             var="cli"
-                                            itemLabel="#{cli.businessString}"
+                                            itemLabel="#{cli}"
                                             itemValue="#{cli}"
                                             converter="#{personasConverter}"
                                             forceSelection="true"
@@ -73,7 +72,7 @@
 
                     </p:panelGrid >
                 </p:fragment>
-                <div class="SeparatorFull"></div>
+                <div class="SeparatorFull"/>
 
                 <p:panelGrid layout="grid" columns="2"
                              styleClass="ui-panelgrid-blank"

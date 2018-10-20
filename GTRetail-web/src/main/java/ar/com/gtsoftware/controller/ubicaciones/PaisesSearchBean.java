@@ -15,29 +15,26 @@
  */
 package ar.com.gtsoftware.controller.ubicaciones;
 
+import ar.com.gtsoftware.bl.UbicacionPaisesService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.model.UbicacionPaises;
+import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "paisesSearchBean")
 @ViewScoped
-public class PaisesSearchBean extends AbstractSearchBean<UbicacionPaises, PaisesSearchFilter> {
+public class PaisesSearchBean extends AbstractSearchBean<UbicacionPaisesDto, PaisesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private UbicacionPaisesFacade facade;
-
     private final PaisesSearchFilter filter = new PaisesSearchFilter();
+    @EJB
+    private UbicacionPaisesService facade;
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -51,7 +48,7 @@ public class PaisesSearchBean extends AbstractSearchBean<UbicacionPaises, Paises
     }
 
     @Override
-    protected AbstractFacade<UbicacionPaises, PaisesSearchFilter> getFacade() {
+    protected UbicacionPaisesService getService() {
         return facade;
     }
 

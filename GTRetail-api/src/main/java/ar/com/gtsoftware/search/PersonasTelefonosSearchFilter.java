@@ -15,34 +15,24 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Personas;
+import lombok.*;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PersonasTelefonosSearchFilter extends AbstractSearchFilter {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    private Personas persona;
+    private Long idPersona;
 
-    public PersonasTelefonosSearchFilter() {
-    }
 
     @Override
     public boolean hasFilter() {
-        return persona != null;
-    }
-
-    public Personas getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Personas persona) {
-        this.persona = persona;
+        return idPersona != null;
     }
 
 }

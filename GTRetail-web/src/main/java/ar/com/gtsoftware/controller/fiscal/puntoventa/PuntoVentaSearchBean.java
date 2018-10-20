@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,50 +15,46 @@
  */
 package ar.com.gtsoftware.controller.fiscal.puntoventa;
 
+import ar.com.gtsoftware.bl.FiscalPuntosVentaService;
+import ar.com.gtsoftware.bl.SucursalesService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
-import ar.com.gtsoftware.eao.SucursalesFacade;
-import ar.com.gtsoftware.model.FiscalPuntosVenta;
-import ar.com.gtsoftware.model.Sucursales;
+import ar.com.gtsoftware.dto.model.FiscalPuntosVentaDto;
+import ar.com.gtsoftware.dto.model.SucursalesDto;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.SucursalesSearchFilter;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "puntoVentaSearchBean")
 @ViewScoped
-public class PuntoVentaSearchBean extends AbstractSearchBean<FiscalPuntosVenta, FiscalPuntosVentaSearchFilter> {
+public class PuntoVentaSearchBean extends AbstractSearchBean<FiscalPuntosVentaDto, FiscalPuntosVentaSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
+    private final List<SucursalesDto> sucursalesList = new ArrayList<>();
+    private final FiscalPuntosVentaSearchFilter filter = FiscalPuntosVentaSearchFilter.builder().activo(true).build();
     @EJB
-    private FiscalPuntosVentaFacade puntosVentaFacade;
+    private FiscalPuntosVentaService puntosVentaService;
     @EJB
-    private SucursalesFacade sucursalesFacade;
-
-    private final List<Sucursales> sucursalesList = new ArrayList<>();
+    private SucursalesService sucursalesFacade;
 
     @PostConstruct
     private void init() {
-        SucursalesSearchFilter sf = new SucursalesSearchFilter(Boolean.TRUE);
+        SucursalesSearchFilter sf = SucursalesSearchFilter.builder()
+                .activa(true).build();
         sucursalesList.addAll(sucursalesFacade.findAllBySearchFilter(sf));
     }
 
-    private final FiscalPuntosVentaSearchFilter filter = new FiscalPuntosVentaSearchFilter(null, Boolean.TRUE);
-
     @Override
-    protected AbstractFacade<FiscalPuntosVenta, FiscalPuntosVentaSearchFilter> getFacade() {
-        return puntosVentaFacade;
+    protected FiscalPuntosVentaService getService() {
+        return puntosVentaService;
     }
 
     @Override
@@ -69,11 +65,11 @@ public class PuntoVentaSearchBean extends AbstractSearchBean<FiscalPuntosVenta, 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("nroPuntoVenta", true));
+            filter.addSortField("nroPuntoVenta", true);
         }
     }
 
-    public List<Sucursales> getSucursalesList() {
+    public List<SucursalesDto> getSucursalesList() {
         return sucursalesList;
     }
 }

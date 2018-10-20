@@ -15,16 +15,15 @@
  */
 package ar.com.gtsoftware.controller.personas;
 
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.List;
 
 /**
  * SearchBean para buscar personas activas sin importar si son proveedores o clientes
@@ -33,14 +32,13 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "personasSearchBean")
 @ViewScoped
-public class PersonasSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
+public class PersonasSearchBean extends AbstractSearchBean<PersonasDto, PersonasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
+    private static final int MAX_RESULTS = 15;
+    private final PersonasSearchFilter filter = PersonasSearchFilter.builder().activo(true).build();
     @EJB
-    private PersonasFacade facade;
-
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, null, null);
+    private PersonasService service;
 
     /**
      * Creates a new instance of PersonasSearchBean
@@ -49,14 +47,14 @@ public class PersonasSearchBean extends AbstractSearchBean<Personas, PersonasSea
     }
 
     @Override
-    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
-        return facade;
+    protected PersonasService getService() {
+        return service;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("razonSocial", true));
+            filter.addSortField("razonSocial", true);
         }
     }
 
@@ -65,9 +63,9 @@ public class PersonasSearchBean extends AbstractSearchBean<Personas, PersonasSea
         return filter;
     }
 
-    public List<Personas> findPersonaByString(String query) {
+    public List<PersonasDto> findPersonaByString(String query) {
         filter.setTxt(query);
-        return facade.findBySearchFilter(filter, 0, 15);
+        return service.findBySearchFilter(filter, 0, MAX_RESULTS);
     }
 
 }

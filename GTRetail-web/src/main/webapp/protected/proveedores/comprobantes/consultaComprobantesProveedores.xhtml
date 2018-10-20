@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
+>
+
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">Consulta de comprobantes de proveedores</h1>
+            <div class="SeparatorFull"/>
+
+            <h:form id="formContenido">
+
+                <p:tabView id="busquedaTab">
+                    <p:defaultCommand target="buscarButton"/>
+
+                    <p:tab title="#{msg.busquedaBasica}">
+                        <p:panelGrid layout="grid"
+                                     styleClass="ui-panelgrid-blank" columns="2">
+
+                            <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                            <p:calendar id="fechaDesdeField"
+                                        value="#{searchComprobantesProveedoresBean.filter.fechaComprobanteDesde}"
+                                        pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true"/>
+
+                            <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                            <p:calendar id="fechaHastaField"
+                                        value="#{searchComprobantesProveedoresBean.filter.fechaComprobanteHasta}"
+                                        pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true"/>
+
+
+                        </p:panelGrid>
+
+                    </p:tab>
+
+                    <p:tab title="#{msg.busquedaAvanzada}">
+                        <p:panelGrid layout="grid"
+                                     styleClass="ui-panelgrid-blank" columns="2">
+                            <p:outputLabel value="#{msg.proveedor}:" for="razonSocialField"/>
+                            <h:panelGroup>
+                                <p:autoComplete id="razonSocialField"
+                                                value="#{searchComprobantesProveedoresBean.filter.idProveedor}"
+                                                completeMethod="#{searchComprobantesProveedoresBean.findProveedoresByString}"
+                                                var="cli" itemLabel="#{cli.razonSocial}"
+                                                itemValue="#{cli}"
+                                                converter="#{personasConverter}"
+                                                forceSelection="true"
+                                                minQueryLength="3"
+                                >
+
+                                </p:autoComplete>
+                                <p:commandButton id="buscarClienteButton" icon="fa fa-fw fa-search"
+                                                 update=":busquedaPersonasDialogForm:busquedaPersonasDialog"
+                                                 oncomplete="PF('proveedoresDialog').show()"
+                                                 process="@this"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoCompField"/>
+
+                            <p:selectCheckboxMenu id="tipoCompField"
+                                                  value="#{searchComprobantesProveedoresBean.filter.idTiposComprobanteList}"
+                                                  label="Tipos Comprobante" multiple="true"
+                                                  filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{searchComprobantesProveedoresBean.tiposCompList}" var="tipComp"
+                                               itemValue="#{tipComp.id}"
+                                               itemLabel="#{tipComp.nombreComprobante}"/>
+                            </p:selectCheckboxMenu>
+
+
+                            <h:outputLabel for="nroFacturaField" value="#{msg.factura}:"/>
+                            <p:inputText id="nroFacturaField"
+                                         value="#{searchComprobantesProveedoresBean.filter.numeroFactura}"
+                                         converter="#{stringFormatConverter}"/>
+
+                            <h:outputLabel for="anuladasField" value="#{msg.anulada}s"/>
+                            <p:selectBooleanCheckbox id="anuladasField"
+                                                     value="#{searchComprobantesProveedoresBean.filter.anulada}"/>
+                        </p:panelGrid>
+                    </p:tab>
+                </p:tabView>
+
+                <p:panelGrid layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="2">
+
+                    <p:commandButton id="buscarButton" action="#{searchComprobantesProveedoresBean.doSearch()}"
+                                     value="#{msg.buscar}"
+                                     update="@form"
+                                     icon="fa fa-fw fa-search"
+                    />
+
+                    <p:commandButton id="nuevoButton" action="edicion/index.xhtml" value="#{msg.nuevo}" ajax="false"
+                                     icon="fa fa-fw fa-plus"
+                                     styleClass="GreenButton"/>
+                </p:panelGrid>
+                <div class="SeparatorFull"/>
+
+                <p:dataTable id="comprasTable" value="#{searchComprobantesProveedoresBean.dataModel}"
+                             var="comprobante"
+                             rows="15"
+                             lazy="true"
+                             paginator="true"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{comprobante.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="15,20,30,50,100"
+
+
+                             scrollable="true"
+                             reflow="true">
+                    <f:facet name="{Exporters}">
+                        <h:commandLink title="xls">
+                            <i class="fa fa-file-excel-o Fs24 Green"/>
+                            <p:dataExporter type="xls" target="comprasTable" fileName="comprobantes"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="pdf">
+                            <i class="fa fa-file-pdf-o Fs24 Red"/>
+                            <p:dataExporter type="pdf" target="comprasTable" fileName="comprobantes"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="csv">
+                            <i class="fa fa-file-text-o Fs24 Blue"/>
+                            <p:dataExporter type="csv" target="comprasTable" fileName="comprobantes"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="xml">
+                            <i class="fa fa-file-code-o Fs24 Black"/>
+                            <p:dataExporter type="xml" target="comprasTable" fileName="comprobantes"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column sortBy="#{comprobante.id}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.tablaId}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.id}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{comprobante.idSucursal.nombreSucursal}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.sucursal}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.idSucursal.nombreSucursal}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{comprobante.fechaComprobante}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.fecha}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.fechaComprobante}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputLabel>
+                    </p:column>
+
+                    <p:column sortBy="#{comprobante.tipoComprobante.nombreComprobante}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.tipoComprobante}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.tipoComprobante.nombreComprobante}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{comprobante.idProveedor.razonSocial}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.tablaRazonSocial}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.idProveedor.razonSocial}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{comprobante.total}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.total}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.totalConSigno}">
+                            <f:convertNumber groupingUsed="true" type="currency"/>
+                        </h:outputLabel>
+                    </p:column>
+
+                    <p:column sortBy="#{comprobante.idRegistro.numeroFactura}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.nro}"/>
+                        </f:facet>
+                        <h:outputLabel rendered="#{not empty comprobante.idRegistro and not comprobante.anulada}"
+                                       value="#{comprobante.idRegistro.letraFactura} #{comprobante.idRegistro.puntoVentaFactura}-#{comprobante.idRegistro.numeroFactura}"/>
+
+                        <h:outputLabel rendered="#{empty comprobante.idRegistro and not comprobante.anulada}"
+                                       value="#{msg.no}"/>
+                        <h:outputLabel rendered="#{comprobante.anulada}"
+                                       value="#{msg.anulada}"/>
+                    </p:column>
+
+
+                    <!-- <p:column  exportable="false" >
+                         <f:facet name="header">
+                             #{msg.ver}
+                         </f:facet>
+
+
+                         <p:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" value="Ver">
+
+                             <f:param name="idComprobante" value="#{comprobante.id}"/>
+                         </p:link>
+
+                     </p:column>-->
+
+                </p:dataTable>
+
+
+                <!--<p:panel id="totalesVentasPanel" header="#{msg.totales}" toggleable="true">
+
+                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                                 styleClass="ui-panelgrid-blank" columns="2" >
+                        <p:outputLabel value="#{msg.totalComprobantes}:" />
+                        <p:outputLabel value="#{searchComprobantesBean.totalVentas}"
+
+                                       style="font-size: x-large; font-weight: bold" >
+                            <f:convertNumber groupingUsed="true" type="currency" />
+                        </p:outputLabel>
+
+                        <p:outputLabel value="#{msg.totalComprobantesSF}:" />
+                        <p:outputLabel value="#{searchComprobantesBean.totalVentasSinFacturar}"
+
+                                       style="font-size: x-large; font-weight: bold" >
+                            <f:convertNumber groupingUsed="true" type="currency" />
+                        </p:outputLabel>
+
+                        <p:outputLabel value="#{msg.totalComprobantesF}:" />
+                        <p:outputLabel value="#{searchComprobantesBean.totalVentasFacturadas}"
+
+                                       style="font-size: x-large; font-weight: bold" >
+                            <f:convertNumber groupingUsed="true" type="currency" />
+                        </p:outputLabel>
+                    </p:panelGrid >
+                </p:panel>-->
+
+            </h:form>
+            <h:form id="busquedaPersonasDialogForm">
+
+                <p:dialog id='busquedaPersonasDialog'
+                          header="#{msg.busquedaClientes}"
+                          widgetVar="proveedoresDialog"
+                          resizable="true"
+                          closeOnEscape="true"
+                          showEffect="fade" hideEffect="clip" modal="true"
+                          dynamic="true">
+
+                    <gtsoftware:busquedaPersonas personaSeleccionada="#{searchComprobantesBean.filter.idPersona}"
+
+                    >
+                    </gtsoftware:busquedaPersonas>
+
+                    <div class="SeparatorFull"/>
+
+                    <p:commandButton value="#{msg.ok}" icon="ui-icon-check"
+                                     oncomplete="PF('proveedoresDialog').hide()"
+                                     process="@this"
+                                     update=":formContenido:busquedaTab"/>
+
+
+                </p:dialog>
+
+
+            </h:form>
+        </div>
+    </div>
+</div>
+</html>

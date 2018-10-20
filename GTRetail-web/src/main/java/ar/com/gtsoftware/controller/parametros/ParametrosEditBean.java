@@ -15,19 +15,20 @@
  */
 package ar.com.gtsoftware.controller.parametros;
 
-import ar.com.gtsoftware.eao.ParametrosFacade;
-import ar.com.gtsoftware.model.Parametros;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import ar.com.gtsoftware.bl.ParametrosService;
+import ar.com.gtsoftware.dto.model.ParametrosDto;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang3.StringUtils;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "parametrosEditBean")
@@ -38,31 +39,27 @@ public class ParametrosEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(ParametrosEditBean.class.getName());
 
     @EJB
-    private ParametrosFacade parametrosFacade;
-    @EJB
-    private JSFUtil jsfUtil;
+    private ParametrosService service;
 
-    private Parametros parametroActual;
+
+    private ParametrosDto parametroActual;
 
     private String nombreParametro;
 
-    /**
-     * Creates a new instance of ParametrosEditBean
-     */
     public ParametrosEditBean() {
     }
 
     public void init() {
 
-        if (jsfUtil.isPostback()) {
+        if (isPostback()) {
             return;
         }
-        nombreParametro = jsfUtil.getRequestParameterMap().get("nombreParametro");
-        if (StringUtils.isEmpty(nombreParametro)) {
+        nombreParametro = getRequestParameterMap().get("nombreParametro");
+        if (isEmpty(nombreParametro)) {
             throw new IllegalArgumentException("El parámetro es nulo");
         }
 
-        parametroActual = parametrosFacade.findParametroByName(nombreParametro);
+        parametroActual = service.findParametroByName(nombreParametro);
         if (parametroActual == null) {
             LOG.log(Level.INFO, "Parámetro inexistente!");
             throw new IllegalArgumentException("El parámetro es nulo");
@@ -73,21 +70,17 @@ public class ParametrosEditBean implements Serializable {
 
     public void edit() {
 
-        parametrosFacade.edit(parametroActual);
-        jsfUtil.addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
+        service.createOrEdit(parametroActual);
+        addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
                 parametroActual.getNombreParametro(), parametroActual.getValorParametro()));
 
     }
 
-    public void establecerParametro(Parametros param) {
-        this.parametroActual = param;
-    }
-
-    public Parametros getParametroActual() {
+    public ParametrosDto getParametroActual() {
         return parametroActual;
     }
 
-    public void setParametroActual(Parametros parametroActual) {
+    public void setParametroActual(ParametrosDto parametroActual) {
         this.parametroActual = parametroActual;
     }
 

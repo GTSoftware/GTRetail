@@ -15,28 +15,28 @@
  */
 package ar.com.gtsoftware.controller.ubicaciones;
 
-import ar.com.gtsoftware.eao.UbicacionLocalidadesFacade;
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
-import ar.com.gtsoftware.model.UbicacionLocalidades;
-import ar.com.gtsoftware.model.UbicacionPaises;
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.bl.UbicacionLocalidadesService;
+import ar.com.gtsoftware.bl.UbicacionPaisesService;
+import ar.com.gtsoftware.bl.UbicacionProvinciasService;
+import ar.com.gtsoftware.dto.model.UbicacionLocalidadesDto;
+import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
+import ar.com.gtsoftware.dto.model.UbicacionProvinciasDto;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.lang.StringUtils;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang.StringUtils;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "localidadesEditBean")
@@ -47,22 +47,20 @@ public class LocalidadesEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(LocalidadesEditBean.class.getName());
 
     @EJB
-    private UbicacionProvinciasFacade provinciasFacade;
+    private UbicacionProvinciasService provinciasFacade;
 
     @EJB
-    private UbicacionLocalidadesFacade facade;
+    private UbicacionLocalidadesService facade;
 
     @EJB
-    private UbicacionPaisesFacade paisesFacade;
+    private UbicacionPaisesService paisesFacade;
 
-    @EJB
-    private JSFUtil jsfUtil;
 
-    private List<UbicacionPaises> paises;
-    private UbicacionPaises paisSeleccionado;
-    private List<UbicacionProvincias> provincias;
+    private List<UbicacionPaisesDto> paises;
+    private UbicacionPaisesDto paisSeleccionado;
+    private List<UbicacionProvinciasDto> provincias;
 
-    private UbicacionLocalidades localidadActual = null;
+    private UbicacionLocalidadesDto localidadActual = null;
 
     /**
      * Creates a new instance of MarcasEditBean
@@ -73,7 +71,7 @@ public class LocalidadesEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idLocalidad = jsfUtil.getRequestParameterMap().get("idLocalidad");
+        String idLocalidad = JSFUtil.getRequestParameterMap().get("idLocalidad");
 
         if (StringUtils.isEmpty(idLocalidad)) {
             nuevo();
@@ -92,31 +90,31 @@ public class LocalidadesEditBean implements Serializable {
     }
 
     private void nuevo() {
-        localidadActual = new UbicacionLocalidades();
+        localidadActual = new UbicacionLocalidadesDto();
     }
 
     public void doGuardar() {
         try {
 
             facade.createOrEdit(localidadActual);
-            jsfUtil.addInfoMessage("Localidad guardada Exitosamente");
+            JSFUtil.addInfoMessage("Localidad guardada Exitosamente");
             localidadActual = facade.find(localidadActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            jsfUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar");
         }
 
     }
 
-    public UbicacionLocalidades getLocalidadActual() {
+    public UbicacionLocalidadesDto getLocalidadActual() {
         return localidadActual;
     }
 
-    public UbicacionPaises getPaisSeleccionado() {
+    public UbicacionPaisesDto getPaisSeleccionado() {
         return paisSeleccionado;
     }
 
-    public void setPaisSeleccionado(UbicacionPaises paisSeleccionado) {
+    public void setPaisSeleccionado(UbicacionPaisesDto paisSeleccionado) {
         this.paisSeleccionado = paisSeleccionado;
     }
 
@@ -125,7 +123,7 @@ public class LocalidadesEditBean implements Serializable {
      *
      * @return la lista de todos los paises
      */
-    public List<UbicacionPaises> getPaises() {
+    public List<UbicacionPaisesDto> getPaises() {
         if (paises == null) {
             PaisesSearchFilter pSf = new PaisesSearchFilter();
             pSf.addSortField("nombrePais", true);
@@ -143,14 +141,14 @@ public class LocalidadesEditBean implements Serializable {
      *
      * @return la lista de todas las provincias de un pais
      */
-    public List<UbicacionProvincias> getProvincias() {
+    public List<UbicacionProvinciasDto> getProvincias() {
         if (paisSeleccionado == null) {
             return Collections.EMPTY_LIST;
         }
         if (provincias == null) {
             ProvinciasSearchFilter pSf = new ProvinciasSearchFilter();
             pSf.addSortField("nombreProvincia", true);
-            pSf.setIdPais(paisSeleccionado);
+            pSf.setIdPais(paisSeleccionado.getId());
             provincias = provinciasFacade.findAllBySearchFilter(pSf);
         }
         return provincias;

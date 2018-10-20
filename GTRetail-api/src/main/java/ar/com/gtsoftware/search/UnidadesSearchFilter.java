@@ -15,34 +15,27 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UnidadesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
     private String nombreUnidad;
 
-    public UnidadesSearchFilter() {
-    }
-
-    public UnidadesSearchFilter(String nombreUnidad) {
-        this.nombreUnidad = nombreUnidad;
-    }
-
     @Override
     public boolean hasFilter() {
-        return nombreUnidad != null;
-    }
-
-    public String getNombreUnidad() {
-        return nombreUnidad;
-    }
-
-    public void setNombreUnidad(String nombreUnidad) {
-        this.nombreUnidad = nombreUnidad;
+        return isNotEmpty(nombreUnidad);
     }
 
 }

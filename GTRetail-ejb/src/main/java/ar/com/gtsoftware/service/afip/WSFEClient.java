@@ -19,7 +19,7 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.model.AFIPAuthServices;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
-import ar.com.gtsoftware.model.dto.fiscal.CAEResponse;
+import ar.com.gtsoftware.dto.fiscal.CAEResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;

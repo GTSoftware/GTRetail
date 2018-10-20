@@ -16,7 +16,7 @@
 package ar.com.gtsoftware.bl.fiscal;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
 import javax.ejb.Remote;
 
 /**
@@ -34,6 +34,6 @@ public interface RegimenInformativoVentasService {
      * @return
      * @throws ar.com.gtsoftware.bl.exceptions.ServiceException
      */
-    public RegimenInformativoDTO generarRegimenInformativo(FiscalPeriodosFiscales periodoFiscal) throws ServiceException;
+    RegimenInformativoDTO generarRegimenInformativo(FiscalPeriodosFiscalesDto periodoFiscal) throws ServiceException;
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,27 @@
 package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.eao.DepositosFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
-import ar.com.gtsoftware.model.Depositos;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.RemitoDetalle;
-import ar.com.gtsoftware.model.RemitoRecepcion;
+import ar.com.gtsoftware.bl.DepositosService;
+import ar.com.gtsoftware.bl.ProductosService;
+import ar.com.gtsoftware.bl.RemitoService;
+import ar.com.gtsoftware.bl.RemitoTipoMovimientoService;
+import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.search.DepositosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.lang.StringUtils;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Bean para el ingreso rápido de mercadería
@@ -50,29 +48,25 @@ import org.apache.commons.lang.StringUtils;
 public class IngresoMercaderiaBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    private final ProductosSearchFilter productosFilter = ProductosSearchFilter.builder()
+            .activo(true).build();
     @EJB
-    private RemitoFacade remitoFacade;
+    private RemitoService remitoFacade;
     @EJB
-    private DepositosFacade depositosFacade;
+    private DepositosService depositosFacade;
     @EJB
-    private RemitoTipoMovimientoFacade remitoTipoMovimientoFacade;
+    private RemitoTipoMovimientoService remitoTipoMovimientoFacade;
     @EJB
-    private ProductosFacade productosFacade;
-
+    private ProductosService productosFacade;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-
-    @EJB
-    private JSFUtil jsfUtil;
-    private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
-    private Productos productoBusquedaSeleccionado = null;
+    private ProductosDto productoBusquedaSeleccionado = null;
     private BigDecimal cantidad = BigDecimal.ONE;
     private int numeradorLinea = 1;
     private boolean unidadesCompra = true;
 
-    private Remito remitoCabecera = new Remito();
-    private List<Depositos> depositosList = new ArrayList<>();
+    private RemitoDto remitoCabecera = new RemitoDto();
+    private List<DepositosDto> depositosList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -84,7 +78,13 @@ public class IngresoMercaderiaBean implements Serializable {
         remitoCabecera.setIsOrigenInterno(Boolean.FALSE);
         remitoCabecera.setIsDestinoInterno(Boolean.TRUE);
 
-        depositosList = authBackingBean.getUserLoggedIn().getIdSucursal().getDepositosList();
+        DepositosSearchFilter dsf = DepositosSearchFilter.builder()
+                .idSucursal(authBackingBean.getUserLoggedIn().getIdSucursal().getId())
+                .activo(true)
+                .build();
+        dsf.addSortField("nombreDeposito", true);
+
+        depositosList = depositosFacade.findAllBySearchFilter(dsf);
 
     }
 
@@ -97,7 +97,7 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public void agregarLinea() {
 
-        Productos producto;
+        ProductosDto producto;
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
@@ -108,7 +108,7 @@ public class IngresoMercaderiaBean implements Serializable {
         }
 
         if (producto == null) {
-            jsfUtil.addErrorMessage(jsfUtil.getBundle("msg").getString("productoNoEncontrado"));
+            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 
@@ -121,8 +121,8 @@ public class IngresoMercaderiaBean implements Serializable {
 
     }
 
-    private RemitoDetalle crearLineaDetalleRemito(Productos producto) {
-        RemitoDetalle detalle = new RemitoDetalle();
+    private RemitoDetalleDto crearLineaDetalleRemito(ProductosDto producto) {
+        RemitoDetalleDto detalle = new RemitoDetalleDto();
         if (unidadesCompra) {
             cantidad = cantidad.multiply(producto.getUnidadesCompraUnidadesVenta());
         }
@@ -139,15 +139,15 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public String confirmarIngreso() {
         if (remitoCabecera.getDetalleList().isEmpty()) {
-            jsfUtil.addErrorMessage("Debe ingresar los productos.");
+            JSFUtil.addErrorMessage("Debe ingresar los productos.");
             return StringUtils.EMPTY;
         }
 
         remitoCabecera.setRemitoTipoMovimiento(remitoTipoMovimientoFacade.find(1L));
         remitoCabecera.setObservaciones(String.format("Ingreso de mercaderia del proveedor: %s",
-                remitoCabecera.getIdOrigenExterno().getBusinessString()));
+                remitoCabecera.getIdOrigenExterno().toString()));
 
-        RemitoRecepcion recepcion = new RemitoRecepcion();
+        RemitoRecepcionDto recepcion = new RemitoRecepcionDto();
 
         recepcion.setRemito(remitoCabecera);
         recepcion.setIdPersona(remitoCabecera.getIdOrigenExterno());
@@ -155,7 +155,7 @@ public class IngresoMercaderiaBean implements Serializable {
         recepcion.setIdDeposito(remitoCabecera.getIdDestinoPrevistoInterno());
 
         remitoCabecera.setRemitoRecepcionesList(Arrays.asList(recepcion));
-        remitoFacade.create(remitoCabecera);
+        remitoFacade.createOrEdit(remitoCabecera);
 
         return "/protected/stock/remitos/index.xhtml?faces-redirect=true";
     }
@@ -169,7 +169,7 @@ public class IngresoMercaderiaBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (RemitoDetalle vl : remitoCabecera.getDetalleList()) {
+        for (RemitoDetalleDto vl : remitoCabecera.getDetalleList()) {
             if (vl.getNroLinea() == nroItem) {
                 index = cont;
                 break;
@@ -182,11 +182,11 @@ public class IngresoMercaderiaBean implements Serializable {
     }
 
     // ---Getter and Setter ----------------------------------------------
-    public Remito getRemitoCabecera() {
+    public RemitoDto getRemitoCabecera() {
         return remitoCabecera;
     }
 
-    public void setRemitoCabecera(Remito remitoCabecera) {
+    public void setRemitoCabecera(RemitoDto remitoCabecera) {
         this.remitoCabecera = remitoCabecera;
     }
 
@@ -210,11 +210,11 @@ public class IngresoMercaderiaBean implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Productos getProductoBusquedaSeleccionado() {
+    public ProductosDto getProductoBusquedaSeleccionado() {
         return productoBusquedaSeleccionado;
     }
 
-    public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
+    public void setProductoBusquedaSeleccionado(ProductosDto productoBusquedaSeleccionado) {
         this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
         productoSelected();
     }
@@ -237,12 +237,9 @@ public class IngresoMercaderiaBean implements Serializable {
         this.unidadesCompra = unidadesCompra;
     }
 
-    public List<Depositos> getDepositosList() {
+    public List<DepositosDto> getDepositosList() {
         return depositosList;
     }
 
-    public void setDepositosList(List<Depositos> depositosList) {
-        this.depositosList = depositosList;
-    }
 
 }

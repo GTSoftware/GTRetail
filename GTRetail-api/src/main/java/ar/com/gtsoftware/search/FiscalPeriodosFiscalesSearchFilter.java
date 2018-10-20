@@ -15,31 +15,31 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+
+import java.util.Date;
+
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FiscalPeriodosFiscalesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
     private Boolean vigente;
+    private Boolean cerrado;
+    private Date fechaActual;
 
     @Override
     public boolean hasFilter() {
-        return vigente != null;
-    }
-
-    public FiscalPeriodosFiscalesSearchFilter(Boolean vigente) {
-        this.vigente = vigente;
-    }
-
-    public Boolean getVigente() {
-        return vigente;
-    }
-
-    public void setVigente(Boolean vigente) {
-        this.vigente = vigente;
+        return vigente != null
+                || cerrado != null
+                || fechaActual != null;
     }
 
 }

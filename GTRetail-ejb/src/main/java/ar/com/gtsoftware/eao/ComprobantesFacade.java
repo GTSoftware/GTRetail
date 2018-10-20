@@ -15,25 +15,18 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.Comprobantes_;
-import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
-import ar.com.gtsoftware.model.NegocioTiposComprobante_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
-import java.math.BigDecimal;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.StringUtils;
+import javax.persistence.criteria.*;
+import java.math.BigDecimal;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
@@ -70,12 +63,12 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes, Comprobante
             Predicate p1 = cb.equal(root.get(Comprobantes_.idSucursal), vsf.getIdSucursal());
             p = appendAndPredicate(cb, p1, p);
         }
-        if (vsf.getCondicionVenta() != null) {
-            Predicate p1 = cb.equal(root.get(Comprobantes_.idCondicionComprobante), vsf.getCondicionVenta());
+        if (vsf.getIdCondicionVenta() != null) {
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idCondicionComprobante).get(NegocioCondicionesOperaciones_.id), vsf.getIdCondicionVenta());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdUsuario() != null) {
-            Predicate p1 = cb.equal(root.get(Comprobantes_.idUsuario), vsf.getIdUsuario());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idUsuario).get(Usuarios_.id), vsf.getIdUsuario());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getFacturada() != null) {
@@ -118,7 +111,7 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes, Comprobante
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.hasTiposComprobanteFilter()) {
-            Predicate p1 = root.get(Comprobantes_.tipoComprobante).in(vsf.getTiposComprobante());
+            Predicate p1 = root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.id).in(vsf.getIdTiposComprobanteList());
             p = appendAndPredicate(cb, p1, p);
         }
         return p;
@@ -145,50 +138,50 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes, Comprobante
         }
         return BigDecimal.ZERO;
     }
-
-    /**
-     * Obtiene el total de ventas facturadas
-     *
-     * @param sf
-     * @return
-     */
-    public BigDecimal calcularTotalVentasFacturadasBySearchFilter(ComprobantesSearchFilter sf) {
-        if (sf.hasFilter()) {
-            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
-            Root<Comprobantes> root = cq.from(Comprobantes.class);
-            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
-                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
-            Predicate p = createWhereFromSearchFilter(sf, cb, root);
-            p = appendAndPredicate(cb, cb.not(cb.isNull(root.get(Comprobantes_.idRegistro))), p);
-            cq.where(p);
-            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
-            return q.getSingleResult();
-
-        }
-        return BigDecimal.ZERO;
-    }
-
-    /**
-     * Obtiene el total de ventas sin facturar
-     *
-     * @param sf
-     * @return
-     */
-    public BigDecimal calcularTotalVentasSinFacturarBySearchFilter(ComprobantesSearchFilter sf) {
-        if (sf.hasFilter()) {
-            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
-            Root<Comprobantes> root = cq.from(Comprobantes.class);
-            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
-                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
-            Predicate p = createWhereFromSearchFilter(sf, cb, root);
-            p = appendAndPredicate(cb, cb.isNull(root.get(Comprobantes_.idRegistro)), p);
-            cq.where(p);
-            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
-            return q.getSingleResult();
-
-        }
-        return BigDecimal.ZERO;
-    }
+//
+//    /**
+//     * Obtiene el total de ventas facturadas
+//     *
+//     * @param sf
+//     * @return
+//     */
+//    public BigDecimal calcularTotalVentasFacturadasBySearchFilter(ComprobantesSearchFilter sf) {
+//        if (sf.hasFilter()) {
+//            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+//            Root<Comprobantes> root = cq.from(Comprobantes.class);
+//            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
+//                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
+//            Predicate p = createWhereFromSearchFilter(sf, cb, root);
+//            p = appendAndPredicate(cb, cb.not(cb.isNull(root.get(Comprobantes_.idRegistro))), p);
+//            cq.where(p);
+//            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+//            return q.getSingleResult();
+//
+//        }
+//        return BigDecimal.ZERO;
+//    }
+//
+//    /**
+//     * Obtiene el total de ventas sin facturar
+//     *
+//     * @param sf
+//     * @return
+//     */
+//    public BigDecimal calcularTotalVentasSinFacturarBySearchFilter(ComprobantesSearchFilter sf) {
+//        if (sf.hasFilter()) {
+//            CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+//            Root<Comprobantes> root = cq.from(Comprobantes.class);
+//            cq.select(cb.sum(cb.prod(root.get(Comprobantes_.total),
+//                    root.get(Comprobantes_.tipoComprobante).get(NegocioTiposComprobante_.signo))));
+//            Predicate p = createWhereFromSearchFilter(sf, cb, root);
+//            p = appendAndPredicate(cb, cb.isNull(root.get(Comprobantes_.idRegistro)), p);
+//            cq.where(p);
+//            TypedQuery<BigDecimal> q = getEntityManager().createQuery(cq);
+//            return q.getSingleResult();
+//
+//        }
+//        return BigDecimal.ZERO;
+//    }
 }

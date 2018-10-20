@@ -15,30 +15,27 @@
  */
 package ar.com.gtsoftware.controller.rubros;
 
+import ar.com.gtsoftware.bl.ProductosRubrosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ProductosRubrosFacade;
-import ar.com.gtsoftware.model.ProductosRubros;
+import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
 import ar.com.gtsoftware.search.RubrosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "rubrosSearchBean")
 @ViewScoped
-public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros, RubrosSearchFilter> {
+public class RubrosSearchBean extends AbstractSearchBean<ProductosRubrosDto, RubrosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private ProductosRubrosFacade facade;
-
     private final RubrosSearchFilter filter = new RubrosSearchFilter();
+    @EJB
+    private ProductosRubrosService service;
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -52,8 +49,8 @@ public class RubrosSearchBean extends AbstractSearchBean<ProductosRubros, Rubros
     }
 
     @Override
-    protected AbstractFacade<ProductosRubros, RubrosSearchFilter> getFacade() {
-        return facade;
+    protected ProductosRubrosService getService() {
+        return service;
     }
 
     @Override

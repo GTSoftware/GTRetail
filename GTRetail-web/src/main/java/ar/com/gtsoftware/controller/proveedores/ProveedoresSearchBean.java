@@ -15,40 +15,38 @@
  */
 package ar.com.gtsoftware.controller.proveedores;
 
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "proveedoresSearchBean")
 @ViewScoped
-public class ProveedoresSearchBean extends AbstractSearchBean<Personas, PersonasSearchFilter> {
+public class ProveedoresSearchBean extends AbstractSearchBean<PersonasDto, PersonasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
+    private final PersonasSearchFilter filter = PersonasSearchFilter.builder()
+            .activo(true).proveedor(true).build();
     @EJB
-    private PersonasFacade facade;
-
-    private final PersonasSearchFilter filter = new PersonasSearchFilter(Boolean.TRUE, null, Boolean.TRUE);
+    private PersonasService facade;
 
     /**
-     * Creates a new instance of ProveedoresSearchBean
+     * Creates a new instance of ProveedoresRSSearchBean
      */
     public ProveedoresSearchBean() {
     }
 
     @Override
-    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
+    protected PersonasService getService() {
         return facade;
     }
 
@@ -64,16 +62,16 @@ public class ProveedoresSearchBean extends AbstractSearchBean<Personas, Personas
         return filter;
     }
 
-    public List<Personas> findProveedorByString(String query) {
+    public List<PersonasDto> findProveedorByString(String query) {
         filter.setTxt(query);
         return facade.findBySearchFilter(filter, 0, 15);
     }
 
-    public String editarProveedor(Personas p) {
+    public String editarProveedor(PersonasDto p) {
         return String.format("edicion/index.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
 
-    public String verCuentaCorriente(Personas p) {
+    public String verCuentaCorriente(PersonasDto p) {
         return String.format("proveedoresCuentaCorriente.xhtml?faces-redirect=true;&idPersona=%d", p.getId());
     }
 }

@@ -15,42 +15,37 @@
  */
 package ar.com.gtsoftware.controller.clientes;
 
+import ar.com.gtsoftware.bl.PersonasCuentaCorrienteService;
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.PersonasCuentaCorrienteFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.PersonasCuentaCorriente;
+import ar.com.gtsoftware.dto.model.PersonasCuentaCorrienteDto;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.PersonasCuentaCorrienteSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "cuentaCorrienteSearchBean")
 @ViewScoped
-public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuentaCorriente, PersonasCuentaCorrienteSearchFilter> {
+public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuentaCorrienteDto, PersonasCuentaCorrienteSearchFilter> {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(CuentaCorrienteSearchBean.class.getName());
-
-    @EJB
-    private PersonasCuentaCorrienteFacade facade;
-    @EJB
-    private PersonasFacade personasFacade;
-
-    @EJB
-    private JSFUtil jsfUtil;
-
     private final PersonasCuentaCorrienteSearchFilter filter = new PersonasCuentaCorrienteSearchFilter();
+    @EJB
+    private PersonasCuentaCorrienteService cuentaCorrienteService;
+    @EJB
+    private PersonasService personasFacade;
 
     /**
      * Creates a new instance of CuentaCorrienteSearchBean
@@ -59,27 +54,27 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     }
 
     public void init() {
-        if (jsfUtil.isPostback()) {
+        if (isPostback()) {
             return;
         }
-        String idPersona = jsfUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {
-            Personas persona = personasFacade.find(Long.parseLong(idPersona));
+            PersonasDto persona = personasFacade.find(Long.parseLong(idPersona));
             if (persona == null) {
 
-                jsfUtil.addErrorMessage("Cliente inexistente!");
+                addErrorMessage("Cliente inexistente!");
                 LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
-                filter.setPersona(persona);
+                filter.setIdPersona(persona.getId());
             }
         }
     }
 
     @Override
-    protected AbstractFacade<PersonasCuentaCorriente, PersonasCuentaCorrienteSearchFilter> getFacade() {
-        return facade;
+    protected PersonasCuentaCorrienteService getService() {
+        return cuentaCorrienteService;
     }
 
     @Override
@@ -95,10 +90,10 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     }
 
     public BigDecimal getSaldo() {
-        if (filter.getPersona() == null) {
+        if (filter.getIdPersona() == null) {
             return BigDecimal.ZERO;
         }
-        return facade.getSaldoPersona(filter.getPersona());
+        return cuentaCorrienteService.getSaldoPersona(filter.getIdPersona());
     }
 
 }

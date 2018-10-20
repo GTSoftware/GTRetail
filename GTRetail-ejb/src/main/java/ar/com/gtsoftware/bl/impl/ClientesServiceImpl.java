@@ -17,37 +17,42 @@ package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.ClientesService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.eao.PersonasFacade;
 import ar.com.gtsoftware.eao.PersonasTelefonosFacade;
+import ar.com.gtsoftware.mappers.PersonasMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasTelefonos;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.PersonasTelefonosSearchFilter;
 import ar.com.gtsoftware.validators.ValidadorCUIT;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.Date;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
 public class ClientesServiceImpl implements ClientesService {
 
-    @EJB
-    private PersonasFacade personasFacade;
-
-    @EJB
-    private PersonasTelefonosFacade telefonosFacade;
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     private static final Logger LOG = Logger.getLogger(ClientesServiceImpl.class.getName());
+    @EJB
+    private PersonasFacade personasFacade;
+    @EJB
+    private PersonasTelefonosFacade telefonosFacade;
+    @Inject
+    private PersonasMapper personasMapper;
 
     @Override
-    public Personas guardarCliente(Personas cliente) throws ServiceException {
+    public PersonasDto guardarCliente(PersonasDto clienteDto) throws ServiceException {
+
+        Personas cliente = personasMapper.dtoToEntity(clienteDto, new CycleAvoidingMappingContext());
 
         if (cliente != null) {
             validarCliente(cliente);
@@ -63,7 +68,7 @@ public class ClientesServiceImpl implements ClientesService {
 
                 personasFacade.edit(cliente);
             }
-            return personasFacade.find(cliente.getId());
+            return personasMapper.entityToDto(personasFacade.find(cliente.getId()), new CycleAvoidingMappingContext());
         }
         return null;
 
@@ -112,8 +117,11 @@ public class ClientesServiceImpl implements ClientesService {
         if (cliente.getIdTipoDocumento().getId() == 2 && !ValidadorCUIT.getValidate(cliente.getDocumento())) {
             throw new ServiceException("El número de CUIT ingresado no es válido!");
         }
-        PersonasSearchFilter psf = new PersonasSearchFilter(cliente.getIdTipoDocumento(),
-                cliente.getDocumento(), Boolean.TRUE, Boolean.TRUE, null);
+        PersonasSearchFilter psf = PersonasSearchFilter.builder()
+                .idTipoDocumento(cliente.getIdTipoDocumento().getId())
+                .documento(cliente.getDocumento())
+                .activo(true)
+                .cliente(true).build();
         int result = personasFacade.countBySearchFilter(psf);
         if (cliente.isNew()) {
             if (result > 0) {
@@ -127,23 +135,22 @@ public class ClientesServiceImpl implements ClientesService {
     }
 
     @Override
-    public Personas find(Long id) {
-        return personasFacade.find(id);
+    public PersonasDto find(Long id) {
+        return personasMapper.entityToDto(personasFacade.find(id), new CycleAvoidingMappingContext());
     }
 
-    @Override
+    /*@Override
     public List<PersonasTelefonos> obtenerTelefonos(Personas persona) {
         PersonasTelefonosSearchFilter ptsf = new PersonasTelefonosSearchFilter();
-        ptsf.setPersona(persona);
+        ptsf.setIdPersona(persona.getId());
         return telefonosFacade.findAllBySearchFilter(ptsf);
-    }
+    }*/
 
-    @Override
     public void guardarTelefono(PersonasTelefonos telefono) {
         telefonosFacade.createOrEdit(telefono);
     }
 
-    @Override
+
     public void borrarTelefono(PersonasTelefonos telefono) {
         telefonosFacade.remove(telefono);
     }

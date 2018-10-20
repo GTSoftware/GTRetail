@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,43 +15,26 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.ProductosRubros;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SubRubroSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private ProductosRubros productosRubros;
+    private Long idProductosRubros;
     private String nombreSubRubro;
-
-    public SubRubroSearchFilter() {
-    }
-
-    public SubRubroSearchFilter(String nombreSubRubro) {
-        this.nombreSubRubro = nombreSubRubro;
-    }
 
     @Override
     public boolean hasFilter() {
-        return (productosRubros != null || (nombreSubRubro != null && !nombreSubRubro.isEmpty()));
-    }
-
-    public ProductosRubros getProductosRubros() {
-        return productosRubros;
-    }
-
-    public void setProductosRubros(ProductosRubros productosRubros) {
-        this.productosRubros = productosRubros;
-    }
-
-    public String getNombreSubRubro() {
-        return nombreSubRubro;
-    }
-
-    public void setNombreSubRubro(String nombreSubRubro) {
-        this.nombreSubRubro = nombreSubRubro;
+        return (idProductosRubros != null || StringUtils.isNotEmpty(nombreSubRubro));
     }
 }

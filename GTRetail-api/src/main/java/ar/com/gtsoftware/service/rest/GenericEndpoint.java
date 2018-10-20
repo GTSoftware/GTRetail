@@ -15,27 +15,25 @@
  */
 package ar.com.gtsoftware.service.rest;
 
-import ar.com.gtsoftware.model.dto.ResultadoDTO;
-import java.time.LocalDateTime;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-@Path("/generic")
+@Path("/v1/generic")
+@Produces(value = MediaType.APPLICATION_JSON)
 public interface GenericEndpoint {
 
     @GET
     @Path("/ping")
-    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public ResultadoDTO getPing();
+    Response getPing();
 
     @GET
     @Path("/date")
-    @Produces(value = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public LocalDateTime getDate();
+    Response getDate();
 }

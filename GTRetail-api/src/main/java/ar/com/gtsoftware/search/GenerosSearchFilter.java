@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,70 +15,30 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.LegalTiposPersoneria;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GenerosSearchFilter extends AbstractSearchFilter {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
     private Integer idGenero;
     private String nombreGenero;
     private String simbolo;
-    private LegalTiposPersoneria idTipoPersoneria;
-
-    public GenerosSearchFilter(Integer idGenero) {
-        this.idGenero = idGenero;
-    }
-
-    public GenerosSearchFilter(LegalTiposPersoneria idTipoPersoneria) {
-        this.idTipoPersoneria = idTipoPersoneria;
-    }
-
-    public GenerosSearchFilter() {
-    }
+    private Long idTipoPersoneria;
 
     @Override
     public boolean hasFilter() {
-        return (idGenero != null) || (nombreGenero != null && !nombreGenero.isEmpty())
-                || (simbolo != null && !simbolo.isEmpty()) || (idTipoPersoneria != null);
-    }
-
-    public Integer getIdGenero() {
-        return idGenero;
-    }
-
-    public void setIdGenero(Integer idGenero) {
-        this.idGenero = idGenero;
-    }
-
-    public String getNombreGenero() {
-        return nombreGenero;
-    }
-
-    public void setNombreGenero(String nombreGenero) {
-        this.nombreGenero = nombreGenero;
-    }
-
-    public String getSimbolo() {
-        return simbolo;
-    }
-
-    public void setSimbolo(String simbolo) {
-        this.simbolo = simbolo;
-    }
-
-    public LegalTiposPersoneria getIdTipoPersoneria() {
-        return idTipoPersoneria;
-    }
-
-    public void setIdTipoPersoneria(LegalTiposPersoneria idTipoPersoneria) {
-        this.idTipoPersoneria = idTipoPersoneria;
+        return idGenero != null
+                || StringUtils.isNotEmpty(nombreGenero)
+                || StringUtils.isNotEmpty(simbolo)
+                || idTipoPersoneria != null;
     }
 
 }

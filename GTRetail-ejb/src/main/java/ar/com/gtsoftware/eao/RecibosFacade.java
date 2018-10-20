@@ -15,9 +15,9 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Recibos;
-import ar.com.gtsoftware.model.Recibos_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.RecibosSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +26,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Stateless
@@ -35,13 +34,13 @@ public class RecibosFacade extends AbstractFacade<Recibos, RecibosSearchFilter> 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public RecibosFacade() {
+        super(Recibos.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public RecibosFacade() {
-        super(Recibos.class);
     }
 
     @Override
@@ -60,17 +59,17 @@ public class RecibosFacade extends AbstractFacade<Recibos, RecibosSearchFilter> 
         }
 
         if (rsf.getIdCaja() != null) {
-            Predicate p1 = cb.equal(root.get(Recibos_.idCaja), rsf.getIdCaja());
+            Predicate p1 = cb.equal(root.get(Recibos_.idCaja).get(Cajas_.id), rsf.getIdCaja());
             p = appendAndPredicate(cb, p1, p);
         }
 
         if (rsf.getIdPersona() != null) {
-            Predicate p1 = cb.equal(root.get(Recibos_.idPersona), rsf.getIdPersona());
+            Predicate p1 = cb.equal(root.get(Recibos_.idPersona).get(Personas_.id), rsf.getIdPersona());
             p = appendAndPredicate(cb, p1, p);
         }
 
         if (rsf.getIdUsuario() != null) {
-            Predicate p1 = cb.equal(root.get(Recibos_.idUsuario), rsf.getIdUsuario());
+            Predicate p1 = cb.equal(root.get(Recibos_.idUsuario).get(Usuarios_.id), rsf.getIdUsuario());
             p = appendAndPredicate(cb, p1, p);
         }
         return p;

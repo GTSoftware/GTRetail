@@ -15,39 +15,30 @@
  */
 package ar.com.gtsoftware.controller.unidades;
 
+import ar.com.gtsoftware.bl.ProductosTiposUnidadesService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
-import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.dto.model.ProductosTiposUnidadesDto;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.UnidadesSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "unidadesSearchBean")
 @ViewScoped
-public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidades, UnidadesSearchFilter> {
+public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidadesDto, UnidadesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private ProductosTiposUnidadesFacade facade;
-    @EJB
-    private JSFUtil jsfUtil;
-
-    private ProductosTiposUnidades unidad;
-
     private final UnidadesSearchFilter filter = new UnidadesSearchFilter();
+    @EJB
+    private ProductosTiposUnidadesService facade;
+    private ProductosTiposUnidadesDto unidad;
 
-    /**
-     * Creates a new instance of ParametrosEditBean
-     */
     public UnidadesSearchBean() {
     }
 
@@ -57,7 +48,7 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
     }
 
     @Override
-    protected AbstractFacade<ProductosTiposUnidades, UnidadesSearchFilter> getFacade() {
+    protected ProductosTiposUnidadesService getService() {
         return facade;
     }
 
@@ -69,16 +60,16 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
 
     }
 
-    public ProductosTiposUnidades getUnidad() {
+    public ProductosTiposUnidadesDto getUnidad() {
         return unidad;
     }
 
-    public void setUnidad(ProductosTiposUnidades unidad) {
+    public void setUnidad(ProductosTiposUnidadesDto unidad) {
         this.unidad = unidad;
     }
 
     public void deleteUnidad() {
         facade.remove(unidad);
-        jsfUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
+        JSFUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
     }
 }

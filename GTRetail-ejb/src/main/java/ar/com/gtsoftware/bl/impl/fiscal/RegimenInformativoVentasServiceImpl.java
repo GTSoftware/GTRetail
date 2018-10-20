@@ -16,32 +16,27 @@
 package ar.com.gtsoftware.bl.impl.fiscal;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.bl.fiscal.RegInfoCvVentasAlicuotas;
-import ar.com.gtsoftware.bl.fiscal.RegimenInformativoDTO;
-import ar.com.gtsoftware.bl.fiscal.RegimenInformativoVentasService;
-import ar.com.gtsoftware.bl.fiscal.ReginfoCvCabecera;
-import ar.com.gtsoftware.bl.fiscal.ReginfoCvVentasCbte;
+import ar.com.gtsoftware.bl.fiscal.*;
+import ar.com.gtsoftware.dto.ImportesAlicuotasIVA;
+import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
 import ar.com.gtsoftware.eao.ParametrosFacade;
+import ar.com.gtsoftware.mappers.FiscalAlicuotasIvaMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
-import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
-import ar.com.gtsoftware.search.IVAVentasSearchFilter;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import ar.com.gtsoftware.search.LibroIVASearchFilter;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
@@ -55,12 +50,16 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
     @EJB
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
 
+
+    @Inject
+    private FiscalAlicuotasIvaMapper alicuotasIvaMapper;
+
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
     private static final BigDecimal MONTO_MAXIMO_SIN_IDENTIFICAR = new BigDecimal(1000);
     private static final int CODIGO_DOCUMENTO_SIN_IDENTIFICAR = 99;
 
     @Override
-    public RegimenInformativoDTO generarRegimenInformativo(FiscalPeriodosFiscales fiscalPeriodosFiscales) throws ServiceException {
+    public RegimenInformativoDTO generarRegimenInformativo(FiscalPeriodosFiscalesDto fiscalPeriodosFiscales) throws ServiceException {
 
         //TODO tomar los datos de secuencia, IVA prorrateado y demás como parámetros
         if (fiscalPeriodosFiscales == null) {
@@ -75,9 +74,9 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
 
         }
 
-        IVAVentasSearchFilter filter = new IVAVentasSearchFilter();
-        filter.setPeriodo(fiscalPeriodosFiscales);
-        filter.setAnuladas(Boolean.FALSE);//Sin anuladas
+        LibroIVASearchFilter filter = LibroIVASearchFilter.builder()
+                .idPeriodo(fiscalPeriodosFiscales.getId())
+                .anuladas(false).build();//Sin anuladas
 
         ReginfoCvCabecera cabecera = new ReginfoCvCabecera();
         Calendar c = Calendar.getInstance();
@@ -130,7 +129,10 @@ public class RegimenInformativoVentasServiceImpl implements RegimenInformativoVe
 
                 FiscalAlicuotasIva alicuota = linea.getIdAlicuotaIva();
 
-                ImportesAlicuotasIVA importeIva = new ImportesAlicuotasIVA(alicuota, linea.getImporteIva(), linea.getNetoGravado());
+                ImportesAlicuotasIVA importeIva = new ImportesAlicuotasIVA(alicuotasIvaMapper.entityToDto(alicuota,
+                        new CycleAvoidingMappingContext()),
+                        linea.getImporteIva(), linea.getNetoGravado());
+
                 if (!importesIVA.add(importeIva)) {
                     for (ImportesAlicuotasIVA imp : importesIVA) {
                         if (imp.getAlicuota().equals(linea.getIdAlicuotaIva())) {

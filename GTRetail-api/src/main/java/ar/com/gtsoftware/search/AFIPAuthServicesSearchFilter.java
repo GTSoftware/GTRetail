@@ -15,12 +15,17 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AFIPAuthServicesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -31,31 +36,8 @@ public class AFIPAuthServicesSearchFilter extends AbstractSearchFilter {
 
     @Override
     public boolean hasFilter() {
-        return StringUtils.isNotEmpty(service) || noExpirado != null;
-    }
-
-    public AFIPAuthServicesSearchFilter() {
-    }
-
-    public AFIPAuthServicesSearchFilter(String service, Boolean noExpirado) {
-        this.service = service;
-        this.noExpirado = noExpirado;
-    }
-
-    public String getService() {
-        return service;
-    }
-
-    public void setService(String service) {
-        this.service = service;
-    }
-
-    public Boolean getNoExpirado() {
-        return noExpirado;
-    }
-
-    public void setNoExpirado(Boolean noExpirado) {
-        this.noExpirado = noExpirado;
+        return StringUtils.isNotEmpty(service)
+                || noExpirado != null;
     }
 
 }
