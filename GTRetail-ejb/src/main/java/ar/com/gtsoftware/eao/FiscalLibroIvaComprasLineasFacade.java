@@ -67,8 +67,7 @@ public class FiscalLibroIvaComprasLineasFacade extends AbstractFacade<FiscalLibr
         cq.where(p);
         TypedQuery<FiscalLibroIvaComprasLineas> q = em.createQuery(cq);
 
-        List<FiscalLibroIvaComprasLineas> lineasFacturaList = q.getResultList();
-        return lineasFacturaList;
+        return q.getResultList();
     }
 
     @Override

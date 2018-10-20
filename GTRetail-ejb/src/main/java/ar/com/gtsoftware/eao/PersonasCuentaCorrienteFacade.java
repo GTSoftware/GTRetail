@@ -15,11 +15,11 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente;
 import ar.com.gtsoftware.model.PersonasCuentaCorriente_;
+import ar.com.gtsoftware.model.Personas_;
 import ar.com.gtsoftware.search.PersonasCuentaCorrienteSearchFilter;
-import java.math.BigDecimal;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,9 +27,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -38,21 +38,21 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public PersonasCuentaCorrienteFacade() {
+        super(PersonasCuentaCorriente.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
-    public PersonasCuentaCorrienteFacade() {
-        super(PersonasCuentaCorriente.class);
-    }
-
-    public BigDecimal getSaldoPersona(Personas persona) {
+    public BigDecimal getSaldoPersona(Long idPersona) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
         Root<PersonasCuentaCorriente> cuenta = cq.from(PersonasCuentaCorriente.class);
         cq.select(cb.sum(cuenta.get(PersonasCuentaCorriente_.importeMovimiento)).alias("SUM"));
-        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona), persona);
+        Predicate p = cb.equal(cuenta.get(PersonasCuentaCorriente_.idPersona).get(Personas_.id), idPersona);
         cq.where(p);
         BigDecimal result = em.createQuery(cq).getSingleResult();
         if (result == null) {
@@ -63,10 +63,10 @@ public class PersonasCuentaCorrienteFacade extends AbstractFacade<PersonasCuenta
 
     @Override
     public Predicate createWhereFromSearchFilter(PersonasCuentaCorrienteSearchFilter sf, CriteriaBuilder cb,
-            Root<PersonasCuentaCorriente> root) {
+                                                 Root<PersonasCuentaCorriente> root) {
         Predicate p = null;
-        if (sf.getPersona() != null) {
-            Predicate p1 = cb.equal(root.get(PersonasCuentaCorriente_.idPersona), sf.getPersona());
+        if (sf.getIdPersona() != null) {
+            Predicate p1 = cb.equal(root.get(PersonasCuentaCorriente_.idPersona).get(Personas_.id), sf.getIdPersona());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

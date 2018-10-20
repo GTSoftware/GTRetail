@@ -17,8 +17,9 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas_;
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,11 +28,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 @Stateless
 public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVentas, LibroIVASearchFilter> {
@@ -79,8 +81,8 @@ public class FiscalLibroIvaVentasFacade extends AbstractFacade<FiscalLibroIvaVen
     @Override
     public Predicate createWhereFromSearchFilter(LibroIVASearchFilter ivavsf, CriteriaBuilder cb, Root<FiscalLibroIvaVentas> root) {
         Predicate p = null;
-        if (ivavsf.getPeriodo() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalLibroIvaVentas_.idPeriodoFiscal), ivavsf.getPeriodo());
+        if (ivavsf.getIdPeriodo() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLibroIvaVentas_.idPeriodoFiscal).get(FiscalPeriodosFiscales_.id), ivavsf.getIdPeriodo());
             p = appendAndPredicate(cb, p1, p);
         }
         if (ivavsf.hasFechasDesdeHasta()) {

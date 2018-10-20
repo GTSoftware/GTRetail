@@ -15,29 +15,33 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Bancos;
-import java.util.Date;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
 
 /**
  * Search filter para cheques de terceros
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChequesTercerosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
     private String cuitOriginante;
     private String nombreOriginante;
-    private Bancos idBanco;
+    private Long idBanco;
     private Date fechaOrigenDesde;
     private Date fechaOrigenHasta;
     private Boolean noVencidos;
     private Boolean noCobrados;
 
-    public ChequesTercerosSearchFilter() {
-    }
 
     @Override
     public boolean hasFilter() {
@@ -73,60 +77,5 @@ public class ChequesTercerosSearchFilter extends AbstractSearchFilter {
         return noCobrados != null;
     }
 
-    public String getCuitOriginante() {
-        return cuitOriginante;
-    }
-
-    public void setCuitOriginante(String cuitOriginante) {
-        this.cuitOriginante = cuitOriginante;
-    }
-
-    public String getNombreOriginante() {
-        return nombreOriginante;
-    }
-
-    public void setNombreOriginante(String nombreOriginante) {
-        this.nombreOriginante = nombreOriginante;
-    }
-
-    public Bancos getIdBanco() {
-        return idBanco;
-    }
-
-    public void setIdBanco(Bancos idBanco) {
-        this.idBanco = idBanco;
-    }
-
-    public Date getFechaOrigenDesde() {
-        return fechaOrigenDesde;
-    }
-
-    public void setFechaOrigenDesde(Date fechaOrigenDesde) {
-        this.fechaOrigenDesde = fechaOrigenDesde;
-    }
-
-    public Date getFechaOrigenHasta() {
-        return fechaOrigenHasta;
-    }
-
-    public void setFechaOrigenHasta(Date fechaOrigenHasta) {
-        this.fechaOrigenHasta = fechaOrigenHasta;
-    }
-
-    public Boolean getNoVencidos() {
-        return noVencidos;
-    }
-
-    public void setNoVencidos(Boolean noVencidos) {
-        this.noVencidos = noVencidos;
-    }
-
-    public Boolean getNoCobrados() {
-        return noCobrados;
-    }
-
-    public void setNoCobrados(Boolean noCobrados) {
-        this.noCobrados = noCobrados;
-    }
 
 }

@@ -15,9 +15,12 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.ProductosListasPrecios_;
 import ar.com.gtsoftware.model.ProductosPrecios;
 import ar.com.gtsoftware.model.ProductosPrecios_;
+import ar.com.gtsoftware.model.Productos_;
 import ar.com.gtsoftware.search.ProductosPreciosSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +29,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
@@ -49,13 +51,13 @@ public class ProductosPreciosFacade extends AbstractFacade<ProductosPrecios, Pro
 
         Predicate p = null;
 
-        if (psf.getProducto() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idProducto), psf.getProducto());
+        if (psf.getIdProducto() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idProducto).get(Productos_.id), psf.getIdProducto());
             p = appendAndPredicate(cb, p, p1);
         }
 
-        if (psf.getLista() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idListaPrecios), psf.getLista());
+        if (psf.getIdListaPrecios() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosPrecios_.idListaPrecios).get(ProductosListasPrecios_.id), psf.getIdListaPrecios());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

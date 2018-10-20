@@ -4,10 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
-      xmlns:o="http://omnifaces.org/ui">
+>
 
 <div class="Container100 Responsive100 NoIndent">
     <div class="Container100 ui-fluid">
@@ -21,7 +20,7 @@
                     <p:defaultCommand target="buscarButton"/>
 
                     <p:tab title="#{msg.busquedaBasica}">
-                        <p:panelGrid layout="grid" style="border:0 !important; background:none;"
+                        <p:panelGrid layout="grid"
                                      styleClass="ui-panelgrid-blank" columns="2">
 
                             <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
@@ -40,7 +39,7 @@
                     </p:tab>
 
                     <p:tab title="#{msg.busquedaAvanzada}">
-                        <p:panelGrid layout="grid" style="border:0 !important; background:none;"
+                        <p:panelGrid layout="grid"
                                      styleClass="ui-panelgrid-blank" columns="2">
                             <p:outputLabel value="#{msg.proveedor}:" for="razonSocialField"/>
                             <h:panelGroup>
@@ -62,23 +61,16 @@
                             </h:panelGroup>
 
                             <p:outputLabel value="#{msg.tipoComprobante}:" for="tipoCompField"/>
-                            <p:autoComplete id="tipoCompField" multiple="true"
-                                            value="#{searchComprobantesProveedoresBean.filter.tiposComprobante}"
-                                            completeMethod="#{searchComprobantesProveedoresBean.autocompleteTiposComp}"
-                                            var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}"
-                                            itemValue="#{tipoComp}"
-                                            forceSelection="true"
-                                            minQueryLength="2"
-                            >
-                                <o:converter converterId="omnifaces.ListConverter"
-                                             list="#{searchComprobantesProveedoresBean.tiposCompList}"/>
-                                <p:ajax event="query" global="false"/>
 
-                                <p:column>
-                                    <h:outputText value="#{tipoComp.nombreComprobante}"/>
-                                </p:column>
+                            <p:selectCheckboxMenu id="tipoCompField"
+                                                  value="#{searchComprobantesProveedoresBean.filter.idTiposComprobanteList}"
+                                                  label="Tipos Comprobante" multiple="true"
+                                                  filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{searchComprobantesProveedoresBean.tiposCompList}" var="tipComp"
+                                               itemValue="#{tipComp.id}"
+                                               itemLabel="#{tipComp.nombreComprobante}"/>
+                            </p:selectCheckboxMenu>
 
-                            </p:autoComplete>
 
                             <h:outputLabel for="nroFacturaField" value="#{msg.factura}:"/>
                             <p:inputText id="nroFacturaField"
@@ -92,7 +84,7 @@
                     </p:tab>
                 </p:tabView>
 
-                <p:panelGrid layout="grid" style="border:0 !important; background:none;"
+                <p:panelGrid layout="grid"
                              styleClass="ui-panelgrid-blank" columns="2">
 
                     <p:commandButton id="buscarButton" action="#{searchComprobantesProveedoresBean.doSearch()}"
@@ -161,7 +153,7 @@
                             <h:outputLabel value="#{msg.fecha}"/>
                         </f:facet>
                         <h:outputLabel value="#{comprobante.fechaComprobante}">
-                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss a"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputLabel>
                     </p:column>
 
@@ -190,7 +182,7 @@
 
                     <p:column sortBy="#{comprobante.idRegistro.numeroFactura}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.factura}"/>
+                            <h:outputLabel value="#{msg.nro}"/>
                         </f:facet>
                         <h:outputLabel rendered="#{not empty comprobante.idRegistro and not comprobante.anulada}"
                                        value="#{comprobante.idRegistro.letraFactura} #{comprobante.idRegistro.puntoVentaFactura}-#{comprobante.idRegistro.numeroFactura}"/>

@@ -49,7 +49,7 @@ limitations under the License.
                                      value="#{usuariosEditBean.usuarioActual.nombreUsuario}"
                                      required="true"
                                      maxlength="100"/>
-                        <!-- Contraseña -->
+                        <!--&lt;!&ndash; Contraseña &ndash;&gt;
                         <p:outputLabel value="#{msg.password}:" for="passwordField"/>
                         <p:password id="passwordField"
                                     required="#{usuariosEditBean.nuevo}"
@@ -63,7 +63,7 @@ limitations under the License.
                                     required="#{usuariosEditBean.nuevo}"
                                     label="Repetir #{msg.password}"
                                     value="#{usuariosEditBean.passwordRepeat}"
-                                    />
+                                    />-->
 
                         <!-- Sucursal-->
                         <h:outputLabel for="sucursalField"
@@ -77,7 +77,7 @@ limitations under the License.
                             <f:selectItem noSelectionOption="true"
                                           itemLabel="#{msg.ingresarValor}" itemValue="#{null}" />
                             <f:selectItems value="#{usuariosEditBean.sucursalesList}"
-                                           var="suc" itemLabel="#{suc.businessString}"
+                                           var="suc" itemLabel="#{suc}"
                                            itemValue="#{suc}" />
 
                         </p:selectOneMenu>

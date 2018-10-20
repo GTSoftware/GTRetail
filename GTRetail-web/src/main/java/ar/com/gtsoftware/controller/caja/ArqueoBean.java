@@ -16,15 +16,16 @@
 package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.CajasArqueosService;
 import ar.com.gtsoftware.bl.CajasService;
-import ar.com.gtsoftware.eao.CajasArqueosFacade;
-import ar.com.gtsoftware.eao.CajasFacade;
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.model.CajasArqueos;
-import ar.com.gtsoftware.model.CajasArqueosDetalle;
-import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.bl.NegocioFormasPagoService;
+import ar.com.gtsoftware.dto.model.CajasArqueosDetalleDto;
+import ar.com.gtsoftware.dto.model.CajasArqueosDto;
+import ar.com.gtsoftware.dto.model.CajasDto;
+import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
+import ar.com.gtsoftware.search.CajasSearchFilter;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -54,23 +55,23 @@ public class ArqueoBean implements Serializable {
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
-    private Cajas cajaActual;
+    private CajasDto cajaActual;
+
 
     @EJB
-    private CajasFacade cajasFacade;
+    private NegocioFormasPagoService formasPagoFacade;
 
     @EJB
-    private NegocioFormasPagoFacade formasPagoFacade;
-    @EJB
-    private CajasArqueosFacade arqueosFacade;
+    private CajasArqueosService arqueosService;
+
     @EJB
     private CajasService cajasService;
 
-    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter(null, null);
+    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter();
 
-    private CajasArqueos arqueoActual = new CajasArqueos();
+    private CajasArqueosDto arqueoActual = new CajasArqueosDto();
 
-    private CajasArqueosDetalle detalleArqueoActual;
+    private CajasArqueosDetalleDto detalleArqueoActual;
 
     private int itemId = 1;
 
@@ -84,7 +85,7 @@ public class ArqueoBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
+        CajasDto cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
 
         if (cajaAbierta == null) {
             addErrorMessage("El usuario no tiene una caja abierta para poder realizar el arqueo.");
@@ -98,7 +99,7 @@ public class ArqueoBean implements Serializable {
         arqueoActual.setIdCaja(cajaActual);
         arqueoActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
         arqueoActual.setDetalleArqueo(new ArrayList<>());
-        detalleArqueoActual = new CajasArqueosDetalle();
+        detalleArqueoActual = new CajasArqueosDetalleDto();
         detalleArqueoActual.setItem(itemId);
     }
 
@@ -110,7 +111,7 @@ public class ArqueoBean implements Serializable {
         this.authBackingBean = authBackingBean;
     }
 
-    public Cajas getCajaActual() {
+    public CajasDto getCajaActual() {
         return cajaActual;
     }
 
@@ -120,8 +121,8 @@ public class ArqueoBean implements Serializable {
             detalleArqueoActual.setMontoSistema(obtenerSaldoCajaFormaPago(detalleArqueoActual.getIdFormaPago()));
             detalleArqueoActual.setDiferencia(detalleArqueoActual.getMontoDeclarado().subtract(detalleArqueoActual.getMontoSistema()));
 
-            arqueoActual.agregarDetalleArqueo(detalleArqueoActual);
-            detalleArqueoActual = new CajasArqueosDetalle();
+            arqueoActual.getDetalleArqueo().add(detalleArqueoActual);
+            detalleArqueoActual = new CajasArqueosDetalleDto();
             detalleArqueoActual.setItem(++itemId);
             addInfoMessage("Se ha agregado el monto al arqueo con éxito");
         } else {
@@ -136,9 +137,9 @@ public class ArqueoBean implements Serializable {
      * @param detalleNuevo
      * @return
      */
-    private boolean validarFormaPagoYaIngresada(CajasArqueosDetalle detalleNuevo) {
-        if (arqueoActual.getDetalleArqueo() != null) {
-            for (CajasArqueosDetalle d : arqueoActual.getDetalleArqueo()) {
+    private boolean validarFormaPagoYaIngresada(CajasArqueosDetalleDto detalleNuevo) {
+        if (CollectionUtils.isNotEmpty(arqueoActual.getDetalleArqueo())) {
+            for (CajasArqueosDetalleDto d : arqueoActual.getDetalleArqueo()) {
                 if (d.getIdFormaPago().equals(detalleNuevo.getIdFormaPago())) {
                     return false;
                 }
@@ -156,7 +157,7 @@ public class ArqueoBean implements Serializable {
         int index = -1;
         int cont = 0;
 
-        for (CajasArqueosDetalle da : arqueoActual.getDetalleArqueo()) {
+        for (CajasArqueosDetalleDto da : arqueoActual.getDetalleArqueo()) {
             if (da.getItem() == item) {
                 index = cont;
                 break;
@@ -176,10 +177,12 @@ public class ArqueoBean implements Serializable {
     private boolean validarArqueo() {
 
         StringBuilder sb = new StringBuilder();
-        BigDecimal montoTotalCaja = cajasFacade.obtenerMontoFormaPago(null, cajaActual);
+        CajasSearchFilter csf = CajasSearchFilter.builder()
+                .idCaja(cajaActual.getId()).build();
+        BigDecimal montoTotalCaja = cajasService.obtenerTotalEnCaja(csf);
         BigDecimal montoTotalArqueo = BigDecimal.ZERO;
 
-        for (CajasArqueosDetalle ad : arqueoActual.getDetalleArqueo()) {
+        for (CajasArqueosDetalleDto ad : arqueoActual.getDetalleArqueo()) {
             montoTotalArqueo = montoTotalArqueo.add(ad.getMontoSistema());
             if (ad.getDiferencia().signum() != 0 && StringUtils.isEmpty(ad.getDescargo())) {
                 sb.append(String.format("La forma de pago: %s tiene una diferencia y debe ingresar el descargo.", ad.getIdFormaPago().getNombreFormaPago()));
@@ -208,35 +211,41 @@ public class ArqueoBean implements Serializable {
         Date fechaActual = new Date();
 
         arqueoActual.setFechaArqueo(fechaActual);
-        arqueoActual.setSaldoFinal(cajasFacade.obtenerMontoFormaPago(null, cajaActual));
-        arqueosFacade.create(arqueoActual);
+        CajasSearchFilter csf = CajasSearchFilter.builder()
+                .idCaja(cajaActual.getId()).build();
+        arqueoActual.setSaldoFinal(cajasService.obtenerTotalEnCaja(csf));
+        arqueosService.createOrEdit(arqueoActual);
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
         addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
 
     }
 
-    private BigDecimal obtenerSaldoCajaFormaPago(NegocioFormasPago formaPago) {
-        return cajasFacade.obtenerMontoFormaPago(formaPago, cajaActual);
+    private BigDecimal obtenerSaldoCajaFormaPago(NegocioFormasPagoDto formaPago) {
+        CajasSearchFilter csf = CajasSearchFilter.builder()
+                .idCaja(cajaActual.getId())
+                .idFormaPago(formaPago.getId()).build();
+
+        return cajasService.obtenerTotalEnCaja(csf);
     }
 
-    public List<NegocioFormasPago> getFormasPagoList() {
+    public List<NegocioFormasPagoDto> getFormasPagoList() {
         return formasPagoFacade.findAllBySearchFilter(formasPagoSearchFilter);
     }
 
-    public CajasArqueos getArqueoActual() {
+    public CajasArqueosDto getArqueoActual() {
         return arqueoActual;
     }
 
-    public void setArqueoActual(CajasArqueos arqueoActual) {
+    public void setArqueoActual(CajasArqueosDto arqueoActual) {
         this.arqueoActual = arqueoActual;
     }
 
-    public CajasArqueosDetalle getDetalleArqueoActual() {
+    public CajasArqueosDetalleDto getDetalleArqueoActual() {
         return detalleArqueoActual;
     }
 
-    public void setDetalleArqueoActual(CajasArqueosDetalle detalleArqueoActual) {
+    public void setDetalleArqueoActual(CajasArqueosDetalleDto detalleArqueoActual) {
         this.detalleArqueoActual = detalleArqueoActual;
     }
 

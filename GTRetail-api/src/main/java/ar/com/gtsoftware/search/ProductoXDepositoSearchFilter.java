@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,29 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.Depositos;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.Sucursales;
+import lombok.*;
 
 /**
- *
  * @author fede
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductoXDepositoSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private Depositos idDeposito;
-    private Productos idProducto;
-    private Sucursales idSucursal;
+    private Long idDeposito;
+    private Long idProducto;
+    private Long idSucursal;
 
     @Override
     public boolean hasFilter() {
-        return hasIdDeposito() || hasIdProducto() || hasIdSucursal();
+        return hasIdDeposito()
+                || hasIdProducto()
+                || hasIdSucursal();
     }
 
     public boolean hasIdProducto() {
@@ -46,31 +50,6 @@ public class ProductoXDepositoSearchFilter extends AbstractSearchFilter {
 
     public boolean hasIdSucursal() {
         return idSucursal != null;
-    }
-
-    //----Getter  and Setter ------------------------------------------
-    public Depositos getIdDeposito() {
-        return idDeposito;
-    }
-
-    public void setIdDeposito(Depositos idDeposito) {
-        this.idDeposito = idDeposito;
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
     }
 
 }

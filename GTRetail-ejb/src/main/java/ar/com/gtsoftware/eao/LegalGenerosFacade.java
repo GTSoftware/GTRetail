@@ -17,7 +17,9 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.LegalGeneros;
 import ar.com.gtsoftware.model.LegalGeneros_;
+import ar.com.gtsoftware.model.LegalTiposPersoneria_;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -51,7 +52,7 @@ public class LegalGenerosFacade extends AbstractFacade<LegalGeneros, GenerosSear
             p = cb.equal(root.get(LegalGeneros_.id), gsf.getIdGenero());
         }
         if (gsf.getIdTipoPersoneria() != null) {
-            Predicate p1 = cb.equal(root.get(LegalGeneros_.idTipoPersoneria), gsf.getIdTipoPersoneria());
+            Predicate p1 = cb.equal(root.get(LegalGeneros_.idTipoPersoneria).get(LegalTiposPersoneria_.id), gsf.getIdTipoPersoneria());
             p = appendAndPredicate(cb, p, p1);
         }
         return p;

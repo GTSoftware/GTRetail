@@ -17,21 +17,29 @@
 package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.dto.ImportesAlicuotasIVA;
+import ar.com.gtsoftware.dto.ImportesResponsabilidad;
+import ar.com.gtsoftware.dto.LibroIVADTO;
+import ar.com.gtsoftware.dto.RegistroIVADTO;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaVentasLineasFacade;
+import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
+import ar.com.gtsoftware.mappers.FiscalAlicuotasIvaMapper;
+import ar.com.gtsoftware.mappers.FiscalResponsabilidadesIvaMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.FiscalAlicuotasIva;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentas;
 import ar.com.gtsoftware.model.FiscalLibroIvaVentasLineas;
-import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
-import ar.com.gtsoftware.model.dto.ImportesResponsabilidad;
-import ar.com.gtsoftware.model.dto.LibroIVADTO;
-import ar.com.gtsoftware.model.dto.RegistroIVADTO;
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import ar.com.gtsoftware.service.fiscal.LibroIVAService;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.inject.Qualifier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,14 +53,22 @@ import java.util.Set;
  * @version 1.0.0
  * @since 1.0.1
  */
-@Stateless
-@LocalBean
+@Stateless(name = "libroIVAVentasServiceImpl")
 public class LibroIVAVentasServiceImpl implements LibroIVAService {
 
     @EJB
     private FiscalLibroIvaVentasFacade ivaVentasFacade;
     @EJB
     private FiscalLibroIvaVentasLineasFacade ivaVentasLineasFacade;
+
+    @EJB
+    private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
+
+
+    @Inject
+    private FiscalAlicuotasIvaMapper alicuotasIvaMapper;
+    @Inject
+    private FiscalResponsabilidadesIvaMapper responsabilidadesIvaMapper;
 
     private static final String NUMERO_FACTURA_FMT = "%s %s-%s";
 
@@ -77,9 +93,11 @@ public class LibroIVAVentasServiceImpl implements LibroIVAService {
                     .fechaDesde(filter.getFechaDesde())
                     .fechaHasta(filter.getFechaHasta()).build();
         } else {
+            FiscalPeriodosFiscales periodo = periodosFiscalesFacade.find(filter.getIdPeriodo());
+
             libro = LibroIVADTO.builder()
-                    .fechaDesde(filter.getPeriodo().getFechaInicioPeriodo())
-                    .fechaHasta(filter.getPeriodo().getFechaFinPeriodo()).build();
+                    .fechaDesde(periodo.getFechaInicioPeriodo())
+                    .fechaHasta(periodo.getFechaFinPeriodo()).build();
         }
         List<FiscalLibroIvaVentas> facturas = ivaVentasFacade.findAllBySearchFilter(filter);
 
@@ -101,7 +119,10 @@ public class LibroIVAVentasServiceImpl implements LibroIVAService {
                 facDTO.setTotalIva(facDTO.getTotalIva().add(linea.getImporteIva()));
                 FiscalAlicuotasIva alicuota = linea.getIdAlicuotaIva();
 
-                ImportesAlicuotasIVA importeIva = new ImportesAlicuotasIVA(alicuota, linea.getImporteIva(), linea.getNetoGravado());
+                ImportesAlicuotasIVA importeIva = ImportesAlicuotasIVA.builder()
+                        .alicuota(alicuotasIvaMapper.entityToDto(alicuota,new CycleAvoidingMappingContext()))
+                        .importeIva(linea.getImporteIva())
+                        .netoGravado(linea.getNetoGravado()).build();
                 if (!importesIVA.add(importeIva)) {
                     for (ImportesAlicuotasIVA imp : importesIVA) {
                         if (imp.getAlicuota().equals(linea.getIdAlicuotaIva())) {
@@ -118,7 +139,8 @@ public class LibroIVAVentasServiceImpl implements LibroIVAService {
             totalGeneralIVA = totalGeneralIVA.add(facDTO.getTotalIva());
             facturasDTOList.add(facDTO);
             ImportesResponsabilidad acumuladorResponsabilidadFactura = ImportesResponsabilidad.builder()
-                    .responsabilidadIva(factura.getIdResponsabilidadIva())
+                    .responsabilidadIva(responsabilidadesIvaMapper.entityToDto(factura.getIdResponsabilidadIva(),
+                            new CycleAvoidingMappingContext()))
                     .importeTotal(facDTO.getTotalFactura())
                     .ivaTotal(facDTO.getTotalIva())
                     .netoGravadoTotal(facDTO.getNetoGravado())
@@ -191,7 +213,10 @@ public class LibroIVAVentasServiceImpl implements LibroIVAService {
                 ImportesAlicuotasIVA existente = totalAlicuotasIVAGeneral.get(totalAlicuotasIVAGeneral.indexOf(ivaFactrura));
                 existente.setImporteIva(existente.getImporteIva().add(ivaFactrura.getImporteIva()));
             } else {
-                ImportesAlicuotasIVA nuevoIva = new ImportesAlicuotasIVA(ivaFactrura.getAlicuota(), ivaFactrura.getImporteIva(), ivaFactrura.getNetoGravado());
+                ImportesAlicuotasIVA nuevoIva = ImportesAlicuotasIVA.builder()
+                        .alicuota(ivaFactrura.getAlicuota())
+                        .importeIva(ivaFactrura.getImporteIva())
+                        .netoGravado(ivaFactrura.getNetoGravado()).build();
                 totalAlicuotasIVAGeneral.add(nuevoIva);
             }
         }

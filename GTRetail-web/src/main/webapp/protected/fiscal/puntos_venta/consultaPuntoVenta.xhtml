@@ -1,139 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
 
-    <div class="Container100 Responsive100 NoIndent">
-        <div class="Container100 ui-fluid">
-            <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Consulta de #{msg.puntosVenta}</h1>
-                <div class="SeparatorFull" />
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">Consulta de #{msg.puntosVenta}</h1>
+            <div class="SeparatorFull"/>
 
-                <h:form id="formContenido">
-                    <p:defaultCommand target="buscarButton"/>
+            <h:form id="formContenido">
+                <p:defaultCommand target="buscarButton"/>
 
-                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                 styleClass="ui-panelgrid-blank" columns="5"
-                                 >
-
-
-                        <p:inputText id="searchField" value="#{puntoVentaSearchBean.filter.nroPuntoVenta}"
-                                     placeholder="#{msg.puntoVenta}"
-                                     >
-                            <f:validateLongRange minimum="0" maximum="9999" />
-                        </p:inputText>
+                <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                             styleClass="ui-panelgrid-blank" columns="5"
+                >
 
 
-                        <p:selectOneMenu id="sucursalField" value="#{puntoVentaSearchBean.filter.sucursal}"
+                    <p:inputText id="searchField" value="#{puntoVentaSearchBean.filter.nroPuntoVenta}"
+                                 placeholder="#{msg.puntoVenta}"
+                    >
+                        <f:validateLongRange minimum="0" maximum="9999"/>
+                    </p:inputText>
 
-                                         converter="omnifaces.SelectItemsIndexConverter"
-                                         >
-                            <f:selectItem value="#{null}" itemLabel="#{msg.todos}" />
-                            <f:selectItems value="#{puntoVentaSearchBean.sucursalesList}" var="sucu" itemLabel="#{sucu.businessString}"
-                                           itemValue="#{sucu}"/>
 
-                        </p:selectOneMenu>
+                    <p:selectOneMenu id="sucursalField" value="#{puntoVentaSearchBean.filter.idSucursal}"
 
-                        <p:selectBooleanCheckbox id="activoField" value="#{puntoVentaSearchBean.filter.activo}"
-                                                 itemLabel="#{msg.activo}"/>
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                    >
+                        <f:selectItem value="#{null}" itemLabel="#{msg.todos}"/>
+                        <f:selectItems value="#{puntoVentaSearchBean.sucursalesList}" var="sucu" itemLabel="#{sucu}"
+                                       itemValue="#{sucu.id}"/>
 
-                        <p:commandButton id="buscarButton" action="#{puntoVentaSearchBean.doSearch()}" value="Buscar"
-                                         update="puntoVentaTable" icon="fa fa-fw fa-search"/>
+                    </p:selectOneMenu>
 
-                        <p:commandButton id="nuevoButton" action="edicion/edicionPuntoVenta.xhtml" value="#{msg.nuevo}"
-                                         ajax="false" icon="fa fa-fw fa-plus"
-                                         styleClass="GreenButton"/>
+                    <p:selectBooleanCheckbox id="activoField" value="#{puntoVentaSearchBean.filter.activo}"
+                                             itemLabel="#{msg.activo}"/>
 
-                    </p:panelGrid >
+                    <p:commandButton id="buscarButton" action="#{puntoVentaSearchBean.doSearch()}" value="Buscar"
+                                     update="puntoVentaTable" icon="fa fa-fw fa-search"/>
 
-                    <div class="SeparatorFull" />
+                    <p:commandButton id="nuevoButton" action="edicion/edicionPuntoVenta.xhtml" value="#{msg.nuevo}"
+                                     ajax="false" icon="fa fa-fw fa-plus"
+                                     styleClass="GreenButton"/>
 
-                    <p:dataTable id="puntoVentaTable" value="#{puntoVentaSearchBean.dataModel}" var="punto"
-                                 rows="30"
-                                 lazy="true"
-                                 paginator="true"
-                                 sortMode="single"
-                                 emptyMessage="#{msg.busquedaSinResultados}"
-                                 rowKey="#{punto.id}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                                 rowsPerPageTemplate="10,15,30,100"
+                </p:panelGrid>
 
-                                 selection="#{puntoVentaSearchBean.elemento}"
-                                 selectionMode="single"
-                                 scrollable="true"
-                                 reflow="true"
-                                 liveResize="true"
-                                 > 
+                <div class="SeparatorFull"/>
 
-                        <f:facet name="{Exporters}">
-                            <h:commandLink title="xls">
-                                <i class="fa fa-file-excel-o Fs24 Green" />
-                                <p:dataExporter type="xls" target="puntoVentaTable" fileName="pv" />
-                            </h:commandLink>
+                <p:dataTable id="puntoVentaTable" value="#{puntoVentaSearchBean.dataModel}" var="punto"
+                             rows="30"
+                             lazy="true"
+                             paginator="true"
+                             sortMode="single"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{punto.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="10,15,30,100"
 
-                            <h:commandLink title="pdf">
-                                <i class="fa fa-file-pdf-o Fs24 Red" />
-                                <p:dataExporter type="pdf" target="puntoVentaTable" fileName="pv"/>
-                            </h:commandLink>
+                             selection="#{puntoVentaSearchBean.elemento}"
+                             selectionMode="single"
+                             scrollable="true"
+                             reflow="true"
+                             liveResize="true"
+                > 
 
-                            <h:commandLink title="csv">
-                                <i class="fa fa-file-text-o Fs24 Blue" />
-                                <p:dataExporter type="csv" target="puntoVentaTable" fileName="pv" />
-                            </h:commandLink>
+                    <f:facet name="{Exporters}">
+                        <h:commandLink title="xls">
+                            <i class="fa fa-file-excel-o Fs24 Green"/>
+                            <p:dataExporter type="xls" target="puntoVentaTable" fileName="pv"/>
+                        </h:commandLink>
 
-                            <h:commandLink title="xml">
-                                <i class="fa fa-file-code-o Fs24 Black" />
-                                <p:dataExporter type="xml" target="puntoVentaTable" fileName="pv" />
-                            </h:commandLink>
+                        <h:commandLink title="pdf">
+                            <i class="fa fa-file-pdf-o Fs24 Red"/>
+                            <p:dataExporter type="pdf" target="puntoVentaTable" fileName="pv"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="csv">
+                            <i class="fa fa-file-text-o Fs24 Blue"/>
+                            <p:dataExporter type="csv" target="puntoVentaTable" fileName="pv"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="xml">
+                            <i class="fa fa-file-code-o Fs24 Black"/>
+                            <p:dataExporter type="xml" target="puntoVentaTable" fileName="pv"/>
+                        </h:commandLink>
+                    </f:facet>
+
+
+                    <p:column sortBy="#{punto.nroPuntoVenta}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.nro}"/>
                         </f:facet>
+                        <h:outputLabel value="#{punto.nroPuntoVenta}"/>
+                    </p:column>
 
 
-                        <p:column sortBy="#{punto.nroPuntoVenta}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.nro}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{punto.nroPuntoVenta}"/>
-                        </p:column>
+                    <p:column sortBy="#{punto.tipo}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.tipo}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{punto.tipo}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{punto.sucursal}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.sucursal}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{punto.sucursal}"/>
+                    </p:column>
+
+                    <p:column exportable="false">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.acciones}"/>
+                        </f:facet>
+                        <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
+                            <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionPuntoVenta" ajax="false"
+                                             title="Editar">
+                                <f:param name="nroPuntoVenta" value="#{punto.id}"/>
+                            </p:commandButton>
 
 
-                        <p:column sortBy="#{punto.tipo}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.tipo}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{punto.tipo}"/>
-                        </p:column>
+                        </p:panelGrid>
 
-                        <p:column sortBy="#{punto.sucursal}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.sucursal}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{punto.sucursal.businessString}"/>
-                        </p:column>
-
-                        <p:column  exportable="false" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.acciones}"/>
-                            </f:facet>
-                            <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
-                                <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionPuntoVenta"  ajax="false"
-                                                 title="Editar">
-                                    <f:param name="nroPuntoVenta" value="#{punto.id}"/>
-                                </p:commandButton>
+                    </p:column>
 
 
-                            </p:panelGrid>
+                </p:dataTable>
 
-                        </p:column>
-
-
-                    </p:dataTable>
-
-                </h:form>
-            </div>
+            </h:form>
         </div>
     </div>
+</div>
 </html>

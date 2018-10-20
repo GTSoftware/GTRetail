@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,24 @@
  */
 package ar.com.gtsoftware.controller.fiscal.puntoventa;
 
-import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
-import ar.com.gtsoftware.eao.SucursalesFacade;
-import ar.com.gtsoftware.model.FiscalPuntosVenta;
-import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.bl.FiscalPuntosVentaService;
+import ar.com.gtsoftware.bl.SucursalesService;
+import ar.com.gtsoftware.dto.model.FiscalPuntosVentaDto;
+import ar.com.gtsoftware.dto.model.SucursalesDto;
+import ar.com.gtsoftware.enums.TiposPuntosVenta;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.SucursalesSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 
 /**
  * Edit Bean para puntos de venta
@@ -45,35 +45,30 @@ public class PuntoVentaEditBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(PuntoVentaEditBean.class.getName());
-
+    private final List<SucursalesDto> sucursalesList = new ArrayList<>();
     @EJB
-    private FiscalPuntosVentaFacade facade;
+    private FiscalPuntosVentaService service;
     @EJB
-    private SucursalesFacade sucursalesFacade;
+    private SucursalesService sucursalesService;
+    private FiscalPuntosVentaDto puntoVentaActual = null;
 
-    private FiscalPuntosVenta puntoVentaActual = null;
-
-    private final List<Sucursales> sucursalesList = new ArrayList<>();
-
-    /**
-     * Creates a new instance of PuntoVentaEditBean
-     */
     public PuntoVentaEditBean() {
     }
 
     @PostConstruct
     private void init() {
-        SucursalesSearchFilter sf = new SucursalesSearchFilter(Boolean.TRUE);
-        sucursalesList.addAll(sucursalesFacade.findAllBySearchFilter(sf));
+        SucursalesSearchFilter sf = SucursalesSearchFilter.builder()
+                .activa(true).build();
+        sucursalesList.addAll(sucursalesService.findAllBySearchFilter(sf));
 
         String nroPuntoVenta = JSFUtil.getRequestParameterMap().get("nroPuntoVenta");
 
         if (nroPuntoVenta == null) {
             nuevo();
         } else {
-            puntoVentaActual = facade.find(Integer.parseInt(nroPuntoVenta));
+            puntoVentaActual = service.find(Integer.parseInt(nroPuntoVenta));
 
-            if (nroPuntoVenta == null) {
+            if (puntoVentaActual == null) {
                 LOG.log(Level.SEVERE, "Punto de venta inexistente!");
                 throw new IllegalArgumentException("Punto de venta inexistente!");
 
@@ -82,20 +77,20 @@ public class PuntoVentaEditBean implements Serializable {
         }
     }
 
-    public List<Sucursales> getSucursalesList() {
+    public List<SucursalesDto> getSucursalesList() {
         return sucursalesList;
     }
 
-    public FiscalPuntosVenta getPuntoVentaActual() {
+    public FiscalPuntosVentaDto getPuntoVentaActual() {
         return puntoVentaActual;
     }
 
     private void nuevo() {
-        FiscalPuntosVentaSearchFilter sf = new FiscalPuntosVentaSearchFilter(null, null);
-        sf.addSortField(new SortField("nroPuntoVenta", false));
-        FiscalPuntosVenta lastPv = facade.findFirstBySearchFilter(sf);
+        FiscalPuntosVentaSearchFilter sf = new FiscalPuntosVentaSearchFilter();
+        sf.addSortField("nroPuntoVenta", false);
+        FiscalPuntosVentaDto lastPv = service.findFirstBySearchFilter(sf);
 
-        puntoVentaActual = new FiscalPuntosVenta();
+        puntoVentaActual = new FiscalPuntosVentaDto();
         puntoVentaActual.setActivo(true);
         if (lastPv != null) {
             puntoVentaActual.setNroPuntoVenta(lastPv.getNroPuntoVenta() + 1);
@@ -105,9 +100,8 @@ public class PuntoVentaEditBean implements Serializable {
     public void doGuardar() {
         try {
 
-            facade.createOrEdit(puntoVentaActual);
+            puntoVentaActual = service.createOrEdit(puntoVentaActual);
             JSFUtil.addInfoMessage("Punto de venta guardado exitosamente");
-            puntoVentaActual = facade.find(puntoVentaActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");

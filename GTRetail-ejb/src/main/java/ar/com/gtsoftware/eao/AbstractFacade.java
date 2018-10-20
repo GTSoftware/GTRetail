@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,46 +18,39 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.GTEntity;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotNull;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
- * @author Rodrigo Tato <rotatomel@gmail.com>
  * @param <T>
  * @param <S>
+ * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSearchFilter> {
 
-    private final Class<T> entityClass;
-
     private static final Logger LOG = Logger.getLogger(AbstractFacade.class.getName());
     private static final String LOAD_GRAPH = "javax.persistence.loadgraph";
+    private final Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
+    }
+
+    public AbstractFacade() {
+        entityClass = null;
     }
 
     protected abstract EntityManager getEntityManager();
@@ -77,8 +70,8 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
     }
 
     public void remove(T entity) {
-        getEntityManager().refresh(entity);
-        getEntityManager().remove(entity);
+        T toDelete = getEntityManager().find(entityClass, entity.getId());
+        getEntityManager().remove(toDelete);
         getEntityManager().flush();
 
     }
@@ -117,10 +110,10 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
     protected abstract Predicate createWhereFromSearchFilter(S sf, CriteriaBuilder cb, Root<T> root);
 
     private Map<String, Object> createHints(S sf) {
-        if (sf.hasNamedEntityGraph()) {
+        if (sf != null && sf.hasNamedEntityGraph()) {
             return createHints(sf.getNamedEntityGraph());
         }
-        return Collections.EMPTY_MAP;
+        return Collections.emptyMap();
     }
 
     private Map<String, Object> createHints(String namedEntityGraph) {
@@ -136,7 +129,7 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
             return hints;
 
         }
-        return Collections.EMPTY_MAP;
+        return Collections.emptyMap();
     }
 
     public List<T> findAllBySearchFilter(S sf) {
@@ -166,12 +159,11 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
         if (!hints.isEmpty()) {
             hints.forEach((x, y) -> q.setHint(x, y));
         }
-        List<T> resultList = q.getResultList();
-        return resultList;
+        return q.getResultList();
 
     }
 
-    protected List<Order> createOrderFromSearchFilter(S sf, Root<T> root, CriteriaBuilder cb) {
+    private List<Order> createOrderFromSearchFilter(S sf, Root<T> root, CriteriaBuilder cb) {
         List<Order> orders = new ArrayList<>();
         for (SortField sof : sf.getSortFields()) {
             Order ord;
@@ -217,7 +209,6 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
 
     /**
      * Devuelve el primer elemento encontrado por el filtro de búsqueda.
-     *
      *
      * @param sf el filtro de búsuqeda
      * @return el primer elemento o null si no encuentra ninguno.
@@ -273,10 +264,8 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
      * @param p1 el predicado 1
      * @param p2 el predicado 2
      */
-    private void validateAppendArguments(CriteriaBuilder cb, Predicate p1, Predicate p2) {
-        if (cb == null) {
-            throw new IllegalArgumentException("El CriteriaBuilder no puede ser null.");
-        }
+    private void validateAppendArguments(@NotNull(message = "El CriteriaBuilder no puede ser null.") CriteriaBuilder cb,
+                                         Predicate p1, Predicate p2) {
         if (p1 == null && p2 == null) {
             throw new IllegalArgumentException("Al menos unos de los predicados debe estar establecido.");
         }
@@ -288,15 +277,12 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
      * @param entity
      * @return T
      */
-    public T createOrEdit(T entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException("Null entity passed to persist!");
-        }
+    public T createOrEdit(@NotNull T entity) {
+
         if (entity.isNew()) {
             create(entity);
         } else {
-            T edit = edit(entity);
-            return edit;
+            return edit(entity);
         }
         return entity;
     }
@@ -306,9 +292,7 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
         if (constraintViolations.size() > 0) {
-            Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
-            while (iterator.hasNext()) {
-                ConstraintViolation<T> cv = iterator.next();
+            for (ConstraintViolation<T> cv : constraintViolations) {
                 LOG.log(Level.SEVERE, "{0}.{1} {2}",
                         new Object[]{cv.getRootBeanClass().getName(), cv.getPropertyPath(), cv.getMessage()});
             }

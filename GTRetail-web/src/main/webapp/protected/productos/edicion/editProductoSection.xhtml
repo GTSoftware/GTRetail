@@ -618,7 +618,7 @@
                                         <f:facet name="header">
                                             Depósito
                                         </f:facet>
-                                        <h:outputText value="#{stk.deposito.businessString}" />
+                                        <h:outputText value="#{stk.deposito}" />
                                     </p:column>
                                     <p:column style="width:30%">
                                         <f:facet name="header">
@@ -657,7 +657,7 @@
                                                    itemValue="#{null}"/>
                                     <f:selectItems value="#{productoEditBean.listProveedores}"
                                                    var="proveedor"
-                                                   itemLabel="#{proveedor.businessString}"
+                                                   itemLabel="#{proveedor}"
                                                    itemValue="#{proveedor}"/>
 
                                 </p:selectOneMenu>

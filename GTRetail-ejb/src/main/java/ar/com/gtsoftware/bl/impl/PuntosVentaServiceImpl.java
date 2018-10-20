@@ -17,14 +17,19 @@ package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
 import ar.com.gtsoftware.eao.SucursalesFacade;
+import ar.com.gtsoftware.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.mappers.FiscalPuntosVentaMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
+import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import ar.com.gtsoftware.service.rest.PuntosVentaEndpoint;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
@@ -37,6 +42,8 @@ public class PuntosVentaServiceImpl implements PuntosVentaEndpoint {
 
     @EJB
     private SucursalesFacade sucursalesFacade;
+    @Inject
+    private FiscalPuntosVentaMapper fiscalPuntosVentaMapper;
 
     @Override
     public Response getPuntosVentaActivos(Long idSucursal) {
@@ -47,10 +54,14 @@ public class PuntosVentaServiceImpl implements PuntosVentaEndpoint {
         if (sucursal == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        FiscalPuntosVentaSearchFilter sf = new FiscalPuntosVentaSearchFilter(sucursal, Boolean.TRUE);
+        FiscalPuntosVentaSearchFilter sf = FiscalPuntosVentaSearchFilter.builder()
+                .idSucursal(idSucursal)
+                .activo(true).build();
         sf.setTipoPuntoVenta(TiposPuntosVenta.CONTROLADOR_FISCAL);
+        List<FiscalPuntosVenta> puntosVenta = facade.findAllBySearchFilter(sf);
 
-        return Response.ok(facade.findAllBySearchFilter(sf)).build();
+        return Response.ok(fiscalPuntosVentaMapper.entitiesToDtos(puntosVenta,
+                new CycleAvoidingMappingContext())).build();
 
     }
 

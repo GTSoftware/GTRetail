@@ -19,13 +19,13 @@ import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
 
-import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -59,9 +59,17 @@ public class FiscalPeriodosFiscalesFacade extends AbstractFacade<FiscalPeriodosF
                 p = appendAndPredicate(cb, p, cb.not(p3));
             }
         }
+
         if (psf.getCerrado() != null) {
             Predicate p1 = cb.equal(root.get(FiscalPeriodosFiscales_.periodoCerrado), psf.getCerrado());
             p = appendAndPredicate(cb, p, p1);
+        }
+
+        if (psf.getFechaActual() != null) {
+            Predicate pDesde = cb.lessThanOrEqualTo(root.get(FiscalPeriodosFiscales_.fechaInicioPeriodo), psf.getFechaActual());
+            Predicate pHasta = cb.greaterThanOrEqualTo(root.get(FiscalPeriodosFiscales_.fechaFinPeriodo), psf.getFechaActual());
+            p = appendAndPredicate(cb, p, pDesde);
+            p = appendAndPredicate(cb, p, pHasta);
         }
         return p;
     }

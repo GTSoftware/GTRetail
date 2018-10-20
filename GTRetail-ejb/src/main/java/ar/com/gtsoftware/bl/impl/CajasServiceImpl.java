@@ -16,26 +16,35 @@
 package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.CajasService;
+import ar.com.gtsoftware.dto.model.CajasDto;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.eao.CajasArqueosFacade;
 import ar.com.gtsoftware.eao.CajasFacade;
 import ar.com.gtsoftware.eao.CuponesFacade;
+import ar.com.gtsoftware.eao.UsuariosFacade;
+import ar.com.gtsoftware.mappers.CajasMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.Cajas;
 import ar.com.gtsoftware.model.CajasArqueos;
 import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.search.CajasArqueosSearchFilter;
 import ar.com.gtsoftware.search.CajasSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import java.math.BigDecimal;
-import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Stateless
-public class CajasServiceImpl implements CajasService {
+public class CajasServiceImpl
+        extends AbstractBasicEntityService<CajasDto, CajasSearchFilter, Cajas>
+        implements CajasService {
 
     @EJB
     private CajasFacade facade;
@@ -43,29 +52,41 @@ public class CajasServiceImpl implements CajasService {
     private CajasArqueosFacade arqueosFacade;
     @EJB
     private CuponesFacade cuponesFacade;
+    @EJB
+    private UsuariosFacade usuariosFacade;
+
+
+    @Inject
+    private CajasMapper cajasMapper;
 
     @Override
-    public Cajas obtenerCajaActual(Usuarios usuario) {
-        CajasSearchFilter cajasFilter = new CajasSearchFilter(usuario,
-                usuario.getIdSucursal(), Boolean.TRUE);
+    public CajasDto obtenerCajaActual(UsuariosDto usuario) {
+
+        CajasSearchFilter cajasFilter = CajasSearchFilter.builder()
+                .idUsuario(usuario.getId())
+                .idSucursal(usuario.getIdSucursal().getId())
+                .abierta(true)
+                .build();
         cajasFilter.addSortField(new SortField("fechaApertura", false));
 
         int cantCajasAbiertas = facade.countBySearchFilter(cajasFilter);
         if (cantCajasAbiertas > 1) {
+            //This should never happen
             throw new RuntimeException(String.format("El usuario %s tiene más de una caja abierta en la sucursal %d!",
                     usuario.getNombreUsuario(),
                     usuario.getIdSucursal().getId()));
         }
-
-        return facade.findFirstBySearchFilter(cajasFilter);
+        Cajas caja = facade.findFirstBySearchFilter(cajasFilter);
+        return cajasMapper.entityToDto(caja, new CycleAvoidingMappingContext());
     }
 
     @Override
-    public Cajas abrirCaja(Usuarios usuario) {
-        if (obtenerCajaActual(usuario) == null) {
+    public CajasDto abrirCaja(UsuariosDto usuarioDto) {
+        if (obtenerCajaActual(usuarioDto) == null) {
 
             Cajas caja = new Cajas();
             caja.setFechaApertura(new Date());
+            Usuarios usuario = usuariosFacade.find(usuarioDto.getId());
             caja.setIdUsuario(usuario);
             caja.setIdSucursal(usuario.getIdSucursal());
             //Obtener el último arqueo y sacar el saldo final de allí.
@@ -73,7 +94,7 @@ public class CajasServiceImpl implements CajasService {
             facade.create(caja);
         }
 
-        return obtenerCajaActual(usuario);
+        return obtenerCajaActual(usuarioDto);
     }
 
     /**
@@ -83,7 +104,10 @@ public class CajasServiceImpl implements CajasService {
      * @return
      */
     private BigDecimal obtenerSaldoUltimoArqueo(Usuarios usuario) {
-        CajasArqueosSearchFilter casf = new CajasArqueosSearchFilter(usuario, usuario.getIdSucursal(), null);
+        CajasArqueosSearchFilter casf = CajasArqueosSearchFilter.builder()
+                .idUsuario(usuario.getId())
+                .idSucursal(usuario.getIdSucursal().getId())
+                .build();
         casf.addSortField(new SortField("fechaArqueo", false));
         CajasArqueos ultimoArqueo = arqueosFacade.findFirstBySearchFilter(casf);
         if (ultimoArqueo != null) {
@@ -93,15 +117,30 @@ public class CajasServiceImpl implements CajasService {
     }
 
     @Override
-    public boolean cerrarCaja(Cajas caja, Date fechaCierre) {
-        if (caja != null && fechaCierre != null) {
-            caja.setFechaCierre(fechaCierre);
-            facade.edit(caja);
-            //Seteo la fecha de presentacion en los cupones
-            cuponesFacade.establecerFechaPresentacion(caja, fechaCierre);
-            return true;
+    public boolean cerrarCaja(CajasDto cajaDto, Date fechaCierre) {
+        Cajas caja = facade.find(cajaDto.getId());
+        if (caja.getFechaCierre() != null) {
+            return false;
         }
-        return false;
+        caja.setFechaCierre(fechaCierre);
+        facade.edit(caja);
+        //Seteo la fecha de presentacion en los cupones
+        cuponesFacade.establecerFechaPresentacion(caja, fechaCierre);
+        return true;
     }
 
+    @Override
+    public BigDecimal obtenerTotalEnCaja(@NotNull CajasSearchFilter csf) {
+        return facade.obtenerTotalDeCaja(csf);
+    }
+
+    @Override
+    protected CajasFacade getFacade() {
+        return facade;
+    }
+
+    @Override
+    protected CajasMapper getMapper() {
+        return cajasMapper;
+    }
 }

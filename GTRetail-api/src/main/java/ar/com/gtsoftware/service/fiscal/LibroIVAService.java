@@ -18,9 +18,12 @@
 package ar.com.gtsoftware.service.fiscal;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.model.dto.LibroIVADTO;
+import ar.com.gtsoftware.dto.LibroIVADTO;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 
+import javax.ejb.Remote;
+
+@Remote
 public interface LibroIVAService {
     /**
      * Genera el libro de IVA para el período establecido en el filtro

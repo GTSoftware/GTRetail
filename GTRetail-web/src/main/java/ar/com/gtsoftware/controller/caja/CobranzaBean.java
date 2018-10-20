@@ -16,56 +16,49 @@
 package ar.com.gtsoftware.controller.caja;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.bl.CajasService;
-import ar.com.gtsoftware.bl.CobranzaService;
-import ar.com.gtsoftware.eao.BancosFacade;
-import ar.com.gtsoftware.eao.ComprobantesPagosFacade;
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.model.Bancos;
-import ar.com.gtsoftware.model.Cajas;
-import ar.com.gtsoftware.model.ChequesTerceros;
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.ComprobantesPagos;
-import ar.com.gtsoftware.model.Cupones;
-import ar.com.gtsoftware.model.Recibos;
-import ar.com.gtsoftware.model.dto.PagoValorDTO;
+import ar.com.gtsoftware.bl.*;
+import ar.com.gtsoftware.dto.PagoValorDTO;
+import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.BancosSearchFilter;
 import ar.com.gtsoftware.search.ComprobantesPagosSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.context.RequestContext;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.apache.commons.collections.CollectionUtils;
-import org.primefaces.context.RequestContext;
 
-import static ar.com.gtsoftware.utils.JSFUtil.*;
+import static ar.com.gtsoftware.utils.JSFUtil.addErrorMessage;
+import static ar.com.gtsoftware.utils.JSFUtil.addInfoMessage;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "cobranzaBean")
 @ViewScoped
 public class CobranzaBean implements Serializable {
 
-    @EJB
-    private CajasService cajasService;
-
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(CobranzaBean.class.getName());
 
     @EJB
-    private CobranzaService cobranzaServiceImpl;
+    private CajasService cajasService;
     @EJB
-    private BancosFacade bancosFacade;
+    private CobranzaService cobranzaService;
+    @EJB
+    private BancosService bancosService;
+    @EJB
+    private NegocioFormasPagoService formasPagoService;
+    @EJB
+    private ComprobantesPagosService pagosService;
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
@@ -73,23 +66,19 @@ public class CobranzaBean implements Serializable {
     @ManagedProperty(value = "#{recibosSearchBean}")
     private RecibosSearchBean recibosSearchBean;
 
-    private Cajas cajaActual;
+    private CajasDto cajaActual;
 
-    private Recibos reciboActual;
+    private RecibosDto reciboActual;
 
-    @EJB
-    private NegocioFormasPagoFacade formasPagoFacade;
-    @EJB
-    private ComprobantesPagosFacade pagosFacade;
 
-    private List<Comprobantes> selectedComprobantes;
+    private List<ComprobantesDto> selectedComprobantes;
 
     private List<PagoValorDTO> pagosValores;
 
     private boolean hayCupones = false;
     private boolean hayCheques = false;
 
-    private List<Bancos> bancosList;
+    private List<BancosDto> bancosList;
 
     /**
      * Creates a new instance of CobranzaBean
@@ -100,7 +89,7 @@ public class CobranzaBean implements Serializable {
     //Permitir la cobranza de comprobantes en cuenta corriente. Habra que generar notas de débito si la forma de pago elegida tiene recargos (Tal vez no permitirlos directamente para esta versión)
     @PostConstruct
     private void init() {
-        Cajas cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
+        CajasDto cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
         if (cajaAbierta == null) {
             RequestContext.getCurrentInstance().execute("PF('abrirCajaDialog').show();");
         }
@@ -116,7 +105,7 @@ public class CobranzaBean implements Serializable {
         this.authBackingBean = authBackingBean;
     }
 
-    public Cajas getCajaActual() {
+    public CajasDto getCajaActual() {
         return cajaActual;
     }
 
@@ -136,15 +125,14 @@ public class CobranzaBean implements Serializable {
      * Realiza la apertura de caja para el usuario.
      */
     public void abrirCaja() {
-        Cajas cajaAbierta = cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
-        cajaActual = cajaAbierta;
+        cajaActual= cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
     }
 
-    public List<Comprobantes> getSelectedComprobantes() {
+    public List<ComprobantesDto> getSelectedComprobantes() {
         return selectedComprobantes;
     }
 
-    public void setSelectedComprobantes(List<Comprobantes> selectedComprobantes) {
+    public void setSelectedComprobantes(List<ComprobantesDto> selectedComprobantes) {
         this.selectedComprobantes = selectedComprobantes;
     }
 
@@ -154,7 +142,7 @@ public class CobranzaBean implements Serializable {
             return false;
         }
         Long idPersona = selectedComprobantes.get(0).getIdPersona().getId();
-        for (Comprobantes c : selectedComprobantes) {
+        for (ComprobantesDto c : selectedComprobantes) {
             if (!Objects.equals(idPersona, c.getIdPersona().getId())) {
                 addErrorMessage("Debe seleccionar comprobatnes de un mismo cliente.");
                 return false;
@@ -176,7 +164,7 @@ public class CobranzaBean implements Serializable {
     public void cobrarComprobantes() {
         if (validarComprobantesSeleccionados()) {
 
-            reciboActual = cobranzaServiceImpl.cobrarComprobantes(cajaActual, pagosValores);
+            reciboActual = cobranzaService.cobrarComprobantes(cajaActual, pagosValores);
             addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
             RequestContext.getCurrentInstance().execute("PF('cobrarComprobantesDialog').hide();");
             RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
@@ -187,28 +175,31 @@ public class CobranzaBean implements Serializable {
 
         pagosValores = new ArrayList<>();
         int item = 1;
-        for (Comprobantes comp : selectedComprobantes) {
+        for (ComprobantesDto comp : selectedComprobantes) {
             //Si es contado tiene los registros de pago, sino hay que hacerlos porque es CC.
             //if (comp.getIdCondicionComprobante().getPagoTotal()) {
             BigDecimal montoPorCubrir = comp.getSaldo();
             ComprobantesPagosSearchFilter pagosFilter = new ComprobantesPagosSearchFilter(comp.getId(), true);
-            for (ComprobantesPagos pago : pagosFacade.findAllBySearchFilter(pagosFilter)) {
+            for (ComprobantesPagosDto pago : pagosService.findAllBySearchFilter(pagosFilter)) {
                 BigDecimal saldoPago = pago.getMontoPago().subtract(pago.getMontoPagado());
                 montoPorCubrir = montoPorCubrir.subtract(saldoPago);
-                PagoValorDTO pagoValor = new PagoValorDTO(item++, pago);
-                pagoValor.setMontoMaximo(saldoPago);
-                if (pago.getIdFormaPago().getRequiereValores()) {
+                PagoValorDTO pagoValor = PagoValorDTO.builder()
+                        .item(item++)
+                        .pago(pago)
+                        .montoMaximo(saldoPago).build();
+
+                if (pago.getIdFormaPago().isRequiereValores()) {
                     //Cheque == 4
                     if (pago.getIdFormaPago().getId() != 4) {
 
-                        Cupones cupon = new Cupones();
+                        CuponesDto cupon = new CuponesDto();
                         cupon.setCantCuotas(pago.getIdDetallePlan().getCuotas());
                         cupon.setCoeficiente(pago.getIdDetallePlan().getCoeficienteInteres());
                         cupon.setMonto(pago.getMontoPagoConSigno());
                         pagoValor.setCupon(cupon);
                         hayCupones = true;
                     } else {
-                        ChequesTerceros chq = new ChequesTerceros();
+                        ChequesTercerosDto chq = new ChequesTercerosDto();
                         chq.setMonto(pago.getMontoPagoConSigno());
                         pagoValor.setCheque(chq);
                         hayCheques = true;
@@ -220,17 +211,19 @@ public class CobranzaBean implements Serializable {
             }
             if (montoPorCubrir.signum() > 0) {
 
-                ComprobantesPagos cp = new ComprobantesPagos();
+                ComprobantesPagosDto cp = new ComprobantesPagosDto();
                 cp.setIdComprobante(comp);
                 //Cableado para efectivo...
-                cp.setIdFormaPago(formasPagoFacade.find(1L));
+                cp.setIdFormaPago(formasPagoService.find(1L));
                 cp.setMontoPago(montoPorCubrir);
 
                 comp.addPago(cp);
 
-                PagoValorDTO pagoValor = new PagoValorDTO(item++, cp);
-                pagoValor.setMontoEditable(true);
-                pagoValor.setMontoMaximo(montoPorCubrir);
+                PagoValorDTO pagoValor = PagoValorDTO.builder()
+                        .item(item++)
+                        .pago(cp)
+                        .montoEditable(true)
+                        .montoMaximo(montoPorCubrir).build();
                 pagosValores.add(pagoValor);
             }
 
@@ -265,11 +258,11 @@ public class CobranzaBean implements Serializable {
      *
      * @return
      */
-    public List<Bancos> getBancosList() {
+    public List<BancosDto> getBancosList() {
         if (bancosList == null) {
             BancosSearchFilter sf = new BancosSearchFilter();
             sf.addSortField("razonSocial", true);
-            bancosList = bancosFacade.findAllBySearchFilter(sf);
+            bancosList = bancosService.findAllBySearchFilter(sf);
         }
         return bancosList;
     }

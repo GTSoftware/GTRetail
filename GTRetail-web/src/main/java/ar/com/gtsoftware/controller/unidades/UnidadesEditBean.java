@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 package ar.com.gtsoftware.controller.unidades;
 
-import ar.com.gtsoftware.eao.ProductosTiposUnidadesFacade;
-import ar.com.gtsoftware.model.ProductosTiposUnidades;
+import ar.com.gtsoftware.bl.ProductosTiposUnidadesService;
+import ar.com.gtsoftware.dto.model.ProductosTiposUnidadesDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "unidadesEditBean")
@@ -38,13 +38,10 @@ public class UnidadesEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(UnidadesEditBean.class.getName());
 
     @EJB
-    private ProductosTiposUnidadesFacade facade;
+    private ProductosTiposUnidadesService facade;
 
-    private ProductosTiposUnidades unidadActual = null;
+    private ProductosTiposUnidadesDto unidadActual = null;
 
-    /**
-     * Creates a new instance of MarcasEditBean
-     */
     public UnidadesEditBean() {
     }
 
@@ -69,7 +66,7 @@ public class UnidadesEditBean implements Serializable {
     }
 
     private void nuevo() {
-        unidadActual = new ProductosTiposUnidades();
+        unidadActual = new ProductosTiposUnidadesDto();
     }
 
     public void doGuardar() {
@@ -85,7 +82,7 @@ public class UnidadesEditBean implements Serializable {
 
     }
 
-    public ProductosTiposUnidades getUnidadActual() {
+    public ProductosTiposUnidadesDto getUnidadActual() {
         return unidadActual;
     }
 

@@ -15,24 +15,24 @@
  */
 package ar.com.gtsoftware.controller.ubicaciones;
 
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
-import ar.com.gtsoftware.model.UbicacionPaises;
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.bl.UbicacionPaisesService;
+import ar.com.gtsoftware.bl.UbicacionProvinciasService;
+import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
+import ar.com.gtsoftware.dto.model.UbicacionProvinciasDto;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang.StringUtils;
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "provinciasEditBean")
@@ -43,15 +43,15 @@ public class ProvinciasEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(ProvinciasEditBean.class.getName());
 
     @EJB
-    private UbicacionProvinciasFacade facade;
+    private UbicacionProvinciasService facade;
 
     @EJB
-    private UbicacionPaisesFacade paisesFacade;
+    private UbicacionPaisesService paisesFacade;
 
 
-    private List<UbicacionPaises> paises;
+    private List<UbicacionPaisesDto> paises;
 
-    private UbicacionProvincias provinciaActual = null;
+    private UbicacionProvinciasDto provinciaActual = null;
 
     /**
      * Creates a new instance of MarcasEditBean
@@ -80,7 +80,7 @@ public class ProvinciasEditBean implements Serializable {
     }
 
     private void nuevo() {
-        provinciaActual = new UbicacionProvincias();
+        provinciaActual = new UbicacionProvinciasDto();
     }
 
     public void doGuardar() {
@@ -96,7 +96,7 @@ public class ProvinciasEditBean implements Serializable {
 
     }
 
-    public UbicacionProvincias getProvinciaActual() {
+    public UbicacionProvinciasDto getProvinciaActual() {
         return provinciaActual;
     }
 
@@ -105,7 +105,7 @@ public class ProvinciasEditBean implements Serializable {
      *
      * @return la lista de todos los paises
      */
-    public List<UbicacionPaises> getPaises() {
+    public List<UbicacionPaisesDto> getPaises() {
         if (paises == null) {
             PaisesSearchFilter pSf = new PaisesSearchFilter();
             pSf.addSortField("nombrePais", true);

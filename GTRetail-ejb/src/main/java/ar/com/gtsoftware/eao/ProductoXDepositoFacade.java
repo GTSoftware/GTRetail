@@ -15,11 +15,9 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Depositos_;
-import ar.com.gtsoftware.model.ProductoXDeposito;
-import ar.com.gtsoftware.model.ProductoXDeposito_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
-import java.math.BigDecimal;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,9 +25,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 
 /**
- *
  * @author fede
  */
 @Stateless
@@ -53,17 +51,17 @@ public class ProductoXDepositoFacade extends AbstractFacade<ProductoXDeposito, P
         Predicate p = null;
 
         if (sf.hasIdProducto()) {
-            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.producto), sf.getIdProducto());
+            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.producto).get(Productos_.id), sf.getIdProducto());
             p = appendAndPredicate(cb, p, p1);
         }
 
         if (sf.hasIdDeposito()) {
-            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.deposito), sf.getIdDeposito());
+            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.deposito).get(Depositos_.id), sf.getIdDeposito());
             p = appendAndPredicate(cb, p, p1);
         }
 
         if (sf.hasIdSucursal()) {
-            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.deposito).get(Depositos_.idSucursal),
+            Predicate p1 = cb.equal(root.get(ProductoXDeposito_.deposito).get(Depositos_.idSucursal).get(Sucursales_.id),
                     sf.getIdSucursal());
             p = appendAndPredicate(cb, p, p1);
         }

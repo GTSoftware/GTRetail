@@ -15,10 +15,8 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.Size;
 
@@ -28,6 +26,8 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
@@ -39,21 +39,16 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private Boolean activo;
     private Boolean puedeComprarse;
     private Boolean puedeVenderse;
-    private ProductosSubRubros idSubRubro;
-    private ProductosRubros idRubro;
-    private Personas idProveedorHabitual;
-    private Depositos conStockEnDeposito;
-    private ProductosListasPrecios listaPrecio;
-    private ProductosTiposProveeduria idTipoProveeduria;
-    private ProductosMarcas idMarca;
+    private Long idSubRubro;
+    private Long idRubro;
+    private Long idProveedorHabitual;
+    private Long idConStockEnDeposito;
+    private Long idListaPrecio;
+    private Long idTipoProveeduria;
+    private Long idMarca;
     private Boolean conStock;
     private Boolean stockDebajoMinimo;
 
-    public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse) {
-        this.activo = activo;
-        this.puedeComprarse = puedeComprarse;
-        this.puedeVenderse = puedeVenderse;
-    }
 
     public ProductosSearchFilter(Boolean activo, Boolean puedeComprarse, Boolean puedeVenderse, Boolean soloConStock) {
         this.activo = activo;
@@ -64,10 +59,20 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
 
     @Override
     public boolean hasFilter() {
-        return (txt != null && !txt.isEmpty()) || (idProducto != null) || (codigoPropio != null && !codigoPropio.isEmpty())
-                || (activo != null) || (puedeComprarse != null) || (puedeVenderse != null) || (idRubro != null) || (idSubRubro != null)
-                || (idProveedorHabitual != null) || (conStockEnDeposito != null) || (listaPrecio != null) || (idTipoProveeduria != null)
-                || (idMarca != null) || (conStock != null) || (stockDebajoMinimo != null);
+        return (StringUtils.isNotEmpty(txt)
+                || idProducto != null
+                || StringUtils.isNotEmpty(codigoPropio)
+                || activo != null || puedeComprarse != null
+                || puedeVenderse != null
+                || idRubro != null
+                || idSubRubro != null
+                || idProveedorHabitual != null
+                || idConStockEnDeposito != null
+                || idListaPrecio != null)
+                || idTipoProveeduria != null
+                || idMarca != null
+                || conStock != null
+                || stockDebajoMinimo != null;
     }
 
 }

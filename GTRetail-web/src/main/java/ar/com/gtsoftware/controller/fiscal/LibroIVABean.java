@@ -17,16 +17,14 @@
 
 package ar.com.gtsoftware.controller.fiscal;
 
+import ar.com.gtsoftware.bl.FiscalAlicuotasIvaService;
+import ar.com.gtsoftware.bl.FiscalPeriodosFiscalesService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.bl.impl.LibroIVAComprasServiceImpl;
-import ar.com.gtsoftware.bl.impl.LibroIVAVentasServiceImpl;
-import ar.com.gtsoftware.eao.FiscalAlicuotasIvaFacade;
-import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
-import ar.com.gtsoftware.model.FiscalAlicuotasIva;
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
-import ar.com.gtsoftware.model.dto.ImportesAlicuotasIVA;
-import ar.com.gtsoftware.model.dto.LibroIVADTO;
-import ar.com.gtsoftware.model.dto.RegistroIVADTO;
+import ar.com.gtsoftware.dto.ImportesAlicuotasIVA;
+import ar.com.gtsoftware.dto.LibroIVADTO;
+import ar.com.gtsoftware.dto.RegistroIVADTO;
+import ar.com.gtsoftware.dto.model.FiscalAlicuotasIvaDto;
+import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import ar.com.gtsoftware.service.fiscal.LibroIVAService;
 import ar.com.gtsoftware.utils.JSFUtil;
@@ -62,23 +60,21 @@ import java.util.List;
 @ViewScoped
 public class LibroIVABean implements Serializable {
 
-    @EJB
-    private LibroIVAVentasServiceImpl libroIVAVentasBean;
-    @EJB
-    private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
-    @EJB
-    private LibroIVAComprasServiceImpl libroIVAComprasBean;
-
-    @EJB
-    private FiscalAlicuotasIvaFacade alicuotasFacade;
-
     private final LibroIVASearchFilter ivaVentasFilter = new LibroIVASearchFilter();
+    @EJB(beanName= "libroIVAVentasServiceImpl")
+    private LibroIVAService libroIVAVentasBean;
+    @EJB
+    private FiscalPeriodosFiscalesService periodosFiscalesService;
+    @EJB(beanName = "libroIVAComprasServiceImpl")
+    private LibroIVAService libroIVAComprasBean;
+    @EJB
+    private FiscalAlicuotasIvaService alicuotasIvaService;
 
     public LibroIVABean() {
     }
 
-    public List<FiscalPeriodosFiscales> getPeriodosList() {
-        return periodosFiscalesFacade.findAll();
+    public List<FiscalPeriodosFiscalesDto> getPeriodosList() {
+        return periodosFiscalesService.findAll();
     }
 
     /*@Deprecated
@@ -166,9 +162,9 @@ public class LibroIVABean implements Serializable {
             columnNames.add("IVA Total");
             columnNames.add("Perc. IVA");
             columnNames.add("Perc. Ing.Br.");
-            HashMap<FiscalAlicuotasIva, Integer> columnaAlicuota = new HashMap<>();
+            HashMap<FiscalAlicuotasIvaDto, Integer> columnaAlicuota = new HashMap<>();
             //Nombres de columna para encabezados por cada alicuota
-            for (FiscalAlicuotasIva al : alicuotasFacade.findAll()) {
+            for (FiscalAlicuotasIvaDto al : alicuotasIvaService.findAll()) {
                 columnNames.add(al.getNombreAlicuotaIva());
                 columnaAlicuota.put(al, columnNames.size() - 1);
             }

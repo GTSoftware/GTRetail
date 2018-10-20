@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.controller.ventas;
 
-import ar.com.gtsoftware.eao.ParametrosFacade;
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.Parametros;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.utils.GeneradorCodigoBarraFE;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import ar.com.gtsoftware.bl.FacturacionVentasService;
+import ar.com.gtsoftware.bl.ParametrosService;
+import ar.com.gtsoftware.dto.model.ComprobantesDto;
+import ar.com.gtsoftware.dto.model.ParametrosDto;
+import ar.com.gtsoftware.dto.model.RemitoDto;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "impresionVentasBean")
@@ -48,7 +48,9 @@ public class ImpresionVentasBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private ParametrosFacade parametrosFacade;
+    private ParametrosService parametrosFacade;
+    @EJB
+    private FacturacionVentasService facturacionVentasService;
 
     /**
      * Creates a new instance of ImpresionVentasBean
@@ -63,16 +65,15 @@ public class ImpresionVentasBean implements Serializable {
      * @throws IOException
      * @throws JRException
      */
-    public void imprimirPresupuesto(Comprobantes ventaActual) throws IOException, JRException {
-        List<Comprobantes> ventas = new ArrayList<>();
+    public void imprimirPresupuesto(ComprobantesDto ventaActual) throws IOException, JRException {
+        List<ComprobantesDto> ventas = Collections.singletonList(ventaActual);
         String copias = parametrosFacade.findParametroByName("presupuesto.impresion.cantidad_copias").getValorParametro();
         int cantCopias = Integer.parseInt(copias);
-        ventas.add(ventaActual);
+
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/vistaVenta.jasper");
 
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.putAll(cargarParametros());
+        HashMap<String, Object> parameters = cargarParametros();
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 
@@ -88,30 +89,21 @@ public class ImpresionVentasBean implements Serializable {
         FacesContext.getCurrentInstance().responseComplete();
     }
 
-    public void imprimirFactura(Comprobantes ventaActual) throws IOException, JRException {
-        List<Comprobantes> ventas = new ArrayList<>();
-        ventas.add(ventaActual);
-//        String copias = parametrosFacade.findParametroByName("facturacion.preimreso.cantidad_copias").getValorParametro();
-//        int cantCopias = Integer.parseInt(copias);
-//        for (int i = 0; i < cantCopias; i++) {
-//            ventas.add(ventaActual);
-//        }
-        String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
+    public void imprimirFactura(ComprobantesDto ventaActual) throws IOException, JRException {
+        List<ComprobantesDto> ventas = Collections.singletonList(ventaActual);
+
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
         JRBeanCollectionDataSource beanCollectionDataSource1 = new JRBeanCollectionDataSource(ventas);
         JRBeanCollectionDataSource beanCollectionDataSource2 = new JRBeanCollectionDataSource(ventas);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/facturaConDuplicado.jasper");
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.putAll(cargarParametros());
+        HashMap<String, Object> parameters = cargarParametros();
+
         parameters.put("logoAfip", FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/images/afip.png"));
 
-        if (ventaActual.getIdRegistro().getCae() != null) {
-            String codigoBarras = GeneradorCodigoBarraFE.calcularCodigoBarras(ventaActual.getIdRegistro(), cuit);
-            parameters.put("codigobarras", codigoBarras);
-        } else {
-            parameters.put("codigobarras", ventaActual.getIdRegistro().getNumeroFactura());
-        }
+
+        parameters.put("codigobarras", facturacionVentasService.obtenerCodigoBarrasFE(ventaActual.getId()));
+
         if (ventaActual.getIdRegistro().getLetraFactura().equals("A")) {
             parameters.put("subreport", "vistaVentas_lineasNeto.jasper");
         } else {
@@ -135,32 +127,30 @@ public class ImpresionVentasBean implements Serializable {
      * @return el HashMap con los parámetros
      */
     private HashMap<String, Object> cargarParametros() {
-        List<Parametros> paramList = parametrosFacade.findParametros("empresa");
+        List<ParametrosDto> paramList = parametrosFacade.findParametros("empresa");
         paramList.add(parametrosFacade.findParametroByName("facturacion.impresion.texto.linea1"));
         paramList.add(parametrosFacade.findParametroByName("facturacion.impresion.texto.linea2"));
-        HashMap<String, Object> result = new HashMap<>();
-        for (Parametros p : paramList) {
+        HashMap<String, Object> result = new HashMap<>(paramList.size());
+        for (ParametrosDto p : paramList) {
             result.put(p.getNombreParametro(), p.getValorParametro());
         }
         return result;
     }
 
     /**
-     * Muestra el remito como PDF
+     * Muestra el remitoDtoCabecera como PDF
      *
      * @param remito
      * @throws IOException
      * @throws JRException
      */
-    public void imprimirRemito(Remito remito) throws IOException, JRException {
-        List<Remito> remitos = new ArrayList<>();
+    public void imprimirRemito(RemitoDto remito) throws IOException, JRException {
+        List<RemitoDto> remitos = Collections.singletonList(remito);
 
-        remitos.add(remito);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(remitos);
         String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/remito.jasper");
 
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.putAll(cargarParametros());
+        HashMap<String, Object> parameters = cargarParametros();
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 

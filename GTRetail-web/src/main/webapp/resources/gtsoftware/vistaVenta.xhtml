@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2014 GT Software.
+Copyright 2018 GT Software.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,139 +21,138 @@ limitations under the License.
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:p="http://primefaces.org/ui">
 
-    <composite:interface>
+<composite:interface>
 
-        <composite:attribute name="venta" type="ar.com.gtsoftware.model.Comprobantes" />
-        <composite:attribute name="lineasVenta" />
+    <composite:attribute name="venta" type="ar.com.gtsoftware.dto.model.ComprobantesDto"/>
+    <composite:attribute name="lineasVenta"/>
 
-    </composite:interface>
+</composite:interface>
 
-    <composite:implementation>
-        <h:form id="vistaVentaForm" >
-            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                         styleClass="ui-panelgrid-blank" columns="2" >
-                <p:outputLabel value="#{msg.venta}:" />
-                <p:outputLabel value="#{cc.attrs.venta.id}" />
+<composite:implementation>
+    <h:form id="vistaVentaForm">
+        <p:panelGrid layout="grid"
+                     styleClass="ui-panelgrid-blank" columns="2">
+            <p:outputLabel value="#{msg.venta}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.id}"/>
 
-                <p:outputLabel value="#{msg.cliente}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idPersona.id} - #{cc.attrs.venta.idPersona.razonSocial}" />
+            <p:outputLabel value="#{msg.cliente}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.idPersona.id} - #{cc.attrs.venta.idPersona.razonSocial}"/>
 
-                <p:outputLabel value="#{msg.condicionVenta}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idCondicionComprobante.nombreCondicion}" />
+            <p:outputLabel value="#{msg.condicionVenta}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.idCondicionComprobante.nombreCondicion}"/>
 
-                <p:outputLabel value="#{msg.fecha}:" />
-                <p:outputLabel value="#{cc.attrs.venta.fechaComprobante}" >
-                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a" />
-                </p:outputLabel>
+            <p:outputLabel value="#{msg.fecha}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.fechaComprobante}">
+                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss a"/>
+            </p:outputLabel>
 
-                <p:outputLabel value="#{msg.sucursal}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idSucursal.nombreSucursal}" />
+            <p:outputLabel value="#{msg.sucursal}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.idSucursal.nombreSucursal}"/>
 
-                <p:outputLabel value="#{msg.vendedor}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idUsuario.nombreUsuario}" />
+            <p:outputLabel value="#{msg.vendedor}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.idUsuario.nombreUsuario}"/>
 
-                <p:outputLabel value="#{msg.factura}:" />
-                <p:outputLabel value="#{cc.attrs.venta.idRegistro.letraFactura} #{cc.attrs.venta.idRegistro.puntoVentaFactura}-#{cc.attrs.venta.idRegistro.numeroFactura}"
-                               rendered="#{not empty cc.attrs.venta.idRegistro}" />
-                <p:outputLabel value="#{msg.no}"
-                               rendered="#{empty cc.attrs.venta.idRegistro}" />
-
-
-
-            </p:panelGrid >
-
-            <div class="SeparatorFull" />
-
-            <p:dataTable id="productosTable" value="#{cc.attrs.lineasVenta}" var="lineaVenta"
-                         rows="15"
-                         paginator="true"
-                         sortMode="multiple"
-                         emptyMessage="#{msg.productosNoCargados}"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="10,15,30"
-
-                         reflow="true">
-
-                <p:column style="text-align: right; ">
-                    <f:facet name="header">
-                        #{msg.tablaId}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.id}" />
-                </p:column>
-                <p:column style="text-align: left; ">
-                    <f:facet name="header">
-                        #{msg.codigo}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.codigoPropio}" />
-                </p:column>
-                <p:column style="text-align: left; ">
-                    <f:facet name="header">
-                        #{msg.tablaDescripcion}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.descripcion}" />
-                </p:column>
-                <p:column style="text-align: right;">
-                    <f:facet name="header">
-                        #{msg.tablaCantidad}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.cantidad}" />
-                </p:column>
-                <p:column style="text-align: left; ">
-                    <f:facet name="header">
-                        #{msg.tablaUnidad}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}" />
-                </p:column>
-                <p:column style="text-align: right; ">
-                    <f:facet name="header">
-                        #{msg.tablaIVA}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}" >
-                        <f:convertNumber  type="number" groupingUsed="true"/>
-                    </h:outputText>
-                </p:column>
-
-                <p:column style="text-align: right;">
-                    <f:facet name="header">
-                        #{msg.tablaPrecioUnitario}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.precioUnitario}" >
-                        <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
-                    </h:outputText>
-                </p:column>
-
-                <p:column style="text-align: right; ">
-                    <f:facet name="header">
-                        #{msg.tablaSubTotal}
-                    </f:facet>
-                    <h:outputText value="#{lineaVenta.subTotal}" >
-                        <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
-                    </h:outputText>
-                </p:column>
+            <p:outputLabel value="#{msg.factura}:"/>
+            <p:outputLabel
+                    value="#{cc.attrs.venta.idRegistro.letraFactura} #{cc.attrs.venta.idRegistro.puntoVentaFactura}-#{cc.attrs.venta.idRegistro.numeroFactura}"
+                    rendered="#{not empty cc.attrs.venta.idRegistro}"/>
+            <p:outputLabel value="#{msg.no}"
+                           rendered="#{empty cc.attrs.venta.idRegistro}"/>
 
 
+        </p:panelGrid>
 
-                <p:columnGroup type="footer">
-                    <p:row>
-                        <p:column colspan="7" footerText="#{msg.total}"
-                                  style="text-align:right; font-size: larger"  />
+        <div class="SeparatorFull"/>
 
-                        <p:column footerText="$#{cc.attrs.venta.totalConSigno}" style=" font-size: xx-large" />
-                    </p:row>
-                </p:columnGroup>
+        <p:dataTable id="productosTable" value="#{cc.attrs.lineasVenta}" var="lineaVenta"
+                     rows="15"
+                     paginator="true"
+                     sortMode="multiple"
+                     emptyMessage="#{msg.productosNoCargados}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="10,15,30"
 
-            </p:dataTable>
-            <div class="SeparatorFull" />
+                     reflow="true">
 
-            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                         styleClass="ui-panelgrid-blank" columns="2">
-                <p:outputLabel value="#{msg.observaciones}:" />
-                <p:outputLabel value="#{cc.attrs.venta.observaciones}" />
-                <p:outputLabel value="#{msg.remitente}:" />
-                <p:outputLabel value="#{cc.attrs.venta.remitente}" />
-                <p:outputLabel value="#{msg.numeroRemito}:" />
-                <p:outputLabel value="#{cc.attrs.venta.nroRemito}" />
-            </p:panelGrid >
-        </h:form>
-    </composite:implementation>
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaId}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.id}"/>
+            </p:column>
+            <p:column style="text-align: left; ">
+                <f:facet name="header">
+                    #{msg.codigo}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.codigoPropio}"/>
+            </p:column>
+            <p:column style="text-align: left; ">
+                <f:facet name="header">
+                    #{msg.tablaDescripcion}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.descripcion}"/>
+            </p:column>
+            <p:column style="text-align: right;">
+                <f:facet name="header">
+                    #{msg.tablaCantidad}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.cantidad}"/>
+            </p:column>
+            <p:column style="text-align: left; ">
+                <f:facet name="header">
+                    #{msg.tablaUnidad}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.idTipoUnidadVenta.nombreUnidad}"/>
+            </p:column>
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaIVA}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.idProducto.idAlicuotaIva.valorAlicuota}">
+                    <f:convertNumber type="number" groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column style="text-align: right;">
+                <f:facet name="header">
+                    #{msg.tablaPrecioUnitario}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.precioUnitario}">
+                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column style="text-align: right; ">
+                <f:facet name="header">
+                    #{msg.tablaSubTotal}
+                </f:facet>
+                <h:outputText value="#{lineaVenta.subTotal}">
+                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                </h:outputText>
+            </p:column>
+
+
+            <p:columnGroup type="footer">
+                <p:row>
+                    <p:column colspan="7" footerText="#{msg.total}"
+                              style="text-align:right; font-size: larger"/>
+
+                    <p:column footerText="$#{cc.attrs.venta.totalConSigno}" style=" font-size: xx-large"/>
+                </p:row>
+            </p:columnGroup>
+
+        </p:dataTable>
+        <div class="SeparatorFull"/>
+
+        <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                     styleClass="ui-panelgrid-blank" columns="2">
+            <p:outputLabel value="#{msg.observaciones}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.observaciones}"/>
+            <p:outputLabel value="#{msg.remitente}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.remitente}"/>
+            <p:outputLabel value="#{msg.numeroRemito}:"/>
+            <p:outputLabel value="#{cc.attrs.venta.nroRemito}"/>
+        </p:panelGrid>
+    </h:form>
+</composite:implementation>
 </html>

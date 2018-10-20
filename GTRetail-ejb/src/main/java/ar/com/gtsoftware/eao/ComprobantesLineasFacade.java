@@ -56,8 +56,7 @@ public class ComprobantesLineasFacade extends AbstractFacade<ComprobantesLineas,
         Predicate p = cb.equal(lineaVenta.get(ComprobantesLineas_.idComprobante), comp);
         cq.where(p);
         TypedQuery<ComprobantesLineas> q = em.createQuery(cq);
-        List<ComprobantesLineas> lineasVentaList = q.getResultList();
-        return lineasVentaList;
+        return q.getResultList();
     }
 
     @Override

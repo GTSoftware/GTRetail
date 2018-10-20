@@ -15,21 +15,20 @@
  */
 package ar.com.gtsoftware.controller.planesPago;
 
+import ar.com.gtsoftware.bl.NegocioFormasPagoService;
+import ar.com.gtsoftware.bl.NegocioPlanesPagoService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.eao.NegocioPlanesPagoFacade;
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.model.NegocioPlanesPago;
+import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
+import ar.com.gtsoftware.dto.model.NegocioPlanesPagoDto;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.PlanesPagoSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SearchBean para planes de pago
@@ -38,19 +37,19 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "planesPagoSearchBean")
 @ViewScoped
-public class PlanesPagoSearchBean extends AbstractSearchBean<NegocioPlanesPago, PlanesPagoSearchFilter> {
+public class PlanesPagoSearchBean extends AbstractSearchBean<NegocioPlanesPagoDto, PlanesPagoSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private NegocioPlanesPagoFacade facade;
+    private NegocioPlanesPagoService service;
 
     @EJB
-    private NegocioFormasPagoFacade formasPagoFacade;
+    private NegocioFormasPagoService formasPagoService;
 
-    private final List<NegocioFormasPago> formasPagoList = new ArrayList<>();
+    private final List<NegocioFormasPagoDto> formasPagoList = new ArrayList<>();
 
-    private final PlanesPagoSearchFilter filter = new PlanesPagoSearchFilter(null, Boolean.TRUE);
+    private final PlanesPagoSearchFilter filter = PlanesPagoSearchFilter.builder().activo(true).build();
 
     /**
      * Creates a new instance of PlanesPagoSearchBean
@@ -65,10 +64,10 @@ public class PlanesPagoSearchBean extends AbstractSearchBean<NegocioPlanesPago, 
 
     private void loadFormasPagoList() {
         formasPagoList.clear();
-        FormasPagoSearchFilter sf = new FormasPagoSearchFilter();
-        sf.setRequierePlanes(Boolean.TRUE);
-        sf.addSortField(new SortField("nombreFormaPago", true));
-        formasPagoList.addAll(formasPagoFacade.findAllBySearchFilter(sf));
+        FormasPagoSearchFilter sf = FormasPagoSearchFilter.builder()
+                .requierePlanes(true).build();
+        sf.addSortField("nombreFormaPago", true);
+        formasPagoList.addAll(formasPagoService.findAllBySearchFilter(sf));
     }
 
     @Override
@@ -77,19 +76,19 @@ public class PlanesPagoSearchBean extends AbstractSearchBean<NegocioPlanesPago, 
     }
 
     @Override
-    protected AbstractFacade<NegocioPlanesPago, PlanesPagoSearchFilter> getFacade() {
-        return facade;
+    protected NegocioPlanesPagoService getService() {
+        return service;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("nombre", true));
+            filter.addSortField("nombre", true);
         }
 
     }
 
-    public List<NegocioFormasPago> getFormasPagoList() {
+    public List<NegocioFormasPagoDto> getFormasPagoList() {
         return formasPagoList;
     }
 

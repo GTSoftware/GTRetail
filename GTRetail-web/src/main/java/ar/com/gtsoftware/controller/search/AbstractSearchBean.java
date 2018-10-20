@@ -15,27 +15,29 @@
  */
 package ar.com.gtsoftware.controller.search;
 
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.model.GTEntity;
+import ar.com.gtsoftware.bl.EntityService;
+import ar.com.gtsoftware.dto.IdentifiableDto;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
-import java.io.Serializable;
+
 import javax.faces.model.DataModel;
+import java.io.Serializable;
 
 /**
  * Bean abstracto del que heredan los search bean para entidades
  *
- * @author Rodrigo Tato mailto:rotatomel@gmail.com
- * @param <T> la entidad a filtrar
+ * @param <D> la entidad a filtrar
  * @param <S> el SearchFilter para esa entidad
+ * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
-public abstract class AbstractSearchBean<T extends GTEntity<?>, S extends AbstractSearchFilter> implements Serializable {
+public abstract class AbstractSearchBean<D extends IdentifiableDto,
+        S extends AbstractSearchFilter> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected DataModel<T> dataModel;
+    protected DataModel<D> dataModel;
 
-    protected T elemento;
+    protected D elemento;
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -43,7 +45,7 @@ public abstract class AbstractSearchBean<T extends GTEntity<?>, S extends Abstra
     public AbstractSearchBean() {
     }
 
-    protected abstract AbstractFacade<T, S> getFacade();
+    protected abstract EntityService<D, S> getService();
 
     public abstract S getFilter();
 
@@ -53,25 +55,25 @@ public abstract class AbstractSearchBean<T extends GTEntity<?>, S extends Abstra
 
     protected abstract void prepareSearchFilter();
 
-    public DataModel<T> getDataModel() {
+    public DataModel<D> getDataModel() {
         prepareSearchFilter();
 
         if (dataModel == null) {
-            dataModel = new LazyEntityDataModel<>(getFacade(), getFilter());
+            dataModel = new LazyEntityDataModel<>(getService(), getFilter());
         }
         return dataModel;
     }
 
-    public T getElemento() {
+    public D getElemento() {
         return elemento;
     }
 
-    public void setElemento(T elemento) {
+    public void setElemento(D elemento) {
         this.elemento = elemento;
     }
 
     public void deleteElemento() throws Exception {
-        getFacade().remove(elemento);
+        getService().remove(elemento);
     }
 
 }

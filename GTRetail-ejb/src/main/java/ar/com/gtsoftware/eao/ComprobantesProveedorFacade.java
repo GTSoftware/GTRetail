@@ -56,16 +56,16 @@ public class ComprobantesProveedorFacade extends AbstractFacade<ProveedoresCompr
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdProveedor() != null) {
-            Predicate p1 = cb.equal(root.get(ProveedoresComprobantes_.idProveedor), vsf.getIdProveedor());
+            Predicate p1 = cb.equal(root.get(ProveedoresComprobantes_.idProveedor).get(Personas_.id), vsf.getIdProveedor());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdSucursal() != null) {
-            Predicate p1 = cb.equal(root.get(ProveedoresComprobantes_.idSucursal), vsf.getIdSucursal());
+            Predicate p1 = cb.equal(root.get(ProveedoresComprobantes_.idSucursal).get(Sucursales_.id), vsf.getIdSucursal());
             p = appendAndPredicate(cb, p1, p);
         }
 
         if (vsf.getIdUsuario() != null) {
-            Predicate p1 = cb.equal(root.get(ProveedoresComprobantes_.idUsuario), vsf.getIdUsuario());
+            Predicate p1 = cb.equal(root.get(ProveedoresComprobantes_.idUsuario).get(Usuarios_.id), vsf.getIdUsuario());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getRegistradaEnLibroIVA() != null) {
@@ -99,7 +99,7 @@ public class ComprobantesProveedorFacade extends AbstractFacade<ProveedoresCompr
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.hasTiposComprobanteFilter()) {
-            Predicate p1 = root.get(ProveedoresComprobantes_.tipoComprobante).in(vsf.getTiposComprobante());
+            Predicate p1 = root.get(ProveedoresComprobantes_.tipoComprobante).get(NegocioTiposComprobante_.id).in(vsf.getIdTiposComprobanteList());
             p = appendAndPredicate(cb, p1, p);
         }
         return p;

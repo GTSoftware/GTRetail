@@ -15,96 +15,87 @@
  */
 package ar.com.gtsoftware.utils;
 
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.model.GTEntity;
+import ar.com.gtsoftware.bl.EntityService;
+import ar.com.gtsoftware.dto.IdentifiableDto;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.*;
+import java.util.logging.Logger;
+
 /**
  * Implemantación de LazyLoading para PrimeFaces
  *
- * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @param <Entity>
  * @param <Filter>
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-public class LazyEntityDataModel<Entity extends GTEntity<?>, Filter extends AbstractSearchFilter>
+public class LazyEntityDataModel<Entity extends IdentifiableDto, Filter extends AbstractSearchFilter>
         extends LazyDataModel<Entity> implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(LazyEntityDataModel.class.getName());
     private static final long serialVersionUID = 1L;
 
-    private AbstractFacade<Entity, Filter> facade;
+    private EntityService<Entity, Filter> service;
     private Filter filter;
 
-    List<Entity> resultsFromEao = null;
+    private List<Entity> resultsFromEao = null;
 
-    public LazyEntityDataModel(AbstractFacade<Entity, Filter> facade, Filter filter) {
+    public LazyEntityDataModel(@NotNull EntityService<Entity, Filter> service, Filter filter) {
         super();
-        if (facade == null) {
-            throw new IllegalArgumentException("El Facade no puede ser nulo");
-        }
-        this.facade = facade;
+        this.service = service;
         this.filter = filter;
     }
 
     @Override
     public List<Entity> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-            Map<String, Object> filters) {
+                             Map<String, Object> filters) {
 
-        resultsFromEao = new ArrayList<>();
+
         if (filter == null) {
-
-            return resultsFromEao;
+            return Collections.emptyList();
         }
         int count;
 
-        count = facade.countBySearchFilter(filter);
-        LOG.log(Level.FINE, "Encontradas: {0} entidades.", count);
+        count = service.countBySearchFilter(filter);
+        resultsFromEao = new ArrayList<>(count);
+        //LOG.log(Level.FINE, "Encontradas: {0} entidades.", count);
         setRowCount(count);
         setPageSize(pageSize);
         if (count > 0) {
             if (sortField != null) {
                 filter.clearSortFields();
-                SortField sof = new SortField(sortField, !sortOrder.equals(SortOrder.DESCENDING));
-                filter.addSortField(sof);
+                filter.addSortField(sortField, !sortOrder.equals(SortOrder.DESCENDING));
             }
-            resultsFromEao = facade.findBySearchFilter(filter, first, pageSize);
+            resultsFromEao.addAll(service.findBySearchFilter(filter, first, pageSize));
             return resultsFromEao;
 
         }
+        setWrappedData(resultsFromEao);
         return resultsFromEao;
     }
 
     @Override
     public List<Entity> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        throw new UnsupportedOperationException("LazyLoading not implemented with multiSort and filters");
     }
 
     @Override
     public Object getRowKey(Entity dto) {
-        return dto.getId();
+        return dto.getStringId();
     }
 
     @Override
     public Entity getRowData(String rowKey) {
-        if (resultsFromEao == null) {
+        if (resultsFromEao == null || rowKey == null) {
             return null;
         }
-        for (Entity dto : resultsFromEao) {
-            if (String.valueOf(dto.getId()).equals(rowKey)) {
-                return dto;
-            }
-        }
-        return null;
+        Optional<Entity> found = resultsFromEao.stream().filter(x -> Objects.equals(rowKey, x.getStringId())).findFirst();
+        return found.orElse(null);
     }
 
 }

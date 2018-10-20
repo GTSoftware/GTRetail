@@ -16,25 +16,23 @@
 package ar.com.gtsoftware.bl;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.PersonasTelefonos;
-import java.util.List;
+import ar.com.gtsoftware.dto.model.PersonasDto;
+
 import javax.ejb.Remote;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Remote
 public interface ClientesService {
 
-    public Personas guardarCliente(Personas cliente) throws ServiceException;
+    PersonasDto guardarCliente(PersonasDto cliente) throws ServiceException;
 
-    public Personas find(Long id);
+    PersonasDto find(Long id);
 
-    public List<PersonasTelefonos> obtenerTelefonos(Personas persona);
+    /*List<PersonasTelefonos> obtenerTelefonos(PersonasDto persona);
 
-    public void guardarTelefono(PersonasTelefonos telefono);
+     *//*void guardarTelefono(PersonasTelefonos telefono);
 
-    public void borrarTelefono(PersonasTelefonos telefono);
+    void borrarTelefono(PersonasTelefonos telefono);*/
 }

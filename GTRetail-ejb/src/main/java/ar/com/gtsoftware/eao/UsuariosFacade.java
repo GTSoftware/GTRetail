@@ -45,25 +45,25 @@ public class UsuariosFacade extends AbstractFacade<Usuarios, UsuariosSearchFilte
     }
 
     @Override
-    public Predicate createWhereFromSearchFilter(UsuariosSearchFilter usuariosSearchFilter, CriteriaBuilder cb, Root<Usuarios> root) {
+    public Predicate createWhereFromSearchFilter(UsuariosSearchFilter usf, CriteriaBuilder cb, Root<Usuarios> root) {
         Predicate p = null;
-        if (usuariosSearchFilter.getIdUsuario() != null) {
-            p = cb.equal(root.get(Usuarios_.id), usuariosSearchFilter.getIdUsuario());
+        if (usf.getIdUsuario() != null) {
+            p = cb.equal(root.get(Usuarios_.id), usf.getIdUsuario());
         }
-        if (usuariosSearchFilter.getNombreUsuario() != null) {
-            Predicate p1 = cb.like(root.get(Usuarios_.nombreUsuario), String.format("%%%s%%", usuariosSearchFilter.getNombreUsuario().toLowerCase()));
+        if (usf.getNombreUsuario() != null) {
+            Predicate p1 = cb.like(root.get(Usuarios_.nombreUsuario), String.format("%%%s%%", usf.getNombreUsuario().toLowerCase()));
             p = appendOrPredicate(cb, p, p1);
         }
-        if (usuariosSearchFilter.getLogin() != null) {
-            Predicate p1 = cb.equal(root.get(Usuarios_.login), usuariosSearchFilter.getLogin());
+        if (usf.getLogin() != null) {
+            Predicate p1 = cb.equal(root.get(Usuarios_.login), usf.getLogin());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (usuariosSearchFilter.getPassword() != null) {
-            Predicate p1 = cb.equal(root.get(Usuarios_.password), usuariosSearchFilter.getPassword());
+        if (usf.getPassword() != null) {
+            Predicate p1 = cb.equal(root.get(Usuarios_.password), usf.getPassword());
             p = appendOrPredicate(cb, p, p1);
         }
-        if (usuariosSearchFilter.hasTextFilter()) {
-            for (String s : usuariosSearchFilter.getText().toUpperCase().split(" ")) {
+        if (usf.hasTextFilter()) {
+            for (String s : usf.getText().toUpperCase().split(" ")) {
 
                 Predicate p1 = cb.like(cb.upper(root.get(Usuarios_.login)), String.format("%%%s%%", s));
                 Predicate p2 = cb.like(cb.upper(root.get(Usuarios_.nombreUsuario)), String.format("%%%s%%", s));

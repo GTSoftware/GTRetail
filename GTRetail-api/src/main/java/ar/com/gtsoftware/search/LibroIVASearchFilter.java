@@ -15,7 +15,6 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import lombok.*;
 
 import java.util.Date;
@@ -34,15 +33,16 @@ import java.util.Date;
 @Builder
 public class LibroIVASearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 1L;
-    private FiscalPeriodosFiscales periodo;
+    private Long idPeriodo;
     private Date fechaDesde;
     private Date fechaHasta;
     private Boolean anuladas;
 
     @Override
     public boolean hasFilter() {
-        return (periodo != null) || (fechaDesde != null && fechaHasta != null) || (anuladas != null);
+        return idPeriodo != null
+                || hasFechasDesdeHasta()
+                || anuladas != null;
     }
 
 

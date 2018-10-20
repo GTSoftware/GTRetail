@@ -15,16 +15,17 @@
  */
 package ar.com.gtsoftware.controller.formasPago;
 
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.bl.NegocioFormasPagoService;
+import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Edit Bean para formas de pago
@@ -39,9 +40,9 @@ public class FormasPagoEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(FormasPagoEditBean.class.getName());
 
     @EJB
-    private NegocioFormasPagoFacade facade;
+    private NegocioFormasPagoService formasPagoService;
 
-    private NegocioFormasPago formaPagoActual = null;
+    private NegocioFormasPagoDto formaPagoActual = null;
 
     /**
      * Creates a new instance of FormasPagoEditBean
@@ -52,12 +53,12 @@ public class FormasPagoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idMarca = JSFUtil.getRequestParameterMap().get("idFormaPago");
+        String idFormaPago = JSFUtil.getRequestParameterMap().get("idFormaPago");
 
-        if (idMarca == null) {
+        if (idFormaPago == null) {
             nuevo();
         } else {
-            formaPagoActual = facade.find(Long.parseLong(idMarca));
+            formaPagoActual = formasPagoService.find(Long.parseLong(idFormaPago));
 
             if (formaPagoActual == null) {
                 LOG.log(Level.SEVERE, "Forma de pago inexistente!");
@@ -70,15 +71,15 @@ public class FormasPagoEditBean implements Serializable {
     }
 
     private void nuevo() {
-        formaPagoActual = new NegocioFormasPago();
+        formaPagoActual = new NegocioFormasPagoDto();
     }
 
     public void doGuardar() {
         try {
 
-            facade.createOrEdit(formaPagoActual);
+            formasPagoService.createOrEdit(formaPagoActual);
             JSFUtil.addInfoMessage("Forma de pago guardada Exitosamente");
-            formaPagoActual = facade.find(formaPagoActual.getId());
+            formaPagoActual = formasPagoService.find(formaPagoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
@@ -86,7 +87,7 @@ public class FormasPagoEditBean implements Serializable {
 
     }
 
-    public NegocioFormasPago getFormaPagoActual() {
+    public NegocioFormasPagoDto getFormaPagoActual() {
         return formaPagoActual;
     }
 

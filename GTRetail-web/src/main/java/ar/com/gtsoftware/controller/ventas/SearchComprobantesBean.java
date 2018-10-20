@@ -15,60 +15,57 @@
  */
 package ar.com.gtsoftware.controller.ventas;
 
+import ar.com.gtsoftware.bl.ComprobantesService;
+import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ComprobantesFacade;
-import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.NegocioTiposComprobante;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.dto.model.ComprobantesDto;
+import ar.com.gtsoftware.dto.model.NegocioTiposComprobanteDto;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
-import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
+import org.apache.commons.lang3.time.DateUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.DataModel;
-
-import org.apache.commons.lang3.time.DateUtils;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "searchComprobantesBean")
 @ViewScoped
-public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes, ComprobantesSearchFilter> {
+public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, ComprobantesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
 
-    @EJB
-    private ComprobantesFacade ventasFacade;
-    private final ComprobantesSearchFilter filter = new ComprobantesSearchFilter(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH),
-            DateUtils.addDays(new Date(), 1), Boolean.FALSE);
-    @EJB
-    private PersonasFacade clientesFacade;
-    @EJB
-    private NegocioTiposComprobanteFacade tiposComprobanteFacade;
+    private final ComprobantesSearchFilter filter = ComprobantesSearchFilter.builder()
+            .fechaVentaDesde(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH))
+            .fechaVentaHasta(DateUtils.truncate(DateUtils.addDays(new Date(), 1), Calendar.DAY_OF_MONTH))
+            .anulada(false).build();
+
     private final PersonasSearchFilter personasSearchFilter = PersonasSearchFilter.builder()
             .activo(true)
             .cliente(true).build();
-    private final NegocioTiposComprobanteSearchFilter tiposComprobanteSearchFilter = NegocioTiposComprobanteSearchFilter.builder()
-            .activo(true).build();
 
+    private final List<NegocioTiposComprobanteDto> tiposCompList = new ArrayList<>();
+    @EJB
+    private ComprobantesService ventasFacade;
+    @EJB
+    private PersonasService clientesFacade;
+    @EJB
+    private NegocioTiposComprobanteService tiposComprobanteFacade;
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
-    private final List<NegocioTiposComprobante> tiposCompList = new ArrayList<>();
 
     /**
      * Creates a new instance of SearchVentasBean
@@ -82,22 +79,22 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes, Com
     }
 
     private void calcularTotales() {
-        totalVentasFacturadas = ventasFacade.calcularTotalVentasFacturadasBySearchFilter(filter);
-        totalVentas = ventasFacade.calcularTotalVentasBySearchFilter(filter);
-        totalVentasSinFacturar = ventasFacade.calcularTotalVentasSinFacturarBySearchFilter(filter);
+        Boolean facturadaStatus = filter.getFacturada();
+        filter.setFacturada(true);
+        totalVentasFacturadas = ventasFacade.calcularTotalVentas(filter);
+        filter.setFacturada(null);
+        totalVentas = ventasFacade.calcularTotalVentas(filter);
+        filter.setFacturada(false);
+        totalVentasSinFacturar = ventasFacade.calcularTotalVentas(filter);
+        filter.setFacturada(facturadaStatus);
     }
 
-    public List<Personas> findClientesByString(String query) {
+    public List<PersonasDto> findClientesByString(String query) {
         personasSearchFilter.setTxt(query);
         return clientesFacade.findBySearchFilter(personasSearchFilter, 0, 15);
     }
 
-    public List<NegocioTiposComprobante> autocompleteTiposComp(String query) {
-        tiposComprobanteSearchFilter.setNombre(query);
-        return tiposComprobanteFacade.findAllBySearchFilter(tiposComprobanteSearchFilter);
-    }
-
-    public List<NegocioTiposComprobante> getTiposCompList() {
+    public List<NegocioTiposComprobanteDto> getTiposCompList() {
         return tiposCompList;
     }
 
@@ -131,7 +128,7 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes, Com
     }
 
     @Override
-    public DataModel<Comprobantes> getDataModel() {
+    public DataModel<ComprobantesDto> getDataModel() {
         if (dataModel == null) {
             dataModel = new LazyEntityDataModel<>(ventasFacade, filter);
             calcularTotales();
@@ -140,14 +137,14 @@ public class SearchComprobantesBean extends AbstractSearchBean<Comprobantes, Com
     }
 
     @Override
-    protected AbstractFacade<Comprobantes, ComprobantesSearchFilter> getFacade() {
+    protected ComprobantesService getService() {
         return ventasFacade;
     }
 
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("fechaComprobante", true));
+            filter.addSortField("fechaComprobante", true);
         }
     }
 

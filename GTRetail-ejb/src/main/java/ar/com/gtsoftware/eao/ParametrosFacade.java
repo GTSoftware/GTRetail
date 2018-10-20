@@ -18,8 +18,7 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.Parametros;
 import ar.com.gtsoftware.model.Parametros_;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.Collections;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,9 +27,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Collections;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Stateless
@@ -39,13 +39,13 @@ public class ParametrosFacade extends AbstractFacade<Parametros, AbstractSearchF
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public ParametrosFacade() {
+        super(Parametros.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public ParametrosFacade() {
-        super(Parametros.class);
     }
 
     /**
@@ -90,7 +90,7 @@ public class ParametrosFacade extends AbstractFacade<Parametros, AbstractSearchF
         if (!paramList.isEmpty()) {
             return paramList;
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

@@ -9,7 +9,7 @@
         <div class="Container100 ui-fluid">
             <div class="Card">
                 <h1 class="CardBigTopic TexAlCenter">Nuevo Remito Manual</h1>
-                <div class="SeparatorFull" />
+                <div class="SeparatorFull"/>
                 <h:form id="nuevoRemitoForm">
 
                     <p:panelGrid id="encabezadoGrid" layout="grid"
@@ -18,7 +18,7 @@
 
 
                         <h:outputLabel for="tipoMovimientoField"
-                                       value="#{msg.tipoMovimiento}:" />
+                                       value="#{msg.tipoMovimiento}:"/>
                         <p:selectOneMenu id="tipoMovimientoField" required="true"
                                          requiredMessage="#{msg.ingresarValor} de tipo de movimiento"
                                          value="#{nuevoRemitoBean.newRemito.remitoTipoMovimiento}"
@@ -26,38 +26,37 @@
                                          filterMatchMode="contains">
 
                             <f:selectItem noSelectionOption="true"
-                                          itemLabel="#{msg.seleccionarUno}" />
+                                          itemLabel="#{msg.seleccionarUno}"/>
                             <f:selectItems value="#{nuevoRemitoBean.tiposMovimientoList}"
                                            var="tipoMov" itemLabel="#{tipoMov.nombreTipo}"
-                                           itemValue="#{tipoMov}" />
+                                           itemValue="#{tipoMov}"/>
 
                         </p:selectOneMenu>
 
 
-                        <h:outputLabel for="origenField" value="#{msg.origen}:" />
+                        <h:outputLabel for="origenField" value="#{msg.origen}:"/>
                         <p:selectBooleanButton id="origenField"
                                                value="#{nuevoRemitoBean.newRemito.isOrigenInterno}"
                                                required="true" offLabel="#{msg.origenExterno}"
                                                onLabel="#{msg.origenInterno}">
-                            <p:ajax update="origenFragment" process="@this" global="false" />
+                            <p:ajax update="origenFragment" process="@this"/>
 
                         </p:selectBooleanButton>
 
 
-
-                        <h:outputLabel for="destinoField" value="#{msg.destinoPrevisto}:" />
+                        <h:outputLabel for="destinoField" value="#{msg.destinoPrevisto}:"/>
                         <p:selectBooleanButton id="destinoField"
                                                value="#{nuevoRemitoBean.newRemito.isDestinoInterno}"
                                                required="true" offLabel="#{msg.destinoExterno}"
                                                onLabel="#{msg.destinoInterno}">
-                            <p:ajax update="destinoFragment" process="@this" global="false" />
+                            <p:ajax update="destinoFragment" process="@this"/>
                         </p:selectBooleanButton>
 
                         <h:outputLabel for="observacionesField"
-                                       value="#{msg.observaciones}:" />
+                                       value="#{msg.observaciones}:"/>
                         <p:inputTextarea id="observacionesField"
                                          value="#{nuevoRemitoBean.newRemito.observaciones}"
-                                         autoResize="true" cols="30" rows="2" />
+                                         autoResize="true" cols="30" rows="2"/>
                     </p:panelGrid>
 
 
@@ -65,41 +64,44 @@
                         <!--Origen Interno-->
                         <h:outputLabel for="origenInternoField"
                                        value="#{msg.origenInterno}:"
-                                       rendered="#{nuevoRemitoBean.newRemito.isOrigenInterno}" />
+                                       rendered="#{nuevoRemitoBean.newRemito.isOrigenInterno}"/>
                         <p:selectOneMenu id="origenInternoField" required="true"
                                          requiredMessage="#{msg.ingresarValor} de origen"
                                          value="#{nuevoRemitoBean.newRemito.idOrigenInterno}"
                                          converter="omnifaces.SelectItemsIndexConverter" filter="true"
                                          filterMatchMode="contains"
                                          rendered="#{nuevoRemitoBean.newRemito.isOrigenInterno}">
+
                             <f:selectItem noSelectionOption="true"
-                                          itemLabel="#{msg.seleccionarUno}" />
+                                          itemLabel="#{msg.seleccionarUno}"/>
+
                             <f:selectItems value="#{nuevoRemitoBean.depositosList}"
                                            var="depo" itemLabel="#{depo.nombreDeposito}"
-                                           itemValue="#{depo}" />
+                                           itemValue="#{depo}"/>
 
                         </p:selectOneMenu>
                         <!--Origen externo-->
                         <h:outputLabel for="origenExternoField"
                                        value="#{msg.origenExterno}:"
-                                       rendered="#{not nuevoRemitoBean.newRemito.isOrigenInterno}" />
+                                       rendered="#{not nuevoRemitoBean.newRemito.isOrigenInterno}"/>
                         <p:autoComplete id="origenExternoField"
                                         value="#{nuevoRemitoBean.newRemito.idOrigenExterno}"
                                         completeMethod="#{personasSearchBean.findPersonaByString}"
-                                        var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
-                                        converter="#{personasConverter}" forceSelection="true"
+                                        var="prov" itemLabel="#{prov}" itemValue="#{prov}"
+                                        forceSelection="true"
                                         required="true" requiredMessage="#{msg.ingresarValor} de origen"
-                                        minQueryLength="3" queryDelay="1000" onclick="this.select();"
+                                        minQueryLength="3" queryDelay="1000"
+                                        converter="#{personasConverter}"
+
                                         rendered="#{not nuevoRemitoBean.newRemito.isOrigenInterno}">
-                            <p:ajax event="blur" process="origenFragment"
-                                    update="origenFragment" />
+
 
                         </p:autoComplete>
                         <p:commandButton id="buscarPersonaExternaButton"
                                          icon="fa fa-fw fa-search"
                                          oncomplete="PF('personaOrigenExternoDialog').show()"
                                          immediate="true"
-                                         rendered="#{not nuevoRemitoBean.newRemito.isOrigenInterno}" />
+                                         rendered="#{not nuevoRemitoBean.newRemito.isOrigenInterno}"/>
 
                     </p:fragment>
 
@@ -107,7 +109,7 @@
                         <!--Destino Interno-->
                         <h:outputLabel for="destinoInternoField"
                                        value="#{msg.destinoInterno}:"
-                                       rendered="#{nuevoRemitoBean.newRemito.isDestinoInterno}" />
+                                       rendered="#{nuevoRemitoBean.newRemito.isDestinoInterno}"/>
                         <p:selectOneMenu id="destinoInternoField" required="true"
                                          requiredMessage="#{msg.ingresarValor} de destino"
                                          value="#{nuevoRemitoBean.newRemito.idDestinoPrevistoInterno}"
@@ -115,40 +117,40 @@
                                          filterMatchMode="contains"
                                          rendered="#{nuevoRemitoBean.newRemito.isDestinoInterno}">
                             <f:selectItem noSelectionOption="true"
-                                          itemLabel="#{msg.seleccionarUno}" />
+                                          itemLabel="#{msg.seleccionarUno}"/>
                             <f:selectItems value="#{nuevoRemitoBean.depositosList}"
                                            var="depo" itemLabel="#{depo.nombreDeposito}"
-                                           itemValue="#{depo}" />
+                                           itemValue="#{depo}"/>
 
                         </p:selectOneMenu>
                         <!--Destino externo-->
                         <h:outputLabel for="destinoExternoField"
                                        value="#{msg.destinoExterno}:"
-                                       rendered="#{not nuevoRemitoBean.newRemito.isDestinoInterno}" />
+                                       rendered="#{not nuevoRemitoBean.newRemito.isDestinoInterno}"/>
                         <p:autoComplete id="destinoExternoField"
                                         value="#{nuevoRemitoBean.newRemito.idDestinoPrevistoExterno}"
                                         completeMethod="#{personasSearchBean.findPersonaByString}"
-                                        var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
-                                        converter="#{personasConverter}" forceSelection="true"
-                                        minQueryLength="3" queryDelay="1000" onclick="this.select();"
+                                        var="prov" itemLabel="#{prov}" itemValue="#{prov}"
+                                        forceSelection="true"
+                                        converter="#{personasConverter}"
+                                        minQueryLength="3" queryDelay="1000"
                                         rendered="#{not nuevoRemitoBean.newRemito.isDestinoInterno}">
-                            <p:ajax event="blur" process="origenFragment"
-                                    update="origenFragment" />
+
 
                         </p:autoComplete>
                         <p:commandButton id="buscarPersonaDestinoExternoButton"
                                          icon="fa fa-fw fa-search"
                                          oncomplete="PF('personaDestinoExternoDialog').show()"
                                          immediate="true"
-                                         rendered="#{not nuevoRemitoBean.newRemito.isDestinoInterno}" />
+                                         rendered="#{not nuevoRemitoBean.newRemito.isDestinoInterno}"/>
                     </p:fragment>
 
 
-                    <div class="SeparatorFull" />
+                    <div class="SeparatorFull"/>
 
                     <!--DETALLE DEL REMITO-->
                     <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank"
-                                 columns="3" style="border:0px !important; background:none;">
+                                 columns="3">
 
 
                         <p:inputText id="idField"
@@ -164,11 +166,10 @@
                         </p:inputText>
 
 
-
                         <p:inputText id="cantidadField" required="true"
                                      value="#{nuevoRemitoBean.cantidad}" placeholder="Cantidad">
                             <f:validateDoubleRange minimum="0.01"
-                                                   maximum="9999999999999999999.99" />
+                                                   maximum="9999999999999999999.99"/>
 
                         </p:inputText>
 
@@ -179,17 +180,16 @@
                         <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                                          title="#{msg.insertar}"
                                          action="#{nuevoRemitoBean.agregarProducto()}" update="@form"
-                                         global="false" styleClass="GreenButton" />
+                                         global="false" styleClass="GreenButton"/>
 
                         <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
                                          title="#{msg.buscar} productos"
                                          oncomplete="PF('dlgBusProd').show()" process="@none"
-                                         global="false" />
+                                         global="false"/>
                     </div>
 
 
-
-                    <div class="EmptyBox10" />
+                    <div class="EmptyBox10"/>
 
                     <p:dataTable id="productosTable" var="lineaDetalle"
                                  value="#{nuevoRemitoBean.newRemito.detalleList}" paginator="false"
@@ -201,22 +201,22 @@
                             <f:facet name="header">
                                 #{msg.tablaId}
                             </f:facet>
-                            <h:outputText value="#{lineaDetalle.idProducto.id}" />
+                            <h:outputText value="#{lineaDetalle.idProducto.id}"/>
                         </p:column>
                         <p:column style="text-align: left; ">
                             <f:facet name="header">
                                 #{msg.codigo}
                             </f:facet>
-                            <h:outputText value="#{lineaDetalle.idProducto.codigoPropio}" />
+                            <h:outputText value="#{lineaDetalle.idProducto.codigoPropio}"/>
                         </p:column>
                         <p:column style="text-align: left; ">
                             <f:facet name="header">
                                 #{msg.tablaDescripcion}
                             </f:facet>
                             <h:outputText id="decripcionProd"
-                                          value="#{lineaDetalle.idProducto.descripcion}" />
+                                          value="#{lineaDetalle.idProducto.descripcion}"/>
                             <p:tooltip id="toolTipFade" for="decripcionProd"
-                                       value="#{lineaDetalle.idProducto.observaciones}" />
+                                       value="#{lineaDetalle.idProducto.observaciones}"/>
                         </p:column>
                         <p:column style="text-align: right;">
                             <f:facet name="header">
@@ -224,13 +224,13 @@
                             </f:facet>
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <h:outputText value="#{lineaDetalle.cantidad}" />
+                                    <h:outputText value="#{lineaDetalle.cantidad}"/>
                                 </f:facet>
                                 <f:facet name="input">
                                     <p:inputText id="cantidadProdTabField"
                                                  value="#{lineaDetalle.cantidad}">
                                         <f:validateDoubleRange minimum="0.01"
-                                                               maximum="9999999999999999999.99" />
+                                                               maximum="9999999999999999999.99"/>
                                     </p:inputText>
                                 </f:facet>
                             </p:cellEditor>
@@ -238,13 +238,11 @@
                         </p:column>
 
 
-
                     </p:dataTable>
 
-                    <div class="SeparatorFull" />
+                    <div class="SeparatorFull"/>
 
                     <p:panelGrid layout="grid"
-                                 style="border:0px !important; background:none;"
                                  styleClass="ui-panelgrid-blank" columns="2">
                         <p:commandButton id="guardarButton" value="#{msg.guardar}"
                                          icon="fa fa-fw fa-save"
@@ -255,7 +253,7 @@
                         <p:commandButton id="cancelarButton" value="#{msg.cancelar}"
                                          icon="ui-icon-cancel"
                                          action="/protected/stock/remitos/index.xhtml?faces-redirect=true"
-                                         immediate="true" ajax="false" styleClass="RedButton" />
+                                         immediate="true" ajax="false" styleClass="RedButton"/>
                     </p:panelGrid>
 
                 </h:form>
@@ -268,18 +266,18 @@
                               hideEffect="clip" modal="true">
 
                         <gtsoftware:busquedaPersonas
-                            personaSeleccionada="#{nuevoRemitoBean.newRemito.idOrigenExterno}">
+                                personaSeleccionada="#{nuevoRemitoBean.newRemito.idOrigenExterno}">
                         </gtsoftware:busquedaPersonas>
 
                         <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                          oncomplete="PF('personaOrigenExternoDialog').hide()"
                                          update=":nuevoRemitoForm:origenFragment" immediate="true"
-                                         process="@this" />
+                                         process="@this"/>
 
                         <p:commandButton value="#{msg.cancelar}" immediate="true"
                                          icon="fa fa-fw fa-ban"
                                          onclick="PF('personaOrigenExternoDialog').hide();" global="false"
-                                         styleClass="RedButton" />
+                                         styleClass="RedButton"/>
 
                     </p:dialog>
                     <p:dialog id='personaDestinoExternoDialog'
@@ -289,18 +287,18 @@
                               hideEffect="clip" modal="true">
 
                         <gtsoftware:busquedaPersonas
-                            personaSeleccionada="#{nuevoRemitoBean.newRemito.idDestinoPrevistoExterno}">
+                                personaSeleccionada="#{nuevoRemitoBean.newRemito.idDestinoPrevistoExterno}">
                         </gtsoftware:busquedaPersonas>
 
                         <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                          oncomplete="PF('personaDestinoExternoDialog').hide()"
                                          update=":nuevoRemitoForm:destinoFragment" immediate="true"
-                                         process="@this" />
+                                         process="@this"/>
 
                         <p:commandButton value="#{msg.cancelar}" immediate="true"
                                          icon="fa fa-fw fa-ban"
                                          onclick="PF('personaDestinoExternoDialog').hide();"
-                                         global="false" styleClass="RedButton" />
+                                         global="false" styleClass="RedButton"/>
 
                     </p:dialog>
                     <!--DIALOGO DE BUSQUEDA DE PRODUCTOS-->
@@ -308,19 +306,18 @@
                               header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
                               modal="true" dynamic="true">
                         <gtsoftware:busquedaProductos
-                            productoSeleccionado="#{nuevoRemitoBean.productoBusquedaSeleccionado}"
-                            soloConStock="#{null}" puedeComprarse="#{null}"
-                            puedeVenderse="#{null}" />
-                        <div class="SeparatorFull" />
+                                model="#{nuevoRemitoBean}"
+                        />
+                        <div class="SeparatorFull"/>
 
                         <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
                                          oncomplete="PF('dlgBusProd').hide()" update=":nuevoRemitoForm"
                                          immediate="true" process="@this"
-                                         actionListener="#{nuevoRemitoBean.agregarProducto()}" />
+                                         actionListener="#{nuevoRemitoBean.agregarProducto()}"/>
 
                         <p:commandButton value="#{msg.cancelar}" immediate="true"
                                          icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
-                                         styleClass="RedButton" />
+                                         styleClass="RedButton"/>
 
                     </p:dialog>
                 </h:form>

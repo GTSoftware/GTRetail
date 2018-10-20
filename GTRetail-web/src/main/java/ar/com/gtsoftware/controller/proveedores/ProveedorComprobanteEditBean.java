@@ -16,11 +16,10 @@
 package ar.com.gtsoftware.controller.proveedores;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.eao.*;
-import ar.com.gtsoftware.model.*;
-import ar.com.gtsoftware.search.FiscalLetrasComprobantesSearchFilter;
+import ar.com.gtsoftware.bl.*;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
-import ar.com.gtsoftware.search.FiscalTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -39,6 +38,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
@@ -47,48 +48,39 @@ import java.util.logging.Logger;
 public class ProveedorComprobanteEditBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(ProveedorComprobanteEditBean.class.getName());
+    private final NegocioTiposComprobanteSearchFilter tipoCompSf = NegocioTiposComprobanteSearchFilter.builder()
+            .activo(true).build();
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
 
     @EJB
-    private ComprobantesProveedorFacade facade;
+    private ComprobantesProveedorService service;
     @EJB
-    private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
-    @EJB
-    private FiscalResponsabilidadesIvaFacade responsabilidadesIvaFacade;
-    @EJB
-    private FiscalLetrasComprobantesFacade letrasComprobantesFacade;
-    @EJB
-    private NegocioTiposComprobanteFacade tiposComprobanteFacade;
-    @EJB
-    private FiscalAlicuotasIvaFacade alicuotasIvaFacade;
-    @EJB
-    private FiscalLibroIvaComprasFacade ivaComprasFacade;
-    @EJB
-    private FiscalTiposComprobanteFacade fiscalTiposComprobanteFacade;
+    private FiscalPeriodosFiscalesService periodosFiscalesService;
 
-    private final NegocioTiposComprobanteSearchFilter tipoCompSf = NegocioTiposComprobanteSearchFilter.builder()
-            .activo(true).build();
-
-    private List<FiscalPeriodosFiscales> periodosFiscalesList = null;
-
-    private List<NegocioTiposComprobante> tiposComprobanteList = null;
-
-    private ProveedoresComprobantes comprobanteActual;
-    private static final Logger LOG = Logger.getLogger(ProveedorComprobanteEditBean.class.getName());
-    private List<FiscalAlicuotasIva> alicuotasIVAList;
-    private FiscalLibroIvaComprasLineas lineaLibro = null;
+    @EJB
+    private FiscalLetrasComprobantesService letrasComprobantesService;
+    @EJB
+    private NegocioTiposComprobanteService tiposComprobanteService;
+    @EJB
+    private FiscalAlicuotasIvaService alicuotasIvaService;
+    private List<FiscalPeriodosFiscalesDto> periodosFiscalesList = null;
+    private List<NegocioTiposComprobanteDto> tiposComprobanteList = null;
+    private ProveedoresComprobantesDto comprobanteActual;
+    private List<FiscalAlicuotasIvaDto> alicuotasIVAList;
+    private FiscalLibroIvaComprasLineasDto lineaLibro = null;
     private int numerador = 1;
 
 
     @PostConstruct
     private void init() {
         String idComprobante = JSFUtil.getRequestParameterMap().get("idComprobante");
-        if (StringUtils.isEmpty(idComprobante)) {
+        if (isEmpty(idComprobante)) {
             nuevoComprobante();
         } else {
-            comprobanteActual = facade.find(Long.parseLong(idComprobante));
+            comprobanteActual = service.find(Long.parseLong(idComprobante));
             if (comprobanteActual == null) {
                 nuevoComprobante();
                 JSFUtil.addErrorMessage("Comprobante inexistente");
@@ -99,10 +91,10 @@ public class ProveedorComprobanteEditBean implements Serializable {
     }
 
     private void nuevoComprobante() {
-        comprobanteActual = new ProveedoresComprobantes();
+        comprobanteActual = new ProveedoresComprobantesDto();
         comprobanteActual.setIdUsuario(authBackingBean.getUserLoggedIn());
         comprobanteActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
-        comprobanteActual.setIdRegistro(new FiscalLibroIvaCompras());
+        comprobanteActual.setIdRegistro(new FiscalLibroIvaComprasDto());
         comprobanteActual.setAnulada(false);
         if (CollectionUtils.isNotEmpty(getPeriodosFiscalesList())) {
             comprobanteActual.getIdRegistro().setIdPeriodoFiscal(getPeriodosFiscalesList().get(0));
@@ -113,7 +105,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
         comprobanteActual.getIdRegistro().setImportePercepcionIva(BigDecimal.ZERO);
     }
 
-    public ProveedoresComprobantes getComprobanteActual() {
+    public ProveedoresComprobantesDto getComprobanteActual() {
         return comprobanteActual;
     }
 
@@ -125,101 +117,68 @@ public class ProveedorComprobanteEditBean implements Serializable {
         this.authBackingBean = authBackingBean;
     }
 
-    public List<FiscalPeriodosFiscales> getPeriodosFiscalesList() {
+    public List<FiscalPeriodosFiscalesDto> getPeriodosFiscalesList() {
         if (periodosFiscalesList == null) {
             FiscalPeriodosFiscalesSearchFilter sf = FiscalPeriodosFiscalesSearchFilter.builder().cerrado(false).build();
             sf.addSortField("fechaInicioPeriodo", false);
-            periodosFiscalesList = periodosFiscalesFacade.findAllBySearchFilter(sf);
+            periodosFiscalesList = periodosFiscalesService.findAllBySearchFilter(sf);
         }
         return periodosFiscalesList;
     }
 
     public String guardar() {
-        if (CollectionUtils.isEmpty(comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList())) {
-            JSFUtil.addErrorMessage("Falta agregar aglún alicuota al comprobante");
+
+        try {
+            service.guardarYFiscalizar(comprobanteActual);
+
+        } catch (ServiceException ex) {
+            JSFUtil.addErrorMessage(ex.getMessage());
             return StringUtils.EMPTY;
         }
-        FiscalLibroIvaCompras registro = comprobanteActual.getIdRegistro();
-        registro.setFechaFactura(comprobanteActual.getFechaComprobante());
-        registro.setDocumento(comprobanteActual.getIdProveedor().getDocumento());
-        registro.setLetraFactura(comprobanteActual.getLetra());
-        registro.setTotalFactura(comprobanteActual.getTotal());
-        registro.setIdPersona(comprobanteActual.getIdProveedor());
-        registro.setIdResponsabilidadIva(comprobanteActual.getIdProveedor().getIdResponsabilidadIva());
-        registro.setPuntoVentaFactura(StringUtils.leftPad(registro.getPuntoVentaFactura(), 4, "0"));
-        registro.setNumeroFactura(StringUtils.leftPad(registro.getNumeroFactura(), 8, "0"));
-
-        calcularTotalesLibro(registro);
-
-        FiscalTiposComprobanteSearchFilter ftcsf = new FiscalTiposComprobanteSearchFilter(comprobanteActual.getLetra(), comprobanteActual.getTipoComprobante());
-        FiscalTiposComprobante tipoCompFiscal = fiscalTiposComprobanteFacade.findFirstBySearchFilter(ftcsf);
-        if (tipoCompFiscal == null) {
-            JSFUtil.addErrorMessage("Este tipo de comprobante no puede ser fiscalizado");
-            return StringUtils.EMPTY;
-        }
-        registro.setCodigoTipoComprobante(tipoCompFiscal);
-        ivaComprasFacade.createOrEdit(registro);
-        facade.createOrEdit(comprobanteActual);
-        return "../index.xhtml";
+        return "/protected/proveedores/comprobantes/index?faces-redirect=true";
     }
 
-    private void calcularTotalesLibro(FiscalLibroIvaCompras registro) {
-        //TODO ver el tema de los exentos
-        BigDecimal totalIVA = BigDecimal.ZERO;
-        BigDecimal totalNG = BigDecimal.ZERO;
-        BigDecimal totalNoGravado = BigDecimal.ZERO;
-        for (FiscalLibroIvaComprasLineas linea :
-                registro.getFiscalLibroIvaComprasLineasList()) {
-            totalIVA = totalIVA.add(linea.getImporteIva());
-            totalNG = totalNG.add(linea.getNetoGravado());
-            totalNoGravado = totalNoGravado.add(linea.getNoGravado());
-        }
-        registro.setImporteIva(totalIVA);
-        registro.setImporteNetoGravado(totalNG);
-        registro.setImporteNetoNoGravado(totalNoGravado);
-
-        registro.setImporteTributos(BigDecimal.ZERO);
-        registro.setImporteExento(BigDecimal.ZERO);
-    }
 
     private void establecerLetraComprobante() {
         if (comprobanteActual.getLetra() == null) {
-            FiscalLetrasComprobantesSearchFilter lsf = FiscalLetrasComprobantesSearchFilter.builder()
-                    .ivaEmisor(comprobanteActual.getIdProveedor().getIdResponsabilidadIva())
-                    .ivaReceptor(responsabilidadesIvaFacade.find(2L)).build();
-            FiscalLetrasComprobantes letra = letrasComprobantesFacade.findFirstBySearchFilter(lsf);
-            comprobanteActual.setLetra(letra.getLetraComprobante());
+            String letra = letrasComprobantesService.obtenerLetra(
+                    comprobanteActual.getIdProveedor().getIdResponsabilidadIva().getId(),
+                    2L);
+            comprobanteActual.setLetra(letra);
         }
     }
 
-    public List<NegocioTiposComprobante> getTiposComprobanteList() {
+    public List<NegocioTiposComprobanteDto> getTiposComprobanteList() {
         if (tiposComprobanteList == null) {
-            tiposComprobanteList = tiposComprobanteFacade.findAllBySearchFilter(tipoCompSf);
+            tiposComprobanteList = tiposComprobanteService.findAllBySearchFilter(tipoCompSf);
         }
         return tiposComprobanteList;
     }
 
-    public List<FiscalAlicuotasIva> getAlicuotasIVA() {
+    public List<FiscalAlicuotasIvaDto> getAlicuotasIVA() {
         if (alicuotasIVAList == null) {
-            alicuotasIVAList = alicuotasIvaFacade.findAll();
+            alicuotasIVAList = alicuotasIvaService.findAll();
         }
         return alicuotasIVAList;
     }
 
     public void nuevaAlicuota() {
-        lineaLibro = new FiscalLibroIvaComprasLineas();
+        lineaLibro = new FiscalLibroIvaComprasLineasDto();
         lineaLibro.setItem(numerador++);
         lineaLibro.setIdRegistro(comprobanteActual.getIdRegistro());
     }
 
-    public FiscalLibroIvaComprasLineas getLineaLibro() {
+    public FiscalLibroIvaComprasLineasDto getLineaLibro() {
         return lineaLibro;
     }
 
     public void actualizarTotal() {
         BigDecimal total = BigDecimal.ZERO;
-        for (FiscalLibroIvaComprasLineas lin : comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList()) {
-            total = total.add(lin.getImporteIva().add(lin.getNetoGravado()).add(lin.getNoGravado()));
+        for (FiscalLibroIvaComprasLineasDto lin : comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList()) {
+            total = total.add(
+                    lin.getImporteIva()
+                            .add(lin.getNetoGravado())
+                            .add(lin.getNoGravado()));
         }
         total = total.add(comprobanteActual.getIdRegistro().getImportePercepcionIngresosBrutos());
         total = total.add(comprobanteActual.getIdRegistro().getImportePercepcionIva());
@@ -230,7 +189,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
         establecerLetraComprobante();
         if (lineaLibro != null) {
             boolean existeAlicuota = false;
-            for (FiscalLibroIvaComprasLineas linea : comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList()) {
+            for (FiscalLibroIvaComprasLineasDto linea : comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList()) {
                 if (linea.getIdAlicuotaIva().equals(lineaLibro.getIdAlicuotaIva())) {
                     existeAlicuota = true;
                     break;
@@ -244,7 +203,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
 
             lineaLibro.setImporteIva(lineaLibro.getImporteIva().setScale(2, RoundingMode.HALF_UP));
 
-            if (lineaLibro.getIdAlicuotaIva().getGravarIva()) {
+            if (lineaLibro.getIdAlicuotaIva().isGravarIva()) {
                 BigDecimal coefAlicuota = lineaLibro.getIdAlicuotaIva().getValorAlicuota().divide(new BigDecimal(100));
                 lineaLibro.setNetoGravado(lineaLibro.getImporteIva()
                         .divide(coefAlicuota, 2, RoundingMode.HALF_UP));
@@ -264,7 +223,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
     public void eliminarAlicuota(int item) {
         int index = -1;
         int cont = 0;
-        for (FiscalLibroIvaComprasLineas linea : comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList()) {
+        for (FiscalLibroIvaComprasLineasDto linea : comprobanteActual.getIdRegistro().getFiscalLibroIvaComprasLineasList()) {
             if (linea.getItem() == item) {
                 index = cont;
                 break;

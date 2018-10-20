@@ -26,11 +26,11 @@ limitations under the License.
 
 
     <composite:attribute name="model" shortDescription="El Bean en el que se debe establecer la seleccion">
-        <composite:attribute name="productoBusquedaSeleccionado" type="ar.com.gtsoftware.model.Productos"/>
+        <composite:attribute name="productoBusquedaSeleccionado" type="ar.com.gtsoftware.dto.model.ProductosDto"/>
 
     </composite:attribute>
-    <composite:attribute name="proveedor" type="ar.com.gtsoftware.model.Personas"/>
-    <composite:attribute name="listaPrecios" type="ar.com.gtsoftware.model.ProductosListasPrecios"/>
+    <composite:attribute name="proveedor" type="ar.com.gtsoftware.dto.model.PersonasDto"/>
+    <composite:attribute name="listaPrecios" type="ar.com.gtsoftware.dto.model.ProductosListasPreciosDto"/>
     <composite:attribute name="soloConStock" type="java.lang.Boolean"/>
     <composite:attribute name="puedeComprarse" type="java.lang.Boolean"/>
     <composite:attribute name="puedeVenderse" type="java.lang.Boolean"/>
@@ -51,8 +51,7 @@ limitations under the License.
 
             <p:fragment>
 
-                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="3"
-                             style="border:0px !important; background:none;">
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="3">
 
 
                     <p:inputText id="cadenaBusquedaProdField"
@@ -134,7 +133,7 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.stock}
                         </f:facet>
-                        <h:outputText value="#{productosSearchBean.getStockSucursal(pro)}">
+                        <h:outputText value="#{pro.stockActual}">
                             <f:convertNumber groupingUsed="true" type="number"/>
                         </h:outputText>
                     </p:column>
@@ -143,7 +142,7 @@ limitations under the License.
                         <f:facet name="header">
                             #{msg.precioUnitario}
                         </f:facet>
-                        <h:outputText value="#{productosSearchBean.getPrecio(pro)}"
+                        <h:outputText value="#{pro.precioVenta}"
                                       style="font-size: medium; font-weight: bold">
                             <f:convertNumber groupingUsed="true" type="currency"
                                              currencySymbol="$"/>

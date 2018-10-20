@@ -15,17 +15,17 @@
  */
 package ar.com.gtsoftware.controller.remitos;
 
-import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.dto.ImpresionEtiquetasDTO;
+import ar.com.gtsoftware.bl.RemitoService;
+import ar.com.gtsoftware.dto.ImpresionEtiquetasDTO;
+import ar.com.gtsoftware.dto.model.ProductosDto;
+import ar.com.gtsoftware.dto.model.RemitoDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -33,15 +33,17 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.apache.commons.lang.StringUtils;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
- * Maneja la creación de un nuevo remito.
+ * Maneja la creación de un nuevo remitoDtoCabecera.
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
@@ -50,17 +52,12 @@ import org.apache.commons.lang.StringUtils;
 public class EtiquetasRemitoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-
-    @EJB
-    private RemitoFacade remitoFacade;
-
-    private Remito remitoActual = null;
-    private int numeradorItems = 1;
-
-    private final List<ImpresionEtiquetasDTO> etiquetas = new ArrayList<>();
-
     private static final Logger LOG = Logger.getLogger(EtiquetasRemitoBean.class.getName());
+    private final List<ImpresionEtiquetasDTO> etiquetas = new ArrayList<>();
+    @EJB
+    private RemitoService remitoFacade;
+    private RemitoDto remitoActual = null;
+    private int numeradorItems = 1;
 
     /**
      * Creates a new instance of NuevoRemitoBean
@@ -72,7 +69,7 @@ public class EtiquetasRemitoBean implements Serializable {
     public void init() {
 
         String idRemito = JSFUtil.getRequestParameterMap().get("idRemito");
-        if (StringUtils.isEmpty(idRemito)) {
+        if (isEmpty(idRemito)) {
             throw new IllegalArgumentException("IdRemito nulo!");
         }
 
@@ -83,13 +80,16 @@ public class EtiquetasRemitoBean implements Serializable {
         armarEtiquetas();
     }
 
-    public Remito getRemitoActual() {
+    public RemitoDto getRemitoActual() {
         return remitoActual;
     }
 
     private void armarEtiquetas() {
         remitoActual.getDetalleList().forEach((rd) -> {
-            etiquetas.add(new ImpresionEtiquetasDTO(rd.getIdProducto(), rd.getCantidad().intValue(), numeradorItems++));
+            etiquetas.add(ImpresionEtiquetasDTO.builder()
+                    .producto(rd.getIdProducto())
+                    .cantidad(rd.getCantidad().intValue())
+                    .nroItem(numeradorItems++).build());
         });
     }
 
@@ -98,7 +98,7 @@ public class EtiquetasRemitoBean implements Serializable {
     }
 
     public void imprimirEtiquetas() throws JRException, IOException {
-        List<Productos> productos = new ArrayList<>();
+        List<ProductosDto> productos = new ArrayList<>(etiquetas.size());
         for (ImpresionEtiquetasDTO iDto : etiquetas) {
             for (int i = 0; i < iDto.getCantidad(); i++) {
                 productos.add(iDto.getProducto());

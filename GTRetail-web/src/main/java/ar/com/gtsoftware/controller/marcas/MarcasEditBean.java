@@ -15,17 +15,17 @@
  */
 package ar.com.gtsoftware.controller.marcas;
 
-import ar.com.gtsoftware.eao.ProductosMarcasFacade;
-import ar.com.gtsoftware.model.ProductosMarcas;
+import ar.com.gtsoftware.bl.ProductosMarcasService;
+import ar.com.gtsoftware.dto.model.ProductosMarcasDto;
 import ar.com.gtsoftware.utils.JSFUtil;
 
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
@@ -38,10 +38,10 @@ public class MarcasEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(MarcasEditBean.class.getName());
 
     @EJB
-    private ProductosMarcasFacade facade;
+    private ProductosMarcasService facade;
 
 
-    private ProductosMarcas marcaActual = null;
+    private ProductosMarcasDto marcaActual = null;
 
     /**
      * Creates a new instance of MarcasEditBean
@@ -70,7 +70,7 @@ public class MarcasEditBean implements Serializable {
     }
 
     private void nuevo() {
-        marcaActual = new ProductosMarcas();
+        marcaActual = new ProductosMarcasDto();
     }
 
     public void doGuardar() {
@@ -86,7 +86,7 @@ public class MarcasEditBean implements Serializable {
 
     }
 
-    public ProductosMarcas getMarcaActual() {
+    public ProductosMarcasDto getMarcaActual() {
         return marcaActual;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ar.com.gtsoftware.converters;
 
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.bl.PersonasService;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+
 import javax.ejb.EJB;
 import javax.enterprise.inject.Model;
 import javax.faces.convert.FacesConverter;
 
+
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
+
 @Model
 @FacesConverter(value = "personasConverter")
-public class PersonasConverter extends AbstractEntityConverter<Personas, PersonasSearchFilter> {
+public class PersonasConverter extends AbstractEntityConverter<PersonasDto, PersonasSearchFilter> {
 
     @EJB
-    private PersonasFacade personasFacade;
+    private PersonasService personasService;
 
     public PersonasConverter() {
-        super(Personas.class);
+        super(PersonasDto.class);
     }
 
     @Override
-    protected AbstractFacade<Personas, PersonasSearchFilter> getFacade() {
-        return personasFacade;
+    protected PersonasService getService() {
+        return personasService;
     }
 
 }
+

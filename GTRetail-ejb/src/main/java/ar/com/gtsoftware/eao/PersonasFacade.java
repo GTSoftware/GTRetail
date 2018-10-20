@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.LegalTiposDocumento;
+import ar.com.gtsoftware.model.LegalTiposDocumento_;
 import ar.com.gtsoftware.model.Personas;
 import ar.com.gtsoftware.model.Personas_;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
@@ -70,7 +72,7 @@ public class PersonasFacade extends AbstractFacade<Personas, PersonasSearchFilte
         if (psf.getDocumento() != null && psf.getIdTipoDocumento() != null) {
             Predicate p1 = cb.like(persona.get(Personas_.documento), String.format(LIKE_FORMAT, psf.getDocumento()));
             p = appendAndPredicate(cb, p, p1);
-            p1 = cb.equal(persona.get(Personas_.idTipoDocumento), psf.getIdTipoDocumento());
+            p1 = cb.equal(persona.get(Personas_.idTipoDocumento).get(LegalTiposDocumento_.id), psf.getIdTipoDocumento());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getCliente() != null) {

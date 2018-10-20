@@ -15,11 +15,9 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.FiscalResponsabilidadesIva;
 import lombok.*;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Getter
@@ -31,12 +29,12 @@ public class FiscalLetrasComprobantesSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private FiscalResponsabilidadesIva ivaReceptor;
-    private FiscalResponsabilidadesIva ivaEmisor;
+    private Long idRespIvaReceptor;
+    private Long idRespIvaEmisor;
 
     @Override
     public boolean hasFilter() {
-        return ivaReceptor != null || ivaEmisor != null;
+        return idRespIvaReceptor != null || idRespIvaEmisor != null;
     }
 
 }

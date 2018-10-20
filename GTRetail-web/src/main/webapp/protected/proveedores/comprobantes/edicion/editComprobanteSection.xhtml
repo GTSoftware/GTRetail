@@ -21,7 +21,7 @@
                         <p:autoComplete id="proveedorField"
                                         value="#{proveedorComprobanteEditBean.comprobanteActual.idProveedor}"
                                         completeMethod="#{proveedoresRSSearchBean.findPersonaByString}"
-                                        var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
+                                        var="prov" itemLabel="#{prov}" itemValue="#{prov}"
                                         converter="#{personasConverter}" forceSelection="true"
                                         required="true" requiredMessage="#{msg.ingresarValor}"
                                         minQueryLength="3" queryDelay="1000" onclick="this.select();"

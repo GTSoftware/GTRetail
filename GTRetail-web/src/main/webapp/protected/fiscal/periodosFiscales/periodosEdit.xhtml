@@ -58,7 +58,7 @@
                                          update=":formEdicion, :formResultados" />
 
                         <p:commandButton value="#{msg.cerrarPeriodo}"
-                                         rendered="#{not periodosFiscalesEditBean.periodoActual.new and
+                                         rendered="#{not empty periodosFiscalesEditBean.periodoActual.id and
                                                      not periodosFiscalesEditBean.periodoActual.periodoCerrado}"
                                          icon="ui-icon-close"
                                          action="#{periodosFiscalesEditBean.cerrarPeriodo()}"

@@ -18,6 +18,10 @@ package ar.com.gtsoftware.eao;
 import ar.com.gtsoftware.model.ChequesTerceros;
 import ar.com.gtsoftware.model.ChequesTerceros_;
 import ar.com.gtsoftware.search.ChequesTercerosSearchFilter;
+
+import javax.ejb.Local;
+import javax.ejb.LocalBean;
+import javax.ejb.LocalHome;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

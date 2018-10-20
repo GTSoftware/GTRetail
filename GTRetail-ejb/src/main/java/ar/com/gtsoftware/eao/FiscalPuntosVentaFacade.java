@@ -17,7 +17,9 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.FiscalPuntosVenta_;
+import ar.com.gtsoftware.model.Sucursales_;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +28,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
@@ -48,8 +49,8 @@ public class FiscalPuntosVentaFacade extends AbstractFacade<FiscalPuntosVenta, F
     public Predicate createWhereFromSearchFilter(FiscalPuntosVentaSearchFilter pvsf, CriteriaBuilder cb, Root<FiscalPuntosVenta> root) {
 
         Predicate p = null;
-        if (pvsf.getSucursal() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.sucursal), pvsf.getSucursal());
+        if (pvsf.getIdSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalPuntosVenta_.sucursal).get(Sucursales_.id), pvsf.getIdSucursal());
             p = appendAndPredicate(cb, p, p1);
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,33 @@
 package ar.com.gtsoftware.controller.remitos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.eao.DepositosFacade;
-import ar.com.gtsoftware.eao.ProductosFacade;
-import ar.com.gtsoftware.eao.RemitoFacade;
-import ar.com.gtsoftware.eao.RemitoTipoMovimientoFacade;
-import ar.com.gtsoftware.model.Depositos;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.RemitoDetalle;
-import ar.com.gtsoftware.model.RemitoRecepcion;
-import ar.com.gtsoftware.model.RemitoTipoMovimiento;
+import ar.com.gtsoftware.bl.DepositosService;
+import ar.com.gtsoftware.bl.ProductosService;
+import ar.com.gtsoftware.bl.RemitoService;
+import ar.com.gtsoftware.bl.RemitoTipoMovimientoService;
+import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.DepositosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Logger;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 
 import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
- * Maneja la creación de un nuevo remito.
+ * Maneja la creación de un nuevo remitoDtoCabecera.
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
@@ -56,28 +51,24 @@ import static ar.com.gtsoftware.utils.JSFUtil.*;
 public class NuevoRemitoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    private static final Logger LOG = Logger.getLogger(NuevoRemitoBean.class.getName());
+    private final RemitoDto newRemito = new RemitoDto();
+    private final List<DepositosDto> depositosList = new ArrayList<>();
+    private final List<RemitoTipoMovimientoDto> tiposMovimientoList = new ArrayList<>();
+    private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
     @EJB
-    private DepositosFacade depositosFacade;
+    private DepositosService depositosFacade;
     @EJB
-    private RemitoTipoMovimientoFacade tipoMovimientoFacade;
+    private RemitoTipoMovimientoService tipoMovimientoFacade;
     @EJB
-    private ProductosFacade productosFacade;
-
+    private ProductosService productosFacade;
     @EJB
-    private RemitoFacade remitoFacade;
-
-    private final Remito newRemito = new Remito();
-    private final List<Depositos> depositosList = new ArrayList<>();
-    private final List<RemitoTipoMovimiento> tiposMovimientoList = new ArrayList<>();
-    private final ProductosSearchFilter productosFilter = new ProductosSearchFilter(Boolean.TRUE, null, null, null);
+    private RemitoService remitoFacade;
     private BigDecimal cantidad = BigDecimal.ONE;
-    private Productos productoBusquedaSeleccionado = null;
+    private ProductosDto productoBusquedaSeleccionado = null;
     private int numeradorLinea = 1;
-
-    private static final Logger LOG = Logger.getLogger(NuevoRemitoBean.class.getName());
 
     /**
      * Creates a new instance of NuevoRemitoBean
@@ -110,15 +101,15 @@ public class NuevoRemitoBean implements Serializable {
         this.authBackingBean = authBackingBean;
     }
 
-    public Remito getNewRemito() {
+    public RemitoDto getNewRemito() {
         return newRemito;
     }
 
-    public List<Depositos> getDepositosList() {
+    public List<DepositosDto> getDepositosList() {
         return depositosList;
     }
 
-    public List<RemitoTipoMovimiento> getTiposMovimientoList() {
+    public List<RemitoTipoMovimientoDto> getTiposMovimientoList() {
         return tiposMovimientoList;
     }
 
@@ -130,8 +121,8 @@ public class NuevoRemitoBean implements Serializable {
         Date hoy = new Date();
         newRemito.setFechaAlta(hoy);
         newRemito.setFechaCierre(hoy);
-        // Se crea la recepción según los datos ingresados para cerrar el remito
-        RemitoRecepcion recepcion = new RemitoRecepcion();
+        // Se crea la recepción según los datos ingresados para cerrar el remitoDtoCabecera
+        RemitoRecepcionDto recepcion = new RemitoRecepcionDto();
         recepcion.setFecha(hoy);
         recepcion.setIdUsuario(authBackingBean.getUserLoggedIn());
         recepcion.setRemito(newRemito);
@@ -140,16 +131,16 @@ public class NuevoRemitoBean implements Serializable {
         } else {
             recepcion.setIdPersona(newRemito.getIdDestinoPrevistoExterno());
         }
-        newRemito.setRemitoRecepcionesList(Arrays.asList(recepcion));
+        newRemito.setRemitoRecepcionesList(Collections.singletonList(recepcion));
 
         remitoFacade.createOrEdit(newRemito);
 
         return "/protected/stock/remitos/index.xhtml?faces-redirect=true";
 
-        //jsfUtil.addInfoMessage(String.format("Remito guardado exitosamente ID: %d", newRemito.getId()));
+        //jsfUtil.addInfoMessage(String.format("RemitoDto guardado exitosamente ID: %d", newRemito.getId()));
     }
 
-    public boolean validarRemito() {
+    private boolean validarRemito() {
         if (!newRemito.getIsOrigenInterno() && !newRemito.getIsDestinoInterno()) {
             addErrorMessage("El remito no puede tener origen y detino externos");
             return false;
@@ -189,17 +180,17 @@ public class NuevoRemitoBean implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Productos getProductoBusquedaSeleccionado() {
+    public ProductosDto getProductoBusquedaSeleccionado() {
         return productoBusquedaSeleccionado;
     }
 
-    public void setProductoBusquedaSeleccionado(Productos productoBusquedaSeleccionado) {
+    public void setProductoBusquedaSeleccionado(ProductosDto productoBusquedaSeleccionado) {
         this.productoBusquedaSeleccionado = productoBusquedaSeleccionado;
     }
 
     public void agregarProducto() {
 
-        Productos producto;
+        ProductosDto producto;
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
@@ -222,12 +213,14 @@ public class NuevoRemitoBean implements Serializable {
         productoBusquedaSeleccionado = null;
     }
 
-    private RemitoDetalle crearLineaDetalleRemito(Productos producto) {
-        RemitoDetalle detalle = new RemitoDetalle();
-        detalle.setCantidad(cantidad);
-        detalle.setIdProducto(producto);
-        detalle.setRemitoCabecera(newRemito);
-        detalle.setNroLinea(numeradorLinea++);
+    private RemitoDetalleDto crearLineaDetalleRemito(ProductosDto producto) {
+        RemitoDetalleDto detalle = RemitoDetalleDto.builder()
+                .cantidad(cantidad)
+                .idProducto(producto)
+                .remitoCabecera(newRemito)
+                .nroLinea(numeradorLinea++)
+                .build();
+
         return detalle;
     }
 

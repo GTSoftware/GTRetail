@@ -1,5 +1,4 @@
-/*
- * Copyright 2015 GT Software.
+/* Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +12,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ar.com.gtsoftware.converters;
 
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.model.GTEntity;
+import ar.com.gtsoftware.bl.EntityService;
+import ar.com.gtsoftware.dto.IdentifiableDto;
 import ar.com.gtsoftware.search.AbstractSearchFilter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
- * Converter abstracto para entidades BaseEntity
+ * Converter abstracto para DTOs
  *
- * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @param <T>
- * @param <S>
- */
-public abstract class AbstractEntityConverter<T extends GTEntity<?>, S extends AbstractSearchFilter> implements Converter {
+ * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
+ **/
+
+
+public abstract class AbstractEntityConverter<T extends IdentifiableDto, S extends AbstractSearchFilter>
+        implements Converter {
 
     private final Class<T> entityClass;
 
@@ -39,25 +46,23 @@ public abstract class AbstractEntityConverter<T extends GTEntity<?>, S extends A
         this.entityClass = entityClass;
     }
 
-    public AbstractEntityConverter() {
+    private AbstractEntityConverter() {
         this.entityClass = null;
     }
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value == null || value.isEmpty()) {
+        if (isEmpty(value)) {
             return null;
         }
 
         try {
-            Object calculateId = entityClass.newInstance().calculateId(value);
-            if (calculateId != null) {
-                return getFacade().find(calculateId);
-            }
-        } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(entityClass.getName()).log(Level.SEVERE, null, ex);
+            long id = Long.parseLong(value);
+            return getService().find(id);
+        } catch (NumberFormatException e) {
+            Logger.getLogger(AbstractEntityConverter.class.getName()).log(Level.SEVERE, null, e);
+            throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid dto."));
         }
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -67,13 +72,12 @@ public abstract class AbstractEntityConverter<T extends GTEntity<?>, S extends A
             return null;
         }
         try {
+            return ((T) value).getStringId();
 
-            T entity = (T) value;
-            return entity.getStringId();
         } catch (ClassCastException ex) {
             return null;
         }
     }
 
-    protected abstract AbstractFacade<T, S> getFacade();
+    protected abstract EntityService<T, S> getService();
 }

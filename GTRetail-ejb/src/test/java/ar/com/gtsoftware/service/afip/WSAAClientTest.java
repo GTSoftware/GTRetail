@@ -16,7 +16,7 @@
 package ar.com.gtsoftware.service.afip;
 
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.model.dto.fiscal.AuthTicket;
+import ar.com.gtsoftware.dto.fiscal.AuthTicket;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

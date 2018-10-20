@@ -15,20 +15,20 @@
  */
 package ar.com.gtsoftware.controller.ubicaciones;
 
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.model.UbicacionPaises;
+import ar.com.gtsoftware.bl.UbicacionPaisesService;
+import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.lang.StringUtils;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import org.apache.commons.lang.StringUtils;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "paisesEditBean")
@@ -39,9 +39,9 @@ public class PaisesEditBean implements Serializable {
     private static final Logger LOG = Logger.getLogger(PaisesEditBean.class.getName());
 
     @EJB
-    private UbicacionPaisesFacade facade;
+    private UbicacionPaisesService facade;
 
-    private UbicacionPaises paisActual = null;
+    private UbicacionPaisesDto paisActual = null;
 
     /**
      * Creates a new instance of MarcasEditBean
@@ -70,7 +70,7 @@ public class PaisesEditBean implements Serializable {
     }
 
     private void nuevo() {
-        paisActual = new UbicacionPaises();
+        paisActual = new UbicacionPaisesDto();
     }
 
     public void doGuardar() {
@@ -86,7 +86,7 @@ public class PaisesEditBean implements Serializable {
 
     }
 
-    public UbicacionPaises getPaisActual() {
+    public UbicacionPaisesDto getPaisActual() {
         return paisActual;
     }
 

@@ -15,14 +15,13 @@
  */
 package ar.com.gtsoftware.controller.proveedores;
 
+import ar.com.gtsoftware.bl.ComprobantesProveedorService;
+import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.ComprobantesProveedorFacade;
-import ar.com.gtsoftware.eao.NegocioTiposComprobanteFacade;
-import ar.com.gtsoftware.eao.PersonasFacade;
-import ar.com.gtsoftware.model.NegocioTiposComprobante;
-import ar.com.gtsoftware.model.Personas;
-import ar.com.gtsoftware.model.ProveedoresComprobantes;
+import ar.com.gtsoftware.dto.model.NegocioTiposComprobanteDto;
+import ar.com.gtsoftware.dto.model.PersonasDto;
+import ar.com.gtsoftware.dto.model.ProveedoresComprobantesDto;
 import ar.com.gtsoftware.search.ComprobantesProveedorSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
@@ -45,34 +44,27 @@ import java.util.List;
  */
 @ManagedBean(name = "searchComprobantesProveedoresBean")
 @ViewScoped
-public class SearchComprobantesProveedoresBean extends AbstractSearchBean<ProveedoresComprobantes, ComprobantesProveedorSearchFilter> {
+public class SearchComprobantesProveedoresBean extends AbstractSearchBean<ProveedoresComprobantesDto, ComprobantesProveedorSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private ComprobantesProveedorFacade comprobantesFacade;
-
-    @EJB
-    private PersonasFacade proveedoresFacade;
-
-    @EJB
-    private NegocioTiposComprobanteFacade tiposComprobanteFacade;
-
     private final ComprobantesProveedorSearchFilter filter = ComprobantesProveedorSearchFilter.builder()
             .fechaComprobanteDesde(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH))
             .fechaComprobanteHasta(DateUtils.addDays(new Date(), 1))
             .anulada(false).build();
-
     private final PersonasSearchFilter personasSearchFilter = PersonasSearchFilter.builder()
             .activo(true).proveedor(true).build();
-
     private final NegocioTiposComprobanteSearchFilter tiposComprobanteSearchFilter = NegocioTiposComprobanteSearchFilter
             .builder().activo(true).build();
-
     /*private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;*/
-    private final List<NegocioTiposComprobante> tiposCompList = new ArrayList<>();
+    private final List<NegocioTiposComprobanteDto> tiposCompList = new ArrayList<>();
+    @EJB
+    private ComprobantesProveedorService comprobantesProveedorService;
+    @EJB
+    private PersonasService personasService;
+    @EJB
+    private NegocioTiposComprobanteService tiposComprobanteService;
 
 
     public SearchComprobantesProveedoresBean() {
@@ -80,26 +72,26 @@ public class SearchComprobantesProveedoresBean extends AbstractSearchBean<Provee
 
     @PostConstruct
     private void init() {
-        tiposCompList.addAll(tiposComprobanteFacade.findAll());
+        tiposCompList.addAll(tiposComprobanteService.findAll());
     }
 
    /* private void calcularTotales() {
-        totalVentasFacturadas = comprobantesFacade.calcularTotalVentasFacturadasBySearchFilter(filter);
-        totalVentas = comprobantesFacade.calcularTotalVentasBySearchFilter(filter);
-        totalVentasSinFacturar = comprobantesFacade.calcularTotalVentasSinFacturarBySearchFilter(filter);
+        totalVentasFacturadas = comprobantesProveedorService.calcularTotalVentasFacturadasBySearchFilter(filter);
+        totalVentas = comprobantesProveedorService.calcularTotalVentasBySearchFilter(filter);
+        totalVentasSinFacturar = comprobantesProveedorService.calcularTotalVentasSinFacturarBySearchFilter(filter);
     }*/
 
-    public List<Personas> findProveedoresByString(String query) {
+    public List<PersonasDto> findProveedoresByString(String query) {
         personasSearchFilter.setTxt(query);
-        return proveedoresFacade.findBySearchFilter(personasSearchFilter, 0, 15);
+        return personasService.findBySearchFilter(personasSearchFilter, 0, 15);
     }
 
-    public List<NegocioTiposComprobante> autocompleteTiposComp(String query) {
+    public List<NegocioTiposComprobanteDto> autocompleteTiposComp(String query) {
         tiposComprobanteSearchFilter.setNombre(query);
-        return tiposComprobanteFacade.findAllBySearchFilter(tiposComprobanteSearchFilter);
+        return tiposComprobanteService.findAllBySearchFilter(tiposComprobanteSearchFilter);
     }
 
-    public List<NegocioTiposComprobante> getTiposCompList() {
+    public List<NegocioTiposComprobanteDto> getTiposCompList() {
         return tiposCompList;
     }
 
@@ -110,16 +102,16 @@ public class SearchComprobantesProveedoresBean extends AbstractSearchBean<Provee
 
 
     @Override
-    public DataModel<ProveedoresComprobantes> getDataModel() {
+    public DataModel<ProveedoresComprobantesDto> getDataModel() {
         if (dataModel == null) {
-            dataModel = new LazyEntityDataModel<>(comprobantesFacade, filter);
+            dataModel = new LazyEntityDataModel<>(comprobantesProveedorService, filter);
         }
         return dataModel;
     }
 
     @Override
-    protected AbstractFacade<ProveedoresComprobantes, ComprobantesProveedorSearchFilter> getFacade() {
-        return comprobantesFacade;
+    protected ComprobantesProveedorService getService() {
+        return comprobantesProveedorService;
     }
 
     @Override

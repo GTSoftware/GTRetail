@@ -34,12 +34,6 @@
             <version>${primefaces.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>GTRetail-ejb</artifactId>
-            <type>ejb</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.5</version>
@@ -48,13 +42,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>GTRetail-api</artifactId>
             <scope>provided</scope>
-            <version>5.2.2-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>2.6.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.xmlbeans</groupId>-->
+            <!--<artifactId>xmlbeans</artifactId>-->
+            <!--<version>2.6.0</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -78,14 +71,16 @@
             <version>2.1</version>
         </dependency>
         <dependency>
-            <groupId>batik</groupId>
+            <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-bridge</artifactId>
-            <version>1.6-1</version>
+            <version>1.10</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>batik</groupId>
+            <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-dom</artifactId>
-            <version>1.6-1</version>
+            <version>1.10</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -103,7 +98,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
@@ -134,38 +128,36 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jasperreports-maven-plugin</artifactId>
-                <version>1.0-beta-2</version>
-                <configuration>
-                    <sourceDirectory>src/main/webapp/resources/reports</sourceDirectory>
-                    <sourceFileExt>.jrxml</sourceFileExt>
-                    <compiler>net.sf.jasperreports.engine.design.JRJavacCompiler</compiler>
-                    <!--  Destination for jasper file -->
-                    <outputDirectory>src/main/webapp/resources/reports</outputDirectory>
-                </configuration>
+                <groupId>com.alexnederlof</groupId>
+                <artifactId>jasperreports-plugin</artifactId>
+                <version>2.0</version>
                 <executions>
                     <execution>
+                        <phase>process-sources</phase>
                         <goals>
-                            <goal>compile-reports</goal>
+                            <goal>jasper</goal>
                         </goals>
                     </execution>
                 </executions>
-
+                <configuration>
+                    <!-- These are the default configurations: -->
+                    <compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
+                    <sourceDirectory>src/main/webapp/resources/reports</sourceDirectory>
+                    <outputDirectory>src/main/webapp/resources/reports</outputDirectory>
+                    <outputFileExt>.jasper</outputFileExt>
+                    <xmlValidation>true</xmlValidation>
+                    <verbose>false</verbose>
+                    <numberOfThreads>4</numberOfThreads>
+                    <failOnMissingSourceDirectory>true</failOnMissingSourceDirectory>
+                    <sourceScanner>org.codehaus.plexus.compiler.util.scan.StaleSourceScanner</sourceScanner>
+                </configuration>
                 <dependencies>
-                    <!--note this must be repeated here to pick up correct xml validation -->
-                    <dependency>
-                        <groupId>net.sf.jasperreports</groupId>
-                        <artifactId>jasperreports</artifactId>
-                        <version>${jasperreports.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.lowagie</groupId>
-                        <artifactId>itext</artifactId>
-                        <version>4.2.0</version>
-                    </dependency>
+                <dependency>
+                    <groupId>net.sf.barcode4j</groupId>
+                    <artifactId>barcode4j</artifactId>
+                    <version>2.1</version>
+                </dependency>
                 </dependencies>
-
             </plugin>
         </plugins>
     </build>

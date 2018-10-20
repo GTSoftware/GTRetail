@@ -17,7 +17,10 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.ProductosPorcentajes;
 import ar.com.gtsoftware.model.ProductosPorcentajes_;
+import ar.com.gtsoftware.model.ProductosTiposPorcentajes_;
+import ar.com.gtsoftware.model.Productos_;
 import ar.com.gtsoftware.search.ProductosPorcentajesSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +29,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
@@ -48,12 +50,12 @@ public class ProductosPorcentajesFacade extends AbstractFacade<ProductosPorcenta
     public Predicate createWhereFromSearchFilter(ProductosPorcentajesSearchFilter psf, CriteriaBuilder cb, Root<ProductosPorcentajes> root) {
 
         Predicate p = null;
-        if (psf.getProducto() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idProducto), psf.getProducto());
+        if (psf.getIdProducto() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idProducto).get(Productos_.id), psf.getIdProducto());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (psf.getTipoPorcentaje() != null) {
-            Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idTipoPorcentaje), psf.getTipoPorcentaje());
+        if (psf.getIdTipoPorcentaje() != null) {
+            Predicate p1 = cb.equal(root.get(ProductosPorcentajes_.idTipoPorcentaje).get(ProductosTiposPorcentajes_.id), psf.getIdTipoPorcentaje());
             p = appendAndPredicate(cb, p, p1);
 
         }

@@ -15,16 +15,20 @@
  */
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.bl.FacturacionVentasService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
+import ar.com.gtsoftware.dto.RegistrarFacturaDTO;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
 import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
 import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
 import ar.com.gtsoftware.eao.SucursalesFacade;
+import ar.com.gtsoftware.mappers.ComprobantesMapper;
+import ar.com.gtsoftware.mappers.FiscalPuntosVentaMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.Comprobantes;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.FiscalPuntosVenta;
 import ar.com.gtsoftware.model.Sucursales;
-import ar.com.gtsoftware.model.dto.RegistrarFacturaDTO;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
 import ar.com.gtsoftware.search.SortField;
@@ -33,9 +37,11 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,11 +59,16 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
     @EJB
     private ComprobantesFacade comprobantesFacade;
     @EJB
-    private FacturacionVentasBean facturacionBean;
+    private FacturacionVentasService facturacionBean;
     @EJB
     private FiscalPuntosVentaFacade puntosVentaFacade;
     @EJB
     private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
+
+    @Inject
+    private ComprobantesMapper comprobantesMapper;
+    @Inject
+    private FiscalPuntosVentaMapper puntosVentaMapper;
 
     @Override
     public Response getPendientesFacturar(Long idSucursal) {
@@ -78,12 +89,13 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
         }
         ComprobantesSearchFilter csf = new ComprobantesSearchFilter();
         csf.setAnulada(Boolean.FALSE);
-        csf.setIdSucursal(sucursal);
+        csf.setIdSucursal(idSucursal);
         csf.setFacturada(Boolean.FALSE);
         csf.setFechaVentaDesde(fechaDesde);
         csf.setFechaVentaHasta(hasta);
         csf.addSortField(new SortField("fechaComprobante", false));
-        return Response.ok(comprobantesFacade.findBySearchFilter(csf, 0, 100)).build();
+        List<Comprobantes> comprobantes = comprobantesFacade.findBySearchFilter(csf, 0, 100);
+        return Response.ok(comprobantesMapper.entitiesToDtos(comprobantes, new CycleAvoidingMappingContext())).build();
     }
 
     @Override
@@ -95,7 +107,8 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
         csf.setAnulada(Boolean.FALSE);
         csf.setIdVenta(idComprobante);
         csf.setFacturada(Boolean.FALSE);
-        return Response.ok(comprobantesFacade.findFirstBySearchFilter(csf)).build();
+        Comprobantes comp = comprobantesFacade.findFirstBySearchFilter(csf);
+        return Response.ok(comprobantesMapper.entityToDto(comp, new CycleAvoidingMappingContext())).build();
     }
 
     @Override
@@ -118,14 +131,15 @@ public class ComprobantesRestServiceImpl implements ComprobantesEndpoint {
             return Response.status(Response.Status.NOT_FOUND).entity("No hay un periodo fiscal configurado").build();
         }
         try {
-            facturacionBean.registrarFacturaVenta(comprobante,
-                    puntoVenta, registro.getNumeroComprobante(),
-                    periodo, new Date());
+            facturacionBean.registrarFacturaVenta(comprobante.getId(),
+                    puntosVentaMapper.entityToDto(puntoVenta, new CycleAvoidingMappingContext()),
+                    registro.getNumeroComprobante(),
+                    null);
         } catch (ServiceException ex) {
             Logger.getLogger(ComprobantesRestServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             return Response.serverError().entity(ex.getMessage()).build();
         }
-        return Response.ok("0").build();
+        return Response.ok().build();
     }
 
 }

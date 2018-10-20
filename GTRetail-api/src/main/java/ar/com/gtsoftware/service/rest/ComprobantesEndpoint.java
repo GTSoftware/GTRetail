@@ -15,7 +15,7 @@
  */
 package ar.com.gtsoftware.service.rest;
 
-import ar.com.gtsoftware.model.dto.RegistrarFacturaDTO;
+import ar.com.gtsoftware.dto.RegistrarFacturaDTO;
 
 import java.util.Date;
 import javax.ws.rs.Consumes;

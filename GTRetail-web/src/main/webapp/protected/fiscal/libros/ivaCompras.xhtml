@@ -28,11 +28,11 @@
                             <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
                             <p:selectOneMenu id="periodoFiscalField" required="true"
                                              requiredMessage="#{msg.campoRequerido}"
-                                             value="#{libroIVABean.ivaVentasFilter.periodo}"
+                                             value="#{libroIVABean.ivaVentasFilter.idPeriodo}"
                                              converter="omnifaces.SelectItemsIndexConverter">
                                 <f:selectItems value="#{libroIVABean.periodosList}"
                                                var="periodo" itemLabel="#{periodo.nombrePeriodo}"
-                                               itemValue="#{periodo}"/>
+                                               itemValue="#{periodo.id}"/>
                             </p:selectOneMenu>
                         </p:panelGrid>
                         <!--            <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}"

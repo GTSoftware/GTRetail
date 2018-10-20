@@ -1,43 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui"
-    template="/WEB-INF/template.xhtml">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        template="/WEB-INF/template.xhtml">
 
     <!-- Contenido -->
     <ui:define name="content">
-        <ui:insert >
-            <ui:include src="breadcrumb_ventas.xhtml" />
+        <ui:insert>
+            <ui:include src="breadcrumb_ventas.xhtml"/>
         </ui:insert>
 
         <div class="Container100 Responsive100 NoIndent">
             <div class="Container100 ui-fluid">
                 <div class="Card">
                     <h1 class="CardBigTopic TexAlCenter">#{msg.libro_iva_ventas}</h1>
-                    <div class="SeparatorFull" />
+                    <div class="SeparatorFull"/>
 
-                    <h:form id="formBusqueda" >
-                        <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2" >
+                    <h:form id="formBusqueda">
+                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
                             <h:outputLabel for="periodoFiscalField" value="#{msg.periodoFiscal}:"/>
                             <p:selectOneMenu id="periodoFiscalField" required="true"
                                              requiredMessage="#{msg.campoRequerido}"
-                                             value="#{libroIVABean.ivaVentasFilter.periodo}"
+                                             value="#{libroIVABean.ivaVentasFilter.idPeriodo}"
                                              converter="omnifaces.SelectItemsIndexConverter">
                                 <f:selectItems value="#{libroIVABean.periodosList}"
                                                var="periodo" itemLabel="#{periodo.nombrePeriodo}"
-                                               itemValue="#{periodo}"/>
+                                               itemValue="#{periodo.id}"/>
                             </p:selectOneMenu>
-                        </p:panelGrid >
-            <!--            <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}"
-                                         value="#{msg.generar}"
-                                         ajax="false"
-                                         icon="ui-icon-gear"/>-->
+                        </p:panelGrid>
+                        <!--            <p:commandButton id="generarButton" action="#{libroIVABean.imprimirLibroIvaVentas()}"
+                                                     value="#{msg.generar}"
+                                                     ajax="false"
+                                                     icon="ui-icon-gear"/>-->
                         <p:commandButton id="exportExcelButton" action="#{libroIVABean.exportIVAVentaExcel()}"
                                          value="#{msg.exportarExcel}"
                                          ajax="false"

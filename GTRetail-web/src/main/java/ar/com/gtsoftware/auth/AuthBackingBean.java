@@ -15,25 +15,23 @@
  */
 package ar.com.gtsoftware.auth;
 
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.model.Usuarios;
-import ar.com.gtsoftware.model.UsuariosGrupos;
+import ar.com.gtsoftware.bl.UsuariosService;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
-import java.io.Serializable;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSeparator;
-import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
+
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "authBackingBean")
@@ -43,25 +41,16 @@ public class AuthBackingBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private UsuariosFacade usuariosFacade;
+    private UsuariosService usuariosService;
 
 
-    private Usuarios usuarioLogueado;
+    private UsuariosDto usuarioLogueado;
 
     private MenuModel rolesMenuModel;
 
     public AuthBackingBean() {
     }
 
-    /**
-     * Creates a new instance of AuthBackingBean
-     *
-     * @param usuariosFacade
-     * @param jSFUtil
-     */
-    public AuthBackingBean(UsuariosFacade usuariosFacade, JSFUtil jSFUtil) {
-        this.usuariosFacade = usuariosFacade;
-    }
 
     @PostConstruct
     public void init() {
@@ -81,7 +70,7 @@ public class AuthBackingBean implements Serializable {
         DefaultSeparator separator = new DefaultSeparator();
         rolesMenuModel.addElement(separator);
 
-        DefaultSubMenu rolesSubMenu = new DefaultSubMenu("Roles");
+      /*  DefaultSubMenu rolesSubMenu = new DefaultSubMenu("Roles");
 
         for (UsuariosGrupos rol : getUserLoggedIn().getUsuariosGruposList()) {
             DefaultMenuItem rolMi = new DefaultMenuItem(rol.getNombreGrupo());
@@ -90,7 +79,7 @@ public class AuthBackingBean implements Serializable {
 
         rolesSubMenu.setExpanded(false);
 
-        rolesMenuModel.addElement(rolesSubMenu);
+        rolesMenuModel.addElement(rolesSubMenu);*/
 
     }
 
@@ -98,15 +87,16 @@ public class AuthBackingBean implements Serializable {
         JSFUtil.logOut("/index.html");
     }
 
-    public Usuarios getUserLoggedIn() {
+    public UsuariosDto getUserLoggedIn() {
         if (usuarioLogueado == null) {
             String usuP = JSFUtil.getUserPrincipalName();
 
             if (StringUtils.isNotEmpty(usuP)) {
-                UsuariosSearchFilter sf = new UsuariosSearchFilter(usuP);
+                UsuariosSearchFilter sf = UsuariosSearchFilter.builder()
+                        .login(usuP).build();
                 sf.setNamedEntityGraph("rolesUsuarios");
 
-                Usuarios usuario = usuariosFacade.findFirstBySearchFilter(sf);
+                UsuariosDto usuario = usuariosService.findFirstBySearchFilter(sf);
                 if (usuario != null) {
                     usuarioLogueado = usuario;
                     return usuario;

@@ -15,28 +15,28 @@
  */
 package ar.com.gtsoftware.controller.planesPago;
 
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.eao.NegocioPlanesPagoFacade;
-import ar.com.gtsoftware.eao.ProductosListasPreciosFacade;
-import ar.com.gtsoftware.model.NegocioFormasPago;
-import ar.com.gtsoftware.model.NegocioPlanesPago;
-import ar.com.gtsoftware.model.NegocioPlanesPagoDetalle;
-import ar.com.gtsoftware.model.ProductosListasPrecios;
+import ar.com.gtsoftware.bl.NegocioFormasPagoService;
+import ar.com.gtsoftware.bl.NegocioPlanesPagoService;
+import ar.com.gtsoftware.bl.ProductosListasPreciosService;
+import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
+import ar.com.gtsoftware.dto.model.NegocioPlanesPagoDetalleDto;
+import ar.com.gtsoftware.dto.model.NegocioPlanesPagoDto;
+import ar.com.gtsoftware.dto.model.ProductosListasPreciosDto;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
-import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Edit Bean para planes de pago
@@ -49,20 +49,15 @@ public class PlanesPagoEditBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(PlanesPagoEditBean.class.getName());
-
+    private final List<NegocioFormasPagoDto> formasPagoList = new ArrayList<>();
+    private final List<ProductosListasPreciosDto> listasPrecio = new ArrayList<>();
     @EJB
-    private NegocioPlanesPagoFacade facade;
-
-    private NegocioPlanesPago planPagoActual = null;
-
+    private NegocioPlanesPagoService planesPagoService;
     @EJB
-    private NegocioFormasPagoFacade formasPagoFacade;
-
+    private NegocioFormasPagoService formasPagoFacade;
     @EJB
-    private ProductosListasPreciosFacade listasPreciosFacade;
-
-    private final List<NegocioFormasPago> formasPagoList = new ArrayList<>();
-    private final List<ProductosListasPrecios> listasPrecio = new ArrayList<>();
+    private ProductosListasPreciosService listasPreciosFacade;
+    private NegocioPlanesPagoDto planPagoActual = null;
 
     /**
      * Creates a new instance of PlanesPagoEditBean
@@ -78,7 +73,7 @@ public class PlanesPagoEditBean implements Serializable {
         if (idPlan == null) {
             nuevo();
         } else {
-            planPagoActual = facade.find(Long.parseLong(idPlan));
+            planPagoActual = planesPagoService.find(Long.parseLong(idPlan));
 
             if (planPagoActual == null) {
                 LOG.log(Level.SEVERE, "Forma de pago inexistente!");
@@ -93,24 +88,24 @@ public class PlanesPagoEditBean implements Serializable {
     }
 
     private void nuevo() {
-        planPagoActual = new NegocioPlanesPago();
-        planPagoActual.setNegocioPlanesPagoDetalles(new ArrayList<>());
+        planPagoActual = new NegocioPlanesPagoDto();
+        planPagoActual.setNegocioPlanesPagoDetalles(new ArrayList<>(6));
     }
 
     private void loadFormasPagoList() {
         formasPagoList.clear();
-        FormasPagoSearchFilter sf = new FormasPagoSearchFilter();
-        sf.setRequierePlanes(Boolean.TRUE);
-        sf.addSortField(new SortField("nombreFormaPago", true));
+        FormasPagoSearchFilter sf = FormasPagoSearchFilter.builder()
+                .requierePlanes(true).build();
+        sf.addSortField("nombreFormaPago", true);
         formasPagoList.addAll(formasPagoFacade.findAllBySearchFilter(sf));
     }
 
     public void doGuardar() {
         try {
 
-            facade.createOrEdit(planPagoActual);
+            planesPagoService.createOrEdit(planPagoActual);
             JSFUtil.addInfoMessage("Plan de pago guardado Exitosamente");
-            planPagoActual = facade.find(planPagoActual.getId());
+            planPagoActual = planesPagoService.find(planPagoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
@@ -118,7 +113,7 @@ public class PlanesPagoEditBean implements Serializable {
 
     }
 
-    public NegocioPlanesPago getPlanPagoActual() {
+    public NegocioPlanesPagoDto getPlanPagoActual() {
         return planPagoActual;
     }
 
@@ -129,21 +124,21 @@ public class PlanesPagoEditBean implements Serializable {
         listasPrecio.addAll(listasPreciosFacade.findAllBySearchFilter(sf));
     }
 
-    public List<NegocioFormasPago> getFormasPagoList() {
+    public List<NegocioFormasPagoDto> getFormasPagoList() {
         return formasPagoList;
     }
 
-    public List<ProductosListasPrecios> getListasPrecio() {
+    public List<ProductosListasPreciosDto> getListasPrecio() {
         return listasPrecio;
     }
 
     public void agregarDetallePlan() {
-        NegocioPlanesPagoDetalle newDet = new NegocioPlanesPagoDetalle();
-        newDet.setActivo(true);
-        newDet.setIdPlan(planPagoActual);
+        NegocioPlanesPagoDetalleDto newDet = NegocioPlanesPagoDetalleDto.builder()
+                .activo(true)
+                .idPlan(planPagoActual).build();
 
         if (CollectionUtils.isEmpty(planPagoActual.getNegocioPlanesPagoDetalles())) {
-            planPagoActual.setNegocioPlanesPagoDetalles(new ArrayList<>());
+            planPagoActual.setNegocioPlanesPagoDetalles(new ArrayList<>(6));
             newDet.setCuotas(1);
         } else {
             newDet.setCuotas(getMaximaCuota() + 1);
@@ -152,16 +147,14 @@ public class PlanesPagoEditBean implements Serializable {
         planPagoActual.getNegocioPlanesPagoDetalles().add(newDet);
     }
 
-    public void borrarDetallePlan(NegocioPlanesPagoDetalle det) {
+    public void borrarDetallePlan(NegocioPlanesPagoDetalleDto det) {
         planPagoActual.getNegocioPlanesPagoDetalles().remove(det);
     }
 
     private int getMaximaCuota() {
-        NegocioPlanesPagoDetalle cuotaMax = planPagoActual.getNegocioPlanesPagoDetalles().stream().max(Comparator.comparingInt(i -> i.getCuotas())
+        NegocioPlanesPagoDetalleDto cuotaMax = planPagoActual.getNegocioPlanesPagoDetalles().stream().max(Comparator.comparingInt(i -> i.getCuotas())
         ).get();
-        if (cuotaMax == null) {
-            return 0;
-        }
+
         return cuotaMax.getCuotas();
     }
 }

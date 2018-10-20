@@ -34,7 +34,7 @@
                                                value="#{msg.tipoMovimiento}:" />
                                 <p:selectOneMenu id="tipoMovimientoField" required="false"
                                                  requiredMessage="#{msg.ingresarValor} de tipo de movimiento"
-                                                 value="#{remitosSearchBean.filter.tipoMovimiento}"
+                                                 value="#{remitosSearchBean.filter.idTipoMovimiento}"
                                                  converter="omnifaces.SelectItemsIndexConverter" filter="true"
                                                  filterMatchMode="contains">
 
@@ -42,14 +42,14 @@
                                                   itemLabel="#{msg.todos}" itemValue="#{null}" />
                                     <f:selectItems value="#{remitosSearchBean.tiposMovimientoList}"
                                                    var="tipoMov" itemLabel="#{tipoMov.nombreTipo}"
-                                                   itemValue="#{tipoMov}" />
+                                                   itemValue="#{tipoMov.id}" />
 
                                 </p:selectOneMenu>
 
                                 <p:outputLabel value="Producto:" for="productoField"/>
                                 <h:panelGroup >
                                     <p:inputText id="productoField"
-                                                 value="#{remitosSearchBean.filter.idProducto.descripcion}"
+                                                 value="#{remitosSearchBean.filter.idProducto}"
                                                  placeholder="Presione el boton azul para buscar un producto"
                                                  disabled="true">
                                         <p:commandButton id="buscarProductoButton" icon="fa fa-fw fa-search"
@@ -243,9 +243,7 @@
                               header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
                               modal="true" dynamic="true">
                         <gtsoftware:busquedaProductos
-                            productoSeleccionado="#{remitosSearchBean.filter.idProducto}"
-                            soloConStock="#{null}" puedeComprarse="#{null}"
-                            puedeVenderse="#{null}" />
+                            model="#{remitosSearchBean}" />
 
                         <div class="SeparatorFull" />
 

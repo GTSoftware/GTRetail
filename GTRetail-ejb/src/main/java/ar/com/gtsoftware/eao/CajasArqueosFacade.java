@@ -17,7 +17,10 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.CajasArqueos;
 import ar.com.gtsoftware.model.CajasArqueos_;
+import ar.com.gtsoftware.model.Sucursales_;
+import ar.com.gtsoftware.model.Usuarios_;
 import ar.com.gtsoftware.search.CajasArqueosSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,7 +29,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Stateless
@@ -63,13 +65,13 @@ public class CajasArqueosFacade extends AbstractFacade<CajasArqueos, CajasArqueo
             p = appendAndPredicate(cb, p1, p);
         }
 
-        if (psf.getSucursal() != null) {
-            Predicate p1 = cb.equal(root.get(CajasArqueos_.idSucursal), psf.getSucursal());
+        if (psf.getIdSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(CajasArqueos_.idSucursal).get(Sucursales_.id), psf.getIdSucursal());
             p = appendAndPredicate(cb, p1, p);
         }
 
-        if (psf.getUsuario() != null) {
-            Predicate p1 = cb.equal(root.get(CajasArqueos_.idUsuario), psf.getUsuario());
+        if (psf.getIdSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(CajasArqueos_.idUsuario).get(Usuarios_.id), psf.getIdUsuario());
             p = appendAndPredicate(cb, p1, p);
         }
 

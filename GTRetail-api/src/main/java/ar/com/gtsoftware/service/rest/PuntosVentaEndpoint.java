@@ -15,8 +15,6 @@
  */
 package ar.com.gtsoftware.service.rest;
 
-import ar.com.gtsoftware.model.FiscalPuntosVenta;
-import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,7 +23,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Path("/v1/puntos_venta")

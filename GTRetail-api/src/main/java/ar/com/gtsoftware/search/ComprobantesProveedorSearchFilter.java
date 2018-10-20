@@ -15,11 +15,10 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.*;
 import lombok.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,32 +38,32 @@ public class ComprobantesProveedorSearchFilter extends AbstractSearchFilter {
     private Date fechaComprobanteDesde;
     private Date fechaComprobanteHasta;
     private Boolean anulada;
-    private Usuarios idUsuario;
-    private Personas idProveedor;
-    private Sucursales idSucursal;
+    private Long idUsuario;
+    private Long idProveedor;
+    private Long idSucursal;
     private Boolean registradaEnLibroIVA;
     private String numeroFactura;
-    private List<NegocioTiposComprobante> tiposComprobante;
+    private List<Long> idTiposComprobanteList;
 
     @Override
     public boolean hasFilter() {
-        return (idComprobante != null) || (fechaComprobanteDesde != null) || (fechaComprobanteHasta != null)
-                || (anulada != null) || (idUsuario != null)
-                || (idSucursal != null) || (idProveedor != null)
-                || (registradaEnLibroIVA != null)
-                || (numeroFactura != null)
+        return idComprobante != null
+                || hasFechasFilter()
+                || anulada != null
+                || idUsuario != null
+                || idSucursal != null
+                || idProveedor != null
+                || registradaEnLibroIVA != null
+                || StringUtils.isNotEmpty(numeroFactura)
                 || hasTiposComprobanteFilter();
-    }
-
-    public List<NegocioTiposComprobante> getTiposComprobante() {
-        if (tiposComprobante == null) {
-            tiposComprobante = new ArrayList<>();
-        }
-        return tiposComprobante;
     }
 
 
     public boolean hasTiposComprobanteFilter() {
-        return CollectionUtils.isNotEmpty(tiposComprobante);
+        return CollectionUtils.isNotEmpty(idTiposComprobanteList);
+    }
+
+    public boolean hasFechasFilter() {
+        return fechaComprobanteDesde != null && fechaComprobanteHasta != null;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,37 +15,36 @@
  */
 package ar.com.gtsoftware.controller.fiscal;
 
+import ar.com.gtsoftware.bl.FiscalPeriodosFiscalesService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
-import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.UtilUI;
+import ar.com.gtsoftware.utils.JSFUtil;
+
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import static org.apache.commons.lang3.time.DateUtils.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
- * @since 1.0.2
  * @version 1.0.0
+ * @since 1.0.2
  */
 @ManagedBean(name = "periodosFiscalesEditBean")
 @ViewScoped
-public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosFiscales, FiscalPeriodosFiscalesSearchFilter> {
+public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosFiscalesDto, FiscalPeriodosFiscalesSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
-
-    private FiscalPeriodosFiscales periodoActual;
-
     private final FiscalPeriodosFiscalesSearchFilter filter = new FiscalPeriodosFiscalesSearchFilter();
+    private final SimpleDateFormat YEAR_MONTH = new SimpleDateFormat("YYYY-MM");
+    @EJB
+    private FiscalPeriodosFiscalesService periodosFiscalesFacade;
+    private FiscalPeriodosFiscalesDto periodoActual;
 
     /**
      * Creates a new instance of PeriodosFiscalesEditBean
@@ -60,38 +59,37 @@ public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosF
     }
 
     public final void nuevoPeriodo() {
-        periodoActual = new FiscalPeriodosFiscales();
-        periodoActual.setFechaInicioPeriodo(UtilUI.getDesde());
-        periodoActual.setFechaFinPeriodo(UtilUI.getHasta());
+        periodoActual = new FiscalPeriodosFiscalesDto();
+        periodoActual.setFechaInicioPeriodo(truncate(new Date(), Calendar.DAY_OF_MONTH));
+        periodoActual.setFechaFinPeriodo(addMilliseconds(addMonths(periodoActual.getFechaInicioPeriodo(), 1), -1));
         periodoActual.setPeriodoCerrado(false);
+        periodoActual.setNombrePeriodo(YEAR_MONTH.format(periodoActual.getFechaInicioPeriodo()));
     }
 
     public void guardarPeriodo() {
 
-        periodosFiscalesFacade.createOrEdit(periodoActual);
+        periodoActual = periodosFiscalesFacade.createOrEdit(periodoActual);
 
-        periodosFiscalesFacade.edit(periodoActual);
 
         nuevoPeriodo();
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO,
-                        "Exito!", "Se ha guardado exitosamente!"));
+        JSFUtil.addInfoMessage("Se ha guardado exitosamente!");
+
     }
 
-    public void editarPeriodo(FiscalPeriodosFiscales pf) {
+    public void editarPeriodo(FiscalPeriodosFiscalesDto pf) {
         periodoActual = pf;
     }
 
-    public FiscalPeriodosFiscales getPeriodoActual() {
+    public FiscalPeriodosFiscalesDto getPeriodoActual() {
         return periodoActual;
     }
 
-    public void setPeriodoActual(FiscalPeriodosFiscales periodoActual) {
+    public void setPeriodoActual(FiscalPeriodosFiscalesDto periodoActual) {
         this.periodoActual = periodoActual;
     }
 
     @Override
-    protected AbstractFacade<FiscalPeriodosFiscales, FiscalPeriodosFiscalesSearchFilter> getFacade() {
+    protected FiscalPeriodosFiscalesService getService() {
         return periodosFiscalesFacade;
     }
 
@@ -103,7 +101,7 @@ public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosF
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("nombrePeriodo", true));
+            filter.addSortField("nombrePeriodo", true);
         }
     }
 }

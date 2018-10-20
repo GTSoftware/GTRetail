@@ -18,6 +18,8 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalLibroIvaCompras;
 import ar.com.gtsoftware.model.FiscalLibroIvaCompras_;
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
+import ar.com.gtsoftware.model.FiscalPeriodosFiscales_;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 
 import javax.ejb.Stateless;
@@ -51,8 +53,8 @@ public class FiscalLibroIvaComprasFacade extends AbstractFacade<FiscalLibroIvaCo
     @Override
     public Predicate createWhereFromSearchFilter(LibroIVASearchFilter ivavsf, CriteriaBuilder cb, Root<FiscalLibroIvaCompras> root) {
         Predicate p = null;
-        if (ivavsf.getPeriodo() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalLibroIvaCompras_.idPeriodoFiscal), ivavsf.getPeriodo());
+        if (ivavsf.getIdPeriodo() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalLibroIvaCompras_.idPeriodoFiscal).get(FiscalPeriodosFiscales_.id), ivavsf.getIdPeriodo());
             p = appendAndPredicate(cb, p1, p);
         }
         if (ivavsf.hasFechasDesdeHasta()) {

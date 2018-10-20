@@ -16,36 +16,29 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.ComprobantesService;
+import ar.com.gtsoftware.bl.FacturacionVentasService;
+import ar.com.gtsoftware.bl.FiscalPuntosVentaService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
-import ar.com.gtsoftware.bl.impl.FacturacionVentasBean;
-import ar.com.gtsoftware.bl.impl.VentasBean;
-import ar.com.gtsoftware.eao.ComprobantesFacade;
-import ar.com.gtsoftware.eao.ComprobantesLineasFacade;
-import ar.com.gtsoftware.eao.FiscalPeriodosFiscalesFacade;
-import ar.com.gtsoftware.eao.FiscalPuntosVentaFacade;
-import ar.com.gtsoftware.model.Comprobantes;
-import ar.com.gtsoftware.model.ComprobantesLineas;
-import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
-import ar.com.gtsoftware.model.FiscalPuntosVenta;
-import ar.com.gtsoftware.model.enums.TiposPuntosVenta;
-import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
+import ar.com.gtsoftware.dto.model.ComprobantesDto;
+import ar.com.gtsoftware.dto.model.FiscalPuntosVentaDto;
+import ar.com.gtsoftware.enums.TiposPuntosVenta;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
+
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 
 import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "verComprobantesBean")
@@ -53,32 +46,22 @@ import static ar.com.gtsoftware.utils.JSFUtil.*;
 public class VerComprobantesBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Comprobantes ventaActual;
-    private List<ComprobantesLineas> lineasVenta = new ArrayList<>();
+    private static final Logger LOG = Logger.getLogger(VerComprobantesBean.class.getName());
+    private final List<FiscalPuntosVentaDto> puntosVentaList = new ArrayList<>();
+    private ComprobantesDto ventaActual;
     @EJB
-    private ComprobantesFacade ventasFacade;
-    @EJB
-    private VentasBean ventasBean;
-    @EJB
-    private ComprobantesLineasFacade lineasFacade;
-    @EJB
-    private FacturacionVentasBean facturacionBean;
+    private ComprobantesService ventasFacade;
 
     @EJB
-    private FiscalPeriodosFiscalesFacade periodosFiscalesFacade;
-    @EJB
-    private FiscalPuntosVentaFacade puntosVentaFacade;
+    private FacturacionVentasService facturacionBean;
 
+    @EJB
+    private FiscalPuntosVentaService puntosVentaFacade;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-
-    private final List<FiscalPuntosVenta> puntosVentaList = new ArrayList<>();
-
-    private FiscalPuntosVenta puntoVentaSeleccionado;
+    private FiscalPuntosVentaDto puntoVentaSeleccionado;
     private long numeroComprobante;
     private boolean permitirCargarNroComprobante = false;
-    private static final Logger LOG = Logger.getLogger(VerComprobantesBean.class.getName());
 
     /**
      * Creates a new instance of VerVentasBean
@@ -100,12 +83,11 @@ public class VerComprobantesBean implements Serializable {
             throw new IllegalArgumentException("Venta inexistente");
 
         }
-        lineasVenta.addAll(lineasFacade.findVentasLineas(ventaActual));
+        //lineasVenta.addAll(ventasFacade.obtenerLineasComprobantes(ventaActual.getId()));
 
-        //puntoVentaComprobante = authBackingBean.getUserLoggedIn().getPuntoVenta();
-        //numeroComprobante = facturacionBean.obtenerProximoNumeroFactura(ventaActual.getLetra(), puntoVentaComprobante);
-        puntosVentaList.addAll(puntosVentaFacade.findAllBySearchFilter(new FiscalPuntosVentaSearchFilter(
-                authBackingBean.getUserLoggedIn().getIdSucursal(), Boolean.TRUE)));
+        puntosVentaList.addAll(puntosVentaFacade.findAllBySearchFilter(FiscalPuntosVentaSearchFilter.builder()
+                .idSucursal(authBackingBean.getUserLoggedIn().getIdSucursal().getId())
+                .activo(true).build()));
 
     }
 
@@ -113,20 +95,15 @@ public class VerComprobantesBean implements Serializable {
      * Registra la factura en el libro de IVA Ventas
      */
     public void registrarFactura() {
-        FiscalPeriodosFiscalesSearchFilter psf =  FiscalPeriodosFiscalesSearchFilter.builder().vigente(Boolean.TRUE).build();
-        FiscalPeriodosFiscales periodo = periodosFiscalesFacade.findFirstBySearchFilter(psf);
-        if (periodo == null) {
-            addErrorMessage("No hay un período vigente fiscal configurado!");
-        }
+
         if (puntoVentaSeleccionado == null) {
             addErrorMessage("Debe seleccionar un punto de venta.");
         }
         try {
 
-            facturacionBean.registrarFacturaVenta(ventaActual,
+            facturacionBean.registrarFacturaVenta(ventaActual.getId(),
                     puntoVentaSeleccionado,
                     numeroComprobante,
-                    periodo,
                     new Date());
             ventaActual = ventasFacade.find(ventaActual.getId());
             addInfoMessage(String.format("Factura registrada correctamente: %s",
@@ -143,7 +120,7 @@ public class VerComprobantesBean implements Serializable {
      */
     public void anularVenta() {
         try {
-            ventasBean.anularVenta(ventaActual);
+            facturacionBean.anularFactura(ventaActual.getId());
             addInfoMessage("Factura anulada correctamente");
 
         } catch (ServiceException ex) {
@@ -153,20 +130,12 @@ public class VerComprobantesBean implements Serializable {
         }
     }
 
-    public Comprobantes getVentaActual() {
+    public ComprobantesDto getVentaActual() {
         return ventaActual;
     }
 
-    public void setVentaActual(Comprobantes ventaActual) {
+    public void setVentaActual(ComprobantesDto ventaActual) {
         this.ventaActual = ventaActual;
-    }
-
-    public List<ComprobantesLineas> getLineasVenta() {
-        return lineasVenta;
-    }
-
-    public void setLineasVenta(List<ComprobantesLineas> lineasVenta) {
-        this.lineasVenta = lineasVenta;
     }
 
     public AuthBackingBean getAuthBackingBean() {
@@ -177,15 +146,15 @@ public class VerComprobantesBean implements Serializable {
         this.authBackingBean = authBackingBean;
     }
 
-    public List<FiscalPuntosVenta> getPuntosVentaList() {
+    public List<FiscalPuntosVentaDto> getPuntosVentaList() {
         return puntosVentaList;
     }
 
-    public FiscalPuntosVenta getPuntoVentaSeleccionado() {
+    public FiscalPuntosVentaDto getPuntoVentaSeleccionado() {
         return puntoVentaSeleccionado;
     }
 
-    public void setPuntoVentaSeleccionado(FiscalPuntosVenta puntoVentaSeleccionado) {
+    public void setPuntoVentaSeleccionado(FiscalPuntosVentaDto puntoVentaSeleccionado) {
         this.puntoVentaSeleccionado = puntoVentaSeleccionado;
     }
 

@@ -15,11 +15,10 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.LegalTiposDocumento;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author rodrigo
  */
 @Getter
@@ -29,19 +28,14 @@ import lombok.*;
 @AllArgsConstructor
 public class PersonasSearchFilter extends AbstractSearchFilter {
 
-    private static final long serialVersionUID = 1L;
 
     private String txt;
     private Integer idPersona;
-
     private String razonSocial;
-
     private String apellidos;
-
     private String nombres;
-
     private String nombreFantasia;
-    private LegalTiposDocumento idTipoDocumento;
+    private Long idTipoDocumento;
     private String documento;
     private Boolean activo;
     private Boolean cliente;
@@ -49,11 +43,17 @@ public class PersonasSearchFilter extends AbstractSearchFilter {
 
     @Override
     public boolean hasFilter() {
-        return (txt != null && !txt.isEmpty()) || (idPersona != null) || (razonSocial != null && !razonSocial.isEmpty())
-                || (apellidos != null && !apellidos.isEmpty()) || (nombres != null && !nombres.isEmpty()) || (nombreFantasia != null && !nombreFantasia.isEmpty())
-                || (idTipoDocumento != null) || (documento != null)
-                || (activo != null) || (cliente != null) || (proveedor != null);
+        return StringUtils.isNotEmpty(txt)
+                || idPersona != null
+                || StringUtils.isNotEmpty(razonSocial)
+                || StringUtils.isNotEmpty(apellidos)
+                || StringUtils.isNotEmpty(nombres)
+                || StringUtils.isNotEmpty(nombreFantasia)
+                || idTipoDocumento != null
+                || documento != null
+                || activo != null
+                || cliente != null
+                || proveedor != null;
     }
-
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,51 +15,30 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.NegocioPlanesPago;
+import lombok.*;
 
 /**
  * SearchFilter para detalle de planes de pago
  *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PlanesPagoDetalleSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    private NegocioPlanesPago idPlan;
+    private Long idPlan;
     private Boolean activo;
 
     @Override
     public boolean hasFilter() {
-        return activo != null || idPlan != null;
+        return activo != null
+                || idPlan != null;
     }
 
-    public PlanesPagoDetalleSearchFilter() {
-    }
-
-    public PlanesPagoDetalleSearchFilter(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public PlanesPagoDetalleSearchFilter(NegocioPlanesPago idPlan, Boolean activo) {
-        this.idPlan = idPlan;
-        this.activo = activo;
-    }
-
-    public NegocioPlanesPago getIdPlan() {
-        return idPlan;
-    }
-
-    public void setIdPlan(NegocioPlanesPago idPlan) {
-        this.idPlan = idPlan;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
 
 }

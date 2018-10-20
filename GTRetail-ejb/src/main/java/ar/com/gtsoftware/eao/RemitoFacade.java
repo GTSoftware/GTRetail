@@ -15,11 +15,9 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.Remito;
-import ar.com.gtsoftware.model.RemitoDetalle;
-import ar.com.gtsoftware.model.RemitoDetalle_;
-import ar.com.gtsoftware.model.Remito_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.RemitoSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,7 +27,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 /**
- *
  * @author fede
  */
 @Stateless
@@ -50,13 +47,14 @@ public class RemitoFacade extends AbstractFacade<Remito, RemitoSearchFilter> {
     @Override
     protected Predicate createWhereFromSearchFilter(RemitoSearchFilter sf, CriteriaBuilder cb, Root<Remito> root) {
         Predicate p = null;
-        if (sf.hasFechaEntreFechasAltaFilter()) {
+        if (sf.hasEntreFechasAltaFilter()) {
             Predicate p1 = cb.between(root.get(Remito_.fechaAlta), sf.getFechaAltaDesde(), sf.getFechaAltaHasta());
             p = appendAndPredicate(cb, p1, p);
         }
 
-        if (sf.getTipoMovimiento() != null) {
-            Predicate p1 = cb.equal(root.get(Remito_.remitoTipoMovimiento), sf.getTipoMovimiento());
+        if (sf.getIdTipoMovimiento() != null) {
+            Predicate p1 = cb.equal(root.get(Remito_.remitoTipoMovimiento).get(RemitoTipoMovimiento_.id),
+                    sf.getIdTipoMovimiento());
             p = appendAndPredicate(cb, p1, p);
         }
 

@@ -62,8 +62,4 @@ public class NegocioTiposComprobanteFacade extends AbstractFacade<NegocioTiposCo
 
     }
 
-    public NegocioTiposComprobante getTipoFactura() {
-        return this.find(1L);
-    }
-
 }

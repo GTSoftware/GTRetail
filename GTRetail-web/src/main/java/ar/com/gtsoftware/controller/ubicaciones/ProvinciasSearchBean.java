@@ -15,38 +15,33 @@
  */
 package ar.com.gtsoftware.controller.ubicaciones;
 
+import ar.com.gtsoftware.bl.UbicacionPaisesService;
+import ar.com.gtsoftware.bl.UbicacionProvinciasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.UbicacionPaisesFacade;
-import ar.com.gtsoftware.eao.UbicacionProvinciasFacade;
-import ar.com.gtsoftware.model.UbicacionPaises;
-import ar.com.gtsoftware.model.UbicacionProvincias;
+import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
+import ar.com.gtsoftware.dto.model.UbicacionProvinciasDto;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
-import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @ManagedBean(name = "provinciasSearchBean")
 @ViewScoped
-public class ProvinciasSearchBean extends AbstractSearchBean<UbicacionProvincias, ProvinciasSearchFilter> {
+public class ProvinciasSearchBean extends AbstractSearchBean<UbicacionProvinciasDto, ProvinciasSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private UbicacionProvinciasFacade facade;
-
-    @EJB
-    private UbicacionPaisesFacade paisesFacade;
-
     private final ProvinciasSearchFilter filter = new ProvinciasSearchFilter();
-
-    private List<UbicacionPaises> paises;
+    @EJB
+    private UbicacionProvinciasService facade;
+    @EJB
+    private UbicacionPaisesService paisesFacade;
+    private List<UbicacionPaisesDto> paises;
 
     /**
      * Creates a new instance of ParametrosEditBean
@@ -60,7 +55,7 @@ public class ProvinciasSearchBean extends AbstractSearchBean<UbicacionProvincias
     }
 
     @Override
-    protected AbstractFacade<UbicacionProvincias, ProvinciasSearchFilter> getFacade() {
+    protected UbicacionProvinciasService getService() {
         return facade;
     }
 
@@ -77,7 +72,7 @@ public class ProvinciasSearchBean extends AbstractSearchBean<UbicacionProvincias
      *
      * @return la lista de todos los paises
      */
-    public List<UbicacionPaises> getPaises() {
+    public List<UbicacionPaisesDto> getPaises() {
         if (paises == null) {
             PaisesSearchFilter pSf = new PaisesSearchFilter();
             pSf.addSortField("nombrePais", true);

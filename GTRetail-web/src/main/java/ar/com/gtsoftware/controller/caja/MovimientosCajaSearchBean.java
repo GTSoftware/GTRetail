@@ -15,30 +15,27 @@
  */
 package ar.com.gtsoftware.controller.caja;
 
+import ar.com.gtsoftware.bl.CajasMovimientosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.CajasMovimientosFacade;
-import ar.com.gtsoftware.model.CajasMovimientos;
+import ar.com.gtsoftware.dto.model.CajasMovimientosDto;
 import ar.com.gtsoftware.search.CajasMovimientosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @ManagedBean(name = "movimientosCajaSearchBean")
 @ViewScoped
-public class MovimientosCajaSearchBean extends AbstractSearchBean<CajasMovimientos, CajasMovimientosSearchFilter> {
+public class MovimientosCajaSearchBean extends AbstractSearchBean<CajasMovimientosDto, CajasMovimientosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private CajasMovimientosFacade facade;
-
     private final CajasMovimientosSearchFilter filter = new CajasMovimientosSearchFilter();
+    @EJB
+    private CajasMovimientosService facade;
 
     /**
      * Creates a new instance of ClientesSearchBean
@@ -47,7 +44,7 @@ public class MovimientosCajaSearchBean extends AbstractSearchBean<CajasMovimient
     }
 
     @Override
-    protected AbstractFacade<CajasMovimientos, CajasMovimientosSearchFilter> getFacade() {
+    protected CajasMovimientosService getService() {
         return facade;
     }
 

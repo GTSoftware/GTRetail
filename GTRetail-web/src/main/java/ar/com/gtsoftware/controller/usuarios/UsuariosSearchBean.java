@@ -15,11 +15,11 @@
  */
 package ar.com.gtsoftware.controller.usuarios;
 
+import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.UsuariosFacade;
-import ar.com.gtsoftware.model.Usuarios;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -31,7 +31,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "usuariosSearchBean")
 @ViewScoped
-public class UsuariosSearchBean extends AbstractSearchBean<Usuarios, UsuariosSearchFilter> {
+public class UsuariosSearchBean extends AbstractSearchBean<UsuariosDto, UsuariosSearchFilter> {
 
     /**
      *
@@ -41,7 +41,7 @@ public class UsuariosSearchBean extends AbstractSearchBean<Usuarios, UsuariosSea
     private final UsuariosSearchFilter filter = new UsuariosSearchFilter();
 
     @EJB
-    private UsuariosFacade usuarioFacade;
+    private UsuariosService usuariosService;
 
     /**
      * Creates a new instance of UsuariosSearchBean
@@ -55,8 +55,8 @@ public class UsuariosSearchBean extends AbstractSearchBean<Usuarios, UsuariosSea
     }
 
     @Override
-    protected AbstractFacade<Usuarios, UsuariosSearchFilter> getFacade() {
-        return usuarioFacade;
+    protected UsuariosService getService() {
+        return usuariosService;
     }
 
     @Override

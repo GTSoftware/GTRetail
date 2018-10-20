@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -12,7 +12,7 @@
         <div class="Container100 ui-fluid">
             <div class="Card">
                 <h1 class="CardBigTopic TexAlCenter">Ingreso de Mercaderias</h1>
-                <div class="SeparatorFull" />
+                <div class="SeparatorFull"/>
 
                 <h:form id="formContenido">
 
@@ -21,32 +21,31 @@
 
                         <p:panelGrid layout="grid"
                                      id="proveedorGrid"
-                                     style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank"
                                      columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-1"
                                      columns="3"
-                                     >
+                        >
 
                             <p:outputLabel value="#{msg.proveedor}: "/>
                             <p:autoComplete id="origenExternoField"
                                             value="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno}"
                                             completeMethod="#{personasSearchBean.findPersonaByString}"
-                                            var="prov" itemLabel="#{prov.businessString}" itemValue="#{prov}"
+                                            var="prov" itemLabel="#{prov}" itemValue="#{prov}"
                                             converter="#{personasConverter}" forceSelection="true"
                                             required="true" requiredMessage="#{msg.ingresarValor} de origen"
                                             minQueryLength="3" queryDelay="1000" onclick="this.select();"
                                             placeholder="Ingrese algún dato del proveedor para buscarlo"
-                                            >
+                            >
                             </p:autoComplete>
 
                             <p:commandButton id="buscarProveedorButton"
                                              icon="fa fa-fw fa-search"
                                              oncomplete="PF('proveedoresDialog').show()"
                                              immediate="true"
-                                             />
+                            />
 
 
-                        </p:panelGrid >
+                        </p:panelGrid>
                     </p:panel>
 
                     <p:panel header="#{msg.deposito}">
@@ -57,7 +56,7 @@
                                      styleClass="ui-panelgrid-blank"
                                      columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-1"
                                      columns="3"
-                                     >
+                        >
 
                             <p:outputLabel value="#{msg.deposito}: "/>
 
@@ -69,26 +68,25 @@
                                              filterMatchMode="contains">
 
                                 <f:selectItem noSelectionOption="true"
-                                              itemLabel="#{msg.seleccionarUno}" />
+                                              itemLabel="#{msg.seleccionarUno}"/>
                                 <f:selectItems value="#{ingresoMercaderiaBean.depositosList}"
-                                               var="depo" itemLabel="#{depo.businessString}"
-                                               itemValue="#{depo}" />
+                                               var="depo" itemLabel="#{depo}"
+                                               itemValue="#{depo}"/>
 
                             </p:selectOneMenu>
 
 
-
-                        </p:panelGrid >
+                        </p:panelGrid>
                     </p:panel>
 
 
-                    <div class="SeparatorFull" />
+                    <div class="SeparatorFull"/>
 
                     <p:panel header="#{msg.productos}">
 
                         <!--DETALLE DEL REMITO-->
                         <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank"
-                                     columns="3" style="border:0px !important; background:none;"
+                                     columns="3"
                                      id="productosGrid">
 
 
@@ -105,14 +103,14 @@
                             </p:inputText>
 
 
-
                             <p:inputText id="cantidadField" required="true"
                                          value="#{ingresoMercaderiaBean.cantidad}" placeholder="Cantidad">
                                 <f:validateDoubleRange minimum="0.01"
-                                                       maximum="9999999999999999999.99" />
+                                                       maximum="9999999999999999999.99"/>
 
                             </p:inputText>
-                            <p:selectBooleanCheckbox id="unidadesCompraCheck" value="#{ingresoMercaderiaBean.unidadesCompra}"
+                            <p:selectBooleanCheckbox id="unidadesCompraCheck"
+                                                     value="#{ingresoMercaderiaBean.unidadesCompra}"
                                                      itemLabel="Unidades de compra"/>
                         </p:panelGrid>
 
@@ -120,18 +118,16 @@
                             <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                                              title="#{msg.insertar}"
                                              action="#{ingresoMercaderiaBean.agregarLinea()}" update="@form"
-                                             global="false" styleClass="GreenButton" />
+                                             global="false" styleClass="GreenButton"/>
 
                             <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
                                              title="#{msg.buscar} productos"
                                              oncomplete="PF('productDialog').show()" process="@none"
-                                             global="false" />
+                                             global="false"/>
                         </div>
 
 
-
                     </p:panel>
-
 
 
                     <div class="EmptyBox10"/>
@@ -152,20 +148,21 @@
                                 <f:facet name="header">
                                     #{msg.tablaId}
                                 </f:facet>
-                                <h:outputText value="#{lineaDetalle.idProducto.id}" />
+                                <h:outputText value="#{lineaDetalle.idProducto.id}"/>
                             </p:column>
                             <p:column style="text-align: left; ">
                                 <f:facet name="header">
                                     #{msg.codigo}
                                 </f:facet>
-                                <h:outputText value="#{lineaDetalle.idProducto.codigoPropio}" />
+                                <h:outputText value="#{lineaDetalle.idProducto.codigoPropio}"/>
                             </p:column>
                             <p:column style="text-align: left; ">
                                 <f:facet name="header">
                                     #{msg.tablaDescripcion}
                                 </f:facet>
-                                <h:outputText id="decripcionProd" value="#{lineaDetalle.idProducto.descripcion}" />
-                                <p:tooltip id="toolTipFade" for="decripcionProd"  value="#{lineaDetalle.idProducto.observaciones}" />
+                                <h:outputText id="decripcionProd" value="#{lineaDetalle.idProducto.descripcion}"/>
+                                <p:tooltip id="toolTipFade" for="decripcionProd"
+                                           value="#{lineaDetalle.idProducto.observaciones}"/>
                             </p:column>
                             <p:column style="text-align: right;">
                                 <f:facet name="header">
@@ -173,12 +170,12 @@
                                 </f:facet>
                                 <p:cellEditor>
                                     <f:facet name="output">
-                                        <h:outputText value="#{lineaDetalle.cantidad}" />
+                                        <h:outputText value="#{lineaDetalle.cantidad}"/>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText id="cantidadProdTabField" value="#{lineaDetalle.cantidad}" >
+                                        <p:inputText id="cantidadProdTabField" value="#{lineaDetalle.cantidad}">
                                             <f:validateDoubleRange minimum="0.01"
-                                                                   maximum="9999999999999999999.99" />
+                                                                   maximum="9999999999999999999.99"/>
                                         </p:inputText>
                                     </f:facet>
                                 </p:cellEditor>
@@ -188,10 +185,10 @@
                                 <f:facet name="header">
                                     #{msg.unidadVenta}
                                 </f:facet>
-                                <h:outputText value="#{lineaDetalle.idProducto.idTipoUnidadVenta.nombreUnidad}" />
+                                <h:outputText value="#{lineaDetalle.idProducto.idTipoUnidadVenta.nombreUnidad}"/>
                             </p:column>
 
-                            <p:column  exportable="false" >
+                            <p:column exportable="false">
                                 <f:facet name="header">
                                     #{msg.borrar}
                                 </f:facet>
@@ -201,7 +198,7 @@
                                                  action="#{ingresoMercaderiaBean.eliminarItem(lineaDetalle.nroLinea)}"
                                                  update="productosTable"
                                                  global="false"
-                                                 >
+                                >
 
                                 </p:commandButton>
                             </p:column>
@@ -214,11 +211,10 @@
                                          immediate="true"
                                          onclick="PF('ingresarMercaderia').disable();"
                                          oncomplete="PF('ingresarMercaderia').enable();"
-                                         />
+                        />
 
 
                     </p:panel>
-
 
 
                 </h:form>
@@ -235,14 +231,12 @@
                               modal="true">
 
 
-
-
                         <gtsoftware:busquedaProveedor id="busqueProveedores"
                                                       personaSeleccionada="#{ingresoMercaderiaBean.remitoCabecera.idOrigenExterno}"
 
-                                                      />
+                        />
 
-                        <div class="SeparatorFull" />
+                        <div class="SeparatorFull"/>
                         <p:commandButton id="buscarPersonaOkButton" icon="fa fa-check-circle"
                                          title="#{msg.ok}"
                                          oncomplete="PF('proveedoresDialog').hide()"
@@ -254,7 +248,7 @@
                     </p:dialog>
                 </h:form>
 
-                <h:form >
+                <h:form>
 
 
                     <p:dialog header="#{msg.productos}"
@@ -268,9 +262,9 @@
 
 
                         <gtsoftware:busquedaProductos id="busquedaProducto"
-                                                      productoSeleccionado="#{ingresoMercaderiaBean.productoBusquedaSeleccionado}"                                        />
+                                                      model="#{ingresoMercaderiaBean}"/>
 
-                        <div class="SeparatorFull" />
+                        <div class="SeparatorFull"/>
                         <p:commandButton id="buscarProductoOkButton" icon="fa fa-check-circle"
                                          title="#{msg.ok}"
                                          action="#{ingresoMercaderiaBean.productoSelected()}"
@@ -278,7 +272,7 @@
                                          styleClass="GreenButton"
                                          update=":formContenido:productosGrid"
                                          global="false"
-                                         />
+                        />
 
 
                     </p:dialog>
@@ -287,7 +281,6 @@
             </div>
         </div>
     </div>
-
 
 
 </ui:composition>

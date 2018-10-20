@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2018 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,61 +15,28 @@
  */
 package ar.com.gtsoftware.search;
 
-import ar.com.gtsoftware.model.UbicacionPaises;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProvinciasSearchFilter extends AbstractSearchFilter {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 2L;
     private Integer idProvincia;
     private String nombreProvincia;
-    private UbicacionPaises idPais;
+    private Long idPais;
 
     @Override
     public boolean hasFilter() {
-        return (idProvincia != null) || (StringUtils.isNotEmpty(nombreProvincia)) || (idPais != null);
-    }
-
-    public ProvinciasSearchFilter() {
-    }
-
-    public ProvinciasSearchFilter(Integer idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    public ProvinciasSearchFilter(UbicacionPaises idPais) {
-        this.idPais = idPais;
-    }
-
-    public Integer getIdProvincia() {
-        return idProvincia;
-    }
-
-    public void setIdProvincia(Integer idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    public String getNombreProvincia() {
-        return nombreProvincia;
-    }
-
-    public void setNombreProvincia(String nombreProvincia) {
-        this.nombreProvincia = nombreProvincia;
-    }
-
-    public UbicacionPaises getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(UbicacionPaises idPais) {
-        this.idPais = idPais;
+        return idProvincia != null
+                || StringUtils.isNotEmpty(nombreProvincia)
+                || idPais != null;
     }
 
 }

@@ -15,12 +15,12 @@
  */
 package ar.com.gtsoftware.controller.formasPago;
 
+import ar.com.gtsoftware.bl.NegocioFormasPagoService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.eao.AbstractFacade;
-import ar.com.gtsoftware.eao.NegocioFormasPagoFacade;
-import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -32,14 +32,12 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean(name = "formasPagoSearchBean")
 @ViewScoped
-public class FormasPagoSearchBean extends AbstractSearchBean<NegocioFormasPago, FormasPagoSearchFilter> {
+public class FormasPagoSearchBean extends AbstractSearchBean<NegocioFormasPagoDto, FormasPagoSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-
-    @EJB
-    private NegocioFormasPagoFacade facade;
-
     private final FormasPagoSearchFilter filter = new FormasPagoSearchFilter();
+    @EJB
+    private NegocioFormasPagoService formasPagoService;
 
     /**
      * Creates a new instance of FormasPagoSearchBean
@@ -53,8 +51,8 @@ public class FormasPagoSearchBean extends AbstractSearchBean<NegocioFormasPago, 
     }
 
     @Override
-    protected AbstractFacade<NegocioFormasPago, FormasPagoSearchFilter> getFacade() {
-        return facade;
+    protected NegocioFormasPagoService getService() {
+        return formasPagoService;
     }
 
     @Override

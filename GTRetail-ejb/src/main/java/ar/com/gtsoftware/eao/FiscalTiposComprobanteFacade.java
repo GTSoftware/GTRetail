@@ -17,17 +17,18 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.FiscalTiposComprobante;
 import ar.com.gtsoftware.model.FiscalTiposComprobante_;
+import ar.com.gtsoftware.model.NegocioTiposComprobante_;
 import ar.com.gtsoftware.search.FiscalTiposComprobanteSearchFilter;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Stateless
@@ -53,8 +54,8 @@ public class FiscalTiposComprobanteFacade extends AbstractFacade<FiscalTiposComp
             Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.letra), ftsf.getLetra());
             p = appendAndPredicate(cb, p, p1);
         }
-        if (ftsf.getTipoComprobante() != null) {
-            Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.tipoComprobante), ftsf.getTipoComprobante());
+        if (ftsf.getIdTipoComprobante() != null) {
+            Predicate p1 = cb.equal(root.get(FiscalTiposComprobante_.tipoComprobante).get(NegocioTiposComprobante_.id), ftsf.getIdTipoComprobante());
             p = appendAndPredicate(cb, p, p1);
         }
 
