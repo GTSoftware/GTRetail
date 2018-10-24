@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.controller.ventas;
 
+import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.auth.Roles;
 import ar.com.gtsoftware.bl.ComprobantesService;
 import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
 import ar.com.gtsoftware.bl.PersonasService;
@@ -24,12 +26,14 @@ import ar.com.gtsoftware.dto.model.NegocioTiposComprobanteDto;
 import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import org.apache.commons.lang3.time.DateUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.DataModel;
 import java.math.BigDecimal;
@@ -63,6 +67,10 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     private PersonasService clientesFacade;
     @EJB
     private NegocioTiposComprobanteService tiposComprobanteFacade;
+
+    @ManagedProperty(value = "#{authBackingBean}")
+    private AuthBackingBean authBackingBean;
+
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
@@ -76,6 +84,9 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     @PostConstruct
     private void init() {
         tiposCompList.addAll(tiposComprobanteFacade.findAll());
+        if (JSFUtil.isUserInRole(Roles.VENDEDORES)) {
+            filter.setIdUsuario(authBackingBean.getUserLoggedIn().getId());
+        }
     }
 
     private void calcularTotales() {
@@ -148,4 +159,11 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
         }
     }
 
+    public AuthBackingBean getAuthBackingBean() {
+        return authBackingBean;
+    }
+
+    public void setAuthBackingBean(AuthBackingBean authBackingBean) {
+        this.authBackingBean = authBackingBean;
+    }
 }

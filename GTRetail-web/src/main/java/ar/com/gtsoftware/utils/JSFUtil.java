@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.utils;
 
+import ar.com.gtsoftware.auth.Roles;
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
@@ -34,6 +36,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotNull;
 
 /**
  * Utility for JSF.
@@ -264,8 +267,8 @@ public abstract class JSFUtil {
      * @param role
      * @return
      */
-    public static boolean isUserInRole(String role) {
-        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role);
+    public static boolean isUserInRole(@NotNull Roles role) {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role.toString());
     }
 
     /**

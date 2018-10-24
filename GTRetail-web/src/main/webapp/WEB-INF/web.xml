@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
@@ -230,8 +231,63 @@
         </user-data-constraint>
     </security-constraint>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Vendedores</web-resource-name>
+            <url-pattern>/protected/ventas/*</url-pattern>
+            <url-pattern>/protected/index.xhtml</url-pattern>
+            <url-pattern>/protected/user/changePassword.xhtml</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <http-method>HEAD</http-method>
+            <http-method>PUT</http-method>
+            <http-method>OPTIONS</http-method>
+            <http-method>TRACE</http-method>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>VENDEDORES</role-name>
+            <role-name>ADMINISTRADORES</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
     <security-role>
         <role-name>ADMINISTRADORES</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>VENDEDORES</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>CAJEROS</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>TESOREROS</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>STOCK_MEN</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>ADMINISTRATIVOS_CONTABLE</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>COMPRAS</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>MARKETING</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>FINANZAS</role-name>
     </security-role>
 
     <!-- Páginas de error -->

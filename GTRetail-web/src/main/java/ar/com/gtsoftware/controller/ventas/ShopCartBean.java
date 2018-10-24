@@ -16,10 +16,12 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.auth.Roles;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.*;
+import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.ejb.EJB;
@@ -103,6 +105,7 @@ public class ShopCartBean implements Serializable {
     private NegocioFormasPagoDto formaPagoDefecto = null;
     private int cantDecimalesRedondeo = 0;
     private int redondeoIndex = 0;
+    private boolean vendedor = false;
 
     /**
      * Creates a new instance of ShopCartBean
@@ -137,6 +140,8 @@ public class ShopCartBean implements Serializable {
             venta.setIdCondicionComprobante(condicionesOperacionesFacade.find(Long.parseLong(idCondicionParam.getValorParametro())));
             formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
             venta.setTipoComprobante(tiposComprobanteFacade.getTipoFactura());
+
+            vendedor = JSFUtil.isUserInRole(Roles.VENDEDORES);
 
         }
     }
@@ -488,5 +493,9 @@ public class ShopCartBean implements Serializable {
         pagoDetalleSearchFilter.setIdPlan(pagoActual.getIdPlan().getId());
         pagoDetalleSearchFilter.addSortField("cuotas", true);
         return pagoDetalleFacade.findAllBySearchFilter(pagoDetalleSearchFilter);
+    }
+
+    public boolean isVendedor() {
+        return vendedor;
     }
 }
