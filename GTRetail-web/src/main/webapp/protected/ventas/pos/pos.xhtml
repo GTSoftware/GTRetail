@@ -16,7 +16,7 @@
     <div class="Container100 ui-fluid">
         <div class="Card">
             <h1 class="CardBigTopic TexAlCenter">POS</h1>
-            <div class="SeparatorFull"></div>
+            <div class="SeparatorFull"/>
             <h:form id="formContenido" >
 
                 <!--                <h:outputText id="cid"
@@ -77,7 +77,7 @@
                 <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true" />
                 <div class="Container100 ui-fluid">
                     <div class="Card">
-                        <div class="SeparatorFull"></div>
+                        <div class="SeparatorFull"/>
                         <p:dataTable id="productosTable"  var="lineaVenta" value="#{shopCartBean.venta.comprobantesLineasList}"
 
                                      paginator="false"
@@ -150,7 +150,12 @@
                                 <f:facet name="header">
                                     #{msg.tablaPrecioUnitario}
                                 </f:facet>
-                                <p:cellEditor>
+
+                                <h:outputText value="#{lineaVenta.precioUnitario}" rendered="#{shopCartBean.vendedor}">
+                                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                                </h:outputText>
+
+                                <p:cellEditor rendered="#{not shopCartBean.vendedor}">
                                     <f:facet name="output">
                                         <h:outputText value="#{lineaVenta.precioUnitario}" >
                                             <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
@@ -208,7 +213,7 @@
                         </p:dataTable>
                     </div>
                 </div>
-                <div class="SeparatorFull"></div>
+                <div class="SeparatorFull"/>
 
                 <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
                              style="border:0px !important; background:none;"
