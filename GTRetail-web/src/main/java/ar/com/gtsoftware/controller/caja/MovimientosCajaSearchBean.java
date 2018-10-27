@@ -20,10 +20,13 @@ import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.CajasMovimientosDto;
 import ar.com.gtsoftware.search.CajasMovimientosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -33,7 +36,10 @@ import javax.faces.bean.ViewScoped;
 public class MovimientosCajaSearchBean extends AbstractSearchBean<CajasMovimientosDto, CajasMovimientosSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-    private final CajasMovimientosSearchFilter filter = new CajasMovimientosSearchFilter();
+    private final CajasMovimientosSearchFilter filter = CajasMovimientosSearchFilter.builder()
+            .fechaDesde(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH))
+            .fechaHasta(DateUtils.truncate(DateUtils.addDays(new Date(), 1), Calendar.DAY_OF_MONTH))
+            .build();
     @EJB
     private CajasMovimientosService facade;
 

@@ -15,20 +15,37 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
+
 /**
- *
  * @author rodrigo
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CajasMovimientosSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
-    public CajasMovimientosSearchFilter() {
-    }
+    private Date fechaDesde, fechaHasta;
+    private Long idCaja;
+    private String txt;
 
     @Override
     public boolean hasFilter() {
-        return false;
+        return StringUtils.isNotEmpty(txt)
+                || hasFechasFilter()
+                || idCaja != null;
     }
+
+    public boolean hasFechasFilter() {
+        return fechaDesde != null && fechaHasta != null;
+    }
+
 
 }

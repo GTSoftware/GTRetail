@@ -53,7 +53,7 @@ public class RecibosSearchBean extends AbstractSearchBean<RecibosDto, RecibosSea
     private static final long serialVersionUID = 1L;
     private final RecibosSearchFilter filter = RecibosSearchFilter.builder()
             .fechaDesde(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH))
-            .fechaHasta(DateUtils.addDays(new Date(), 1)).build();
+            .fechaHasta(DateUtils.truncate(DateUtils.addDays(new Date(), 1), Calendar.DAY_OF_MONTH)).build();
     @EJB
     private RecibosService recibosService;
     @EJB
