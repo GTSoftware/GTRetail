@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018 GT Software.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <div class="Container100 Responsive100 NoIndent">
+        <div class="Container100 ui-fluid">
+            <div class="Card">
+                <h1 class="CardBigTopic TexAlCenter">Consulta de ofertas</h1>
+                <div class="SeparatorFull" />
+
+                <h:form id="formContenido">
+                    <p:defaultCommand target="buscarButton"/>
+
+                    <p:panelGrid layout="grid"
+                                 styleClass="ui-panelgrid-blank" columns="4" id="panelBusqueda"
+                                 >
+
+                        <p:inputText id="searchField" value="#{ofertasSearchBean.filter.textoOferta}" placeholder="#{msg.busqueda}"/>
+
+                        <p:selectBooleanCheckbox id="activasField" value="#{ofertasSearchBean.filter.activas}"
+                                                 itemLabel="#{msg.activas}"/>
+
+
+                        <p:commandButton id="buscarButton" action="#{ofertasSearchBean.doSearch()}" value="Buscar"
+                                         update="ofertasTable" icon="fa fa-fw fa-search"/>
+
+                        <p:commandButton id="nuevoButton" action="edicion/edicionOferta.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus"
+                                         styleClass="GreenButton"/>
+
+                    </p:panelGrid >
+
+                    <div class="SeparatorFull" />
+
+                    <p:dataTable id="ofertasTable" value="#{ofertasSearchBean.dataModel}" var="oferta"
+                                 rows="30"
+                                 lazy="true"
+                                 paginator="true"
+                                 sortMode="single"
+                                 emptyMessage="#{msg.busquedaSinResultados}"
+                                 rowKey="#{oferta.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowsPerPageTemplate="10,15,30,100"
+
+                                 selection="#{ofertasSearchBean.elemento}"
+                                 selectionMode="single"
+
+                                 scrollable="true"
+                                 reflow="true"
+                                 liveResize="true"
+                                 > 
+
+                        <f:facet name="{Exporters}">
+                            <h:commandLink title="xls">
+                                <i class="fa fa-file-excel-o Fs24 Green" />
+                                <p:dataExporter type="xls" target="ofertasTable" fileName="ofertas" />
+                            </h:commandLink>
+
+                            <h:commandLink title="pdf">
+                                <i class="fa fa-file-pdf-o Fs24 Red" />
+                                <p:dataExporter type="pdf" target="ofertasTable" fileName="ofertas"/>
+                            </h:commandLink>
+
+                            <h:commandLink title="csv">
+                                <i class="fa fa-file-text-o Fs24 Blue" />
+                                <p:dataExporter type="csv" target="ofertasTable" fileName="ofertas" />
+                            </h:commandLink>
+
+                            <h:commandLink title="xml">
+                                <i class="fa fa-file-code-o Fs24 Black" />
+                                <p:dataExporter type="xml" target="ofertasTable" fileName="ofertas" />
+                            </h:commandLink>
+                        </f:facet>
+
+                        <f:facet name="header" >
+                            #{msg.ofertasListado}
+                        </f:facet>
+
+                        <p:column sortBy="#{oferta.id}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.id}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{oferta.id}"/>
+                        </p:column>
+
+
+                        <p:column sortBy="#{oferta.textoOferta}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.descripcion}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{oferta.textoOferta}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{oferta.descuento}" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.descuento}"/>
+                            </f:facet>
+                            <h:outputLabel value="#{oferta.descuento}"/>
+
+                        </p:column>
+
+                        <p:column  exportable="false" >
+                            <f:facet name="header">
+                                <h:outputLabel value="#{msg.acciones}"/>
+                            </f:facet>
+                            <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
+                                <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionOferta"  ajax="false"
+                                                 title="Editar">
+                                    <f:param name="idOferta" value="#{oferta.id}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="fa fa-fw fa-copy" action="edicion/edicionOferta"  ajax="false"
+                                                 title="Duplicar">
+                                    <f:param name="idOferta" value="#{oferta.id}"/>
+                                    <f:param name="duplicar" value="1"/>
+                                </p:commandButton>
+
+                            </p:panelGrid>
+
+                        </p:column>
+
+
+                    </p:dataTable>
+
+                </h:form>
+            </div>
+        </div>
+    </div>
+</html>

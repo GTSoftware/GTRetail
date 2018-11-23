@@ -1,0 +1,36 @@
+template header
+
+nombre
+condiciones
+tipoAccion
+descuento
+
+package drools.templates;
+
+global ar.com.gtsoftware.controller.ventas.ShopCartBean shopCart;
+
+import java.text.SimpleDateFormat;
+import ar.com.gtsoftware.dto.model.ComprobantesLineasDto;
+import ar.com.gtsoftware.dto.model.ComprobantesDto;
+import ar.com.gtsoftware.dto.model.ProductosDto;
+import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
+import ar.com.gtsoftware.rules.TipoAccion;
+import java.math.BigDecimal;
+
+import function ar.com.gtsoftware.utils.DroolsUtility.debug;
+
+dialect "java"
+
+template "Product"
+
+
+
+rule "@{row.rowNumber} - @{nombre}"
+when
+    $linea: ComprobantesLineasDto(@{condiciones})
+then
+    shopCart.aplicarDescuento($linea.getItem(), TipoAccion.@{tipoAccion}, new BigDecimal(@{descuento}), "@{nombre}");
+	//debug(drools);
+end
+
+end template

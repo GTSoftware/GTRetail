@@ -90,6 +90,8 @@
         <class>ar.com.gtsoftware.model.RemitoRecepcion</class>
         <class>ar.com.gtsoftware.model.RemitoTipoMovimiento</class>
         <class>ar.com.gtsoftware.model.VentasCargosFijos</class>
+        <class>ar.com.gtsoftware.model.Ofertas</class>
+        <class>ar.com.gtsoftware.model.OfertasCondiciones</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <validation-mode>CALLBACK</validation-mode>

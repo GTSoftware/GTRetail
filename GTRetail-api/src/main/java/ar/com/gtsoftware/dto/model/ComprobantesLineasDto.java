@@ -46,7 +46,9 @@ public class ComprobantesLineasDto implements Serializable {
     private ComprobantesDto idComprobante;
     private ProductosDto idProducto;
     private String descripcion;
+    @EqualsAndHashCode.Include
     private Integer item;
+    private Integer nroItemAsociado;
     private Integer version;
 
     /**
