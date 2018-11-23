@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018 GT Software.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+
+
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">Edición de Oferta</h1>
+            <div class="SeparatorFull"/>
+
+            <h:form id="editOfertaForm">
+
+
+                <p:panelGrid id="datosBasicosGrid"
+                             layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="3">
+
+                    <h:outputLabel for="idOfertaField" value="#{msg.id}:"/>
+                    <h:outputText id="idOfertaField"
+                                  value="#{ofertaEditBean.ofertaActual.id}"/>
+                    <h:outputLabel/>
+
+                    <h:outputLabel for="textoOfertaField" value="#{msg.textoOferta}:"/>
+                    <p:inputText id="textoOfertaField"
+                                 value="#{ofertaEditBean.ofertaActual.textoOferta}"
+                                 maxlength="90"
+                                 required="true"
+                                 requiredMessage="#{msg.ingresarValor}"
+                                 converter="#{stringFormatConverter}"
+                                 label="#{msg.textoOferta}"/>
+                    <p:message for="textoOfertaField"/>
+
+
+                    <h:outputLabel for="tipoAccionField" value="#{msg.tipoDescuento}:"/>
+                    <p:selectOneMenu id="tipoAccionField"
+                                     value="#{ofertaEditBean.ofertaActual.tipoAccion}"
+
+                                     converter="omnifaces.SelectItemsIndexConverter">
+
+                        <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarValor}" itemValue="#{null}"/>
+
+                        <f:selectItems value="#{ofertaEditBean.tiposAcciones}" var="tipo"
+                                       itemLabel="#{tipo.nombre}"
+                                       itemDescription="#{tipo.descripcion}"
+                                       itemValue="#{tipo}"/>
+
+                    </p:selectOneMenu>
+                    <p:message for="tipoAccionField"/>
+
+
+                    <p:outputLabel for="montoDescuentoField" value="#{msg.descuento}:"/>
+                    <p:inputText id="montoDescuentoField" value="#{ofertaEditBean.ofertaActual.descuento}"
+                                 style="text-align: right"
+                                 label="#{msg.descuento}"
+                                 title="Ingrese un valor positivo que represente el tipo de descuento"
+                                 required="true">
+
+
+                    </p:inputText>
+                    <p:message for="montoDescuentoField"/>
+
+                    <p:outputLabel for="vigenciaDesdeField" value="#{msg.vigenciaDesde}:"/>
+                    <p:calendar id="vigenciaDesdeField" value="#{ofertaEditBean.ofertaActual.vigenciaDesde}"
+                                pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" required="true"
+                                placeholder="#{msg.vigenciaDesde}"/>
+                    <p:message for="vigenciaDesdeField"/>
+
+                    <p:outputLabel for="vigenciaHastaField" value="#{msg.vigenciaHasta}:"/>
+                    <p:calendar id="vigenciaHastaField" value="#{ofertaEditBean.ofertaActual.vigenciaHasta}"
+                                pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true" required="true"
+                                placeholder="#{msg.vigenciaHasta}"/>
+                    <p:message for="vigenciaHastaField"/>
+
+                </p:panelGrid>
+
+
+                <div class="SeparatorFull"/>
+
+                <p:commandButton id="nuevaCondicionButton"
+                                 value="#{msg.nuevaCondicion}"
+                                 icon="fa fa-fw fa-plus"
+                                 action="#{ofertaEditBean.nuevaCondicion()}"
+                                 update="condicionesTable"
+                                 styleClass="GreenButton"/>
+
+
+
+                <p:dataTable id="condicionesTable"
+                             value="#{ofertaEditBean.ofertaActual.condiciones}"
+                             var="condicion"
+                             rows="15"
+                             reflow="true"
+                             paginator="true"
+
+                             rowKey="#{condicion.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="10,15,30"
+                             scrollable="true"
+                             editable="true"
+                             editMode="cell">
+
+
+                    <f:facet name="header">
+                        Condiciones
+                    </f:facet>
+
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.campo}
+                        </f:facet>
+
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputLabel value="#{condicion.campo.descripcionCampo}"/>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{condicion.campo}" style="width:100%">
+                                    <f:selectItems value="#{ofertaEditBean.campos}" var="campo"
+                                                   itemLabel="#{campo.descripcionCampo}" itemValue="#{campo}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.operacion}
+                        </f:facet>
+                        <p:cellEditor>
+
+                            <f:facet name="output"><h:outputLabel value="#{condicion.operacion.nombre}"/></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{condicion.operacion}" style="width:100%">
+                                    <f:selectItems value="#{ofertaEditBean.operaciones}" var="operacion"
+                                                   itemLabel="#{operacion.nombre}" itemValue="#{operacion}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            #{msg.valor}
+                        </f:facet>
+                        <p:cellEditor>
+
+                            <f:facet name="output"><h:outputLabel value="#{condicion.valor}"/> </f:facet>
+                            <f:facet name="input"><p:inputText required="true" value="#{condicion.valor}"/> </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column exportable="false">
+                        <f:facet name="header">
+                            #{msg.borrar}
+                        </f:facet>
+                        <p:commandButton id="borrarItemButton"
+                                         icon="fa fa-fw fa-trash"
+                                         process="@this"
+                                         action="#{ofertaEditBean.borrarCondicion(condicion)}"
+                                         update="condicionesTable"
+                                         global="false"
+                        >
+
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <div class="SeparatorFull"/>
+
+                <p:panelGrid layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="2">
+                    <p:commandButton id="guardarButton"
+                                     value="#{msg.guardar}"
+                                     icon="fa fa-fw fa-save"
+                                     action="#{ofertaEditBean.doGuardar()}"
+                                     update="@form"/>
+
+                    <p:commandButton id="cancelarButton"
+                                     value="#{msg.cancelar}"
+                                     icon="ui-icon-cancel"
+                                     action="/protected/productos/ofertas/index.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     ajax="false"
+                                     styleClass="RedButton"/>
+                </p:panelGrid>
+            </h:form>
+        </div>
+    </div>
+</div>
+</html>

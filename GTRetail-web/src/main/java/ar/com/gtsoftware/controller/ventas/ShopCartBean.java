@@ -20,6 +20,7 @@ import ar.com.gtsoftware.auth.Roles;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.rules.TipoAccion;
 import ar.com.gtsoftware.search.*;
 import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
@@ -35,6 +36,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +60,7 @@ public class ShopCartBean implements Serializable {
     private static final String ID_CLIENTE_DEFECTO_PARAM = "venta.pos.id_cliente.defecto";
     private static final String ID_CONDICION_DEFECTO_PARAM = "venta.pos.id_condicion.defecto";
     private static final String ID_FORMA_PAGO_DEFECTO_PARAM = "venta.pos.id_forma_pago.defecto";
+    private static final BigDecimal CIEN = new BigDecimal(100);
 
     private final ProductosSearchFilter productosFilter = ProductosSearchFilter.builder()
             .activo(true)
@@ -96,6 +99,10 @@ public class ShopCartBean implements Serializable {
     private NegocioPlanesPagoDetalleService pagoDetalleFacade;
     @EJB
     private VentasService ventasService;
+    @EJB
+    private OfertasService ofertasService;
+
+    private OfertasHelper ofertasHelper;
     private ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
     private BigDecimal cantidad = BigDecimal.ONE;
     private ComprobantesDto venta;
@@ -103,7 +110,7 @@ public class ShopCartBean implements Serializable {
     private ProductosListasPreciosDto lista;
     private ProductosDto productoRedondeo;
     private NegocioFormasPagoDto formaPagoDefecto = null;
-    private int cantDecimalesRedondeo = 0;
+    private int cantDecimalesRedondeo = 2;
     private int redondeoIndex = 0;
     private boolean vendedor = false;
 
@@ -143,6 +150,7 @@ public class ShopCartBean implements Serializable {
 
             vendedor = JSFUtil.isUserInRole(Roles.VENDEDORES);
 
+            ofertasHelper = new OfertasHelper(ofertasService, this);
         }
     }
 
@@ -158,21 +166,44 @@ public class ShopCartBean implements Serializable {
         return "index?faces-redirect=true";
     }
 
-    public void removeFromCart(int item) {
-        int index = -1;
-        int cont = 0;
+    private ComprobantesLineasDto getItem(final int nroItem) {
+        Optional<ComprobantesLineasDto> first = venta.getComprobantesLineasList().stream().filter(x -> x.getItem() == nroItem).findFirst();
+        return first.orElse(null);
+    }
 
-        for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
-            if (vl.getItem() == item) {
-                index = cont;
-                break;
-            }
-            cont++;
+    public void removeFromCart(int nroItem) {
+
+        int index = venta.getComprobantesLineasList().indexOf(ComprobantesLineasDto.builder().item(nroItem).build());
+        ComprobantesLineasDto lineaParaBorrar = venta.getComprobantesLineasList().get(index);
+
+        if (lineaParaBorrar.getNroItemAsociado() != null) {
+            ComprobantesLineasDto itemAsociado = ComprobantesLineasDto.builder().item(lineaParaBorrar.getNroItemAsociado()).build();
+            venta.getComprobantesLineasList().remove(itemAsociado);
         }
-        if (index >= 0) {
-            venta.getComprobantesLineasList().remove(index);
-            calcularTotal();
-        }
+        venta.getComprobantesLineasList().remove(lineaParaBorrar);
+
+        calcularTotal();
+//
+//
+//        int index = -1;
+//        int cont = 0;
+//        ComprobantesLineasDto linea = null;
+//
+//        for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
+//            if (vl.getItem() == item) {
+//                index = cont;
+//                linea = vl;
+//                break;
+//            }
+//            cont++;
+//        }
+//        if (index >= 0) {
+//            venta.getComprobantesLineasList().remove(index);
+//            if (linea.getNroItemAsociado() != null) {
+//                removeFromCart(linea.getNroItemAsociado());
+//            }
+//            calcularTotal();
+//        }
     }
 
     public void eliminarPago(int item) {
@@ -234,7 +265,11 @@ public class ShopCartBean implements Serializable {
             addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
             return;
         }
-        venta.addLineaVenta(crearLinea(producto));
+        ComprobantesLineasDto linea = crearLinea(producto);
+        venta.addLineaVenta(linea);
+
+        ofertasHelper.ejecutarReglasOferta(linea);
+
         calcularTotal();
 
         cantidad = BigDecimal.ONE;
@@ -410,7 +445,6 @@ public class ShopCartBean implements Serializable {
         return true;
     }
 
-
     public String guardarVenta() {
         if (validarVenta()) {
 
@@ -450,6 +484,10 @@ public class ShopCartBean implements Serializable {
         return venta;
     }
 
+    protected void setVenta(ComprobantesDto venta) {
+        this.venta = venta;
+    }
+
     public ProductosDto getProductoBusquedaSeleccionado() {
         return productoBusquedaSeleccionado;
     }
@@ -470,7 +508,6 @@ public class ShopCartBean implements Serializable {
     public List<NegocioFormasPagoDto> getFormasPagoList() {
         return formasPagoFacade.findAllBySearchFilter(formasPagoSearchFilter);
     }
-
 
     public ComprobantesPagosDto getPagoActual() {
         return pagoActual;
@@ -497,5 +534,55 @@ public class ShopCartBean implements Serializable {
 
     public boolean isVendedor() {
         return vendedor;
+    }
+
+    /**
+     * Este método es llamado desde las reglas de ofertas. Agrega una línea de descuento a la venta.
+     *
+     * @param nroItem
+     * @param tipoAccion
+     * @param descuento
+     * @param texto
+     */
+    public void aplicarDescuento(int nroItem, TipoAccion tipoAccion, BigDecimal descuento, String texto) {
+        ComprobantesLineasDto itemConDescuento = getItem(nroItem);
+        if (itemConDescuento == null) {
+            return;
+        }
+
+        BigDecimal montoDescuento = null;
+        //Construir el ìtem de descuento
+        switch (tipoAccion) {
+            case DESCUENTO_MONTO_FIJO:
+                //Setear el monto en el nuevo item creado
+                montoDescuento = descuento;
+                break;
+            case DESCUENTO_PORCENTAJE:
+                //Calcular el monto y setearlo en el item
+                montoDescuento = itemConDescuento.getSubTotal().multiply(descuento.divide(CIEN)).setScale(2, RoundingMode.HALF_UP);
+                break;
+        }
+        montoDescuento = montoDescuento.negate();
+        ComprobantesLineasDto lineaDescuento = ComprobantesLineasDto.builder()
+                .idComprobante(venta)
+                .cantidad(BigDecimal.ONE)
+                .descripcion(texto)
+                .idProducto(productoRedondeo)
+                .cantidadEntregada(BigDecimal.ONE)
+                .costoBrutoUnitario(BigDecimal.ZERO)
+                .costoNetoUnitario(BigDecimal.ZERO)
+                .precioUnitario(montoDescuento)
+                .subTotal(montoDescuento)
+                .nroItemAsociado(itemConDescuento.getItem())
+                .item(itemCounter.getAndIncrement()).build();
+
+
+        venta.addLineaVenta(lineaDescuento);
+        calcularTotal();
+
+    }
+
+    public void setProductoRedondeo(ProductosDto productoRedondeo) {
+        this.productoRedondeo = productoRedondeo;
     }
 }

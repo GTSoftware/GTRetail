@@ -139,7 +139,7 @@ public class ProductoEditBean implements Serializable {
 
         subRubroSearchFilter.addSortField("nombreSubRubro", true);
 
-        if (productoActual != null) {
+        if (productoActual != null && productoActual.getIdRubro() != null) {
             subRubroSearchFilter.setIdProductosRubros(productoActual.getIdRubro().getId());
             listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
         }

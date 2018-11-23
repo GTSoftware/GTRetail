@@ -109,8 +109,9 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
         Application app = FacesContext.getCurrentInstance().getApplication();
         listaSeleccionada = app.evaluateExpressionGet(fc,
                 "#{cc.attrs.listaPrecios}", ProductosListasPreciosDto.class);
-
-        filter.setIdListaPrecio(listaSeleccionada.getId());
+        if (listaSeleccionada != null) {
+            filter.setIdListaPrecio(listaSeleccionada.getId());
+        }
 
         filter.setConStock(app.evaluateExpressionGet(fc,
                 "#{cc.attrs.soloConStock}", Boolean.class));
@@ -154,8 +155,8 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
             filter.addSortField("descripcion", true);
         }
         if (listaSeleccionada == null) {
-            filter.setIdListaPrecio(listaSeleccionada.getId());
             listaSeleccionada = getListasPrecio().get(0);
+            filter.setIdListaPrecio(listaSeleccionada.getId());
         }
     }
 
