@@ -24,10 +24,8 @@ import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -90,6 +88,7 @@ public class ProductoEditBean implements Serializable {
     private ProductosListasPreciosDto listaSeleccionada;
     private ProductosTiposPorcentajesDto tipoPorcentajeSeleccionado;
     private ProductosSubRubrosDto productosSubRubrosNuevo = new ProductosSubRubrosDto();
+    private boolean editandoNuevoProducto = false;
 
     @PostConstruct
     public void init() {
@@ -109,6 +108,7 @@ public class ProductoEditBean implements Serializable {
             }
             if (duplicar != null && duplicar.equals("1")) {
                 productoActual.setId(null);
+                editandoNuevoProducto = true;
                 // TODO ver como duplicar todos los datos
             }
         }
@@ -157,6 +157,8 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void nuevo() {
+        editandoNuevoProducto = true;
+
         productoActual = new ProductosDto();
         productoActual.setPrecios(new ArrayList<>());
         productoActual.setPorcentajes(new ArrayList<>());
@@ -175,7 +177,7 @@ public class ProductoEditBean implements Serializable {
         try {
             productosRubrosFacade.createOrEdit(productosRubrosNuevo);
             listRubros.add(productosRubrosNuevo);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
+            JSFUtil.addInfoMessage("Rubro " + productosRubrosNuevo.getNombreRubro() + " guardado exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
@@ -193,8 +195,7 @@ public class ProductoEditBean implements Serializable {
         try {
             productosSubRubrosFacade.createOrEdit(productosSubRubrosNuevo);
             listSubRubros.add(productosSubRubrosNuevo);
-
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
+            JSFUtil.addInfoMessage("SubRubro " + productosSubRubrosNuevo.getNombreSubRubro() + " guardado exitosamente.");
 
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
@@ -214,11 +215,10 @@ public class ProductoEditBean implements Serializable {
 
             productosMarcasFacade.createOrEdit(nuevaMarca);
             listMarcas.add(nuevaMarca);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Exito al guardar", "Guardado.."));
-
+            JSFUtil.addInfoMessage("Marca " + nuevaMarca.getNombreMarca() + " guardada exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar la marca");
         }
 
     }
@@ -233,9 +233,9 @@ public class ProductoEditBean implements Serializable {
 
             }
 
-            productosFacade.createOrEdit(productoActual);
-            JSFUtil.addInfoMessage("Producto guardado Exitosamente");
-            productoActual = productosFacade.find(productoActual.getId());
+            productoActual = productosFacade.createOrEdit(productoActual);
+            JSFUtil.addInfoMessage("Producto " + productoActual.getId() + " guardado Exitosamente");
+
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
@@ -435,11 +435,16 @@ public class ProductoEditBean implements Serializable {
         if (stockXDepo == null) {
             if (productoActual == null || productoActual.getId() == null) {
                 stockXDepo = Collections.emptyList();
+                return stockXDepo;
             }
             ProductoXDepositoSearchFilter sf = new ProductoXDepositoSearchFilter();
             sf.setIdProducto(productoActual.getId());
             stockXDepo = prodXDepoFacade.findAllBySearchFilter(sf);
         }
         return stockXDepo;
+    }
+
+    public boolean isEditandoNuevoProducto() {
+        return editandoNuevoProducto;
     }
 }
