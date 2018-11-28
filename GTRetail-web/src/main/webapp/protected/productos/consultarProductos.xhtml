@@ -20,8 +20,6 @@
                                  styleClass="ui-panelgrid-blank" columns="7" id="panelBusqueda"
                                  >
 
-                        <p:outputLabel id="searchFieldLabel" for="searchField" value="#{msg.busqueda}:"/>
-
 
                         <p:autoComplete id="searchField" value="#{productosSearchBean.filter.txt}"
                                         completeMethod="#{productosSearchBean.autocompleteProductos}"
@@ -37,6 +35,9 @@
                                         />
                         <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
                                                  itemLabel="#{msg.soloConStock}"/>
+
+                        <p:selectBooleanCheckbox id="soloDescripcionField" value="#{productosSearchBean.filter.buscarEnTodosLados}"
+                                                 itemLabel="#{msg.soloDescripcion}"/>
 
                         <p:selectOneMenu id="listaField" value="#{productosSearchBean.filter.idListaPrecio}"
                                          required="true" requiredMessage="#{msg.seleccionarUno}"

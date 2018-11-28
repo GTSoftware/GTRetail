@@ -51,7 +51,7 @@ limitations under the License.
 
             <p:fragment>
 
-                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="3">
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="4">
 
 
                     <p:inputText id="cadenaBusquedaProdField"
@@ -68,6 +68,9 @@ limitations under the License.
                                         </p:selectOneMenu>-->
                     <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
                                              itemLabel="#{msg.soloConStock}"/>
+
+                    <p:selectBooleanCheckbox id="soloDescripcionField" value="#{productosSearchBean.filter.buscarEnTodosLados}"
+                                             itemLabel="#{msg.soloDescripcion}"/>
 
                     <p:selectBooleanCheckbox id="sinStockField" value="#{productosSearchBean.filter.stockDebajoMinimo}"
                                              itemLabel="#{msg.stockBajoMinimo}"

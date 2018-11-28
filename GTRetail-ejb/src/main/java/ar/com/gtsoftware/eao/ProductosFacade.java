@@ -15,15 +15,9 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.ProductoXDeposito;
-import ar.com.gtsoftware.model.ProductoXDeposito_;
-import ar.com.gtsoftware.model.Productos;
-import ar.com.gtsoftware.model.ProductosMarcas_;
-import ar.com.gtsoftware.model.ProductosRubros_;
-import ar.com.gtsoftware.model.ProductosSubRubros_;
-import ar.com.gtsoftware.model.ProductosTiposProveeduria_;
-import ar.com.gtsoftware.model.Productos_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,9 +26,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 
 /**
@@ -49,13 +40,13 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public ProductosFacade() {
+        super(Productos.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public ProductosFacade() {
-        super(Productos.class);
     }
 
     @Override
@@ -80,23 +71,32 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
 
             } else {
 
-                for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
-                    Predicate pTxt = null;
-                    String likeS = String.format(LIKE, s);
+                if (psf.isBuscarEnTodosLados()) {
 
-                    Predicate p1 = cb.like(root.get(Productos_.descripcion), likeS);
-                    Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), likeS);
-                    Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), likeS);
-                    Predicate p4 = cb.like(root.get(Productos_.idMarca).get(ProductosMarcas_.nombreMarca), likeS);
-                    Predicate pCod = cb.like(root.get(Productos_.codigoPropio), likeS);
+                    for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
+                        Predicate pTxt = null;
+                        String likeS = String.format(LIKE, s);
 
-                    pTxt = appendOrPredicate(cb, pTxt, pCod);
-                    pTxt = appendOrPredicate(cb, pTxt, p1);
-                    pTxt = appendOrPredicate(cb, pTxt, p2);
-                    pTxt = appendOrPredicate(cb, pTxt, p3);
-                    pTxt = appendOrPredicate(cb, pTxt, p4);
+                        Predicate p1 = cb.like(root.get(Productos_.descripcion), likeS);
+                        Predicate p2 = cb.like(root.get(Productos_.idRubro).get(ProductosRubros_.nombreRubro), likeS);
+                        Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), likeS);
+                        Predicate p4 = cb.like(root.get(Productos_.idMarca).get(ProductosMarcas_.nombreMarca), likeS);
+                        Predicate pCod = cb.like(root.get(Productos_.codigoPropio), likeS);
 
-                    p = appendAndPredicate(cb, p, pTxt);
+                        pTxt = appendOrPredicate(cb, pTxt, pCod);
+                        pTxt = appendOrPredicate(cb, pTxt, p1);
+                        pTxt = appendOrPredicate(cb, pTxt, p2);
+                        pTxt = appendOrPredicate(cb, pTxt, p3);
+                        pTxt = appendOrPredicate(cb, pTxt, p4);
+
+                        p = appendAndPredicate(cb, p, pTxt);
+                    }
+                } else {
+                    String texto = psf.getTxt().toUpperCase().replaceAll("\\s", "%");
+                    String descLike = String.format("%s%%", texto);
+                    Predicate p1 = cb.like(root.get(Productos_.descripcion), descLike);
+                    p = appendAndPredicate(cb, p, p1);
+
                 }
             }
         }
