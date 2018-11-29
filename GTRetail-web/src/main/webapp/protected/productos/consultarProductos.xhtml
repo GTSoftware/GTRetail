@@ -1,211 +1,284 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:gtsoftware="http://xmlns.jcp.org/jsf/composite/gtsoftware">
 
-    <div class="Container100 Responsive100 NoIndent">
-        <div class="Container100 ui-fluid">
-            <div class="Card">
-                <h1 class="CardBigTopic TexAlCenter">Consulta de productos</h1>
-                <div class="SeparatorFull" />
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">Consulta de productos</h1>
+            <div class="SeparatorFull"/>
 
-                <h:form id="formContenido">
-                    <p:defaultCommand target="buscarButton"/>
+            <h:form id="formContenido">
 
-                    <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
-                                 styleClass="ui-panelgrid-blank" columns="7" id="panelBusqueda"
-                                 >
+                <p:defaultCommand target="buscarButton"/>
+                <p:tabView id="busquedaTab">
+
+                    <p:tab title="#{msg.busquedaBasica}">
+                        <p:panelGrid layout="grid"
+                                     styleClass="ui-panelgrid-blank" columns="7" id="panelBusqueda"
+                        >
 
 
-                        <p:autoComplete id="searchField" value="#{productosSearchBean.filter.txt}"
-                                        completeMethod="#{productosSearchBean.autocompleteProductos}"
-                                        var="prod" itemLabel="#{prod.descripcion}" itemValue="#{prod.descripcion}"
-                                        forceSelection="false"
-                                        queryDelay="1000"
-                                        minQueryLength="3"
-                                        size="50"
-                                        autoHighlight="false"
-                                        style="width: 100%"
-                                        inputStyle="width: 100%"
-                                        placeholder="Ingrese los términos de búsqueda"
-                                        />
-                        <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
-                                                 itemLabel="#{msg.soloConStock}"/>
+                            <p:autoComplete id="searchField" value="#{productosSearchBean.filter.txt}"
+                                            completeMethod="#{productosSearchBean.autocompleteProductos}"
+                                            var="prod" itemLabel="#{prod.descripcion}" itemValue="#{prod.descripcion}"
+                                            forceSelection="false"
+                                            queryDelay="1000"
+                                            minQueryLength="3"
+                                            size="50"
+                                            autoHighlight="false"
+                                            style="width: 100%"
+                                            inputStyle="width: 100%"
+                                            placeholder="Ingrese los términos de búsqueda"
+                            />
+                            <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
+                                                     itemLabel="#{msg.soloConStock}"/>
 
-                        <p:selectBooleanCheckbox id="soloDescripcionField" value="#{productosSearchBean.filter.buscarEnTodosLados}"
-                                                 itemLabel="#{msg.soloDescripcion}"/>
+                            <p:selectBooleanCheckbox id="soloDescripcionField"
+                                                     value="#{productosSearchBean.filter.buscarEnTodosLados}"
+                                                     itemLabel="#{msg.soloDescripcion}"/>
 
-                        <p:selectOneMenu id="listaField" value="#{productosSearchBean.filter.idListaPrecio}"
-                                         required="true" requiredMessage="#{msg.seleccionarUno}"
-                                         converter="omnifaces.SelectItemsIndexConverter"
-                                         >
+                            <p:selectOneMenu id="listaField" value="#{productosSearchBean.filter.idListaPrecio}"
+                                             required="true" requiredMessage="#{msg.seleccionarUno}"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                            >
 
-                            <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista" itemLabel="#{lista.nombreLista}"
-                                           itemValue="#{lista.id}"/>
+                                <f:selectItems value="#{productosSearchBean.listasPrecio}" var="lista"
+                                               itemLabel="#{lista.nombreLista}"
+                                               itemValue="#{lista.id}"/>
 
-                        </p:selectOneMenu>
-                        <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}" value="Buscar"
-                                         update="productosTable" icon="fa fa-fw fa-search"/>
-                        <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml" value="#{msg.nuevo}" ajax="false" icon="fa fa-fw fa-plus"
-                                         styleClass="GreenButton"/>
+                            </p:selectOneMenu>
 
-                    </p:panelGrid >
+                            <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml"
+                                             value="#{msg.nuevo}"
+                                             ajax="false" icon="fa fa-fw fa-plus"
+                                             styleClass="GreenButton"/>
 
-                    <div class="SeparatorFull" />
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="#{msg.busquedaAvanzada}">
 
-                    <p:dataTable id="productosTable" value="#{productosSearchBean.dataModel}" var="producto"
-                                 rows="30"
-                                 lazy="true"
-                                 paginator="true"
-                                 sortMode="single"
-                                 emptyMessage="#{msg.busquedaSinResultados}"
-                                 rowKey="#{producto.id}"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
-                                 rowsPerPageTemplate="10,15,30,100"
+                        <p:panelGrid layout="grid"
+                                     styleClass="ui-panelgrid-blank" columns="2"
+                                     id="busquedaAvanzadaGrid">
+                            <p:outputLabel value="#{msg.proveedor}:" for="proveedorField"/>
+                            <h:panelGroup>
+                                <p:autoComplete id="proveedorField"
+                                                value="#{productosSearchBean.idProveedorHabitual}"
+                                                completeMethod="#{proveedoresRSSearchBean.findPersonaByString}"
+                                                var="prov" itemLabel="#{prov}"
+                                                itemValue="#{prov}"
+                                                converter="#{personasConverter}"
+                                                forceSelection="true"
+                                                queryDelay="1000"
+                                                minQueryLength="3"
+                                                onclick="this.select();"
+                                >
 
-                                 selection="#{productosSearchBean.elemento}"
-                                 selectionMode="single"
+                                </p:autoComplete>
+                                <p:commandButton id="buscarProveedorButton" icon="fa fa-fw fa-search"
+                                                 update=":busquedasForm:proveedoresDialog"
+                                                 oncomplete="PF('proveedoresDialog').show()"
+                                                 process="@this"/>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                    </p:tab>
 
-                                 scrollable="true"
-                                 reflow="true"
-                                 liveResize="true"
-                                 > 
 
-                        <f:facet name="{Exporters}">
-                            <h:commandLink title="xls">
-                                <i class="fa fa-file-excel-o Fs24 Green" />
-                                <p:dataExporter type="xls" target="productosTable" fileName="productos" />
-                            </h:commandLink>
+                </p:tabView>
 
-                            <h:commandLink title="pdf">
-                                <i class="fa fa-file-pdf-o Fs24 Red" />
-                                <p:dataExporter type="pdf" target="productosTable" fileName="productos"/>
-                            </h:commandLink>
+                <div class="EmptyBox10"/>
 
-                            <h:commandLink title="csv">
-                                <i class="fa fa-file-text-o Fs24 Blue" />
-                                <p:dataExporter type="csv" target="productosTable" fileName="productos" />
-                            </h:commandLink>
+                <p:commandButton id="buscarButton" action="#{productosSearchBean.doSearch()}"
+                                 value="Buscar"
+                                 update="productosTable" icon="fa fa-fw fa-search"/>
 
-                            <h:commandLink title="xml">
-                                <i class="fa fa-file-code-o Fs24 Black" />
-                                <p:dataExporter type="xml" target="productosTable" fileName="productos" />
-                            </h:commandLink>
+                <div class="SeparatorFull"/>
+
+                <p:dataTable id="productosTable" value="#{productosSearchBean.dataModel}" var="producto"
+                             rows="30"
+                             lazy="true"
+                             paginator="true"
+                             sortMode="single"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{producto.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="10,15,30,100"
+
+                             selection="#{productosSearchBean.elemento}"
+                             selectionMode="single"
+
+                             scrollable="true"
+                             reflow="true"
+                             liveResize="true"
+                > 
+
+                    <f:facet name="{Exporters}">
+                        <h:commandLink title="xls">
+                            <i class="fa fa-file-excel-o Fs24 Green"/>
+                            <p:dataExporter type="xls" target="productosTable" fileName="productos"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="pdf">
+                            <i class="fa fa-file-pdf-o Fs24 Red"/>
+                            <p:dataExporter type="pdf" target="productosTable" fileName="productos"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="csv">
+                            <i class="fa fa-file-text-o Fs24 Blue"/>
+                            <p:dataExporter type="csv" target="productosTable" fileName="productos"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="xml">
+                            <i class="fa fa-file-code-o Fs24 Black"/>
+                            <p:dataExporter type="xml" target="productosTable" fileName="productos"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <f:facet name="header">
+                        #{msg.productoListado}
+                    </f:facet>
+
+                    <p:column sortBy="#{producto.codigoPropio}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.codigo}"/>
                         </f:facet>
+                        <h:outputLabel value="#{producto.codigoPropio}"/>
+                    </p:column>
 
-                        <f:facet name="header" >
-                            #{msg.productoListado}
+
+                    <p:column sortBy="#{producto.descripcion}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.descripcion}"/>
                         </f:facet>
+                        <h:outputLabel value="#{producto.descripcion}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.idMarca.nombreMarca}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.marca}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idMarca.nombreMarca}"/>
 
-                        <p:column sortBy="#{producto.codigoPropio}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.codigo}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.codigoPropio}"/>
-                        </p:column>
+                    </p:column>
+                    <p:column sortBy="#{producto.idRubro.nombreRubro}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.productoRubro}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idRubro.nombreRubro}"/>
+                    </p:column>
+                    <p:column sortBy="#{producto.idSubRubro.nombreSubRubro}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.productoSubRubro}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
+                    </p:column>
 
-
-                        <p:column sortBy="#{producto.descripcion}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.descripcion}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.descripcion}"/>
-                        </p:column>
-                        <p:column sortBy="#{producto.idMarca.nombreMarca}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.marca}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.idMarca.nombreMarca}"/>
-
-                        </p:column>
-                        <p:column sortBy="#{producto.idRubro.nombreRubro}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.productoRubro}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.idRubro.nombreRubro}"/>
-                        </p:column>
-                        <p:column sortBy="#{producto.idSubRubro.nombreSubRubro}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.productoSubRubro}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
-                        </p:column>
-
-                        <p:column sortBy="#{producto.costoAdquisicionNeto}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.costoAdquisicion}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.costoAdquisicionNeto}">
-                                <f:convertNumber type="currency" groupingUsed="true" currencySymbol="$"/>
-                            </h:outputLabel>
-                        </p:column>
+                    <p:column sortBy="#{producto.costoAdquisicionNeto}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.costoAdquisicion}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.costoAdquisicionNeto}">
+                            <f:convertNumber type="currency" groupingUsed="true" currencySymbol="$"/>
+                        </h:outputLabel>
+                    </p:column>
 
 
-                        <p:column  >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.precioUnitario}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.precioVenta}" style="font-size: medium; font-weight: bold">
-                                <f:convertNumber type="currency" groupingUsed="true"
-                                                 currencySymbol="$ "/>
-                            </h:outputLabel>
-                        </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.precioUnitario}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.precioVenta}" style="font-size: medium; font-weight: bold">
+                            <f:convertNumber type="currency" groupingUsed="true"
+                                             currencySymbol="$ "/>
+                        </h:outputLabel>
+                    </p:column>
 
-                        <p:column sortBy="#{producto.idTipoUnidadVenta.nombreUnidad}" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.unidadVenta}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.idTipoUnidadVenta.nombreUnidad}"/>
+                    <p:column sortBy="#{producto.idTipoUnidadVenta.nombreUnidad}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.unidadVenta}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idTipoUnidadVenta.nombreUnidad}"/>
 
-                        </p:column>
+                    </p:column>
 
-                        <p:column headerText="#{msg.stockTotal}" style="text-align: right; " >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.stockTotal}"/>
-                            </f:facet>
-                            <h:outputText value="#{producto.stockActual}" >
-                                <f:convertNumber groupingUsed="true" type="number"/>
-                            </h:outputText>
-                        </p:column>
+                    <p:column headerText="#{msg.stockTotal}" style="text-align: right; ">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.stockTotal}"/>
+                        </f:facet>
+                        <h:outputText value="#{producto.stockActual}">
+                            <f:convertNumber groupingUsed="true" type="number"/>
+                        </h:outputText>
+                    </p:column>
 
-                        <p:column sortBy="#{producto.idProveedorHabitual.razonSocial}">
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.proveedor}"/>
-                            </f:facet>
-                            <h:outputLabel value="#{producto.idProveedorHabitual.razonSocial}"/>
+                    <p:column sortBy="#{producto.idProveedorHabitual.razonSocial}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.proveedor}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{producto.idProveedorHabitual.razonSocial}"/>
 
-                        </p:column>
-                        <p:column  exportable="false" >
-                            <f:facet name="header">
-                                <h:outputLabel value="#{msg.acciones}"/>
-                            </f:facet>
-                            <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
-                                <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionProducto"  ajax="false"
-                                                 title="Editar">
-                                    <f:param name="idProducto" value="#{producto.id}"/>
-                                </p:commandButton>
-                                <p:commandButton icon="fa fa-fw fa-copy" action="edicion/edicionProducto"  ajax="false"
-                                                 title="Duplicar">
-                                    <f:param name="idProducto" value="#{producto.id}"/>
-                                    <f:param name="duplicar" value="1"/>
-                                </p:commandButton>
-                                <p:commandButton icon="fa fa-print" action="#{productosSearchBean.imprimirEtiqueta(producto)}"  ajax="false"
-                                                 title="Imprimir etiqueta">
+                    </p:column>
+                    <p:column exportable="false">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.acciones}"/>
+                        </f:facet>
+                        <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
+                            <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionProducto" ajax="false"
+                                             title="Editar">
+                                <f:param name="idProducto" value="#{producto.id}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="fa fa-fw fa-copy" action="edicion/edicionProducto" ajax="false"
+                                             title="Duplicar">
+                                <f:param name="idProducto" value="#{producto.id}"/>
+                                <f:param name="duplicar" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton icon="fa fa-print"
+                                             action="#{productosSearchBean.imprimirEtiqueta(producto)}" ajax="false"
+                                             title="Imprimir etiqueta">
 
-                                </p:commandButton>
-                            </p:panelGrid>
+                            </p:commandButton>
+                        </p:panelGrid>
 
-                        </p:column>
+                    </p:column>
 
 
-                    </p:dataTable>
+                </p:dataTable>
 
-                </h:form>
-            </div>
+            </h:form>
+
+            <h:form id="busquedasForm">
+
+                <p:dialog header="#{msg.proveedores}"
+                          widgetVar="proveedoresDialog"
+                          resizable="true"
+                          id="proveedoresDialog"
+                          closeOnEscape="true"
+                          showEffect="fade"
+                          hideEffect="clip"
+                          modal="true">
+
+
+                    <gtsoftware:busquedaProveedor id="busqueProveedores"
+                                                  personaSeleccionada="#{productosSearchBean.idProveedorHabitual}"
+
+                    />
+
+                    <div class="SeparatorFull"/>
+                    <p:commandButton id="buscarPersonaOkButton" icon="fa fa-check-circle"
+                                     title="#{msg.ok}"
+                                     oncomplete="PF('proveedoresDialog').hide()"
+                                     update=":formContenido:busquedaTab:busquedaAvanzadaGrid"
+                                     styleClass="GreenButton"
+                                     global="false"/>
+
+
+                </p:dialog>
+            </h:form>
         </div>
     </div>
+</div>
 </html>

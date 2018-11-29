@@ -101,7 +101,7 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
             }
         }
         if (psf.getIdProveedorHabitual() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idProveedorHabitual), psf.getIdProveedorHabitual());
+            Predicate p1 = cb.equal(root.get(Productos_.idProveedorHabitual).get(Personas_.id), psf.getIdProveedorHabitual());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getPuedeComprarse() != null) {
@@ -114,11 +114,11 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getIdRubro() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idRubro), psf.getIdRubro());
+            Predicate p1 = cb.equal(root.get(Productos_.idRubro).get(ProductosRubros_.id), psf.getIdRubro());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getIdSubRubro() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idSubRubro), psf.getIdSubRubro());
+            Predicate p1 = cb.equal(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.id), psf.getIdSubRubro());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getActivo() != null) {
@@ -132,11 +132,11 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
 //            p = appendAndPredicate(cb, p, p1);
 //        }
         if (psf.getIdTipoProveeduria() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria), psf.getIdTipoProveeduria());
+            Predicate p1 = cb.equal(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.id), psf.getIdTipoProveeduria());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getIdMarca() != null) {
-            Predicate p1 = cb.equal(root.get(Productos_.idMarca), psf.getIdMarca());
+            Predicate p1 = cb.equal(root.get(Productos_.idMarca).get(ProductosMarcas_.id), psf.getIdMarca());
             p = appendAndPredicate(cb, p, p1);
         }
         if (psf.getConStock() != null) {

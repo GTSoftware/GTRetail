@@ -159,6 +159,21 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
         }
     }
 
+    public PersonasDto getIdPersona() {
+        if (filter.getIdPersona() == null) {
+            return null;
+        }
+        return clientesFacade.find(filter.getIdPersona());
+    }
+
+    public void setIdPersona(PersonasDto cliente) {
+        if (cliente != null) {
+            filter.setIdPersona(cliente.getId());
+        } else {
+            filter.setIdPersona(null);
+        }
+    }
+
     public AuthBackingBean getAuthBackingBean() {
         return authBackingBean;
     }

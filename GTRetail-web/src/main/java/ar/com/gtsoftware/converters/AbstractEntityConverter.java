@@ -71,12 +71,13 @@ public abstract class AbstractEntityConverter<T extends IdentifiableDto, S exten
         if (value == null) {
             return null;
         }
-        try {
-            return ((T) value).getStringId();
-
-        } catch (ClassCastException ex) {
-            return null;
+        if (value instanceof IdentifiableDto) {
+            IdentifiableDto dto = (IdentifiableDto) value;
+            return dto.getStringId();
         }
+
+        return String.valueOf(value);
+
     }
 
     protected abstract EntityService<T, S> getService();

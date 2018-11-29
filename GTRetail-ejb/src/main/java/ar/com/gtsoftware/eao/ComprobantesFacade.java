@@ -35,13 +35,13 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes, Comprobante
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public ComprobantesFacade() {
+        super(Comprobantes.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public ComprobantesFacade() {
-        super(Comprobantes.class);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class ComprobantesFacade extends AbstractFacade<Comprobantes, Comprobante
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdPersona() != null) {
-            Predicate p1 = cb.equal(root.get(Comprobantes_.idPersona), vsf.getIdPersona());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idPersona).get(Personas_.id), vsf.getIdPersona());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdSucursal() != null) {
-            Predicate p1 = cb.equal(root.get(Comprobantes_.idSucursal), vsf.getIdSucursal());
+            Predicate p1 = cb.equal(root.get(Comprobantes_.idSucursal).get(Sucursales_.id), vsf.getIdSucursal());
             p = appendAndPredicate(cb, p1, p);
         }
         if (vsf.getIdCondicionVenta() != null) {

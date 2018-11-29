@@ -42,7 +42,7 @@
                             <p:outputLabel value="#{msg.cliente}:" for="razonSocialField"/>
                             <h:panelGroup>
                                 <p:autoComplete id="razonSocialField"
-                                                value="#{searchComprobantesBean.filter.idPersona}"
+                                                value="#{searchComprobantesBean.idPersona}"
                                                 completeMethod="#{searchComprobantesBean.findClientesByString}"
                                                 var="cli" itemLabel="#{cli}"
                                                 itemValue="#{cli.id}"
@@ -328,7 +328,7 @@
                           showEffect="fade" hideEffect="clip" modal="true"
                           dynamic="true">
 
-                    <gtsoftware:busquedaClientes personaSeleccionada="#{searchComprobantesBean.filter.idPersona}"
+                    <gtsoftware:busquedaClientes personaSeleccionada="#{searchComprobantesBean.idPersona}"
 
                     >
                     </gtsoftware:busquedaClientes>

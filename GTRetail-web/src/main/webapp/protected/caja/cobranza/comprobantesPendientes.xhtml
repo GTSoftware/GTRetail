@@ -51,13 +51,14 @@
                             <p:outputLabel value="#{msg.cliente}:" for="razonSocialField"/>
                             <h:panelGroup>
                                 <p:autoComplete id="razonSocialField"
-                                                value="#{searchComprobantesBean.filter.idPersona}"
+                                                value="#{searchComprobantesBean.idPersona}"
                                                 completeMethod="#{searchComprobantesBean.findClientesByString}"
-                                                var="cli" itemLabel="#{cli.razonSocial}"
-                                                itemValue="#{cli}"
+                                                var="cli" itemLabel="#{cli}"
+                                                itemValue="#{cli.id}"
                                                 converter="#{personasConverter}"
                                                 forceSelection="true"
                                                 minQueryLength="3"
+                                                onclick="this.select();"
                                 >
 
                                 </p:autoComplete>
@@ -99,11 +100,15 @@
                         </p:panelGrid>
                     </p:tab>
                 </p:tabView>
+
+                <div class="EmptyBox10" />
+
                 <p:commandButton id="buscarButton" action="#{searchComprobantesBean.doSearch()}"
                                  value="#{msg.buscar}"
                                  update="@form"
                                  icon="fa fa-fw fa-search"
                 />
+
                 <div class="SeparatorFull"/>
 
                 <p:dataTable id="ventasTable" value="#{searchComprobantesBean.dataModel}" var="comprobante"
@@ -345,10 +350,10 @@
                       showEffect="fade" hideEffect="clip" modal="true"
                       dynamic="true">
                 <h:form id="busquedaPersonasDialogForm">
-                    <gtsoftware:busquedaPersonas personaSeleccionada="#{searchComprobantesBean.filter.idPersona}"
+                    <gtsoftware:busquedaClientes personaSeleccionada="#{searchComprobantesBean.idPersona}"
 
                     >
-                    </gtsoftware:busquedaPersonas>
+                    </gtsoftware:busquedaClientes>
 
                     <div class="SeparatorFull"/>
 

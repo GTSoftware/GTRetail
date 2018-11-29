@@ -16,9 +16,11 @@
 package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
+import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.bl.ProductosListasPreciosService;
 import ar.com.gtsoftware.bl.ProductosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.dto.model.ProductosDto;
 import ar.com.gtsoftware.dto.model.ProductosListasPreciosDto;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
@@ -56,6 +58,8 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
             .activo(true).build();
     @EJB
     private ProductosService service;
+    @EJB
+    private PersonasService personasService;
     @EJB
     private ProductosListasPreciosService listasPreciosService;
 
@@ -163,6 +167,21 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
     @Override
     public ProductosSearchFilter getFilter() {
         return filter;
+    }
+
+    public PersonasDto getIdProveedorHabitual() {
+        if (filter.getIdProveedorHabitual() == null) {
+            return null;
+        }
+        return personasService.find(filter.getIdProveedorHabitual());
+    }
+
+    public void setIdProveedorHabitual(PersonasDto proveedor) {
+        if (proveedor != null) {
+            filter.setIdProveedorHabitual(proveedor.getId());
+        } else {
+            filter.setIdProveedorHabitual(null);
+        }
     }
 
     public AuthBackingBean getAuthBackingBean() {

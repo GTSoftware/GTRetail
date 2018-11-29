@@ -21,15 +21,14 @@ import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 
 import javax.ejb.EJB;
-import javax.enterprise.inject.Model;
+import javax.faces.bean.ManagedBean;
 import javax.faces.convert.FacesConverter;
 
 
 /**
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
-
-@Model
+@ManagedBean(name = "personasConverter")
 @FacesConverter(value = "personasConverter")
 public class PersonasConverter extends AbstractEntityConverter<PersonasDto, PersonasSearchFilter> {
 
