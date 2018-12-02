@@ -105,6 +105,7 @@
                              lazy="true"
                              paginator="true"
                              sortMode="single"
+                             resizableColumns="true"
                              emptyMessage="#{msg.busquedaSinResultados}"
                              rowKey="#{producto.id}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
@@ -152,7 +153,7 @@
                     </p:column>
 
 
-                    <p:column sortBy="#{producto.descripcion}">
+                    <p:column sortBy="#{producto.descripcion}" style="width: 30%">
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.descripcion}"/>
                         </f:facet>
@@ -227,15 +228,21 @@
                             <h:outputLabel value="#{msg.acciones}"/>
                         </f:facet>
                         <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
-                            <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionProducto" ajax="false"
-                                             title="Editar">
+                            <p:link outcome="edicion/edicionProducto"
+                                    ajax="false"
+                                    target="_blank"
+                                    value="#{msg.editar}"
+                                    title="Editar">
                                 <f:param name="idProducto" value="#{producto.id}"/>
-                            </p:commandButton>
-                            <p:commandButton icon="fa fa-fw fa-copy" action="edicion/edicionProducto" ajax="false"
-                                             title="Duplicar">
+                            </p:link>
+                            <p:link outcome="edicion/edicionProducto"
+                                    ajax="false"
+                                    value="#{msg.duplicar}"
+                                    title="Duplicar"
+                                    target="_blank">
                                 <f:param name="idProducto" value="#{producto.id}"/>
                                 <f:param name="duplicar" value="1"/>
-                            </p:commandButton>
+                            </p:link>
                             <p:commandButton icon="fa fa-print"
                                              action="#{productosSearchBean.imprimirEtiqueta(producto)}" ajax="false"
                                              title="Imprimir etiqueta">

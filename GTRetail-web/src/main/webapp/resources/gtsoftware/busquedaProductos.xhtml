@@ -69,7 +69,8 @@ limitations under the License.
                     <p:selectBooleanCheckbox id="conStockField" value="#{productosSearchBean.filter.conStock}"
                                              itemLabel="#{msg.soloConStock}"/>
 
-                    <p:selectBooleanCheckbox id="soloDescripcionField" value="#{productosSearchBean.filter.buscarEnTodosLados}"
+                    <p:selectBooleanCheckbox id="soloDescripcionField"
+                                             value="#{productosSearchBean.filter.buscarEnTodosLados}"
                                              itemLabel="#{msg.soloDescripcion}"/>
 
                     <p:selectBooleanCheckbox id="sinStockField" value="#{productosSearchBean.filter.stockDebajoMinimo}"
@@ -125,7 +126,7 @@ limitations under the License.
                         <h:outputText value="#{pro.codigoFabricante}"/>
                     </p:column>
 
-                    <p:column>
+                    <p:column style="width: 30%">
                         <f:facet name="header">
                             #{msg.descripcion}
                         </f:facet>
