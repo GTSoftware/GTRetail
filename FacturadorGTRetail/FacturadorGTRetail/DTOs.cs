@@ -6,19 +6,13 @@ using System.Text;
 namespace FacturadorGTRetail.DTO
 {
   
-        public class TipoComprobante
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreComprobante { get; set; }
-            public int signo { get; set; }
-            public bool activo { get; set; }
-        }
+      
 
         public class ComprobantesLineas
         {
-            public int version { get; set; }
-            public int id { get; set; }
+           
+            public long id { get; set; }
+            public long idComprobante { get; set; }
             public double precioUnitario { get; set; }
             public double cantidad { get; set; }
             public double subTotal { get; set; }
@@ -30,64 +24,17 @@ namespace FacturadorGTRetail.DTO
             public double iva { get; set; }
         }
 
-        public class Sucursal
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreSucursal { get; set; }
-            public string direccion { get; set; }
-            public string telefonoFijo { get; set; }
-            public long fechaAlta { get; set; }
-            public bool activo { get; set; }
-            public string businessString { get; set; }
-        }
-
-        public class Usuario
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreUsuario { get; set; }
-            public string login { get; set; }
-            public long fechaAlta { get; set; }
-            public string puntoVenta { get; set; }
-            public Sucursal idSucursal { get; set; }
-        }
-
-        public class Pais
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombrePais { get; set; }
-        }
-
-        public class Provincia
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreProvincia { get; set; }
-            public Pais idPais { get; set; }
-        }
-
-        public class Localidad
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreLocalidad { get; set; }
-            public string codigoPostal { get; set; }
-            public  Provincia idProvincia { get; set; }
-        }
-
         public class TipoPersoneria
         {
             public int version { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
             public string nombreTipo { get; set; }
         }
 
         public class TipoDocumento
         {
             public int version { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
             public string nombreTipoDocumento { get; set; }
             public int cantidadCaracteresMinimo { get; set; }
             public int cantidadCaracteresMaximo { get; set; }
@@ -98,7 +45,7 @@ namespace FacturadorGTRetail.DTO
         public class Genero
         {
             public int version { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
             public string nombreGenero { get; set; }
             public string simbolo { get; set; }
             public TipoPersoneria idTipoPersoneria { get; set; }
@@ -107,15 +54,14 @@ namespace FacturadorGTRetail.DTO
         public class ResponsabilidadIva
         {
             public int version { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
             public string nombreResponsabildiad { get; set; }
             public int fiscalCodigoResponsable { get; set; }
         }
 
         public class Persona
         {
-            public int version { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
             public string email { get; set; }
             public string razonSocial { get; set; }
             public string apellidos { get; set; }
@@ -127,56 +73,35 @@ namespace FacturadorGTRetail.DTO
             public string depto { get; set; }
             public string documento { get; set; }
             public long fechaAlta { get; set; }
-            public bool activo { get; set; }
-            public bool cliente { get; set; }
-            public bool proveedor { get; set; }
-            public Provincia idProvincia { get; set; }
-            public Pais idPais { get; set; }
-            public Localidad idLocalidad { get; set; }
+            public string provincia { get; set; }
+            public string pais { get; set; }
+            public string localidad { get; set; }
             public TipoPersoneria idTipoPersoneria { get; set; }
             public TipoDocumento idTipoDocumento { get; set; }
             public Genero idGenero { get; set; }
             public ResponsabilidadIva idResponsabilidadIva { get; set; }
-            public Sucursal idSucursal { get; set; }
+            public int idSucursal { get; set; }
             public string businessString { get; set; }
         }
 
-        public class CondicionComprobante
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreCondicion { get; set; }
-            public bool activo { get; set; }
-            public bool venta { get; set; }
-            public bool compra { get; set; }
-            public bool pagoTotal { get; set; }
-        }
-
-        public class EstadoComprobante
-        {
-            public int version { get; set; }
-            public int id { get; set; }
-            public string nombreEstado { get; set; }
-        }
+       
 
         public class Comprobante
         {
             public int version { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
             public long fechaComprobante { get; set; }
             public double total { get; set; }
             public double saldo { get; set; }
             public string observaciones { get; set; }
             public string remitente { get; set; }
             public string nroRemito { get; set; }
-            public bool anulada { get; set; }
             public string letra { get; set; }
-            public TipoComprobante tipoComprobante { get; set; }
+            public string tipoComprobante { get; set; }
             public List<ComprobantesLineas> comprobantesLineasList { get; set; }
-            public Usuario idUsuario { get; set; }
+            public string usuario { get; set; }
             public Persona idPersona { get; set; }
-            public CondicionComprobante idCondicionComprobante { get; set; }
-            public EstadoComprobante idEstadoComprobante { get; set; }
+            public string condicionComprobante { get; set; }
             public double totalConSigno { get; set; }
             public DateTime fechaComprobanteDate
             {
@@ -190,6 +115,11 @@ namespace FacturadorGTRetail.DTO
             }
         }
 
-
+        public class RegistrarFacturaRequest
+        {
+            public long idComprobante { get; set; }
+            public int puntoVenta { get; set; }
+            public long numeroComprobante { get; set; }
+        }
 
 }

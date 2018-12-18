@@ -57,6 +57,7 @@ namespace FacturadorGTRetail
         {
             this.Enabled = false;
             //comprobantesDataList.Clear();
+            comprobantesDataList.ClearObjects();
 
             if (!validateRest()) {
                 this.Enabled = true;
@@ -67,7 +68,7 @@ namespace FacturadorGTRetail
                 //comp.id = 1212;
                 //comp.fechaComprobante = 1472094900663;
                 List<Comprobante> compList = new List<Comprobante>();
-                compList.Add(getComprobanteById(int.Parse(idComprobanteField.Text)));
+                compList.Add(getComprobanteById(long.Parse(idComprobanteField.Text)));
                 comprobantesDataList.SetObjects(compList);
             }
             this.Enabled = true;
@@ -109,7 +110,9 @@ namespace FacturadorGTRetail
         {
             
             if (comprobantesDataList.SelectedItem == null) { return; }
+
             this.Enabled = false;
+
             if (!FacturadorUtils.initControlador())
             {
                 this.Enabled = true;
@@ -117,12 +120,45 @@ namespace FacturadorGTRetail
                 return;
             }
             Comprobante comp = (Comprobante)comprobantesDataList.SelectedItem.RowObject;
-            //LLamara al rest para registrar con el ultimo numero +1
+
             long nroCOmp = FacturadorUtils.imprimirComprobante(comp);
-            
-            MessageBox.Show("Comprobante impreso: " + nroCOmp);
+
+            if (registrarFacturacionRest(comp.id, nroCOmp))
+            {
+                MessageBox.Show("Comprobante impreso: " + nroCOmp);
+            }
+            else
+            {
+                MessageBox.Show("Error al registrar la facturacion en el sistema: " + nroCOmp);
+            }
             this.Enabled = true;
         }
-        
+
+        private Boolean registrarFacturacionRest(long idComp, long nroComp)
+        {
+            RestClient client = new RestClient(Properties.Settings.Default.Host);
+            RestRequest request = new RestRequest(RESTEndpoints.REGISTRAR_FACTURACION, Method.POST);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+
+            RegistrarFacturaRequest regFact = new RegistrarFacturaRequest();
+            regFact.idComprobante = idComp;
+            regFact.numeroComprobante = nroComp;
+            regFact.puntoVenta = Properties.Settings.Default.Punto_Venta;
+
+            request.AddBody(regFact);
+
+
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            MessageBox.Show("Error API: " + response.StatusCode.ToString + " " + response.Content);
+            
+            return false;
+        }
     }
 }

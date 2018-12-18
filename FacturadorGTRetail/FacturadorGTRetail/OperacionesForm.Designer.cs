@@ -165,7 +165,7 @@
             // 
             // TipoCompFieldData
             // 
-            this.TipoCompFieldData.AspectName = "tipoComprobante.nombreComprobante";
+            this.TipoCompFieldData.AspectName = "tipoComprobante";
             this.TipoCompFieldData.Text = "Tipo";
             this.TipoCompFieldData.Width = 100;
             // 
@@ -176,7 +176,7 @@
             // 
             // UsuarioCompFieldData
             // 
-            this.UsuarioCompFieldData.AspectName = "idUsuario.nombreUsuario";
+            this.UsuarioCompFieldData.AspectName = "usuario";
             this.UsuarioCompFieldData.Text = "Usuario";
             this.UsuarioCompFieldData.Width = 100;
             // 
