@@ -15,7 +15,8 @@
  */
 package ar.com.gtsoftware.service.rest;
 
-import ar.com.gtsoftware.dto.RegistrarFacturaDTO;
+import ar.com.gtsoftware.dto.model.rest.RegistrarFacturaRequest;
+import ar.com.gtsoftware.dto.model.rest.VentasPendientesFacturarRequest;
 
 import java.util.Date;
 import javax.ws.rs.Consumes;
@@ -56,18 +57,13 @@ public interface ComprobantesEndpoint {
     Response getPendienteFacturar(@QueryParam("idComprobante") Long idComprobante);
 
     /**
-     * Retorna la lista de comprobantes pendientes de facturar entre las fechas pasadas por parámetro.
+     * Retorna la lista de comprobantes pendientes de facturar según la request
      *
-     * @param idSucursal
-     * @param fechaDesde
-     * @param hasta
      * @return lista de comprobantes
      */
-    @GET
+    @POST
     @Path("/pendientes")
-    Response getPendientesFacturar(@QueryParam("sucursal") Long idSucursal,
-            @QueryParam("desde") Date fechaDesde,
-            @QueryParam("hasta") Date hasta);
+    Response getPendientesFacturar(VentasPendientesFacturarRequest pendientesFacturarRequest);
 
     /**
      * Recibe el registro con el número de comprobante y punto de venta
@@ -78,5 +74,5 @@ public interface ComprobantesEndpoint {
     @POST
     @Path("/registrar")
     @Consumes(value = MediaType.APPLICATION_JSON)
-    Response registrarFacturacion(RegistrarFacturaDTO registro);
+    Response registrarFacturacion(RegistrarFacturaRequest registro);
 }

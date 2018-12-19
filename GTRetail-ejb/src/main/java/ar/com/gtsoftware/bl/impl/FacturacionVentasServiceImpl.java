@@ -102,6 +102,7 @@ public class FacturacionVentasServiceImpl implements FacturacionVentasService {
 
         if (fechaFactura == null) {
             psf.setVigente(true);
+            fechaFactura = new Date();
         } else {
             psf.setFechaActual(fechaFactura);
         }
