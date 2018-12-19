@@ -108,7 +108,7 @@ namespace FacturadorGTRetail {
 
         private static bool determinarTipoComprobanteControlador(Comprobante comp) {
             //Facturas
-            if(comp.tipoComprobante.id==1){
+            if(comp.tipoComprobante.Equals("FACTURA") ){
                 switch(comp.letra){
                     case "A":
                         controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_FACTURA_A);
@@ -121,7 +121,7 @@ namespace FacturadorGTRetail {
                 return true;
             }
             //Notas de credito
-            if (comp.tipoComprobante.id == 2)
+            if (comp.tipoComprobante.Equals("NOTA DE CREDITO"))
             {
                 controlador.set_DocumentoDeReferencia(1, "0001-00000001");
                 switch (comp.letra)
@@ -138,7 +138,7 @@ namespace FacturadorGTRetail {
             }
 
             //Notas de Debito
-            if (comp.tipoComprobante.id == 3)
+            if (comp.tipoComprobante.Equals("NOTA DE DEBITO"))
             {
                 switch (comp.letra)
                 {

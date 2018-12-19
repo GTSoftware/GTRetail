@@ -56,7 +56,8 @@ namespace FacturadorGTRetail
         private void buscarButton_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            //comprobantesDataList.Clear();
+            
+            comprobantesDataList.ClearObjects();
 
             if (!validateRest()) {
                 this.Enabled = true;
@@ -67,11 +68,40 @@ namespace FacturadorGTRetail
                 //comp.id = 1212;
                 //comp.fechaComprobante = 1472094900663;
                 List<Comprobante> compList = new List<Comprobante>();
-                compList.Add(getComprobanteById(int.Parse(idComprobanteField.Text)));
+                compList.Add(getComprobanteById(long.Parse(idComprobanteField.Text)));
                 comprobantesDataList.SetObjects(compList);
+            }else{
+
+                comprobantesDataList.SetObjects(getComprobantes());
             }
             this.Enabled = true;
 
+        }
+
+        private List<Comprobante> getComprobantes()
+        {
+            RestClient client = new RestClient(Properties.Settings.Default.Host);
+            RestRequest request = new RestRequest(RESTEndpoints.COMPROBANTES_PENDIENTES, Method.POST);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+            VentasPendientesRequest pendientesRequest = new VentasPendientesRequest();
+            pendientesRequest.idSucursal = Properties.Settings.Default.Sucursal;
+            pendientesRequest.fechaDesde = (long)(fechaDesdeField.Value.ToUniversalTime().Date - epoch).TotalMilliseconds;
+            pendientesRequest.fechaHasta = (long)(fechaHastaField.Value.ToUniversalTime().Date - epoch).TotalMilliseconds;
+
+            request.AddBody(pendientesRequest);
+
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return JsonConvert.DeserializeObject<List<Comprobante>>(response.Content);
+            }
+            return null;
         }
 
         private Comprobante getComprobanteById(long id)
@@ -109,7 +139,9 @@ namespace FacturadorGTRetail
         {
             
             if (comprobantesDataList.SelectedItem == null) { return; }
+
             this.Enabled = false;
+
             if (!FacturadorUtils.initControlador())
             {
                 this.Enabled = true;
@@ -117,12 +149,48 @@ namespace FacturadorGTRetail
                 return;
             }
             Comprobante comp = (Comprobante)comprobantesDataList.SelectedItem.RowObject;
-            //LLamara al rest para registrar con el ultimo numero +1
+
             long nroCOmp = FacturadorUtils.imprimirComprobante(comp);
+
+            if (registrarFacturacionRest(comp.id, nroCOmp))
+            {
+                MessageBox.Show("Comprobante impreso: " + nroCOmp);
+            }
+            else
+            {
+                MessageBox.Show("Error al registrar la facturacion en el sistema: " + nroCOmp);
+            }
             
-            MessageBox.Show("Comprobante impreso: " + nroCOmp);
+            comprobantesDataList.ClearObjects();
+
             this.Enabled = true;
         }
-        
+
+        private Boolean registrarFacturacionRest(long idComp, long nroComp)
+        {
+            RestClient client = new RestClient(Properties.Settings.Default.Host);
+            RestRequest request = new RestRequest(RESTEndpoints.REGISTRAR_FACTURACION, Method.POST);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+
+            RegistrarFacturaRequest regFact = new RegistrarFacturaRequest();
+            regFact.idComprobante = idComp;
+            regFact.numeroComprobante = nroComp;
+            regFact.puntoVenta = Properties.Settings.Default.Punto_Venta;
+
+            request.AddBody(regFact);
+
+
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            MessageBox.Show("Error API: " + response.StatusCode.ToString() + " " + response.Content);
+            
+            return false;
+        }
     }
 }
