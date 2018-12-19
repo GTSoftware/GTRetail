@@ -66,7 +66,7 @@
             // 
             // fechaDesdeField
             // 
-            this.fechaDesdeField.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+            this.fechaDesdeField.CustomFormat = "dd/MM/yyyy";
             this.fechaDesdeField.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.fechaDesdeField.Location = new System.Drawing.Point(103, 46);
             this.fechaDesdeField.Name = "fechaDesdeField";
@@ -93,7 +93,7 @@
             // 
             // fechaHastaField
             // 
-            this.fechaHastaField.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+            this.fechaHastaField.CustomFormat = "dd/MM/yyyy";
             this.fechaHastaField.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.fechaHastaField.Location = new System.Drawing.Point(341, 46);
             this.fechaHastaField.Name = "fechaHastaField";

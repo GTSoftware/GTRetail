@@ -56,7 +56,7 @@ namespace FacturadorGTRetail
         private void buscarButton_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
-            //comprobantesDataList.Clear();
+            
             comprobantesDataList.ClearObjects();
 
             if (!validateRest()) {
@@ -70,9 +70,38 @@ namespace FacturadorGTRetail
                 List<Comprobante> compList = new List<Comprobante>();
                 compList.Add(getComprobanteById(long.Parse(idComprobanteField.Text)));
                 comprobantesDataList.SetObjects(compList);
+            }else{
+
+                comprobantesDataList.SetObjects(getComprobantes());
             }
             this.Enabled = true;
 
+        }
+
+        private List<Comprobante> getComprobantes()
+        {
+            RestClient client = new RestClient(Properties.Settings.Default.Host);
+            RestRequest request = new RestRequest(RESTEndpoints.COMPROBANTES_PENDIENTES, Method.POST);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+            VentasPendientesRequest pendientesRequest = new VentasPendientesRequest();
+            pendientesRequest.idSucursal = Properties.Settings.Default.Sucursal;
+            pendientesRequest.fechaDesde = (long)(fechaDesdeField.Value.ToUniversalTime().Date - epoch).TotalMilliseconds;
+            pendientesRequest.fechaHasta = (long)(fechaHastaField.Value.ToUniversalTime().Date - epoch).TotalMilliseconds;
+
+            request.AddBody(pendientesRequest);
+
+            IRestResponse response = client.Execute(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return JsonConvert.DeserializeObject<List<Comprobante>>(response.Content);
+            }
+            return null;
         }
 
         private Comprobante getComprobanteById(long id)
@@ -131,6 +160,9 @@ namespace FacturadorGTRetail
             {
                 MessageBox.Show("Error al registrar la facturacion en el sistema: " + nroCOmp);
             }
+            
+            comprobantesDataList.ClearObjects();
+
             this.Enabled = true;
         }
 
@@ -156,7 +188,7 @@ namespace FacturadorGTRetail
             {
                 return true;
             }
-            MessageBox.Show("Error API: " + response.StatusCode.ToString + " " + response.Content);
+            MessageBox.Show("Error API: " + response.StatusCode.ToString() + " " + response.Content);
             
             return false;
         }

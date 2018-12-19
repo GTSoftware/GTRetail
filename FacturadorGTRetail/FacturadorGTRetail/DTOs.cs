@@ -6,7 +6,6 @@ using System.Text;
 namespace FacturadorGTRetail.DTO
 {
   
-      
 
         public class ComprobantesLineas
         {
@@ -122,4 +121,10 @@ namespace FacturadorGTRetail.DTO
             public long numeroComprobante { get; set; }
         }
 
+        public class VentasPendientesRequest
+        {
+            public long idSucursal { get; set; }
+            public long fechaDesde { get; set; }
+            public long fechaHasta { get; set; }
+        }
 }
