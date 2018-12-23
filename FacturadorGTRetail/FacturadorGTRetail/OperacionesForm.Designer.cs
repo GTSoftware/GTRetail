@@ -44,6 +44,8 @@
             this.TotalCompFieldData = new BrightIdeasSoftware.OLVColumn();
             this.UsuarioCompFieldData = new BrightIdeasSoftware.OLVColumn();
             this.imprimirButton = new System.Windows.Forms.Button();
+            this.cierreXButton = new System.Windows.Forms.Button();
+            this.cierreZButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.comprobantesDataList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -190,12 +192,34 @@
             this.imprimirButton.UseVisualStyleBackColor = true;
             this.imprimirButton.Click += new System.EventHandler(this.imprimirButton_Click);
             // 
+            // cierreXButton
+            // 
+            this.cierreXButton.Location = new System.Drawing.Point(15, 247);
+            this.cierreXButton.Name = "cierreXButton";
+            this.cierreXButton.Size = new System.Drawing.Size(75, 23);
+            this.cierreXButton.TabIndex = 9;
+            this.cierreXButton.Text = "Cierre X";
+            this.cierreXButton.UseVisualStyleBackColor = true;
+            this.cierreXButton.Click += new System.EventHandler(this.cierreXButton_Click);
+            // 
+            // cierreZButton
+            // 
+            this.cierreZButton.Location = new System.Drawing.Point(96, 247);
+            this.cierreZButton.Name = "cierreZButton";
+            this.cierreZButton.Size = new System.Drawing.Size(75, 23);
+            this.cierreZButton.TabIndex = 10;
+            this.cierreZButton.Text = "Cierre Z";
+            this.cierreZButton.UseVisualStyleBackColor = true;
+            this.cierreZButton.Click += new System.EventHandler(this.cierreZButton_Click);
+            // 
             // OperacionesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(687, 282);
+            this.Controls.Add(this.cierreZButton);
+            this.Controls.Add(this.cierreXButton);
             this.Controls.Add(this.imprimirButton);
             this.Controls.Add(this.comprobantesDataList);
             this.Controls.Add(this.buscarButton);
@@ -231,6 +255,8 @@
         private BrightIdeasSoftware.OLVColumn TipoCompFieldData;
         private BrightIdeasSoftware.OLVColumn TotalCompFieldData;
         private System.Windows.Forms.Button imprimirButton;
+        private System.Windows.Forms.Button cierreXButton;
+        private System.Windows.Forms.Button cierreZButton;
         
     }
 }

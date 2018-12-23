@@ -192,5 +192,48 @@ namespace FacturadorGTRetail
             
             return false;
         }
+
+        private void cierreXButton_Click(object sender, EventArgs e)
+        {
+            
+            if (MessageBox.Show(this, "Realmente desea imprimir el reporte X?", "Reporte X", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+            {
+                return;
+            }
+
+            this.Enabled = false;
+
+            if (!FacturadorUtils.initControlador())
+            {
+                this.Enabled = true;
+                MessageBox.Show("No fue posible inicializar el controlador fiscal");
+                return;
+            }
+            FacturadorUtils.cierreX();
+
+            this.Enabled = true;
+        }
+
+        private void cierreZButton_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(this, "Realmente desea imprimir el reporte Z?", "Reporte Z", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+            {
+                return;
+            }
+
+            this.Enabled = false;
+
+            if (!FacturadorUtils.initControlador())
+            {
+                this.Enabled = true;
+                MessageBox.Show("No fue posible inicializar el controlador fiscal");
+                return;
+            }
+            FacturadorUtils.cierreZ();
+
+            this.Enabled = true;
+        }
+        
+
     }
 }

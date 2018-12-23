@@ -35,12 +35,22 @@ namespace FacturadorGTRetail {
 
         public static void cierreZ()
         {
-            //controlador.ReporteZ;
+            object unused;
+            controlador.ReporteZ(out unused, out unused, out unused, out unused, out unused,
+                out unused, out unused, out unused, out unused, out unused, out unused,
+                out unused, out unused, out unused, out unused, out unused, out unused, out unused,
+                out unused, out unused, out unused,
+                out unused, out unused, out unused, out unused);
         }
 
         public static void cierreX()
         {
-            //controlador.ReporteX();
+            object unused;
+            controlador.ReporteX(out unused,out unused,out unused,out unused,out unused,
+                out unused,out unused,out unused,out unused,out unused,out unused,
+                out unused,out unused,out unused,out unused,out unused,out unused,out unused,
+                out unused,out unused,out unused,
+                out unused,out unused,out unused,out unused);
         }
 
         public static long imprimirComprobante(Comprobante comp) {
@@ -89,9 +99,20 @@ namespace FacturadorGTRetail {
             //Imprimo los items
             foreach (ComprobantesLineas cl in comp.comprobantesLineasList)
             {
-                controlador.ImprimirItem(cl.descripcionLinea, cl.cantidad, cl.precioUnitario, cl.iva, 0);
+                if (cl.precioUnitario > 0)
+                {
+                    controlador.ImprimirItem(cl.descripcionLinea, cl.cantidad, cl.precioUnitario, cl.iva, 0);                
+                }
+                    
             }
-
+            //Cargo los descuentos
+            foreach (ComprobantesLineas cl in comp.comprobantesLineasList)
+            {
+                if (cl.precioUnitario < 0)
+                {
+                    controlador.DescuentoGeneral(cl.descripcion, cl.subTotal * -1, true);
+                }
+            }
             Object nroComprobante;
             if (esFiscal)
             {
@@ -123,6 +144,7 @@ namespace FacturadorGTRetail {
             //Notas de credito
             if (comp.tipoComprobante.Equals("NOTA DE CREDITO"))
             {
+                //TODO fix this eventually
                 controlador.set_DocumentoDeReferencia(1, "0001-00000001");
                 switch (comp.letra)
                 {
@@ -146,7 +168,7 @@ namespace FacturadorGTRetail {
                         controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_NOTA_DEBITO_A);
                         break;
                     case "B":
-                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_NOTA_DEBITO_A);
+                        controlador.AbrirComprobanteFiscal(DocumentosFiscales.TICKET_NOTA_DEBITO_B);
                         break;
 
                 }
