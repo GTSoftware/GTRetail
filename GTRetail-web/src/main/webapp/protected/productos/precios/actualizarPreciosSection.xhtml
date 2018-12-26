@@ -18,7 +18,7 @@
 
 
                     <p:panel header="#{msg.filtros}">
-                        <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                        <p:panelGrid layout="grid"
                                      styleClass="ui-panelgrid-blank" columns="3" id="clasificacionGrid"  >
 
                             <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
@@ -30,7 +30,7 @@
 
                                 <f:selectItems value="#{productosPreciosBean.tiposProveeduriaList}" var="tipoProd"
                                                itemLabel="#{tipoProd.nombreTipoProveeduria}"
-                                               itemValue="#{tipoProd}"/>
+                                               itemValue="#{tipoProd.id}"/>
 
                             </p:selectOneMenu>
                             <p:message for="tipoProveeduriaField"/>
@@ -43,8 +43,8 @@
                                              filterMatchMode="contains">
                                 <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
                                 <f:selectItems value="#{productosPreciosBean.proveedoresList}" var="proveedor"
-                                               itemLabel="#{proveedor.businessString}"
-                                               itemValue="#{proveedor}"/>
+                                               itemLabel="#{proveedor}"
+                                               itemValue="#{proveedor.id}"/>
 
                             </p:selectOneMenu>
                             <p:message for="proveedorHabitualField"/>
@@ -59,7 +59,7 @@
 
                                 <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}"  itemValue="#{null}"/>
                                 <f:selectItems value="#{productosPreciosBean.rubrosList}" var="rubro"
-                                               itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro}"/>
+                                               itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro.id}"/>
                                 <p:ajax event="valueChange"
                                         update=":actualizarPreciosForm:subRubroField"  process="@form"
                                         global="false"/>
@@ -81,7 +81,7 @@
 
                                 <f:selectItem  noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}" />
                                 <f:selectItems value="#{productosPreciosBean.subRubrosList}" var="subRubro"
-                                               itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro}"/>
+                                               itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro.id}"/>
                             </p:selectOneMenu>
 
 
@@ -97,7 +97,7 @@
                                                  label="#{msg.marca}">
                                     <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}"/>
                                     <f:selectItems value="#{productosPreciosBean.marcasList}" var="marca"
-                                                   itemLabel="#{marca.nombreMarca}" itemValue="#{marca}"/>
+                                                   itemLabel="#{marca.nombreMarca}" itemValue="#{marca.id}"/>
 
                                 </p:selectOneMenu>
 
@@ -150,7 +150,7 @@
                         </f:facet>
 
                         <f:facet name="start">
-                            <a><i class="fa-gears" /></a>
+                            <a><i class="fa fa-fw fa-gears" /></a>
                         </f:facet>
 
                         <f:facet name="complete">
@@ -161,7 +161,7 @@
                     <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
                     <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                        <a><i class="fa-gears" /></a>
+                        <a><i class="fa fa-fw fa-gears" /></a>
                     </p:dialog>
 
                 </h:form>

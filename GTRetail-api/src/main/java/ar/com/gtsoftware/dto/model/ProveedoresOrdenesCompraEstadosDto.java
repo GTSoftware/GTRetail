@@ -16,11 +16,11 @@
  */
 package ar.com.gtsoftware.dto.model;
 
+import ar.com.gtsoftware.dto.IdentifiableDto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 /**
  * Representa a los posibles estados por los que puede pasar una Orden de Compra
@@ -32,7 +32,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProveedoresOrdenesCompraEstadosDto implements Serializable {
+public class ProveedoresOrdenesCompraEstadosDto implements IdentifiableDto {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,4 +42,8 @@ public class ProveedoresOrdenesCompraEstadosDto implements Serializable {
     @Size(min = 1, max = 50)
     private String nombreEstado;
 
+    @Override
+    public String getStringId() {
+        return String.valueOf(id);
+    }
 }

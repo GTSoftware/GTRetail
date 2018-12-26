@@ -16,6 +16,7 @@
 
                 <h:form id="formContenido">
 
+                    <p:defaultCommand target="insertarButton"/>
 
                     <p:panel header="#{msg.proveedor}">
 
@@ -52,7 +53,6 @@
 
                         <p:panelGrid layout="grid"
                                      id="depositoGrid"
-                                     style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank"
                                      columnClasses="ui-grid-col-2, ui-grid-col-3, ui-grid-col-1"
                                      columns="3"
@@ -86,7 +86,7 @@
 
                         <!--DETALLE DEL REMITO-->
                         <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank"
-                                     columns="3"
+                                     columns="4"
                                      id="productosGrid">
 
 
@@ -102,9 +102,15 @@
 
                             </p:inputText>
 
+                            <p:inputText id="codigoFabricaField"
+                                         value="#{ingresoMercaderiaBean.productosFilter.codigoFabrica}"
+                                         placeholder="Código de fábrica">
+
+                            </p:inputText>
 
                             <p:inputText id="cantidadField" required="true"
-                                         value="#{ingresoMercaderiaBean.cantidad}" placeholder="Cantidad">
+                                         value="#{ingresoMercaderiaBean.cantidad}" placeholder="Cantidad"
+                                         label="La cantidad">
                                 <f:validateDoubleRange minimum="0.01"
                                                        maximum="9999999999999999999.99"/>
 
@@ -155,6 +161,12 @@
                                     #{msg.codigo}
                                 </f:facet>
                                 <h:outputText value="#{lineaDetalle.idProducto.codigoPropio}"/>
+                            </p:column>
+                            <p:column style="text-align: left; ">
+                                <f:facet name="header">
+                                    #{msg.codigoFabrica}
+                                </f:facet>
+                                <h:outputText value="#{lineaDetalle.idProducto.codigoFabricante}"/>
                             </p:column>
                             <p:column style="text-align: left; ">
                                 <f:facet name="header">

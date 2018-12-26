@@ -235,6 +235,7 @@
         <web-resource-collection>
             <web-resource-name>Vendedores</web-resource-name>
             <url-pattern>/protected/ventas/*</url-pattern>
+            <url-pattern>/protected/clientes/*</url-pattern>
             <url-pattern>/protected/index.xhtml</url-pattern>
             <url-pattern>/protected/user/changePassword.xhtml</url-pattern>
             <http-method>GET</http-method>

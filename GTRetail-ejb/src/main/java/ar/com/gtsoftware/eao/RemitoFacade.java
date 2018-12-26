@@ -64,7 +64,7 @@ public class RemitoFacade extends AbstractFacade<Remito, RemitoSearchFilter> {
 
             subQRemDetProd.select(fromSubQ.get(RemitoDetalle_.id));
 
-            Predicate ps1 = cb.equal(fromSubQ.get(RemitoDetalle_.idProducto), sf.getIdProducto());
+            Predicate ps1 = cb.equal(fromSubQ.get(RemitoDetalle_.idProducto).get(Productos_.id), sf.getIdProducto());
             Predicate ps2 = cb.equal(fromSubQ.get(RemitoDetalle_.remitoCabecera), root);
             subQRemDetProd.where(cb.and(ps1, ps2));
 

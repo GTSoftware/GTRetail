@@ -20,7 +20,6 @@
                     <div class="Container25 Fleft">
                         <p:panelGrid layout="grid"
                                      id="proveedorGrid"
-                                     style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank"
                                      columns="1">
 
@@ -33,6 +32,7 @@
                                             minQueryLength="3" queryDelay="1000" onclick="this.select();"
                                             placeholder="#{msg.proveedor}"
                             >
+
                             </p:autoComplete>
 
 
@@ -68,9 +68,8 @@
                     <div class="Container75 Fright ">
                         <p:panelGrid layout="grid"
                                      id="cargaProductoGrid"
-                                     style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank"
-                                     columns="3">
+                                     columns="4">
 
                             <p:inputText id="idField"
                                          value="#{ordenesCompraEditBean.productosFilter.idProducto}"
@@ -83,7 +82,11 @@
                                          placeholder="Código">
 
                             </p:inputText>
+                            <p:inputText id="codigoFabricaField"
+                                         value="#{ordenesCompraEditBean.productosFilter.codigoFabrica}"
+                                         placeholder="Código Fabricante">
 
+                            </p:inputText>
 
                             <p:inputText id="cantidadField" required="true"
                                          value="#{ordenesCompraEditBean.cantidad}" placeholder="Cantidad">
@@ -152,6 +155,18 @@
                                 </f:facet>
                                 <p:outputLabel value="#{linea.cantidadRecibida}"/>
                             </p:column>
+                            <p:column sortBy="#{linea.idProducto.id}">
+                                <f:facet name="header">
+                                    #{msg.idProducto}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.idProducto.id}"/>
+                            </p:column>
+                            <p:column sortBy="#{linea.idProducto.codigoFabricante}">
+                                <f:facet name="header">
+                                    #{msg.codigoFabrica}
+                                </f:facet>
+                                <p:outputLabel value="#{linea.idProducto.codigoFabricante}"/>
+                            </p:column>
                             <p:column sortBy="#{linea.idTipoUnidad.nombreUnidad}">
                                 <f:facet name="header">
                                     #{msg.unidadVenta}
@@ -168,7 +183,17 @@
                                 <f:facet name="header">
                                     #{msg.precioUnitario}
                                 </f:facet>
-                                <p:outputLabel value="#{linea.precioCompraUnitario}"/>
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{linea.precioCompraUnitario}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="precioUnitarioTabField" value="#{linea.precioCompraUnitario}">
+                                            <f:validateDoubleRange minimum="0.01"
+                                                                   maximum="9999999999999999999.99"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
                             </p:column>
 
                             <p:column sortBy="#{linea.subTotal}">
@@ -184,6 +209,15 @@
                                     #{msg.acciones}
                                 </f:facet>
 
+                                <p:commandButton id="borrarItemButton"
+                                                 icon="fa fa-fw fa-trash"
+                                                 process="@this"
+                                                 action="#{ordenesCompraEditBean.borrarItem(linea)}"
+                                                 update="detalleOCTable"
+                                                 global="false"
+                                >
+
+                                </p:commandButton>
                             </p:column>
 
 
@@ -203,7 +237,8 @@
                         </div>
                         <div class="Container25 TexAlLeft">
 
-                            <h:outputText value="#{ordenesCompraEditBean.ordenCompraActual.total}" styleClass="FontLatoBold Fs20">
+                            <h:outputText value="#{ordenesCompraEditBean.ordenCompraActual.total}"
+                                          styleClass="FontLatoBold Fs20">
                                 <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                             </h:outputText>
                             <br/>
@@ -214,6 +249,23 @@
                         </div>
 
                     </div>
+
+                    <div class="SeparatorFull"/>
+
+                    <p:panelGrid layout="grid"
+                                 styleClass="ui-panelgrid-blank" columns="2">
+                        <p:commandButton id="guardarButton"
+                                         value="#{msg.guardar}"
+                                         icon="fa fa-fw fa-save"/>
+
+                        <p:commandButton id="cancelarButton"
+                                         value="#{msg.cancelar}"
+                                         icon="ui-icon-cancel"
+                                         action="/protected/proveedores/ordenes_compra/index.xhtml?faces-redirect=true"
+                                         immediate="true"
+                                         ajax="false"
+                                         styleClass="RedButton"/>
+                    </p:panelGrid>
 
                 </h:form>
 
@@ -227,6 +279,7 @@
                               closeOnEscape="true"
                               showEffect="fade"
                               hideEffect="clip"
+                              dynamic="true"
                               modal="true">
 
 

@@ -157,6 +157,13 @@
                         </h:outputLabel>
                     </p:column>
 
+                    <p:column sortBy="#{comprobante.idRegistro.idPeriodoFiscal.nombrePeriodo}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.periodoFiscal}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.idRegistro.idPeriodoFiscal.nombrePeriodo}" />
+                    </p:column>
+
                     <p:column sortBy="#{comprobante.tipoComprobante.nombreComprobante}">
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.tipoComprobante}"/>
@@ -193,6 +200,12 @@
                                        value="#{msg.anulada}"/>
                     </p:column>
 
+                    <p:column sortBy="#{comprobante.idUsuario.nombreUsuario}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.usuario}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.idUsuario.nombreUsuario}"/>
+                    </p:column>
 
                     <!-- <p:column  exportable="false" >
                          <f:facet name="header">

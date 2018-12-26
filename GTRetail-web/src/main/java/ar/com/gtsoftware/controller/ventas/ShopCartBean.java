@@ -459,7 +459,7 @@ public class ShopCartBean implements Serializable {
                 addInfoMessage("Operación: " + registroVentaDto.getIdComprobante()
                         + " guardada exitosamente");
                 endConversation();
-                return "/protected/ventas/index?faces-redirect=true";
+                return String.format("/protected/ventas/vista/verVenta.xhtml?idComprobante=%d&faces-redirect=true", registroVentaDto.getIdComprobante());
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
                 addErrorMessage(ex.getMessage());

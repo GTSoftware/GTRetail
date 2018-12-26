@@ -137,6 +137,8 @@
                             </f:facet>
                             <f:facet name="input">
                                 <p:selectOneMenu value="#{condicion.campo}" style="width:100%">
+                                    <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
+
                                     <f:selectItems value="#{ofertaEditBean.campos}" var="campo"
                                                    itemLabel="#{campo.descripcionCampo}" itemValue="#{campo}"/>
                                 </p:selectOneMenu>
@@ -153,6 +155,7 @@
                             <f:facet name="output"><h:outputLabel value="#{condicion.operacion.nombre}"/></f:facet>
                             <f:facet name="input">
                                 <p:selectOneMenu value="#{condicion.operacion}" style="width:100%">
+                                    <f:selectItem  noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"  itemValue="#{null}"/>
                                     <f:selectItems value="#{ofertaEditBean.operaciones}" var="operacion"
                                                    itemLabel="#{operacion.nombre}" itemValue="#{operacion}"/>
                                 </p:selectOneMenu>

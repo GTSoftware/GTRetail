@@ -89,6 +89,7 @@ public class ComprobantesProveedorFacade extends AbstractFacade<ProveedoresCompr
 
             p = appendAndPredicate(cb, p1, p);
         }
+
         if (StringUtils.isNotEmpty(vsf.getNumeroFactura())) {
             Predicate p1;
             Expression<String> nroFactura = cb.concat(root.get(ProveedoresComprobantes_.idRegistro).get(FiscalLibroIvaCompras_.letraFactura),
@@ -98,10 +99,12 @@ public class ComprobantesProveedorFacade extends AbstractFacade<ProveedoresCompr
 
             p = appendAndPredicate(cb, p1, p);
         }
+
         if (vsf.hasTiposComprobanteFilter()) {
             Predicate p1 = root.get(ProveedoresComprobantes_.tipoComprobante).get(NegocioTiposComprobante_.id).in(vsf.getIdTiposComprobanteList());
             p = appendAndPredicate(cb, p1, p);
         }
+
         return p;
     }
 

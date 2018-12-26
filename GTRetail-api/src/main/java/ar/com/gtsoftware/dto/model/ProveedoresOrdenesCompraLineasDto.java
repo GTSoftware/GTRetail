@@ -16,6 +16,7 @@
  */
 package ar.com.gtsoftware.dto.model;
 
+import ar.com.gtsoftware.dto.IdentifiableDto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -30,7 +31,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProveedoresOrdenesCompraLineasDto implements Serializable {
+public class ProveedoresOrdenesCompraLineasDto implements IdentifiableDto {
 
     private static final long serialVersionUID = 1L;
     @EqualsAndHashCode.Include
@@ -53,7 +54,13 @@ public class ProveedoresOrdenesCompraLineasDto implements Serializable {
     private ProductosTiposUnidadesDto idTipoUnidad;
 
 
+    @EqualsAndHashCode.Include
     private int nroLinea;
+
     private Integer version;
 
+    @Override
+    public String getStringId() {
+        return String.valueOf(id);
+    }
 }

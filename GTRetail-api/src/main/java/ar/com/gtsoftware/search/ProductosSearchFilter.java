@@ -36,6 +36,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private Long idProducto;
     @Size(max = 100)
     private String codigoPropio;
+    private String codigoFabrica;
     private Boolean activo;
     private Boolean puedeComprarse;
     private Boolean puedeVenderse;
@@ -74,7 +75,9 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
                 || idTipoProveeduria != null
                 || idMarca != null
                 || conStock != null
-                || stockDebajoMinimo != null;
+                || stockDebajoMinimo != null
+                || StringUtils.isNotEmpty(codigoFabrica);
+
     }
 
 }

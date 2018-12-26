@@ -15,26 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author rodrigo
@@ -92,7 +80,7 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
     @ManyToOne(optional = false)
     private Personas idTransporte;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenCompra")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenCompra", orphanRemoval = true)
     private List<ProveedoresOrdenesCompraLineas> proveedoresOrdenesCompraLineasList;
 
     public ProveedoresOrdenesCompra() {
@@ -206,7 +194,8 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
 
     @PrePersist
     private void prePersist() {
-        this.fechaAlta = new Date();
-        this.fechaModificacion = new Date();
+        Date today = new Date();
+        this.fechaAlta = today;
+        this.fechaModificacion = today;
     }
 }

@@ -123,8 +123,12 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
                 "#{cc.attrs.puedeVenderse}", Boolean.class));
         filter.setPuedeComprarse(app.evaluateExpressionGet(fc,
                 "#{cc.attrs.puedeComprarse}", Boolean.class));
-        filter.setIdProveedorHabitual(app.evaluateExpressionGet(fc,
-                "#{cc.attrs.proveedor}", Long.class));
+
+        PersonasDto proveedor = app.evaluateExpressionGet(fc,
+                "#{cc.attrs.proveedor}", PersonasDto.class);
+        if (proveedor != null) {
+            filter.setIdProveedorHabitual(proveedor.getId());
+        }
 
     }
 

@@ -16,11 +16,11 @@
  */
 package ar.com.gtsoftware.dto.model;
 
+import ar.com.gtsoftware.dto.IdentifiableDto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProveedoresOrdenesCompraDto implements Serializable {
+public class ProveedoresOrdenesCompraDto implements IdentifiableDto {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,7 +60,11 @@ public class ProveedoresOrdenesCompraDto implements Serializable {
     private PersonasDto idProveedor;
     private PersonasDto idTransporte;
 
-    private List<ProveedoresOrdenesCompraLineasDto> proveedoresOrdenesCompraLineasDtoList;
+    private List<ProveedoresOrdenesCompraLineasDto> proveedoresOrdenesCompraLineasList;
     private Integer version;
 
+    @Override
+    public String getStringId() {
+        return String.valueOf(id);
+    }
 }

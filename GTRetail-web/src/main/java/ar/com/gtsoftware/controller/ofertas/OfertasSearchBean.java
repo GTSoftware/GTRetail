@@ -49,4 +49,8 @@ public class OfertasSearchBean extends AbstractSearchBean<OfertaDto, OfertasSear
     protected void prepareSearchFilter() {
 
     }
+
+    public void eliminar(OfertaDto oferta){
+        service.remove(oferta);
+    }
 }

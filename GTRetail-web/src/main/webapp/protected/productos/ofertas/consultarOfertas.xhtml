@@ -135,6 +135,12 @@
                                     <f:param name="duplicar" value="1"/>
                                 </p:commandButton>
 
+                                <p:commandButton icon="fa fa-fw fa-trash"
+                                                 action="#{ofertasSearchBean.eliminar(oferta)}"
+                                                 update="ofertasTable"
+                                                 title="Eliminar">
+                                </p:commandButton>
+
                             </p:panelGrid>
 
                         </p:column>

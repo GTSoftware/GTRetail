@@ -137,6 +137,13 @@
                         <h:outputLabel value="#{comprobante.idSucursal.nombreSucursal}"/>
                     </p:column>
 
+                    <p:column sortBy="#{comprobante.idUsuario.nombreUsuario}">
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.vendedor}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.idUsuario.nombreUsuario}"/>
+                    </p:column>
+
                     <p:column sortBy="#{comprobante.fechaComprobante}">
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.fecha}"/>

@@ -38,6 +38,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.apache.commons.lang.StringUtils.isEmpty;
+
 /**
  * Bean para el ingreso rápido de mercadería
  *
@@ -101,7 +103,8 @@ public class IngresoMercaderiaBean implements Serializable {
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
-            if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio())) {
+            if (productosFilter.getIdProducto() == null && isEmpty(productosFilter.getCodigoPropio())
+                    && isEmpty(productosFilter.getCodigoFabrica())) {
                 return;
             }
             producto = productosFacade.findFirstBySearchFilter(productosFilter);
@@ -116,6 +119,7 @@ public class IngresoMercaderiaBean implements Serializable {
         cantidad = BigDecimal.ONE;
         productosFilter.setCodigoPropio(null);
         productosFilter.setIdProducto(null);
+        productosFilter.setCodigoFabrica(null);
 
         productoBusquedaSeleccionado = null;
 

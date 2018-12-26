@@ -26,7 +26,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-import java.math.BigDecimal;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -58,6 +57,9 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
         }
         if (!StringUtils.isEmpty(psf.getCodigoPropio())) {
             p = cb.equal(root.get(Productos_.codigoPropio), psf.getCodigoPropio());
+        }
+        if (!StringUtils.isEmpty(psf.getCodigoFabrica())) {
+            p = cb.equal(root.get(Productos_.codigoFabricante), psf.getCodigoFabrica());
         }
         if (StringUtils.isNotEmpty(psf.getTxt())) {
 
@@ -160,24 +162,33 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
             p = appendAndPredicate(cb, p, pstk);
         }
 
-        //TODO check that this is working properly
+        //TODO agregar un not exists sobre la tabla de stock para traer productos sin movimientos
         if (psf.getStockDebajoMinimo() != null) {
             Predicate pstk = null;
             if (psf.getStockDebajoMinimo()) {
-                Subquery<BigDecimal> subQStk = cb.createQuery().subquery(BigDecimal.class);
+                Subquery<Long> subQStk = cb.createQuery().subquery(Long.class);
+
                 Root<ProductoXDeposito> fromSubQ = subQStk.from(ProductoXDeposito.class);
 
-                subQStk.select(cb.sum(fromSubQ.get(ProductoXDeposito_.stock)));
-                //Predicate ps1 = cb.lessThanOrEqualTo(cb.sum(fromSubQ.get(ProductoXDeposito_.stock)), root.get(Productos_.stockMinimo));
+                subQStk.select(fromSubQ.get(ProductoXDeposito_.producto).get(Productos_.id));
+                subQStk = subQStk.groupBy(fromSubQ.get(ProductoXDeposito_.producto).get(Productos_.id));
+
                 Predicate ps2 = cb.equal(fromSubQ.get(ProductoXDeposito_.producto), root);
-                //subQStk.where(cb.and(ps1, ps2));
-                subQStk.where(cb.and(ps2));
 
                 Predicate p1 = cb.lessThanOrEqualTo(cb.sum(fromSubQ.get(ProductoXDeposito_.stock)), root.get(Productos_.stockMinimo));
-                ;
-                //Predicate p2 = cb.isFalse(root.get(Productos_.idTipoProveeduria).get(ProductosTiposProveeduria_.controlStock));
-                //pstk = appendOrPredicate(cb, p1, p2);
-                pstk = p1;
+
+                subQStk = subQStk.where(ps2);
+                subQStk = subQStk.having(p1);
+
+                pstk = cb.exists(subQStk);
+
+
+                Subquery<Long> subQSinMov = cb.createQuery().subquery(Long.class);
+                Root<ProductoXDeposito> fromSubQSinMov = subQSinMov.from(ProductoXDeposito.class);
+                subQSinMov.select(fromSubQSinMov.get(ProductoXDeposito_.id));
+                subQSinMov.where(cb.equal(fromSubQSinMov.get(ProductoXDeposito_.producto), root));
+
+                pstk = cb.or(pstk, cb.not(cb.exists(subQSinMov)));
 
             }
             p = appendAndPredicate(cb, p, pstk);

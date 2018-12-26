@@ -19,7 +19,7 @@
                         <p:defaultCommand target="buscarButton"/>
 
                         <p:tab title="#{msg.busquedaBasica}">
-                            <p:panelGrid layout="grid"  style="border:0px !important; background:none;"
+                            <p:panelGrid layout="grid"
                                          styleClass="ui-panelgrid-blank" columns="2">
 
                                 <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
@@ -49,7 +49,7 @@
                                 <p:outputLabel value="Producto:" for="productoField"/>
                                 <h:panelGroup >
                                     <p:inputText id="productoField"
-                                                 value="#{remitosSearchBean.filter.idProducto}"
+                                                 value="#{remitosSearchBean.productoBusquedaSeleccionado.descripcion}"
                                                  placeholder="Presione el boton azul para buscar un producto"
                                                  disabled="true">
                                         <p:commandButton id="buscarProductoButton" icon="fa fa-fw fa-search"

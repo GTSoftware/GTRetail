@@ -120,9 +120,7 @@
                                     #{msg.tablaCantidad}
                                 </f:facet>
 
-                                <h:outputText value="#{lineaVenta.cantidad}" rendered="#{shopCartBean.vendedor}"/>
-
-                                <p:cellEditor rendered="#{not shopCartBean.vendedor}">
+                                <p:cellEditor >
                                     <f:facet name="output">
                                         <h:outputText value="#{lineaVenta.cantidad}"/>
                                     </f:facet>

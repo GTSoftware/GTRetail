@@ -15,10 +15,7 @@
  */
 package ar.com.gtsoftware.eao;
 
-import ar.com.gtsoftware.model.ProveedoresOrdenesCompra;
-import ar.com.gtsoftware.model.ProveedoresOrdenesCompraLineas;
-import ar.com.gtsoftware.model.ProveedoresOrdenesCompraLineas_;
-import ar.com.gtsoftware.model.ProveedoresOrdenesCompra_;
+import ar.com.gtsoftware.model.*;
 import ar.com.gtsoftware.search.OrdenCompraSearchFilter;
 
 import javax.ejb.Stateless;
@@ -38,13 +35,13 @@ public class ProveedoresOrdenesCompraFacade extends AbstractFacade<ProveedoresOr
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public ProveedoresOrdenesCompraFacade() {
+        super(ProveedoresOrdenesCompra.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public ProveedoresOrdenesCompraFacade() {
-        super(ProveedoresOrdenesCompra.class);
     }
 
     @Override
@@ -55,11 +52,11 @@ public class ProveedoresOrdenesCompraFacade extends AbstractFacade<ProveedoresOr
             p = appendAndPredicate(cb, p1, p);
         }
         if (sf.getIdProveedor() != null) {
-            Predicate p1 = cb.equal(root.get(ProveedoresOrdenesCompra_.idProveedor), sf.getIdProveedor());
+            Predicate p1 = cb.equal(root.get(ProveedoresOrdenesCompra_.idProveedor).get(Personas_.id), sf.getIdProveedor());
             p = appendAndPredicate(cb, p1, p);
         }
         if (sf.getIdEstadoOrdenCompra() != null) {
-            Predicate p1 = cb.equal(root.get(ProveedoresOrdenesCompra_.idEstadoOrdenCompra), sf.getIdEstadoOrdenCompra());
+            Predicate p1 = cb.equal(root.get(ProveedoresOrdenesCompra_.idEstadoOrdenCompra).get(ProveedoresOrdenesCompraEstados_.id), sf.getIdEstadoOrdenCompra());
             p = appendAndPredicate(cb, p1, p);
         }
         if (sf.getIdProducto() != null) {
@@ -69,7 +66,7 @@ public class ProveedoresOrdenesCompraFacade extends AbstractFacade<ProveedoresOr
 
             subQOcLineas.select(fromSubQ.get(ProveedoresOrdenesCompraLineas_.id));
 
-            Predicate ps1 = cb.equal(fromSubQ.get(ProveedoresOrdenesCompraLineas_.idProducto), sf.getIdProducto());
+            Predicate ps1 = cb.equal(fromSubQ.get(ProveedoresOrdenesCompraLineas_.idProducto).get(Productos_.id), sf.getIdProducto());
             Predicate ps2 = cb.equal(fromSubQ.get(ProveedoresOrdenesCompraLineas_.idOrdenCompra), root);
             subQOcLineas.where(cb.and(ps1, ps2));
 
