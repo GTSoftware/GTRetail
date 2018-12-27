@@ -48,4 +48,5 @@ public interface UsuariosService
     void quitarRol(@NotNull Long idUsuario, @NotNull Long idGrupo);
 
 
+    String resetPassword(@NotNull Long idUsuario);
 }

@@ -30,7 +30,6 @@ import ar.com.gtsoftware.model.Usuarios;
 import ar.com.gtsoftware.model.UsuariosGrupos;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import ar.com.gtsoftware.utils.HashUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -133,6 +132,20 @@ public class UsuariosServiceImpl extends AbstractBasicEntityService<UsuariosDto,
         }
         return mapper.entityToDto(facade.createOrEdit(usuario),
                 new CycleAvoidingMappingContext());
+    }
+
+    @Override
+    public String resetPassword(@NotNull Long idUsuario) {
+        Usuarios usuario = facade.find(idUsuario);
+
+        if (usuario != null) {
+            usuario.setPassword(HashUtils.getHash(DEFAULT_PASSWORD));
+            facade.createOrEdit(usuario);
+            return DEFAULT_PASSWORD;
+        }
+
+        return null;
+
     }
 
 

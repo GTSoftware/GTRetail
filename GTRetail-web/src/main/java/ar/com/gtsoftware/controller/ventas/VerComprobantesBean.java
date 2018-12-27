@@ -98,6 +98,16 @@ public class VerComprobantesBean implements Serializable {
 
         if (puntoVentaSeleccionado == null) {
             addErrorMessage("Debe seleccionar un punto de venta.");
+            return;
+        }
+        if (puntoVentaSeleccionado.getTipo() != TiposPuntosVenta.MANUAL
+                && puntoVentaSeleccionado.getTipo() != TiposPuntosVenta.ELECTRONICO) {
+            addErrorMessage("Solo disponible para puntos de venta manual o electrónico");
+            return;
+        }
+        if (puntoVentaSeleccionado.getTipo() == TiposPuntosVenta.MANUAL && numeroComprobante == 0) {
+            addErrorMessage("Debe ingresar un número de comprobante");
+            return;
         }
         try {
 

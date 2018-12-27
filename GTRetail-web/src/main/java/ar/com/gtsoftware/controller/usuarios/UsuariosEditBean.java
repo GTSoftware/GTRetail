@@ -150,6 +150,14 @@ public class UsuariosEditBean implements Serializable {
         }
     }
 
+    public void resetPassword() {
+
+        String defaultPassword = usuariosService.resetPassword(usuarioActual.getId());
+        if (defaultPassword != null) {
+            JSFUtil.addInfoMessage("Se ha establecido la clave del usuario a: " + defaultPassword);
+        }
+    }
+
 
     /**
      * La lista de sucursales activas en las que se puede encontrar un usuario

@@ -189,8 +189,10 @@
 
 
                                 <h:outputLabel for="fechaAlta" value="#{msg.fechaAlta}:"/>
-                                <p:calendar id="fechaAlta" value="#{clientesEditBean.clienteActual.fechaAlta}" readonly="true" required="false"
-                                            pattern="dd/MM/yyyy"/>
+                                <p:outputLabel id="fechaAlta" value="#{clientesEditBean.clienteActual.fechaAlta}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                </p:outputLabel>
+
                                 <p:message for="fechaAlta"/>
 
                                 <h:outputLabel for="activoField" value="#{msg.activo}:"/>

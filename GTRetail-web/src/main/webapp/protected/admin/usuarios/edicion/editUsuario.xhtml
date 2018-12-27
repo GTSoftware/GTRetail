@@ -85,7 +85,7 @@ limitations under the License.
                     </p:panelGrid >
                     <p:separator/>
                     <!-- Botones de guardar y cancelar-->
-                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="4" >
+                    <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="5" >
                         <p:commandButton id="guardarButton"
                                          value="#{msg.guardar}"
                                          action="#{usuariosEditBean.doGuardarUsuario()}"
@@ -93,6 +93,15 @@ limitations under the License.
                                          ajax="true"
                                          icon="fa fa-fw fa-save"
                                          styleClass="GreenButton"/>
+
+                        <p:commandButton id="resetearClaveButton"
+                                         value="#{msg.resetPassword}"
+                                         action="#{usuariosEditBean.resetPassword()}"
+                                         update="@form"
+                                         ajax="true"
+                                         rendered="#{not usuariosEditBean.nuevo}"
+                                         icon="fa fa-fw fa-unlock"/>
+
                         <p:commandButton id="eliminarButton"
                                          value="#{msg.borrar}"
                                          action="#{usuariosEditBean.doEliminarUsuario()}"
@@ -101,12 +110,13 @@ limitations under the License.
                                          rendered="#{not usuariosEditBean.nuevo}"
                                          icon="fa fa-fw fa-trash"
                                          styleClass="RedButton"/>
+
                         <p:commandButton id="editarRolesButton"
                                          value="#{msg.usuariosEditRoles}"
                                          action="/protected/admin/usuarios/roles/index.xhtml"
                                          ajax="false"
                                          rendered="#{not usuariosEditBean.nuevo}"
-                                         icon="fa fa-fw fa-user">
+                                         icon="fa fa-fw fa-user-plus">
                             <f:param name="login" value="#{usuariosEditBean.usuarioActual.id}" />
                         </p:commandButton>
 

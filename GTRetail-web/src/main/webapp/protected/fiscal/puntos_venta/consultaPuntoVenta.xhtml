@@ -15,7 +15,7 @@
             <h:form id="formContenido">
                 <p:defaultCommand target="buscarButton"/>
 
-                <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                <p:panelGrid layout="grid"
                              styleClass="ui-panelgrid-blank" columns="5"
                 >
 
@@ -57,7 +57,7 @@
                              paginator="true"
                              sortMode="single"
                              emptyMessage="#{msg.busquedaSinResultados}"
-                             rowKey="#{punto.id}"
+                             rowKey="#{punto.nroPuntoVenta}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
                              rowsPerPageTemplate="10,15,30,100"
 
@@ -120,7 +120,7 @@
                         <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
                             <p:commandButton icon="fa fa-fw fa-edit" action="edicion/edicionPuntoVenta" ajax="false"
                                              title="Editar">
-                                <f:param name="nroPuntoVenta" value="#{punto.id}"/>
+                                <f:param name="nroPuntoVenta" value="#{punto.nroPuntoVenta}"/>
                             </p:commandButton>
 
 

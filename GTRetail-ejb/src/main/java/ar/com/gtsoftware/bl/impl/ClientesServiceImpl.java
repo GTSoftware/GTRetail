@@ -114,6 +114,10 @@ public class ClientesServiceImpl implements ClientesService {
         } catch (NumberFormatException nfe) {
             throw new ServiceException("El documento debe ser un número!");
         }
+        //Es responsable inscripto y tiene cargado DNI
+        if (cliente.getIdResponsabilidadIva().getId() == 2 && cliente.getIdTipoDocumento().getId() != 2) {
+            throw new ServiceException("Se debe cargar tipo de documento como CUIT para Responsables Inscriptos");
+        }
         if (cliente.getIdTipoDocumento().getId() == 2 && !ValidadorCUIT.getValidate(cliente.getDocumento())) {
             throw new ServiceException("El número de CUIT ingresado no es válido!");
         }
