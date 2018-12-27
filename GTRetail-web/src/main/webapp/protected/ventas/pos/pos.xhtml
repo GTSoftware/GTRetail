@@ -120,7 +120,10 @@
                                     #{msg.tablaCantidad}
                                 </f:facet>
 
-                                <p:cellEditor >
+                                <h:outputText value="#{lineaVenta.cantidad}"
+                                              rendered="#{not lineaVenta.permiteModificarCantidad}"/>
+
+                                <p:cellEditor id="cantidadCellEdit" rendered="#{lineaVenta.permiteModificarCantidad}">
                                     <f:facet name="output">
                                         <h:outputText value="#{lineaVenta.cantidad}"/>
                                     </f:facet>
@@ -132,6 +135,8 @@
                                     </f:facet>
                                 </p:cellEditor>
 
+                                <p:tooltip id="toolTipStock" for="cantidadCellEdit"
+                                           value="Stock en sucursal: #{lineaVenta.idProducto.stockActualEnSucursal} Total: #{lineaVenta.idProducto.stockActual}"/>
                             </p:column>
 
                             <p:column style="text-align: left; ">
@@ -246,6 +251,7 @@
                         <gtsoftware:busquedaProductos model="#{shopCartBean}"
                                                       listaPrecios="#{shopCartBean.lista}"
                                                       soloConStock="true"
+                                                      idSucursal="#{shopCartBean.venta.idSucursal.id}"
                         />
                         <div class="SeparatorFull"/>
 

@@ -86,6 +86,12 @@ public class ProductosServiceImpl
 
                 BigDecimal stockTotal = stockFacade.getStockBySearchFilter(stockSf);
                 prod.setStockActual(stockTotal);
+
+                if (sf.getIdSucursal() != null) {
+                    stockSf.setIdSucursal(sf.getIdSucursal());
+                    BigDecimal stockSucursal = stockFacade.getStockBySearchFilter(stockSf);
+                    prod.setStockActualEnSucursal(stockSucursal);
+                }
             }
         }
     }
@@ -93,7 +99,9 @@ public class ProductosServiceImpl
     @Override
     public ProductosDto findFirstBySearchFilter(@NotNull ProductosSearchFilter sf) {
         ProductosDto productosDto = super.findFirstBySearchFilter(sf);
-        establecerPrecioYStock(Collections.singletonList(productosDto), sf);
+        if (productosDto != null) {
+            establecerPrecioYStock(Collections.singletonList(productosDto), sf);
+        }
         return productosDto;
     }
 }

@@ -49,6 +49,7 @@ public class ProductosSearchFilter extends AbstractSearchFilter {
     private Long idMarca;
     private Boolean conStock;
     private Boolean stockDebajoMinimo;
+    private Long idSucursal;
     @Builder.Default
     private boolean buscarEnTodosLados = false;
 

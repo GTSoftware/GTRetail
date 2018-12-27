@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Data
@@ -50,6 +49,8 @@ public class ComprobantesLineasDto implements Serializable {
     private Integer item;
     private Integer nroItemAsociado;
     private Integer version;
+    @Builder.Default
+    private boolean permiteModificarCantidad = true;
 
     /**
      * Retorna la descripción imprimible o mostrable hasta los 90 caracteres.

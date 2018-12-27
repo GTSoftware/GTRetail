@@ -130,6 +130,9 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
             filter.setIdProveedorHabitual(proveedor.getId());
         }
 
+        filter.setIdSucursal(app.evaluateExpressionGet(fc,
+                "#{cc.attrs.idSucursal}", Long.class));
+
     }
 
     public ProductosListasPreciosDto getListaSeleccionada() {
@@ -139,18 +142,6 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
     public void setListaSeleccionada(ProductosListasPreciosDto listaSeleccionada) {
         this.listaSeleccionada = listaSeleccionada;
     }
-//
-//    public BigDecimal getPrecio(ProductosDto producto) {
-//        if (preciosSF == null) {
-//            preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
-//        }
-//        preciosSF.setProducto(producto);
-//        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(preciosSF);
-//        if (precio == null) {
-//            return null;
-//        }
-//        return precio.getPrecio();
-//    }
 
     @Override
     protected ProductosService getService() {
@@ -195,20 +186,5 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
     public void setAuthBackingBean(AuthBackingBean authBackingBean) {
         this.authBackingBean = authBackingBean;
     }
-
-//    public BigDecimal getStockSucursal(ProductosDto producto) {
-//        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
-//        stFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal().getId());
-//        stFilter.setIdProducto(producto.getId());
-//
-//        return stockFacade.getStockBySearchFilter(stFilter);
-//    }
-
-//    public BigDecimal getStockTotal(ProductosDto producto) {
-//        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
-//        stFilter.setIdProducto(producto);
-//
-//        return stockFacade.getStockBySearchFilter(stFilter);
-//    }
 
 }

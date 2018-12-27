@@ -71,6 +71,8 @@ public class ProductosDto implements IdentifiableDto {
 
     private BigDecimal stockActual;
 
+    private BigDecimal stockActualEnSucursal;
+
     private Integer version;
 
     @Override

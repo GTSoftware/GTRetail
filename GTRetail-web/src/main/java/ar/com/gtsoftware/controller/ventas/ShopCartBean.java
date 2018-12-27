@@ -183,27 +183,7 @@ public class ShopCartBean implements Serializable {
         venta.getComprobantesLineasList().remove(lineaParaBorrar);
 
         calcularTotal();
-//
-//
-//        int index = -1;
-//        int cont = 0;
-//        ComprobantesLineasDto linea = null;
-//
-//        for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
-//            if (vl.getItem() == item) {
-//                index = cont;
-//                linea = vl;
-//                break;
-//            }
-//            cont++;
-//        }
-//        if (index >= 0) {
-//            venta.getComprobantesLineasList().remove(index);
-//            if (linea.getNroItemAsociado() != null) {
-//                removeFromCart(linea.getNroItemAsociado());
-//            }
-//            calcularTotal();
-//        }
+
     }
 
     public void eliminarPago(int item) {
@@ -249,6 +229,8 @@ public class ShopCartBean implements Serializable {
                 return;
             }
             productosFilter.setIdListaPrecio(lista.getId());
+            productosFilter.setIdSucursal(venta.getIdSucursal().getId());
+
             producto = productosFacade.findFirstBySearchFilter(productosFilter);
         }
 
@@ -352,6 +334,7 @@ public class ShopCartBean implements Serializable {
         linea.setCostoNetoUnitario(BigDecimal.ZERO);
         linea.setPrecioUnitario(redondeo);
         linea.setSubTotal(redondeo);
+        linea.setPermiteModificarCantidad(false);
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
@@ -368,6 +351,7 @@ public class ShopCartBean implements Serializable {
         linea.setCostoNetoUnitario(BigDecimal.ZERO);
         linea.setPrecioUnitario(recargo);
         linea.setSubTotal(recargo);
+        linea.setPermiteModificarCantidad(false);
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
@@ -573,6 +557,7 @@ public class ShopCartBean implements Serializable {
                 .costoNetoUnitario(BigDecimal.ZERO)
                 .precioUnitario(montoDescuento)
                 .subTotal(montoDescuento)
+                .permiteModificarCantidad(false)
                 .nroItemAsociado(itemConDescuento.getItem())
                 .item(itemCounter.getAndIncrement()).build();
 
