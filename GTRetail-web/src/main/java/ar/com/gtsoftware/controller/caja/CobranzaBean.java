@@ -125,7 +125,7 @@ public class CobranzaBean implements Serializable {
      * Realiza la apertura de caja para el usuario.
      */
     public void abrirCaja() {
-        cajaActual= cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
+        cajaActual = cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
     }
 
     public List<ComprobantesDto> getSelectedComprobantes() {
@@ -162,6 +162,10 @@ public class CobranzaBean implements Serializable {
     }
 
     public void cobrarComprobantes() {
+        if (cajaActual == null) {
+            addErrorMessage("No posee una caja abierta");
+            return;
+        }
         if (validarComprobantesSeleccionados()) {
 
             reciboActual = cobranzaService.cobrarComprobantes(cajaActual, pagosValores);
