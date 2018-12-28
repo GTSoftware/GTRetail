@@ -84,13 +84,15 @@ public class ProductosServiceImpl
                 BigDecimal precioVenta = productosPrecios == null ? null : productosPrecios.getPrecio();
                 prod.setPrecioVenta(precioVenta);
 
-                BigDecimal stockTotal = stockFacade.getStockBySearchFilter(stockSf);
-                prod.setStockActual(stockTotal);
+                if (prod.getIdTipoProveeduria().isControlStock()) {
+                    BigDecimal stockTotal = stockFacade.getStockBySearchFilter(stockSf);
+                    prod.setStockActual(stockTotal);
 
-                if (sf.getIdSucursal() != null) {
-                    stockSf.setIdSucursal(sf.getIdSucursal());
-                    BigDecimal stockSucursal = stockFacade.getStockBySearchFilter(stockSf);
-                    prod.setStockActualEnSucursal(stockSucursal);
+                    if (sf.getIdSucursal() != null) {
+                        stockSf.setIdSucursal(sf.getIdSucursal());
+                        BigDecimal stockSucursal = stockFacade.getStockBySearchFilter(stockSf);
+                        prod.setStockActualEnSucursal(stockSucursal);
+                    }
                 }
             }
         }
