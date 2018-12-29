@@ -15,34 +15,27 @@
  */
 package ar.com.gtsoftware.search;
 
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
+
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MarcasSearchFilter extends AbstractSearchFilter {
 
     private static final long serialVersionUID = 1L;
 
     private String nombreMarca;
 
-    public MarcasSearchFilter() {
-    }
-
-    public MarcasSearchFilter(String nombreMarca) {
-        this.nombreMarca = nombreMarca;
-    }
 
     @Override
     public boolean hasFilter() {
-        return nombreMarca != null;
-    }
-
-    public String getNombreMarca() {
-        return nombreMarca;
-    }
-
-    public void setNombreMarca(String nombreMarca) {
-        this.nombreMarca = nombreMarca;
+        return StringUtils.isNotEmpty(nombreMarca);
     }
 
 }
