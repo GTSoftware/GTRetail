@@ -21,6 +21,8 @@ import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.*;
 import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.primefaces.event.CellEditEvent;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -244,8 +246,7 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void actualizarPrecios() {
-        BigDecimal costoAdquisicionNeto = productoActual.getCostoAdquisicionNeto();
-        BigDecimal costoFinal = costoAdquisicionNeto;
+        BigDecimal costoFinal = productoActual.getCostoAdquisicionNeto();
         BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN)
                 .add(BigDecimal.ONE);
         if (productoActual.getPorcentajes() != null) {
@@ -429,6 +430,22 @@ public class ProductoEditBean implements Serializable {
 
     public void setTipoPorcentajeSeleccionado(ProductosTiposPorcentajesDto tipoPorcentajeSeleccionado) {
         this.tipoPorcentajeSeleccionado = tipoPorcentajeSeleccionado;
+    }
+
+    public void onCellEditPrecio(CellEditEvent event) {
+
+        if (StringUtils.contains(event.getColumn().getHeaderText(), "Precio")) {
+            ProductosPreciosDto precioDto = productoActual.getPrecios().get(event.getRowIndex());
+            BigDecimal coeficienteIVA = productoActual.getIdAlicuotaIva().getValorAlicuota().divide(CIEN)
+                    .add(BigDecimal.ONE);
+            BigDecimal costoFinal = productoActual.getCostoFinal();
+
+            precioDto.setUtilidad(precioDto.getPrecio().divide(coeficienteIVA, 10, RoundingMode.HALF_UP).subtract(costoFinal)
+                    .divide(costoFinal, 8, BigDecimal.ROUND_HALF_UP).multiply(CIEN).setScale(4, RoundingMode.HALF_UP));
+        }
+
+
+        actualizarPrecios();
     }
 
     public List<ProductoXDepositoDto> getStockPorDeposito() {

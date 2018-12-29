@@ -183,27 +183,7 @@ public class ShopCartBean implements Serializable {
         venta.getComprobantesLineasList().remove(lineaParaBorrar);
 
         calcularTotal();
-//
-//
-//        int index = -1;
-//        int cont = 0;
-//        ComprobantesLineasDto linea = null;
-//
-//        for (ComprobantesLineasDto vl : venta.getComprobantesLineasList()) {
-//            if (vl.getItem() == item) {
-//                index = cont;
-//                linea = vl;
-//                break;
-//            }
-//            cont++;
-//        }
-//        if (index >= 0) {
-//            venta.getComprobantesLineasList().remove(index);
-//            if (linea.getNroItemAsociado() != null) {
-//                removeFromCart(linea.getNroItemAsociado());
-//            }
-//            calcularTotal();
-//        }
+
     }
 
     public void eliminarPago(int item) {
@@ -240,6 +220,10 @@ public class ShopCartBean implements Serializable {
     }
 
     public void addToCart() {
+
+        if (cantidad.signum() == 0) {
+            addErrorMessage("La cantidad no puede ser cero");
+        }
 
         ProductosDto producto;
         if (productoBusquedaSeleccionado != null) {
@@ -282,7 +266,7 @@ public class ShopCartBean implements Serializable {
     private ComprobantesLineasDto crearLinea(ProductosDto prod) {
         ComprobantesLineasDto linea = new ComprobantesLineasDto();
         linea.setIdComprobante(venta);
-        linea.setCantidad(cantidad);
+        linea.setCantidad(cantidad.setScale(2, RoundingMode.HALF_UP));
         linea.setDescripcion(prod.getDescripcion());
         linea.setIdProducto(prod);
         linea.setCantidadEntregada(BigDecimal.ZERO);
@@ -292,7 +276,7 @@ public class ShopCartBean implements Serializable {
         linea.setCostoBrutoUnitario(prod.getCostoAdquisicionNeto());
         linea.setCostoNetoUnitario(prod.getCostoFinal());
         linea.setPrecioUnitario(prod.getPrecioVenta());
-        linea.setSubTotal(cantidad.multiply(linea.getIdProducto().getPrecioVenta()));
+        linea.setSubTotal(linea.getCantidad().multiply(linea.getIdProducto().getPrecioVenta()));
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
