@@ -101,6 +101,7 @@ public class CobranzaServiceImpl implements CobranzaService {
             RecibosDetalle reciboDet = new RecibosDetalle();
             reciboDet.setIdRecibo(recibo);
             reciboDet.setMontoPagado(compPago.getMontoPago());
+            reciboDet.setMontoPagadoConSigno(compPago.getMontoPagoConSigno());
             reciboDet.setIdFormaPago(compPago.getIdFormaPago());
 
             if (pv.getCupon() != null) {

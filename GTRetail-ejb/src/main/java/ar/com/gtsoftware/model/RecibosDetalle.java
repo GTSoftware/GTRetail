@@ -15,20 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Entity
@@ -51,6 +43,10 @@ public class RecibosDetalle extends BaseEntity {
     @NotNull
     @Column(name = "monto_pagado")
     private BigDecimal montoPagado;
+
+    @NotNull
+    @Column(name = "monto_pagado_con_signo")
+    private BigDecimal montoPagadoConSigno;
 
     @NotNull
     @ManyToOne
@@ -109,4 +105,12 @@ public class RecibosDetalle extends BaseEntity {
         this.idValor = idValor;
     }
 
+
+    public BigDecimal getMontoPagadoConSigno() {
+        return montoPagadoConSigno;
+    }
+
+    public void setMontoPagadoConSigno(BigDecimal montoPagadoConSigno) {
+        this.montoPagadoConSigno = montoPagadoConSigno;
+    }
 }

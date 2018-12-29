@@ -82,7 +82,7 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
         Root<RecibosDetalle> root = cq.from(RecibosDetalle.class);
         Join<RecibosDetalle, Recibos> recibos = root.join(RecibosDetalle_.idRecibo, JoinType.INNER);
         CriteriaBuilder.Coalesce<BigDecimal> coalesce = cb.coalesce();
-        coalesce.value(cb.sum(root.get(RecibosDetalle_.montoPagado)));
+        coalesce.value(cb.sum(root.get(RecibosDetalle_.montoPagadoConSigno)));
         coalesce.value(BigDecimal.ZERO);
         cq.select(coalesce);
         Predicate p = cb.equal(recibos.get(Recibos_.idCaja).get(Cajas_.id), csf.getIdCaja());

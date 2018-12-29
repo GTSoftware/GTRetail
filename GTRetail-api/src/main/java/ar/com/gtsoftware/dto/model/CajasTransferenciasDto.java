@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Los planes de pago elegidos para cada comprobante
+ * Transferencia de valores entre cajas
  *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
@@ -32,48 +32,23 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ComprobantesPagosDto implements IdentifiableDto {
+public class CajasTransferenciasDto implements IdentifiableDto {
 
     private static final long serialVersionUID = 1L;
 
     @EqualsAndHashCode.Include
     private Long id;
-
-    private ComprobantesDto idComprobante;
-
+    private CajasDto idCajaOrigen;
+    private CajasDto idCajaDestino;
+    private Date fechaTransferencia;
+    private BigDecimal monto;
+    private String observaciones;
     private NegocioFormasPagoDto idFormaPago;
-
-    private NegocioPlanesPagoDto idPlan;
-
-    private NegocioPlanesPagoDetalleDto idDetallePlan;
-
-    private BigDecimal montoPago;
-
-    private BigDecimal montoPagado;
-
-    private Date fechaPago;
-
-    private Date fechaUltimoPago;
     private Integer version;
 
-    private transient int item;
-
-    private transient int productoRecargoItem;
-
-
-    /**
-     * Retorna el total con signo del pago
-     *
-     * @return
-     */
-    public BigDecimal getMontoPagoConSigno() {
-        return idComprobante.getTipoComprobante().getSigno().multiply(montoPago);
-    }
 
     @Override
     public String getStringId() {
         return String.valueOf(id);
     }
-
-
 }
