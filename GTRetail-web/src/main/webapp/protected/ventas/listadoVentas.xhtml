@@ -78,14 +78,16 @@
                             <p:selectBooleanCheckbox id="anuladasField"
                                                      value="#{searchComprobantesBean.filter.anulada}"/>
 
-                            <h:outputLabel for="usuarioField" value="#{msg.usuario}:"/>
+                            <h:outputLabel for="usuarioField" value="#{msg.usuario}:"
+                                           rendered="#{not authBackingBean.userVendedor}"/>
 
                             <p:selectOneMenu id="usuarioField" value="#{searchComprobantesBean.filter.idUsuario}"
                                              required="false" requiredMessage="#{msg.ingresarValor}"
                                              converter="omnifaces.SelectItemsIndexConverter"
                                              label="#{msg.marca}"
                                              filter="true"
-                                             filterMatchMode="contains">
+                                             filterMatchMode="contains"
+                                             rendered="#{not authBackingBean.userVendedor}">
 
                                 <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}"
                                               itemValue="#{null}"/>
