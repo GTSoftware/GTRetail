@@ -77,6 +77,23 @@
                             <h:outputLabel for="anuladasField" value="#{msg.anulada}s"/>
                             <p:selectBooleanCheckbox id="anuladasField"
                                                      value="#{searchComprobantesBean.filter.anulada}"/>
+
+                            <h:outputLabel for="usuarioField" value="#{msg.usuario}:"/>
+
+                            <p:selectOneMenu id="usuarioField" value="#{searchComprobantesBean.filter.idUsuario}"
+                                             required="false" requiredMessage="#{msg.ingresarValor}"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             label="#{msg.marca}"
+                                             filter="true"
+                                             filterMatchMode="contains">
+
+                                <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}"
+                                              itemValue="#{null}"/>
+
+                                <f:selectItems value="#{searchComprobantesBean.usuariosList}" var="usuario"
+                                               itemLabel="#{usuario.nombreUsuario}" itemValue="#{usuario.id}"/>
+
+                            </p:selectOneMenu>
                         </p:panelGrid>
                     </p:tab>
                 </p:tabView>
