@@ -20,12 +20,15 @@ import ar.com.gtsoftware.auth.Roles;
 import ar.com.gtsoftware.bl.ComprobantesService;
 import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
 import ar.com.gtsoftware.bl.PersonasService;
+import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.ComprobantesDto;
 import ar.com.gtsoftware.dto.model.NegocioTiposComprobanteDto;
 import ar.com.gtsoftware.dto.model.PersonasDto;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
+import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import org.apache.commons.lang3.time.DateUtils;
@@ -67,6 +70,8 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     private PersonasService clientesFacade;
     @EJB
     private NegocioTiposComprobanteService tiposComprobanteFacade;
+    @EJB
+    private UsuariosService usuariosService;
 
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
@@ -74,6 +79,7 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     private BigDecimal totalVentasFacturadas = BigDecimal.ZERO;
     private BigDecimal totalVentas = BigDecimal.ZERO;
     private BigDecimal totalVentasSinFacturar = BigDecimal.ZERO;
+    private List<UsuariosDto> usuariosList;
 
     /**
      * Creates a new instance of SearchVentasBean
@@ -181,4 +187,15 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     public void setAuthBackingBean(AuthBackingBean authBackingBean) {
         this.authBackingBean = authBackingBean;
     }
+
+    public List<UsuariosDto> getUsuariosList() {
+        if (usuariosList == null) {
+            usuariosList = new ArrayList<>();
+            UsuariosSearchFilter usf = new UsuariosSearchFilter();
+            usf.addSortField("nombreUsuario", true);
+            usuariosList.addAll(usuariosService.findAllBySearchFilter(usf));
+        }
+        return usuariosList;
+    }
+
 }

@@ -16,15 +16,10 @@
 package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.bl.PersonasService;
-import ar.com.gtsoftware.bl.ProductosListasPreciosService;
-import ar.com.gtsoftware.bl.ProductosService;
+import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
-import ar.com.gtsoftware.dto.model.PersonasDto;
-import ar.com.gtsoftware.dto.model.ProductosDto;
-import ar.com.gtsoftware.dto.model.ProductosListasPreciosDto;
-import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
-import ar.com.gtsoftware.search.ProductosSearchFilter;
+import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.search.*;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -41,6 +36,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -63,10 +59,21 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
     @EJB
     private ProductosListasPreciosService listasPreciosService;
 
+    @EJB
+    private ProductosRubrosService productosRubrosFacade;
+    @EJB
+    private ProductosSubRubrosService productosSubRubrosFacade;
+    @EJB
+    private ProductosMarcasService productosMarcasFacade;
+
     private ProductosListasPreciosDto listaSeleccionada;
     private List<ProductosListasPreciosDto> listasPrecio;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+
+    private List<ProductosRubrosDto> rubrosList;
+    private List<ProductosSubRubrosDto> subRubrosList;
+    private List<ProductosMarcasDto> marcasList;
 
     /**
      * Creates a new instance of ProductosSearchBean
@@ -139,18 +146,7 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
     public void setListaSeleccionada(ProductosListasPreciosDto listaSeleccionada) {
         this.listaSeleccionada = listaSeleccionada;
     }
-//
-//    public BigDecimal getPrecio(ProductosDto producto) {
-//        if (preciosSF == null) {
-//            preciosSF = new ProductosPreciosSearchFilter(null, listaSeleccionada);
-//        }
-//        preciosSF.setProducto(producto);
-//        ProductosPrecios precio = preciosFacade.findFirstBySearchFilter(preciosSF);
-//        if (precio == null) {
-//            return null;
-//        }
-//        return precio.getPrecio();
-//    }
+
 
     @Override
     protected ProductosService getService() {
@@ -196,19 +192,39 @@ public class ProductosSearchBean extends AbstractSearchBean<ProductosDto, Produc
         this.authBackingBean = authBackingBean;
     }
 
-//    public BigDecimal getStockSucursal(ProductosDto producto) {
-//        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
-//        stFilter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal().getId());
-//        stFilter.setIdProducto(producto.getId());
-//
-//        return stockFacade.getStockBySearchFilter(stFilter);
-//    }
+    public List<ProductosRubrosDto> getRubrosList() {
+        if (rubrosList == null) {
+            RubrosSearchFilter prsf = new RubrosSearchFilter();
+            prsf.addSortField("nombreRubro", true);
+            rubrosList = new ArrayList<>();
+            rubrosList.addAll(productosRubrosFacade.findAllBySearchFilter(prsf));
+        }
+        return rubrosList;
+    }
 
-//    public BigDecimal getStockTotal(ProductosDto producto) {
-//        ProductoXDepositoSearchFilter stFilter = new ProductoXDepositoSearchFilter();
-//        stFilter.setIdProducto(producto);
-//
-//        return stockFacade.getStockBySearchFilter(stFilter);
-//    }
+    public List<ProductosSubRubrosDto> getSubRubrosList() {
+
+        if (subRubrosList == null) {
+            subRubrosList = new ArrayList<>();
+        }
+        subRubrosList.clear();
+        if (filter.getIdRubro() != null) {
+            SubRubroSearchFilter subRubroSearchFilter = SubRubroSearchFilter.builder()
+                    .idProductosRubros(filter.getIdRubro()).build();
+            subRubroSearchFilter.addSortField("nombreSubRubro", true);
+            subRubrosList.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
+        }
+        return subRubrosList;
+    }
+
+    public List<ProductosMarcasDto> getMarcasList() {
+        if (marcasList == null) {
+            MarcasSearchFilter msf = new MarcasSearchFilter();
+            msf.addSortField("nombreMarca", true);
+            marcasList = new ArrayList<>();
+            marcasList.addAll(productosMarcasFacade.findAllBySearchFilter(msf));
+        }
+        return marcasList;
+    }
 
 }

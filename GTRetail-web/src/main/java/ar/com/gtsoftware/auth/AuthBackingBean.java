@@ -112,4 +112,8 @@ public class AuthBackingBean implements Serializable {
         return rolesMenuModel;
     }
 
+    public boolean isUserVendedor() {
+        return JSFUtil.isUserInRole(Roles.VENDEDORES);
+    }
+
 }

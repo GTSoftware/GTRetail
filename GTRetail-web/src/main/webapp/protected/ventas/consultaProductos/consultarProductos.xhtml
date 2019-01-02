@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2018 GT Software.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -54,10 +71,6 @@
 
                             </p:selectOneMenu>
 
-                            <p:commandButton id="nuevoButton" action="edicion/edicionProducto.xhtml"
-                                             value="#{msg.nuevo}"
-                                             ajax="false" icon="fa fa-fw fa-plus"
-                                             styleClass="GreenButton"/>
 
                         </p:panelGrid>
                     </p:tab>
@@ -142,7 +155,7 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{msg.codigoFabrica}:" for="codigoFabricaField"/>
-                            <p:inputText value="#{productosSearchBean.filter.codigoFabrica}" id="codigoFabricaField" />
+                            <p:inputText value="#{productosSearchBean.filter.codigoFabrica}" id="codigoFabricaField"/>
 
                         </p:panelGrid>
                     </p:tab>
@@ -166,7 +179,7 @@
                              resizableColumns="true"
                              emptyMessage="#{msg.busquedaSinResultados}"
                              rowKey="#{producto.id}"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} "
                              rowsPerPageTemplate="10,15,30,100"
 
                              selection="#{productosSearchBean.elemento}"
@@ -177,27 +190,6 @@
                              liveResize="true"
                 > 
 
-                    <f:facet name="{Exporters}">
-                        <h:commandLink title="xls">
-                            <i class="fa fa-file-excel-o Fs24 Green"/>
-                            <p:dataExporter type="xls" target="productosTable" fileName="productos"/>
-                        </h:commandLink>
-
-                        <h:commandLink title="pdf">
-                            <i class="fa fa-file-pdf-o Fs24 Red"/>
-                            <p:dataExporter type="pdf" target="productosTable" fileName="productos"/>
-                        </h:commandLink>
-
-                        <h:commandLink title="csv">
-                            <i class="fa fa-file-text-o Fs24 Blue"/>
-                            <p:dataExporter type="csv" target="productosTable" fileName="productos"/>
-                        </h:commandLink>
-
-                        <h:commandLink title="xml">
-                            <i class="fa fa-file-code-o Fs24 Black"/>
-                            <p:dataExporter type="xml" target="productosTable" fileName="productos"/>
-                        </h:commandLink>
-                    </f:facet>
 
                     <f:facet name="header">
                         #{msg.productoListado}
@@ -237,21 +229,12 @@
                         <h:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
                     </p:column>
 
-                    <p:column sortBy="#{producto.costoAdquisicionNeto}">
-                        <f:facet name="header">
-                            <h:outputLabel value="#{msg.costoAdquisicion}"/>
-                        </f:facet>
-                        <h:outputLabel value="#{producto.costoAdquisicionNeto}">
-                            <f:convertNumber type="currency" groupingUsed="true" currencySymbol="$"/>
-                        </h:outputLabel>
-                    </p:column>
-
 
                     <p:column>
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.precioUnitario}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.precioVenta}" style="font-size: medium; font-weight: bold">
+                        <h:outputLabel value="#{producto.precioVenta}" style="font-size: medium; font-weight: bold !important;">
                             <f:convertNumber type="currency" groupingUsed="true"
                                              currencySymbol="$ "/>
                         </h:outputLabel>
@@ -269,7 +252,7 @@
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.stockTotal}"/>
                         </f:facet>
-                        <h:outputText value="#{producto.stockActual}">
+                        <h:outputText value="#{producto.stockActual}" style="font-weight: bold !important;">
                             <f:convertNumber groupingUsed="true" type="number"/>
                         </h:outputText>
                     </p:column>
@@ -285,28 +268,12 @@
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.acciones}"/>
                         </f:facet>
-                        <p:panelGrid layout="grid" columns="1" styleClass="ui-panelgrid-blank">
-                            <p:link outcome="edicion/edicionProducto"
-                                    ajax="false"
-                                    target="_blank"
-                                    value="#{msg.editar}"
-                                    title="Editar">
-                                <f:param name="idProducto" value="#{producto.id}"/>
-                            </p:link>
-                            <p:link outcome="edicion/edicionProducto"
-                                    ajax="false"
-                                    value="#{msg.duplicar}"
-                                    title="Duplicar"
-                                    target="_blank">
-                                <f:param name="idProducto" value="#{producto.id}"/>
-                                <f:param name="duplicar" value="1"/>
-                            </p:link>
-                            <p:commandButton icon="fa fa-print"
-                                             action="#{productosSearchBean.imprimirEtiqueta(producto)}" ajax="false"
-                                             title="Imprimir etiqueta">
 
-                            </p:commandButton>
-                        </p:panelGrid>
+                        <p:commandButton icon="fa fa-print"
+                                         action="#{productosSearchBean.imprimirEtiqueta(producto)}" ajax="false"
+                                         title="Imprimir etiqueta">
+
+                        </p:commandButton>
 
                     </p:column>
 

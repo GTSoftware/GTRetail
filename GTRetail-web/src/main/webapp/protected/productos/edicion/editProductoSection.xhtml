@@ -19,7 +19,6 @@
 
                 <p:panelGrid id="fechasGrid"
                              layout="grid"
-                             style="border:0px !important; background:none;"
                              styleClass="ui-panelgrid-blank" columns="2">
                     <h:outputLabel value="#{msg.fechaAlta}:"/>
                     <h:outputLabel value="#{productoEditBean.productoActual.fechaAlta}">
@@ -37,7 +36,6 @@
                     <p:tab id='datosBasicosTab' title="Datos básicos">
                         <p:panelGrid id="datosBasicosGrid"
                                      layout="grid"
-                                     style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank" columns="3">
                             <h:outputLabel for="idProductoField" value="#{msg.id}:"/>
                             <h:outputText id="idProductoField"
@@ -94,7 +92,6 @@
 
                         <p:panelGrid id="clasificacionGrid"
                                      layout="grid"
-                                     style="border:0px !important; background:none;"
                                      styleClass="ui-panelgrid-blank"
                                      columns="3">
                             <h:outputLabel for="tipoProveeduriaField" value="#{msg.tipoProveeduria}:"/>
@@ -281,7 +278,6 @@
                             <div class="Container50 Responsive50 NoIndent">
                                 <h:panelGroup id="pgCostos">
                                     <p:panelGrid layout="grid"
-                                                 style="border:0px !important; background:none;"
                                                  styleClass="ui-panelgrid-blank" columns="3">
 
                                         <h:outputLabel for="costoAdquisicionField"
@@ -349,7 +345,6 @@
 
 
                                     <p:panelGrid layout="grid"
-                                                 style="border:0px !important; background:none;"
                                                  styleClass="ui-panelgrid-blank" columns="2">
 
                                         <p:selectOneMenu id="porcentajeSelect"
@@ -459,7 +454,6 @@
 
 
                                     <p:panelGrid layout="grid"
-                                                 style="border:0px !important; background:none;"
                                                  styleClass="ui-panelgrid-blank" columns="2">
                                         <p:selectOneMenu id="listaPreciosSelect"
                                                          value="#{productoEditBean.listaSeleccionada}"
@@ -497,7 +491,7 @@
                                                  lazy="false"> 
 
                                         <p:ajax event="cellEdit"
-                                                listener="#{productoEditBean.actualizarPrecios()}"
+                                                listener="#{productoEditBean.onCellEditPrecio}"
                                                 oncomplete="onCellEdit()"/>
 
                                         <p:column>
@@ -532,16 +526,26 @@
                                                                  currencySymbol="$ "/>
                                             </h:outputLabel>
                                         </p:column>
-                                        <p:column>
+                                        <p:column headerText="#{msg.precio}">
                                             <f:facet name="header">
                                                 #{msg.precio}
                                             </f:facet>
-                                            <h:outputLabel value="#{precio.precio}"
-                                                           style="font-size: medium; font-weight: bold">
-                                                <f:convertNumber type="currency"
-                                                                 groupingUsed="true"
-                                                                 currencySymbol="$ "/>
-                                            </h:outputLabel>
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{precio.precio}"
+                                                                  style="font-size: medium; font-weight: bold">
+                                                        <f:convertNumber type="currency"
+                                                                         groupingUsed="true"
+                                                                         currencySymbol="$ "/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="precioVentaField"
+                                                                 value="#{precio.precio}"
+                                                                 style="width:96%"/>
+                                                </f:facet>
+                                            </p:cellEditor>
+
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
