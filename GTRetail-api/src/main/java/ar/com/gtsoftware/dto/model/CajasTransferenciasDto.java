@@ -19,6 +19,8 @@ package ar.com.gtsoftware.dto.model;
 import ar.com.gtsoftware.dto.IdentifiableDto;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -38,11 +40,17 @@ public class CajasTransferenciasDto implements IdentifiableDto {
 
     @EqualsAndHashCode.Include
     private Long id;
+    @NotNull
     private CajasDto idCajaOrigen;
+    @NotNull
     private CajasDto idCajaDestino;
+    @NotNull
     private Date fechaTransferencia;
+    @NotNull
     private BigDecimal monto;
+    @Size(max = 90)
     private String observaciones;
+    @NotNull
     private NegocioFormasPagoDto idFormaPago;
     private Integer version;
 

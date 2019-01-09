@@ -19,8 +19,11 @@ package ar.com.gtsoftware.bl.impl;
 
 import ar.com.gtsoftware.bl.CajasTransferenciasService;
 import ar.com.gtsoftware.dto.model.CajasTransferenciasDto;
+import ar.com.gtsoftware.eao.CajasMovimientosFacade;
 import ar.com.gtsoftware.eao.CajasTransferenciasFacade;
 import ar.com.gtsoftware.mappers.CajasTransferenciasMapper;
+import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
+import ar.com.gtsoftware.model.CajasMovimientos;
 import ar.com.gtsoftware.model.CajasTransferencias;
 import ar.com.gtsoftware.search.CajasTransferenciasSearchFilter;
 
@@ -39,6 +42,8 @@ public class CajasTransferenciasServiceImpl
     @Inject
     private CajasTransferenciasMapper mapper;
 
+    @EJB
+    private CajasMovimientosFacade cajasMovimientosFacade;
 
     @Override
     protected CajasTransferenciasFacade getFacade() {
@@ -48,5 +53,33 @@ public class CajasTransferenciasServiceImpl
     @Override
     protected CajasTransferenciasMapper getMapper() {
         return mapper;
+    }
+
+
+    @Override
+    public CajasTransferenciasDto generarTransferencia(CajasTransferenciasDto transfencia) {
+        CajasTransferencias entity = mapper.dtoToEntity(transfencia, new CycleAvoidingMappingContext());
+        facade.create(entity);
+
+        String descMovimiento = String.format("Transferencia Nro: %d desde caja: %s hacia caja: %s",
+                entity.getId(),
+                transfencia.getIdCajaOrigen().toString(),
+                transfencia.getIdCajaDestino().toString());
+
+        CajasMovimientos movOrigen = new CajasMovimientos();
+        movOrigen.setFechaMovimiento(transfencia.getFechaTransferencia());
+        movOrigen.setDescripcion(descMovimiento);
+        movOrigen.setIdCaja(entity.getIdCajaOrigen());
+        movOrigen.setMontoMovimiento(entity.getMonto().negate());
+        cajasMovimientosFacade.create(movOrigen);
+
+        CajasMovimientos movDestino = new CajasMovimientos();
+        movDestino.setFechaMovimiento(transfencia.getFechaTransferencia());
+        movDestino.setDescripcion(descMovimiento);
+        movDestino.setIdCaja(entity.getIdCajaDestino());
+        movDestino.setMontoMovimiento(entity.getMonto());
+        cajasMovimientosFacade.create(movDestino);
+
+        return mapper.entityToDto(entity, new CycleAvoidingMappingContext());
     }
 }

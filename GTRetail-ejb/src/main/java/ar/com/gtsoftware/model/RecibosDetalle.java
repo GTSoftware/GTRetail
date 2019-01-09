@@ -49,6 +49,10 @@ public class RecibosDetalle extends BaseEntity {
     private BigDecimal montoPagadoConSigno;
 
     @NotNull
+    @Column(name = "redondeo")
+    private BigDecimal redondeo;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago")
     private NegocioFormasPago idFormaPago;
@@ -112,5 +116,14 @@ public class RecibosDetalle extends BaseEntity {
 
     public void setMontoPagadoConSigno(BigDecimal montoPagadoConSigno) {
         this.montoPagadoConSigno = montoPagadoConSigno;
+    }
+
+    @NotNull
+    public BigDecimal getRedondeo() {
+        return redondeo;
+    }
+
+    public void setRedondeo(@NotNull BigDecimal redondeo) {
+        this.redondeo = redondeo;
     }
 }

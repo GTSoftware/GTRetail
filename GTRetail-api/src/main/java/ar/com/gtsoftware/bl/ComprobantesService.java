@@ -34,9 +34,6 @@ public interface ComprobantesService
 
     BigDecimal calcularTotalVentas(@NotNull ComprobantesSearchFilter sf);
 
-    void guardarVenta(@NotNull ComprobantesDto ventaDto);
-
     void anularVenta(@NotNull Long idComprobante) throws ServiceException;
 
-    List<ComprobantesLineasDto> obtenerLineasComprobantes(@NotNull Long idComprobante);
 }

@@ -44,3 +44,9 @@ set monto_pagado_con_signo = monto_pagado * (select ntc.signo from negocio_tipos
 alter table recibos_detalle
 alter column monto_pagado_con_signo set not null;
 
+
+alter table recibos_detalle
+  add column redondeo numeric (19,2) not null default 0;
+
+comment on column recibos_detalle.redondeo is 'El monto que se suma o resta al valor correspondiente al pago en concepto de redondeo. Solo el tipo de pago EFECTIVO deberia completar este campo.';
+

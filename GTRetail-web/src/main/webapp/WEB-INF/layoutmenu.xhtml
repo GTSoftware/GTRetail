@@ -1,6 +1,5 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
@@ -152,6 +151,12 @@
                     <p:menuitem id="cobranzaItem" value="#{msg.cobranza}"
                                 action="/protected/caja/cobranza/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"/>
+
+                    <p:menuitem id="transferenciasCajaItem" value="#{msg.transferencias}"
+                                action="/protected/caja/transferencias/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-exchange"/>
+
                     <p:menuitem id="arqueoItem" value="#{msg.arqueo}"
                                 action="/protected/caja/arqueo/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false"
@@ -160,12 +165,14 @@
                     <p:submenu id="valoresSubMenu" label="#{msg.valores}" icon="fa fa-fw fa-ticket">
 
                         <p:menuitem id="cuponesItem" value="#{msg.cupones}"
-                                    action="/protected/archivos/marcas/marcaSearch.xhtml?faces-redirect=true"
-                                    immediate="true" ajax="false"/>
+                                    action="/protected/caja/valores/cupones/index.xhtml?faces-redirect=true"
+                                    immediate="true" ajax="false"
+                                    icon="fa fa-fw fa-credit-card"/>
 
                         <p:menuitem id="chequesItem" value="#{msg.cheques}"
                                     action="/protected/caja/valores/cheques/index.xhtml?faces-redirect=true"
-                                    immediate="true" ajax="false"/>
+                                    immediate="true" ajax="false"
+                                    icon="fa fa-fw fa-usd"/>
                     </p:submenu>
 
                 </p:submenu>

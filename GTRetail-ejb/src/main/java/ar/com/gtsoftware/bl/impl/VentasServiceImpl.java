@@ -17,6 +17,7 @@
 
 package ar.com.gtsoftware.bl.impl;
 
+import ar.com.gtsoftware.bl.PersonasCuentaCorrienteService;
 import ar.com.gtsoftware.bl.VentasService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.RegistroVentaDto;
@@ -62,6 +63,8 @@ public class VentasServiceImpl implements VentasService {
     private UsuariosFacade usuariosFacade;
     @EJB
     private DepositosFacade depositosFacade;
+    @EJB
+    private PersonasCuentaCorrienteService cuentaCorrienteBean;
 
     @Override
     public RegistroVentaDto guardarVenta(ComprobantesDto comprobantesDto, boolean generarRemitoSalida) throws ServiceException {
@@ -86,6 +89,12 @@ public class VentasServiceImpl implements VentasService {
             registro.setIdRemito(idRemito);
         }
 
+        String descMovimiento = String.format("%s Nro; %d",
+                comprobante.getTipoComprobante().getNombreComprobante(), registro.getIdComprobante());
+        cuentaCorrienteBean.registrarMovimientoCuenta(
+                comprobantesDto.getIdPersona(),
+                comprobante.getTotalConSigno(),
+                descMovimiento);
         return registro;
     }
 

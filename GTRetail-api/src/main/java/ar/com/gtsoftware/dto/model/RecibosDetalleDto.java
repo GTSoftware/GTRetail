@@ -48,6 +48,9 @@ public class RecibosDetalleDto implements Serializable {
     private BigDecimal montoPagadoConSigno;
 
     @NotNull
+    private BigDecimal redondeo;
+
+    @NotNull
     private NegocioFormasPagoDto idFormaPago;
 
     private ValoresDto idValor;

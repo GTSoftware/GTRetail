@@ -116,4 +116,12 @@ public class AuthBackingBean implements Serializable {
         return JSFUtil.isUserInRole(Roles.VENDEDORES);
     }
 
+    public boolean isUserCajero() {
+        return JSFUtil.isUserInRole(Roles.CAJEROS);
+    }
+
+    public boolean isUserAdministrador() {
+        return JSFUtil.isUserInRole(Roles.ADMINISTRADORES);
+    }
+
 }

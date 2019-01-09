@@ -35,6 +35,7 @@ public class CajasTransferenciasSearchFilter extends AbstractSearchFilter {
     private Date fechaDesde, fechaHasta;
     private Long idCajaOrigen;
     private Long idCajaDestino;
+    private Long idCaja;
     private Long idFormaPago;
 
 
@@ -43,7 +44,8 @@ public class CajasTransferenciasSearchFilter extends AbstractSearchFilter {
         return hasFechasFilter()
                 || idCajaOrigen != null
                 || idCajaDestino != null
-                || idFormaPago != null;
+                || idFormaPago != null
+                || idCaja !=null;
     }
 
     public boolean hasFechasFilter() {

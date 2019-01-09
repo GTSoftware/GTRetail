@@ -66,8 +66,6 @@ public class CobranzaServiceImpl implements CobranzaService {
     @Inject
     private PersonasMapper personasMapper;
 
-    @EJB
-    private CuponesFacade cuponesFacade;
 
     @Override
     public RecibosDto cobrarComprobantes(CajasDto cajasDto, List<PagoValorDTO> pagos) {
@@ -81,15 +79,10 @@ public class CobranzaServiceImpl implements CobranzaService {
         recibo.setIdCaja(caja);
         Comprobantes comprobante = comprobantesFacade.find(pagos.get(0).getPago().getIdComprobante().getId());
         BigDecimal montoTotal = BigDecimal.ZERO;
-        for (PagoValorDTO pv : pagos) {
-            if (pv.getPago().getMontoPago().compareTo(pv.getMontoMaximo()) > 0) {
-                throw new IllegalArgumentException("El total de pagos excede al saldo disponible!");
-            }
-            montoTotal = montoTotal.add(pv.getPago().getMontoPagoConSigno());
-        }
+        BigDecimal montoTotalConRedondeo = BigDecimal.ZERO;
+
         recibo.setIdPersona(comprobante.getIdPersona());
         recibo.setIdUsuario(usuariosFacade.find(cajasDto.getIdUsuario().getId()));
-        recibo.setMontoTotal(montoTotal);
         Set<Comprobantes> comprobantesToEdit = new HashSet<>();
         List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
 
@@ -100,9 +93,36 @@ public class CobranzaServiceImpl implements CobranzaService {
 
             RecibosDetalle reciboDet = new RecibosDetalle();
             reciboDet.setIdRecibo(recibo);
+            reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+            reciboDet.setRedondeo(BigDecimal.ZERO);
+
             reciboDet.setMontoPagado(compPago.getMontoPago());
             reciboDet.setMontoPagadoConSigno(compPago.getMontoPagoConSigno());
-            reciboDet.setIdFormaPago(compPago.getIdFormaPago());
+
+            if (pv.getPago().getIdComprobante().getIdCondicionComprobante().getId() == 2) {
+                reciboDet.setMontoPagado(pv.getMontoRealPagado());
+                reciboDet.setMontoPagadoConSigno(pv.getMontoRealPagadoConSigno());
+
+                montoTotal = montoTotal.add(pv.getMontoRealPagadoConSigno());
+
+                compPago.setMontoPagado(pv.getMontoRealPagado());
+                compPago.setMontoPago(compPago.getMontoPagado());
+            }
+
+            if (pv.getPago().getIdComprobante().getIdCondicionComprobante().getId() == 1) {
+                reciboDet.setMontoPagado(pv.getPago().getMontoPago());
+                reciboDet.setMontoPagadoConSigno(pv.getPago().getMontoPagoConSigno());
+
+                BigDecimal redondeo = pv.getMontoRealPagadoConSigno().subtract(compPago.getMontoPagoConSigno());
+                reciboDet.setRedondeo(redondeo);
+
+                montoTotal = montoTotal.add(pv.getPago().getMontoPagoConSigno());
+                montoTotalConRedondeo = montoTotalConRedondeo.add(redondeo);
+
+                compPago.setMontoPagado(compPago.getMontoPago());
+
+            }
+
 
             if (pv.getCupon() != null) {
                 Cupones cupon = cuponesMapper.dtoToEntity(pv.getCupon(),
@@ -119,7 +139,6 @@ public class CobranzaServiceImpl implements CobranzaService {
 
             compPago.setFechaPago(fecha);
             compPago.setFechaUltimoPago(fecha);
-            compPago.setMontoPagado(compPago.getMontoPago());
 
             if (compPago.isNew()) {
                 pagosFacade.create(compPago);
@@ -131,6 +150,9 @@ public class CobranzaServiceImpl implements CobranzaService {
             comprobantesToEdit.add(compPago.getIdComprobante());
 
         }
+
+        recibo.setMontoTotal(montoTotal);
+        montoTotalConRedondeo = montoTotalConRedondeo.add(montoTotal);
 
         for (Comprobantes c : comprobantesToEdit) {
             BigDecimal saldo = c.getTotal();
@@ -150,7 +172,7 @@ public class CobranzaServiceImpl implements CobranzaService {
                 comprobante.getIdPersona().getBusinessString(), recibo.getId());
         movimiento.setDescripcion(descMovimiento);
         movimiento.setIdCaja(caja);
-        movimiento.setMontoMovimiento(recibo.getMontoTotal());
+        movimiento.setMontoMovimiento(montoTotalConRedondeo);
         cajasMovimientosFacade.create(movimiento);
 
         cuentaCorrienteBean.registrarMovimientoCuenta(

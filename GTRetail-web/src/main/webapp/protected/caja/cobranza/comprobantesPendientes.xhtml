@@ -6,7 +6,6 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware"
-      xmlns:o="http://omnifaces.org/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
 <c:set value="#{true}" target="#{searchComprobantesBean.filter}" property="conSaldo"/>
@@ -101,7 +100,7 @@
                     </p:tab>
                 </p:tabView>
 
-                <div class="EmptyBox10" />
+                <div class="EmptyBox10"/>
 
                 <p:commandButton id="buscarButton" action="#{searchComprobantesBean.doSearch()}"
                                  value="#{msg.buscar}"
@@ -474,15 +473,18 @@
                         <p:column headerText="Importe" style="text-align: right">
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <h:outputText value="#{pago.pago.montoPago}">
+                                    <h:outputText value="#{pago.montoRealPagado}">
                                         <f:convertNumber currencyCode="ARS" type="currency" groupingUsed="true"/>
                                     </h:outputText>
                                 </f:facet>
                                 <f:facet name="input">
-                                    <p:inputText id="montoPagoInput" value="#{pago.pago.montoPago}" style="width:96%"
-                                                 disabled="#{not pago.montoEditable}">
-                                        <f:validateDoubleRange maximum="9999999999999999999.99" minimum="0"/>
-                                    </p:inputText>
+                                    <p:inputNumber id="montoPagoInput" value="#{pago.montoRealPagado}" style="width:96%"
+                                                   disabled="#{not pago.montoEditable}"
+                                                   maxValue="#{pago.montoMaximoConRedondeo}"
+                                                   minValue="#{pago.montoMinimoConRedondeo}"
+                                                   decimalPlaces="2">
+
+                                    </p:inputNumber>
                                 </f:facet>
                             </p:cellEditor>
 
@@ -631,9 +633,7 @@
                         <p:column headerText="Banco" rendered="#{cobranzaBean.hayCheques}">
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <h:outputText value="#{pago.cheque.idBanco.razonSocial}">
-
-                                    </h:outputText>
+                                    <p:outputLabel value="#{pago.cheque.idBanco.razonSocial}" />
                                 </f:facet>
                                 <f:facet name="input">
                                     <p:selectOneMenu id="bancoField" required="true"
@@ -672,7 +672,7 @@
 
 
                     <div class="SeparatorFull"/>
-                    <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                    <p:panelGrid layout="grid"
                                  styleClass="ui-panelgrid-blank" columns="2">
 
                         <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
@@ -702,7 +702,7 @@
                       dynamic="false">
                 <h:form id="imprimirReciboDialogForm">
 
-                    <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                    <p:panelGrid layout="grid"
                                  styleClass="ui-panelgrid-blank" columns="2">
 
                         <p:commandButton id="cancelarButtonImprimirRecibo" value="#{msg.cancelar}"
@@ -732,7 +732,7 @@
                 <h:form id="abrirCajaDialogForm">
                     <h:outputText value="Usted no posee una caja abierta en la sucursal actual. ¿Desa abrirla?"/>
 
-                    <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+                    <p:panelGrid layout="grid"
                                  styleClass="ui-panelgrid-blank" columns="2">
 
                         <p:commandButton id="cancelarAperturaCaja" value="#{msg.cancelar}"

@@ -25,4 +25,6 @@ import javax.ejb.Remote;
 @Remote
 public interface CajasTransferenciasService
         extends EntityService<CajasTransferenciasDto, CajasTransferenciasSearchFilter> {
+
+    CajasTransferenciasDto generarTransferencia(CajasTransferenciasDto transfencia);
 }

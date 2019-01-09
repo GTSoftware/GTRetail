@@ -15,6 +15,8 @@
  */
 package ar.com.gtsoftware.eao;
 
+import ar.com.gtsoftware.model.NegocioFormasPago;
+import ar.com.gtsoftware.model.NegocioFormasPago_;
 import ar.com.gtsoftware.model.NegocioPlanesPago;
 import ar.com.gtsoftware.model.NegocioPlanesPago_;
 import ar.com.gtsoftware.search.PlanesPagoSearchFilter;
@@ -56,7 +58,7 @@ public class NegocioPlanesPagoFacade extends AbstractFacade<NegocioPlanesPago, P
         }
 
         if (sf.getIdFormaPago() != null) {
-            Predicate p1 = cb.equal(root.get(NegocioPlanesPago_.idFormaPago), sf.getIdFormaPago());
+            Predicate p1 = cb.equal(root.get(NegocioPlanesPago_.idFormaPago).get(NegocioFormasPago_.id), sf.getIdFormaPago());
             p = appendAndPredicate(cb, p, p1);
         }
 

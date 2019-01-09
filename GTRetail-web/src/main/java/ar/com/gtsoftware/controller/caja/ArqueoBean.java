@@ -185,11 +185,11 @@ public class ArqueoBean implements Serializable {
         for (CajasArqueosDetalleDto ad : arqueoActual.getDetalleArqueo()) {
             montoTotalArqueo = montoTotalArqueo.add(ad.getMontoSistema());
             if (ad.getDiferencia().signum() != 0 && StringUtils.isEmpty(ad.getDescargo())) {
-                sb.append(String.format("La forma de pago: %s tiene una diferencia y debe ingresar el descargo.", ad.getIdFormaPago().getNombreFormaPago()));
+                sb.append(String.format("La forma de pago: %s tiene una diferencia y debe ingresar el descargo. ", ad.getIdFormaPago().getNombreFormaPago()));
             }
         }
         if (montoTotalCaja.compareTo(montoTotalArqueo) != 0) {
-            sb.append("El monto de las formas de pago declaradas no coincide con el saldo en caja. Declare todas las formas de pago.\n");
+            sb.append("El monto de las formas de pago declaradas no coincide con el saldo en caja. Declare todas las formas de pago. ");
         }
         String errores = sb.toString();
         if (StringUtils.isNotEmpty(errores)) {

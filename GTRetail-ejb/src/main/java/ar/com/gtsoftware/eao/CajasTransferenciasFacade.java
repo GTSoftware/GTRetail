@@ -54,7 +54,30 @@ public class CajasTransferenciasFacade extends AbstractFacade<CajasTransferencia
 
     @Override
     public Predicate createWhereFromSearchFilter(CajasTransferenciasSearchFilter psf, CriteriaBuilder cb, Root<CajasTransferencias> root) {
-        throw new UnsupportedOperationException();
+        Predicate p = null;
+        if (psf.hasFechasFilter()) {
+            Predicate p1 = cb.between(root.get(CajasTransferencias_.fechaTransferencia), psf.getFechaDesde(), psf.getFechaHasta());
+            p = appendAndPredicate(cb, p1, p);
+        }
+
+        if (psf.getIdCajaOrigen() != null) {
+            Predicate p1 = cb.equal(root.get(CajasTransferencias_.idCajaOrigen).get(Cajas_.id), psf.getIdCajaOrigen());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        if (psf.getIdCajaDestino() != null) {
+            Predicate p1 = cb.equal(root.get(CajasTransferencias_.idCajaDestino).get(Cajas_.id), psf.getIdCajaDestino());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        if (psf.getIdFormaPago() != null) {
+            Predicate p1 = cb.equal(root.get(CajasTransferencias_.idFormaPago).get(NegocioFormasPago_.id), psf.getIdFormaPago());
+            p = appendAndPredicate(cb, p1, p);
+        }
+        if (psf.getIdCaja() != null) {
+            Predicate p1 = cb.equal(root.get(CajasTransferencias_.idCajaOrigen).get(Cajas_.id), psf.getIdCaja());
+            Predicate p2 = cb.equal(root.get(CajasTransferencias_.idCajaDestino).get(Cajas_.id), psf.getIdCaja());
+            p = appendAndPredicate(cb, cb.or(p1, p2), p);
+        }
+        return p;
 
     }
 

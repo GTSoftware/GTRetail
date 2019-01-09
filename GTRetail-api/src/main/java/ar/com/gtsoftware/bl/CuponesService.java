@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 GT Software.
+ * Copyright 2019 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,14 @@
  *
  */
 
-package ar.com.gtsoftware.mappers;
+package ar.com.gtsoftware.bl;
 
-import ar.com.gtsoftware.dto.model.ChequesTercerosDto;
-import ar.com.gtsoftware.model.ChequesTerceros;
-import org.mapstruct.Mapper;
+import ar.com.gtsoftware.dto.model.CuponesDto;
+import ar.com.gtsoftware.search.CuponesSearchFilter;
 
-@Mapper(componentModel = "cdi",
-        uses = {BancosMapper.class})
-public interface ChequesTercerosMapper
-        extends GenericMapper<ChequesTerceros, ChequesTercerosDto> {
+import javax.ejb.Remote;
 
-
+@Remote
+public interface CuponesService
+        extends EntityService<CuponesDto, CuponesSearchFilter> {
 }

@@ -35,13 +35,13 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public CajasFacade() {
+        super(Cajas.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public CajasFacade() {
-        super(Cajas.class);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class CajasFacade extends AbstractFacade<Cajas, CajasSearchFilter> {
         Root<RecibosDetalle> root = cq.from(RecibosDetalle.class);
         Join<RecibosDetalle, Recibos> recibos = root.join(RecibosDetalle_.idRecibo, JoinType.INNER);
         CriteriaBuilder.Coalesce<BigDecimal> coalesce = cb.coalesce();
-        coalesce.value(cb.sum(root.get(RecibosDetalle_.montoPagadoConSigno)));
+        coalesce.value(cb.sum(cb.sum(root.get(RecibosDetalle_.montoPagadoConSigno), root.get(RecibosDetalle_.redondeo))));
         coalesce.value(BigDecimal.ZERO);
         cq.select(coalesce);
         Predicate p = cb.equal(recibos.get(Recibos_.idCaja).get(Cajas_.id), csf.getIdCaja());
