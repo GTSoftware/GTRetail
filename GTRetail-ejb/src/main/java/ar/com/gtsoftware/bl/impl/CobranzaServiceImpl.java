@@ -47,6 +47,9 @@ public class CobranzaServiceImpl implements CobranzaService {
     @EJB
     private CajasFacade cajasFacade;
 
+    @EJB
+    private ComprobantesPagosFacade compPagosFacade;
+
 
     @EJB
     private PersonasCuentaCorrienteService cuentaCorrienteBean;
@@ -84,12 +87,19 @@ public class CobranzaServiceImpl implements CobranzaService {
         recibo.setIdPersona(comprobante.getIdPersona());
         recibo.setIdUsuario(usuariosFacade.find(cajasDto.getIdUsuario().getId()));
         Set<Comprobantes> comprobantesToEdit = new HashSet<>();
-        List<RecibosDetalle> recibosDetalleList = new ArrayList<>();
+        List<RecibosDetalle> recibosDetalleList = new ArrayList<>(pagos.size());
 
         for (PagoValorDTO pv : pagos) {
 
-            ComprobantesPagos compPago = comprobantesPagosMapper.dtoToEntity(pv.getPago(),
-                    new CycleAvoidingMappingContext());
+            ComprobantesPagos compPago;
+            if (pv.getPago().getId() == null) {
+                compPago = comprobantesPagosMapper.dtoToEntity(pv.getPago(),
+                        new CycleAvoidingMappingContext());
+            } else {
+                compPago = compPagosFacade.find(pv.getPago().getId());
+            }
+
+            Comprobantes comp = comprobantesFacade.find(compPago.getIdComprobante().getId());
 
             RecibosDetalle reciboDet = new RecibosDetalle();
             reciboDet.setIdRecibo(recibo);
@@ -99,7 +109,7 @@ public class CobranzaServiceImpl implements CobranzaService {
             reciboDet.setMontoPagado(compPago.getMontoPago());
             reciboDet.setMontoPagadoConSigno(compPago.getMontoPagoConSigno());
 
-            if (pv.getPago().getIdComprobante().getIdCondicionComprobante().getId() == 2) {
+            if (comp.getIdCondicionComprobante().getId() == 2) {
                 reciboDet.setMontoPagado(pv.getMontoRealPagado());
                 reciboDet.setMontoPagadoConSigno(pv.getMontoRealPagadoConSigno());
 
@@ -109,7 +119,7 @@ public class CobranzaServiceImpl implements CobranzaService {
                 compPago.setMontoPago(compPago.getMontoPagado());
             }
 
-            if (pv.getPago().getIdComprobante().getIdCondicionComprobante().getId() == 1) {
+            if (comp.getIdCondicionComprobante().getId() == 1) {
                 reciboDet.setMontoPagado(pv.getPago().getMontoPago());
                 reciboDet.setMontoPagadoConSigno(pv.getPago().getMontoPagoConSigno());
 
@@ -147,40 +157,50 @@ public class CobranzaServiceImpl implements CobranzaService {
 
             recibosDetalleList.add(reciboDet);
 
-            comprobantesToEdit.add(compPago.getIdComprobante());
+            comprobantesToEdit.add(comp);
+
+            BigDecimal saldo = comp.getSaldo();
+            saldo = saldo.subtract(compPago.getMontoPagado());
+            comp.setSaldo(saldo);
 
         }
 
         recibo.setMontoTotal(montoTotal);
         montoTotalConRedondeo = montoTotalConRedondeo.add(montoTotal);
 
-        for (Comprobantes c : comprobantesToEdit) {
-            BigDecimal saldo = c.getTotal();
-            for (ComprobantesPagos cp : c.getPagosList()) {
-                saldo = saldo.subtract(cp.getMontoPagado());
-            }
-            c.setSaldo(saldo);
-            comprobantesFacade.edit(c);
-        }
         recibo.setRecibosDetalles(recibosDetalleList);
 
         recibosFacade.create(recibo);
 
+        for (Comprobantes c : comprobantesToEdit) {
+            comprobantesFacade.edit(c);
+        }
+
+        String descMovimiento = generarMovimientoCaja(fecha, recibo.getId(), caja, comprobante, montoTotalConRedondeo);
+
+        generarMovimientoCuenta(recibo.getMontoTotal(), comprobante, descMovimiento);
+        return recibosMapper.entityToDto(recibo, new CycleAvoidingMappingContext());
+    }
+
+    private void generarMovimientoCuenta(BigDecimal monto, Comprobantes comprobante, String descMovimiento) {
+        cuentaCorrienteBean.registrarMovimientoCuenta(
+                personasMapper.entityToDto(comprobante.getIdPersona(),
+                        new CycleAvoidingMappingContext()),
+                monto,
+                descMovimiento);
+    }
+
+    private String generarMovimientoCaja(Date fecha, Long idRecibo, Cajas caja, Comprobantes comprobante,
+                                         BigDecimal montoTotalConRedondeo) {
         CajasMovimientos movimiento = new CajasMovimientos();
         movimiento.setFechaMovimiento(fecha);
         String descMovimiento = String.format("Cobro de comprobantes del cliente %s - Recibo: %d",
-                comprobante.getIdPersona().getBusinessString(), recibo.getId());
+                comprobante.getIdPersona().getBusinessString(), idRecibo);
         movimiento.setDescripcion(descMovimiento);
         movimiento.setIdCaja(caja);
         movimiento.setMontoMovimiento(montoTotalConRedondeo);
         cajasMovimientosFacade.create(movimiento);
-
-        cuentaCorrienteBean.registrarMovimientoCuenta(
-                personasMapper.entityToDto(comprobante.getIdPersona(),
-                        new CycleAvoidingMappingContext()),
-                recibo.getMontoTotal(),
-                descMovimiento);
-        return recibosMapper.entityToDto(recibo, new CycleAvoidingMappingContext());
+        return descMovimiento;
     }
 
 }
