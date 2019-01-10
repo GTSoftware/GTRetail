@@ -72,6 +72,11 @@ public class RecibosFacade extends AbstractFacade<Recibos, RecibosSearchFilter> 
             Predicate p1 = cb.equal(root.get(Recibos_.idUsuario).get(Usuarios_.id), rsf.getIdUsuario());
             p = appendAndPredicate(cb, p1, p);
         }
+
+        if (rsf.getIdSucursal() != null) {
+            Predicate p1 = cb.equal(root.get(Recibos_.idCaja).get(Cajas_.idSucursal).get(Sucursales_.id), rsf.getIdSucursal());
+            p = appendAndPredicate(cb, p1, p);
+        }
         return p;
     }
 

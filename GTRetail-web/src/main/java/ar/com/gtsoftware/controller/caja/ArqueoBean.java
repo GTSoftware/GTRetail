@@ -101,6 +101,7 @@ public class ArqueoBean implements Serializable {
         arqueoActual.setDetalleArqueo(new ArrayList<>());
         detalleArqueoActual = new CajasArqueosDetalleDto();
         detalleArqueoActual.setItem(itemId);
+        detalleArqueoActual.setIdArqueo(arqueoActual);
     }
 
     public AuthBackingBean getAuthBackingBean() {
@@ -124,6 +125,7 @@ public class ArqueoBean implements Serializable {
             arqueoActual.getDetalleArqueo().add(detalleArqueoActual);
             detalleArqueoActual = new CajasArqueosDetalleDto();
             detalleArqueoActual.setItem(++itemId);
+            detalleArqueoActual.setIdArqueo(arqueoActual);
             addInfoMessage("Se ha agregado el monto al arqueo con éxito");
         } else {
             addErrorMessage("Ya se ha ingresado esa forma de pago!");
@@ -214,7 +216,7 @@ public class ArqueoBean implements Serializable {
         CajasSearchFilter csf = CajasSearchFilter.builder()
                 .idCaja(cajaActual.getId()).build();
         arqueoActual.setSaldoFinal(cajasService.obtenerTotalEnCaja(csf));
-        arqueosService.createOrEdit(arqueoActual);
+        arqueoActual = arqueosService.createOrEdit(arqueoActual);
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
         addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
