@@ -39,7 +39,7 @@ public class ChequesTercerosDto implements IdentifiableDto {
     @EqualsAndHashCode.Include
     private Long id;
     private BigDecimal monto;
-    private RecibosDetalleDto reciboDetalle;
+    //private RecibosDetalleDto reciboDetalle;
     private Integer version;
 
     private String nroCheque;

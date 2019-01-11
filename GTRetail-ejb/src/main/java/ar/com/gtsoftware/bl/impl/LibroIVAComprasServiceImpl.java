@@ -91,9 +91,10 @@ public class LibroIVAComprasServiceImpl implements LibroIVAService {
                     .fechaDesde(periodo.getFechaInicioPeriodo())
                     .fechaHasta(periodo.getFechaFinPeriodo()).build();
         }
+        filter.addSortField("fechaFactura", true);
         List<FiscalLibroIvaCompras> facturas = ivaComprasFacade.findAllBySearchFilter(filter);
 
-        List<RegistroIVADTO> facturasDTOList = new ArrayList<>();
+        List<RegistroIVADTO> facturasDTOList = new ArrayList<>(facturas.size());
         BigDecimal importeGeneralTotal = BigDecimal.ZERO;
         BigDecimal totalGeneralIVA = BigDecimal.ZERO;
         List<ImportesResponsabilidad> totalesResponsabildiad = new ArrayList<>();

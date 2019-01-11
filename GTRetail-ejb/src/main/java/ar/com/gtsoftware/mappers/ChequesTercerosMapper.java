@@ -22,7 +22,9 @@ import ar.com.gtsoftware.model.ChequesTerceros;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "cdi",
-uses = {BancosMapper.class})
+        uses = {BancosMapper.class})
 public interface ChequesTercerosMapper
         extends GenericMapper<ChequesTerceros, ChequesTercerosDto> {
+
+
 }

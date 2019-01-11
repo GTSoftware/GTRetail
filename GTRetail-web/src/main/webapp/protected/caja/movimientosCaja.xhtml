@@ -28,11 +28,13 @@
                     <p:inputText id="searchField" value="#{movimientosCajaSearchBean.filter.txt}"
                                  placeholder="#{msg.descripcion}"/>
 
-                    <p:outputLabel value="#{msg.caja}:" for="idCajaField"/>
-                    <p:inputText id="idCajaField" value="#{movimientosCajaSearchBean.filter.idCaja}"
-                                 placeholder="#{msg.caja}">
-                        <f:convertNumber integerOnly="true"/>
-                    </p:inputText>
+                    <p:outputLabel value="#{msg.caja}:" for="idCajaField"
+                                   rendered="#{movimientosCajaSearchBean.permiteFiltrarCajas}"/>
+                    <p:inputNumber id="idCajaField" value="#{movimientosCajaSearchBean.filter.idCaja}"
+                                   placeholder="#{msg.caja}"
+                                   rendered="#{movimientosCajaSearchBean.permiteFiltrarCajas}"
+                                   decimalPlaces="0">
+                    </p:inputNumber>
 
 
                     <p:commandButton id="buscarButton" action="#{movimientosCajaSearchBean.doSearch()}" value="Buscar"

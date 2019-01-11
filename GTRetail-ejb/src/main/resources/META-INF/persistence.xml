@@ -13,6 +13,7 @@
         <class>ar.com.gtsoftware.model.CajasArqueos</class>
         <class>ar.com.gtsoftware.model.CajasArqueosDetalle</class>
         <class>ar.com.gtsoftware.model.CajasMovimientos</class>
+        <class>ar.com.gtsoftware.model.CajasTransferencias</class>
         <class>ar.com.gtsoftware.model.ContabilidadLibros</class>
         <class>ar.com.gtsoftware.model.ContabilidadMonedas</class>
         <class>ar.com.gtsoftware.model.ContabilidadPeriodosContables</class>

@@ -18,10 +18,7 @@ package ar.com.gtsoftware.bl.impl;
 import ar.com.gtsoftware.bl.CajasService;
 import ar.com.gtsoftware.dto.model.CajasDto;
 import ar.com.gtsoftware.dto.model.UsuariosDto;
-import ar.com.gtsoftware.eao.CajasArqueosFacade;
-import ar.com.gtsoftware.eao.CajasFacade;
-import ar.com.gtsoftware.eao.CuponesFacade;
-import ar.com.gtsoftware.eao.UsuariosFacade;
+import ar.com.gtsoftware.eao.*;
 import ar.com.gtsoftware.mappers.CajasMapper;
 import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.Cajas;
@@ -54,6 +51,8 @@ public class CajasServiceImpl
     private CuponesFacade cuponesFacade;
     @EJB
     private UsuariosFacade usuariosFacade;
+    @EJB
+    private CajasTransferenciasFacade transferenciasFacade;
 
 
     @Inject
@@ -131,7 +130,12 @@ public class CajasServiceImpl
 
     @Override
     public BigDecimal obtenerTotalEnCaja(@NotNull CajasSearchFilter csf) {
-        return facade.obtenerTotalDeCaja(csf);
+
+        BigDecimal totalCobranzas = facade.obtenerTotalDeCaja(csf);
+        BigDecimal erogacionTransf = transferenciasFacade.obtenerTotalTransferenciasEmitidas(csf);
+        BigDecimal recepcionTransf = transferenciasFacade.obtenerTotalTransferenciasRecibidas(csf);
+
+        return totalCobranzas.add(erogacionTransf).add(recepcionTransf);
     }
 
     @Override

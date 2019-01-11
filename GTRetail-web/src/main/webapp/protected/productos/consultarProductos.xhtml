@@ -66,6 +66,7 @@
                         <p:panelGrid layout="grid"
                                      styleClass="ui-panelgrid-blank" columns="2"
                                      id="busquedaAvanzadaGrid">
+
                             <p:outputLabel value="#{msg.proveedor}:" for="proveedorField"/>
                             <h:panelGroup>
                                 <p:autoComplete id="proveedorField"
@@ -86,6 +87,63 @@
                                                  oncomplete="PF('proveedoresDialog').show()"
                                                  process="@this"/>
                             </h:panelGroup>
+
+
+                            <h:outputLabel for="rubroField" value="#{msg.productoRubro}:"/>
+
+                            <p:selectOneMenu id="rubroField" value="#{productosSearchBean.filter.idRubro}"
+                                             filter="true"
+                                             filterMatchMode="contains"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             label="#{msg.productoRubro}">
+
+                                <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}"/>
+
+                                <f:selectItems value="#{productosSearchBean.rubrosList}" var="rubro"
+                                               itemLabel="#{rubro.nombreRubro}" itemValue="#{rubro.id}"/>
+                                <p:ajax event="valueChange"
+                                        update=":formContenido:busquedaTab:subRubroField" process="@form"
+                                        global="false"/>
+                            </p:selectOneMenu>
+
+
+                            <h:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:"/>
+
+
+                            <p:selectOneMenu id="subRubroField" value="#{productosSearchBean.filter.idSubRubro}"
+                                             required="false" converter="omnifaces.SelectItemsIndexConverter"
+                                             requiredMessage="#{msg.seleccionarUno}"
+                                             label="#{msg.productoSubRubro}"
+                                             filter="true"
+                                             filterMatchMode="contains">
+
+                                <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}" itemValue="#{null}"/>
+
+                                <f:selectItems value="#{productosSearchBean.subRubrosList}" var="subRubro"
+                                               itemLabel="#{subRubro.nombreSubRubro}" itemValue="#{subRubro.id}"/>
+                            </p:selectOneMenu>
+
+
+                            <h:outputLabel for="marcaField" value="#{msg.marca}:"/>
+
+                            <p:selectOneMenu id="marcaField" value="#{productosSearchBean.filter.idMarca}"
+                                             required="false" requiredMessage="#{msg.ingresarValor}"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             label="#{msg.marca}"
+                                             filter="true"
+                                             filterMatchMode="contains">
+
+                                <f:selectItem noSelectionOption="false" itemLabel="#{msg.todos}"
+                                              itemValue="#{null}"/>
+
+                                <f:selectItems value="#{productosSearchBean.marcasList}" var="marca"
+                                               itemLabel="#{marca.nombreMarca}" itemValue="#{marca.id}"/>
+
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{msg.codigoFabrica}:" for="codigoFabricaField"/>
+                            <p:inputText value="#{productosSearchBean.filter.codigoFabrica}" id="codigoFabricaField" />
+
                         </p:panelGrid>
                     </p:tab>
 

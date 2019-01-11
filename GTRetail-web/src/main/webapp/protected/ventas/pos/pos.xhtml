@@ -44,14 +44,14 @@
                     </p:inputText>
 
 
-                    <p:inputText id="cantidadField"
-                                 required="true"
-                                 value="#{shopCartBean.cantidad}"
-                                 placeholder="Cantidad">
-                        <f:validateDoubleRange minimum="0.01"
-                                               maximum="9999999999999999999.99"/>
+                    <p:inputNumber id="cantidadField"
+                                   required="true"
+                                   value="#{shopCartBean.cantidad}"
+                                   decimalPlaces="2"
+                                   placeholder="Cantidad"
+                                   minValue="0.00" maxValue="999999999.99">
 
-                    </p:inputText>
+                    </p:inputNumber>
 
 
                 </p:panelGrid>
@@ -128,10 +128,14 @@
                                         <h:outputText value="#{lineaVenta.cantidad}"/>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText id="cantidadProdTabField" value="#{lineaVenta.cantidad}">
-                                            <f:validateDoubleRange minimum="0.01"
-                                                                   maximum="9999999999999999999.99"/>
-                                        </p:inputText>
+                                        <p:inputNumber id="cantidadProdTabField"
+                                                       required="true"
+                                                       value="#{lineaVenta.cantidad}"
+                                                       decimalPlaces="2"
+                                                       placeholder="Cantidad"
+                                                       minValue="0.01" maxValue="999999999.99">
+
+                                        </p:inputNumber>
                                     </f:facet>
                                 </p:cellEditor>
 
@@ -251,7 +255,6 @@
                         <gtsoftware:busquedaProductos model="#{shopCartBean}"
                                                       listaPrecios="#{shopCartBean.lista}"
                                                       soloConStock="true"
-                                                      idSucursal="#{shopCartBean.venta.idSucursal.id}"
                         />
                         <div class="SeparatorFull"/>
 

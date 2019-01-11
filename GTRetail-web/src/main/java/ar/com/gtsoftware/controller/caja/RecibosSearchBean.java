@@ -18,11 +18,17 @@ package ar.com.gtsoftware.controller.caja;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.ParametrosService;
 import ar.com.gtsoftware.bl.RecibosService;
+import ar.com.gtsoftware.bl.SucursalesService;
+import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.ParametrosDto;
 import ar.com.gtsoftware.dto.model.RecibosDto;
+import ar.com.gtsoftware.dto.model.SucursalesDto;
+import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.search.RecibosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.search.SucursalesSearchFilter;
+import ar.com.gtsoftware.search.UsuariosSearchFilter;
 import ar.com.gtsoftware.utils.NumberToLetterConverter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -58,9 +64,16 @@ public class RecibosSearchBean extends AbstractSearchBean<RecibosDto, RecibosSea
     private RecibosService recibosService;
     @EJB
     private ParametrosService parametrosService;
-    private boolean soloMiosFilter = true;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+    @EJB
+    private SucursalesService sucursalesService;
+    @EJB
+    private UsuariosService usuariosService;
+
+    private List<SucursalesDto> sucursalesList;
+    private List<UsuariosDto> usuariosList;
+
 
     /**
      * Creates a new instance of ClientesSearchBean
@@ -78,8 +91,7 @@ public class RecibosSearchBean extends AbstractSearchBean<RecibosDto, RecibosSea
         if (!filter.hasOrderFields()) {
             filter.addSortField(new SortField("fechaRecibo", false));
         }
-        filter.setIdUsuario(null);
-        if (soloMiosFilter) {
+        if (!isPermiteFiltrarRecibos()) {
             filter.setIdUsuario(authBackingBean.getUserLoggedIn().getId());
         }
     }
@@ -138,22 +150,26 @@ public class RecibosSearchBean extends AbstractSearchBean<RecibosDto, RecibosSea
         return result;
     }
 
-    /**
-     * Si es True especifica que solo se deben buscar recibos del usuario logueado
-     *
-     * @return
-     */
-    public Boolean getSoloMiosFilter() {
-        return soloMiosFilter;
+    public boolean isPermiteFiltrarRecibos() {
+        return authBackingBean.isUserAdministrador();
     }
 
-    /**
-     * Si es True especifica que solo se deben buscar recibos del usuario logueado
-     *
-     * @param soloMiosFilter
-     */
-    public void setSoloMiosFilter(Boolean soloMiosFilter) {
-        this.soloMiosFilter = soloMiosFilter;
+    public List<SucursalesDto> getSucursalesList() {
+        if (sucursalesList == null) {
+            SucursalesSearchFilter ssf = SucursalesSearchFilter.builder()
+                    .activa(true).build();
+            ssf.addSortField("nombreSucursal", true);
+            sucursalesList = sucursalesService.findAllBySearchFilter(ssf);
+        }
+        return sucursalesList;
     }
 
+    public List<UsuariosDto> getUsuariosList() {
+        if (usuariosList == null) {
+            UsuariosSearchFilter usf = new UsuariosSearchFilter();
+            usf.addSortField("nombreUsuario", true);
+            usuariosList = usuariosService.findAllBySearchFilter(usf);
+        }
+        return usuariosList;
+    }
 }

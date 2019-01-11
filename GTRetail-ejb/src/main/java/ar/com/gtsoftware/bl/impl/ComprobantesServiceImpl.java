@@ -21,10 +21,7 @@ import ar.com.gtsoftware.bl.ComprobantesService;
 import ar.com.gtsoftware.bl.PersonasCuentaCorrienteService;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.ComprobantesDto;
-import ar.com.gtsoftware.dto.model.ComprobantesLineasDto;
-import ar.com.gtsoftware.eao.ComprobantesEstadosFacade;
 import ar.com.gtsoftware.eao.ComprobantesFacade;
-import ar.com.gtsoftware.mappers.ComprobantesLineasMapper;
 import ar.com.gtsoftware.mappers.ComprobantesMapper;
 import ar.com.gtsoftware.mappers.PersonasMapper;
 import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
@@ -34,9 +31,7 @@ import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Stateless
 public class ComprobantesServiceImpl
@@ -47,17 +42,12 @@ public class ComprobantesServiceImpl
     private ComprobantesFacade facade;
     @EJB
     private PersonasCuentaCorrienteService cuentaCorrienteBean;
-    @EJB
-    private ComprobantesEstadosFacade estadosFacade;
 
     @Inject
     private ComprobantesMapper mapper;
 
     @Inject
     private PersonasMapper personasMapper;
-
-    @Inject
-    private ComprobantesLineasMapper comprobantesLineasMapper;
 
 
     @Override
@@ -73,21 +63,6 @@ public class ComprobantesServiceImpl
     @Override
     public BigDecimal calcularTotalVentas(ComprobantesSearchFilter sf) {
         return facade.calcularTotalVentasBySearchFilter(sf);
-    }
-
-    @Override
-    public void guardarVenta(ComprobantesDto ventaDto) {
-        Comprobantes venta = mapper.dtoToEntity(ventaDto, new CycleAvoidingMappingContext());
-        if (venta.isNew()) {
-            venta.setIdEstadoComprobante(estadosFacade.find(2L)); //Aceptada
-            facade.create(venta);
-            cuentaCorrienteBean.registrarMovimientoCuenta(ventaDto.getIdPersona(),
-                    venta.getTotal().multiply(venta.getTipoComprobante().getSigno()).negate(),
-                    String.format("Comprobante Nro: %d", venta.getId()));
-        } else {
-            throw new IllegalArgumentException("La venta ya està guardada.");
-        }
-
     }
 
     @Override
@@ -112,9 +87,4 @@ public class ComprobantesServiceImpl
         facade.edit(venta);
     }
 
-    @Override
-    public List<ComprobantesLineasDto> obtenerLineasComprobantes(@NotNull Long idComprobante) {
-        Comprobantes comprobante = facade.find(idComprobante);
-        return comprobantesLineasMapper.entitiesToDtos(comprobante.getComprobantesLineasList(), new CycleAvoidingMappingContext());
-    }
 }

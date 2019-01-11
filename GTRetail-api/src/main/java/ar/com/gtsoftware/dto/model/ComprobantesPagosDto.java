@@ -70,15 +70,6 @@ public class ComprobantesPagosDto implements IdentifiableDto {
         return idComprobante.getTipoComprobante().getSigno().multiply(montoPago);
     }
 
-    /**
-     * Retorna el monto pagado con signo del pago
-     *
-     * @return
-     */
-    public BigDecimal getMontoPagadoConSigno() {
-        return idComprobante.getTipoComprobante().getSigno().multiply(montoPagado);
-    }
-
     @Override
     public String getStringId() {
         return String.valueOf(id);

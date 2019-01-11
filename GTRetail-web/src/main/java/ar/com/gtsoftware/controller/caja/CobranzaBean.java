@@ -31,6 +31,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,7 @@ public class CobranzaBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(CobranzaBean.class.getName());
+    private static final BigDecimal REDONDEO = new BigDecimal(5);
 
     @EJB
     private CajasService cajasService;
@@ -125,7 +127,7 @@ public class CobranzaBean implements Serializable {
      * Realiza la apertura de caja para el usuario.
      */
     public void abrirCaja() {
-        cajaActual= cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
+        cajaActual = cajasService.abrirCaja(authBackingBean.getUserLoggedIn());
     }
 
     public List<ComprobantesDto> getSelectedComprobantes() {
@@ -162,6 +164,10 @@ public class CobranzaBean implements Serializable {
     }
 
     public void cobrarComprobantes() {
+        if (cajaActual == null) {
+            addErrorMessage("No posee una caja abierta");
+            return;
+        }
         if (validarComprobantesSeleccionados()) {
 
             reciboActual = cobranzaService.cobrarComprobantes(cajaActual, pagosValores);
@@ -186,6 +192,7 @@ public class CobranzaBean implements Serializable {
                 PagoValorDTO pagoValor = PagoValorDTO.builder()
                         .item(item++)
                         .pago(pago)
+                        .montoRealPagado(pago.getMontoPago())
                         .montoMaximo(saldoPago).build();
 
                 if (pago.getIdFormaPago().isRequiereValores()) {
@@ -206,9 +213,18 @@ public class CobranzaBean implements Serializable {
                     }
 
                 }
+                if (pago.getIdFormaPago().getId() == 1) {
+                    pagoValor.setMontoEditable(true);
+                    BigDecimal saldoPagoSinDecimales = saldoPago.setScale(0, RoundingMode.HALF_UP);
+                    pagoValor.setMontoMinimoConRedondeo(saldoPagoSinDecimales
+                            .subtract(REDONDEO).max(BigDecimal.ZERO));
+                    pagoValor.setMontoMaximoConRedondeo(saldoPagoSinDecimales.add(REDONDEO));
+                    pagoValor.setMontoRealPagado(saldoPago);
+                }
 
                 pagosValores.add(pagoValor);
             }
+            //Esto es para cuando no se definió una forma de pago en el comprobante (ej: cuenta corriente)
             if (montoPorCubrir.signum() > 0) {
 
                 ComprobantesPagosDto cp = new ComprobantesPagosDto();
@@ -223,7 +239,10 @@ public class CobranzaBean implements Serializable {
                         .item(item++)
                         .pago(cp)
                         .montoEditable(true)
-                        .montoMaximo(montoPorCubrir).build();
+                        .montoMaximo(montoPorCubrir)
+                        .montoRealPagado(montoPorCubrir)
+                        .montoMaximoConRedondeo(montoPorCubrir)
+                        .montoMinimoConRedondeo(BigDecimal.ZERO).build();
                 pagosValores.add(pagoValor);
             }
 

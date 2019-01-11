@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -68,11 +69,11 @@ public class ShopCartBean implements Serializable {
             .conStock(true).build();
     private final NegocioTiposComprobanteSearchFilter tipoCompSf = NegocioTiposComprobanteSearchFilter.builder()
             .activo(true).build();
-    private final PlanesPagoSearchFilter planesSearchFilter = PlanesPagoSearchFilter.builder().activo(true).build();
-    private final PlanesPagoDetalleSearchFilter pagoDetalleSearchFilter = PlanesPagoDetalleSearchFilter.builder().activo(true).build();
     private final FormasPagoSearchFilter formasPagoSearchFilter = FormasPagoSearchFilter.builder()
             .disponibleVenta(true).build();
     private final AtomicInteger itemCounter = new AtomicInteger(1);
+    private final List<NegocioPlanesPagoDetalleDto> detallePlan = new ArrayList<>();
+
     @Inject
     private Conversation conversation;
     @Inject
@@ -221,6 +222,10 @@ public class ShopCartBean implements Serializable {
 
     public void addToCart() {
 
+        if (cantidad.signum() == 0) {
+            addErrorMessage("La cantidad no puede ser cero");
+        }
+
         ProductosDto producto;
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
@@ -264,7 +269,7 @@ public class ShopCartBean implements Serializable {
     private ComprobantesLineasDto crearLinea(ProductosDto prod) {
         ComprobantesLineasDto linea = new ComprobantesLineasDto();
         linea.setIdComprobante(venta);
-        linea.setCantidad(cantidad);
+        linea.setCantidad(cantidad.setScale(2, RoundingMode.HALF_UP));
         linea.setDescripcion(prod.getDescripcion());
         linea.setIdProducto(prod);
         linea.setCantidadEntregada(BigDecimal.ZERO);
@@ -274,7 +279,7 @@ public class ShopCartBean implements Serializable {
         linea.setCostoBrutoUnitario(prod.getCostoAdquisicionNeto());
         linea.setCostoNetoUnitario(prod.getCostoFinal());
         linea.setPrecioUnitario(prod.getPrecioVenta());
-        linea.setSubTotal(cantidad.multiply(linea.getIdProducto().getPrecioVenta()));
+        linea.setSubTotal(linea.getCantidad().multiply(linea.getIdProducto().getPrecioVenta()));
         linea.setItem(itemCounter.getAndIncrement());
         return linea;
     }
@@ -506,14 +511,25 @@ public class ShopCartBean implements Serializable {
     }
 
     public List<NegocioPlanesPagoDto> getPlanesPagoList() {
-        planesSearchFilter.setIdFormaPago(pagoActual.getIdFormaPago().getId());
+        PlanesPagoSearchFilter planesSearchFilter = PlanesPagoSearchFilter.builder().activo(true)
+                .idFormaPago(pagoActual.getIdFormaPago().getId()).build();
         return planesPagoFacade.findAllBySearchFilter(planesSearchFilter);
     }
 
     public List<NegocioPlanesPagoDetalleDto> getDetallePlan() {
-        pagoDetalleSearchFilter.setIdPlan(pagoActual.getIdPlan().getId());
-        pagoDetalleSearchFilter.addSortField("cuotas", true);
-        return pagoDetalleFacade.findAllBySearchFilter(pagoDetalleSearchFilter);
+        return detallePlan;
+    }
+
+    public void cargarDetallePlan(ValueChangeEvent event) {
+        detallePlan.clear();
+        NegocioPlanesPagoDto plan = (NegocioPlanesPagoDto) event.getNewValue();
+        if (plan != null) {
+            PlanesPagoDetalleSearchFilter psf = PlanesPagoDetalleSearchFilter.builder()
+                    .activo(true)
+                    .idPlan(plan.getId()).build();
+            psf.addSortField("cuotas", true);
+            detallePlan.addAll(pagoDetalleFacade.findAllBySearchFilter(psf));
+        }
     }
 
     public boolean isVendedor() {

@@ -45,5 +45,12 @@ public class PagoValorDTO implements Serializable {
     @Builder.Default
     private boolean montoEditable = false;
     private BigDecimal montoMaximo;
+    private BigDecimal montoRealPagado;
+    private BigDecimal montoMinimoConRedondeo;
+    private BigDecimal montoMaximoConRedondeo;
+
+    public BigDecimal getMontoRealPagadoConSigno() {
+        return pago.getIdComprobante().getTipoComprobante().getSigno().multiply(montoRealPagado);
+    }
 
 }

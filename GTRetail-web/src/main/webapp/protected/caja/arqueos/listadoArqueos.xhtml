@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  ~ Copyright 2019 GT Software.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">#{msg.arqueos}</h1>
+            <div class="SeparatorFull"/>
+            <h:form id="buscarArqueosForm">
+                <p:defaultCommand target="buscarButton"/>
+                <p:panelGrid layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="2">
+
+                    <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                    <p:calendar id="fechaDesdeField" value="#{arqueosSearchBean.filter.fechaArqueoDesde}"
+                                pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true"/>
+
+                    <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                    <p:calendar id="fechaHastaField" value="#{arqueosSearchBean.filter.fechaArqueoHasta}"
+                                pattern="dd/MM/yyyy hh:mm:ss a" showButtonPanel="true"/>
+
+
+                    <p:outputLabel value="#{msg.sucursal}:" for="sucursalField" rendered="#{arqueosSearchBean.permiteFiltrarArqueos}"/>
+                    <p:selectOneMenu id="sucursalField" value="#{arqueosSearchBean.filter.idSucursal}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                                     rendered="#{arqueosSearchBean.permiteFiltrarArqueos}">
+
+                        <f:selectItem itemLabel="#{msg.todos}" itemValue="#{null}"/>
+
+                        <f:selectItems value="#{arqueosSearchBean.sucursalesList}" var="sucu" itemLabel="#{sucu}"
+                                       itemValue="#{sucu.id}"/>
+
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{msg.usuario}:" for="usuarioField"
+                                   rendered="#{arqueosSearchBean.permiteFiltrarArqueos}"/>
+                    <p:selectOneMenu id="usuarioField" value="#{arqueosSearchBean.filter.idUsuario}"
+                                     converter="omnifaces.SelectItemsIndexConverter"
+                                     rendered="#{arqueosSearchBean.permiteFiltrarArqueos}">
+
+                        <f:selectItem itemLabel="#{msg.todos}" itemValue="#{null}"/>
+
+                        <f:selectItems value="#{arqueosSearchBean.usuariosList}" var="usu"
+                                       itemLabel="#{usu.nombreUsuario}"
+                                       itemValue="#{usu.id}"/>
+
+                    </p:selectOneMenu>
+
+
+                </p:panelGrid>
+
+                <p:commandButton id="buscarButton" action="#{arqueosSearchBean.doSearch()}" value="Buscar"
+                                 update="movimientosTable" icon="fa fa-fw fa-search"/>
+
+                <div class="SeparatorFull"/>
+
+                <p:dataTable id="movimientosTable" value="#{arqueosSearchBean.dataModel}" var="mov"
+                             rows="10"
+                             lazy="true"
+                             paginator="true"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{mov.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="10,15,30,100"
+                             scrollable="true"
+                             reflow="true">
+
+                    <f:facet name="{Exporters}">
+
+                        <h:commandLink title="xls">
+                            <i class="fa fa-file-excel-o Fs24 Green"/>
+                            <p:dataExporter type="xls" target="movimientosTable" fileName="movimientos"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="pdf">
+                            <i class="fa fa-file-pdf-o Fs24 Red"/>
+                            <p:dataExporter type="pdf" target="movimientosTable" fileName="movimientos"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="csv">
+                            <i class="fa fa-file-text-o Fs24 Blue"/>
+                            <p:dataExporter type="csv" target="movimientosTable" fileName="movimientos"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="xml">
+                            <i class="fa fa-file-code-o Fs24 Black"/>
+                            <p:dataExporter type="xml" target="movimientosTable" fileName="movimientos"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column exportable="false">
+                        <p:rowToggler/>
+                    </p:column>
+
+                    <p:column sortBy="#{mov.id}">
+                        <f:facet name="header">
+                            #{msg.tablaId}
+                        </f:facet>
+                        <p:outputLabel value="#{mov.id}"/>
+                    </p:column>
+                    <p:column sortBy="#{mov.fechaArqueo}">
+                        <f:facet name="header">
+                            #{msg.fecha}
+                        </f:facet>
+                        <p:outputLabel value="#{mov.fechaArqueo}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column sortBy="#{mov.idSucursal}">
+                        <f:facet name="header">
+                            #{msg.sucursal}
+                        </f:facet>
+                        <p:outputLabel value="#{mov.idSucursal}"/>
+                    </p:column>
+                    <p:column sortBy="#{mov.idUsuario}">
+                        <f:facet name="header">
+                            #{msg.usuario}
+                        </f:facet>
+                        <p:outputLabel value="#{mov.idUsuario.nombreUsuario}"/>
+                    </p:column>
+                    <p:column sortBy="#{mov.saldoInicial}">
+                        <f:facet name="header">
+                            #{msg.saldoInicial}
+                        </f:facet>
+                        <p:outputLabel value="#{mov.saldoInicial}">
+                            <f:convertNumber groupingUsed="true" type="currency"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column sortBy="#{mov.saldoFinal}">
+                        <f:facet name="header">
+                            #{msg.saldoFinal}
+                        </f:facet>
+                        <p:outputLabel value="#{mov.saldoFinal}">
+                            <f:convertNumber groupingUsed="true" type="currency"/>
+                        </p:outputLabel>
+                    </p:column>
+
+
+                    <p:rowExpansion>
+                        <p:dataTable id="detalleArqueoTable" value="#{mov.detalleArqueo}" var="detArc"
+                                     reflow="true"
+                        >
+
+                            <p:column>
+                                <f:facet name="header">
+                                    #{msg.formaPago}
+                                </f:facet>
+                                <h:outputText value="#{detArc.idFormaPago.nombreFormaPago}"/>
+                            </p:column>
+
+                            <p:column style="text-align: right;">
+                                <f:facet name="header">
+                                    #{msg.montoSistema}
+                                </f:facet>
+                                <h:outputText value="#{detArc.montoSistema}">
+                                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="text-align: right;">
+                                <f:facet name="header">
+                                    #{msg.montoDeclarado}
+                                </f:facet>
+                                <h:outputText value="#{detArc.montoDeclarado}">
+                                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="text-align: right;">
+                                <f:facet name="header">
+                                    #{msg.diferencia}
+                                </f:facet>
+                                <h:outputText value="#{detArc.diferencia}">
+                                    <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    #{msg.descargo}
+                                </f:facet>
+                                <h:outputText value="#{detArc.descargo}">
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:rowExpansion>
+                </p:dataTable>
+
+            </h:form>
+
+        </div>
+    </div>
+</div>
+</html>
