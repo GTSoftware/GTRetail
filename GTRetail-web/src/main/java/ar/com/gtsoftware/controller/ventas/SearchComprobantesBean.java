@@ -16,7 +16,6 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.auth.Roles;
 import ar.com.gtsoftware.bl.ComprobantesService;
 import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
 import ar.com.gtsoftware.bl.PersonasService;
@@ -29,7 +28,6 @@ import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.search.ComprobantesSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -90,9 +88,13 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     @PostConstruct
     private void init() {
         tiposCompList.addAll(tiposComprobanteFacade.findAll());
-        if (JSFUtil.isUserInRole(Roles.VENDEDORES)) {
-            filter.setIdUsuario(authBackingBean.getUserLoggedIn().getId());
+        if (!authBackingBean.isUserAdministrador()) {
+            if (authBackingBean.isUserCajero()) {
+                filter.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal().getId());
+            } else if (authBackingBean.isUserVendedor())
+                filter.setIdUsuario(authBackingBean.getUserLoggedIn().getId());
         }
+
     }
 
     private void calcularTotales() {
