@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -13,73 +14,92 @@
         <div class="Card">
             <h1 class="CardBigTopic TexAlCenter">Forma de pago</h1>
             <div class="SeparatorFull"/>
-            <h:form id="cargaPagosForm" >
+            <h:form id="cargaPagosForm">
                 <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
 
-                    <h:outputLabel value="#{msg.tipoComprobante}:" />
+                    <h:outputLabel value="#{msg.tipoComprobante}:"/>
                     <p:selectOneMenu id="tipoComprobanteField" required="true" requiredMessage="#{msg.campoRequerido}"
                                      value="#{shopCartBean.venta.tipoComprobante}"
-                                     converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+                                     converter="omnifaces.SelectItemsIndexConverter" filter="true">
 
-                        <f:selectItems value="#{shopCartBean.tiposComprobanteList}" var="tipoComp" itemLabel="#{tipoComp.nombreComprobante}"
+                        <f:selectItems value="#{shopCartBean.tiposComprobanteList}" var="tipoComp"
+                                       itemLabel="#{tipoComp.nombreComprobante}"
                                        itemValue="#{tipoComp}"/>
 
                     </p:selectOneMenu>
 
                     <h:outputLabel value="#{msg.totalPagar}:" style="font-size: xx-large"/>
                     <h:outputLabel value="#{shopCartBean.venta.total}" style="font-size: xx-large">
-                        <f:convertNumber currencySymbol="$" type="currency"  groupingUsed="true"/>
+                        <f:convertNumber currencySymbol="$" type="currency" groupingUsed="true"/>
                     </h:outputLabel>
 
-                    <h:outputLabel value="#{msg.condicionVenta}:" />
-                    <p:selectOneMenu id="condicionVentaField" required="true" requiredMessage="#{msg.condicionVentaRequerido}"
+                    <h:outputLabel value="#{msg.condicionVenta}:"/>
+                    <p:selectOneMenu id="condicionVentaField" required="true"
+                                     requiredMessage="#{msg.condicionVentaRequerido}"
                                      value="#{shopCartBean.venta.idCondicionComprobante}"
-                                     converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+                                     converter="omnifaces.SelectItemsIndexConverter" filter="true">
 
-                        <f:selectItems value="#{shopCartBean.condicionesVentaList}" var="cond" itemLabel="#{cond.nombreCondicion}"
+                        <f:selectItems value="#{shopCartBean.condicionesVentaList}" var="cond"
+                                       itemLabel="#{cond.nombreCondicion}"
                                        itemValue="#{cond}"/>
 
                     </p:selectOneMenu>
 
-                    <h:outputLabel value="#{msg.formaPago}:" />
+                    <h:outputLabel value="#{msg.formaPago}:"/>
                     <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
                                      value="#{shopCartBean.pagoActual.idFormaPago}"
-                                     converter="omnifaces.SelectItemsIndexConverter" filter="true"  >
+                                     converter="omnifaces.SelectItemsIndexConverter" filter="true">
 
-                        <f:selectItems value="#{shopCartBean.formasPagoList}" var="formaPago" itemLabel="#{formaPago.nombreFormaPago}"
+                        <f:selectItems value="#{shopCartBean.formasPagoList}" var="formaPago"
+                                       itemLabel="#{formaPago.nombreFormaPago}"
                                        itemValue="#{formaPago}"/>
 
                         <p:ajax event="valueChange"
-                                update=":cargaPagosForm:planFragment"  process="@this"/>
+                                update=":cargaPagosForm:planFragment" process="@this"/>
 
                     </p:selectOneMenu>
-                    <h:outputLabel for="importePagoField" value="#{msg.importePago}:" />
-                    <p:inputText id="importePagoField" value="#{shopCartBean.pagoActual.montoPago}" label="#{msg.importePago}">
-        <!--                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
-                                               rendered="#{shopCartBean.venta.saldo gt 0}" />-->
-                    </p:inputText>
-                    <p:message for="importePagoField" />
+                    <h:outputLabel for="importePagoField" value="#{msg.importePago}:"/>
+                    <p:inputNumber id="importePagoField" value="#{shopCartBean.pagoActual.montoPago}"
+                                   label="#{msg.importePago}"
+                                   decimalPlaces="2"
+                                   minValue="0">
+                        <!--                <f:validateDoubleRange minimum="0" maximum="#{shopCartBean.venta.saldo}"
+                                                               rendered="#{shopCartBean.venta.saldo gt 0}" />-->
+                    </p:inputNumber>
+                    <p:message for="importePagoField"/>
 
-                    <p:fragment id="planFragment"  >
-                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2" >
+                    <p:fragment id="planFragment" autoUpdate="true">
+                        <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
 
-                            <h:outputLabel for="planPagoField" value="#{msg.planPago}:" />
-                            <p:selectOneMenu id="planPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
+                            <h:outputLabel for="planPagoField" value="#{msg.planPago}:"/>
+                            <p:selectOneMenu id="planPagoField" required="true"
+                                             requiredMessage="#{msg.formaPagoRequerido}"
                                              value="#{shopCartBean.pagoActual.idPlan}"
                                              converter="omnifaces.SelectItemsIndexConverter" filter="true"
+                                             valueChangeListener="#{shopCartBean.cargarDetallePlan}"
                                              rendered="#{shopCartBean.pagoActual.idFormaPago.requierePlan}">
+
+                                <f:selectItem noSelectionOption="true" itemValue="#{null}"
+                                              itemLabel="#{msg.seleccionarUno}"/>
 
                                 <f:selectItems value="#{shopCartBean.planesPagoList}" var="planPago"
                                                itemLabel="#{planPago.nombre}"
                                                itemValue="#{planPago}"/>
 
+                                <p:ajax event="valueChange"
+                                        update=":cargaPagosForm:detallePlanPagoField" process="@this"/>
+
                             </p:selectOneMenu>
 
-                            <h:outputLabel for="detallePlanPagoField" value="#{msg.cuotas}:" />
-                            <p:selectOneMenu id="detallePlanPagoField" required="true" requiredMessage="#{msg.formaPagoRequerido}"
+                            <h:outputLabel for="detallePlanPagoField" value="#{msg.cuotas}:"/>
+                            <p:selectOneMenu id="detallePlanPagoField" required="true"
+                                             requiredMessage="#{msg.formaPagoRequerido}"
                                              value="#{shopCartBean.pagoActual.idDetallePlan}"
                                              converter="omnifaces.SelectItemsIndexConverter" filter="true"
                                              rendered="#{shopCartBean.pagoActual.idFormaPago.requierePlan}">
+
+                                <f:selectItem noSelectionOption="true" itemValue="#{null}"
+                                              itemLabel="#{msg.seleccionarUno}"/>
 
                                 <f:selectItems value="#{shopCartBean.detallePlan}" var="detPlan"
                                                itemLabel="#{detPlan.cuotas}"
@@ -91,12 +111,13 @@
                     </p:fragment>
 
 
-                    <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}" icon="fa fa-fw fa-plus"
+                    <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}"
+                                     icon="fa fa-fw fa-plus"
                                      update="pagosTable, importePagoField"
                                      global="false"
                                      styleClass="GreenButton"/>
 
-                </p:panelGrid >
+                </p:panelGrid>
                 <p:dataTable id="pagosTable" value="#{shopCartBean.venta.pagosList}" var="pago"
                              rows="5"
                              paginator="true"
@@ -107,29 +128,29 @@
                              resizableColumns="false"
                              reflow="true"
                              liveResize="true">
-                    <f:facet name="header" >
+                    <f:facet name="header">
                         #{msg.pagosVenta}
                     </f:facet>
                     <p:column sortBy="#{pago.idFormaPago}" headerText="#{msg.formaPago}" style="text-align: left">
-                        <h:outputText value="#{pago.idFormaPago.nombreFormaPago}" />
+                        <h:outputText value="#{pago.idFormaPago.nombreFormaPago}"/>
                     </p:column>
                     <p:column sortBy="#{pago.montoPago}" headerText="Importe" style="text-align: right">
-                        <h:outputText value="#{pago.montoPago}" >
-                            <f:convertNumber currencyCode="ARS" type="currency"  groupingUsed="true"/>
+                        <h:outputText value="#{pago.montoPago}">
+                            <f:convertNumber currencyCode="ARS" type="currency" groupingUsed="true"/>
                         </h:outputText>
                     </p:column>
                     <p:column sortBy="#{pago.idPlan.nombre}" headerText="Plan">
-                        <h:outputText value="#{pago.idPlan.nombre}" >
+                        <h:outputText value="#{pago.idPlan.nombre}">
 
                         </h:outputText>
                     </p:column>
                     <p:column sortBy="#{pago.idDetallePlan}" headerText="Cuotas">
-                        <h:outputText value="#{pago.idDetallePlan.cuotas}" >
+                        <h:outputText value="#{pago.idDetallePlan.cuotas}">
 
                         </h:outputText>
                     </p:column>
 
-                    <p:column >
+                    <p:column>
                         <f:facet name="header">
                             #{msg.borrar}
                         </f:facet>
@@ -140,24 +161,24 @@
                     <p:columnGroup type="footer">
                         <p:row>
                             <p:column colspan="1" footerText="#{msg.saldo}:"
-                                      style="text-align:right; font-size: larger"  />
+                                      style="text-align:right; font-size: larger"/>
 
-                            <p:column footerText="$#{shopCartBean.venta.saldo}" style=" font-size: xx-large" />
+                            <p:column footerText="$#{shopCartBean.venta.saldo}" style=" font-size: xx-large"/>
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>
-                <h:outputLabel value="#{msg.observaciones}:" />
+                <h:outputLabel value="#{msg.observaciones}:"/>
                 <br/>
                 <p:inputTextarea style="width: 100%" value="#{shopCartBean.venta.observaciones}" maxlength="1024"
                                  autoResize="true"
                                  converter="#{stringFormatConverter}"/>
-                <h:outputLabel value="#{msg.remitente}:" />
+                <h:outputLabel value="#{msg.remitente}:"/>
                 <p:inputText style="width: 100%" value="#{shopCartBean.venta.remitente}" maxlength="100"
-                             converter="#{stringFormatConverter}" />
+                             converter="#{stringFormatConverter}"/>
 
-                <h:outputLabel value="#{msg.numeroRemito}:" />
+                <h:outputLabel value="#{msg.numeroRemito}:"/>
                 <p:inputText style="width: 100%" value="#{shopCartBean.venta.nroRemito}" maxlength="100"
-                             converter="#{stringFormatConverter}" />
+                             converter="#{stringFormatConverter}"/>
 
                 <!--        <h:outputLabel value="Estado:" />
                         <p:selectOneMenu id="estadoField" required="true" requiredMessage="#{msg.ingresarValor}"
@@ -170,7 +191,7 @@
                         </p:selectOneMenu>-->
 
                 <div class="SeparatorFull"></div>
-                <p:panelGrid layout="grid"  styleClass="ui-panelgrid-blank" columns="2"
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2"
                              style="border:0px !important; background:none;">
 
                     <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"

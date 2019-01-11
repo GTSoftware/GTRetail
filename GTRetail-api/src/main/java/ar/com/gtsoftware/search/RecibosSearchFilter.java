@@ -35,6 +35,7 @@ public class RecibosSearchFilter extends AbstractSearchFilter {
     private Date fechaHasta;
     private Long idPersona;
     private Long idUsuario;
+    private Long idSucursal;
     private Long idCaja;
     private Long idRecibo;
 
@@ -45,7 +46,8 @@ public class RecibosSearchFilter extends AbstractSearchFilter {
                 || idCaja != null
                 || idPersona != null
                 || idUsuario != null
-                ||idRecibo != null;
+                || idRecibo != null
+                || idSucursal != null;
     }
 
 }

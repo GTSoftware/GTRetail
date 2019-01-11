@@ -24,6 +24,9 @@
     <field name="montoPagado" class="java.math.BigDecimal">
         <fieldDescription><![CDATA[montoPagado]]></fieldDescription>
     </field>
+    <field name="montoPagadoConSigno" class="java.math.BigDecimal">
+        <fieldDescription><![CDATA[montoPagadoConSigno]]></fieldDescription>
+    </field>
     <background>
         <band splitType="Stretch"/>
     </background>
@@ -53,7 +56,7 @@
             <textField pattern="¤ #,##0.00">
                 <reportElement x="441" y="0" width="100" height="20" uuid="e08e9214-3c21-4341-b4d9-06fec343c6d7"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$F{idPagoComprobante}.getMontoPagoConSigno()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$F{montoPagadoConSigno}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="153" y="0" width="239" height="20" uuid="d9eaae7d-9a4f-4edb-a653-45a724eed560"/>

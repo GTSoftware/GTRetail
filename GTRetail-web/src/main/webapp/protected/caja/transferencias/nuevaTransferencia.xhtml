@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+  ~ Copyright 2019 GT Software.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://java.sun.com/jsf/core"
+        template="/WEB-INF/template.xhtml">
+
+
+    <ui:define name="content">
+        <ui:insert>
+            <ui:include src="breadcrumb.xhtml"/>
+        </ui:insert>
+        <div class="Container100 Responsive100 NoIndent">
+            <div class="Container100 ui-fluid">
+                <div class="Card">
+                    <h1 class="CardBigTopic TexAlCenter">Nueva transferencia</h1>
+                    <h:form id="formContenido">
+
+                        <p:panelGrid layout="grid"
+                                     styleClass="ui-panelgrid-blank" columns="4">
+
+                            <p:outputLabel value="#{msg.caja}:" for="idCaja"/>
+                            <p:outputLabel id="idCaja" value="#{nuevaTransferenciaBean.cajaActual.id}"/>
+                            <p:outputLabel value="#{msg.fechaApertura}:" for="fechaAperturaField"/>
+                            <p:outputLabel id="fechaAperturaField"
+                                           value="#{nuevaTransferenciaBean.cajaActual.fechaApertura}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                            </p:outputLabel>
+
+                        </p:panelGrid>
+                        <div class="SeparatorFull"/>
+
+
+                        <p:panelGrid layout="grid"
+                                     styleClass="ui-panelgrid-blank" columns="3">
+
+
+                            <h:outputLabel for="cajaDestinoField" value="#{msg.cajaDestino}:"/>
+
+                            <p:selectOneMenu id="cajaDestinoField" required="true"
+                                             requiredMessage="#{msg.seleccionarUno}"
+                                             value="#{nuevaTransferenciaBean.transferenciaActual.idCajaDestino}"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             filter="true" filterMatchMode="contains">
+                                <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+
+                                <f:selectItems value="#{nuevaTransferenciaBean.cajasAbiertas}" var="caja"
+                                               itemLabel="#{caja}"
+                                               itemValue="#{caja}"/>
+
+                            </p:selectOneMenu>
+                            <p:message for="cajaDestinoField"/>
+
+                            <h:outputLabel for="formaPagoField" value="#{msg.formaPago}:"/>
+                            <p:selectOneMenu id="formaPagoField" required="true" requiredMessage="#{msg.seleccionarUno}"
+                                             value="#{nuevaTransferenciaBean.transferenciaActual.idFormaPago}"
+                                             converter="omnifaces.SelectItemsIndexConverter"
+                                             filter="true" filterMatchMode="contains">
+                                <f:selectItem noSelectionOption="true" itemLabel="#{msg.seleccionarUno}"/>
+
+                                <f:selectItems value="#{nuevaTransferenciaBean.formasPagoList}" var="formaPago"
+                                               itemLabel="#{formaPago.nombreFormaPago}"
+                                               itemValue="#{formaPago}"/>
+
+                            </p:selectOneMenu>
+                            <p:message for="formaPagoField"/>
+
+
+                            <h:outputLabel for="montoField" value="#{msg.monto}:"/>
+                            <p:inputNumber id="montoField"
+                                           value="#{nuevaTransferenciaBean.transferenciaActual.monto}"
+                                           decimalPlaces="2"
+                                           required="true"/>
+                            <p:message for="montoField"/>
+
+                            <h:outputLabel for="observacionesField"
+                                           value="#{msg.observaciones}:"/>
+                            <p:inputTextarea id="observacionesField"
+                                             value="#{nuevaTransferenciaBean.transferenciaActual.observaciones}"
+                                             autoResize="true" cols="30" rows="2"
+                                             maxlength="90"/>
+                            <p:message for="observacionesField"/>
+
+
+                        </p:panelGrid>
+
+                        <div class="SeparatorFull"/>
+                        <p:panelGrid layout="grid" columns="2"
+                                     styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save"
+                                             action="#{nuevaTransferenciaBean.doGuardar}"
+                                             update="@form"/>
+
+                            <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
+                                             action="index.xhtml?faces-redirect=true"
+                                             ajax="false" immediate="true" styleClass="RedButton"/>
+                        </p:panelGrid>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

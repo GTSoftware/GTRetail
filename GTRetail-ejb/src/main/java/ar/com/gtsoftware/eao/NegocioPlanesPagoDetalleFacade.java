@@ -17,7 +17,9 @@ package ar.com.gtsoftware.eao;
 
 import ar.com.gtsoftware.model.NegocioPlanesPagoDetalle;
 import ar.com.gtsoftware.model.NegocioPlanesPagoDetalle_;
+import ar.com.gtsoftware.model.NegocioPlanesPago_;
 import ar.com.gtsoftware.search.PlanesPagoDetalleSearchFilter;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,13 +38,13 @@ public class NegocioPlanesPagoDetalleFacade extends AbstractFacade<NegocioPlanes
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
     private EntityManager em;
 
+    public NegocioPlanesPagoDetalleFacade() {
+        super(NegocioPlanesPagoDetalle.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public NegocioPlanesPagoDetalleFacade() {
-        super(NegocioPlanesPagoDetalle.class);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class NegocioPlanesPagoDetalleFacade extends AbstractFacade<NegocioPlanes
         Predicate p = null;
 
         if (sf.getIdPlan() != null) {
-            Predicate p1 = cb.equal(root.get(NegocioPlanesPagoDetalle_.idPlan), sf.getIdPlan());
+            Predicate p1 = cb.equal(root.get(NegocioPlanesPagoDetalle_.idPlan).get(NegocioPlanesPago_.id), sf.getIdPlan());
             p = appendAndPredicate(cb, p, p1);
         }
 

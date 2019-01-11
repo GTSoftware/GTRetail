@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -68,11 +69,11 @@ public class ShopCartBean implements Serializable {
             .conStock(true).build();
     private final NegocioTiposComprobanteSearchFilter tipoCompSf = NegocioTiposComprobanteSearchFilter.builder()
             .activo(true).build();
-    private final PlanesPagoSearchFilter planesSearchFilter = PlanesPagoSearchFilter.builder().activo(true).build();
-    private final PlanesPagoDetalleSearchFilter pagoDetalleSearchFilter = PlanesPagoDetalleSearchFilter.builder().activo(true).build();
     private final FormasPagoSearchFilter formasPagoSearchFilter = FormasPagoSearchFilter.builder()
             .disponibleVenta(true).build();
     private final AtomicInteger itemCounter = new AtomicInteger(1);
+    private final List<NegocioPlanesPagoDetalleDto> detallePlan = new ArrayList<>();
+
     @Inject
     private Conversation conversation;
     @Inject
@@ -506,14 +507,25 @@ public class ShopCartBean implements Serializable {
     }
 
     public List<NegocioPlanesPagoDto> getPlanesPagoList() {
-        planesSearchFilter.setIdFormaPago(pagoActual.getIdFormaPago().getId());
+        PlanesPagoSearchFilter planesSearchFilter = PlanesPagoSearchFilter.builder().activo(true)
+                .idFormaPago(pagoActual.getIdFormaPago().getId()).build();
         return planesPagoFacade.findAllBySearchFilter(planesSearchFilter);
     }
 
     public List<NegocioPlanesPagoDetalleDto> getDetallePlan() {
-        pagoDetalleSearchFilter.setIdPlan(pagoActual.getIdPlan().getId());
-        pagoDetalleSearchFilter.addSortField("cuotas", true);
-        return pagoDetalleFacade.findAllBySearchFilter(pagoDetalleSearchFilter);
+        return detallePlan;
+    }
+
+    public void cargarDetallePlan(ValueChangeEvent event) {
+        detallePlan.clear();
+        NegocioPlanesPagoDto plan = (NegocioPlanesPagoDto) event.getNewValue();
+        if (plan != null) {
+            PlanesPagoDetalleSearchFilter psf = PlanesPagoDetalleSearchFilter.builder()
+                    .activo(true)
+                    .idPlan(plan.getId()).build();
+            psf.addSortField("cuotas", true);
+            detallePlan.addAll(pagoDetalleFacade.findAllBySearchFilter(psf));
+        }
     }
 
     public boolean isVendedor() {

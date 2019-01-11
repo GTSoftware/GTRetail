@@ -52,4 +52,9 @@ public class NegocioPlanesPagoDto implements IdentifiableDto {
     public String getStringId() {
         return String.valueOf(id);
     }
+
+    @Override
+    public String toString() {
+        return "[" + id + "] " + nombre;
+    }
 }

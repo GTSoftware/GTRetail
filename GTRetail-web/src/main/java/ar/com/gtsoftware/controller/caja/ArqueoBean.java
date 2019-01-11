@@ -101,6 +101,7 @@ public class ArqueoBean implements Serializable {
         arqueoActual.setDetalleArqueo(new ArrayList<>());
         detalleArqueoActual = new CajasArqueosDetalleDto();
         detalleArqueoActual.setItem(itemId);
+        detalleArqueoActual.setIdArqueo(arqueoActual);
     }
 
     public AuthBackingBean getAuthBackingBean() {
@@ -124,6 +125,7 @@ public class ArqueoBean implements Serializable {
             arqueoActual.getDetalleArqueo().add(detalleArqueoActual);
             detalleArqueoActual = new CajasArqueosDetalleDto();
             detalleArqueoActual.setItem(++itemId);
+            detalleArqueoActual.setIdArqueo(arqueoActual);
             addInfoMessage("Se ha agregado el monto al arqueo con éxito");
         } else {
             addErrorMessage("Ya se ha ingresado esa forma de pago!");
@@ -185,11 +187,11 @@ public class ArqueoBean implements Serializable {
         for (CajasArqueosDetalleDto ad : arqueoActual.getDetalleArqueo()) {
             montoTotalArqueo = montoTotalArqueo.add(ad.getMontoSistema());
             if (ad.getDiferencia().signum() != 0 && StringUtils.isEmpty(ad.getDescargo())) {
-                sb.append(String.format("La forma de pago: %s tiene una diferencia y debe ingresar el descargo.", ad.getIdFormaPago().getNombreFormaPago()));
+                sb.append(String.format("La forma de pago: %s tiene una diferencia y debe ingresar el descargo. ", ad.getIdFormaPago().getNombreFormaPago()));
             }
         }
         if (montoTotalCaja.compareTo(montoTotalArqueo) != 0) {
-            sb.append("El monto de las formas de pago declaradas no coincide con el saldo en caja. Declare todas las formas de pago.\n");
+            sb.append("El monto de las formas de pago declaradas no coincide con el saldo en caja. Declare todas las formas de pago. ");
         }
         String errores = sb.toString();
         if (StringUtils.isNotEmpty(errores)) {
@@ -214,7 +216,7 @@ public class ArqueoBean implements Serializable {
         CajasSearchFilter csf = CajasSearchFilter.builder()
                 .idCaja(cajaActual.getId()).build();
         arqueoActual.setSaldoFinal(cajasService.obtenerTotalEnCaja(csf));
-        arqueosService.createOrEdit(arqueoActual);
+        arqueoActual = arqueosService.createOrEdit(arqueoActual);
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
         addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
