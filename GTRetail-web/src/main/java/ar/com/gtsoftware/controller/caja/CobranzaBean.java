@@ -205,7 +205,10 @@ public class CobranzaBean implements Serializable {
                         .item(item++)
                         .pago(pago)
                         .montoRealPagado(pago.getMontoPago())
-                        .montoMaximo(saldoPago).build();
+                        .montoMaximo(saldoPago)
+                        .montoMaximoConRedondeo(saldoPago)
+                        .montoMinimoConRedondeo(saldoPago)
+                        .build();
 
                 if (pago.getIdFormaPago().isRequiereValores()) {
                     //Cheque == 4

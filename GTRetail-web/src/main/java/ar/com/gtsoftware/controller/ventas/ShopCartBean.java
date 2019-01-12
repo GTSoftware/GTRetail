@@ -405,7 +405,7 @@ public class ShopCartBean implements Serializable {
         pagoActual.setMontoPago(venta.getSaldo());
     }
 
-    public String siguientePasoDesdePos(){
+    public String siguientePasoDesdePos() {
         if (!validarCantidades()) {
             return StringUtils.EMPTY;
         }
@@ -448,8 +448,8 @@ public class ShopCartBean implements Serializable {
                 addErrorMessage(String.format("El producto: %d no puede tener cantidad 0 o inferior.", linea.getIdProducto().getId()));
                 return false;
             }
-            BigDecimal cantidadSinCeros = linea.getCantidad().stripTrailingZeros();
-            if (cantidadSinCeros.scale() != 0 && linea.getIdProducto().getIdTipoUnidadVenta().isCantidadEntera()) {
+            BigDecimal parteDecimal = linea.getCantidad().subtract(linea.getCantidad().setScale(0, RoundingMode.DOWN));
+            if (parteDecimal.signum() != 0 && linea.getIdProducto().getIdTipoUnidadVenta().isCantidadEntera()) {
                 addErrorMessage(String.format("El producto: %d no admite cantidades fraccionadas.", linea.getIdProducto().getId()));
                 return false;
             }

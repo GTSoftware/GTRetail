@@ -178,6 +178,7 @@ public class ArqueoBean implements Serializable {
         CajasSearchFilter csf = CajasSearchFilter.builder()
                 .idCaja(cajaActual.getId()).build();
         BigDecimal montoTotalCaja = cajasService.obtenerTotalEnCaja(csf);
+        montoTotalCaja = montoTotalCaja.add(cajaActual.getSaldoInicial());
         BigDecimal montoTotalArqueo = BigDecimal.ZERO;
 
         for (CajasArqueosDetalleDto ad : arqueoActual.getDetalleArqueo()) {
