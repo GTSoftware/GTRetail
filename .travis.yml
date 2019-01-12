@@ -4,5 +4,5 @@ jdk:
 services:
 #  - postgresql
 before_install:
-  - sudo rm /etc/mavenrc
-install: "mvn clean install"
+        #  - sudo rm /etc/mavenrc
+install: "./justDoIt.sh"
