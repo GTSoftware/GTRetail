@@ -212,7 +212,9 @@ public class ArqueoBean implements Serializable {
         arqueoActual.setFechaArqueo(fechaActual);
         CajasSearchFilter csf = CajasSearchFilter.builder()
                 .idCaja(cajaActual.getId()).build();
-        arqueoActual.setSaldoFinal(cajasService.obtenerTotalEnCaja(csf));
+        BigDecimal saldoFinal = cajasService.obtenerTotalEnCaja(csf);
+        saldoFinal = saldoFinal.add(cajaActual.getSaldoInicial());
+        arqueoActual.setSaldoFinal(saldoFinal);
         arqueoActual = arqueosService.createOrEdit(arqueoActual);
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
