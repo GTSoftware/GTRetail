@@ -51,24 +51,16 @@ public class ArqueoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ArqueoBean.class.getName());
-
+    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter();
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
-
     private CajasDto cajaActual;
-
-
     @EJB
     private NegocioFormasPagoService formasPagoFacade;
-
     @EJB
     private CajasArqueosService arqueosService;
-
     @EJB
     private CajasService cajasService;
-
-    private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter();
-
     private CajasArqueosDto arqueoActual = new CajasArqueosDto();
 
     private CajasArqueosDetalleDto detalleArqueoActual;
@@ -119,7 +111,11 @@ public class ArqueoBean implements Serializable {
     public void agregarDetalleArqueo() {
 
         if (validarFormaPagoYaIngresada(detalleArqueoActual)) {
-            detalleArqueoActual.setMontoSistema(obtenerSaldoCajaFormaPago(detalleArqueoActual.getIdFormaPago()));
+            BigDecimal saldoCajaFormaPago = obtenerSaldoCajaFormaPago(detalleArqueoActual.getIdFormaPago());
+            if (detalleArqueoActual.getIdFormaPago().getId() == 1) {
+                saldoCajaFormaPago = saldoCajaFormaPago.add(cajaActual.getSaldoInicial());
+            }
+            detalleArqueoActual.setMontoSistema(saldoCajaFormaPago);
             detalleArqueoActual.setDiferencia(detalleArqueoActual.getMontoDeclarado().subtract(detalleArqueoActual.getMontoSistema()));
 
             arqueoActual.getDetalleArqueo().add(detalleArqueoActual);

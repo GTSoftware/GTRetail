@@ -405,6 +405,13 @@ public class ShopCartBean implements Serializable {
         pagoActual.setMontoPago(venta.getSaldo());
     }
 
+    public String siguientePasoDesdePos(){
+        if (!validarCantidades()) {
+            return StringUtils.EMPTY;
+        }
+        return "cliente.xhtml?faces-redirect=true";
+    }
+
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
             addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
@@ -422,6 +429,7 @@ public class ShopCartBean implements Serializable {
             addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
+
         if (venta.getIdCondicionComprobante() != null) {
             if (venta.getIdCondicionComprobante().isPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
@@ -431,6 +439,21 @@ public class ShopCartBean implements Serializable {
             }
         }
 
+        return true;
+    }
+
+    private boolean validarCantidades() {
+        for (ComprobantesLineasDto linea : venta.getComprobantesLineasList()) {
+            if (linea.getCantidad().signum() <= 0) {
+                addErrorMessage(String.format("El producto: %d no puede tener cantidad 0 o inferior.", linea.getIdProducto().getId()));
+                return false;
+            }
+            BigDecimal cantidadSinCeros = linea.getCantidad().stripTrailingZeros();
+            if (cantidadSinCeros.scale() != 0 && linea.getIdProducto().getIdTipoUnidadVenta().isCantidadEntera()) {
+                addErrorMessage(String.format("El producto: %d no admite cantidades fraccionadas.", linea.getIdProducto().getId()));
+                return false;
+            }
+        }
         return true;
     }
 

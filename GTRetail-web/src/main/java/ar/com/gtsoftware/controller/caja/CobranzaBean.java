@@ -150,7 +150,6 @@ public class CobranzaBean implements Serializable {
                 return false;
             }
         }
-
         //TODO Validar que se completen todos los campos requeridos de las formas de pago
 //        //Deben ser bien todos de pago contado o todos de corriente
 //        boolean allContado = selectedComprobantes.stream().allMatch(x -> x.getIdCondicionComprobante().getPagoTotal());
@@ -168,13 +167,26 @@ public class CobranzaBean implements Serializable {
             addErrorMessage("No posee una caja abierta");
             return;
         }
-        if (validarComprobantesSeleccionados()) {
+        if (validarComprobantesSeleccionados() && validarMontosEnPagos()) {
 
             reciboActual = cobranzaService.cobrarComprobantes(cajaActual, pagosValores);
             addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
             RequestContext.getCurrentInstance().execute("PF('cobrarComprobantesDialog').hide();");
             RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
         }
+    }
+
+    private boolean validarMontosEnPagos() {
+        for (PagoValorDTO pago : pagosValores) {
+            if (pago.getMontoRealPagado().compareTo(pago.getMontoMaximoConRedondeo()) > 0
+                    || pago.getMontoRealPagado().compareTo(pago.getMontoMinimoConRedondeo()) < 0) {
+
+                addErrorMessage(String.format("El monto pago para el comp: %s no se encuentra dentro de los parámetros válidos",
+                        pago.getPago().getIdComprobante()));
+                return false;
+            }
+        }
+        return true;
     }
 
     public void cargarValores() {

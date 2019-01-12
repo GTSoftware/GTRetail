@@ -42,6 +42,8 @@ public class ProductosTiposUnidadesDto implements IdentifiableDto {
     private String nombreUnidad;
     private boolean cantidadEntera;
 
+    private Integer version;
+
     @Override
     public String getStringId() {
         return String.valueOf(id);

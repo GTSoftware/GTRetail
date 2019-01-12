@@ -480,8 +480,7 @@
                                 <f:facet name="input">
                                     <p:inputNumber id="montoPagoInput" value="#{pago.montoRealPagado}" style="width:96%"
                                                    disabled="#{not pago.montoEditable}"
-                                                   maxValue="#{pago.montoMaximoConRedondeo}"
-                                                   minValue="#{pago.montoMinimoConRedondeo}"
+                                                   minValue="0"
                                                    decimalPlaces="2">
 
                                     </p:inputNumber>
@@ -633,7 +632,7 @@
                         <p:column headerText="Banco" rendered="#{cobranzaBean.hayCheques}">
                             <p:cellEditor>
                                 <f:facet name="output">
-                                    <p:outputLabel value="#{pago.cheque.idBanco.razonSocial}" />
+                                    <p:outputLabel value="#{pago.cheque.idBanco.razonSocial}"/>
                                 </f:facet>
                                 <f:facet name="input">
                                     <p:selectOneMenu id="bancoField" required="true"
@@ -686,6 +685,7 @@
                                          action="#{cobranzaBean.cobrarComprobantes()}"
                                          process="@this"
                                          onclick="PF('cobrarButton').disable();"
+                                         oncomplete="PF('cobrarButton').enable();"
                                          update=":formContenido"/>
                     </p:panelGrid>
 

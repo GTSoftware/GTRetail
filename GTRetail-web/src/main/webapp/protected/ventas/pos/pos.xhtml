@@ -133,7 +133,7 @@
                                                        value="#{lineaVenta.cantidad}"
                                                        decimalPlaces="2"
                                                        placeholder="Cantidad"
-                                                       minValue="0.01" maxValue="999999999.99">
+                                                       minValue="0" maxValue="999999999.99">
 
                                         </p:inputNumber>
                                     </f:facet>
@@ -244,8 +244,7 @@
                     <p:commandButton id="siguienteButton"
                                      icon="fa fa-fw fa-arrow-right"
                                      value="#{msg.siguiente}"
-                                     action="cliente.xhtml?faces-redirect=true"
-                                     immediate="true">
+                                     action="#{shopCartBean.siguientePasoDesdePos}">
                     </p:commandButton>
                 </p:panelGrid>
 
