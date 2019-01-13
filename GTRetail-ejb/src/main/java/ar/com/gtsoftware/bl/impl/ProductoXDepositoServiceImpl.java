@@ -28,6 +28,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Stateless
 public class ProductoXDepositoServiceImpl
@@ -59,5 +60,10 @@ public class ProductoXDepositoServiceImpl
     @Override
     protected ProductoXDepositoMapper getMapper() {
         return mapper;
+    }
+
+    @Override
+    public BigDecimal getStockBySearchFilter(ProductoXDepositoSearchFilter sf) {
+        return facade.getStockBySearchFilter(sf);
     }
 }

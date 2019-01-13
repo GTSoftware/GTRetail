@@ -21,9 +21,11 @@ import ar.com.gtsoftware.dto.model.ProductoXDepositoDto;
 import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 
 import javax.ejb.Remote;
+import java.math.BigDecimal;
 
 @Remote
 public interface ProductoXDepositoService
         extends EntityService<ProductoXDepositoDto, ProductoXDepositoSearchFilter> {
 
+    BigDecimal getStockBySearchFilter(ProductoXDepositoSearchFilter sf);
 }

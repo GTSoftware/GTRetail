@@ -41,8 +41,13 @@ public class RemitoDetalleDto implements IdentifiableDto {
 
     private BigDecimal cantidad;
 
+    @EqualsAndHashCode.Include
     private int nroLinea;
     private Integer version;
+
+    private transient BigDecimal stockTotal;
+    private transient BigDecimal stockDeposito;
+
 
 
     @Override

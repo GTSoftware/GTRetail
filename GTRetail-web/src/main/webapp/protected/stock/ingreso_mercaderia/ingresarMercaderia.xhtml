@@ -195,6 +195,12 @@
                             </p:column>
                             <p:column style="text-align: right; ">
                                 <f:facet name="header">
+                                    #{msg.stockActualDeposito}
+                                </f:facet>
+                                <h:outputText value="#{lineaDetalle.stockDeposito}"/>
+                            </p:column>
+                            <p:column style="text-align: right; ">
+                                <f:facet name="header">
                                     #{msg.unidadVenta}
                                 </f:facet>
                                 <h:outputText value="#{lineaDetalle.idProducto.idTipoUnidadVenta.nombreUnidad}"/>
@@ -207,7 +213,7 @@
                                 <p:commandButton id="borrarItemButton"
                                                  icon="fa fa-fw fa-trash"
                                                  process="@this"
-                                                 action="#{ingresoMercaderiaBean.eliminarItem(lineaDetalle.nroLinea)}"
+                                                 action="#{ingresoMercaderiaBean.eliminarItem(lineaDetalle)}"
                                                  update="productosTable"
                                                  global="false"
                                 >

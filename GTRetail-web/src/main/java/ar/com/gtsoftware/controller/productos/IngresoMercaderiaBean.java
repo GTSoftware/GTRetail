@@ -16,12 +16,10 @@
 package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.auth.AuthBackingBean;
-import ar.com.gtsoftware.bl.DepositosService;
-import ar.com.gtsoftware.bl.ProductosService;
-import ar.com.gtsoftware.bl.RemitoService;
-import ar.com.gtsoftware.bl.RemitoTipoMovimientoService;
+import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.DepositosSearchFilter;
+import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
@@ -33,10 +31,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
@@ -60,6 +55,8 @@ public class IngresoMercaderiaBean implements Serializable {
     private RemitoTipoMovimientoService remitoTipoMovimientoFacade;
     @EJB
     private ProductosService productosFacade;
+    @EJB
+    private ProductoXDepositoService stockService;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
     private ProductosDto productoBusquedaSeleccionado = null;
@@ -134,6 +131,17 @@ public class IngresoMercaderiaBean implements Serializable {
         detalle.setIdProducto(producto);
         detalle.setRemitoCabecera(remitoCabecera);
         detalle.setNroLinea(numeradorLinea++);
+        if(remitoCabecera.getIdDestinoPrevistoInterno()!=null) {
+            ProductoXDepositoSearchFilter stkf = ProductoXDepositoSearchFilter.builder()
+                    .idSucursal(remitoCabecera.getIdDestinoPrevistoInterno().getIdSucursal().getId())
+                    .idProducto(producto.getId())
+                    .build();
+            BigDecimal stockSucursal = stockService.getStockBySearchFilter(stkf);
+            stkf.setIdSucursal(null);
+            BigDecimal stockTotal = stockService.getStockBySearchFilter(stkf);
+            detalle.setStockDeposito(stockSucursal);
+            detalle.setStockTotal(stockTotal);
+        }
 
         productosFilter.setIdProducto(null);
         productosFilter.setCodigoPropio(null);
@@ -158,31 +166,16 @@ public class IngresoMercaderiaBean implements Serializable {
         recepcion.setIdUsuario(authBackingBean.getUserLoggedIn());
         recepcion.setIdDeposito(remitoCabecera.getIdDestinoPrevistoInterno());
 
-        remitoCabecera.setRemitoRecepcionesList(Arrays.asList(recepcion));
+        remitoCabecera.setRemitoRecepcionesList(Collections.singletonList(recepcion));
         remitoFacade.createOrEdit(remitoCabecera);
 
         return "/protected/stock/remitos/index.xhtml?faces-redirect=true";
     }
 
-    /**
-     * Borra el ítem con el número pasado por parámetro
-     *
-     * @param nroItem
-     */
-    public void eliminarItem(int nroItem) {
-        int index = -1;
-        int cont = 0;
+    public void eliminarItem(RemitoDetalleDto linea) {
 
-        for (RemitoDetalleDto vl : remitoCabecera.getDetalleList()) {
-            if (vl.getNroLinea() == nroItem) {
-                index = cont;
-                break;
-            }
-            cont++;
-        }
-        if (index >= 0) {
-            remitoCabecera.getDetalleList().remove(index);
-        }
+        remitoCabecera.getDetalleList().remove(linea);
+
     }
 
     // ---Getter and Setter ----------------------------------------------
