@@ -103,7 +103,7 @@ public class PlanesPagoEditBean implements Serializable {
     public void doGuardar() {
         try {
 
-            planesPagoService.createOrEdit(planPagoActual);
+            planPagoActual = planesPagoService.createOrEdit(planPagoActual);
             JSFUtil.addInfoMessage("Plan de pago guardado Exitosamente");
             planPagoActual = planesPagoService.find(planPagoActual.getId());
         } catch (Exception e) {

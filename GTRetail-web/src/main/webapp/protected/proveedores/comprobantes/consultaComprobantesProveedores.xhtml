@@ -207,18 +207,31 @@
                         <h:outputLabel value="#{comprobante.idUsuario.nombreUsuario}"/>
                     </p:column>
 
-                    <!-- <p:column  exportable="false" >
+                    <p:column >
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.observaciones}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.observaciones}"/>
+                    </p:column>
+
+                    <p:column  exportable="false" >
                          <f:facet name="header">
-                             #{msg.ver}
+                             #{msg.acciones}
                          </f:facet>
+                         <p:commandButton id="borrarItemButton"
+                                          icon="fa fa-fw fa-trash"
+                                          process="@this"
+                                          action="#{searchComprobantesProveedoresBean.eliminarComprobante(comprobante)}"
+                                          update="comprasTable"
+                                          styleClass="RedButton"
+                                          global="false"
+                         >
+                             <p:confirm header="#{msg.confirmacion}"
+                                        message="#{msg.seguroEliminar}"
+                                        icon="fa fa-fw fa-exclamation-triangle"/>
+                         </p:commandButton>
 
-
-                         <p:link outcome="vista/verVenta.xhtml?faces-redirect=true" includeViewParams="true" value="Ver">
-
-                             <f:param name="idComprobante" value="#{comprobante.id}"/>
-                         </p:link>
-
-                     </p:column>-->
+                     </p:column>
 
                 </p:dataTable>
 
@@ -249,7 +262,13 @@
                         </p:outputLabel>
                     </p:panelGrid >
                 </p:panel>-->
+                <p:confirmDialog global="true"
+                                 showEffect="fade" hideEffect="explode">
 
+                    <p:commandButton value="#{msg.si}" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-fw fa-check"/>
+                    <p:commandButton value="#{msg.no}" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-fw fa-ban"/>
+
+                </p:confirmDialog>
             </h:form>
             <h:form id="busquedaPersonasDialogForm">
 

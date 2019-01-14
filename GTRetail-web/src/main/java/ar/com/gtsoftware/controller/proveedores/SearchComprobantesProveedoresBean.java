@@ -18,6 +18,7 @@ package ar.com.gtsoftware.controller.proveedores;
 import ar.com.gtsoftware.bl.ComprobantesProveedorService;
 import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
 import ar.com.gtsoftware.bl.PersonasService;
+import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.NegocioTiposComprobanteDto;
 import ar.com.gtsoftware.dto.model.PersonasDto;
@@ -25,7 +26,7 @@ import ar.com.gtsoftware.dto.model.ProveedoresComprobantesDto;
 import ar.com.gtsoftware.search.ComprobantesProveedorSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.search.SortField;
+import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -117,8 +118,16 @@ public class SearchComprobantesProveedoresBean extends AbstractSearchBean<Provee
     @Override
     protected void prepareSearchFilter() {
         if (!filter.hasOrderFields()) {
-            filter.addSortField(new SortField("fechaComprobante", true));
+            filter.addSortField("fechaComprobante", true);
         }
     }
 
+    public void eliminarComprobante(ProveedoresComprobantesDto comp) {
+        try {
+            comprobantesProveedorService.eliminarComprobante(comp);
+            JSFUtil.addInfoMessage("Comprobante: " + comp.getId() + " eliminado correctamente");
+        } catch (ServiceException e) {
+            JSFUtil.addErrorMessage(e.getMessage());
+        }
+    }
 }

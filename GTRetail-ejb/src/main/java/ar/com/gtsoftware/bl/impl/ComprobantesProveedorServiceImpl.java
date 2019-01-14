@@ -22,6 +22,7 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.ProveedoresComprobantesDto;
 import ar.com.gtsoftware.eao.ComprobantesProveedorFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaComprasFacade;
+import ar.com.gtsoftware.eao.FiscalLibroIvaComprasLineasFacade;
 import ar.com.gtsoftware.eao.FiscalTiposComprobanteFacade;
 import ar.com.gtsoftware.mappers.ProveedoresComprobantesMapper;
 import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
@@ -53,6 +54,8 @@ public class ComprobantesProveedorServiceImpl
     private FiscalTiposComprobanteFacade tiposComprobanteFacade;
     @EJB
     private FiscalLibroIvaComprasFacade ivaComprasFacade;
+    @EJB
+    private FiscalLibroIvaComprasLineasFacade lineasIvaComprasFacade;
 
     @Inject
     private ProveedoresComprobantesMapper mapper;
@@ -106,6 +109,26 @@ public class ComprobantesProveedorServiceImpl
         ProveedoresComprobantes compEditado = facade.createOrEdit(comprobante);
 
         return mapper.entityToDto(compEditado, new CycleAvoidingMappingContext());
+    }
+
+    @Override
+    public void eliminarComprobante(ProveedoresComprobantesDto comprobante) throws ServiceException {
+        boolean borrarFiscal = false;
+        if (comprobante.getIdRegistro() != null) {
+            if (comprobante.getIdRegistro().getIdPeriodoFiscal().isPeriodoCerrado()) {
+                throw new ServiceException("No se puede eliminar un comprobante de un periodo cerrado");
+            }
+            borrarFiscal = true;
+        }
+        ProveedoresComprobantes entity = mapper.dtoToEntity(comprobante, new CycleAvoidingMappingContext());
+        facade.remove(entity);
+        if (borrarFiscal) {
+            FiscalLibroIvaCompras fiscalLibroIvaCompras = ivaComprasFacade.find(entity.getIdRegistro().getId());
+            for (FiscalLibroIvaComprasLineas linea : fiscalLibroIvaCompras.getFiscalLibroIvaComprasLineasList()) {
+                lineasIvaComprasFacade.remove(linea);
+            }
+            ivaComprasFacade.remove(fiscalLibroIvaCompras);
+        }
     }
 
     private void calcularTotalesLibro(FiscalLibroIvaCompras registro) {

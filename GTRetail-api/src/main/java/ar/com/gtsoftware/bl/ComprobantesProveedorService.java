@@ -36,4 +36,6 @@ public interface ComprobantesProveedorService
      * @throws ServiceException
      */
     ProveedoresComprobantesDto guardarYFiscalizar(ProveedoresComprobantesDto comprobante) throws ServiceException;
+
+    void eliminarComprobante(ProveedoresComprobantesDto comprobante) throws ServiceException;
 }

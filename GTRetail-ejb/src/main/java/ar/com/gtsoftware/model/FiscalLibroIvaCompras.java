@@ -76,7 +76,8 @@ public class FiscalLibroIvaCompras extends BaseEntity {
 
     @OneToMany(mappedBy = "idRegistro")
     private List<ProveedoresComprobantes> comprobantesList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRegistro")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRegistro", orphanRemoval = true)
+    @JoinColumn(name = "id_registro", referencedColumnName = "id_registro")
     private List<FiscalLibroIvaComprasLineas> fiscalLibroIvaComprasLineasList;
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     @ManyToOne(optional = false)
