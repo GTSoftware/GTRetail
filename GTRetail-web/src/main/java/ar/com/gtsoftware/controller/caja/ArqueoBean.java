@@ -18,11 +18,9 @@ package ar.com.gtsoftware.controller.caja;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.CajasArqueosService;
 import ar.com.gtsoftware.bl.CajasService;
+import ar.com.gtsoftware.bl.CajasTransferenciasService;
 import ar.com.gtsoftware.bl.NegocioFormasPagoService;
-import ar.com.gtsoftware.dto.model.CajasArqueosDetalleDto;
-import ar.com.gtsoftware.dto.model.CajasArqueosDto;
-import ar.com.gtsoftware.dto.model.CajasDto;
-import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
+import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.CajasSearchFilter;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import org.apache.commons.collections.CollectionUtils;
@@ -55,12 +53,16 @@ public class ArqueoBean implements Serializable {
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
     private CajasDto cajaActual;
+    private CajasDto cajaDestino;
     @EJB
     private NegocioFormasPagoService formasPagoFacade;
     @EJB
     private CajasArqueosService arqueosService;
     @EJB
     private CajasService cajasService;
+    @EJB
+    private CajasTransferenciasService transferenciasService;
+
     private CajasArqueosDto arqueoActual = new CajasArqueosDto();
 
     private CajasArqueosDetalleDto detalleArqueoActual;
@@ -68,6 +70,7 @@ public class ArqueoBean implements Serializable {
     private int itemId = 1;
 
     private boolean arqueoGuardado = false;
+    private List<CajasDto> cajasAbiertas;
 
     /**
      * Creates a new instance of ArqueoBean
@@ -208,10 +211,11 @@ public class ArqueoBean implements Serializable {
             return;
         }
         Date fechaActual = new Date();
-
+        transferirValores(fechaActual);
         arqueoActual.setFechaArqueo(fechaActual);
         CajasSearchFilter csf = CajasSearchFilter.builder()
-                .idCaja(cajaActual.getId()).build();
+                .idCaja(cajaActual.getId())
+                .idFormaPago(1L).build();
         BigDecimal saldoFinal = cajasService.obtenerTotalEnCaja(csf);
         saldoFinal = saldoFinal.add(cajaActual.getSaldoInicial());
         arqueoActual.setSaldoFinal(saldoFinal);
@@ -219,6 +223,27 @@ public class ArqueoBean implements Serializable {
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
         addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
+
+    }
+
+    private void transferirValores(Date fecha) {
+        for (NegocioFormasPagoDto fp : getFormasPagoList()) {
+            if (fp.getId() != 1L) {
+                BigDecimal monto = obtenerSaldoCajaFormaPago(fp);
+                if (monto.signum() != 0) {
+                    CajasTransferenciasDto transferenciaActual = CajasTransferenciasDto.builder()
+                            .idCajaOrigen(cajaActual)
+                            .idCajaDestino(cajaDestino)
+                            .fechaTransferencia(fecha)
+                            .idFormaPago(fp)
+                            .monto(monto)
+                            .observaciones("Rendición de: " + fp.getNombreCorto())
+                            .build();
+                    transferenciasService.generarTransferencia(transferenciaActual);
+                }
+            }
+        }
+
 
     }
 
@@ -254,4 +279,22 @@ public class ArqueoBean implements Serializable {
         return arqueoGuardado;
     }
 
+    public List<CajasDto> getCajasAbiertas() {
+        if (cajasAbiertas == null) {
+            CajasSearchFilter csf = CajasSearchFilter.builder()
+                    .abierta(true).build();
+            cajasAbiertas = cajasService.findAllBySearchFilter(csf);
+
+            cajasAbiertas.remove(cajaActual);
+        }
+        return cajasAbiertas;
+    }
+
+    public CajasDto getCajaDestino() {
+        return cajaDestino;
+    }
+
+    public void setCajaDestino(CajasDto cajaDestino) {
+        this.cajaDestino = cajaDestino;
+    }
 }
