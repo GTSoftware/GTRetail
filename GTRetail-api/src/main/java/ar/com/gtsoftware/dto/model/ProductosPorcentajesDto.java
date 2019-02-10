@@ -43,4 +43,7 @@ public class ProductosPorcentajesDto implements Serializable {
     private ProductosDto idProducto;
     private Integer version;
 
+    @EqualsAndHashCode.Include
+    private transient Integer nroItem;
+
 }
