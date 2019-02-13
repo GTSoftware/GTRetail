@@ -101,7 +101,12 @@ public class ComprobantesProveedorServiceImpl
         registro.setPuntoVentaFactura(StringUtils.leftPad(registro.getPuntoVentaFactura(), 4, "0"));
         registro.setNumeroFactura(StringUtils.leftPad(registro.getNumeroFactura(), 8, "0"));
 
-        calcularTotalesLibro(registro);
+        BigDecimal signo = comprobante.getTipoComprobante().getSigno();
+        registro.setImportePercepcionIva(registro.getImportePercepcionIva().multiply(signo));
+        registro.setImportePercepcionIngresosBrutos(registro.getImportePercepcionIngresosBrutos().multiply(signo));
+
+        calcularTotalesLibro(registro, signo);
+
 
 
         registro.setCodigoTipoComprobante(tipoCompFiscal);
@@ -131,13 +136,17 @@ public class ComprobantesProveedorServiceImpl
         }
     }
 
-    private void calcularTotalesLibro(FiscalLibroIvaCompras registro) {
+    private void calcularTotalesLibro(FiscalLibroIvaCompras registro, BigDecimal signo) {
         //TODO ver el tema de los exentos
         BigDecimal totalIVA = BigDecimal.ZERO;
         BigDecimal totalNG = BigDecimal.ZERO;
         BigDecimal totalNoGravado = BigDecimal.ZERO;
         for (FiscalLibroIvaComprasLineas linea :
                 registro.getFiscalLibroIvaComprasLineasList()) {
+            linea.setNoGravado(linea.getNoGravado().multiply(signo));
+            linea.setNetoGravado(linea.getNetoGravado().multiply(signo));
+            linea.setImporteIva(linea.getImporteIva().multiply(signo));
+
             totalIVA = totalIVA.add(linea.getImporteIva());
             totalNG = totalNG.add(linea.getNetoGravado());
             totalNoGravado = totalNoGravado.add(linea.getNoGravado());
