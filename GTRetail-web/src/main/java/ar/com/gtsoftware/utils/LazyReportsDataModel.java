@@ -58,7 +58,6 @@ public class LazyReportsDataModel<Report extends GenericReport<T>, Filter extend
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder,
                         Map<String, Object> filters) {
 
-
         if (filter == null) {
             return Collections.emptyList();
         }

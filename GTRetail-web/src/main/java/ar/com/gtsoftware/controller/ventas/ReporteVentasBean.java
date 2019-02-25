@@ -18,7 +18,10 @@
 package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.bl.ReportesVentaService;
+import ar.com.gtsoftware.bl.SucursalesService;
+import ar.com.gtsoftware.dto.model.SucursalesDto;
 import ar.com.gtsoftware.dto.reportes.VentaPorProducto;
+import ar.com.gtsoftware.search.SucursalesSearchFilter;
 import ar.com.gtsoftware.search.reportes.ReporteVentasSearchFilter;
 import ar.com.gtsoftware.utils.LazyReportsDataModel;
 
@@ -27,21 +30,45 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.DataModel;
 import java.io.Serializable;
+import java.util.List;
 
 @ManagedBean(name = "reporteVentasBean")
 @ViewScoped
 public class ReporteVentasBean implements Serializable {
 
+    private final ReporteVentasSearchFilter filter = new ReporteVentasSearchFilter();
     protected DataModel<VentaPorProducto> dataModel;
+
+    private List<SucursalesDto> sucursalesList;
+
     @EJB
     private ReportesVentaService service;
+    @EJB
+    private SucursalesService sucursalesService;
 
     public DataModel<VentaPorProducto> getDataModel() {
 
         if (dataModel == null) {
-            dataModel = new LazyReportsDataModel<>(service, new ReporteVentasSearchFilter());
+            dataModel = new LazyReportsDataModel<>(service, filter);
         }
         return dataModel;
     }
 
+    public void doSearch() {
+        dataModel = null;
+    }
+
+    public ReporteVentasSearchFilter getFilter() {
+        return filter;
+    }
+
+    public List<SucursalesDto> getSucursalesList() {
+        if (sucursalesList == null) {
+            SucursalesSearchFilter ssf = SucursalesSearchFilter.builder()
+                    .activa(true).build();
+            ssf.addSortField("nombreSucursal", true);
+            sucursalesList = sucursalesService.findAllBySearchFilter(ssf);
+        }
+        return sucursalesList;
+    }
 }

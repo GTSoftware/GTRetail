@@ -10,11 +10,42 @@
 <div class="Container100 Responsive100 NoIndent">
     <div class="Container100 ui-fluid">
         <div class="Card">
-            <h1 class="CardBigTopic TexAlCenter">Reporte de ventas</h1>
+            <h1 class="CardBigTopic TexAlCenter">#{msg.reporteVentas_por_producto}</h1>
             <div class="SeparatorFull"/>
 
             <h:form id="formContenido">
 
+                <p:panelGrid layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="2">
+
+                    <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                    <p:calendar id="fechaDesdeField" value="#{reporteVentasBean.filter.fechaDesde}"
+                                pattern="dd/MM/yyyy" showButtonPanel="true"/>
+
+                    <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                    <p:calendar id="fechaHastaField" value="#{reporteVentasBean.filter.fechaHasta}"
+                                pattern="dd/MM/yyyy" showButtonPanel="true"/>
+
+
+                    <p:outputLabel value="#{msg.sucursal}:" for="sucursalField"/>
+                    <p:selectOneMenu id="sucursalField" value="#{reporteVentasBean.filter.idSucursal}"
+                                     converter="omnifaces.SelectItemsIndexConverter">
+
+                        <f:selectItem itemLabel="#{msg.todos}" itemValue="#{null}"/>
+
+                        <f:selectItems value="#{reporteVentasBean.sucursalesList}" var="sucu" itemLabel="#{sucu}"
+                                       itemValue="#{sucu.id}"/>
+
+                    </p:selectOneMenu>
+                </p:panelGrid>
+
+                <p:commandButton id="buscarButton" action="#{reporteVentasBean.doSearch()}"
+                                 value="#{msg.buscar}"
+                                 update="@form"
+                                 icon="fa fa-fw fa-search"
+                />
+
+                <div class="SeparatorFull"/>
 
                 <p:dataTable id="ventasTable" value="#{reporteVentasBean.dataModel}" var="comprobante"
                              rows="30"
@@ -29,22 +60,22 @@
                     <f:facet name="{Exporters}">
                         <h:commandLink title="xls">
                             <i class="fa fa-file-excel-o Fs24 Green"/>
-                            <p:dataExporter type="xls" target="ventasTable" fileName="comprobantes"/>
+                            <p:dataExporter type="xls" target="ventasTable" fileName="reporte"/>
                         </h:commandLink>
 
                         <h:commandLink title="pdf">
                             <i class="fa fa-file-pdf-o Fs24 Red"/>
-                            <p:dataExporter type="pdf" target="ventasTable" fileName="comprobantes"/>
+                            <p:dataExporter type="pdf" target="ventasTable" fileName="reporte"/>
                         </h:commandLink>
 
                         <h:commandLink title="csv">
                             <i class="fa fa-file-text-o Fs24 Blue"/>
-                            <p:dataExporter type="csv" target="ventasTable" fileName="comprobantes"/>
+                            <p:dataExporter type="csv" target="ventasTable" fileName="reporte"/>
                         </h:commandLink>
 
                         <h:commandLink title="xml">
                             <i class="fa fa-file-code-o Fs24 Black"/>
-                            <p:dataExporter type="xml" target="ventasTable" fileName="comprobantes"/>
+                            <p:dataExporter type="xml" target="ventasTable" fileName="reporte"/>
                         </h:commandLink>
                     </f:facet>
 
@@ -67,6 +98,13 @@
                             <h:outputLabel value="#{msg.descripcion}"/>
                         </f:facet>
                         <h:outputLabel value="#{comprobante.descripcionProducto}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.proveedor}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.proveedor}"/>
                     </p:column>
 
                     <p:column>

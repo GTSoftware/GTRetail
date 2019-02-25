@@ -41,6 +41,7 @@ public class VentaPorProducto implements IdentifiableDto {
     private BigDecimal costoTotalVentas;
     private BigDecimal totalAPrecioVenta;
     private Integer cantidadComprobantes;
+    private String proveedor;
 
     @Override
     public String getStringId() {

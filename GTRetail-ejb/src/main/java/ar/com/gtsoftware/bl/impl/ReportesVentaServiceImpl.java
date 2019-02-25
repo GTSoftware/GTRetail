@@ -42,6 +42,7 @@ public class ReportesVentaServiceImpl implements ReportesVentaService {
         }
         qCount.setParameter("fechaDesde", filter.getFechaDesde());
         qCount.setParameter("fechaHasta", filter.getFechaHasta());
+        qCount.setParameter("idSucursal", filter.getIdSucursal());
 
         Integer maxRows = qCount.getSingleResult().intValue();
 
@@ -53,6 +54,7 @@ public class ReportesVentaServiceImpl implements ReportesVentaService {
 
         q.setParameter("fechaDesde", filter.getFechaDesde());
         q.setParameter("fechaHasta", filter.getFechaHasta());
+        q.setParameter("idSucursal", filter.getIdSucursal());
 
         List<VentaPorProducto> items = q.getResultList();
 
