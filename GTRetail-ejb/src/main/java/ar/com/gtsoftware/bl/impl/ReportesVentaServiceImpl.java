@@ -25,6 +25,7 @@ import ar.com.gtsoftware.search.reportes.ReporteVentasSearchFilter;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class ReportesVentaServiceImpl implements ReportesVentaService {
         if (!filter.hasFechasFilter()) {
             filter.setDefaultDatesValues();
         }
-        qCount.setParameter("fechaDesde", filter.getFechaDesde());
-        qCount.setParameter("fechaHasta", filter.getFechaHasta());
+        qCount.setParameter("fechaDesde", filter.getFechaDesde(), TemporalType.DATE);
+        qCount.setParameter("fechaHasta", filter.getFechaHasta(), TemporalType.DATE);
         qCount.setParameter("idSucursal", filter.getIdSucursal());
 
         Integer maxRows = qCount.getSingleResult().intValue();
@@ -52,8 +53,8 @@ public class ReportesVentaServiceImpl implements ReportesVentaService {
         q.setMaxResults(filter.getPageSize());
         q.setFirstResult(filter.getFirstRow());
 
-        q.setParameter("fechaDesde", filter.getFechaDesde());
-        q.setParameter("fechaHasta", filter.getFechaHasta());
+        q.setParameter("fechaDesde", filter.getFechaDesde(), TemporalType.DATE);
+        q.setParameter("fechaHasta", filter.getFechaHasta(), TemporalType.DATE);
         q.setParameter("idSucursal", filter.getIdSucursal());
 
         List<VentaPorProducto> items = q.getResultList();
