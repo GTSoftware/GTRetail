@@ -40,7 +40,7 @@ public class ReporteVentasSearchFilter extends AbstractReportSearchFilter {
     }
 
     public boolean hasFechasFilter() {
-        return (fechaDesde != null && fechaHasta != null) && fechaDesde.before(fechaHasta);
+        return (fechaDesde != null && fechaHasta != null);
     }
 
     public void setDefaultDatesValues() {
