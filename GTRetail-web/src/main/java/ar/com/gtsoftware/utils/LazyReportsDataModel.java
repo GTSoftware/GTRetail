@@ -27,28 +27,26 @@ import org.primefaces.model.SortOrder;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Implemantación de LazyLoading para PrimeFaces
  *
- * @param <Report>
- * @param <Filter>
+ * @param <R> the Report that holds the data
+ * @param <F> the Filter to be used in the report, to filter report data
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-public class LazyReportsDataModel<Report extends GenericReport<T>, Filter extends AbstractReportSearchFilter,
+public class LazyReportsDataModel<R extends GenericReport<T>, F extends AbstractReportSearchFilter,
         T extends IdentifiableDto>
         extends LazyDataModel<T> implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(LazyReportsDataModel.class.getName());
     private static final long serialVersionUID = 1L;
 
-    private ReportsService<Report, Filter> service;
-    private Filter filter;
+    private ReportsService<R, F> service;
+    private F filter;
 
-    private Report report = null;
+    private R report = null;
 
-    public LazyReportsDataModel(@NotNull ReportsService<Report, Filter> service, Filter filter) {
+    public LazyReportsDataModel(@NotNull ReportsService<R, F> service, F filter) {
         super();
         this.service = service;
         this.filter = filter;
