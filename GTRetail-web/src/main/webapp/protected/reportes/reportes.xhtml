@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+
+<div class="Container100 Responsive100 NoIndent">
+    <div class="Container100 ui-fluid">
+        <div class="Card">
+            <h1 class="CardBigTopic TexAlCenter">#{msg.reporteVentas_por_producto}</h1>
+            <div class="SeparatorFull"/>
+
+            <h:form id="formContenido">
+
+                <p:panelGrid layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="2">
+
+                    <p:outputLabel value="#{msg.fechaDesde}:" for="fechaDesdeField"/>
+                    <p:calendar id="fechaDesdeField" value="#{reporteVentasBean.filter.fechaDesde}"
+                                pattern="dd/MM/yyyy" showButtonPanel="true"/>
+
+                    <p:outputLabel value="#{msg.fechaHasta}:" for="fechaHastaField"/>
+                    <p:calendar id="fechaHastaField" value="#{reporteVentasBean.filter.fechaHasta}"
+                                pattern="dd/MM/yyyy" showButtonPanel="true"/>
+
+
+                    <p:outputLabel value="#{msg.sucursal}:" for="sucursalField"/>
+                    <p:selectOneMenu id="sucursalField" value="#{reporteVentasBean.filter.idSucursal}"
+                                     converter="omnifaces.SelectItemsIndexConverter">
+
+                        <f:selectItem itemLabel="#{msg.todos}" itemValue="#{null}"/>
+
+                        <f:selectItems value="#{reporteVentasBean.sucursalesList}" var="sucu" itemLabel="#{sucu}"
+                                       itemValue="#{sucu.id}"/>
+
+                    </p:selectOneMenu>
+                </p:panelGrid>
+
+                <p:commandButton id="buscarButton" action="#{reporteVentasBean.doSearch()}"
+                                 value="#{msg.buscar}"
+                                 update="@form"
+                                 icon="fa fa-fw fa-search"
+                />
+
+                <div class="SeparatorFull"/>
+
+                <p:dataTable id="ventasTable" value="#{reporteVentasBean.dataModel}" var="comprobante"
+                             rows="30"
+                             lazy="true"
+                             paginator="true"
+                             emptyMessage="#{msg.busquedaSinResultados}"
+                             rowKey="#{comprobante.id}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                             rowsPerPageTemplate="15,20,30,50,100"
+                             scrollable="true"
+                             reflow="true">
+                    <f:facet name="{Exporters}">
+                        <h:commandLink title="xls">
+                            <i class="fa fa-file-excel-o Fs24 Green"/>
+                            <p:dataExporter type="xls" target="ventasTable" fileName="reporte"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="pdf">
+                            <i class="fa fa-file-pdf-o Fs24 Red"/>
+                            <p:dataExporter type="pdf" target="ventasTable" fileName="reporte"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="csv">
+                            <i class="fa fa-file-text-o Fs24 Blue"/>
+                            <p:dataExporter type="csv" target="ventasTable" fileName="reporte"/>
+                        </h:commandLink>
+
+                        <h:commandLink title="xml">
+                            <i class="fa fa-file-code-o Fs24 Black"/>
+                            <p:dataExporter type="xml" target="ventasTable" fileName="reporte"/>
+                        </h:commandLink>
+                    </f:facet>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.tablaId}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.idProducto}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.codigo}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.codigoProducto}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.descripcion}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.descripcionProducto}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.proveedor}"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.proveedor}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="#{msg.cantidad} vendida"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.cantidadVendida}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="Stock minimo"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.stockMinimo}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="Stock actual"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.stockTotalActual}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="Costo de ventas"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.costoTotalVentas}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="Total precio venta"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.totalAPrecioVenta}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputLabel value="Cantidad de ventas"/>
+                        </f:facet>
+                        <h:outputLabel value="#{comprobante.cantidadComprobantes}"/>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+        </div>
+    </div>
+</div>
+</html>

@@ -209,6 +209,15 @@
                                 action="/protected/ventas/consultaProductos/index.xhtml?faces-redirect=true"
                                 immediate="true" ajax="false" icon="fa fa-fw fa-search"/>
                 </p:submenu>
+
+                <p:submenu id="reportesSubMenu" label="#{msg.reportes}" icon="fa fa-fw fa-line-chart"
+                           rendered="#{authBackingBean.userAdministrador}">
+                    <p:menuitem id="reporteVentasItem" value="#{msg.reporteVentas_por_producto}"
+                                action="/protected/reportes/index.xhtml?faces-redirect=true"
+                                immediate="true" ajax="false"
+                                icon="fa fa-fw fa-list"/>
+
+                </p:submenu>
                 <!--
                             <p:submenu id="om_menuoptcolor" label="MENU AND COLOR OPTIONS">
                                 <p:menuitem id="om_def" url="#" value="Default Menu Option" icon="icon-list3" onclick="Olympos.changeBodyClass('');return false;"/>
