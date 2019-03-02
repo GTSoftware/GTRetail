@@ -71,7 +71,6 @@ public class OfertaEditBean implements Serializable {
                 ofertaActual.setId(null);
             }
         }
-        initDatos();
 
     }
 
@@ -79,9 +78,6 @@ public class OfertaEditBean implements Serializable {
         ofertaActual = new OfertaDto();
     }
 
-    private void initDatos() {
-
-    }
 
     public OfertaDto getOfertaActual() {
         return ofertaActual;
@@ -92,19 +88,26 @@ public class OfertaEditBean implements Serializable {
     }
 
     public void doGuardar() {
+        if (validarCondiciones()) {
+            ofertaActual = service.createOrEdit(ofertaActual);
+            JSFUtil.addInfoMessage("Oferta guardada con éxito.");
+        }
+    }
 
+
+    private boolean validarCondiciones() {
+        boolean isValid = true;
         try {
             for (Condicion condicion : ofertaActual.getCondiciones()) {
 
                 condicion.buildExpression();
 
             }
-            ofertaActual = service.createOrEdit(ofertaActual);
-            JSFUtil.addInfoMessage("Oferta guardada con éxito.");
         } catch (CondicionIlegalException e) {
+            isValid = false;
             JSFUtil.addErrorMessage(e.getMessage());
         }
-
+        return isValid;
     }
 
     public void nuevaCondicion() {
