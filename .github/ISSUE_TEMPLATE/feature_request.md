@@ -1,9 +1,9 @@
 ---
 name: Solicitud de mejora
 about: Sugerir una idea para el proyecto
-title: '[FEAT]'
-labels: 'enhancement'
-assignees: 'rotatomel'
+title: "[FEAT]"
+labels: enhancement
+assignees: rotatomel
 
 ---
 
