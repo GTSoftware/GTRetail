@@ -1,9 +1,9 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+name: Solicitud de mejora
+about: Sugerir una idea para el proyecto
+title: '[FEAT]'
+labels: 'enhancement'
+assignees: 'rotatomel'
 
 ---
 
@@ -18,3 +18,6 @@ A clear and concise description of any alternative solutions or features you've 
 
 **Additional context**
 Add any other context or screenshots about the feature request here.
+
+**Tech notes**
+Additional tech notes that where discovered during the developer analysis.
