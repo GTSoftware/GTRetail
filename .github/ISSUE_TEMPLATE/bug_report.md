@@ -1,9 +1,9 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+title: "[BUG]"
+labels: bug
+assignees: rotatomel
 
 ---
 
@@ -36,3 +36,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**Tech notes**
+Additional tech notes that where discovered during the developer analysis.
