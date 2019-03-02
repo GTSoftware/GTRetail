@@ -52,19 +52,19 @@ public class Condicion implements IdentifiableDto {
 
     private int version;
 
-    public String buildExpression() {
+    public String buildExpression() throws CondicionIlegalException {
         validarCondicion();
 
         return campo.getRuta() + buildOperador();
 
     }
 
-    private void validarCondicion() {
+    private void validarCondicion() throws CondicionIlegalException {
         if (operacion == null || campo == null || isEmpty(valor)) {
-            throw new IllegalArgumentException("Algunos de los elementos de la condiciòn es nulo!");
+            throw new CondicionIlegalException("Algunos de los elementos de la condición es nulo!");
         }
         if (!operacion.soportaTipo(campo.getClase())) {
-            throw new IllegalArgumentException("El campo:" + campo + " no soporta la operación: " + operacion);
+            throw new CondicionIlegalException("El campo:" + campo + " no soporta la operación: " + operacion);
         }
 
     }

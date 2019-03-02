@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 public class OfertaEditBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(OfertaEditBean.class.getName());
+    private static final Logger logger = Logger.getLogger(OfertaEditBean.class.getName());
 
 
     @EJB
@@ -63,7 +63,7 @@ public class OfertaEditBean implements Serializable {
             ofertaActual = service.find(Long.parseLong(idOferta));
 
             if (ofertaActual == null) {
-                LOG.log(Level.SEVERE, "Oferta inexistente!");
+                logger.log(Level.SEVERE, "Oferta inexistente!");
                 throw new RuntimeException("Oferta inexistente!");
 
             }
@@ -92,8 +92,19 @@ public class OfertaEditBean implements Serializable {
     }
 
     public void doGuardar() {
-        ofertaActual = service.createOrEdit(ofertaActual);
-        JSFUtil.addInfoMessage("Oferta guardada con éxito.");
+
+        try {
+            for (Condicion condicion : ofertaActual.getCondiciones()) {
+
+                condicion.buildExpression();
+
+            }
+            ofertaActual = service.createOrEdit(ofertaActual);
+            JSFUtil.addInfoMessage("Oferta guardada con éxito.");
+        } catch (CondicionIlegalException e) {
+            JSFUtil.addErrorMessage(e.getMessage());
+        }
+
     }
 
     public void nuevaCondicion() {
