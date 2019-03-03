@@ -29,12 +29,12 @@ import static java.util.Arrays.asList;
 @Getter
 public enum Operacion {
 
-    IGUAL("Igual a", "==", asList(String.class,
+    IGUAL("Igual a", "==", asList(
             BigDecimal.class,
             Long.class,
             Date.class)),
 
-    DISTINTO("Distinto a", "!=", asList(String.class,
+    DISTINTO("Distinto a", "!=", asList(
             BigDecimal.class,
             Long.class,
             Date.class)),

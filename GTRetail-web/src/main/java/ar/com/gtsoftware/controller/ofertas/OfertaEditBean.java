@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 public class OfertaEditBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(OfertaEditBean.class.getName());
+    private static final Logger logger = Logger.getLogger(OfertaEditBean.class.getName());
 
 
     @EJB
@@ -63,7 +63,7 @@ public class OfertaEditBean implements Serializable {
             ofertaActual = service.find(Long.parseLong(idOferta));
 
             if (ofertaActual == null) {
-                LOG.log(Level.SEVERE, "Oferta inexistente!");
+                logger.log(Level.SEVERE, "Oferta inexistente!");
                 throw new RuntimeException("Oferta inexistente!");
 
             }
@@ -71,7 +71,6 @@ public class OfertaEditBean implements Serializable {
                 ofertaActual.setId(null);
             }
         }
-        initDatos();
 
     }
 
@@ -79,9 +78,6 @@ public class OfertaEditBean implements Serializable {
         ofertaActual = new OfertaDto();
     }
 
-    private void initDatos() {
-
-    }
 
     public OfertaDto getOfertaActual() {
         return ofertaActual;
@@ -92,8 +88,26 @@ public class OfertaEditBean implements Serializable {
     }
 
     public void doGuardar() {
-        ofertaActual = service.createOrEdit(ofertaActual);
-        JSFUtil.addInfoMessage("Oferta guardada con éxito.");
+        if (validarCondiciones()) {
+            ofertaActual = service.createOrEdit(ofertaActual);
+            JSFUtil.addInfoMessage("Oferta guardada con éxito.");
+        }
+    }
+
+
+    private boolean validarCondiciones() {
+        boolean isValid = true;
+        try {
+            for (Condicion condicion : ofertaActual.getCondiciones()) {
+
+                condicion.buildExpression();
+
+            }
+        } catch (CondicionIlegalException e) {
+            isValid = false;
+            JSFUtil.addErrorMessage(e.getMessage());
+        }
+        return isValid;
     }
 
     public void nuevaCondicion() {

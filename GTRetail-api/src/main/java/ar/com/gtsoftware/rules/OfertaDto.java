@@ -62,7 +62,7 @@ public class OfertaDto implements IdentifiableDto {
 
     private int version;
 
-    public Map<String, Object> toMap() {
+    public Map<String, Object> toMap() throws CondicionIlegalException {
 
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("nombre", textoOferta);
@@ -73,7 +73,7 @@ public class OfertaDto implements IdentifiableDto {
         return attributes;
     }
 
-    private String conticionesAsDrl() {
+    private String conticionesAsDrl() throws CondicionIlegalException {
         if (CollectionUtils.isEmpty(condiciones)) {
             throw new IllegalStateException("Se debe declarar al menos una condición para evaluar");
         }

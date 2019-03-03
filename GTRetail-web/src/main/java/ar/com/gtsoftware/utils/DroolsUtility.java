@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 public final class DroolsUtility {
 
     private static final Logger LOG = Logger.getLogger(DroolsUtility.class.getName());
+
     /**
      * Debug tool to show what is happening over each triggered execution.<br>
      * Name of rule trigger as well the object inspected are printed.
@@ -46,11 +47,11 @@ public final class DroolsUtility {
      * @param helper Injected when a consequence is fired.
      */
     public static void debug(final KnowledgeHelper helper) {
-        LOG.log(Level.FINE,"Triggered rule: " + helper.getRule().getName());
+        LOG.log(Level.FINE, "Triggered rule: " + helper.getRule().getName());
 
         if (helper.getMatch() != null && helper.getMatch().getObjects() != null) {
             for (Object object : helper.getMatch().getObjects()) {
-                LOG.log(Level.FINE,"Data object: " + object);
+                LOG.log(Level.FINE, "Data object: " + object);
             }
         }
     }
@@ -81,12 +82,12 @@ public final class DroolsUtility {
      * @return Session for execution of rules.
      * @throws Exception
      */
-    private static StatelessKieSession loadSession(String templatePath, List<Map<String, Object>> rulesAsParameters) throws Exception {
+    private static StatelessKieSession loadSession(String templatePath, List<Map<String, Object>> rulesAsParameters) {
         ObjectDataCompiler compiler = new ObjectDataCompiler();
         //Compiles the list of rules using the template to create a readable Drools Rules Language
         String drl = compiler.compile(rulesAsParameters, Thread.currentThread().getContextClassLoader().getResourceAsStream(templatePath));
 
-        LOG.log(Level.FINE,"drl:\n" + drl);
+        LOG.log(Level.FINE, "drl:\n" + drl);
 
         KieHelper kieHelper = new KieHelper();
         kieHelper.kfs.write("src/main/resources/drools/templates/rule.drl", drl);
