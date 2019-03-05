@@ -33,7 +33,7 @@ import javax.persistence.criteria.Subquery;
 @Stateless
 public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFilter> {
 
-    private static final String WORDS = "\\W";
+    private static final String SPACE = "\\s";
     private static final String LIKE = "%%%s%%";
 
     @PersistenceContext(unitName = "ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU")
@@ -75,7 +75,7 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
 
                 if (psf.isBuscarEnTodosLados()) {
 
-                    for (String s : psf.getTxt().toUpperCase().split(WORDS)) {
+                    for (String s : psf.getTxt().toUpperCase().split(SPACE)) {
                         Predicate pTxt = null;
                         String likeS = String.format(LIKE, s);
 
@@ -84,8 +84,10 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
                         Predicate p3 = cb.like(root.get(Productos_.idSubRubro).get(ProductosSubRubros_.nombreSubRubro), likeS);
                         Predicate p4 = cb.like(root.get(Productos_.idMarca).get(ProductosMarcas_.nombreMarca), likeS);
                         Predicate pCod = cb.like(root.get(Productos_.codigoPropio), likeS);
+                        Predicate pCodFab = cb.like(root.get(Productos_.codigoFabricante), likeS);
 
                         pTxt = appendOrPredicate(cb, pTxt, pCod);
+                        pTxt = appendOrPredicate(cb, pTxt, pCodFab);
                         pTxt = appendOrPredicate(cb, pTxt, p1);
                         pTxt = appendOrPredicate(cb, pTxt, p2);
                         pTxt = appendOrPredicate(cb, pTxt, p3);
@@ -94,7 +96,7 @@ public class ProductosFacade extends AbstractFacade<Productos, ProductosSearchFi
                         p = appendAndPredicate(cb, p, pTxt);
                     }
                 } else {
-                    String texto = psf.getTxt().toUpperCase().replaceAll("\\s", "%");
+                    String texto = psf.getTxt().toUpperCase().replaceAll(SPACE, "%");
                     String descLike = String.format("%s%%", texto);
                     Predicate p1 = cb.like(root.get(Productos_.descripcion), descLike);
                     p = appendAndPredicate(cb, p, p1);
