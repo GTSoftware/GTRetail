@@ -243,11 +243,7 @@ public class ShopCartBean implements Serializable {
             addErrorMessage(getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
-//        ProductosPreciosDto precio = preciosFacade.findFirstBySearchFilter(new ProductosPreciosSearchFilter(producto, lista));
-//        if (precio == null) {
-//            addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
-//            return;
-//        }
+
         if (producto.getPrecioVenta() == null) {
             addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
             return;
@@ -473,7 +469,7 @@ public class ShopCartBean implements Serializable {
                 endConversation();
                 return String.format("/protected/ventas/vista/verVenta.xhtml?idComprobante=%d&faces-redirect=true", registroVentaDto.getIdComprobante());
             } catch (Exception ex) {
-                LOG.log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, ex.getMessage(), ex);
                 addErrorMessage(ex.getMessage());
             }
         }

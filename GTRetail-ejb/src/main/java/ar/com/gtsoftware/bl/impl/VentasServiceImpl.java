@@ -33,6 +33,7 @@ import org.apache.commons.collections.CollectionUtils;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -43,6 +44,7 @@ public class VentasServiceImpl implements VentasService {
 
     private static final long ID_ESTADO_ACEPTADA = 2L;
     private static final long ID_TIPO_MOV_VENTA = 2L;
+    private static final long ID_TIPO_COMP_PRESUPUESTO = 4L;
     @Inject
     private ComprobantesMapper mapper;
 
@@ -69,7 +71,13 @@ public class VentasServiceImpl implements VentasService {
     @Override
     public RegistroVentaDto guardarVenta(ComprobantesDto comprobantesDto, boolean generarRemitoSalida) throws ServiceException {
         Comprobantes comprobante = mapper.dtoToEntity(comprobantesDto, new CycleAvoidingMappingContext());
-        comprobante.setSaldo(comprobante.getTotal());
+
+        boolean isPresupuesto = comprobante.getTipoComprobante().getId() == ID_TIPO_COMP_PRESUPUESTO;
+        if (isPresupuesto) {
+            comprobante.setSaldo(BigDecimal.ZERO);
+        } else {
+            comprobante.setSaldo(comprobante.getTotal());
+        }
         comprobante.setIdEstadoComprobante(estadosFacade.find(ID_ESTADO_ACEPTADA));
         comprobante.setFechaComprobante(new Date());
 
@@ -82,19 +90,20 @@ public class VentasServiceImpl implements VentasService {
         facade.createOrEdit(comprobante);
         RegistroVentaDto registro = new RegistroVentaDto();
         registro.setIdComprobante(comprobante.getId());
-        if (generarRemitoSalida) {
+        if (generarRemitoSalida && !isPresupuesto) {
             long idRemito = generarRemitoComprobante(comprobante.getId(),
                     comprobante.getIdUsuario().getId());
 
             registro.setIdRemito(idRemito);
         }
-
-        String descMovimiento = String.format("%s Nro; %d",
-                comprobante.getTipoComprobante().getNombreComprobante(), registro.getIdComprobante());
-        cuentaCorrienteBean.registrarMovimientoCuenta(
-                comprobantesDto.getIdPersona(),
-                comprobante.getTotalConSigno(),
-                descMovimiento);
+        if (!isPresupuesto) {
+            String descMovimiento = String.format("%s Nro: %d",
+                    comprobante.getTipoComprobante().getNombreComprobante(), registro.getIdComprobante());
+            cuentaCorrienteBean.registrarMovimientoCuenta(
+                    comprobantesDto.getIdPersona(),
+                    comprobante.getTotalConSigno(),
+                    descMovimiento);
+        }
         return registro;
     }
 

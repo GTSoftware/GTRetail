@@ -1,18 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <ui:composition
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
-    template="/WEB-INF/template.xhtml"
-    xmlns:p="http://primefaces.org/ui">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        template="/WEB-INF/template.xhtml"
+        xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="meta">
 
-        <f:metadata >
+        <f:metadata>
 
             <f:event listener="#{cuentaCorrienteSearchBean.init()}"
                      type="preRenderView">
@@ -23,15 +24,15 @@
     </ui:define>
 
     <ui:define name="content">
-        <ui:insert >
-            <ui:include src="breadcrumb.xhtml" />
+        <ui:insert>
+            <ui:include src="breadcrumb.xhtml"/>
         </ui:insert>
 
         <div class="Container100 Responsive100 NoIndent">
             <div class="Container100 ui-fluid">
                 <div class="Card">
                     <h1 class="CardBigTopic TexAlCenter">Movimientos de cuenta</h1>
-                    <div class="SeparatorFull" />
+                    <div class="SeparatorFull"/>
 
 
                     <h:form id="form">
@@ -48,30 +49,34 @@
                                          rowsPerPageTemplate="10,15,30"
                                          lazy="true"
                                          scrollable="true"
-                                         >
+                            >
                                 <f:facet name="{Exporters}">
                                     <h:commandLink title="xls">
-                                        <i class="fa fa-file-excel-o Fs24 Green" />
-                                        <p:dataExporter type="xls" target="ccTable" fileName="movCuenta" pageOnly="true" />
+                                        <i class="fa fa-file-excel-o Fs24 Green"/>
+                                        <p:dataExporter type="xls" target="ccTable" fileName="movCuenta"
+                                                        pageOnly="true"/>
                                     </h:commandLink>
 
                                     <h:commandLink title="pdf">
-                                        <i class="fa fa-file-pdf-o Fs24 Red" />
-                                        <p:dataExporter type="pdf" target="ccTable" fileName="movCuenta" pageOnly="true"/>
+                                        <i class="fa fa-file-pdf-o Fs24 Red"/>
+                                        <p:dataExporter type="pdf" target="ccTable" fileName="movCuenta"
+                                                        pageOnly="true"/>
                                     </h:commandLink>
 
                                     <h:commandLink title="csv">
-                                        <i class="fa fa-file-text-o Fs24 Blue" />
-                                        <p:dataExporter type="csv" target="ccTable" fileName="movCuenta" pageOnly="true"/>
+                                        <i class="fa fa-file-text-o Fs24 Blue"/>
+                                        <p:dataExporter type="csv" target="ccTable" fileName="movCuenta"
+                                                        pageOnly="true"/>
                                     </h:commandLink>
 
                                     <h:commandLink title="xml">
-                                        <i class="fa fa-file-code-o Fs24 Black" />
-                                        <p:dataExporter type="xml" target="ccTable" fileName="movCuenta" pageOnly="true"/>
+                                        <i class="fa fa-file-code-o Fs24 Black"/>
+                                        <p:dataExporter type="xml" target="ccTable" fileName="movCuenta"
+                                                        pageOnly="true"/>
                                     </h:commandLink>
                                 </f:facet>
 
-                                <f:facet name="header" >
+                                <f:facet name="header">
                                     Últimos movimientos
                                 </f:facet>
 
@@ -94,7 +99,7 @@
                                         Importe
                                     </f:facet>
                                     <h:outputText value="#{cmov.importeMovimiento}">
-                                        <f:convertNumber groupingUsed="true" type="currency" />
+                                        <f:convertNumber groupingUsed="true" type="currency"/>
                                     </h:outputText>
                                 </p:column>
                                 <p:column sortBy="#{cmov.descripcionMovimiento}">
@@ -108,10 +113,10 @@
                                 <p:columnGroup type="footer">
                                     <p:row>
                                         <p:column colspan="1" footerText="Saldo actual:"
-                                                  style="text-align:right; font-size: larger"  />
+                                                  style="text-align:right; font-size: larger"/>
 
                                         <p:column footerText="\$#{cuentaCorrienteSearchBean.saldo}"
-                                                  style=" font-size: xx-large" />
+                                                  style=" font-size: xx-large"/>
                                     </p:row>
                                 </p:columnGroup>
                             </p:dataTable>

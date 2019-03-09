@@ -15,12 +15,7 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 /**
  *
@@ -33,8 +28,6 @@ public abstract class BaseEntity extends GTEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @TableGenerator(name = "Numeraciones", table = "numeraciones", allocationSize = 1,
-//            pkColumnName = "tabla", valueColumnName = "id")
     @Basic(optional = false)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
