@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -44,7 +45,7 @@ public class PersonasDto implements IdentifiableDto {
     @Pattern(regexp = "^$|^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
             + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
             + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-    message = "Debe ser un mail vàlido Ej: alguien@host.com.")
+            message = "Debe ser un mail válido Ej: alguien@host.com.")
     private String email;
     @NotNull
     @Size(min = 1, max = 200)
@@ -81,6 +82,7 @@ public class PersonasDto implements IdentifiableDto {
     private LegalTiposDocumentoDto idTipoDocumento;
     private LegalGenerosDto idGenero;
     private FiscalResponsabilidadesIvaDto idResponsabilidadIva;
+    private List<PersonasTelefonosDto> personasTelefonosList;
 
     private SucursalesDto idSucursal;
     private Integer version;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GT Software.
+ * Copyright 2019 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,24 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "personas_telefonos")
-@XmlRootElement
 @AttributeOverride(name = "id", column = @Column(name = "id_telefono", columnDefinition = "serial"))
+@Getter
+@Setter
+@NoArgsConstructor
 public class PersonasTelefonos extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -51,40 +50,5 @@ public class PersonasTelefonos extends BaseEntity {
     @ManyToOne(optional = false)
     private Personas idPersona;
 
-    public PersonasTelefonos() {
-    }
-
-    public PersonasTelefonos(Long idTelefono) {
-        super(idTelefono);
-    }
-
-    public PersonasTelefonos(Long idTelefono, String numero) {
-        super(idTelefono);
-        this.numero = numero;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String getReferencia() {
-        return referencia;
-    }
-
-    public void setReferencia(String referencia) {
-        this.referencia = referencia;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
 
 }
