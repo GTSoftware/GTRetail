@@ -23,6 +23,7 @@ import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -31,6 +32,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,8 +66,7 @@ public class ClientesEditBean implements Serializable {
     @EJB
     private UbicacionLocalidadesService localidadesService;
 
-    /* private PersonasTelefonos telefonoActual = new PersonasTelefonos();
-     private List<PersonasTelefonos> telefonos = new ArrayList<>();*/
+    private int nroItem = 0;
     private PersonasDto clienteActual;
 
     /**
@@ -86,8 +87,6 @@ public class ClientesEditBean implements Serializable {
                 nuevo();
                 JSFUtil.addMessage("Cliente inexistente!", FacesMessage.SEVERITY_ERROR);
                 Logger.getLogger(ClientesEditBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
-            } else {
-                // telefonos = clientesService.obtenerTelefonos(clienteActual);
             }
         }
 
@@ -103,7 +102,6 @@ public class ClientesEditBean implements Serializable {
 
     public void doGuardarCliente() {
         try {
-            //clienteActual.setPersonasTelefonosList(telefonos);
             clienteActual = clientesService.guardarCliente(clienteActual);
             JSFUtil.addInfoMessage("Cliente guardado exitosamente.");
 
@@ -112,23 +110,20 @@ public class ClientesEditBean implements Serializable {
             LOG.log(Level.INFO, e.getMessage(), e);
         }
     }
-/*
-    public List<PersonasTelefonos> getTelefonos() {
-        return telefonos;
-    }
 
-    public void grabarTelefono() {
-        if (telefonoActual != null) {
-            telefonoActual.setIdPersona(clienteActual);
-            telefonos.add(telefonoActual);
+    public void nuevoTelefono() {
+        if (CollectionUtils.isEmpty(clienteActual.getPersonasTelefonosList())) {
+            clienteActual.setPersonasTelefonosList(new ArrayList<>(2));
         }
-        telefonoActual = new PersonasTelefonos();
+        clienteActual.getPersonasTelefonosList().add(PersonasTelefonosDto.builder()
+                .idPersona(clienteActual)
+                .item(nroItem++)
+                .build());
     }
 
-    public void borrarTelefono(PersonasTelefonos pt) {
-
-        telefonos.remove(pt);
-    }*/
+    public void borrarTelefono(PersonasTelefonosDto telefono) {
+        clienteActual.getPersonasTelefonosList().remove(telefono);
+    }
 
     public PersonasDto getClienteActual() {
         return clienteActual;
@@ -181,14 +176,6 @@ public class ClientesEditBean implements Serializable {
         }
         return Collections.emptyList();
     }
-
-    /*public PersonasTelefonos getTelefonoActual() {
-        return telefonoActual;
-    }
-
-    public void setTelefonoActual(PersonasTelefonos telefonoActual) {
-        this.telefonoActual = telefonoActual;
-    }*/
 
     public AuthBackingBean getAuthBackingBean() {
         return authBackingBean;

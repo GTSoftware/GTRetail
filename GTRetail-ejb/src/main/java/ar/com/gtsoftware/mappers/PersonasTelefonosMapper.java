@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 GT Software.
+ * Copyright 2019 GT Software.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 
 package ar.com.gtsoftware.mappers;
 
-import ar.com.gtsoftware.dto.model.PersonasDto;
-import ar.com.gtsoftware.model.Personas;
+import ar.com.gtsoftware.dto.model.PersonasTelefonosDto;
+import ar.com.gtsoftware.model.PersonasTelefonos;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi", uses = PersonasTelefonosMapper.class)
-public interface PersonasMapper
-        extends GenericMapper<Personas, PersonasDto> {
+@Mapper(componentModel = "cdi", uses = PersonasMapper.class)
+public interface PersonasTelefonosMapper
+        extends GenericMapper<PersonasTelefonos, PersonasTelefonosDto> {
 }

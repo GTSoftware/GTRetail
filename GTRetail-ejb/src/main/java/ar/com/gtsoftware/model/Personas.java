@@ -15,28 +15,17 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
@@ -130,11 +119,11 @@ public class Personas extends BaseEntity implements Serializable {
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIva;
 
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
+    //    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
 //    private List<FiscalLibroIvaVentasDto> fiscalLibroIvaVentasList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona", orphanRemoval = true)
     private List<PersonasTelefonos> personasTelefonosList;
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
+    //    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, mappedBy = "idPersona")
 //    private List<PersonasCuentaCorrienteDto> personasCuentaCorrienteList;
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne(optional = false)
@@ -344,7 +333,7 @@ public class Personas extends BaseEntity implements Serializable {
         this.idResponsabilidadIva = idResponsabilidadIva;
     }
 
-//    @XmlTransient
+    //    @XmlTransient
 //    public List<FiscalLibroIvaVentasDto> getFiscalLibroIvaVentasList() {
 //        return fiscalLibroIvaVentasList;
 //    }
@@ -361,7 +350,7 @@ public class Personas extends BaseEntity implements Serializable {
         this.personasTelefonosList = personasTelefonosList;
     }
 
-//    @XmlTransient
+    //    @XmlTransient
 //    public List<PersonasCuentaCorrienteDto> getPersonasCuentaCorrienteList() {
 //        return personasCuentaCorrienteList;
 //    }

@@ -23,15 +23,15 @@ import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
 import ar.com.gtsoftware.utils.JSFUtil;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -65,8 +65,8 @@ public class ProveedoresEditBean implements Serializable {
     private UbicacionLocalidadesService localidadesFacade;
     @EJB
     private UbicacionProvinciasService provinciasFacade;
-    //private PersonasTelefonos telefonoActual = new PersonasTelefonos();
-    //private List<PersonasTelefonos> telefonos = new ArrayList<>();
+
+    private int nroItem = 0;
     private PersonasDto proveedorActual;
 
     public ProveedoresEditBean() {
@@ -82,10 +82,8 @@ public class ProveedoresEditBean implements Serializable {
             proveedorActual = clientesService.find(Long.parseLong(idPersona));
             if (proveedorActual == null) {
                 nuevo();
-                JSFUtil.addErrorMessage("Cliente inexistente!");
-                LOG.log(Level.INFO, "Cliente inexistente!");
-            } else {
-                //telefonos = clientesService.obtenerTelefonos(proveedorActual);
+                JSFUtil.addErrorMessage("Proveedor inexistente!");
+                LOG.log(Level.INFO, "Proveedor inexistente!");
             }
         }
 
@@ -100,10 +98,8 @@ public class ProveedoresEditBean implements Serializable {
 
     public void doGuardarCliente() {
         try {
-            //proveedorActual.setPersonasTelefonosList(telefonos);
             proveedorActual = clientesService.guardarCliente(proveedorActual);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardar",
-                    "Proveedor guardado exitosamente."));
+            JSFUtil.addInfoMessage("Proveedor guardado exitosamente.");
 
         } catch (ServiceException e) {
             JSFUtil.addErrorMessage("Error al guardar: " + e.getMessage());
@@ -111,22 +107,20 @@ public class ProveedoresEditBean implements Serializable {
         }
     }
 
-//    public List<PersonasTelefonos> getTelefonos() {
-//        return telefonos;
-//    }
-//
-//    public void grabarTelefono() {
-//        if (telefonoActual != null) {
-//            telefonoActual.setIdPersona(proveedorActual);
-//            telefonos.add(telefonoActual);
-//        }
-//        telefonoActual = new PersonasTelefonos();
-//    }
 
-//    public void borrarTelefono(PersonasTelefonos pt) {
-//
-//        telefonos.remove(pt);
-//    }
+    public void nuevoTelefono() {
+        if (CollectionUtils.isEmpty(proveedorActual.getPersonasTelefonosList())) {
+            proveedorActual.setPersonasTelefonosList(new ArrayList<>(2));
+        }
+        proveedorActual.getPersonasTelefonosList().add(PersonasTelefonosDto.builder()
+                .idPersona(proveedorActual)
+                .item(nroItem++)
+                .build());
+    }
+
+    public void borrarTelefono(PersonasTelefonosDto telefono) {
+        proveedorActual.getPersonasTelefonosList().remove(telefono);
+    }
 
     public PersonasDto getProveedorActual() {
         return proveedorActual;
@@ -178,14 +172,6 @@ public class ProveedoresEditBean implements Serializable {
         }
         return Collections.emptyList();
     }
-
-//    public PersonasTelefonos getTelefonoActual() {
-//        return telefonoActual;
-//    }
-//
-//    public void setTelefonoActual(PersonasTelefonos telefonoActual) {
-//        this.telefonoActual = telefonoActual;
-//    }
 
     public AuthBackingBean getAuthBackingBean() {
         return authBackingBean;
