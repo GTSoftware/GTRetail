@@ -226,9 +226,6 @@
         <auth-constraint>
             <role-name>ADMINISTRADORES</role-name>
         </auth-constraint>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
     </security-constraint>
 
     <security-constraint>
@@ -250,9 +247,6 @@
             <role-name>VENDEDORES</role-name>
             <role-name>ADMINISTRADORES</role-name>
         </auth-constraint>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
     </security-constraint>
 
 
@@ -275,9 +269,6 @@
             <role-name>CAJEROS</role-name>
             <role-name>ADMINISTRADORES</role-name>
         </auth-constraint>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
     </security-constraint>
 
     <security-role>
