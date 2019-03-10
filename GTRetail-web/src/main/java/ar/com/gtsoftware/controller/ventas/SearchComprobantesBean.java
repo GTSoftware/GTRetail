@@ -55,6 +55,7 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
     private final ComprobantesSearchFilter filter = ComprobantesSearchFilter.builder()
             .fechaVentaDesde(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH))
             .fechaVentaHasta(DateUtils.truncate(DateUtils.addDays(new Date(), 1), Calendar.DAY_OF_MONTH))
+            .idTiposComprobanteList(getInitialTiposCompFilter())
             .anulada(false).build();
 
     private final PersonasSearchFilter personasSearchFilter = PersonasSearchFilter.builder()
@@ -106,6 +107,13 @@ public class SearchComprobantesBean extends AbstractSearchBean<ComprobantesDto, 
         filter.setFacturada(false);
         totalVentasSinFacturar = ventasFacade.calcularTotalVentas(filter);
         filter.setFacturada(facturadaStatus);
+    }
+
+    private List<Long> getInitialTiposCompFilter() {
+        List<Long> lista = new ArrayList<>(2);
+        lista.add(1L);
+        lista.add(2L);
+        return lista;
     }
 
     public List<PersonasDto> findClientesByString(String query) {

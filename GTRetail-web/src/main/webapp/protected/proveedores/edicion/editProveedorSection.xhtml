@@ -230,8 +230,6 @@
                                 <h:outputLabel for="emailField" value="#{msg.email}:"/>
                                 <p:inputText id="emailField" value="#{proveedoresEditBean.proveedorActual.email}"
                                              required="false">
-                                    <f:validateRegex
-                                            pattern="^$|^[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"/>
                                 </p:inputText>
                                 <p:message for="emailField"/>
                             </p:panelGrid>

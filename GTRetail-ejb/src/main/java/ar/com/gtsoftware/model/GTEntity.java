@@ -15,11 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
-import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Superclase para todas las entidades del sistema
@@ -28,6 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @param <T> la clase de la clave primaria
  */
 @MappedSuperclass
+@Getter
+@Setter
 public abstract class GTEntity<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,14 +71,6 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
      */
     @XmlTransient
     public abstract String getStringId();
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     @Override
     public int hashCode() {
