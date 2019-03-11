@@ -117,6 +117,7 @@ public class ClientesEditBean implements Serializable {
         }
         clienteActual.getPersonasTelefonosList().add(PersonasTelefonosDto.builder()
                 .idPersona(clienteActual)
+                .numero("0")
                 .item(nroItem++)
                 .build());
     }

@@ -114,6 +114,7 @@ public class ProveedoresEditBean implements Serializable {
         }
         proveedorActual.getPersonasTelefonosList().add(PersonasTelefonosDto.builder()
                 .idPersona(proveedorActual)
+                .numero("0")
                 .item(nroItem++)
                 .build());
     }

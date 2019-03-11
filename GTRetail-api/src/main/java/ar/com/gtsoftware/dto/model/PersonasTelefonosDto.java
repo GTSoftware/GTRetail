@@ -33,8 +33,8 @@ public class PersonasTelefonosDto implements IdentifiableDto {
 
     @EqualsAndHashCode.Include
     private Long id;
-    @Pattern(regexp = "\\(0\\d{2,4}\\)\\s\\d{6,9}",
-            message = "Número de teléfono no válido, debe tener el formato: (0123) 123456789")
+    @Pattern(regexp = "0\\d{2,4}\\s\\d{6,9}",
+            message = "Número de teléfono no válido, debe tener el formato: 0123 123456789")
     @NotNull
     @Size(min = 1, max = 50)
     private String numero;
