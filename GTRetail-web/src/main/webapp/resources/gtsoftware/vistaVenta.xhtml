@@ -134,17 +134,17 @@ limitations under the License.
 
             <p:columnGroup type="footer">
                 <p:row>
-                    <p:column colspan="7" footerText="#{msg.total}"
+                    <p:column colspan="7" footerText="#{msg.total}:"
                               style="text-align:right; font-size: larger"/>
 
-                    <p:column footerText="$#{cc.attrs.venta.totalConSigno}" style=" font-size: xx-large"/>
+                    <p:column footerText="$#{cc.attrs.venta.totalConSigno}" style="font-size: larger"/>
                 </p:row>
             </p:columnGroup>
 
         </p:dataTable>
         <div class="SeparatorFull"/>
 
-        <p:panelGrid layout="grid" style="border:0px !important; background:none;"
+        <p:panelGrid layout="grid"
                      styleClass="ui-panelgrid-blank" columns="2">
             <p:outputLabel value="#{msg.observaciones}:"/>
             <p:outputLabel value="#{cc.attrs.venta.observaciones}"/>
