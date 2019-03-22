@@ -142,6 +142,7 @@
                                 <p:commandButton icon="fa fa-fw fa-plus"
                                                  action="#{productoEditBean.nuevoRubro}"
                                                  immediate="true"
+                                                 styleClass="GreenButton"
                                                  update="nuevoRubroDlg"
                                                  oncomplete="PF('nuevoRubroDlg').show();"/>
 
@@ -176,6 +177,7 @@
                                 <p:commandButton id="btnNuevoSubRubro"
                                                  icon="fa fa-fw fa-plus"
                                                  action="#{productoEditBean.nuevoSubRubro}"
+                                                 styleClass="GreenButton"
                                                  immediate="true"
                                                  oncomplete="PF('dlgSubRubro').show();"
                                                  update="dlgSubRubro"
@@ -209,6 +211,7 @@
                                                  action="#{productoEditBean.cargarNuevaMarca}"
                                                  immediate="true"
                                                  update="dlgNuevaMarca"
+                                                 styleClass="GreenButton"
                                                  oncomplete="PF('dlgNuevaMarca').show();"
 
                                 />
