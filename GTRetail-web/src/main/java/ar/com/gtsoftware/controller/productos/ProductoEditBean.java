@@ -153,9 +153,9 @@ public class ProductoEditBean implements Serializable {
     public void cargarSubRubros(ValueChangeEvent event) {
         listSubRubros.clear();
         subRubroSearchFilter.setIdProductosRubros(((ProductosRubrosDto) event.getNewValue()).getId());
-
-        listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
-
+        if (subRubroSearchFilter.getIdProductosRubros() != null) {
+            listSubRubros.addAll(productosSubRubrosFacade.findAllBySearchFilter(subRubroSearchFilter));
+        }
     }
 
     public void nuevo() {
@@ -175,14 +175,13 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void doGuardarRubro() {
-
         try {
-            productosRubrosFacade.createOrEdit(productosRubrosNuevo);
+            productosRubrosNuevo = productosRubrosFacade.createOrEdit(productosRubrosNuevo);
             listRubros.add(productosRubrosNuevo);
             JSFUtil.addInfoMessage("Rubro " + productosRubrosNuevo.getNombreRubro() + " guardado exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            JSFUtil.addErrorMessage("Error al guardar el rubro");
 
         }
     }
@@ -195,16 +194,13 @@ public class ProductoEditBean implements Serializable {
 
     public void doGuardarSubRubro() {
         try {
-            productosSubRubrosFacade.createOrEdit(productosSubRubrosNuevo);
+            productosSubRubrosNuevo = productosSubRubrosFacade.createOrEdit(productosSubRubrosNuevo);
             listSubRubros.add(productosSubRubrosNuevo);
             JSFUtil.addInfoMessage("SubRubro " + productosSubRubrosNuevo.getNombreSubRubro() + " guardado exitosamente.");
-
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
-
+            JSFUtil.addErrorMessage("Error al guardar el SubRubro");
         }
-
     }
 
     public void cargarNuevaMarca() {
@@ -212,17 +208,14 @@ public class ProductoEditBean implements Serializable {
     }
 
     public void doGuardarMarca() {
-
         try {
-
-            productosMarcasFacade.createOrEdit(nuevaMarca);
+            nuevaMarca = productosMarcasFacade.createOrEdit(nuevaMarca);
             listMarcas.add(nuevaMarca);
             JSFUtil.addInfoMessage("Marca " + nuevaMarca.getNombreMarca() + " guardada exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar la marca");
         }
-
     }
 
     public void doGuardar() {
