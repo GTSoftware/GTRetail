@@ -59,6 +59,10 @@ public enum Operacion {
             Long.class,
             Date.class)),
 
+    MULTIPLO("Multiplo", "%", asList(
+            BigDecimal.class,
+            Long.class)),
+
     CONTIENE("Contiene a", "?", Collections.singletonList(String.class));
 
     private final String nombre, operador;

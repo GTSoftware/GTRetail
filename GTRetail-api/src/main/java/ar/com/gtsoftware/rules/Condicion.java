@@ -22,6 +22,8 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
+import static ar.com.gtsoftware.rules.Operacion.CONTIENE;
+import static ar.com.gtsoftware.rules.Operacion.MULTIPLO;
 import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -55,6 +57,10 @@ public class Condicion implements IdentifiableDto {
     public String buildExpression() throws CondicionIlegalException {
         validarCondicion();
 
+        if (MULTIPLO == operacion) {
+            return "(" + campo.getRuta() + buildOperador();
+        }
+
         return campo.getRuta() + buildOperador();
 
     }
@@ -70,8 +76,11 @@ public class Condicion implements IdentifiableDto {
     }
 
     private String buildOperador() {
-        if (operacion.equals(Operacion.CONTIENE)) {
+        if (CONTIENE == operacion) {
             return ".toUpperCase().contains(\"" + valor.toUpperCase() + "\")";
+        }
+        if (MULTIPLO == operacion) {
+            return SPACE + operacion.getOperador() + SPACE + valor + ") == 0";
         }
         return SPACE + operacion.getOperador() + SPACE + valor;
 

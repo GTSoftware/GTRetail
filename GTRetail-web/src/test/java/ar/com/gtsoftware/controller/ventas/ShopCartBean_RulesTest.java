@@ -87,7 +87,22 @@ public class ShopCartBean_RulesTest {
                 .tipoAccion(TipoAccion.DESCUENTO_MONTO_FIJO)
                 .build();
 
-        return Arrays.asList(rp1, rp2);
+        OfertaDto rp3 = OfertaDto.builder()
+                .condiciones(Arrays.asList(
+                        Condicion.builder()
+                                .campo(Campo.CANTIDAD)
+                                .operacion(Operacion.MULTIPLO)
+                                .valor("12").build(),
+                        Condicion.builder()
+                                .campo(Campo.CANTIDAD)
+                                .operacion(Operacion.MAYOR_IGUAL)
+                                .valor("12").build()))
+                .descuento(new BigDecimal(17))
+                .textoOferta("Oferta multiplo de")
+                .tipoAccion(TipoAccion.DESCUENTO_MONTO_FIJO)
+                .build();
+
+        return Arrays.asList(rp1, rp2, rp3);
     }
 
     @Test
@@ -161,6 +176,45 @@ public class ShopCartBean_RulesTest {
         assertEquals(3, venta.getComprobantesLineasList().size());
         assertEquals(new BigDecimal(-12), venta.getComprobantesLineasList().get(2).getSubTotal());
         assertEquals("Oferta cortes a medida", venta.getComprobantesLineasList().get(2).getDescripcion());
+
+    }
+
+    @Test
+    public void shouldPassOnMultiploRule() {
+        ProductosDto prod = ProductosDto.builder()
+                .idRubro(ProductosRubrosDto.builder().nombreRubro("zaratustra").build())
+                .build();
+
+        ProductosDto prod2 = ProductosDto.builder()
+                .idRubro(ProductosRubrosDto.builder().nombreRubro("otro rubro").build())
+                .build();
+
+        ComprobantesLineasDto linea1 = ComprobantesLineasDto.builder().descripcion("cualquier cosa 10x50")
+                .item(1)
+                .precioUnitario(new BigDecimal(5))
+                .cantidad(new BigDecimal(144))
+                .subTotal(new BigDecimal(5))
+                .idComprobante(venta)
+                .idProducto(prod2)
+                .build();
+
+        ComprobantesLineasDto linea2 = ComprobantesLineasDto.builder().descripcion("cortes 15mm")
+                .item(2)
+                .idProducto(prod)
+                .precioUnitario(new BigDecimal(25))
+                .cantidad(BigDecimal.TEN)
+                .subTotal(new BigDecimal(25))
+                .idComprobante(venta).build();
+
+        venta.addLineaVenta(linea1);
+        venta.addLineaVenta(linea2);
+
+        session.setGlobal("shopCart", bean);
+        session.execute(venta.getComprobantesLineasList());
+
+        assertEquals(3, venta.getComprobantesLineasList().size());
+        assertEquals(new BigDecimal(-17), venta.getComprobantesLineasList().get(2).getSubTotal());
+        assertEquals("Oferta multiplo de", venta.getComprobantesLineasList().get(2).getDescripcion());
 
     }
 
