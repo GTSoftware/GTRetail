@@ -28,7 +28,6 @@ import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import ar.com.gtsoftware.service.fiscal.LibroIVAService;
 import ar.com.gtsoftware.utils.JSFUtil;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
@@ -116,7 +115,7 @@ public class LibroIVABean implements Serializable {
 
             XSSFCellStyle styleHeader = wb.createCellStyle();
             XSSFFont fontHeader = wb.createFont();
-            fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+            fontHeader.setBold(true);
             styleHeader.setFont(fontHeader);
 
             XSSFCellStyle dateStyle = wb.createCellStyle();

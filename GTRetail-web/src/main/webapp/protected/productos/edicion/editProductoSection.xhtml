@@ -55,7 +55,6 @@
                             <p:inputText id="descripcionField"
                                          value="#{productoEditBean.productoActual.descripcion}"
                                          maxlength="200"
-                                         size="100"
                                          required="true" requiredMessage="#{msg.ingresarDescripcion}"
                                          converter="#{stringFormatConverter}"
                                          label="#{msg.descripcion}"/>
@@ -276,7 +275,8 @@
                     <!--Precios-->
                     <p:tab id='preciosTab' title="Precios">
 
-                        <p:fragment id="preciosFragment" autoUpdate="true">
+                        <p:fragment id="preciosFragment">
+                            <p:autoUpdate/>
 
                             <div class="Container50 Responsive50 NoIndent">
                                 <h:panelGroup id="pgCostos">
