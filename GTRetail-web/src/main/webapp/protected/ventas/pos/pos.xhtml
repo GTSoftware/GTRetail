@@ -61,7 +61,6 @@
                                      title="#{msg.insertar}"
                                      action="#{shopCartBean.addToCart()}"
                                      update="@form"
-                                     global="false"
                                      styleClass="GreenButton"/>
 
                     <p:commandButton id="buscarButton" icon="fa fa-fw fa-search"
@@ -89,10 +88,8 @@
                                      liveResize="true">
 
                             <p:ajax event="cellEdit"
-                                    listener="#{shopCartBean.calcularTotal()}"
-                                    oncomplete="onCellEdit()"
-                                    global="false"
-                            />
+                                    listener="#{shopCartBean.onCellEditLinea}"
+                                    oncomplete="onCellEdit()"/>
 
                             <p:column style="text-align: right; ">
                                 <f:facet name="header">
@@ -115,7 +112,7 @@
                                            value="#{lineaVenta.idProducto.observaciones}"/>
                             </p:column>
 
-                            <p:column style="text-align: right;">
+                            <p:column style="text-align: right;" headerText="#{msg.tablaCantidad}">
                                 <f:facet name="header">
                                     #{msg.tablaCantidad}
                                 </f:facet>
