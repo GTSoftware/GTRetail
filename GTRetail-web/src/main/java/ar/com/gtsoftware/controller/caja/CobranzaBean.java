@@ -22,7 +22,7 @@ import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.search.BancosSearchFilter;
 import ar.com.gtsoftware.search.ComprobantesPagosSearchFilter;
 import org.apache.commons.collections.CollectionUtils;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -93,7 +93,7 @@ public class CobranzaBean implements Serializable {
     private void init() {
         CajasDto cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
         if (cajaAbierta == null) {
-            RequestContext.getCurrentInstance().execute("PF('abrirCajaDialog').show();");
+            PrimeFaces.current().executeScript("PF('abrirCajaDialog').show();");
         }
 
         cajaActual = cajaAbierta;
@@ -171,8 +171,8 @@ public class CobranzaBean implements Serializable {
 
             reciboActual = cobranzaService.cobrarComprobantes(cajaActual, pagosValores);
             addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
-            RequestContext.getCurrentInstance().execute("PF('cobrarComprobantesDialog').hide();");
-            RequestContext.getCurrentInstance().execute("PF('imprimirReciboDialog').show();");
+            PrimeFaces.current().executeScript("PF('cobrarComprobantesDialog').hide();");
+            PrimeFaces.current().executeScript("PF('imprimirReciboDialog').show();");
         }
     }
 

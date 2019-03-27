@@ -67,8 +67,9 @@
                                                                rendered="#{shopCartBean.venta.saldo gt 0}" />-->
                     </p:inputNumber>
                     <p:message for="importePagoField"/>
+                    <p:fragment id="planFragment">
+                        <p:autoUpdate/>
 
-                    <p:fragment id="planFragment" autoUpdate="true">
                         <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
 
                             <h:outputLabel for="planPagoField" value="#{msg.planPago}:"/>
@@ -109,7 +110,6 @@
 
                         </p:panelGrid>
                     </p:fragment>
-
 
                     <p:commandButton value="#{msg.agregarPago}" action="#{shopCartBean.doAgregarPago()}"
                                      icon="fa fa-fw fa-plus"
@@ -167,19 +167,20 @@
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>
-                <h:outputLabel value="#{msg.observaciones}:"/>
-                <br/>
-                <p:inputTextarea style="width: 100%" value="#{shopCartBean.venta.observaciones}" maxlength="1024"
-                                 autoResize="true"
+                <p:panel toggleable="true" collapsed="true" menuTitle="#{msg.observaciones}">
+                    <h:outputLabel value="#{msg.observaciones}:"/>
+                    <br/>
+                    <p:inputTextarea style="width: 100%" value="#{shopCartBean.venta.observaciones}" maxlength="1024"
+                                     autoResize="true"
+                                     converter="#{stringFormatConverter}"/>
+                    <h:outputLabel value="#{msg.remitente}:"/>
+                    <p:inputText style="width: 100%" value="#{shopCartBean.venta.remitente}" maxlength="100"
                                  converter="#{stringFormatConverter}"/>
-                <h:outputLabel value="#{msg.remitente}:"/>
-                <p:inputText style="width: 100%" value="#{shopCartBean.venta.remitente}" maxlength="100"
-                             converter="#{stringFormatConverter}"/>
 
-                <h:outputLabel value="#{msg.numeroRemito}:"/>
-                <p:inputText style="width: 100%" value="#{shopCartBean.venta.nroRemito}" maxlength="100"
-                             converter="#{stringFormatConverter}"/>
-
+                    <h:outputLabel value="#{msg.numeroRemito}:"/>
+                    <p:inputText style="width: 100%" value="#{shopCartBean.venta.nroRemito}" maxlength="100"
+                                 converter="#{stringFormatConverter}"/>
+                </p:panel>
                 <!--        <h:outputLabel value="Estado:" />
                         <p:selectOneMenu id="estadoField" required="true" requiredMessage="#{msg.ingresarValor}"
                                          value="#{shopCartBean.venta.idVentasEstados}"
@@ -191,8 +192,7 @@
                         </p:selectOneMenu>-->
 
                 <div class="SeparatorFull"></div>
-                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2"
-                             style="border:0px !important; background:none;">
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
 
                     <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
                                      action="#{shopCartBean.endConversation()}" immediate="true" ajax="false"
