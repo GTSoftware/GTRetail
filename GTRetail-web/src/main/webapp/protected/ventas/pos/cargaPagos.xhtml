@@ -119,12 +119,13 @@
 
                 </p:panelGrid>
                 <p:dataTable id="pagosTable" value="#{shopCartBean.venta.pagosList}" var="pago"
-                             rows="5"
+                             rows="3"
                              paginator="true"
                              sortMode="multiple"
+                             paginatorPosition="top"
                              emptyMessage="#{msg.pagosVacio}"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="5,10,15,30"
+                             rowsPerPageTemplate="3,5,10,15,30"
                              resizableColumns="false"
                              reflow="true"
                              liveResize="true">
@@ -167,7 +168,10 @@
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>
-                <p:panel toggleable="true" collapsed="true" menuTitle="#{msg.observaciones}">
+
+                <div class="EmptyBox10"/>
+
+                <p:panel toggleable="true" collapsed="true" closable="false" header="#{msg.masInfo}">
                     <h:outputLabel value="#{msg.observaciones}:"/>
                     <br/>
                     <p:inputTextarea style="width: 100%" value="#{shopCartBean.venta.observaciones}" maxlength="1024"
