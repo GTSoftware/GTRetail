@@ -22,8 +22,8 @@ import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.rules.TipoAccion;
 import ar.com.gtsoftware.search.*;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.CellEditEvent;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -43,6 +43,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static ar.com.gtsoftware.utils.JSFUtil.*;
+import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.contains;
 
 /**
  * MB para manejar el carrito de compras
@@ -149,7 +151,7 @@ public class ShopCartBean implements Serializable {
             formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
             venta.setTipoComprobante(tiposComprobanteFacade.getTipoFactura());
 
-            vendedor = JSFUtil.isUserInRole(Roles.VENDEDORES);
+            vendedor = isUserInRole(Roles.VENDEDORES);
 
             ofertasHelper = new OfertasHelper(ofertasService, this);
         }
@@ -177,12 +179,14 @@ public class ShopCartBean implements Serializable {
         int index = venta.getComprobantesLineasList().indexOf(ComprobantesLineasDto.builder().item(nroItem).build());
         ComprobantesLineasDto lineaParaBorrar = venta.getComprobantesLineasList().get(index);
 
+        eliminarLineasRelacionadas(lineaParaBorrar);
+
         if (lineaParaBorrar.getNroItemAsociado() != null) {
             ComprobantesLineasDto itemAsociado = ComprobantesLineasDto.builder().item(lineaParaBorrar.getNroItemAsociado()).build();
             venta.getComprobantesLineasList().remove(itemAsociado);
         }
-        venta.getComprobantesLineasList().remove(lineaParaBorrar);
 
+        venta.getComprobantesLineasList().remove(lineaParaBorrar);
         calcularTotal();
 
     }
@@ -230,7 +234,7 @@ public class ShopCartBean implements Serializable {
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
-            if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio())) {
+            if (productosFilter.getIdProducto() == null && isEmpty(productosFilter.getCodigoPropio())) {
                 return;
             }
             productosFilter.setIdListaPrecio(lista.getId());
@@ -604,5 +608,29 @@ public class ShopCartBean implements Serializable {
 
     public void setProductoRedondeo(ProductosDto productoRedondeo) {
         this.productoRedondeo = productoRedondeo;
+    }
+
+    public void onCellEditLinea(CellEditEvent event) {
+        if (contains(event.getColumn().getHeaderText(), "Cantidad")) {
+            ComprobantesLineasDto linea = venta.getComprobantesLineasList().get(event.getRowIndex());
+
+            eliminarLineasRelacionadas(linea);
+
+            linea.setSubTotal(linea.getCantidad().multiply(linea.getPrecioUnitario()));
+
+            ofertasHelper.ejecutarReglasOferta(linea);
+        }
+        calcularTotal();
+    }
+
+    private void eliminarLineasRelacionadas(ComprobantesLineasDto linea) {
+        List<ComprobantesLineasDto> lineasRelacionadas = new ArrayList<>(1);
+        for (ComprobantesLineasDto lineasDto : venta.getComprobantesLineasList()) {
+            if (lineasDto.getNroItemAsociado() != null
+                    && lineasDto.getNroItemAsociado().equals(linea.getItem())) {
+                lineasRelacionadas.add(lineasDto);
+            }
+        }
+        venta.getComprobantesLineasList().removeAll(lineasRelacionadas);
     }
 }
