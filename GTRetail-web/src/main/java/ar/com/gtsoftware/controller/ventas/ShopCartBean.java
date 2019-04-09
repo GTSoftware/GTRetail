@@ -589,7 +589,7 @@ public class ShopCartBean implements Serializable {
         ComprobantesLineasDto lineaDescuento = ComprobantesLineasDto.builder()
                 .idComprobante(venta)
                 .cantidad(BigDecimal.ONE)
-                .descripcion(texto)
+                .descripcion(StringUtils.left("[" + itemConDescuento.getIdProducto().getId() + "] " + texto, 90))
                 .idProducto(productoRedondeo)
                 .cantidadEntregada(BigDecimal.ONE)
                 .costoBrutoUnitario(BigDecimal.ZERO)
