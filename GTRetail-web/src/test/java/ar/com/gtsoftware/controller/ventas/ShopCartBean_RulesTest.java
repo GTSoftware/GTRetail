@@ -108,6 +108,7 @@ public class ShopCartBean_RulesTest {
     @Test
     public void shouldPassOnContainsRule() {
         ProductosDto prod = ProductosDto.builder()
+                .id(1234L)
                 .idRubro(ProductosRubrosDto.builder().nombreRubro("SARASA").build())
                 .build();
 
@@ -136,13 +137,14 @@ public class ShopCartBean_RulesTest {
 
         assertEquals(3, venta.getComprobantesLineasList().size());
         assertEquals(0, new BigDecimal(-0.5).subtract(venta.getComprobantesLineasList().get(2).getSubTotal()).signum());
-        assertEquals("Oferta tornillos", venta.getComprobantesLineasList().get(2).getDescripcion());
+        assertEquals("[1234] Oferta tornillos", venta.getComprobantesLineasList().get(2).getDescripcion());
     }
 
 
     @Test
     public void shouldPassOnRubroAndCantidadRule() {
         ProductosDto prod = ProductosDto.builder()
+                .id(1234L)
                 .idRubro(ProductosRubrosDto.builder().nombreRubro("cortes a medida").build())
                 .build();
 
@@ -175,17 +177,19 @@ public class ShopCartBean_RulesTest {
 
         assertEquals(3, venta.getComprobantesLineasList().size());
         assertEquals(new BigDecimal(-12), venta.getComprobantesLineasList().get(2).getSubTotal());
-        assertEquals("Oferta cortes a medida", venta.getComprobantesLineasList().get(2).getDescripcion());
+        assertEquals("[1234] Oferta cortes a medida", venta.getComprobantesLineasList().get(2).getDescripcion());
 
     }
 
     @Test
     public void shouldPassOnMultiploRule() {
         ProductosDto prod = ProductosDto.builder()
+                .id(1234L)
                 .idRubro(ProductosRubrosDto.builder().nombreRubro("zaratustra").build())
                 .build();
 
         ProductosDto prod2 = ProductosDto.builder()
+                .id(1235L)
                 .idRubro(ProductosRubrosDto.builder().nombreRubro("otro rubro").build())
                 .build();
 
@@ -214,7 +218,7 @@ public class ShopCartBean_RulesTest {
 
         assertEquals(3, venta.getComprobantesLineasList().size());
         assertEquals(new BigDecimal(-17), venta.getComprobantesLineasList().get(2).getSubTotal());
-        assertEquals("Oferta multiplo de", venta.getComprobantesLineasList().get(2).getDescripcion());
+        assertEquals("[1235] Oferta multiplo de", venta.getComprobantesLineasList().get(2).getDescripcion());
 
     }
 
