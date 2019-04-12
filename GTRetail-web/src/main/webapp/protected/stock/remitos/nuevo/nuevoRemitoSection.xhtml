@@ -167,12 +167,13 @@
                         </p:inputText>
 
 
-                        <p:inputText id="cantidadField" required="true"
-                                     value="#{nuevoRemitoBean.cantidad}" placeholder="Cantidad">
-                            <f:validateDoubleRange minimum="0.01"
-                                                   maximum="9999999999999999999.99"/>
+                        <p:inputNumber id="cantidadField" required="true"
+                                       value="#{nuevoRemitoBean.cantidad}" placeholder="Cantidad"
+                                       decimalPlaces="2"
+                                       minValue="0"
+                                       maxValue="999999999.99">
 
-                        </p:inputText>
+                        </p:inputNumber>
 
 
                     </p:panelGrid>
@@ -197,6 +198,8 @@
                                  sortMode="single" emptyMessage="#{msg.productosNoCargados}"
                                  editable="true" editMode="cell" reflow="true" liveResize="true">
 
+                        <p:ajax event="cellEdit"
+                                global="false"/>
 
                         <p:column style="text-align: right; ">
                             <f:facet name="header">
@@ -228,11 +231,13 @@
                                     <h:outputText value="#{lineaDetalle.cantidad}"/>
                                 </f:facet>
                                 <f:facet name="input">
-                                    <p:inputText id="cantidadProdTabField"
-                                                 value="#{lineaDetalle.cantidad}">
-                                        <f:validateDoubleRange minimum="0.01"
-                                                               maximum="9999999999999999999.99"/>
-                                    </p:inputText>
+                                    <p:inputNumber id="cantidadProdTabField"
+                                                   value="#{lineaDetalle.cantidad}"
+                                                   decimalPlaces="2"
+                                                   minValue="0"
+                                                   maxValue="999999999.99">
+
+                                    </p:inputNumber>
                                 </f:facet>
                             </p:cellEditor>
 
