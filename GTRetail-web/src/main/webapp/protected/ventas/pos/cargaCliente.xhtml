@@ -4,7 +4,6 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:gtsoftware="http://java.sun.com/jsf/composite/gtsoftware">
 
     <div class="Container100 ui-fluid">
@@ -74,10 +73,8 @@
                 </p:fragment>
                 <div class="SeparatorFull"/>
 
-                <p:panelGrid layout="grid" columns="2"
-                             styleClass="ui-panelgrid-blank"
-                             style="border:0px !important; background:none;"
-                             >
+                <p:panelGrid layout="grid" columns="3"
+                             styleClass="ui-panelgrid-blank">
                     <p:commandButton id="cancelarButton"
                                      icon="fa fa-fw fa-ban"
                                      value="#{msg.cancelar}"
@@ -85,6 +82,15 @@
                                      immediate="true"
                                      styleClass="RedButton">
 
+                    </p:commandButton>
+
+                    <p:commandButton id="anteriorButton"
+                                     icon="fa fa-fw fa-arrow-left"
+                                     value="#{msg.anterior}"
+                                     action="index.xhtml?faces-redirect=true"
+                                     styleClass="OrangeButton"
+                                     immediate="true"
+                    >
                     </p:commandButton>
 
                     <p:commandButton id="siguienteButton"

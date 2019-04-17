@@ -196,11 +196,20 @@
                         </p:selectOneMenu>-->
 
                 <div class="SeparatorFull"></div>
-                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="3">
 
                     <p:commandButton id="cancelarButton" value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
                                      action="#{shopCartBean.endConversation()}" immediate="true" ajax="false"
                                      styleClass="RedButton"/>
+
+                    <p:commandButton id="anteriorButton"
+                                     icon="fa fa-fw fa-backward"
+                                     value="#{msg.volverInicio}"
+                                     action="#{shopCartBean.volverPasoInicialEnPago}"
+                                     styleClass="OrangeButton"
+                                     immediate="true"
+                    >
+                    </p:commandButton>
 
                     <p:commandButton id="guardarButton" value="#{msg.guardar}" icon="fa fa-fw fa-save"
                                      action="#{shopCartBean.guardarVenta()}"/>

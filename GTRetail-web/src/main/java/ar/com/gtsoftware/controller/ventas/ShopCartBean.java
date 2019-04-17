@@ -106,13 +106,13 @@ public class ShopCartBean implements Serializable {
     private OfertasService ofertasService;
 
     private OfertasHelper ofertasHelper;
-    private ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
+    protected ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
     private BigDecimal cantidad = BigDecimal.ONE;
     private ComprobantesDto venta;
     private ProductosDto productoBusquedaSeleccionado = null;
     private ProductosListasPreciosDto lista;
     private ProductosDto productoRedondeo;
-    private NegocioFormasPagoDto formaPagoDefecto = null;
+    protected NegocioFormasPagoDto formaPagoDefecto = null;
     private int cantDecimalesRedondeo = 2;
     private int redondeoIndex = 0;
     private boolean vendedor = false;
@@ -176,17 +176,19 @@ public class ShopCartBean implements Serializable {
 
     public void removeFromCart(int nroItem) {
 
-        int index = venta.getComprobantesLineasList().indexOf(ComprobantesLineasDto.builder().item(nroItem).build());
-        ComprobantesLineasDto lineaParaBorrar = venta.getComprobantesLineasList().get(index);
+        List<ComprobantesLineasDto> comprobantesLineasList = venta.getComprobantesLineasList();
+
+        int index = comprobantesLineasList.indexOf(ComprobantesLineasDto.builder().item(nroItem).build());
+        ComprobantesLineasDto lineaParaBorrar = comprobantesLineasList.get(index);
 
         eliminarLineasRelacionadas(lineaParaBorrar);
 
         if (lineaParaBorrar.getNroItemAsociado() != null) {
             ComprobantesLineasDto itemAsociado = ComprobantesLineasDto.builder().item(lineaParaBorrar.getNroItemAsociado()).build();
-            venta.getComprobantesLineasList().remove(itemAsociado);
+            comprobantesLineasList.remove(itemAsociado);
         }
 
-        venta.getComprobantesLineasList().remove(lineaParaBorrar);
+        comprobantesLineasList.remove(lineaParaBorrar);
         calcularTotal();
 
     }
@@ -214,7 +216,8 @@ public class ShopCartBean implements Serializable {
 
     public void initPagos() {
         if (!isPostback()) {
-            if (venta.getPagosList().isEmpty() && formaPagoDefecto != null) {
+            clearPagos();
+            if (formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
                 pagoActual.setMontoPagado(BigDecimal.ZERO);
                 pagoActual.setIdFormaPago(formaPagoDefecto);
@@ -222,6 +225,25 @@ public class ShopCartBean implements Serializable {
                 doAgregarPago();
             }
         }
+    }
+
+    private void clearPagos() {
+        List<ComprobantesPagosDto> pagosList = venta.getPagosList();
+
+        if (!pagosList.isEmpty()) {
+            for (ComprobantesPagosDto pago : pagosList) {
+                int productoRecargoItem = pago.getProductoRecargoItem();
+                if (productoRecargoItem > 0) {
+                    removeFromCart(productoRecargoItem);
+                }
+            }
+            pagosList.clear();
+        }
+    }
+
+    public String volverPasoInicialEnPago() {
+        clearPagos();
+        return "index.xhtml?faces-redirect=true";
     }
 
     public void addToCart() {
@@ -625,12 +647,14 @@ public class ShopCartBean implements Serializable {
 
     private void eliminarLineasRelacionadas(ComprobantesLineasDto linea) {
         List<ComprobantesLineasDto> lineasRelacionadas = new ArrayList<>(1);
-        for (ComprobantesLineasDto lineasDto : venta.getComprobantesLineasList()) {
+        List<ComprobantesLineasDto> comprobantesLineasList = venta.getComprobantesLineasList();
+
+        for (ComprobantesLineasDto lineasDto : comprobantesLineasList) {
             if (lineasDto.getNroItemAsociado() != null
                     && lineasDto.getNroItemAsociado().equals(linea.getItem())) {
                 lineasRelacionadas.add(lineasDto);
             }
         }
-        venta.getComprobantesLineasList().removeAll(lineasRelacionadas);
+        comprobantesLineasList.removeAll(lineasRelacionadas);
     }
 }
