@@ -106,13 +106,13 @@ public class ShopCartBean implements Serializable {
     private OfertasService ofertasService;
 
     private OfertasHelper ofertasHelper;
-    ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
+    protected ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
     private BigDecimal cantidad = BigDecimal.ONE;
     private ComprobantesDto venta;
     private ProductosDto productoBusquedaSeleccionado = null;
     private ProductosListasPreciosDto lista;
     private ProductosDto productoRedondeo;
-    NegocioFormasPagoDto formaPagoDefecto = null;
+    protected NegocioFormasPagoDto formaPagoDefecto = null;
     private int cantDecimalesRedondeo = 2;
     private int redondeoIndex = 0;
     private boolean vendedor = false;
