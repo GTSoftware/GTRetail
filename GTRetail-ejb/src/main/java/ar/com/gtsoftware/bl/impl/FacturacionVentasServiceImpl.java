@@ -317,7 +317,7 @@ public class FacturacionVentasServiceImpl implements FacturacionVentasService {
             return StringUtils.EMPTY;
         }
         if (comprobante.getIdRegistro().getCae() != null) {
-            String cuit = parametrosFacade.findParametroByName("cuit.empresa").getValorParametro();
+            String cuit = parametrosFacade.findParametroByName("empresa.cuit").getValorParametro();
             return GeneradorCodigoBarraFE.calcularCodigoBarras(comprobante.getIdRegistro(), cuit);
         }
         return comprobante.getIdRegistro().getNumeroFactura();
