@@ -80,19 +80,27 @@
                         <f:facet name="header">
                             #{msg.proveedor}
                         </f:facet>
-                        <p:outputLabel value="#{ordenCompra.idProveedor.businessString}"/>
+                        <p:outputLabel value="#{ordenCompra.idProveedor}"/>
                     </p:column>
                     <p:column sortBy="#{ordenCompra.fechaAlta}">
                         <f:facet name="header">
                             #{msg.fecha}
                         </f:facet>
-                        <p:outputLabel value="#{ordenCompra.fechaAlta}"/>
+                        <p:outputLabel value="#{ordenCompra.fechaAlta}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </p:outputLabel>
                     </p:column>
                     <p:column sortBy="#{ordenCompra.total}">
                         <f:facet name="header">
                             #{msg.total}
                         </f:facet>
                         <p:outputLabel value="#{ordenCompra.total}"/>
+                    </p:column>
+                    <p:column sortBy="#{ordenCompra.idEstadoOrdenCompra.nombreEstado}">
+                        <f:facet name="header">
+                            #{msg.estado}
+                        </f:facet>
+                        <p:outputLabel value="#{ordenCompra.idEstadoOrdenCompra.nombreEstado}"/>
                     </p:column>
                     <p:column sortBy="#{ordenCompra.observaciones}">
                         <f:facet name="header">
@@ -106,24 +114,22 @@
                         <f:facet name="header">
                             #{msg.acciones}
                         </f:facet>
-                        <!-- <p:panelGrid columns="1" layout="grid"  styleClass="ui-panelgrid-blank">
-                             <p:commandButton id="editarClienteButton"
-                                              icon="fa fa-fw fa-edit" action="#{proveedoresSearchBean.editarProveedor(cliente)}"
-                                              ajax="false"
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                            <p:commandButton id="verOrdenCompraButton"
+                                             icon="fa fa-fw fa-search"
+                                             action="#{ordenesCompraSearchBean.verOrdenCompra(ordenCompra)}"
+                                             ajax="false"
+                                             title="#{msg.ver}">
+                            </p:commandButton>
 
-                                              title="#{msg.editar}">
-                                 <f:param name="idPersona" value="#{cliente.id}"/>
-                             </p:commandButton>
+                            <p:commandButton icon="fa fa-print"
+                                             ajax="false"
+                                             action="#{ordenesCompraSearchBean.imprimirOrdenCompra(ordenCompra)}"
+                                             title="Imprimir OC">
 
-                             <p:commandButton id="verCCButton"
-                                              icon="fa fa-fw fa-bank" action="#{proveedoresSearchBean.verCuentaCorriente(cliente)}"
-                                              ajax="false"
+                            </p:commandButton>
 
-                                              title="#{msg.verCuentaCorriente}">
-
-                             </p:commandButton>
-
-                         </p:panelGrid>-->
+                        </p:panelGrid>
 
                     </p:column>
 

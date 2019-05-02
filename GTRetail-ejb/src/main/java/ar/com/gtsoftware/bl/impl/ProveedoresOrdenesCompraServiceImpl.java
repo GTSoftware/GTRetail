@@ -68,7 +68,7 @@ public class ProveedoresOrdenesCompraServiceImpl
     }
 
     @Override
-    public ProveedoresOrdenesCompraEstadosDto obtenerEstado(Long id) {
+    public ProveedoresOrdenesCompraEstadosDto obtenerEstado(long id) {
         ProveedoresOrdenesCompraEstados estado = estadosFacade.find(id);
         return estadosMapper.entityToDto(estado, new CycleAvoidingMappingContext());
 

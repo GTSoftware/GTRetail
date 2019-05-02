@@ -226,9 +226,7 @@
                 </div>
                 <div class="SeparatorFull"/>
 
-                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2"
-                             style="border:0px !important; background:none;"
-                >
+                <p:panelGrid layout="grid" styleClass="ui-panelgrid-blank" columns="2">
                     <p:commandButton id="cancelarButton"
                                      icon="fa fa-fw fa-ban"
                                      value="#{msg.cancelar}"
@@ -250,8 +248,7 @@
                               modal="true" dynamic="true">
                         <gtsoftware:busquedaProductos model="#{shopCartBean}"
                                                       listaPrecios="#{shopCartBean.lista}"
-                                                      soloConStock="true"
-                        />
+                                                      soloConStock="true"/>
                         <div class="SeparatorFull"/>
 
                         <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"

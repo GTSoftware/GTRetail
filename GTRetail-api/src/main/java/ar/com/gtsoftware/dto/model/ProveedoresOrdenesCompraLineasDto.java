@@ -20,7 +20,6 @@ import ar.com.gtsoftware.dto.IdentifiableDto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**

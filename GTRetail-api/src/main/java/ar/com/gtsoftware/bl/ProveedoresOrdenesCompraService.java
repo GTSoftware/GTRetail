@@ -30,6 +30,6 @@ public interface ProveedoresOrdenesCompraService
 
     List<ProveedoresOrdenesCompraEstadosDto> obtenerEstados();
 
-    ProveedoresOrdenesCompraEstadosDto obtenerEstado(Long id);
+    ProveedoresOrdenesCompraEstadosDto obtenerEstado(long id);
 
 }

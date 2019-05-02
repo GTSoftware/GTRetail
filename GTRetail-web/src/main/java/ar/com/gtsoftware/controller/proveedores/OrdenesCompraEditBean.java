@@ -26,7 +26,6 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.EJBs;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -34,10 +33,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static ar.com.gtsoftware.utils.JSFUtil.*;
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 /**
  * Bean para la edición de ordenes de compra
@@ -48,20 +49,23 @@ import static ar.com.gtsoftware.utils.JSFUtil.*;
 @ViewScoped
 public class OrdenesCompraEditBean implements Serializable {
 
+    protected static final long ID_ESTADO_OC_INICIAL = 1L;
+    protected static final long ID_ESTADO_OC_PENDIENTE_RECEPCION = 2L;
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(OrdenesCompraEditBean.class.getName());
+    private static final Logger logger = Logger.getLogger(OrdenesCompraEditBean.class.getName());
     private final ProductosSearchFilter productosFilter = ProductosSearchFilter.builder().activo(true)
             .puedeComprarse(true).build();
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
     @EJB
-    private ProveedoresOrdenesCompraService ocFacade;
+    private ProveedoresOrdenesCompraService ocService;
     @EJB
     private ProductosService productosFacade;
     private ProductosDto productoBusquedaSeleccionado = null;
     private BigDecimal cantidad = BigDecimal.ONE;
     private int numeradorLinea = 1;
     private ProveedoresOrdenesCompraDto ordenCompraActual = null;
+    private boolean limitarAProveedor = true;
 
     /**
      * Creates a new instance of OrdenesCompraEditBean
@@ -76,11 +80,11 @@ public class OrdenesCompraEditBean implements Serializable {
         if (StringUtils.isEmpty(idOrdenCompra)) {
             nuevo();
         } else {
-            ordenCompraActual = ocFacade.find(Long.parseLong(idOrdenCompra));
+            ordenCompraActual = ocService.find(Long.parseLong(idOrdenCompra));
             if (ordenCompraActual == null) {
                 nuevo();
                 addErrorMessage("Orden de compra inexistente!");
-                LOG.log(Level.INFO, "Orden de compra inexistente!");
+                logger.log(Level.INFO, "Orden de compra inexistente!");
             }
         }
 
@@ -93,14 +97,20 @@ public class OrdenesCompraEditBean implements Serializable {
             return;
         }
 
-        ProductosDto producto;
+        ProductosDto producto = null;
+        if (limitarAProveedor && ordenCompraActual.getIdProveedor() != null) {
+            productosFilter.setIdProveedorHabitual(ordenCompraActual.getIdProveedor().getId());
+        } else {
+            productosFilter.setIdProveedorHabitual(null);
+        }
+
         if (productoBusquedaSeleccionado != null) {
             producto = productoBusquedaSeleccionado;
         } else {
-            if (productosFilter.getIdProducto() == null && StringUtils.isEmpty(productosFilter.getCodigoPropio()) && StringUtils.isEmpty(productosFilter.getCodigoFabrica())) {
-                return;
+            if (productosFilter.getIdProducto() != null || isNotEmpty(productosFilter.getCodigoPropio())
+                    || isNotEmpty(productosFilter.getCodigoFabrica())) {
+                producto = productosFacade.findFirstBySearchFilter(productosFilter);
             }
-            producto = productosFacade.findFirstBySearchFilter(productosFilter);
         }
 
         if (producto == null) {
@@ -112,6 +122,7 @@ public class OrdenesCompraEditBean implements Serializable {
         cantidad = BigDecimal.ONE;
         productosFilter.setCodigoPropio(null);
         productosFilter.setIdProducto(null);
+        productosFilter.setCodigoFabrica(null);
 
         productoBusquedaSeleccionado = null;
 
@@ -163,8 +174,10 @@ public class OrdenesCompraEditBean implements Serializable {
         ordenCompraActual.setProveedoresOrdenesCompraLineasList(new ArrayList<>());
         ordenCompraActual.setTotalIVA(BigDecimal.ZERO);
         ordenCompraActual.setTotal(BigDecimal.ZERO);
-        //TODO setear el estado inicial de la OC en Diseño (por ej)
-//        ordenCompraActual.setIdEstadoOrdenCompra();
+        ordenCompraActual.setIdEstadoOrdenCompra(ocService.obtenerEstado(ID_ESTADO_OC_INICIAL));
+        Date today = new Date();
+        ordenCompraActual.setFechaAlta(today);
+        ordenCompraActual.setFechaModificacion(today);
     }
 
     public void borrarItem(ProveedoresOrdenesCompraLineasDto linea) {
@@ -173,10 +186,10 @@ public class OrdenesCompraEditBean implements Serializable {
     }
 
     public void productoSelected() {
-        if (productoBusquedaSeleccionado == null) {
-            return;
+        if (productoBusquedaSeleccionado != null) {
+            agregarLinea();
         }
-        productosFilter.setIdProducto(productoBusquedaSeleccionado.getId());
+        productoBusquedaSeleccionado = null;
     }
 
 
@@ -210,5 +223,41 @@ public class OrdenesCompraEditBean implements Serializable {
 
     public ProductosSearchFilter getProductosFilter() {
         return productosFilter;
+    }
+
+    public boolean getLimitarAProveedor() {
+        return limitarAProveedor;
+    }
+
+    public void setLimitarAProveedor(boolean limitarAProveedor) {
+        this.limitarAProveedor = limitarAProveedor;
+    }
+
+    public boolean getSePuedeConfirmar() {
+        return 1 == ordenCompraActual.getIdEstadoOrdenCompra().getId();
+    }
+
+    public void guardarOrdenCompra() {
+        calcularTotal();
+        if (ordenCompraActual.getTotal().signum() <= 0) {
+            addErrorMessage("La orden de compra debe tener productos");
+            return;
+        }
+        ordenCompraActual = ocService.createOrEdit(ordenCompraActual);
+        addInfoMessage(String.format("Orden de compra: %d guardada con éxito", ordenCompraActual.getId()));
+    }
+
+    public void confirmarOrdenCompra() {
+        ordenCompraActual.setIdEstadoOrdenCompra(ocService.obtenerEstado(ID_ESTADO_OC_PENDIENTE_RECEPCION));
+        guardarOrdenCompra();
+    }
+
+    /**
+     * Determina si se puede o no seguir agregando o quitando elementos a la Orden de Compra.
+     *
+     * @return
+     */
+    public boolean getEsEditable() {
+        return 1 == ordenCompraActual.getIdEstadoOrdenCompra().getId();
     }
 }

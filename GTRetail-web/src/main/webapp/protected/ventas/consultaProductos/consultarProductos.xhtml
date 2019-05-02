@@ -102,7 +102,7 @@
                             </h:panelGroup>
 
 
-                            <h:outputLabel for="rubroField" value="#{msg.productoRubro}:"/>
+                            <p:outputLabel for="rubroField" value="#{msg.productoRubro}:"/>
 
                             <p:selectOneMenu id="rubroField" value="#{productosSearchBean.filter.idRubro}"
                                              filter="true"
@@ -120,7 +120,7 @@
                             </p:selectOneMenu>
 
 
-                            <h:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:"/>
+                            <p:outputLabel for="subRubroField" value="#{msg.productoSubRubro}:"/>
 
 
                             <p:selectOneMenu id="subRubroField" value="#{productosSearchBean.filter.idSubRubro}"
@@ -137,7 +137,7 @@
                             </p:selectOneMenu>
 
 
-                            <h:outputLabel for="marcaField" value="#{msg.marca}:"/>
+                            <p:outputLabel for="marcaField" value="#{msg.marca}:"/>
 
                             <p:selectOneMenu id="marcaField" value="#{productosSearchBean.filter.idMarca}"
                                              required="false" requiredMessage="#{msg.ingresarValor}"
@@ -197,60 +197,61 @@
 
                     <p:column sortBy="#{producto.codigoPropio}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.codigo}"/>
+                            <p:outputLabel value="#{msg.codigo}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.codigoPropio}"/>
+                        <p:outputLabel value="#{producto.codigoPropio}"/>
                     </p:column>
 
 
                     <p:column sortBy="#{producto.descripcion}" style="width: 30%">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.descripcion}"/>
+                            <p:outputLabel value="#{msg.descripcion}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.descripcion}"/>
+                        <p:outputLabel value="#{producto.descripcion}"/>
                     </p:column>
                     <p:column sortBy="#{producto.idMarca.nombreMarca}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.marca}"/>
+                            <p:outputLabel value="#{msg.marca}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.idMarca.nombreMarca}"/>
+                        <p:outputLabel value="#{producto.idMarca.nombreMarca}"/>
 
                     </p:column>
                     <p:column sortBy="#{producto.idRubro.nombreRubro}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.productoRubro}"/>
+                            <p:outputLabel value="#{msg.productoRubro}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.idRubro.nombreRubro}"/>
+                        <p:outputLabel value="#{producto.idRubro.nombreRubro}"/>
                     </p:column>
                     <p:column sortBy="#{producto.idSubRubro.nombreSubRubro}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.productoSubRubro}"/>
+                            <p:outputLabel value="#{msg.productoSubRubro}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
+                        <p:outputLabel value="#{producto.idSubRubro.nombreSubRubro}"/>
                     </p:column>
 
 
                     <p:column>
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.precioUnitario}"/>
+                            <p:outputLabel value="#{msg.precioUnitario}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.precioVenta}" style="font-size: medium; font-weight: bold !important;">
+                        <p:outputLabel value="#{producto.precioVenta}"
+                                       style="font-size: medium; font-weight: bold !important;">
                             <f:convertNumber type="currency" groupingUsed="true"
                                              currencySymbol="$ "/>
-                        </h:outputLabel>
+                        </p:outputLabel>
                     </p:column>
 
                     <p:column sortBy="#{producto.idTipoUnidadVenta.nombreUnidad}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.unidadVenta}"/>
+                            <p:outputLabel value="#{msg.unidadVenta}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.idTipoUnidadVenta.nombreUnidad}"/>
+                        <p:outputLabel value="#{producto.idTipoUnidadVenta.nombreUnidad}"/>
 
                     </p:column>
 
                     <p:column headerText="#{msg.stockTotal}" style="text-align: right; ">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.stockTotal}"/>
+                            <p:outputLabel value="#{msg.stockTotal}"/>
                         </f:facet>
                         <h:outputText value="#{producto.stockActual}" style="font-weight: bold !important;">
                             <f:convertNumber groupingUsed="true" type="number"/>
@@ -259,14 +260,14 @@
 
                     <p:column sortBy="#{producto.codigoFabricante}">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.codigoFabrica}"/>
+                            <p:outputLabel value="#{msg.codigoFabrica}"/>
                         </f:facet>
-                        <h:outputLabel value="#{producto.codigoFabricante}"/>
+                        <p:outputLabel value="#{producto.codigoFabricante}"/>
 
                     </p:column>
                     <p:column exportable="false">
                         <f:facet name="header">
-                            <h:outputLabel value="#{msg.acciones}"/>
+                            <p:outputLabel value="#{msg.acciones}"/>
                         </f:facet>
 
                         <p:commandButton icon="fa fa-print"

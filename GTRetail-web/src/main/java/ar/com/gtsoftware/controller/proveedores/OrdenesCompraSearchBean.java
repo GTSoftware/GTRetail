@@ -15,14 +15,28 @@
  */
 package ar.com.gtsoftware.controller.proveedores;
 
+import ar.com.gtsoftware.bl.ParametrosService;
 import ar.com.gtsoftware.bl.ProveedoresOrdenesCompraService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
+import ar.com.gtsoftware.dto.model.ParametrosDto;
 import ar.com.gtsoftware.dto.model.ProveedoresOrdenesCompraDto;
 import ar.com.gtsoftware.search.OrdenCompraSearchFilter;
+import ar.com.gtsoftware.utils.JSFUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * SearchBean para Ordenes de compra
@@ -34,9 +48,11 @@ import javax.faces.bean.ViewScoped;
 public class OrdenesCompraSearchBean extends AbstractSearchBean<ProveedoresOrdenesCompraDto, OrdenCompraSearchFilter> {
 
     private static final long serialVersionUID = 1L;
-    private final OrdenCompraSearchFilter filter = new OrdenCompraSearchFilter();
+    private OrdenCompraSearchFilter filter = new OrdenCompraSearchFilter();
     @EJB
     private ProveedoresOrdenesCompraService service;
+    @EJB
+    private ParametrosService parametrosService;
 
     /**
      * Creates a new instance of OrdenesCompraSearchBean
@@ -47,6 +63,10 @@ public class OrdenesCompraSearchBean extends AbstractSearchBean<ProveedoresOrden
     @Override
     protected ProveedoresOrdenesCompraService getService() {
         return service;
+    }
+
+    protected void setService(ProveedoresOrdenesCompraService service) {
+        this.service = service;
     }
 
     @Override
@@ -61,5 +81,39 @@ public class OrdenesCompraSearchBean extends AbstractSearchBean<ProveedoresOrden
         return filter;
     }
 
+    public String verOrdenCompra(ProveedoresOrdenesCompraDto ordenesCompraDto) {
+        return String.format("edicion/index.xhtml?faces-redirect=true;&idOrdenCompra=%d", ordenesCompraDto.getId());
+    }
 
+    public void imprimirOrdenCompra(ProveedoresOrdenesCompraDto ordenCompraDto) throws JRException, IOException {
+        List<ProveedoresOrdenesCompraDto> ordenesCompra = Collections.singletonList(ordenCompraDto);
+
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ordenesCompra);
+        String reportPath = JSFUtil.getRealPath("/resources/reports/orden_compra.jasper");
+
+        HashMap<String, Object> parameters = cargarParametros();
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
+
+        HttpServletResponse httpServletResponse = JSFUtil.getResponse();
+        httpServletResponse.addHeader("Content-disposition", String.format("attachment; filename=orden-compra-%s.pdf", ordenCompraDto.getId()));
+        ServletOutputStream servletStream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
+        JSFUtil.responseComplete();
+    }
+
+    /**
+     * Devuelve los parámetros para cargar en los reportes de impresión
+     *
+     * @return el HashMap con los parámetros
+     */
+    private HashMap<String, Object> cargarParametros() {
+        List<ParametrosDto> paramList = parametrosService.findParametros("empresa");
+
+        HashMap<String, Object> result = new HashMap<>(paramList.size());
+        for (ParametrosDto p : paramList) {
+            result.put(p.getNombreParametro(), p.getValorParametro());
+        }
+        return result;
+    }
 }
