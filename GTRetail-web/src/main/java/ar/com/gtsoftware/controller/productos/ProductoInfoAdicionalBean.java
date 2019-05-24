@@ -60,15 +60,8 @@ public class ProductoInfoAdicionalBean implements Serializable {
     private List<ProductoXDepositoDto> stockXDepo = null;
 
 
-    /**
-     * Creates a new instance of ProductosSearchBean
-     */
-    public ProductoInfoAdicionalBean() {
-    }
-
-
     @PostConstruct
-    private void initParamsFromComposite() {
+    public void initParamsFromComposite() {
 
         FacesContext fc = FacesContext.getCurrentInstance();
         Application app = FacesContext.getCurrentInstance().getApplication();
