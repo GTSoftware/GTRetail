@@ -203,6 +203,10 @@
                         #{msg.productoListado}
                     </f:facet>
 
+                    <p:column exportable="false">
+                        <p:rowToggler/>
+                    </p:column>
+
                     <p:column sortBy="#{producto.codigoPropio}">
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.codigo}"/>
@@ -310,6 +314,9 @@
 
                     </p:column>
 
+                    <p:rowExpansion>
+                        <gtsoftware:infoAdicionalProducto idProducto="#{producto.id}"/>
+                    </p:rowExpansion>
 
                 </p:dataTable>
 
