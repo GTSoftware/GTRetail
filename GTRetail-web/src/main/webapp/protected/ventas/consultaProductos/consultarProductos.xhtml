@@ -187,13 +187,16 @@
 
                              scrollable="true"
                              reflow="true"
-                             liveResize="true"
-                > 
+                             liveResize="true"> 
 
 
                     <f:facet name="header">
                         #{msg.productoListado}
                     </f:facet>
+
+                    <p:column exportable="false">
+                        <p:rowToggler/>
+                    </p:column>
 
                     <p:column sortBy="#{producto.codigoPropio}">
                         <f:facet name="header">
@@ -230,7 +233,7 @@
                     </p:column>
 
 
-                    <p:column>
+                    <p:column style="width: 10%">
                         <f:facet name="header">
                             <h:outputLabel value="#{msg.precioUnitario}"/>
                         </f:facet>
@@ -277,6 +280,9 @@
 
                     </p:column>
 
+                    <p:rowExpansion>
+                        <gtsoftware:infoAdicionalProducto idProducto="#{producto.id}"/>
+                    </p:rowExpansion>
 
                 </p:dataTable>
 

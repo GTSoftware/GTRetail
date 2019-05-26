@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2019 GT Software.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<composite:interface>
+
+    <composite:attribute name="idProducto" type="java.lang.Long"/>
+
+</composite:interface>
+
+<composite:implementation>
+    <h:form id="infoAdicionalProductoForm">
+        <p:tabView id="editProductoTabView">
+
+            <p:tab id="datosAdicionalesTab" title="Información adicional">
+                <p:panelGrid id="datosAdicionalesGrid"
+                             layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="2">
+
+                    <p:outputLabel for="idProductoField" value="#{msg.id}:"/>
+                    <p:outputLabel id="idProductoField"
+                                   value="#{productoInfoAdicionalBean.producto.id}"/>
+
+                    <p:outputLabel for="codigoFabricaField" value="#{msg.codigoFabrica}:"/>
+                    <p:outputLabel id="codigoFabricaField"
+                                   value="#{productoInfoAdicionalBean.producto.codigoFabricante}"/>
+
+                    <p:outputLabel for="ultimaActualizacionField" value="#{msg.ultimaModificacion}:"/>
+                    <p:outputLabel id="ultimaActualizacionField"
+                                   value="#{productoInfoAdicionalBean.ultimaModificacion}"/>
+
+                    <p:outputLabel for="ultimaRecepcionField" value="#{msg.ultimaRecepcion}:"/>
+                    <p:outputLabel id="ultimaRecepcionField"
+                                   value="#{productoInfoAdicionalBean.fechaUltimaRecepcion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </p:outputLabel>
+
+
+                </p:panelGrid>
+                <p:panelGrid id="observacionesGrid"
+                             layout="grid"
+                             styleClass="ui-panelgrid-blank" columns="1">
+
+                    <p:outputLabel for="observacionesField" value="#{msg.observaciones}:"/>
+                    <p:inputTextarea id="observacionesField" readonly="true"
+                                     value="#{productoInfoAdicionalBean.producto.observaciones}"/>
+                </p:panelGrid>
+            </p:tab>
+
+            <p:tab id="existenciasTab" title="Existencias">
+
+                <p:panelGrid id="existenciasGrid" layout="grid"
+                             styleClass="ui-panelgrid-blank"
+                             columns="2">
+                    <p:outputLabel for="stockMinimoField"
+                                   value="#{msg.stockMinimo}:"/>
+                    <p:outputLabel id="stockMinimoField"
+                                   value="#{productoInfoAdicionalBean.producto.stockMinimo}"
+                                   label="#{msg.stockMinimo}"/>
+
+
+                </p:panelGrid>
+
+                <div>
+
+                    <p:dataTable id="existenciasTable" var="stk" value="#{productoInfoAdicionalBean.stockXDepo}"
+                                 rows="10"
+                                 lazy="false"
+                                 paginator="true"
+                                 emptyMessage="No hay existencias..."
+                                 selectionMode="single"
+                                 rowKey="#{stk.id}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15,30,100"
+                                 liveResize="false"
+                                 resizableColumns="false"
+                                 scrollable="true"
+                                 sortMode="single"
+                                 reflow="true">
+
+                        <p:column>
+                            <f:facet name="header">
+                                Depósito
+                            </f:facet>
+                            <h:outputText value="#{stk.deposito}"/>
+                        </p:column>
+                        <p:column style="width:30%">
+                            <f:facet name="header">
+                                #{msg.stock}
+                            </f:facet>
+                            <h:outputText value="#{stk.stock}">
+                                <f:convertNumber groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+
+            </p:tab>
+        </p:tabView>
+    </h:form>
+</composite:implementation>
+</html>
