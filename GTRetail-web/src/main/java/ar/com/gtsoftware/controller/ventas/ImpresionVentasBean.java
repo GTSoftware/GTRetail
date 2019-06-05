@@ -67,21 +67,17 @@ public class ImpresionVentasBean implements Serializable {
      */
     public void imprimirPresupuesto(ComprobantesDto ventaActual) throws IOException, JRException {
         List<ComprobantesDto> ventas = Collections.singletonList(ventaActual);
-        String copias = parametrosFacade.findParametroByName("presupuesto.impresion.cantidad_copias").getValorParametro();
-        int cantCopias = Integer.parseInt(copias);
+        String mostrarPreciosValue = parametrosFacade.findParametroByName("presupuesto.impresion.mostrar_detalle_precios").getValorParametro();
+        int mostrarPrecios = Integer.parseInt(mostrarPreciosValue);
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(ventas);
-        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/vistaVenta.jasper");
+        String reportPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/reports/presupuesto.jasper");
 
         HashMap<String, Object> parameters = cargarParametros();
+        parameters.put("presupuesto.impresion.mostrar_detalle_precios", mostrarPrecios > 0);
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 
-        for (int i = 1; i < cantCopias; i++) {
-
-            jasperPrint.addPage(jasperPrint.getPages().get(0));
-
-        }
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         httpServletResponse.addHeader("Content-disposition", "attachment; filename=venta-" + ventaActual.getId() + ".pdf");
         ServletOutputStream servletStream = httpServletResponse.getOutputStream();
