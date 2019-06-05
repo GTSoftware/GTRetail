@@ -17,6 +17,7 @@ package ar.com.gtsoftware.controller.parametros;
 
 import ar.com.gtsoftware.bl.ParametrosService;
 import ar.com.gtsoftware.dto.model.ParametrosDto;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -37,7 +38,7 @@ public class ParametrosSearchBean implements Serializable {
     @EJB
     private ParametrosService parametrosFacade;
     private List<ParametrosDto> parametrosList = new ArrayList<>();
-    private String txt;
+    private String txt = StringUtils.EMPTY;
 
     /**
      * Creates a new instance of ParametrosEditBean
