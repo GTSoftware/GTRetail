@@ -25,7 +25,6 @@ import ar.com.gtsoftware.dto.model.ProductosDto;
 import ar.com.gtsoftware.dto.model.RemitoDto;
 import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 import ar.com.gtsoftware.search.RemitoSearchFilter;
-import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -89,10 +88,9 @@ public class ProductoInfoAdicionalBeanTest {
     public void deberiaMostrarFechaUltimaModificacionVaciaSinProducto() {
         bean.setProducto(null);
 
-        String ultimaModificacion = bean.getUltimaModificacion();
+        Date ultimaModificacion = bean.getUltimaModificacion();
 
-        assertThat(ultimaModificacion, notNullValue());
-        assertThat(ultimaModificacion, is(""));
+        assertThat(ultimaModificacion, nullValue());
     }
 
     @Test
@@ -100,21 +98,10 @@ public class ProductoInfoAdicionalBeanTest {
         bean.setProducto(ProductosDto.builder()
                 .fechaUltimaModificacion(HOY).build());
 
-        String ultimaModificacion = bean.getUltimaModificacion();
+        Date ultimaModificacion = bean.getUltimaModificacion();
 
         assertThat(ultimaModificacion, notNullValue());
-        assertThat(ultimaModificacion, is("Este mes"));
-    }
-
-    @Test
-    public void deberiaMostrarFechaUltimaModificacionDeHaceMeses() {
-        bean.setProducto(ProductosDto.builder()
-                .fechaUltimaModificacion(DateUtils.addMonths(HOY, -3)).build());
-
-        String ultimaModificacion = bean.getUltimaModificacion();
-
-        assertThat(ultimaModificacion, notNullValue());
-        assertThat(ultimaModificacion, is("Hace 3 mes/es"));
+        assertThat(ultimaModificacion, is(HOY));
     }
 
     @Test

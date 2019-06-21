@@ -24,7 +24,6 @@ import ar.com.gtsoftware.dto.model.ProductosDto;
 import ar.com.gtsoftware.dto.model.RemitoDto;
 import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 import ar.com.gtsoftware.search.RemitoSearchFilter;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -33,9 +32,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -108,16 +104,11 @@ public class ProductoInfoAdicionalBean implements Serializable {
         return stockXDepo;
     }
 
-    public String getUltimaModificacion() {
+    public Date getUltimaModificacion() {
         if (producto != null) {
-            YearMonth mesAnioUltimaModif =
-                    YearMonth.from(producto.getFechaUltimaModificacion().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
-            long nroMeses = ChronoUnit.MONTHS.between(mesAnioUltimaModif, YearMonth.now());
-            return nroMeses <= 0 ? "Este mes" : "Hace " + nroMeses + " mes/es";
+            return producto.getFechaUltimaModificacion();
         }
-        return StringUtils.EMPTY;
+        return null;
     }
 
     public Date getFechaUltimaRecepcion() {

@@ -47,7 +47,9 @@
 
                     <p:outputLabel for="ultimaActualizacionField" value="#{msg.ultimaModificacion}:"/>
                     <p:outputLabel id="ultimaActualizacionField"
-                                   value="#{productoInfoAdicionalBean.ultimaModificacion}"/>
+                                   value="#{productoInfoAdicionalBean.ultimaModificacion}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </p:outputLabel>
 
                     <p:outputLabel for="ultimaRecepcionField" value="#{msg.ultimaRecepcion}:"/>
                     <p:outputLabel id="ultimaRecepcionField"
