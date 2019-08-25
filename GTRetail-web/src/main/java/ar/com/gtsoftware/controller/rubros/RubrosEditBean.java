@@ -76,15 +76,12 @@ public class RubrosEditBean implements Serializable {
 
     public void doGuardar() {
         try {
-
-            service.createOrEdit(rubroActual);
-            JSFUtil.addInfoMessage("Rubro guardada Exitosamente");
-            rubroActual = service.find(rubroActual.getId());
+            rubroActual = service.createOrEdit(rubroActual);
+            JSFUtil.addInfoMessage("Rubro guardado Exitosamente");
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");
         }
-
     }
 
     public ProductosRubrosDto getRubroActual() {

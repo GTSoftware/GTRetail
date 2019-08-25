@@ -39,13 +39,13 @@
                         </p:panelGrid >
 
                         <div class="SeparatorFull"></div>
-                        <p:panelGrid layout="grid" columns="2"  style="border:0px !important; background:none;"
+                        <p:panelGrid layout="grid" columns="2"
                                      styleClass="ui-panelgrid-blank">
                             <p:commandButton value="#{msg.guardar}" icon="fa fa-fw fa-save" action="#{subRubrosEditBean.doGuardar()}"
                                              update="@form" />
 
                             <p:commandButton value="#{msg.cancelar}" icon="fa fa-fw fa-ban"
-                                             action="subrubroSearch.xhtml?faces-redirect=true"
+                                             action="subrubroSearch"
                                              ajax="false" immediate="true" styleClass="RedButton">
                                 <f:param name="idRubro" value="#{subRubrosEditBean.rubroActual.id}" />
 

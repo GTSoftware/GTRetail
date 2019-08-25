@@ -93,7 +93,6 @@ public class SubRubrosEditBean implements Serializable {
 
     public void doGuardar() {
         try {
-
             subRubroActual = service.createOrEdit(subRubroActual);
             JSFUtil.addInfoMessage("SubRubro guardado Exitosamente");
         } catch (Exception e) {

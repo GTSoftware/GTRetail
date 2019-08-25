@@ -75,10 +75,8 @@ public class MarcasEditBean implements Serializable {
 
     public void doGuardar() {
         try {
-
-            facade.createOrEdit(marcaActual);
+            marcaActual = facade.createOrEdit(marcaActual);
             JSFUtil.addInfoMessage("Marca guardada Exitosamente");
-            marcaActual = facade.find(marcaActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
             JSFUtil.addErrorMessage("Error al guardar");

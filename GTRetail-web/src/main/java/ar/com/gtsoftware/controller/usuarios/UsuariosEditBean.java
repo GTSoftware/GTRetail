@@ -145,7 +145,7 @@ public class UsuariosEditBean implements Serializable {
             throw new ValidationException("No se permite guardar el usuario en el estado actual");
         }
 
-        if (usuarioActual.getLogin().equals(RESERVED_USERNAME)) {
+        if (RESERVED_USERNAME.equals(usuarioActual.getLogin())) {
             throw new ValidationException("No se permite modificar el usuario reservado");
         }
     }
