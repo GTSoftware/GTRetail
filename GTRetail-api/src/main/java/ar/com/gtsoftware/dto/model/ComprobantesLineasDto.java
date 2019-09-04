@@ -58,7 +58,7 @@ public class ComprobantesLineasDto implements Serializable {
      * @return
      */
     public String getDescripcionLinea() {
-        return StringUtils.left(String.format("[%d] %s", idProducto.getId(), descripcion), 90);
+        return StringUtils.left(String.format("[%s] %s", idProducto.getCodigoPropio(), descripcion), 90);
     }
 
     public BigDecimal getIva() {

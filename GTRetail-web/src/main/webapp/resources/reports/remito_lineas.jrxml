@@ -62,7 +62,8 @@
 			</textField>
 			<textField>
 				<reportElement x="122" y="4" width="431" height="20" uuid="28435475-9b51-4ff1-b6f1-957423fb2291"/>
-				<textFieldExpression><![CDATA["["+$F{idProducto}.getId()+"] "+ $F{idProducto}.getDescripcion()]]></textFieldExpression>
+				<textFieldExpression>
+					<![CDATA["["+$F{idProducto}.getCodigoPropio()+"] "+ $F{idProducto}.getDescripcion()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="54" y="4" width="57" height="20" uuid="9198d21b-a936-4cf8-a475-355332c68bce"/>

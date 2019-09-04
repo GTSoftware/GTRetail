@@ -457,4 +457,19 @@ public class ProductoEditBean implements Serializable {
     public boolean isEditandoNuevoProducto() {
         return editandoNuevoProducto;
     }
+
+    public void validarCodigoExistente() {
+        String codigoPropio = productoActual.getCodigoPropio();
+        ProductosSearchFilter sf = ProductosSearchFilter.builder().codigoPropio(codigoPropio).build();
+        ProductosDto productoExistente = productosFacade.findFirstBySearchFilter(sf);
+        if (productoExistente == null) {
+            return;
+        }
+        Long idExistente = productoExistente.getId();
+        if (editandoNuevoProducto) {
+            JSFUtil.addErrorMessage(String.format("El código %s ya existe. ID: %d", codigoPropio, idExistente));
+        } else if (!idExistente.equals(productoActual.getId())) {
+            JSFUtil.addErrorMessage(String.format("El código %s ya existe. ID: %d", codigoPropio, idExistente));
+        }
+    }
 }
