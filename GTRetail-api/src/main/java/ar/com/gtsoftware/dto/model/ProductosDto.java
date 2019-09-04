@@ -19,6 +19,7 @@ package ar.com.gtsoftware.dto.model;
 import ar.com.gtsoftware.dto.IdentifiableDto;
 import lombok.*;
 
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ProductosDto implements IdentifiableDto {
 
     @EqualsAndHashCode.Include
     private Long id;
+    @Pattern(regexp = "([A-Z]|[0-9]|/|-|_|\\.\\S)+", message = "El código no puede tener caracteres extraños ni espacios")
     private String codigoPropio;
     private String descripcion;
     private String observaciones;

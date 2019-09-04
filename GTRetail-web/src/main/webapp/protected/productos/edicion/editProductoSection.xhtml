@@ -48,7 +48,11 @@
                                          maxlength="100"
                                          required="true"
                                          requiredMessage="#{msg.ingresarValor}"
-                                         label="#{msg.codigo}"/>
+                                         label="#{msg.codigo}"
+                                         converter="#{stringFormatConverter}">
+                                <p:ajax event="blur" listener="#{productoEditBean.validarCodigoExistente()}"
+                                        partialSubmit="true" process="@this"/>
+                            </p:inputText>
                             <p:message for="codigoProductoField"/>
 
                             <h:outputLabel for="descripcionField" value="#{msg.descripcion}:"/>

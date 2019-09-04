@@ -112,7 +112,8 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></variableEx
 			</textField>
 			<textField>
 				<reportElement x="122" y="4" width="245" height="20" uuid="28435475-9b51-4ff1-b6f1-957423fb2291"/>
-				<textFieldExpression><![CDATA["["+$F{idProducto}.getId()+"] "+$F{descripcion}]]></textFieldExpression>
+				<textFieldExpression>
+					<![CDATA["["+$F{idProducto}.getCodigoPropio()+"] "+$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="54" y="4" width="57" height="20" uuid="9198d21b-a936-4cf8-a475-355332c68bce"/>
