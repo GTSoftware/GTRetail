@@ -1,24 +1,29 @@
 #!/bin/bash
 
 SKIP_TESTS=""
-CLEAN=""
+clean=" clean "
+report=" surefire-report:report "
 
-usage="$(basename "$0") [-h] [-S] [-c] -- Script for compiling application
+usage="$(basename "$0") [-h] [-T] [-c] [-r] -- Script for compiling application
 
 where:
     -h  show this help text
-    -T  Without tests
-    -c  clean"
+    -T  without tests
+    -c  no clean
+    -r without surefire reports
+"
 
-while getopts ':hSc:' option; do
+while getopts ':hTrc :' option; do
 	case "$option" in
 	h) echo "$usage"
 		exit
 		;;
-	T) SKIP_TESTS="-DskipTests=true"
+	T) SKIP_TESTS=" -DskipTests=true "
 		;;
-	c) CLEAN=" clean "
+	c) clean=""
 		;;
+  r) report=""
+    ;;
 	\?) printf "Illegal option: -%s\n" "$OPTARG" >&2
 		echo "$usage" >&2
 		exit 1
@@ -26,6 +31,7 @@ while getopts ':hSc:' option; do
 	esac
 done
 
-MAVEN_OPTS="-Xms1024m"
+MAVEN_OPTS="-Xms2048m"
 
-mvn  $CLEAN install -T 4 $SKIP_TESTS
+echo "Executing: mvn $clean install -T 4 $SKIP_TESTS $report"
+mvn $clean install -T 4 $SKIP_TESTS $report
