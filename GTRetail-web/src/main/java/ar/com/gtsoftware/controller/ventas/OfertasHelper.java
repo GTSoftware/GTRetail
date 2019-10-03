@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Clase de soporte para la implementación de reglas de ofertas
  */
-public final class OfertasHelper {
+public class OfertasHelper {
 
     private static final String DROOLS_TEMPLATES_PRODUCT_DRT = "ar/com/gtsoftware/drools/templates/Product.drt";
     private final OfertasService ofertasService;
