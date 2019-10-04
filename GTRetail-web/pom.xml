@@ -43,11 +43,6 @@
             <artifactId>GTRetail-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.apache.xmlbeans</groupId>-->
-        <!--<artifactId>xmlbeans</artifactId>-->
-        <!--<version>2.6.0</version>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -205,22 +200,9 @@
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
                         </path>
-                        <!--<path>
-                            <groupId>org.hibernate</groupId>
-                            <artifactId>hibernate-jpamodelgen</artifactId>
-                            <version>5.2.2.Final</version>
-                        </path>-->
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <!--    <repositories>
-        <repository>
-            <url>http://repository.primefaces.org/</url>
-            <id>PrimeFaces-maven-lib</id>
-            <layout>default</layout>
-            <name>Repository for library PrimeFaces-maven-lib</name>
-        </repository>
-    </repositories>-->
 </project>

@@ -24,7 +24,6 @@ import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.rules.TipoAccion;
 import ar.com.gtsoftware.search.*;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.CellEditEvent;
 
@@ -670,7 +669,7 @@ public class ShopCartBean implements Serializable {
         }
         ComprobantesDto comprobanteOriginal = ventasService.obtenerComprobante(idComprobanteRelacionado);
         if (comprobanteOriginal == null) {
-            JSFUtil.addErrorMessage("Comprobante no encontrado");
+            addErrorMessage("Comprobante no encontrado");
             return;
         }
 
@@ -687,7 +686,7 @@ public class ShopCartBean implements Serializable {
 
         calcularTotal();
         venta.setIdPersona(comprobanteOriginal.getIdPersona());
-        JSFUtil.addInfoMessage("El tipo de comprobante se ha establecido a: "
+        addInfoMessage("El tipo de comprobante se ha establecido a: "
                 + comprobanteRelacionado.getTipoComprobante().getNombre());
     }
 }

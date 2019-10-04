@@ -31,7 +31,7 @@ while getopts ':hTrc :' option; do
 	esac
 done
 
-MAVEN_OPTS="-Xms2048m"
+MAVEN_OPTS="-DXms2048m"
 
-echo "Executing: mvn $clean install -T 4 $SKIP_TESTS $report"
-mvn $clean install -T 4 $SKIP_TESTS $report
+echo "Executing: mvn $MAVEN_OPTS $clean install -T 4 $SKIP_TESTS $report"
+mvn $MAVEN_OPTS $clean install -T 4 $SKIP_TESTS $report

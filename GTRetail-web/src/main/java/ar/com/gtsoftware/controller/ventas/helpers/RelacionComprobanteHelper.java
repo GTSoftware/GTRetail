@@ -43,7 +43,6 @@ public class RelacionComprobanteHelper {
     }
 
     private NegocioTiposComprobanteEnum determinarTipoComprobanteActual(NegocioTiposComprobanteDto tipoComprobanteOriginal) {
-
         if (tipoComprobanteOriginal.getId().equals(FACTURA.getId())) {
             return NOTA_DE_CREDITO;
         }
@@ -53,8 +52,6 @@ public class RelacionComprobanteHelper {
 
     private List<ComprobantesLineasDto> quitarProductosReservados(List<ComprobantesLineasDto> comprobantesLineasList,
                                                                   List<Long> idsProductosReservados) {
-
-
         if (CollectionUtils.isEmpty(idsProductosReservados)) {
             limpiarLineas(comprobantesLineasList);
             return comprobantesLineasList;
@@ -73,7 +70,6 @@ public class RelacionComprobanteHelper {
     }
 
     private void limpiarLineas(List<ComprobantesLineasDto> comprobantesLineasList) {
-
         for (ComprobantesLineasDto linea : comprobantesLineasList) {
             linea.setId(null);
             linea.setIdComprobante(null);
