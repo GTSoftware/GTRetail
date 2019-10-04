@@ -17,14 +17,7 @@ package ar.com.gtsoftware.utils;
 
 import ar.com.gtsoftware.auth.Roles;
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
-import javax.ejb.Stateless;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -37,6 +30,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility for JSF.
@@ -44,8 +43,9 @@ import javax.validation.constraints.NotNull;
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  * @version 2.0.0
  * @since 1.0.0
+ * @deprecated use JSFHelper instead
  */
-
+@Deprecated
 public abstract class JSFUtil {
 
     private static final Logger LOG = Logger.getLogger(JSFUtil.class.getName());
