@@ -18,6 +18,8 @@ package ar.com.gtsoftware.controller.ventas;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.auth.Roles;
 import ar.com.gtsoftware.bl.*;
+import ar.com.gtsoftware.controller.ventas.dto.ComprobanteRelacionado;
+import ar.com.gtsoftware.controller.ventas.helpers.RelacionComprobanteHelper;
 import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.rules.TipoAccion;
@@ -34,10 +36,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,7 +74,15 @@ public class ShopCartBean implements Serializable {
             .disponibleVenta(true).build();
     private final AtomicInteger itemCounter = new AtomicInteger(1);
     private final List<NegocioPlanesPagoDetalleDto> detallePlan = new ArrayList<>();
-
+    protected ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
+    protected NegocioFormasPagoDto formaPagoDefecto = null;
+    RelacionComprobanteHelper relacionComprobanteHelper = new RelacionComprobanteHelper();
+    @EJB
+    NegocioTiposComprobanteService tiposComprobanteFacade;
+    @EJB
+    VentasService ventasService;
+    OfertasHelper ofertasHelper;
+    ProductosDto productoRedondeo;
     @Inject
     private Conversation conversation;
     @Inject
@@ -92,27 +99,17 @@ public class ShopCartBean implements Serializable {
     private NegocioCondicionesOperacionesService condicionesOperacionesFacade;
     @EJB
     private NegocioFormasPagoService formasPagoFacade;
-
-    @EJB
-    private NegocioTiposComprobanteService tiposComprobanteFacade;
-
     @EJB
     private NegocioPlanesPagoService planesPagoFacade;
     @EJB
     private NegocioPlanesPagoDetalleService pagoDetalleFacade;
     @EJB
-    private VentasService ventasService;
-    @EJB
     private OfertasService ofertasService;
-
-    private OfertasHelper ofertasHelper;
-    protected ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
     private BigDecimal cantidad = BigDecimal.ONE;
+    private Long idComprobanteRelacionado = null;
     private ComprobantesDto venta;
     private ProductosDto productoBusquedaSeleccionado = null;
     private ProductosListasPreciosDto lista;
-    private ProductosDto productoRedondeo;
-    protected NegocioFormasPagoDto formaPagoDefecto = null;
     private int cantDecimalesRedondeo = 2;
     private int redondeoIndex = 0;
     private boolean vendedor = false;
@@ -656,5 +653,40 @@ public class ShopCartBean implements Serializable {
             }
         }
         comprobantesLineasList.removeAll(lineasRelacionadas);
+    }
+
+    public Long getIdComprobanteRelacionado() {
+        return idComprobanteRelacionado;
+    }
+
+    public void setIdComprobanteRelacionado(Long idComprobanteRelacionado) {
+        this.idComprobanteRelacionado = idComprobanteRelacionado;
+    }
+
+    public void cargarComprobanteRelacionado() {
+        if (idComprobanteRelacionado == null) {
+            return;
+        }
+        ComprobantesDto comprobanteOriginal = ventasService.obtenerComprobante(idComprobanteRelacionado);
+        if (comprobanteOriginal == null) {
+            addErrorMessage("Comprobante no encontrado");
+            return;
+        }
+
+        ComprobanteRelacionado comprobanteRelacionado = relacionComprobanteHelper.generarComprobanteRelacionado(comprobanteOriginal,
+                Collections.singletonList(productoRedondeo.getId()));
+
+        venta.setTipoComprobante(comprobanteRelacionado.getTipoComprobante().convertToDto());
+
+        for (ComprobantesLineasDto linea : comprobanteRelacionado.getComprobantesLineas()) {
+            linea.setIdComprobante(venta);
+            venta.addLineaVenta(linea);
+            ofertasHelper.ejecutarReglasOferta(linea);
+        }
+
+        calcularTotal();
+        venta.setIdPersona(comprobanteOriginal.getIdPersona());
+        addInfoMessage("El tipo de comprobante se ha establecido a: "
+                + comprobanteRelacionado.getTipoComprobante().getNombre());
     }
 }

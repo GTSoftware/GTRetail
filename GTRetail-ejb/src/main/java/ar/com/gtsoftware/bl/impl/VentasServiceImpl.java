@@ -23,6 +23,7 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.ComprobantesDto;
 import ar.com.gtsoftware.eao.*;
+import ar.com.gtsoftware.enums.NegocioTiposComprobanteEnum;
 import ar.com.gtsoftware.mappers.ComprobantesMapper;
 import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
 import ar.com.gtsoftware.model.*;
@@ -44,7 +45,6 @@ public class VentasServiceImpl implements VentasService {
 
     private static final long ID_ESTADO_ACEPTADA = 2L;
     private static final long ID_TIPO_MOV_VENTA = 2L;
-    private static final long ID_TIPO_COMP_PRESUPUESTO = 4L;
     @Inject
     private ComprobantesMapper mapper;
 
@@ -72,7 +72,7 @@ public class VentasServiceImpl implements VentasService {
     public RegistroVentaDto guardarVenta(ComprobantesDto comprobantesDto, boolean generarRemitoSalida) throws ServiceException {
         Comprobantes comprobante = mapper.dtoToEntity(comprobantesDto, new CycleAvoidingMappingContext());
 
-        boolean isPresupuesto = comprobante.getTipoComprobante().getId() == ID_TIPO_COMP_PRESUPUESTO;
+        boolean isPresupuesto = NegocioTiposComprobanteEnum.PRESUPUESTO.getId().equals(comprobante.getTipoComprobante().getId());
         if (isPresupuesto) {
             comprobante.setSaldo(BigDecimal.ZERO);
         } else {
@@ -108,8 +108,13 @@ public class VentasServiceImpl implements VentasService {
     }
 
     @Override
+    public ComprobantesDto obtenerComprobante(Long id) {
+        Comprobantes comprobante = facade.find(id);
+        return mapper.entityToDto(comprobante, new CycleAvoidingMappingContext());
+    }
+
     //TODO esto deberìa ir en un bean responsable de manejar el stock :S
-    public long generarRemitoComprobante(long idComprobante, long idUsuario) {
+    private long generarRemitoComprobante(long idComprobante, long idUsuario) {
         Comprobantes venta = facade.find(idComprobante);
 
         Remito rem = new Remito();

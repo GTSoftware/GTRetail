@@ -56,7 +56,7 @@
 
                 </p:panelGrid>
 
-                <div class="Container25 ui-fluid">
+                <div class="Container10 ui-fluid">
                     <p:commandButton id="insertarButton" icon="fa fa-fw fa-plus"
                                      title="#{msg.insertar}"
                                      action="#{shopCartBean.addToCart()}"
@@ -69,7 +69,21 @@
                                      process="@none"
                                      global="false"/>
                 </div>
-
+                <div class="Container25 ui-fluid">
+                    <p:panel toggleable="true" collapsed="true" closable="false" header="#{msg.desdeComprobante}">
+                        <p:panelGrid
+                                layout="grid" styleClass="ui-panelgrid-blank" columns="2">
+                            <p:inputNumber id="idComprobanteField"
+                                           value="#{shopCartBean.idComprobanteRelacionado}"
+                                           decimalPlaces="0"
+                                           placeholder="Id Comprobante">
+                                <p:ajax event="blur" listener="#{shopCartBean.cargarComprobanteRelacionado()}"
+                                        partialSubmit="true" process="@this"
+                                        update="productosTable"/>
+                            </p:inputNumber>
+                        </p:panelGrid>
+                    </p:panel>
+                </div>
 
                 <p:remoteCommand name="onCellEdit" update="productosTable" immediate="true"/>
                 <div class="Container100 ui-fluid">
