@@ -38,11 +38,5 @@ public interface VentasService {
      */
     RegistroVentaDto guardarVenta(ComprobantesDto comprobantesDto, boolean generarRemitoSalida) throws ServiceException;
 
-    /**
-     * Genera el remito de entrada o salida segùn corresponda el tipo de comprobante
-     *
-     * @param idComprobante
-     * @return
-     */
-    long generarRemitoComprobante(long idComprobante, long idUsuario);
+    ComprobantesDto obtenerComprobante(Long id);
 }
