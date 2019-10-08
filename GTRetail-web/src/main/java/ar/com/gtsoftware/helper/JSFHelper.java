@@ -80,6 +80,10 @@ public class JSFHelper implements Serializable {
         return getFacesContext().isPostback();
     }
 
+    public boolean isNotPostback() {
+        return !isPostback();
+    }
+
     public Map<String, String> getRequestParameterMap() {
         return getExternalContext().getRequestParameterMap();
     }

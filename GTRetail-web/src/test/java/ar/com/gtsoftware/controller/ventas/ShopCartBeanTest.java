@@ -21,15 +21,13 @@ import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
 import ar.com.gtsoftware.bl.VentasService;
 import ar.com.gtsoftware.controller.ventas.helpers.RelacionComprobanteHelper;
 import ar.com.gtsoftware.dto.model.*;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.enums.NegocioTiposComprobanteEnum;
+import ar.com.gtsoftware.helper.JSFHelper;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -39,15 +37,11 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({JSFUtil.class})
 public class ShopCartBeanTest {
 
-    private ShopCartBean shopCartBean;
-
-    @Mock
-    private ComprobantesDto mockVenta;
+    private ComprobantesDto venta;
     @Mock
     private VentasService mockVentasService;
     @Mock
@@ -56,52 +50,45 @@ public class ShopCartBeanTest {
     private OfertasHelper mockOfertasHelper;
     @Mock
     private RelacionComprobanteHelper mockRelacionComprobanteHelper;
+    @Mock
+    private JSFHelper mockJsfHelper;
 
+    @InjectMocks
+    private ShopCartBean shopCartBean;
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(JSFUtil.class);
-        shopCartBean = new ShopCartBean();
-        shopCartBean.setVenta(mockVenta);
-        shopCartBean.ventasService = mockVentasService;
-        shopCartBean.tiposComprobanteFacade = mockNegocioTiposComprobanteService;
-        shopCartBean.ofertasHelper = mockOfertasHelper;
-        shopCartBean.relacionComprobanteHelper = mockRelacionComprobanteHelper;
-
+        initMocks(this);
+        venta = ComprobantesDto.builder().build();
+        shopCartBean.setVenta(venta);
     }
 
     @Test
     public void deberiaVolverAlPasoInicialEnPagoSinPagos() {
         List<ComprobantesPagosDto> pagosList = Collections.emptyList();
 
-        when(mockVenta.getPagosList()).thenReturn(pagosList);
+        venta.setPagosList(pagosList);
 
         String actual = shopCartBean.volverPasoInicialEnPago();
 
-        verify(mockVenta).getPagosList();
         assertThat(actual, is("index.xhtml?faces-redirect=true"));
     }
 
     @Test
     public void deberiaVolverAlPasoInicialEnPagoConPagos() {
-        ComprobantesPagosDto mockPago = mock(ComprobantesPagosDto.class);
+        ComprobantesPagosDto pago = new ComprobantesPagosDto();
         List<ComprobantesPagosDto> pagosList = new ArrayList<>(1);
-        pagosList.add(mockPago);
+        pagosList.add(pago);
 
         ComprobantesLineasDto linea = ComprobantesLineasDto.builder().item(1).build();
         List<ComprobantesLineasDto> lineasVentaList = new ArrayList<>(1);
         lineasVentaList.add(linea);
 
-        when(mockVenta.getPagosList()).thenReturn(pagosList);
-        when(mockPago.getProductoRecargoItem()).thenReturn(1);
-        when(mockVenta.getComprobantesLineasList()).thenReturn(lineasVentaList);
-
+        venta.setPagosList(pagosList);
+        pago.setProductoRecargoItem(1);
+        venta.setComprobantesLineasList(lineasVentaList);
 
         String actual = shopCartBean.volverPasoInicialEnPago();
-
-        verify(mockVenta).getPagosList();
-        verify(mockPago).getProductoRecargoItem();
-        verify(mockVenta, times(3)).getComprobantesLineasList();
 
         assertThat(actual, is("index.xhtml?faces-redirect=true"));
         assertThat(lineasVentaList.size(), is(0));
@@ -111,42 +98,36 @@ public class ShopCartBeanTest {
 
     @Test
     public void deberiaInicializarLosPagosCuandoNoEsPostback() {
-        when(JSFUtil.isPostback()).thenReturn(false);
-        when(mockVenta.getPagosList()).thenReturn(Collections.emptyList());
-        shopCartBean.formaPagoDefecto = mock(NegocioFormasPagoDto.class);
-        shopCartBean.pagoActual = mock(ComprobantesPagosDto.class);
-        when(mockVenta.getTotal()).thenReturn(BigDecimal.TEN);
+        when(mockJsfHelper.isNotPostback()).thenReturn(true);
+        venta.setPagosList(new ArrayList<>());
+        shopCartBean.formaPagoDefecto = NegocioFormasPagoDto.builder().id(1L).build();
+        venta.setTotal(BigDecimal.TEN);
 
         shopCartBean.initPagos();
 
-        verify(mockVenta, times(2)).getPagosList();
-        verify(shopCartBean.pagoActual).setMontoPago(eq(BigDecimal.TEN));
-        verify(shopCartBean.pagoActual).setMontoPagado(eq(BigDecimal.ZERO));
-        verify(shopCartBean.pagoActual).setIdFormaPago(eq(shopCartBean.formaPagoDefecto));
-        verify(mockVenta, times(3)).setSaldo(eq(BigDecimal.TEN));
-
+        ComprobantesPagosDto pagoAgregado = venta.getPagosList().get(0);
+        assertThat(pagoAgregado.getMontoPago(), is(BigDecimal.TEN));
+        assertThat(pagoAgregado.getMontoPagado(), is(BigDecimal.ZERO));
+        assertThat(pagoAgregado.getIdFormaPago().getId(), is(1L));
+        assertThat(venta.getSaldo(), is(BigDecimal.ZERO));
     }
 
     @Test
     public void noDeberiaInicializarLosPagosCuandoEsPostback() {
-        when(JSFUtil.isPostback()).thenReturn(true);
-        when(mockVenta.getPagosList()).thenReturn(Collections.emptyList());
-
-        shopCartBean.formaPagoDefecto = mock(NegocioFormasPagoDto.class);
-        shopCartBean.pagoActual = mock(ComprobantesPagosDto.class);
-        when(mockVenta.getTotal()).thenReturn(BigDecimal.TEN);
+        when(mockJsfHelper.isNotPostback()).thenReturn(false);
+        venta.setPagosList(new ArrayList<>());
+        shopCartBean.formaPagoDefecto = NegocioFormasPagoDto.builder().id(1L).build();
+        venta.setTotal(BigDecimal.TEN);
 
         shopCartBean.initPagos();
 
-        verify(mockVenta, times(0)).getPagosList();
-        verify(mockVenta, times(0)).setSaldo(eq(BigDecimal.TEN));
-
+        assertThat(venta.getPagosList().isEmpty(), is(true));
     }
 
     @Test
     public void deberiaRelacionarComprobante() {
         shopCartBean.setIdComprobanteRelacionado(1L);
-        shopCartBean.productoRedondeo = ProductosDto.builder().id(1L).build();
+        shopCartBean.setProductoRedondeo(ProductosDto.builder().id(1L).build());
         PersonasDto cliente = PersonasDto.builder().id(5L).build();
 
         ComprobantesDto compOriginal = ComprobantesDto.builder().id(1L)
@@ -160,21 +141,20 @@ public class ShopCartBeanTest {
 
         shopCartBean.cargarComprobanteRelacionado();
 
-        verify(mockVenta).setTipoComprobante(any());
-        verify(mockVenta, times(2)).addLineaVenta(any());
-        verify(mockOfertasHelper, times(2)).ejecutarReglasOferta(any());
-        verify(mockVenta).setTotal(any());
-        verify(mockVenta).setIdPersona(eq(cliente));
+        assertThat(venta.getTipoComprobante().getId(), is(NegocioTiposComprobanteEnum.NOTA_DE_CREDITO.getId()));
+        assertThat(venta.getComprobantesLineasList().size(), is(2));
+        assertThat(venta.getTotal().signum(), is(1));
+        assertThat(venta.getIdPersona(), is(cliente));
     }
 
     @Test
     public void deberiaMostrarErrorCuandoNoExisteComprobanteRelacionado() {
         when(mockVentasService.obtenerComprobante(anyLong())).thenReturn(null);
+        shopCartBean.setIdComprobanteRelacionado(1L);
 
         shopCartBean.cargarComprobanteRelacionado();
 
-        PowerMockito.verifyStatic();
-        assertThat(true, is(true));//TODO this is to comply with Codacy and will be removed.
+        verify(mockJsfHelper).addErrorMessage("Comprobante no encontrado");
     }
 
     private List<ComprobantesLineasDto> crearLineasComprobante(int cantElementos) {
