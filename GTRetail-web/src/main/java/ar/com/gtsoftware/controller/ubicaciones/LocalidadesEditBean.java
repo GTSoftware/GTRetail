@@ -21,15 +21,16 @@ import ar.com.gtsoftware.bl.UbicacionProvinciasService;
 import ar.com.gtsoftware.dto.model.UbicacionLocalidadesDto;
 import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
 import ar.com.gtsoftware.dto.model.UbicacionProvinciasDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +55,8 @@ public class LocalidadesEditBean implements Serializable {
 
     @EJB
     private UbicacionPaisesService paisesFacade;
-
+    @Inject
+    private JSFHelper jsfHelper;
 
     private List<UbicacionPaisesDto> paises;
     private UbicacionPaisesDto paisSeleccionado;
@@ -71,7 +73,7 @@ public class LocalidadesEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idLocalidad = JSFUtil.getRequestParameterMap().get("idLocalidad");
+        String idLocalidad = jsfHelper.getRequestParameterMap().get("idLocalidad");
 
         if (StringUtils.isEmpty(idLocalidad)) {
             nuevo();
@@ -97,11 +99,11 @@ public class LocalidadesEditBean implements Serializable {
         try {
 
             facade.createOrEdit(localidadActual);
-            JSFUtil.addInfoMessage("Localidad guardada Exitosamente");
+            jsfHelper.addInfoMessage("Localidad guardada Exitosamente");
             localidadActual = facade.find(localidadActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }
@@ -143,7 +145,7 @@ public class LocalidadesEditBean implements Serializable {
      */
     public List<UbicacionProvinciasDto> getProvincias() {
         if (paisSeleccionado == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         if (provincias == null) {
             ProvinciasSearchFilter pSf = new ProvinciasSearchFilter();

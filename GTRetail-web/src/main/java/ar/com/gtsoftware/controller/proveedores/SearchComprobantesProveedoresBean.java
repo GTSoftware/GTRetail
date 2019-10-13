@@ -23,10 +23,10 @@ import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.NegocioTiposComprobanteDto;
 import ar.com.gtsoftware.dto.model.PersonasDto;
 import ar.com.gtsoftware.dto.model.ProveedoresComprobantesDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.ComprobantesProveedorSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
 import ar.com.gtsoftware.search.PersonasSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import ar.com.gtsoftware.utils.LazyEntityDataModel;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -35,6 +35,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.DataModel;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,7 +67,8 @@ public class SearchComprobantesProveedoresBean extends AbstractSearchBean<Provee
     private PersonasService personasService;
     @EJB
     private NegocioTiposComprobanteService tiposComprobanteService;
-
+    @Inject
+    private JSFHelper jsfHelper;
 
     public SearchComprobantesProveedoresBean() {
     }
@@ -125,9 +127,9 @@ public class SearchComprobantesProveedoresBean extends AbstractSearchBean<Provee
     public void eliminarComprobante(ProveedoresComprobantesDto comp) {
         try {
             comprobantesProveedorService.eliminarComprobante(comp);
-            JSFUtil.addInfoMessage("Comprobante: " + comp.getId() + " eliminado correctamente");
+            jsfHelper.addInfoMessage("Comprobante: " + comp.getId() + " eliminado correctamente");
         } catch (ServiceException e) {
-            JSFUtil.addErrorMessage(e.getMessage());
+            jsfHelper.addErrorMessage(e.getMessage());
         }
     }
 }

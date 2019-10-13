@@ -25,9 +25,9 @@ import ar.com.gtsoftware.dto.LibroIVADTO;
 import ar.com.gtsoftware.dto.RegistroIVADTO;
 import ar.com.gtsoftware.dto.model.FiscalAlicuotasIvaDto;
 import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import ar.com.gtsoftware.service.fiscal.LibroIVAService;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
@@ -40,7 +40,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -58,9 +58,11 @@ import java.util.List;
 @ManagedBean(name = "libroIVABean")
 @ViewScoped
 public class LibroIVABean implements Serializable {
+    public static final String MS_EXCEL_2007_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
 
     private final LibroIVASearchFilter ivaVentasFilter = new LibroIVASearchFilter();
-    @EJB(beanName= "libroIVAVentasServiceImpl")
+    @EJB(beanName = "libroIVAVentasServiceImpl")
     private LibroIVAService libroIVAVentasBean;
     @EJB
     private FiscalPeriodosFiscalesService periodosFiscalesService;
@@ -68,6 +70,8 @@ public class LibroIVABean implements Serializable {
     private LibroIVAService libroIVAComprasBean;
     @EJB
     private FiscalAlicuotasIvaService alicuotasIvaService;
+    @Inject
+    private JSFHelper jsfHelper;
 
     public LibroIVABean() {
     }
@@ -266,14 +270,14 @@ public class LibroIVABean implements Serializable {
             cell.setCellValue(libro.getImporteTotal().doubleValue());
             cell.setCellStyle(moneyStyle);
 
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesContext.getExternalContext();
-            externalContext.setResponseContentType(JSFUtil.MS_EXCEL_2007_MIME_TYPE);
+
+            ExternalContext externalContext = jsfHelper.getExternalContext();
+            externalContext.setResponseContentType(MS_EXCEL_2007_MIME_TYPE);
             externalContext.setResponseHeader("Content-Disposition",
                     String.format("attachment; filename=%s-%s.xlsx", filename, dateFormat.format(libro.getFechaGeneracion())));
 
             wb.write(externalContext.getResponseOutputStream());
-            facesContext.responseComplete();
+            jsfHelper.getFacesContext().responseComplete();
         }
 
     }
@@ -282,7 +286,7 @@ public class LibroIVABean implements Serializable {
         try {
             generarLibroIVA(libroIVAVentasBean, "Libro IVA Ventas", "IVA_Ventas");
         } catch (IOException | ServiceException e) {
-            JSFUtil.addErrorMessage("Error al generar el libro: " + e.getMessage());
+            jsfHelper.addErrorMessage("Error al generar el libro: " + e.getMessage());
         }
     }
 
@@ -290,7 +294,7 @@ public class LibroIVABean implements Serializable {
         try {
             generarLibroIVA(libroIVAComprasBean, "Libro IVA Compras", "IVA_Compras");
         } catch (IOException | ServiceException e) {
-            JSFUtil.addErrorMessage("Error al generar el libro: " + e.getMessage());
+            jsfHelper.addErrorMessage("Error al generar el libro: " + e.getMessage());
         }
     }
 

@@ -18,12 +18,13 @@ package ar.com.gtsoftware.controller.usuarios;
 import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.dto.model.UsuariosDto;
 import ar.com.gtsoftware.dto.model.UsuariosGruposDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +50,8 @@ public class UsuariosRolesEditBean implements Serializable {
     private static final String RESERVED_USERNAME = "admin";
     @EJB
     private UsuariosService usuarioFacade;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private UsuariosDto usuarioActual;
 
@@ -61,7 +64,7 @@ public class UsuariosRolesEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String logIn = JSFUtil.getRequestParameterMap().get("login");
+        String logIn = jsfHelper.getRequestParameterMap().get("login");
         if (logIn == null) {
 
             LOG.log(Level.INFO, "Usuario inexistente! {0}", logIn);

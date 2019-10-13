@@ -17,12 +17,13 @@ package ar.com.gtsoftware.controller.formasPago;
 
 import ar.com.gtsoftware.bl.NegocioFormasPagoService;
 import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,8 @@ public class FormasPagoEditBean implements Serializable {
 
     @EJB
     private NegocioFormasPagoService formasPagoService;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private NegocioFormasPagoDto formaPagoActual = null;
 
@@ -53,7 +56,7 @@ public class FormasPagoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idFormaPago = JSFUtil.getRequestParameterMap().get("idFormaPago");
+        String idFormaPago = jsfHelper.getRequestParameterMap().get("idFormaPago");
 
         if (idFormaPago == null) {
             nuevo();
@@ -78,11 +81,11 @@ public class FormasPagoEditBean implements Serializable {
         try {
 
             formasPagoService.createOrEdit(formaPagoActual);
-            JSFUtil.addInfoMessage("Forma de pago guardada Exitosamente");
+            jsfHelper.addInfoMessage("Forma de pago guardada Exitosamente");
             formaPagoActual = formasPagoService.find(formaPagoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

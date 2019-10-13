@@ -17,12 +17,13 @@ package ar.com.gtsoftware.controller.marcas;
 
 import ar.com.gtsoftware.bl.ProductosMarcasService;
 import ar.com.gtsoftware.dto.model.ProductosMarcasDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +40,8 @@ public class MarcasEditBean implements Serializable {
 
     @EJB
     private ProductosMarcasService facade;
+    @Inject
+    private JSFHelper jsfHelper;
 
 
     private ProductosMarcasDto marcaActual = null;
@@ -52,7 +55,7 @@ public class MarcasEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idMarca = JSFUtil.getRequestParameterMap().get("idMarca");
+        String idMarca = jsfHelper.getRequestParameterMap().get("idMarca");
 
         if (idMarca == null) {
             nuevo();
@@ -76,10 +79,10 @@ public class MarcasEditBean implements Serializable {
     public void doGuardar() {
         try {
             marcaActual = facade.createOrEdit(marcaActual);
-            JSFUtil.addInfoMessage("Marca guardada Exitosamente");
+            jsfHelper.addInfoMessage("Marca guardada Exitosamente");
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

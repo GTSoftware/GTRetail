@@ -19,12 +19,13 @@ import ar.com.gtsoftware.bl.ProductosRubrosService;
 import ar.com.gtsoftware.bl.ProductosSubRubrosService;
 import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
 import ar.com.gtsoftware.dto.model.ProductosSubRubrosDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +48,8 @@ public class SubRubrosEditBean implements Serializable {
     private ProductosSubRubrosService service;
     @EJB
     private ProductosRubrosService rubrosService;
-
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosSubRubrosDto subRubroActual = null;
     private ProductosRubrosDto rubroActual = null;
 
@@ -60,8 +62,8 @@ public class SubRubrosEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
-        String idSubRubro = JSFUtil.getRequestParameterMap().get("idSubRubro");
+        String idRubro = jsfHelper.getRequestParameterMap().get("idRubro");
+        String idSubRubro = jsfHelper.getRequestParameterMap().get("idSubRubro");
 
         if (isEmpty(idRubro)) {
             throw new IllegalArgumentException("IdRubro nulo!");
@@ -94,10 +96,10 @@ public class SubRubrosEditBean implements Serializable {
     public void doGuardar() {
         try {
             subRubroActual = service.createOrEdit(subRubroActual);
-            JSFUtil.addInfoMessage("SubRubro guardado Exitosamente");
+            jsfHelper.addInfoMessage("SubRubro guardado Exitosamente");
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

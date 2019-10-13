@@ -17,13 +17,14 @@ package ar.com.gtsoftware.controller.ubicaciones;
 
 import ar.com.gtsoftware.bl.UbicacionPaisesService;
 import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +41,8 @@ public class PaisesEditBean implements Serializable {
 
     @EJB
     private UbicacionPaisesService facade;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private UbicacionPaisesDto paisActual = null;
 
@@ -52,7 +55,7 @@ public class PaisesEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idPais = JSFUtil.getRequestParameterMap().get("idPais");
+        String idPais = jsfHelper.getRequestParameterMap().get("idPais");
 
         if (StringUtils.isEmpty(idPais)) {
             nuevo();
@@ -77,11 +80,11 @@ public class PaisesEditBean implements Serializable {
         try {
 
             facade.createOrEdit(paisActual);
-            JSFUtil.addInfoMessage("País guardado Exitosamente");
+            jsfHelper.addInfoMessage("País guardado Exitosamente");
             paisActual = facade.find(paisActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

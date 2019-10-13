@@ -17,12 +17,13 @@ package ar.com.gtsoftware.controller.unidades;
 
 import ar.com.gtsoftware.bl.ProductosTiposUnidadesService;
 import ar.com.gtsoftware.dto.model.ProductosTiposUnidadesDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +40,8 @@ public class UnidadesEditBean implements Serializable {
 
     @EJB
     private ProductosTiposUnidadesService facade;
-
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosTiposUnidadesDto unidadActual = null;
 
     public UnidadesEditBean() {
@@ -48,7 +50,7 @@ public class UnidadesEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idUnidad = JSFUtil.getRequestParameterMap().get("idUnidad");
+        String idUnidad = jsfHelper.getRequestParameterMap().get("idUnidad");
 
         if (idUnidad == null) {
             nuevo();
@@ -73,11 +75,11 @@ public class UnidadesEditBean implements Serializable {
         try {
 
             facade.createOrEdit(unidadActual);
-            JSFUtil.addInfoMessage("Unidad guardada Exitosamente");
+            jsfHelper.addInfoMessage("Unidad guardada Exitosamente");
             unidadActual = facade.find(unidadActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

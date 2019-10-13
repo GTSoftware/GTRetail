@@ -17,12 +17,13 @@ package ar.com.gtsoftware.controller.rubros;
 
 import ar.com.gtsoftware.bl.ProductosRubrosService;
 import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +42,8 @@ public class RubrosEditBean implements Serializable {
 
     @EJB
     private ProductosRubrosService service;
-
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosRubrosDto rubroActual = null;
 
     /**
@@ -53,7 +55,7 @@ public class RubrosEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
+        String idRubro = jsfHelper.getRequestParameterMap().get("idRubro");
 
         if (idRubro == null) {
             nuevo();
@@ -77,10 +79,10 @@ public class RubrosEditBean implements Serializable {
     public void doGuardar() {
         try {
             rubroActual = service.createOrEdit(rubroActual);
-            JSFUtil.addInfoMessage("Rubro guardado Exitosamente");
+            jsfHelper.addInfoMessage("Rubro guardado Exitosamente");
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
     }
 

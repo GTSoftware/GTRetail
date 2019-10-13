@@ -20,17 +20,17 @@ import ar.com.gtsoftware.bl.PersonasService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.PersonasCuentaCorrienteDto;
 import ar.com.gtsoftware.dto.model.PersonasDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.PersonasCuentaCorrienteSearchFilter;
 import ar.com.gtsoftware.search.SortField;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -46,6 +46,8 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     private PersonasCuentaCorrienteService cuentaCorrienteService;
     @EJB
     private PersonasService personasFacade;
+    @Inject
+    private JSFHelper jsfHelper;
 
     /**
      * Creates a new instance of CuentaCorrienteSearchBean
@@ -54,17 +56,17 @@ public class CuentaCorrienteSearchBean extends AbstractSearchBean<PersonasCuenta
     }
 
     public void init() {
-        if (isPostback()) {
+        if (jsfHelper.isPostback()) {
             return;
         }
-        String idPersona = getRequestParameterMap().get("idPersona");
+        String idPersona = jsfHelper.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         } else {
             PersonasDto persona = personasFacade.find(Long.parseLong(idPersona));
             if (persona == null) {
 
-                addErrorMessage("Cliente inexistente!");
+                jsfHelper.addErrorMessage("Cliente inexistente!");
                 LOG.log(Level.INFO, "Cliente inexistente!");
             } else {
                 filter.setIdPersona(persona.getId());

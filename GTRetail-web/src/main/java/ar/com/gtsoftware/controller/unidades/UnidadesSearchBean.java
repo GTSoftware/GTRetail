@@ -18,13 +18,14 @@ package ar.com.gtsoftware.controller.unidades;
 import ar.com.gtsoftware.bl.ProductosTiposUnidadesService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.ProductosTiposUnidadesDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.SortField;
 import ar.com.gtsoftware.search.UnidadesSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 
 /**
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
@@ -37,6 +38,8 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
     private final UnidadesSearchFilter filter = new UnidadesSearchFilter();
     @EJB
     private ProductosTiposUnidadesService facade;
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosTiposUnidadesDto unidad;
 
     public UnidadesSearchBean() {
@@ -70,6 +73,6 @@ public class UnidadesSearchBean extends AbstractSearchBean<ProductosTiposUnidade
 
     public void deleteUnidad() {
         facade.remove(unidad);
-        JSFUtil.addInfoMessage("Unidad eliminada satisfactoriamente");
+        jsfHelper.addInfoMessage("Unidad eliminada satisfactoriamente");
     }
 }

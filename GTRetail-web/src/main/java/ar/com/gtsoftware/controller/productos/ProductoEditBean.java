@@ -19,8 +19,8 @@ package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.*;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.CellEditEvent;
 
@@ -29,6 +29,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -73,6 +74,8 @@ public class ProductoEditBean implements Serializable {
     private ProductosListasPreciosService listasPreciosFacade;
     @EJB
     private ProductoXDepositoService prodXDepoFacade;
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosDto productoActual;
     private List<ProductosMarcasDto> listMarcas = new ArrayList<>();
     private List<FiscalAlicuotasIvaDto> listAlicuotaIVA = new ArrayList<>();
@@ -95,8 +98,8 @@ public class ProductoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idProducto = JSFUtil.getRequestParameterMap().get("idProducto");
-        String duplicar = JSFUtil.getRequestParameterMap().get("duplicar");
+        String idProducto = jsfHelper.getRequestParameterMap().get("idProducto");
+        String duplicar = jsfHelper.getRequestParameterMap().get("duplicar");
         if (idProducto == null) {
             nuevo();
         } else {
@@ -178,10 +181,10 @@ public class ProductoEditBean implements Serializable {
         try {
             productosRubrosNuevo = productosRubrosFacade.createOrEdit(productosRubrosNuevo);
             listRubros.add(productosRubrosNuevo);
-            JSFUtil.addInfoMessage("Rubro " + productosRubrosNuevo.getNombreRubro() + " guardado exitosamente.");
+            jsfHelper.addInfoMessage("Rubro " + productosRubrosNuevo.getNombreRubro() + " guardado exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar el rubro");
+            jsfHelper.addErrorMessage("Error al guardar el rubro");
 
         }
     }
@@ -196,10 +199,10 @@ public class ProductoEditBean implements Serializable {
         try {
             productosSubRubrosNuevo = productosSubRubrosFacade.createOrEdit(productosSubRubrosNuevo);
             listSubRubros.add(productosSubRubrosNuevo);
-            JSFUtil.addInfoMessage("SubRubro " + productosSubRubrosNuevo.getNombreSubRubro() + " guardado exitosamente.");
+            jsfHelper.addInfoMessage("SubRubro " + productosSubRubrosNuevo.getNombreSubRubro() + " guardado exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar el SubRubro");
+            jsfHelper.addErrorMessage("Error al guardar el SubRubro");
         }
     }
 
@@ -211,10 +214,10 @@ public class ProductoEditBean implements Serializable {
         try {
             nuevaMarca = productosMarcasFacade.createOrEdit(nuevaMarca);
             listMarcas.add(nuevaMarca);
-            JSFUtil.addInfoMessage("Marca " + nuevaMarca.getNombreMarca() + " guardada exitosamente.");
+            jsfHelper.addInfoMessage("Marca " + nuevaMarca.getNombreMarca() + " guardada exitosamente.");
         } catch (Exception e) {
             LOG.log(Level.SEVERE, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar la marca");
+            jsfHelper.addErrorMessage("Error al guardar la marca");
         }
     }
 
@@ -229,11 +232,11 @@ public class ProductoEditBean implements Serializable {
             }
 
             productoActual = productosFacade.createOrEdit(productoActual);
-            JSFUtil.addInfoMessage("Producto " + productoActual.getId() + " guardado Exitosamente");
+            jsfHelper.addInfoMessage("Producto " + productoActual.getId() + " guardado Exitosamente");
 
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }
@@ -467,9 +470,9 @@ public class ProductoEditBean implements Serializable {
         }
         Long idExistente = productoExistente.getId();
         if (editandoNuevoProducto) {
-            JSFUtil.addErrorMessage(String.format("El código %s ya existe. ID: %d", codigoPropio, idExistente));
+            jsfHelper.addErrorMessage(String.format("El código %s ya existe. ID: %d", codigoPropio, idExistente));
         } else if (!idExistente.equals(productoActual.getId())) {
-            JSFUtil.addErrorMessage(String.format("El código %s ya existe. ID: %d", codigoPropio, idExistente));
+            jsfHelper.addErrorMessage(String.format("El código %s ya existe. ID: %d", codigoPropio, idExistente));
         }
     }
 }

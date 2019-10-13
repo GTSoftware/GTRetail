@@ -20,13 +20,14 @@ import ar.com.gtsoftware.bl.ProductosSubRubrosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.ProductosRubrosDto;
 import ar.com.gtsoftware.dto.model.ProductosSubRubrosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.SubRubroSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +47,8 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubrosDt
     private ProductosSubRubrosService service;
     @EJB
     private ProductosRubrosService rubrosService;
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosRubrosDto rubro;
 
     /**
@@ -57,7 +60,7 @@ public class SubRubrosSearchBean extends AbstractSearchBean<ProductosSubRubrosDt
     @PostConstruct
     public void init() {
 
-        String idRubro = JSFUtil.getRequestParameterMap().get("idRubro");
+        String idRubro = jsfHelper.getRequestParameterMap().get("idRubro");
 
         if (isEmpty(idRubro)) {
             throw new RuntimeException("No hay parámetro de Rubro!");

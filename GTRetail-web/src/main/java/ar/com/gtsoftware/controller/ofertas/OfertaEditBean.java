@@ -18,8 +18,8 @@
 package ar.com.gtsoftware.controller.ofertas;
 
 import ar.com.gtsoftware.bl.OfertasService;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.rules.*;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -45,6 +46,8 @@ public class OfertaEditBean implements Serializable {
 
     @EJB
     private OfertasService service;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private OfertaDto ofertaActual;
 
@@ -53,8 +56,8 @@ public class OfertaEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idOferta = JSFUtil.getRequestParameterMap().get("idOferta");
-        String duplicar = JSFUtil.getRequestParameterMap().get("duplicar");
+        String idOferta = jsfHelper.getRequestParameterMap().get("idOferta");
+        String duplicar = jsfHelper.getRequestParameterMap().get("duplicar");
 
         if (StringUtils.isEmpty(idOferta)) {
             nuevo();
@@ -90,7 +93,7 @@ public class OfertaEditBean implements Serializable {
     public void doGuardar() {
         if (validarCondiciones()) {
             ofertaActual = service.createOrEdit(ofertaActual);
-            JSFUtil.addInfoMessage("Oferta guardada con éxito.");
+            jsfHelper.addInfoMessage("Oferta guardada con éxito.");
         }
     }
 
@@ -105,7 +108,7 @@ public class OfertaEditBean implements Serializable {
             }
         } catch (CondicionIlegalException e) {
             isValid = false;
-            JSFUtil.addErrorMessage(e.getMessage());
+            jsfHelper.addErrorMessage(e.getMessage());
         }
         return isValid;
     }

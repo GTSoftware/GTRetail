@@ -19,10 +19,10 @@ import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +30,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,6 +66,8 @@ public class ProveedoresEditBean implements Serializable {
     private UbicacionLocalidadesService localidadesFacade;
     @EJB
     private UbicacionProvinciasService provinciasFacade;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private int nroItem = 0;
     private PersonasDto proveedorActual;
@@ -75,14 +78,14 @@ public class ProveedoresEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = jsfHelper.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {
             proveedorActual = clientesService.find(Long.parseLong(idPersona));
             if (proveedorActual == null) {
                 nuevo();
-                JSFUtil.addErrorMessage("Proveedor inexistente!");
+                jsfHelper.addErrorMessage("Proveedor inexistente!");
                 LOG.log(Level.INFO, "Proveedor inexistente!");
             }
         }
@@ -92,6 +95,7 @@ public class ProveedoresEditBean implements Serializable {
     public void nuevo() {
         proveedorActual = new PersonasDto();
         proveedorActual.setProveedor(true);
+        proveedorActual.setCliente(false);
         proveedorActual.setActivo(true);
         proveedorActual.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
     }
@@ -99,10 +103,10 @@ public class ProveedoresEditBean implements Serializable {
     public void doGuardarCliente() {
         try {
             proveedorActual = clientesService.guardarCliente(proveedorActual);
-            JSFUtil.addInfoMessage("Proveedor guardado exitosamente.");
+            jsfHelper.addInfoMessage("Proveedor guardado exitosamente.");
 
         } catch (ServiceException e) {
-            JSFUtil.addErrorMessage("Error al guardar: " + e.getMessage());
+            jsfHelper.addErrorMessage("Error al guardar: " + e.getMessage());
             LOG.log(Level.INFO, e.getMessage(), e);
         }
     }

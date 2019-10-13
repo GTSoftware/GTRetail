@@ -18,13 +18,14 @@ package ar.com.gtsoftware.controller.caja;
 import ar.com.gtsoftware.bl.ChequesTercerosService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.ChequesTercerosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.ChequesTercerosSearchFilter;
 import ar.com.gtsoftware.search.SortField;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.util.Date;
 
 /**
@@ -40,6 +41,8 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTercerosDto, Ch
     private final ChequesTercerosSearchFilter filter = new ChequesTercerosSearchFilter();
     @EJB
     private ChequesTercerosService chequesTercerosService;
+    @Inject
+    private JSFHelper jsfHelper;
 
     /**
      * Creates a new instance of ChequesSearchBean
@@ -75,6 +78,6 @@ public class ChequesSearchBean extends AbstractSearchBean<ChequesTercerosDto, Ch
         }
         cheque.setFechaCobro(new Date());
         chequesTercerosService.createOrEdit(cheque);
-        JSFUtil.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
+        jsfHelper.addInfoMessage(String.format("Cheque: %s marcado como cobrado.", cheque.getNroCheque()));
     }
 }

@@ -18,10 +18,10 @@ package ar.com.gtsoftware.controller.productos;
 import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.DepositosSearchFilter;
 import ar.com.gtsoftware.search.ProductoXDepositoSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -29,9 +29,13 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
@@ -59,6 +63,8 @@ public class IngresoMercaderiaBean implements Serializable {
     private ProductoXDepositoService stockService;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosDto productoBusquedaSeleccionado = null;
     private BigDecimal cantidad = BigDecimal.ONE;
     private int numeradorLinea = 1;
@@ -108,7 +114,7 @@ public class IngresoMercaderiaBean implements Serializable {
         }
 
         if (producto == null) {
-            JSFUtil.addErrorMessage(JSFUtil.getBundle("msg").getString("productoNoEncontrado"));
+            jsfHelper.addErrorMessage(jsfHelper.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 
@@ -131,7 +137,7 @@ public class IngresoMercaderiaBean implements Serializable {
         detalle.setIdProducto(producto);
         detalle.setRemitoCabecera(remitoCabecera);
         detalle.setNroLinea(numeradorLinea++);
-        if(remitoCabecera.getIdDestinoPrevistoInterno()!=null) {
+        if (remitoCabecera.getIdDestinoPrevistoInterno() != null) {
             ProductoXDepositoSearchFilter stkf = ProductoXDepositoSearchFilter.builder()
                     .idSucursal(remitoCabecera.getIdDestinoPrevistoInterno().getIdSucursal().getId())
                     .idProducto(producto.getId())
@@ -151,7 +157,7 @@ public class IngresoMercaderiaBean implements Serializable {
 
     public String confirmarIngreso() {
         if (remitoCabecera.getDetalleList().isEmpty()) {
-            JSFUtil.addErrorMessage("Debe ingresar los productos.");
+            jsfHelper.addErrorMessage("Debe ingresar los productos.");
             return StringUtils.EMPTY;
         }
 

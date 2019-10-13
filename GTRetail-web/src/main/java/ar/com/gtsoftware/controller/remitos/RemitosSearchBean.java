@@ -21,13 +21,14 @@ import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.ProductosDto;
 import ar.com.gtsoftware.dto.model.RemitoDto;
 import ar.com.gtsoftware.dto.model.RemitoTipoMovimientoDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.RemitoSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,8 @@ public class RemitosSearchBean extends AbstractSearchBean<RemitoDto, RemitoSearc
     private RemitoService remitoService;
     @EJB
     private RemitoTipoMovimientoService tipoMovimientoService;
-
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosDto productoBusquedaSeleccionado;
 
     /**
@@ -59,7 +61,7 @@ public class RemitosSearchBean extends AbstractSearchBean<RemitoDto, RemitoSearc
 
     @PostConstruct
     public void init() {
-        if (JSFUtil.isPostback()) {
+        if (jsfHelper.isPostback()) {
             return;
         }
 

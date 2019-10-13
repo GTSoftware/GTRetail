@@ -17,13 +17,14 @@ package ar.com.gtsoftware.controller.productos;
 
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.*;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -60,7 +61,6 @@ public class ProductosPreciosBean implements Serializable {
     private ProductosService productosFacade;
     @EJB
     private ProductosRubrosService productosRubrosFacade;
-
     @EJB
     private ProductosSubRubrosService productosSubRubrosFacade;
     @EJB
@@ -71,6 +71,8 @@ public class ProductosPreciosBean implements Serializable {
     private PersonasService personasFacade;
     @EJB
     private ProductosTiposPorcentajesService tiposPorcentajesFacade;
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosTiposPorcentajesDto tipoPorcentajeSeleccionado;
     private int itemNro = 1;
 
@@ -185,7 +187,7 @@ public class ProductosPreciosBean implements Serializable {
             }
             productosFacade.createOrEdit(producto);
         }
-        JSFUtil.addInfoMessage("Productos actualizados exitosamente.");
+        jsfHelper.addInfoMessage("Productos actualizados exitosamente.");
     }
 
     private void tratarPorcentajes(ProductosDto producto) {

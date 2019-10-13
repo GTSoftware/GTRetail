@@ -18,12 +18,13 @@ package ar.com.gtsoftware.controller.fiscal;
 import ar.com.gtsoftware.bl.FiscalPeriodosFiscalesService;
 import ar.com.gtsoftware.controller.search.AbstractSearchBean;
 import ar.com.gtsoftware.dto.model.FiscalPeriodosFiscalesDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,6 +45,9 @@ public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosF
     private final SimpleDateFormat YEAR_MONTH = new SimpleDateFormat("YYYY-MM");
     @EJB
     private FiscalPeriodosFiscalesService periodosFiscalesFacade;
+    @Inject
+    private JSFHelper jsfHelper;
+
     private FiscalPeriodosFiscalesDto periodoActual;
 
     /**
@@ -67,12 +71,10 @@ public class PeriodosFiscalesEditBean extends AbstractSearchBean<FiscalPeriodosF
     }
 
     public void guardarPeriodo() {
-
         periodoActual = periodosFiscalesFacade.createOrEdit(periodoActual);
 
-
         nuevoPeriodo();
-        JSFUtil.addInfoMessage("Se ha guardado exitosamente!");
+        jsfHelper.addInfoMessage("Se ha guardado exitosamente!");
 
     }
 
