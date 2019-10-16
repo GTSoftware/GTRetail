@@ -21,23 +21,22 @@ import ar.com.gtsoftware.bl.ProveedoresOrdenesCompraService;
 import ar.com.gtsoftware.dto.model.ProductosDto;
 import ar.com.gtsoftware.dto.model.ProveedoresOrdenesCompraDto;
 import ar.com.gtsoftware.dto.model.ProveedoresOrdenesCompraLineasDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.EJBs;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * Bean para la edición de ordenes de compra
@@ -58,6 +57,8 @@ public class OrdenesCompraEditBean implements Serializable {
     private ProveedoresOrdenesCompraService ocFacade;
     @EJB
     private ProductosService productosFacade;
+    @Inject
+    private JSFHelper jsfHelper;
     private ProductosDto productoBusquedaSeleccionado = null;
     private BigDecimal cantidad = BigDecimal.ONE;
     private int numeradorLinea = 1;
@@ -72,14 +73,14 @@ public class OrdenesCompraEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String idOrdenCompra = getRequestParameterMap().get("idOrdenCompra");
+        String idOrdenCompra = jsfHelper.getRequestParameterMap().get("idOrdenCompra");
         if (StringUtils.isEmpty(idOrdenCompra)) {
             nuevo();
         } else {
             ordenCompraActual = ocFacade.find(Long.parseLong(idOrdenCompra));
             if (ordenCompraActual == null) {
                 nuevo();
-                addErrorMessage("Orden de compra inexistente!");
+                jsfHelper.addErrorMessage("Orden de compra inexistente!");
                 LOG.log(Level.INFO, "Orden de compra inexistente!");
             }
         }
@@ -89,7 +90,7 @@ public class OrdenesCompraEditBean implements Serializable {
     public void agregarLinea() {
 
         if (cantidad.signum() <= 0) {
-            addErrorMessage("La cantidad no puede ser cero o negativo.");
+            jsfHelper.addErrorMessage("La cantidad no puede ser cero o negativo.");
             return;
         }
 
@@ -104,7 +105,7 @@ public class OrdenesCompraEditBean implements Serializable {
         }
 
         if (producto == null) {
-            addErrorMessage(getBundle("msg").getString("productoNoEncontrado"));
+            jsfHelper.addErrorMessage(jsfHelper.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 

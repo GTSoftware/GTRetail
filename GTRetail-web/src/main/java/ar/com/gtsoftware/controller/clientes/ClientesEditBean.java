@@ -19,10 +19,10 @@ import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.GenerosSearchFilter;
 import ar.com.gtsoftware.search.LocalidadesSearchFilter;
 import ar.com.gtsoftware.search.ProvinciasSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.PostConstruct;
@@ -31,6 +31,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,6 +66,8 @@ public class ClientesEditBean implements Serializable {
     private UbicacionProvinciasService provinciasService;
     @EJB
     private UbicacionLocalidadesService localidadesService;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private int nroItem = 0;
     private PersonasDto clienteActual;
@@ -78,14 +81,14 @@ public class ClientesEditBean implements Serializable {
     @PostConstruct
     private void init() {
 
-        String idPersona = JSFUtil.getRequestParameterMap().get("idPersona");
+        String idPersona = jsfHelper.getRequestParameterMap().get("idPersona");
         if (idPersona == null) {
             nuevo();
         } else {
             clienteActual = clientesService.find(Long.parseLong(idPersona));
             if (clienteActual == null) {
                 nuevo();
-                JSFUtil.addMessage("Cliente inexistente!", FacesMessage.SEVERITY_ERROR);
+                jsfHelper.addMessage("Cliente inexistente!", FacesMessage.SEVERITY_ERROR);
                 Logger.getLogger(ClientesEditBean.class.getName()).log(Level.INFO, "Cliente inexistente!");
             }
         }
@@ -103,10 +106,10 @@ public class ClientesEditBean implements Serializable {
     public void doGuardarCliente() {
         try {
             clienteActual = clientesService.guardarCliente(clienteActual);
-            JSFUtil.addInfoMessage("Cliente guardado exitosamente.");
+            jsfHelper.addInfoMessage("Cliente guardado exitosamente.");
 
         } catch (ServiceException e) {
-            JSFUtil.addErrorMessage("Error al guardar:" + e.getMessage());
+            jsfHelper.addErrorMessage("Error al guardar:" + e.getMessage());
             LOG.log(Level.INFO, e.getMessage(), e);
         }
     }

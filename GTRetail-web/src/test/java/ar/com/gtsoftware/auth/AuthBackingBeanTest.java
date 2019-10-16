@@ -19,51 +19,70 @@ package ar.com.gtsoftware.auth;
 
 import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.dto.model.UsuariosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import javax.faces.context.FacesContext;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class AuthBackingBeanTest {
 
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
     @Mock
     private UsuariosService mockUsuariosService;
-
     @Mock
-    private FacesContext mockFacesContext;
-
+    private JSFHelper mockJsfHelper;
     @InjectMocks
     private AuthBackingBean authBackingBean;
-
-    private final UsuariosDto usuarioDto = UsuariosDto.builder()
-            .id(1L)
-            .login("TestUser")
-            .nombreUsuario("Test User")
-            .build();
-    ;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        authBackingBean = new AuthBackingBean();
     }
 
     @Test
-    @Ignore //TODO see how to mock facesContext
-    public void getUserLoggedIn() {
+    public void deberiaObtenerUsuarioLogueado() {
+        final UsuariosDto usuarioDto = UsuariosDto.builder()
+                .id(1L)
+                .login("TestUser")
+                .nombreUsuario("Test User")
+                .build();
         when(mockUsuariosService.findFirstBySearchFilter(any())).thenReturn(usuarioDto);
-        when(mockFacesContext.getExternalContext().getUserPrincipal().getName()).thenReturn("Test");
+        when(mockJsfHelper.getUserPrincipalName()).thenReturn("Test");
 
-        assertEquals(authBackingBean.getUserLoggedIn(), usuarioDto);
+        UsuariosDto userLoggedIn = authBackingBean.getUserLoggedIn();
+        authBackingBean.getUserLoggedIn();
+
+        assertEquals(userLoggedIn, usuarioDto);
+        verify(mockUsuariosService, times(1)).findFirstBySearchFilter(any());
+        verify(mockJsfHelper, times(1)).getUserPrincipalName();
     }
 
+    @Test
+    public void deberiaFallarCuandoElUsuarioNoExiste() {
+        when(mockUsuariosService.findFirstBySearchFilter(any())).thenReturn(null);
+        when(mockJsfHelper.getUserPrincipalName()).thenReturn("Test");
 
+        exceptionRule.expect(RuntimeException.class);
+        exceptionRule.expectMessage("Usuario no encontrado!");
+        authBackingBean.getUserLoggedIn();
+
+        fail("No debería haber llegado hasta acá");
+    }
+
+    @Test
+    public void deberiaHacerLogout() {
+        authBackingBean.logout();
+
+        verify(mockJsfHelper).logout(eq("/index.html"));
+    }
 }

@@ -19,10 +19,10 @@ import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.ComprobantesProveedorSearchFilter;
 import ar.com.gtsoftware.search.FiscalPeriodosFiscalesSearchFilter;
 import ar.com.gtsoftware.search.NegocioTiposComprobanteSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,6 +31,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -68,6 +69,8 @@ public class ProveedorComprobanteEditBean implements Serializable {
     private NegocioTiposComprobanteService tiposComprobanteService;
     @EJB
     private FiscalAlicuotasIvaService alicuotasIvaService;
+    @Inject
+    private JSFHelper jsfHelper;
     private List<FiscalPeriodosFiscalesDto> periodosFiscalesList = null;
     private List<NegocioTiposComprobanteDto> tiposComprobanteList = null;
     private ProveedoresComprobantesDto comprobanteActual;
@@ -78,14 +81,14 @@ public class ProveedorComprobanteEditBean implements Serializable {
 
     @PostConstruct
     private void init() {
-        String idComprobante = JSFUtil.getRequestParameterMap().get("idComprobante");
+        String idComprobante = jsfHelper.getRequestParameterMap().get("idComprobante");
         if (isEmpty(idComprobante)) {
             nuevoComprobante();
         } else {
             comprobanteActual = service.find(Long.parseLong(idComprobante));
             if (comprobanteActual == null) {
                 nuevoComprobante();
-                JSFUtil.addErrorMessage("Comprobante inexistente");
+                jsfHelper.addErrorMessage("Comprobante inexistente");
                 LOG.log(Level.INFO, "Comprobante inexistente");
             }
         }
@@ -147,7 +150,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
 
         ProveedoresComprobantesDto comp = service.findFirstBySearchFilter(sf);
         if (comp != null) {
-            JSFUtil.addErrorMessage("El comprobante ya ha sido cargado, su ID es: " + comp.getId());
+            jsfHelper.addErrorMessage("El comprobante ya ha sido cargado, su ID es: " + comp.getId());
             return StringUtils.EMPTY;
         }
 
@@ -157,7 +160,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
             service.guardarYFiscalizar(comprobanteActual);
 
         } catch (ServiceException ex) {
-            JSFUtil.addErrorMessage(ex.getMessage());
+            jsfHelper.addErrorMessage(ex.getMessage());
             return StringUtils.EMPTY;
         }
         return "/protected/proveedores/comprobantes/index?faces-redirect=true";
@@ -221,7 +224,7 @@ public class ProveedorComprobanteEditBean implements Serializable {
                 }
             }
             if (existeAlicuota) {
-                JSFUtil.addErrorMessage("Ya se ha cargado esa alicuota.");
+                jsfHelper.addErrorMessage("Ya se ha cargado esa alicuota.");
                 nuevaAlicuota();
                 return;
             }

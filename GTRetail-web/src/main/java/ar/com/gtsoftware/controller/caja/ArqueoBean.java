@@ -21,6 +21,7 @@ import ar.com.gtsoftware.bl.CajasService;
 import ar.com.gtsoftware.bl.CajasTransferenciasService;
 import ar.com.gtsoftware.bl.NegocioFormasPagoService;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.CajasSearchFilter;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,14 +32,12 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
-
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
@@ -48,10 +47,11 @@ import static ar.com.gtsoftware.utils.JSFUtil.*;
 public class ArqueoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(ArqueoBean.class.getName());
     private final FormasPagoSearchFilter formasPagoSearchFilter = new FormasPagoSearchFilter();
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+    @Inject
+    private JSFHelper jsfHelper;
     private CajasDto cajaActual;
     private CajasDto cajaDestino;
     @EJB
@@ -83,8 +83,8 @@ public class ArqueoBean implements Serializable {
         CajasDto cajaAbierta = cajasService.obtenerCajaActual(authBackingBean.getUserLoggedIn());
 
         if (cajaAbierta == null) {
-            addErrorMessage("El usuario no tiene una caja abierta para poder realizar el arqueo.");
-            redirect("/protected/index.xhtml");
+            jsfHelper.addErrorMessage("El usuario no tiene una caja abierta para poder realizar el arqueo.");
+            jsfHelper.redirect("/protected/index.xhtml");
 
             return;
         }
@@ -125,9 +125,9 @@ public class ArqueoBean implements Serializable {
             detalleArqueoActual = new CajasArqueosDetalleDto();
             detalleArqueoActual.setItem(++itemId);
             detalleArqueoActual.setIdArqueo(arqueoActual);
-            addInfoMessage("Se ha agregado el monto al arqueo con éxito");
+            jsfHelper.addInfoMessage("Se ha agregado el monto al arqueo con éxito");
         } else {
-            addErrorMessage("Ya se ha ingresado esa forma de pago!");
+            jsfHelper.addErrorMessage("Ya se ha ingresado esa forma de pago!");
 
         }
     }
@@ -195,7 +195,7 @@ public class ArqueoBean implements Serializable {
         }
         String errores = sb.toString();
         if (StringUtils.isNotEmpty(errores)) {
-            addErrorMessage(errores);
+            jsfHelper.addErrorMessage(errores);
             return false;
         }
 
@@ -222,7 +222,7 @@ public class ArqueoBean implements Serializable {
         arqueoActual = arqueosService.createOrEdit(arqueoActual);
         cajasService.cerrarCaja(cajaActual, fechaActual);
         arqueoGuardado = true;
-        addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
+        jsfHelper.addInfoMessage(String.format("Arqueo guardado con éxito id: %d", arqueoActual.getId()));
 
     }
 

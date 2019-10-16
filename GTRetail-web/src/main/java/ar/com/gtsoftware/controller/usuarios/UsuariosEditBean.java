@@ -20,14 +20,15 @@ import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.controller.exceptions.ValidationException;
 import ar.com.gtsoftware.dto.model.SucursalesDto;
 import ar.com.gtsoftware.dto.model.UsuariosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.SucursalesSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +56,8 @@ public class UsuariosEditBean implements Serializable {
     private UsuariosService usuariosService;
     @EJB
     private SucursalesService sucursalesService;
+    @Inject
+    private JSFHelper jsfHelper;
     private List<SucursalesDto> sucursalesList;
     private UsuariosDto usuarioActual;
     private boolean nuevo = false;
@@ -113,10 +116,10 @@ public class UsuariosEditBean implements Serializable {
             usuarioActual.setNombreUsuario(usuarioActual.getNombreUsuario().toUpperCase());
             usuarioActual.setLogin(usuarioActual.getLogin().toLowerCase());
             usuarioActual = usuariosService.createOrEdit(usuarioActual);
-            JSFUtil.addInfoMessage(String.format("Usuario guardado exitosamente: %s", usuarioActual.getLogin()));
+            jsfHelper.addInfoMessage(String.format("Usuario guardado exitosamente: %s", usuarioActual.getLogin()));
 
         } catch (ValidationException ex) {
-            JSFUtil.addErrorMessage(String.format("Error de validación de datos: %s", ex.getMessage()));
+            jsfHelper.addErrorMessage(String.format("Error de validación de datos: %s", ex.getMessage()));
 
         }
 
@@ -124,18 +127,18 @@ public class UsuariosEditBean implements Serializable {
 
     public void doEliminarUsuario() {
         if (usuarioActual.getLogin().equals(RESERVED_USERNAME)) {
-            JSFUtil.addErrorMessage("El usuario reservado no puede borrarse!");
+            jsfHelper.addErrorMessage("El usuario reservado no puede borrarse!");
 
             return;
         }
         try {
             usuariosService.remove(usuarioActual);
             usuarioActual = null;
-            JSFUtil.addInfoMessage("Usuario eliminado exitosamente!");
+            jsfHelper.addInfoMessage("Usuario eliminado exitosamente!");
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            JSFUtil.addErrorMessage("Error al borrar!");
+            jsfHelper.addErrorMessage("Error al borrar!");
 
         }
     }
@@ -154,7 +157,7 @@ public class UsuariosEditBean implements Serializable {
 
         String defaultPassword = usuariosService.resetPassword(usuarioActual.getId());
         if (defaultPassword != null) {
-            JSFUtil.addInfoMessage("Se ha establecido la clave del usuario a: " + defaultPassword);
+            jsfHelper.addInfoMessage("Se ha establecido la clave del usuario a: " + defaultPassword);
         }
     }
 

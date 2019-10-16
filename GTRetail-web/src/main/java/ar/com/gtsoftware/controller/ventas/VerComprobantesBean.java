@@ -23,20 +23,20 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.ComprobantesDto;
 import ar.com.gtsoftware.dto.model.FiscalPuntosVentaDto;
 import ar.com.gtsoftware.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -59,6 +59,8 @@ public class VerComprobantesBean implements Serializable {
     private FiscalPuntosVentaService puntosVentaFacade;
     @ManagedProperty(value = "#{authBackingBean}")
     private AuthBackingBean authBackingBean;
+    @Inject
+    private JSFHelper jsfHelper;
     private FiscalPuntosVentaDto puntoVentaSeleccionado;
     private long numeroComprobante;
     private boolean permitirCargarNroComprobante = false;
@@ -70,10 +72,10 @@ public class VerComprobantesBean implements Serializable {
     }
 
     public void init() {
-        if (isPostback()) {
+        if (jsfHelper.isPostback()) {
             return;
         }
-        String idVenta = getRequestParameterMap().get("idComprobante");
+        String idVenta = jsfHelper.getRequestParameterMap().get("idComprobante");
         if (idVenta == null) {
             throw new IllegalArgumentException("Parámetro nulo!");
         }
@@ -97,16 +99,16 @@ public class VerComprobantesBean implements Serializable {
     public void registrarFactura() {
 
         if (puntoVentaSeleccionado == null) {
-            addErrorMessage("Debe seleccionar un punto de venta.");
+            jsfHelper.addErrorMessage("Debe seleccionar un punto de venta.");
             return;
         }
         if (puntoVentaSeleccionado.getTipo() != TiposPuntosVenta.MANUAL
                 && puntoVentaSeleccionado.getTipo() != TiposPuntosVenta.ELECTRONICO) {
-            addErrorMessage("Solo disponible para puntos de venta manual o electrónico");
+            jsfHelper.addErrorMessage("Solo disponible para puntos de venta manual o electrónico");
             return;
         }
         if (puntoVentaSeleccionado.getTipo() == TiposPuntosVenta.MANUAL && numeroComprobante == 0) {
-            addErrorMessage("Debe ingresar un número de comprobante");
+            jsfHelper.addErrorMessage("Debe ingresar un número de comprobante");
             return;
         }
         try {
@@ -116,11 +118,11 @@ public class VerComprobantesBean implements Serializable {
                     numeroComprobante,
                     new Date());
             ventaActual = ventasFacade.find(ventaActual.getId());
-            addInfoMessage(String.format("Factura registrada correctamente: %s",
+            jsfHelper.addInfoMessage(String.format("Factura registrada correctamente: %s",
                     ventaActual.getIdRegistro().getNumeroFactura()));
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            addErrorMessage(ex.getMessage());
+            jsfHelper.addErrorMessage(ex.getMessage());
         }
 
     }
@@ -131,12 +133,10 @@ public class VerComprobantesBean implements Serializable {
     public void anularVenta() {
         try {
             facturacionBean.anularFactura(ventaActual.getId());
-            addInfoMessage("Factura anulada correctamente");
-
+            jsfHelper.addInfoMessage("Factura anulada correctamente");
         } catch (ServiceException ex) {
             LOG.log(Level.SEVERE, null, ex);
-            addErrorMessage(ex.getMessage());
-
+            jsfHelper.addErrorMessage(ex.getMessage());
         }
     }
 

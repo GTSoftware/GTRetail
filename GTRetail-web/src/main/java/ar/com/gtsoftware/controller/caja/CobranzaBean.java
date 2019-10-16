@@ -19,6 +19,7 @@ import ar.com.gtsoftware.auth.AuthBackingBean;
 import ar.com.gtsoftware.bl.*;
 import ar.com.gtsoftware.dto.PagoValorDTO;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.BancosSearchFilter;
 import ar.com.gtsoftware.search.ComprobantesPagosSearchFilter;
 import org.apache.commons.collections.CollectionUtils;
@@ -29,16 +30,13 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
-
-import static ar.com.gtsoftware.utils.JSFUtil.addErrorMessage;
-import static ar.com.gtsoftware.utils.JSFUtil.addInfoMessage;
 
 /**
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
@@ -48,7 +46,6 @@ import static ar.com.gtsoftware.utils.JSFUtil.addInfoMessage;
 public class CobranzaBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(CobranzaBean.class.getName());
     private static final BigDecimal REDONDEO = new BigDecimal(5);
 
     @EJB
@@ -67,6 +64,8 @@ public class CobranzaBean implements Serializable {
 
     @ManagedProperty(value = "#{recibosSearchBean}")
     private RecibosSearchBean recibosSearchBean;
+    @Inject
+    private JSFHelper jsfHelper;
 
     private CajasDto cajaActual;
 
@@ -140,13 +139,13 @@ public class CobranzaBean implements Serializable {
 
     private boolean validarComprobantesSeleccionados() {
         if (CollectionUtils.isEmpty(selectedComprobantes)) {
-            addErrorMessage("No hay comprobantes seleccionados.");
+            jsfHelper.addErrorMessage("No hay comprobantes seleccionados.");
             return false;
         }
         Long idPersona = selectedComprobantes.get(0).getIdPersona().getId();
         for (ComprobantesDto c : selectedComprobantes) {
             if (!Objects.equals(idPersona, c.getIdPersona().getId())) {
-                addErrorMessage("Debe seleccionar comprobatnes de un mismo cliente.");
+                jsfHelper.addErrorMessage("Debe seleccionar comprobatnes de un mismo cliente.");
                 return false;
             }
         }
@@ -164,13 +163,13 @@ public class CobranzaBean implements Serializable {
 
     public void cobrarComprobantes() {
         if (cajaActual == null) {
-            addErrorMessage("No posee una caja abierta");
+            jsfHelper.addErrorMessage("No posee una caja abierta");
             return;
         }
         if (validarComprobantesSeleccionados() && validarMontosEnPagos()) {
 
             reciboActual = cobranzaService.cobrarComprobantes(cajaActual, pagosValores);
-            addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
+            jsfHelper.addInfoMessage(String.format("Comprobante cobrado exitosamente con recibo: %d", reciboActual.getId()));
             PrimeFaces.current().executeScript("PF('cobrarComprobantesDialog').hide();");
             PrimeFaces.current().executeScript("PF('imprimirReciboDialog').show();");
         }
@@ -181,7 +180,7 @@ public class CobranzaBean implements Serializable {
             if (pago.getMontoRealPagado().compareTo(pago.getMontoMaximoConRedondeo()) > 0
                     || pago.getMontoRealPagado().compareTo(pago.getMontoMinimoConRedondeo()) < 0) {
 
-                addErrorMessage(String.format("El monto pago para el comp: %s no se encuentra dentro de los parámetros válidos",
+                jsfHelper.addErrorMessage(String.format("El monto pago para el comp: %s no se encuentra dentro de los parámetros válidos",
                         pago.getPago().getIdComprobante()));
                 return false;
             }

@@ -19,7 +19,7 @@ import ar.com.gtsoftware.bl.RemitoService;
 import ar.com.gtsoftware.dto.ImpresionEtiquetasDTO;
 import ar.com.gtsoftware.dto.model.ProductosDto;
 import ar.com.gtsoftware.dto.model.RemitoDto;
-import ar.com.gtsoftware.utils.JSFUtil;
+import ar.com.gtsoftware.helper.JSFHelper;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -31,6 +31,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -56,6 +57,8 @@ public class EtiquetasRemitoBean implements Serializable {
     private final List<ImpresionEtiquetasDTO> etiquetas = new ArrayList<>();
     @EJB
     private RemitoService remitoFacade;
+    @Inject
+    private JSFHelper jsfHelper;
     private RemitoDto remitoActual = null;
     private int numeradorItems = 1;
 
@@ -68,7 +71,7 @@ public class EtiquetasRemitoBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idRemito = JSFUtil.getRequestParameterMap().get("idRemito");
+        String idRemito = jsfHelper.getRequestParameterMap().get("idRemito");
         if (isEmpty(idRemito)) {
             throw new IllegalArgumentException("IdRemito nulo!");
         }
@@ -112,10 +115,10 @@ public class EtiquetasRemitoBean implements Serializable {
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, beanCollectionDataSource);
 
-        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletResponse httpServletResponse = jsfHelper.getResponse();
         httpServletResponse.addHeader("Content-disposition", "attachment; filename=etiquetas.pdf");
         ServletOutputStream servletStream = httpServletResponse.getOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, servletStream);
-        FacesContext.getCurrentInstance().responseComplete();
+        jsfHelper.getFacesContext().responseComplete();
     }
 }

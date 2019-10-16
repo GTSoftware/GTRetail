@@ -17,15 +17,16 @@ package ar.com.gtsoftware.controller.parametros;
 
 import ar.com.gtsoftware.bl.ParametrosService;
 import ar.com.gtsoftware.dto.model.ParametrosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -40,6 +41,8 @@ public class ParametrosEditBean implements Serializable {
 
     @EJB
     private ParametrosService service;
+    @Inject
+    private JSFHelper jsfHelper;
 
 
     private ParametrosDto parametroActual;
@@ -51,10 +54,10 @@ public class ParametrosEditBean implements Serializable {
 
     public void init() {
 
-        if (isPostback()) {
+        if (jsfHelper.isPostback()) {
             return;
         }
-        nombreParametro = getRequestParameterMap().get("nombreParametro");
+        nombreParametro = jsfHelper.getRequestParameterMap().get("nombreParametro");
         if (isEmpty(nombreParametro)) {
             throw new IllegalArgumentException("El parámetro es nulo");
         }
@@ -71,7 +74,7 @@ public class ParametrosEditBean implements Serializable {
     public void edit() {
 
         service.createOrEdit(parametroActual);
-        addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
+        jsfHelper.addInfoMessage(String.format("Parámetro editado con éxito: %s - %s",
                 parametroActual.getNombreParametro(), parametroActual.getValorParametro()));
 
     }

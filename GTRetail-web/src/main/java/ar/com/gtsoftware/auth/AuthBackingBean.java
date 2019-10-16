@@ -17,19 +17,17 @@ package ar.com.gtsoftware.auth;
 
 import ar.com.gtsoftware.bl.UsuariosService;
 import ar.com.gtsoftware.dto.model.UsuariosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.UsuariosSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
-import org.apache.commons.lang.StringUtils;
-import org.primefaces.model.menu.DefaultMenuItem;
-import org.primefaces.model.menu.DefaultMenuModel;
-import org.primefaces.model.menu.DefaultSeparator;
-import org.primefaces.model.menu.MenuModel;
+import org.primefaces.model.menu.*;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
+
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 /**
  * @author Rodrigo Tato <rotatomel@gmail.com>
@@ -38,11 +36,10 @@ import java.io.Serializable;
 @SessionScoped
 public class AuthBackingBean implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @EJB
     private UsuariosService usuariosService;
-
+    @Inject
+    private JSFHelper jsfHelper;
 
     private UsuariosDto usuarioLogueado;
 
@@ -51,24 +48,11 @@ public class AuthBackingBean implements Serializable {
     public AuthBackingBean() {
     }
 
-
-    @PostConstruct
-    public void init() {
-
+    private void armarMenu() {
         rolesMenuModel = new DefaultMenuModel();
-
-        DefaultMenuItem cambiarClaveMi = new DefaultMenuItem("Cambiar clave");
-        cambiarClaveMi.setIcon("fa fa-fw fa-lock");
-        cambiarClaveMi.setCommand(String.format("/protected/user/changePassword.xhtml%s", JSFUtil.JSF_REDIRECT_ESCAPED));
-        rolesMenuModel.addElement(cambiarClaveMi);
-
-        DefaultMenuItem salirMi = new DefaultMenuItem("Salir");
-        salirMi.setIcon("fa fa-fw fa-power-off");
-        salirMi.setCommand("#{authBackingBean.logout}");
-        rolesMenuModel.addElement(salirMi);
-
-        DefaultSeparator separator = new DefaultSeparator();
-        rolesMenuModel.addElement(separator);
+        rolesMenuModel.addElement(armarCambiarClaveItem());
+        rolesMenuModel.addElement(armarSalirItem());
+        rolesMenuModel.addElement(new DefaultSeparator());
 
       /*  DefaultSubMenu rolesSubMenu = new DefaultSubMenu("Roles");
 
@@ -80,18 +64,31 @@ public class AuthBackingBean implements Serializable {
         rolesSubMenu.setExpanded(false);
 
         rolesMenuModel.addElement(rolesSubMenu);*/
+    }
 
+    private MenuElement armarSalirItem() {
+        DefaultMenuItem salirMi = new DefaultMenuItem("Salir");
+        salirMi.setIcon("fa fa-fw fa-power-off");
+        salirMi.setCommand("#{authBackingBean.logout}");
+        return salirMi;
+    }
+
+    private MenuElement armarCambiarClaveItem() {
+        DefaultMenuItem cambiarClaveMi = new DefaultMenuItem("Cambiar clave");
+        cambiarClaveMi.setIcon("fa fa-fw fa-lock");
+        cambiarClaveMi.setCommand(String.format("/protected/user/changePassword.xhtml%s", JSFHelper.JSF_REDIRECT_ESCAPED));
+        return cambiarClaveMi;
     }
 
     public void logout() {
-        JSFUtil.logOut("/index.html");
+        jsfHelper.logout("/index.html");
     }
 
     public UsuariosDto getUserLoggedIn() {
         if (usuarioLogueado == null) {
-            String usuP = JSFUtil.getUserPrincipalName();
+            String usuP = jsfHelper.getUserPrincipalName();
 
-            if (StringUtils.isNotEmpty(usuP)) {
+            if (isNotEmpty(usuP)) {
                 UsuariosSearchFilter sf = UsuariosSearchFilter.builder()
                         .login(usuP).build();
                 sf.setNamedEntityGraph("rolesUsuarios");
@@ -109,19 +106,22 @@ public class AuthBackingBean implements Serializable {
     }
 
     public MenuModel getRolesMenuModel() {
+        if (rolesMenuModel == null) {
+            armarMenu();
+        }
         return rolesMenuModel;
     }
 
     public boolean isUserVendedor() {
-        return JSFUtil.isUserInRole(Roles.VENDEDORES);
+        return jsfHelper.isUserInRole(Roles.VENDEDORES);
     }
 
     public boolean isUserCajero() {
-        return JSFUtil.isUserInRole(Roles.CAJEROS);
+        return jsfHelper.isUserInRole(Roles.CAJEROS);
     }
 
     public boolean isUserAdministrador() {
-        return JSFUtil.isUserInRole(Roles.ADMINISTRADORES);
+        return jsfHelper.isUserInRole(Roles.ADMINISTRADORES);
     }
 
 }

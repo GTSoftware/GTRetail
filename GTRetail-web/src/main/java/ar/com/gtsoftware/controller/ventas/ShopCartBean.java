@@ -22,6 +22,7 @@ import ar.com.gtsoftware.controller.ventas.dto.ComprobanteRelacionado;
 import ar.com.gtsoftware.controller.ventas.helpers.RelacionComprobanteHelper;
 import ar.com.gtsoftware.dto.RegistroVentaDto;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.rules.TipoAccion;
 import ar.com.gtsoftware.search.*;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +42,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.contains;
 
@@ -76,15 +76,17 @@ public class ShopCartBean implements Serializable {
     private final List<NegocioPlanesPagoDetalleDto> detallePlan = new ArrayList<>();
     protected ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
     protected NegocioFormasPagoDto formaPagoDefecto = null;
-    RelacionComprobanteHelper relacionComprobanteHelper = new RelacionComprobanteHelper();
+    private RelacionComprobanteHelper relacionComprobanteHelper = new RelacionComprobanteHelper();
     @EJB
-    NegocioTiposComprobanteService tiposComprobanteFacade;
+    private NegocioTiposComprobanteService tiposComprobanteFacade;
     @EJB
-    VentasService ventasService;
-    OfertasHelper ofertasHelper;
-    ProductosDto productoRedondeo;
+    private VentasService ventasService;
+    private OfertasHelper ofertasHelper;
+    private ProductosDto productoRedondeo;
     @Inject
     private Conversation conversation;
+    @Inject
+    private JSFHelper jsfHelper;
     @Inject
     private AuthBackingBean authBackingBean;
     @EJB
@@ -124,8 +126,8 @@ public class ShopCartBean implements Serializable {
      * Inicializa la conversación
      */
     public void initConversation() {
-        if (!isPostback() && conversation.isTransient()) {
-            conversation.begin();
+        if (jsfHelper.isNotPostback() && conversation.isTransient()) {
+            startConversation();
             venta = new ComprobantesDto();
             venta.setIdUsuario(authBackingBean.getUserLoggedIn());
             venta.setIdSucursal(authBackingBean.getUserLoggedIn().getIdSucursal());
@@ -148,10 +150,15 @@ public class ShopCartBean implements Serializable {
             formaPagoDefecto = formasPagoFacade.find(Long.parseLong(idFormaPagoParam.getValorParametro()));
             venta.setTipoComprobante(tiposComprobanteFacade.getTipoFactura());
 
-            vendedor = isUserInRole(Roles.VENDEDORES);
+            vendedor = jsfHelper.isUserInRole(Roles.VENDEDORES);
 
             ofertasHelper = new OfertasHelper(ofertasService, this);
         }
+    }
+
+    private void startConversation() {
+        conversation.setTimeout(jsfHelper.getRequest().getSession().getMaxInactiveInterval() * 1000);
+        conversation.begin();
     }
 
     /**
@@ -212,7 +219,7 @@ public class ShopCartBean implements Serializable {
     }
 
     public void initPagos() {
-        if (!isPostback()) {
+        if (jsfHelper.isNotPostback()) {
             clearPagos();
             if (formaPagoDefecto != null) {
                 pagoActual.setMontoPago(venta.getTotal());
@@ -246,7 +253,7 @@ public class ShopCartBean implements Serializable {
     public void addToCart() {
 
         if (cantidad.signum() == 0) {
-            addErrorMessage("La cantidad no puede ser cero");
+            jsfHelper.addErrorMessage("La cantidad no puede ser cero");
         }
 
         ProductosDto producto;
@@ -263,12 +270,12 @@ public class ShopCartBean implements Serializable {
         }
 
         if (producto == null) {
-            addErrorMessage(getBundle("msg").getString("productoNoEncontrado"));
+            jsfHelper.addErrorMessage(jsfHelper.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 
         if (producto.getPrecioVenta() == null) {
-            addErrorMessage(getBundle("msg").getString("productoSinPrecio"));
+            jsfHelper.addErrorMessage(jsfHelper.getBundle("msg").getString("productoSinPrecio"));
             return;
         }
         ComprobantesLineasDto linea = crearLinea(producto);
@@ -384,7 +391,7 @@ public class ShopCartBean implements Serializable {
         if (pagoActual.getIdFormaPago() != null) {
             if (pagoActual.getMontoPago().signum() <= 0
                     || pagoActual.getMontoPago().compareTo(venta.getSaldo()) > 0) {
-                addErrorMessage("El monto del pago supera el saldo!");
+                jsfHelper.addErrorMessage("El monto del pago supera el saldo!");
 
             } else {
 
@@ -433,26 +440,26 @@ public class ShopCartBean implements Serializable {
 
     private boolean validarVenta() {
         if (authBackingBean.getUserLoggedIn().getIdSucursal() == null) {
-            addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
+            jsfHelper.addErrorMessage("El usuario no tiene una sucursal configurada. Por favor configure el usuario.");
             return false;
         }
         if (venta.getIdPersona() == null) {
-            addErrorMessage("Por favor cargue un cliente para poder continuar.");
+            jsfHelper.addErrorMessage("Por favor cargue un cliente para poder continuar.");
             return false;
         }
         if (venta.getTotal().signum() <= 0) {
-            addErrorMessage("El total del comprobante debe ser mayor que cero.");
+            jsfHelper.addErrorMessage("El total del comprobante debe ser mayor que cero.");
             return false;
         }
         if (venta.getComprobantesLineasList() == null || venta.getComprobantesLineasList().isEmpty()) {
-            addErrorMessage("Por favor cargue productos para poder continuar.");
+            jsfHelper.addErrorMessage("Por favor cargue productos para poder continuar.");
             return false;
         }
 
         if (venta.getIdCondicionComprobante() != null) {
             if (venta.getIdCondicionComprobante().isPagoTotal()) {
                 if (venta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
-                    addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
+                    jsfHelper.addErrorMessage("El importe del pago debe cubrir el total de la operación para esta condición.");
                     return false;
                 }
             }
@@ -464,12 +471,12 @@ public class ShopCartBean implements Serializable {
     private boolean validarCantidades() {
         for (ComprobantesLineasDto linea : venta.getComprobantesLineasList()) {
             if (linea.getCantidad().signum() <= 0) {
-                addErrorMessage(String.format("El producto: %d no puede tener cantidad 0 o inferior.", linea.getIdProducto().getId()));
+                jsfHelper.addErrorMessage(String.format("El producto: %d no puede tener cantidad 0 o inferior.", linea.getIdProducto().getId()));
                 return false;
             }
             BigDecimal parteDecimal = linea.getCantidad().subtract(linea.getCantidad().setScale(0, RoundingMode.DOWN));
             if (parteDecimal.signum() != 0 && linea.getIdProducto().getIdTipoUnidadVenta().isCantidadEntera()) {
-                addErrorMessage(String.format("El producto: %d no admite cantidades fraccionadas.", linea.getIdProducto().getId()));
+                jsfHelper.addErrorMessage(String.format("El producto: %d no admite cantidades fraccionadas.", linea.getIdProducto().getId()));
                 return false;
             }
         }
@@ -487,13 +494,13 @@ public class ShopCartBean implements Serializable {
 
                 RegistroVentaDto registroVentaDto = ventasService.guardarVenta(venta, true);
 
-                addInfoMessage("Operación: " + registroVentaDto.getIdComprobante()
+                jsfHelper.addInfoMessage("Operación: " + registroVentaDto.getIdComprobante()
                         + " guardada exitosamente");
                 endConversation();
                 return String.format("/protected/ventas/vista/verVenta.xhtml?idComprobante=%d&faces-redirect=true", registroVentaDto.getIdComprobante());
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, ex.getMessage(), ex);
-                addErrorMessage(ex.getMessage());
+                jsfHelper.addErrorMessage(ex.getMessage());
             }
         }
         return null;
@@ -669,7 +676,7 @@ public class ShopCartBean implements Serializable {
         }
         ComprobantesDto comprobanteOriginal = ventasService.obtenerComprobante(idComprobanteRelacionado);
         if (comprobanteOriginal == null) {
-            addErrorMessage("Comprobante no encontrado");
+            jsfHelper.addErrorMessage("Comprobante no encontrado");
             return;
         }
 
@@ -686,7 +693,7 @@ public class ShopCartBean implements Serializable {
 
         calcularTotal();
         venta.setIdPersona(comprobanteOriginal.getIdPersona());
-        addInfoMessage("El tipo de comprobante se ha establecido a: "
+        jsfHelper.addInfoMessage("El tipo de comprobante se ha establecido a: "
                 + comprobanteRelacionado.getTipoComprobante().getNombre());
     }
 }

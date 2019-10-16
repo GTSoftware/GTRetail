@@ -22,15 +22,16 @@ import ar.com.gtsoftware.dto.model.NegocioFormasPagoDto;
 import ar.com.gtsoftware.dto.model.NegocioPlanesPagoDetalleDto;
 import ar.com.gtsoftware.dto.model.NegocioPlanesPagoDto;
 import ar.com.gtsoftware.dto.model.ProductosListasPreciosDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.FormasPagoSearchFilter;
 import ar.com.gtsoftware.search.ProductosListasPreciosSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -57,6 +58,8 @@ public class PlanesPagoEditBean implements Serializable {
     private NegocioFormasPagoService formasPagoFacade;
     @EJB
     private ProductosListasPreciosService listasPreciosFacade;
+    @Inject
+    private JSFHelper jsfHelper;
     private NegocioPlanesPagoDto planPagoActual = null;
 
     /**
@@ -68,7 +71,7 @@ public class PlanesPagoEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idPlan = JSFUtil.getRequestParameterMap().get("idPlanPago");
+        String idPlan = jsfHelper.getRequestParameterMap().get("idPlanPago");
 
         if (idPlan == null) {
             nuevo();
@@ -104,11 +107,11 @@ public class PlanesPagoEditBean implements Serializable {
         try {
 
             planPagoActual = planesPagoService.createOrEdit(planPagoActual);
-            JSFUtil.addInfoMessage("Plan de pago guardado Exitosamente");
+            jsfHelper.addInfoMessage("Plan de pago guardado Exitosamente");
             planPagoActual = planesPagoService.find(planPagoActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

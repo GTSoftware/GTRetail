@@ -19,14 +19,15 @@ import ar.com.gtsoftware.bl.UbicacionPaisesService;
 import ar.com.gtsoftware.bl.UbicacionProvinciasService;
 import ar.com.gtsoftware.dto.model.UbicacionPaisesDto;
 import ar.com.gtsoftware.dto.model.UbicacionProvinciasDto;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.PaisesSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,7 +48,8 @@ public class ProvinciasEditBean implements Serializable {
 
     @EJB
     private UbicacionPaisesService paisesFacade;
-
+    @Inject
+    private JSFHelper jsfHelper;
 
     private List<UbicacionPaisesDto> paises;
 
@@ -62,7 +64,7 @@ public class ProvinciasEditBean implements Serializable {
     @PostConstruct
     public void init() {
 
-        String idProvincia = JSFUtil.getRequestParameterMap().get("idProvincia");
+        String idProvincia = jsfHelper.getRequestParameterMap().get("idProvincia");
 
         if (StringUtils.isEmpty(idProvincia)) {
             nuevo();
@@ -87,11 +89,11 @@ public class ProvinciasEditBean implements Serializable {
         try {
 
             facade.createOrEdit(provinciaActual);
-            JSFUtil.addInfoMessage("Provincia guardada Exitosamente");
+            jsfHelper.addInfoMessage("Provincia guardada Exitosamente");
             provinciaActual = facade.find(provinciaActual.getId());
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }

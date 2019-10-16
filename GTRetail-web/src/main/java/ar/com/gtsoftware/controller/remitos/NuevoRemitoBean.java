@@ -21,6 +21,7 @@ import ar.com.gtsoftware.bl.ProductosService;
 import ar.com.gtsoftware.bl.RemitoService;
 import ar.com.gtsoftware.bl.RemitoTipoMovimientoService;
 import ar.com.gtsoftware.dto.model.*;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.DepositosSearchFilter;
 import ar.com.gtsoftware.search.ProductosSearchFilter;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,6 +32,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -38,8 +40,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import static ar.com.gtsoftware.utils.JSFUtil.*;
 
 /**
  * Maneja la creación de un nuevo remitoDtoCabecera.
@@ -66,6 +66,8 @@ public class NuevoRemitoBean implements Serializable {
     private ProductosService productosFacade;
     @EJB
     private RemitoService remitoFacade;
+    @Inject
+    private JSFHelper jsfHelper;
     private BigDecimal cantidad = BigDecimal.ONE;
     private ProductosDto productoBusquedaSeleccionado = null;
     private int numeradorLinea = 1;
@@ -78,7 +80,7 @@ public class NuevoRemitoBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (isPostback()) {
+        if (jsfHelper.isPostback()) {
             return;
         }
         DepositosSearchFilter dsf = new DepositosSearchFilter();
@@ -142,27 +144,27 @@ public class NuevoRemitoBean implements Serializable {
 
     private boolean validarRemito() {
         if (!newRemito.getIsOrigenInterno() && !newRemito.getIsDestinoInterno()) {
-            addErrorMessage("El remito no puede tener origen y detino externos");
+            jsfHelper.addErrorMessage("El remito no puede tener origen y detino externos");
             return false;
         }
         if (CollectionUtils.isEmpty(newRemito.getDetalleList())) {
-            addErrorMessage("El remito debe tener al menos un producto");
+            jsfHelper.addErrorMessage("El remito debe tener al menos un producto");
             return false;
         }
         if (newRemito.getIsOrigenInterno() && newRemito.getIdOrigenInterno() == null) {
-            addErrorMessage("Debe seleccionar el ORIGEN para el remito");
+            jsfHelper.addErrorMessage("Debe seleccionar el ORIGEN para el remito");
             return false;
         }
         if (!newRemito.getIsOrigenInterno() && newRemito.getIdOrigenExterno() == null) {
-            addErrorMessage("Debe seleccionar el ORIGEN para el remito");
+            jsfHelper.addErrorMessage("Debe seleccionar el ORIGEN para el remito");
             return false;
         }
         if (newRemito.getIsDestinoInterno() && newRemito.getIdDestinoPrevistoInterno() == null) {
-            addErrorMessage("Debe seleccionar el DESTINO para el remito");
+            jsfHelper.addErrorMessage("Debe seleccionar el DESTINO para el remito");
             return false;
         }
         if (!newRemito.getIsDestinoInterno() && newRemito.getIdDestinoPrevistoExterno() == null) {
-            addErrorMessage("Debe seleccionar el DESTINO para el remito");
+            jsfHelper.addErrorMessage("Debe seleccionar el DESTINO para el remito");
             return false;
         }
         return true;
@@ -201,7 +203,7 @@ public class NuevoRemitoBean implements Serializable {
         }
 
         if (producto == null) {
-            addErrorMessage(getBundle("msg").getString("productoNoEncontrado"));
+            jsfHelper.addErrorMessage(jsfHelper.getBundle("msg").getString("productoNoEncontrado"));
             return;
         }
 

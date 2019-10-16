@@ -20,14 +20,15 @@ import ar.com.gtsoftware.bl.SucursalesService;
 import ar.com.gtsoftware.dto.model.FiscalPuntosVentaDto;
 import ar.com.gtsoftware.dto.model.SucursalesDto;
 import ar.com.gtsoftware.enums.TiposPuntosVenta;
+import ar.com.gtsoftware.helper.JSFHelper;
 import ar.com.gtsoftware.search.FiscalPuntosVentaSearchFilter;
 import ar.com.gtsoftware.search.SucursalesSearchFilter;
-import ar.com.gtsoftware.utils.JSFUtil;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,8 @@ public class PuntoVentaEditBean implements Serializable {
     private FiscalPuntosVentaService service;
     @EJB
     private SucursalesService sucursalesService;
+    @Inject
+    private JSFHelper jsfHelper;
     private FiscalPuntosVentaDto puntoVentaActual = null;
 
     public PuntoVentaEditBean() {
@@ -61,7 +64,7 @@ public class PuntoVentaEditBean implements Serializable {
                 .activa(true).build();
         sucursalesList.addAll(sucursalesService.findAllBySearchFilter(sf));
 
-        String nroPuntoVenta = JSFUtil.getRequestParameterMap().get("nroPuntoVenta");
+        String nroPuntoVenta = jsfHelper.getRequestParameterMap().get("nroPuntoVenta");
 
         if (nroPuntoVenta == null) {
             nuevo();
@@ -101,10 +104,10 @@ public class PuntoVentaEditBean implements Serializable {
         try {
 
             puntoVentaActual = service.createOrEdit(puntoVentaActual);
-            JSFUtil.addInfoMessage("Punto de venta guardado exitosamente");
+            jsfHelper.addInfoMessage("Punto de venta guardado exitosamente");
         } catch (Exception e) {
             LOG.log(Level.INFO, e.getMessage());
-            JSFUtil.addErrorMessage("Error al guardar");
+            jsfHelper.addErrorMessage("Error al guardar");
         }
 
     }
