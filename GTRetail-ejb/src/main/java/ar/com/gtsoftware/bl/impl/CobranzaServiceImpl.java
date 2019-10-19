@@ -186,7 +186,7 @@ public class CobranzaServiceImpl implements CobranzaService {
         cuentaCorrienteBean.registrarMovimientoCuenta(
                 personasMapper.entityToDto(comprobante.getIdPersona(),
                         new CycleAvoidingMappingContext()),
-                monto,
+                monto.negate(),
                 descMovimiento);
     }
 
