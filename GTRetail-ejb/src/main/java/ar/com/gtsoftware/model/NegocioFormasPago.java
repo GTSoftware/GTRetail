@@ -15,14 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Representa las formas de pago del negocio
@@ -31,11 +29,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "negocio_formas_pago")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_forma_pago", columnDefinition = "serial"))
+@Getter
+@Setter
 public class NegocioFormasPago extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ventas_formas_pago_id_forma_pago")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ventas_formas_pago_id_forma_pago",
+            sequenceName = "ventas_formas_pago_id_forma_pago_seq")
+    @Basic(optional = false)
+    @Column(name = "id_forma_pago", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -61,141 +65,5 @@ public class NegocioFormasPago extends BaseEntity {
     @NotNull
     @Column(name = "requiere_valores")
     private boolean requiereValores;
-
-    /**
-     * Constructor por defecto
-     */
-    public NegocioFormasPago() {
-    }
-
-    /**
-     *
-     * @param idFormaPago
-     */
-    public NegocioFormasPago(Long idFormaPago) {
-        super(idFormaPago);
-    }
-
-    /**
-     *
-     * @param idFormaPago
-     * @param nombreFormaPago
-     * @param venta
-     * @param compra
-     */
-    public NegocioFormasPago(Long idFormaPago, String nombreFormaPago, boolean venta, boolean compra) {
-        super(idFormaPago);
-        this.nombreFormaPago = nombreFormaPago;
-        this.venta = venta;
-        this.compra = compra;
-    }
-
-    /**
-     * Nombre de la forma de pago
-     *
-     * @return
-     */
-    public String getNombreFormaPago() {
-        return nombreFormaPago;
-    }
-
-    /**
-     * Nombre de la forma de pago
-     *
-     * @param nombreFormaPago
-     */
-    public void setNombreFormaPago(String nombreFormaPago) {
-        this.nombreFormaPago = nombreFormaPago;
-    }
-
-    /**
-     * Nombre corto
-     *
-     * @return
-     */
-    public String getNombreCorto() {
-        return nombreCorto;
-    }
-
-    /**
-     * Nombre corto
-     *
-     * @param nombreCorto
-     */
-    public void setNombreCorto(String nombreCorto) {
-        this.nombreCorto = nombreCorto;
-    }
-
-    /**
-     * Si se puede usar para la venta
-     *
-     * @return
-     */
-    public boolean getVenta() {
-        return venta;
-    }
-
-    /**
-     * Si se puede usar para la venta
-     *
-     * @param venta
-     */
-    public void setVenta(boolean venta) {
-        this.venta = venta;
-    }
-
-    /**
-     * Si se puede usar para la compra
-     *
-     * @return
-     */
-    public boolean getCompra() {
-        return compra;
-    }
-
-    /**
-     * Si se puede usar para la compra
-     *
-     * @param compra
-     */
-    public void setCompra(boolean compra) {
-        this.compra = compra;
-    }
-
-    /**
-     * Si requiere que tenga al menos un plan asociado para poder ser utilizado
-     *
-     * @return
-     */
-    public boolean getRequierePlan() {
-        return requierePlan;
-    }
-
-    /**
-     * Si requiere que tenga al menos un plan asociado para poder ser utilizado
-     *
-     * @param requierePlan
-     */
-    public void setRequierePlan(boolean requierePlan) {
-        this.requierePlan = requierePlan;
-    }
-
-    /**
-     * Si la forma de pago requiere el ingreso de valores que la representen
-     *
-     * @return
-     */
-    public boolean getRequiereValores() {
-        return requiereValores;
-    }
-
-    /**
-     * Si la forma de pago requiere el ingreso de valores que la representen
-     *
-     * @param requiereValores
-     */
-    public void setRequiereValores(boolean requiereValores) {
-        this.requiereValores = requiereValores;
-    }
 
 }

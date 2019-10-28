@@ -15,9 +15,11 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 
 /**
@@ -25,11 +27,17 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "recibos_detalle")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_detalle_recibo"))
+@Getter
+@Setter
 public class RecibosDetalle extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recibos_detalle_id_detalle_recibo")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "recibos_detalle_id_detalle_recibo",
+            sequenceName = "recibos_detalle_id_detalle_recibo_seq")
+    @Basic(optional = false)
+    @Column(name = "id_detalle_recibo", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -62,68 +70,4 @@ public class RecibosDetalle extends BaseEntity {
     @OneToOne
     private Valores idValor;
 
-    public RecibosDetalle(Long id) {
-        super(id);
-    }
-
-    public RecibosDetalle() {
-    }
-
-    public Recibos getIdRecibo() {
-        return idRecibo;
-    }
-
-    public void setIdRecibo(Recibos idRecibo) {
-        this.idRecibo = idRecibo;
-    }
-
-    public ComprobantesPagos getIdPagoComprobante() {
-        return idPagoComprobante;
-    }
-
-    public void setIdPagoComprobante(ComprobantesPagos idPagoComprobante) {
-        this.idPagoComprobante = idPagoComprobante;
-    }
-
-    public BigDecimal getMontoPagado() {
-        return montoPagado;
-    }
-
-    public void setMontoPagado(BigDecimal montoPagado) {
-        this.montoPagado = montoPagado;
-    }
-
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public Valores getIdValor() {
-        return idValor;
-    }
-
-    public void setIdValor(Valores idValor) {
-        this.idValor = idValor;
-    }
-
-
-    public BigDecimal getMontoPagadoConSigno() {
-        return montoPagadoConSigno;
-    }
-
-    public void setMontoPagadoConSigno(BigDecimal montoPagadoConSigno) {
-        this.montoPagadoConSigno = montoPagadoConSigno;
-    }
-
-    @NotNull
-    public BigDecimal getRedondeo() {
-        return redondeo;
-    }
-
-    public void setRedondeo(@NotNull BigDecimal redondeo) {
-        this.redondeo = redondeo;
-    }
 }

@@ -15,13 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,8 +32,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "comprobantes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_comprobante"))
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "lineas", attributeNodes = {
                 @NamedAttributeNode("comprobantesLineasList")})
@@ -45,9 +43,17 @@ import java.util.List;
                 @NamedAttributeNode("pagosList")
                 ,
                 @NamedAttributeNode("comprobantesLineasList")})})
+@Getter
+@Setter
 public class Comprobantes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ventas_id_venta")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ventas_id_venta",
+            sequenceName = "ventas_id_venta_seq")
+    @Basic(optional = false)
+    @Column(name = "id_comprobante", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -114,169 +120,6 @@ public class Comprobantes extends BaseEntity {
     @OneToMany(mappedBy = "idComprobante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComprobantesPagos> pagosList;
 
-    public Comprobantes() {
-    }
-
-    public Comprobantes(Long idVenta) {
-        super(idVenta);
-    }
-
-    public Comprobantes(Long idVenta, Date fechaVenta, BigDecimal total, BigDecimal saldo, boolean anulada) {
-        super(idVenta);
-        this.fechaComprobante = fechaVenta;
-        this.total = total;
-        this.saldo = saldo;
-        this.anulada = anulada;
-    }
-
-    public Date getFechaComprobante() {
-        return fechaComprobante;
-    }
-
-    public void setFechaComprobante(Date fechaComprobante) {
-        this.fechaComprobante = fechaComprobante;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public boolean getAnulada() {
-        return anulada;
-    }
-
-    public void setAnulada(boolean anulada) {
-        this.anulada = anulada;
-    }
-
-    public List<ComprobantesLineas> getComprobantesLineasList() {
-        return comprobantesLineasList;
-    }
-
-    public void setComprobantesLineasList(List<ComprobantesLineas> comprobantesLineasList) {
-        this.comprobantesLineasList = comprobantesLineasList;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    @XmlTransient
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public NegocioCondicionesOperaciones getIdCondicionComprobante() {
-        return idCondicionComprobante;
-    }
-
-    public void setIdCondicionComprobante(NegocioCondicionesOperaciones idCondicionComprobante) {
-        this.idCondicionComprobante = idCondicionComprobante;
-    }
-
-    @XmlTransient
-    public FiscalLibroIvaVentas getIdRegistro() {
-        return idRegistro;
-    }
-
-    public void setIdRegistro(FiscalLibroIvaVentas idRegistro) {
-        this.idRegistro = idRegistro;
-    }
-
-    public ComprobantesEstados getIdEstadoComprobante() {
-        return idEstadoComprobante;
-    }
-
-    public void setIdEstadoComprobante(ComprobantesEstados idEstadoComprobante) {
-        this.idEstadoComprobante = idEstadoComprobante;
-    }
-
-    public String getRemitente() {
-        return remitente;
-    }
-
-    public void setRemitente(String remitente) {
-        this.remitente = remitente;
-    }
-
-    public String getNroRemito() {
-        return nroRemito;
-    }
-
-    public void setNroRemito(String nroRemito) {
-        this.nroRemito = nroRemito;
-    }
-
-    public void addLineaVenta(ComprobantesLineas linea) {
-        if (comprobantesLineasList == null) {
-            comprobantesLineasList = new ArrayList<>();
-        }
-        comprobantesLineasList.add(linea);
-    }
-
-    public String getLetra() {
-        return letra;
-    }
-
-    public void setLetra(String letra) {
-        this.letra = letra;
-    }
-
-    public NegocioTiposComprobante getTipoComprobante() {
-        return tipoComprobante;
-    }
-
-    public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
-    }
-
-    @XmlTransient
-    public List<ComprobantesPagos> getPagosList() {
-        return pagosList;
-    }
-
-    public void setPagosList(List<ComprobantesPagos> pagosList) {
-        this.pagosList = pagosList;
-    }
-
-
-
     public BigDecimal getTotalConSigno() {
         if (totalConSigno == null) {
             totalConSigno = total.multiply(tipoComprobante.getSigno());
@@ -292,11 +135,4 @@ public class Comprobantes extends BaseEntity {
         return saldoConSigno;
     }
 
-    public String getBusinessString() {
-        if (idRegistro != null) {
-            return String.format("[%d] %s %s %s-%s", getId(), tipoComprobante.getNombreComprobante(), letra,
-                    idRegistro.getPuntoVentaFactura(), idRegistro.getNumeroFactura());
-        }
-        return String.format("[%d] %s", getId(), tipoComprobante.getNombreComprobante());
-    }
 }

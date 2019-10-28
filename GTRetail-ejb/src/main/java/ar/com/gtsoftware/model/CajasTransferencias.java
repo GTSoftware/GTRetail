@@ -16,10 +16,12 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -30,17 +32,22 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "cajas_transferencias")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_transferencia"))
+@Getter
+@Setter
 public class CajasTransferencias extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cajas_transferencias_id_transferencia")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "cajas_transferencias_id_transferencia",
+            sequenceName = "cajas_transferencias_id_transferencia_seq")
+    @Basic(optional = false)
+    @Column(name = "id_transferencia", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @JoinColumn(name = "id_caja_origen", referencedColumnName = "id_caja")
     @ManyToOne
     private Cajas idCajaOrigen;
-
 
     @NotNull
     @JoinColumn(name = "id_caja_destino", referencedColumnName = "id_caja")
@@ -65,59 +72,4 @@ public class CajasTransferencias extends BaseEntity {
     @ManyToOne
     private NegocioFormasPago idFormaPago;
 
-    public CajasTransferencias() {
-    }
-
-    @NotNull
-    public Cajas getIdCajaOrigen() {
-        return idCajaOrigen;
-    }
-
-    public void setIdCajaOrigen(@NotNull Cajas idCajaOrigen) {
-        this.idCajaOrigen = idCajaOrigen;
-    }
-
-    @NotNull
-    public Cajas getIdCajaDestino() {
-        return idCajaDestino;
-    }
-
-    public void setIdCajaDestino(@NotNull Cajas idCajaDestino) {
-        this.idCajaDestino = idCajaDestino;
-    }
-
-    @NotNull
-    public Date getFechaTransferencia() {
-        return fechaTransferencia;
-    }
-
-    public void setFechaTransferencia(@NotNull Date fechaTransferencia) {
-        this.fechaTransferencia = fechaTransferencia;
-    }
-
-    @NotNull
-    public BigDecimal getMonto() {
-        return monto;
-    }
-
-    public void setMonto(@NotNull BigDecimal monto) {
-        this.monto = monto;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    @NotNull
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(@NotNull NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
 }

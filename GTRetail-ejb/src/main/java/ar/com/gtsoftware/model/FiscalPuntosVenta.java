@@ -16,20 +16,14 @@
 package ar.com.gtsoftware.model;
 
 import ar.com.gtsoftware.enums.TiposPuntosVenta;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Representa a los puntos de venta fiscales asignados a cada sucursal
@@ -38,10 +32,9 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Entity
 @Table(name = "fiscal_puntos_venta")
-@XmlRootElement
+@Getter
+@Setter
 public class FiscalPuntosVenta extends GTEntity<Integer> {
-
-    private static final long serialVersionUID = 1L;
 
     @Id
     @Basic(optional = false)
@@ -65,50 +58,6 @@ public class FiscalPuntosVenta extends GTEntity<Integer> {
     @ManyToOne
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal")
     private Sucursales sucursal;
-
-    public FiscalPuntosVenta() {
-    }
-
-    public Integer getNroPuntoVenta() {
-        return nroPuntoVenta;
-    }
-
-    public void setNroPuntoVenta(Integer nroPuntoVenta) {
-        this.nroPuntoVenta = nroPuntoVenta;
-    }
-
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public TiposPuntosVenta getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TiposPuntosVenta tipo) {
-        this.tipo = tipo;
-    }
-
-    @XmlTransient
-    public Sucursales getSucursal() {
-        return sucursal;
-    }
-
-    public void setSucursal(Sucursales sucursal) {
-        this.sucursal = sucursal;
-    }
 
     @Override
     public Integer getId() {

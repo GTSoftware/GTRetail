@@ -112,13 +112,22 @@ public class ProductoEditBean implements Serializable {
 
             }
             if (duplicar != null && duplicar.equals("1")) {
-                productoActual.setId(null);
                 editandoNuevoProducto = true;
-                // TODO ver como duplicar todos los datos
+                duplicarProducto();
             }
         }
         initDatos();
 
+    }
+
+    private void duplicarProducto() {
+        productoActual.setId(null);
+        for (ProductosPorcentajesDto pp : productoActual.getPorcentajes()) {
+            pp.setId(null);
+        }
+        for (ProductosPreciosDto pp : productoActual.getPrecios()) {
+            pp.setId(null);
+        }
     }
 
     private void initDatos() {

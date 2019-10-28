@@ -15,31 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author fede
  */
 @Entity
 @Table(name = "remitos")
-@AttributeOverride(name = "id", column = @Column(name = "id_remito", columnDefinition = "serial"))
+@Getter
+@Setter
 public class Remito extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "remitos_id_remito")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "remitos_id_remito",
+            sequenceName = "remitos_id_remito_seq")
+    @Basic(optional = false)
+    @Column(name = "id_remito", nullable = false, updatable = false)
+    private Long id;
 
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
@@ -91,142 +90,5 @@ public class Remito extends BaseEntity {
 
     @OneToMany(mappedBy = "remito", cascade = CascadeType.ALL)
     private List<RemitoRecepcion> remitoRecepcionesList;
-
-    //-------Getter and Setter ----------------------------------------------
-    public Personas getIdOrigenExterno() {
-        return idOrigenExterno;
-    }
-
-    public void setIdOrigenExterno(Personas idOrigenExterno) {
-        this.idOrigenExterno = idOrigenExterno;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public Boolean getIsOrigenInterno() {
-        return isOrigenInterno;
-    }
-
-    public void setIsOrigenInterno(Boolean isOrigenInterno) {
-        this.isOrigenInterno = isOrigenInterno;
-    }
-
-    public Depositos getIdOrigenInterno() {
-        return idOrigenInterno;
-    }
-
-    public void setIdOrigenInterno(Depositos idOrigenInterno) {
-        this.idOrigenInterno = idOrigenInterno;
-    }
-
-    public Boolean getIsDestinoInterno() {
-        return isDestinoInterno;
-    }
-
-    public void setIsDestinoInterno(Boolean isDestinoInterno) {
-        this.isDestinoInterno = isDestinoInterno;
-    }
-
-    public Personas getIdDestinoPrevistoExterno() {
-        return idDestinoPrevistoExterno;
-    }
-
-    public void setIdDestinoPrevistoExterno(Personas idDestinoPrevistoExterno) {
-        this.idDestinoPrevistoExterno = idDestinoPrevistoExterno;
-    }
-
-    public Depositos getIdDestinoPrevistoInterno() {
-        return idDestinoPrevistoInterno;
-    }
-
-    public void setIdDestinoPrevistoInterno(Depositos idDestinoPrevistoInterno) {
-        this.idDestinoPrevistoInterno = idDestinoPrevistoInterno;
-    }
-
-    public Date getFechaCierre() {
-        return fechaCierre;
-    }
-
-    public void setFechaCierre(Date fechaCierre) {
-        this.fechaCierre = fechaCierre;
-    }
-
-    public RemitoTipoMovimiento getRemitoTipoMovimiento() {
-        return remitoTipoMovimiento;
-    }
-
-    public void setRemitoTipoMovimiento(RemitoTipoMovimiento remitoTipoMovimiento) {
-        this.remitoTipoMovimiento = remitoTipoMovimiento;
-    }
-
-    public List<RemitoDetalle> getDetalleList() {
-        return detalleList;
-    }
-
-    public void setDetalleList(List<RemitoDetalle> detalleList) {
-        this.detalleList = detalleList;
-    }
-
-    public List<RemitoRecepcion> getRemitoRecepcionesList() {
-        return remitoRecepcionesList;
-    }
-
-    public void setRemitoRecepcionesList(List<RemitoRecepcion> remitoRecepcionesList) {
-        this.remitoRecepcionesList = remitoRecepcionesList;
-    }
-
-    /**
-     * Devuelve la representación en Stirng del origen del remitoDtoCabecera.
-     *
-     * @return un String que representa el origen
-     */
-    public String getNombreOrigen() {
-        if (this.isOrigenInterno) {
-            return String.format("INTERNO: %s", this.getIdOrigenInterno().getBusinessString());
-        }
-        return String.format("EXTERNO: %s", this.getIdOrigenExterno().getBusinessString());
-    }
-
-    /**
-     * Devuelve la representación en Stirng del destino del remitoDtoCabecera.
-     *
-     * @return un String que representa el destino
-     */
-    public String getNombreDestino() {
-        if (this.isDestinoInterno) {
-            return String.format("INTERNO: %s", this.getIdDestinoPrevistoInterno().getBusinessString());
-        }
-        return String.format("EXTERNO: %s Dirección: %s %s Piso: %s Depto: %s (%s) %s - %s",
-                this.getIdDestinoPrevistoExterno().getBusinessString(),
-                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getCalle()),
-                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getAltura()),
-                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getPiso(), "-"),
-                StringUtils.defaultString(this.getIdDestinoPrevistoExterno().getDepto(), "-"),
-                this.getIdDestinoPrevistoExterno().getIdLocalidad().getCodigoPostal(),
-                this.getIdDestinoPrevistoExterno().getIdLocalidad().getNombreLocalidad(),
-                this.getIdDestinoPrevistoExterno().getIdProvincia().getNombreProvincia());
-    }
 
 }

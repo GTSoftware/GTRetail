@@ -15,49 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "comprobantes_estados")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_estado"))
+@Getter
+@Setter
 public class ComprobantesEstados extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id_estado", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
     @Column(name = "nombre_estado")
     private String nombreEstado;
-
-    public ComprobantesEstados(Long id) {
-        super(id);
-    }
-
-    public ComprobantesEstados() {
-    }
-
-    public ComprobantesEstados(Long id, String nombreEstado) {
-        super(id);
-        this.nombreEstado = nombreEstado;
-    }
-
-    public String getNombreEstado() {
-        return nombreEstado;
-    }
-
-    public void setNombreEstado(String nombreEstado) {
-        this.nombreEstado = nombreEstado;
-    }
 
 }

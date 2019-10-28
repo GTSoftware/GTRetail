@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_monedas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_moneda", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadMonedas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_monedas_id_moneda")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_monedas_id_moneda",
+            sequenceName = "contabilidad_monedas_id_moneda_seq")
+    @Basic(optional = false)
+    @Column(name = "id_moneda", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -53,50 +53,5 @@ public class ContabilidadMonedas extends BaseEntity {
     private String simboloMoneda;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMoneda")
     private List<BancosCuentas> bancosCuentasList;
-
-    public ContabilidadMonedas() {
-    }
-
-    public ContabilidadMonedas(Long idMoneda) {
-        super(idMoneda);
-    }
-
-    public ContabilidadMonedas(Long idMoneda, String nombreMoneda) {
-        super(idMoneda);
-        this.nombreMoneda = nombreMoneda;
-    }
-
-    public String getNombreMoneda() {
-        return nombreMoneda;
-    }
-
-    public void setNombreMoneda(String nombreMoneda) {
-        this.nombreMoneda = nombreMoneda;
-    }
-
-    public String getNombreCortoMoneda() {
-        return nombreCortoMoneda;
-    }
-
-    public void setNombreCortoMoneda(String nombreCortoMoneda) {
-        this.nombreCortoMoneda = nombreCortoMoneda;
-    }
-
-    public String getSimboloMoneda() {
-        return simboloMoneda;
-    }
-
-    public void setSimboloMoneda(String simboloMoneda) {
-        this.simboloMoneda = simboloMoneda;
-    }
-
-    @XmlTransient
-    public List<BancosCuentas> getBancosCuentasList() {
-        return bancosCuentasList;
-    }
-
-    public void setBancosCuentasList(List<BancosCuentas> bancosCuentasList) {
-        this.bancosCuentasList = bancosCuentasList;
-    }
 
 }

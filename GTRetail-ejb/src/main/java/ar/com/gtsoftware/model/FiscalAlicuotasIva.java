@@ -15,31 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "fiscal_alicuotas_iva")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_alicuota_iva", columnDefinition = "serial"))
+@Getter
+@Setter
 public class FiscalAlicuotasIva extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fiscal_alicuotas_iva_id_alicuota_iva")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "fiscal_alicuotas_iva_id_alicuota_iva",
+            sequenceName = "fiscal_alicuotas_iva_id_alicuota_iva_seq")
+    @Basic(optional = false)
+    @Column(name = "id_alicuota_iva", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -66,88 +66,5 @@ public class FiscalAlicuotasIva extends BaseEntity {
     private List<Productos> productosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAlicuotaIva")
     private List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList;
-
-    public FiscalAlicuotasIva() {
-    }
-
-    public FiscalAlicuotasIva(Long idAlicuotaIva) {
-        super(idAlicuotaIva);
-    }
-
-    public FiscalAlicuotasIva(Long idAlicuotaIva, String nombreAlicuotaIva, BigDecimal valorAlicuota, boolean gravarIva, boolean activo) {
-        super(idAlicuotaIva);
-        this.nombreAlicuotaIva = nombreAlicuotaIva;
-        this.valorAlicuota = valorAlicuota;
-        this.gravarIva = gravarIva;
-        this.activo = activo;
-    }
-
-    public String getNombreAlicuotaIva() {
-        return nombreAlicuotaIva;
-    }
-
-    public void setNombreAlicuotaIva(String nombreAlicuotaIva) {
-        this.nombreAlicuotaIva = nombreAlicuotaIva;
-    }
-
-    public BigDecimal getValorAlicuota() {
-        return valorAlicuota;
-    }
-
-    public void setValorAlicuota(BigDecimal valorAlicuota) {
-        this.valorAlicuota = valorAlicuota;
-    }
-
-    public boolean getGravarIva() {
-        return gravarIva;
-    }
-
-    public void setGravarIva(boolean gravarIva) {
-        this.gravarIva = gravarIva;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    @XmlTransient
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
-    }
-
-    @XmlTransient
-    public List<FiscalLibroIvaVentasLineas> getFiscalLibroIvaVentasLineasList() {
-        return fiscalLibroIvaVentasLineasList;
-    }
-
-    public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
-        this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
-    }
-
-    /**
-     * Devuelve el código de alícuota para regimenes informativos
-     *
-     * @return
-     */
-    public Integer getFiscalCodigoAlicuota() {
-        return fiscalCodigoAlicuota;
-    }
-
-    /**
-     * Establece el código de alícuota para regimenes informativos
-     *
-     * @param fiscalCodigoAlicuota
-     */
-    public void setFiscalCodigoAlicuota(Integer fiscalCodigoAlicuota) {
-        this.fiscalCodigoAlicuota = fiscalCodigoAlicuota;
-    }
 
 }

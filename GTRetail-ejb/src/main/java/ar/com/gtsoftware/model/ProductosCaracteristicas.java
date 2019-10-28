@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "productos_caracteristicas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_caracteristica", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosCaracteristicas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_caracteristicas_id_caracteristica")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_caracteristicas_id_caracteristica",
+            sequenceName = "productos_caracteristicas_id_caracteristica_seq")
+    @Basic(optional = false)
+    @Column(name = "id_caracteristica", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -47,34 +47,5 @@ public class ProductosCaracteristicas extends BaseEntity {
     private String nombreCaracteristica;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCaracteristica")
     private List<ProductosXCaracteristicas> productosXCaracteristicasList;
-
-    public ProductosCaracteristicas() {
-    }
-
-    public ProductosCaracteristicas(Long idCaracteristica) {
-        super(idCaracteristica);
-    }
-
-    public ProductosCaracteristicas(Long idCaracteristica, String nombreCaracteristica) {
-        super(idCaracteristica);
-        this.nombreCaracteristica = nombreCaracteristica;
-    }
-
-    public String getNombreCaracteristica() {
-        return nombreCaracteristica;
-    }
-
-    public void setNombreCaracteristica(String nombreCaracteristica) {
-        this.nombreCaracteristica = nombreCaracteristica;
-    }
-
-    @XmlTransient
-    public List<ProductosXCaracteristicas> getProductosXCaracteristicasList() {
-        return productosXCaracteristicasList;
-    }
-
-    public void setProductosXCaracteristicasList(List<ProductosXCaracteristicas> productosXCaracteristicasList) {
-        this.productosXCaracteristicasList = productosXCaracteristicasList;
-    }
 
 }

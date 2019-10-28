@@ -34,12 +34,9 @@ import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.search.LibroIVASearchFilter;
 import ar.com.gtsoftware.service.fiscal.LibroIVAService;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Qualifier;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -183,7 +180,7 @@ public class LibroIVAVentasServiceImpl implements LibroIVAService {
         facDTO.setTipoDocumento(factura.getIdPersona().getIdTipoDocumento().getNombreTipoDocumento());
         facDTO.setTipoComprobante(factura.getCodigoTipoComprobante().getDenominacionComprobante());
         facDTO.setCategoriaIVACliente(factura.getIdPersona().getIdResponsabilidadIva().getNombreResponsabildiad());
-        if (factura.getAnulada()) {
+        if (factura.isAnulada()) {
             facDTO.setRazonSocialCliente("NULA");
         }
         facDTO.setNumeroFactura(String.format(NUMERO_FACTURA_FMT, factura.getLetraFactura(), factura.getPuntoVentaFactura(),

@@ -29,13 +29,18 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "personas_telefonos")
-@AttributeOverride(name = "id", column = @Column(name = "id_telefono", columnDefinition = "serial"))
 @Getter
 @Setter
 @NoArgsConstructor
 public class PersonasTelefonos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personas_telefonos_id_telefono")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "personas_telefonos_id_telefono",
+            sequenceName = "personas_telefonos_id_telefono_seq")
+    @Basic(optional = false)
+    @Column(name = "id_telefono", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -49,6 +54,5 @@ public class PersonasTelefonos extends BaseEntity {
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
-
 
 }

@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "bancos_tipos_cuenta")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_cuenta_banco", columnDefinition = "serial"))
+@Getter
+@Setter
 public class BancosTiposCuenta extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bancos_tipos_cuenta_id_tipo_cuenta_banco")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "bancos_tipos_cuenta_id_tipo_cuenta_banco",
+            sequenceName = "bancos_tipos_cuenta_id_tipo_cuenta_banco_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_cuenta_banco", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -47,34 +47,5 @@ public class BancosTiposCuenta extends BaseEntity {
     private String nombreTipoCuenta;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoCuentaBanco")
     private List<BancosCuentas> bancosCuentasList;
-
-    public BancosTiposCuenta() {
-    }
-
-    public BancosTiposCuenta(Long idTipoCuentaBanco) {
-        super(idTipoCuentaBanco);
-    }
-
-    public BancosTiposCuenta(Long idTipoCuentaBanco, String nombreTipoCuenta) {
-        super(idTipoCuentaBanco);
-        this.nombreTipoCuenta = nombreTipoCuenta;
-    }
-
-    public String getNombreTipoCuenta() {
-        return nombreTipoCuenta;
-    }
-
-    public void setNombreTipoCuenta(String nombreTipoCuenta) {
-        this.nombreTipoCuenta = nombreTipoCuenta;
-    }
-
-    @XmlTransient
-    public List<BancosCuentas> getBancosCuentasList() {
-        return bancosCuentasList;
-    }
-
-    public void setBancosCuentasList(List<BancosCuentas> bancosCuentasList) {
-        this.bancosCuentasList = bancosCuentasList;
-    }
 
 }

@@ -15,18 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Movimientos de cajas
@@ -35,11 +31,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "cajas_movimientos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_caja"))
+@Getter
+@Setter
 public class CajasMovimientos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cajas_movimientos_id_movimiento_caja")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "cajas_movimientos_id_movimiento_caja",
+            sequenceName = "cajas_movimientos_id_movimiento_caja_seq")
+    @Basic(optional = false)
+    @Column(name = "id_movimiento_caja", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @JoinColumn(name = "id_caja", referencedColumnName = "id_caja")
@@ -58,44 +60,5 @@ public class CajasMovimientos extends BaseEntity {
     @Column(name = "descripcion")
     @Size(max = 255)
     private String descripcion;
-
-    public CajasMovimientos(Long id) {
-        super(id);
-    }
-
-    public CajasMovimientos() {
-    }
-
-    public Cajas getIdCaja() {
-        return idCaja;
-    }
-
-    public void setIdCaja(Cajas idCaja) {
-        this.idCaja = idCaja;
-    }
-
-    public Date getFechaMovimiento() {
-        return fechaMovimiento;
-    }
-
-    public void setFechaMovimiento(Date fechaMovimiento) {
-        this.fechaMovimiento = fechaMovimiento;
-    }
-
-    public BigDecimal getMontoMovimiento() {
-        return montoMovimiento;
-    }
-
-    public void setMontoMovimiento(BigDecimal montoMovimiento) {
-        this.montoMovimiento = montoMovimiento;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
 
 }

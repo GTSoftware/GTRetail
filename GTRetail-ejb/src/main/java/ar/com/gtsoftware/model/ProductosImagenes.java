@@ -15,32 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "productos_imagenes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_imagen", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosImagenes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_imagenes_id_imagen")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_imagenes_id_imagen",
+            sequenceName = "productos_imagenes_id_imagen_seq")
+    @Basic(optional = false)
+    @Column(name = "id_imagen", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -61,58 +59,5 @@ public class ProductosImagenes extends BaseEntity {
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
-
-    public ProductosImagenes() {
-    }
-
-    public ProductosImagenes(Long idImagen) {
-        super(idImagen);
-    }
-
-    public ProductosImagenes(Long idImagen, Date fechaAlta, byte[] imagen) {
-        super(idImagen);
-        this.fechaAlta = fechaAlta;
-        this.imagen = imagen;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public byte[] getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(byte[] imagen) {
-        this.imagen = imagen;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
 
 }

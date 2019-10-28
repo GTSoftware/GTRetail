@@ -15,28 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
- *
  * @author fede
  */
 @Entity
 @Table(name = "remitos_recepciones")
-@AttributeOverride(name = "id", column = @Column(name = "id_recepcion", columnDefinition = "serial"))
+@Getter
+@Setter
 public class RemitoRecepcion extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "remitos_recepciones_id_recepcion")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "remitos_recepciones_id_recepcion",
+            sequenceName = "remitos_recepciones_id_recepcion_seq")
+    @Basic(optional = false)
+    @Column(name = "id_recepcion", nullable = false, updatable = false)
+    private Long id;
 
     @JoinColumn(name = "id_remito", referencedColumnName = "id_remito")
     @NotNull
@@ -60,50 +61,8 @@ public class RemitoRecepcion extends BaseEntity {
     @ManyToOne
     private Depositos idDeposito;
 
-    //----------Getter and Setter ------------------------------
     @PrePersist
     public void dateOnCreate() {
         fecha = new Date();
     }
-
-    public Remito getRemito() {
-        return remito;
-    }
-
-    public void setRemito(Remito remito) {
-        this.remito = remito;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public Depositos getIdDeposito() {
-        return idDeposito;
-    }
-
-    public void setIdDeposito(Depositos idDeposito) {
-        this.idDeposito = idDeposito;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
 }

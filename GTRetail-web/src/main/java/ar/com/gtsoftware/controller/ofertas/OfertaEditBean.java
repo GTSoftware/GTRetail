@@ -72,6 +72,9 @@ public class OfertaEditBean implements Serializable {
             }
             if (StringUtils.equals("1", duplicar)) {
                 ofertaActual.setId(null);
+                for (Condicion c : ofertaActual.getCondiciones()) {
+                    c.setId(null);
+                }
             }
         }
 

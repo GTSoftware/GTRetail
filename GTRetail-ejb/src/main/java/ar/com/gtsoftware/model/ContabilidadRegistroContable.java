@@ -15,35 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_registro_contable")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_registro", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadRegistroContable extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_registro_contable_id_registro")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_registro_contable_id_registro",
+            sequenceName = "contabilidad_registro_contable_id_registro_seq")
+    @Basic(optional = false)
+    @Column(name = "id_registro", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -98,164 +94,5 @@ public class ContabilidadRegistroContable extends BaseEntity {
     private List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRegistroContable")
     private List<PersonasCuentaCorriente> personasCuentaCorrienteList;
-
-    public ContabilidadRegistroContable() {
-    }
-
-    public ContabilidadRegistroContable(Long idRegistro) {
-        super(idRegistro);
-    }
-
-    public ContabilidadRegistroContable(Long idRegistro, Date fechaProceso) {
-        super(idRegistro);
-        this.fechaProceso = fechaProceso;
-    }
-
-    public Date getFechaProceso() {
-        return fechaProceso;
-    }
-
-    public void setFechaProceso(Date fechaProceso) {
-        this.fechaProceso = fechaProceso;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getLetraComprobante() {
-        return letraComprobante;
-    }
-
-    public void setLetraComprobante(String letraComprobante) {
-        this.letraComprobante = letraComprobante;
-    }
-
-    public String getPuntoVentaComprobante() {
-        return puntoVentaComprobante;
-    }
-
-    public void setPuntoVentaComprobante(String puntoVentaComprobante) {
-        this.puntoVentaComprobante = puntoVentaComprobante;
-    }
-
-    public String getNumeroComprobante() {
-        return numeroComprobante;
-    }
-
-    public void setNumeroComprobante(String numeroComprobante) {
-        this.numeroComprobante = numeroComprobante;
-    }
-
-    public String getCuitEmisorComprobante() {
-        return cuitEmisorComprobante;
-    }
-
-    public void setCuitEmisorComprobante(String cuitEmisorComprobante) {
-        this.cuitEmisorComprobante = cuitEmisorComprobante;
-    }
-
-    public String getCuitReceptorComprobante() {
-        return cuitReceptorComprobante;
-    }
-
-    public void setCuitReceptorComprobante(String cuitReceptorComprobante) {
-        this.cuitReceptorComprobante = cuitReceptorComprobante;
-    }
-
-    public Date getFechaComprobante() {
-        return fechaComprobante;
-    }
-
-    public void setFechaComprobante(Date fechaComprobante) {
-        this.fechaComprobante = fechaComprobante;
-    }
-
-    public Date getFechaVencimiento() {
-        return fechaVencimiento;
-    }
-
-    public void setFechaVencimiento(Date fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
-    }
-
-    public String getConceptoComprobante() {
-        return conceptoComprobante;
-    }
-
-    public void setConceptoComprobante(String conceptoComprobante) {
-        this.conceptoComprobante = conceptoComprobante;
-    }
-
-    @XmlTransient
-    public List<ContabilidadRegistroContableLineas> getContabilidadRegistroContableLineasList() {
-        return contabilidadRegistroContableLineasList;
-    }
-
-    public void setContabilidadRegistroContableLineasList(List<ContabilidadRegistroContableLineas> contabilidadRegistroContableLineasList) {
-        this.contabilidadRegistroContableLineasList = contabilidadRegistroContableLineasList;
-    }
-
-    public FiscalPeriodosFiscales getIdPeriodoFiscal() {
-        return idPeriodoFiscal;
-    }
-
-    public void setIdPeriodoFiscal(FiscalPeriodosFiscales idPeriodoFiscal) {
-        this.idPeriodoFiscal = idPeriodoFiscal;
-    }
-
-    public ContabilidadTiposOperacion getIdTipoOperacion() {
-        return idTipoOperacion;
-    }
-
-    public void setIdTipoOperacion(ContabilidadTiposOperacion idTipoOperacion) {
-        this.idTipoOperacion = idTipoOperacion;
-    }
-
-    public ContabilidadTiposComprobantes getIdTipoComprobante() {
-        return idTipoComprobante;
-    }
-
-    public void setIdTipoComprobante(ContabilidadTiposComprobantes idTipoComprobante) {
-        this.idTipoComprobante = idTipoComprobante;
-    }
-
-    public ContabilidadPeriodosContables getIdPeriodoContable() {
-        return idPeriodoContable;
-    }
-
-    public void setIdPeriodoContable(ContabilidadPeriodosContables idPeriodoContable) {
-        this.idPeriodoContable = idPeriodoContable;
-    }
-
-    public ContabilidadLibros getIdLibro() {
-        return idLibro;
-    }
-
-    public void setIdLibro(ContabilidadLibros idLibro) {
-        this.idLibro = idLibro;
-    }
-
-    @XmlTransient
-    public List<FiscalLibroIvaVentas> getFiscalLibroIvaVentasList() {
-        return fiscalLibroIvaVentasList;
-    }
-
-    public void setFiscalLibroIvaVentasList(List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList) {
-        this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
-    }
-
-    @XmlTransient
-    public List<PersonasCuentaCorriente> getPersonasCuentaCorrienteList() {
-        return personasCuentaCorrienteList;
-    }
-
-    public void setPersonasCuentaCorrienteList(List<PersonasCuentaCorriente> personasCuentaCorrienteList) {
-        this.personasCuentaCorrienteList = personasCuentaCorrienteList;
-    }
 
 }

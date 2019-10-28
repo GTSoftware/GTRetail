@@ -15,15 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
 
 /**
  * Clase que mapea a la tabla fiscal_monedas para regímenes informativos
@@ -32,10 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "fiscal_monedas")
-@XmlRootElement
+@Getter
+@Setter
 public class FiscalMonedas extends GTEntity<String> {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -46,28 +44,10 @@ public class FiscalMonedas extends GTEntity<String> {
     @Column(name = "nombre_moneda")
     private String nombreMoneda;
 
-    public FiscalMonedas() {
-    }
 
     @Override
     public boolean isNew() {
         return codigoMoneda == null;
-    }
-
-    public String getCodigoMoneda() {
-        return codigoMoneda;
-    }
-
-    public void setCodigoMoneda(String codigoMoneda) {
-        this.codigoMoneda = codigoMoneda;
-    }
-
-    public String getNombreMoneda() {
-        return nombreMoneda;
-    }
-
-    public void setNombreMoneda(String nombreMoneda) {
-        this.nombreMoneda = nombreMoneda;
     }
 
     @Override

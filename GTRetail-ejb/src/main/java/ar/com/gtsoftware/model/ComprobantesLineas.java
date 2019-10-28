@@ -15,31 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.apache.commons.lang3.StringUtils;
+import java.math.BigDecimal;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "comprobantes_lineas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_comprobante"))
+@Getter
+@Setter
 public class ComprobantesLineas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ventas_lineas_id_linea_venta")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ventas_lineas_id_linea_venta",
+            sequenceName = "ventas_lineas_id_linea_venta_seq")
+    @Basic(optional = false)
+    @Column(name = "id_linea_comprobante", nullable = false, updatable = false)
+    private Long id;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
@@ -82,125 +81,6 @@ public class ComprobantesLineas extends BaseEntity {
     @NotNull
     @Column(name = "item")
     private Integer item;
-
-    public ComprobantesLineas() {
-    }
-
-    public ComprobantesLineas(Long idLineaVenta) {
-        super(idLineaVenta);
-    }
-
-    public ComprobantesLineas(Long idLineaVenta, BigDecimal precioVentaUnitario, BigDecimal cantidad, BigDecimal subTotal, BigDecimal costoNetoUnitario, BigDecimal costoBrutoUnitario, BigDecimal cantidadEntregada) {
-        super(idLineaVenta);
-        this.precioUnitario = precioVentaUnitario;
-        this.cantidad = cantidad;
-        this.subTotal = subTotal;
-        this.costoNetoUnitario = costoNetoUnitario;
-        this.costoBrutoUnitario = costoBrutoUnitario;
-        this.cantidadEntregada = cantidadEntregada;
-    }
-
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public BigDecimal getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(BigDecimal subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public BigDecimal getCostoNetoUnitario() {
-        return costoNetoUnitario;
-    }
-
-    public void setCostoNetoUnitario(BigDecimal costoNetoUnitario) {
-        this.costoNetoUnitario = costoNetoUnitario;
-    }
-
-    public BigDecimal getCostoBrutoUnitario() {
-        return costoBrutoUnitario;
-    }
-
-    public void setCostoBrutoUnitario(BigDecimal costoBrutoUnitario) {
-        this.costoBrutoUnitario = costoBrutoUnitario;
-    }
-
-    public BigDecimal getCantidadEntregada() {
-        return cantidadEntregada;
-    }
-
-    public void setCantidadEntregada(BigDecimal cantidadEntregada) {
-        this.cantidadEntregada = cantidadEntregada;
-    }
-
-    @XmlTransient
-    public Comprobantes getIdComprobante() {
-        return idComprobante;
-    }
-
-    public void setIdComprobante(Comprobantes idComprobante) {
-        this.idComprobante = idComprobante;
-    }
-
-    @XmlTransient
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    /**
-     * Devuelve el número de item de la línea
-     *
-     * @return
-     */
-    @XmlTransient
-    public Integer getItem() {
-        return item;
-    }
-
-    /**
-     * Establece el número de ítem de la línea
-     *
-     * @param item
-     */
-    public void setItem(Integer item) {
-        this.item = item;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    /**
-     * Retorna la descripción imprimible o mostrable hasta los 90 caracteres.
-     *
-     * @return
-     */
-    public String getDescripcionLinea() {
-        return StringUtils.left(String.format("[%d] %s", idProducto.getId(), descripcion), 90);
-    }
 
     public BigDecimal getIva() {
         return this.idProducto.getIdAlicuotaIva().getValorAlicuota();

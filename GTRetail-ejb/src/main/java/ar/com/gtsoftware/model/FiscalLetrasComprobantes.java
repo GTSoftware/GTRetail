@@ -15,16 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -32,10 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "fiscal_letras_comprobantes")
-@XmlRootElement
+@Getter
+@Setter
 public class FiscalLetrasComprobantes extends GTEntity<FiscalLetrasComprobantesPK> {
 
-    private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected FiscalLetrasComprobantesPK fiscalLetrasComprobantesPK;
     @Basic(optional = false)
@@ -49,54 +45,6 @@ public class FiscalLetrasComprobantes extends GTEntity<FiscalLetrasComprobantesP
     @JoinColumn(name = "id_resoponsabildiad_iva_emisor", referencedColumnName = "id_resoponsabildiad_iva", insertable = false, updatable = false, columnDefinition = "int4")
     @ManyToOne(optional = false)
     private FiscalResponsabilidadesIva idResponsabilidadIvaEmisor;
-
-    public FiscalLetrasComprobantes() {
-    }
-
-    public FiscalLetrasComprobantes(FiscalLetrasComprobantesPK fiscalLetrasComprobantesPK) {
-        this.fiscalLetrasComprobantesPK = fiscalLetrasComprobantesPK;
-    }
-
-    public FiscalLetrasComprobantes(FiscalLetrasComprobantesPK fiscalLetrasComprobantesPK, String letraComprobante) {
-        this.fiscalLetrasComprobantesPK = fiscalLetrasComprobantesPK;
-        this.letraComprobante = letraComprobante;
-    }
-
-    public FiscalLetrasComprobantes(int idResoponsabildiadIvaEmisor, int idResoponsabildiadIvaReceptor) {
-        this.fiscalLetrasComprobantesPK = new FiscalLetrasComprobantesPK(idResoponsabildiadIvaEmisor, idResoponsabildiadIvaReceptor);
-    }
-
-    public FiscalLetrasComprobantesPK getFiscalLetrasComprobantesPK() {
-        return fiscalLetrasComprobantesPK;
-    }
-
-    public void setFiscalLetrasComprobantesPK(FiscalLetrasComprobantesPK fiscalLetrasComprobantesPK) {
-        this.fiscalLetrasComprobantesPK = fiscalLetrasComprobantesPK;
-    }
-
-    public String getLetraComprobante() {
-        return letraComprobante;
-    }
-
-    public void setLetraComprobante(String letraComprobante) {
-        this.letraComprobante = letraComprobante;
-    }
-
-    public FiscalResponsabilidadesIva getIdResponsabilidadIvaReceptor() {
-        return idResponsabilidadIvaReceptor;
-    }
-
-    public void setIdResponsabilidadIvaReceptor(FiscalResponsabilidadesIva idResponsabilidadIvaReceptor) {
-        this.idResponsabilidadIvaReceptor = idResponsabilidadIvaReceptor;
-    }
-
-    public FiscalResponsabilidadesIva getIdResponsabilidadIvaEmisor() {
-        return idResponsabilidadIvaEmisor;
-    }
-
-    public void setIdResponsabilidadIvaEmisor(FiscalResponsabilidadesIva idResponsabilidadIvaEmisor) {
-        this.idResponsabilidadIvaEmisor = idResponsabilidadIvaEmisor;
-    }
 
     @Override
     public int hashCode() {

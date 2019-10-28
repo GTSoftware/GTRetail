@@ -15,32 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "legal_tipos_documento")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_documento", columnDefinition = "serial"))
+@Getter
+@Setter
 public class LegalTiposDocumento extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "legal_tipos_documento_id_tipo_documento")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "legal_tipos_documento_id_tipo_documento",
+            sequenceName = "legal_tipos_documento_id_tipo_documento_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_documento", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -63,78 +61,5 @@ public class LegalTiposDocumento extends BaseEntity {
     private LegalTiposPersoneria idTipoPersoneria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoDocumento")
     private List<Personas> personasList;
-
-    public LegalTiposDocumento() {
-    }
-
-    public LegalTiposDocumento(Long idTipoDocumento) {
-        super(idTipoDocumento);
-    }
-
-    public LegalTiposDocumento(Long idTipoDocumento, String nombreTipoDocumento, int cantidadCaracteresMinimo, int cantidadCaracteresMaximo) {
-        super(idTipoDocumento);
-        this.nombreTipoDocumento = nombreTipoDocumento;
-        this.cantidadCaracteresMinimo = cantidadCaracteresMinimo;
-        this.cantidadCaracteresMaximo = cantidadCaracteresMaximo;
-    }
-
-    public String getNombreTipoDocumento() {
-        return nombreTipoDocumento;
-    }
-
-    public void setNombreTipoDocumento(String nombreTipoDocumento) {
-        this.nombreTipoDocumento = nombreTipoDocumento;
-    }
-
-    public int getCantidadCaracteresMinimo() {
-        return cantidadCaracteresMinimo;
-    }
-
-    public void setCantidadCaracteresMinimo(int cantidadCaracteresMinimo) {
-        this.cantidadCaracteresMinimo = cantidadCaracteresMinimo;
-    }
-
-    public int getCantidadCaracteresMaximo() {
-        return cantidadCaracteresMaximo;
-    }
-
-    public void setCantidadCaracteresMaximo(int cantidadCaracteresMaximo) {
-        this.cantidadCaracteresMaximo = cantidadCaracteresMaximo;
-    }
-
-    public LegalTiposPersoneria getIdTipoPersoneria() {
-        return idTipoPersoneria;
-    }
-
-    public void setIdTipoPersoneria(LegalTiposPersoneria idTipoPersoneria) {
-        this.idTipoPersoneria = idTipoPersoneria;
-    }
-
-    @XmlTransient
-    public List<Personas> getPersonasList() {
-        return personasList;
-    }
-
-    public void setPersonasList(List<Personas> personasList) {
-        this.personasList = personasList;
-    }
-
-    /**
-     * Devuelve el código fiscal para el tipo de documento
-     *
-     * @return
-     */
-    public Integer getFiscalCodigoTipoDocumento() {
-        return fiscalCodigoTipoDocumento;
-    }
-
-    /**
-     * Establece el código fiscal para el tipo de documento
-     *
-     * @param fiscalCodigoTipoDocumento
-     */
-    public void setFiscalCodigoTipoDocumento(Integer fiscalCodigoTipoDocumento) {
-        this.fiscalCodigoTipoDocumento = fiscalCodigoTipoDocumento;
-    }
 
 }

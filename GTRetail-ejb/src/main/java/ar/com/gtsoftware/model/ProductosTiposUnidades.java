@@ -15,26 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "productos_tipos_unidades")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_unidad", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosTiposUnidades extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_tipos_unidades_id_tipo_unidad")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_tipos_unidades_id_tipo_unidad",
+            sequenceName = "productos_tipos_unidades_id_tipo_unidad_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_unidad", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -45,34 +48,5 @@ public class ProductosTiposUnidades extends BaseEntity {
     @NotNull
     @Column(name = "cantidad_entera")
     private boolean cantidadEntera;
-
-    public ProductosTiposUnidades() {
-    }
-
-    public ProductosTiposUnidades(Long idTipoUnidad) {
-        super(idTipoUnidad);
-    }
-
-    public ProductosTiposUnidades(Long idTipoUnidad, String nombreUnidad, boolean cantidadEntera) {
-        super(idTipoUnidad);
-        this.nombreUnidad = nombreUnidad;
-        this.cantidadEntera = cantidadEntera;
-    }
-
-    public String getNombreUnidad() {
-        return nombreUnidad;
-    }
-
-    public void setNombreUnidad(String nombreUnidad) {
-        this.nombreUnidad = nombreUnidad;
-    }
-
-    public boolean getCantidadEntera() {
-        return cantidadEntera;
-    }
-
-    public void setCantidadEntera(boolean cantidadEntera) {
-        this.cantidadEntera = cantidadEntera;
-    }
 
 }

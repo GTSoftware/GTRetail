@@ -15,26 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author Rodrigo Tato mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "negocio_condiciones_operaciones")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_condicion"))
+@Getter
+@Setter
 public class NegocioCondicionesOperaciones extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ventas_condiciones_id_condicion_venta")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ventas_condiciones_id_condicion_venta",
+            sequenceName = "ventas_condiciones_id_condicion_venta_seq")
+    @Basic(optional = false)
+    @Column(name = "id_condicion", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -58,64 +61,9 @@ public class NegocioCondicionesOperaciones extends BaseEntity {
     @Column(name = "pago_total")
     private boolean pagoTotal;
 
-    public NegocioCondicionesOperaciones() {
-    }
-
-    public NegocioCondicionesOperaciones(Long idCondicion) {
-        super(idCondicion);
-    }
-
-    public NegocioCondicionesOperaciones(Long idCondicion, String nombreCondicion, boolean activo, boolean venta, boolean compra) {
-        super(idCondicion);
-        this.nombreCondicion = nombreCondicion;
-        this.activo = activo;
-        this.venta = venta;
-        this.compra = compra;
-    }
-
-    public String getNombreCondicion() {
-        return nombreCondicion;
-    }
-
-    public void setNombreCondicion(String nombreCondicion) {
-        this.nombreCondicion = nombreCondicion;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    public boolean getVenta() {
-        return venta;
-    }
-
-    public void setVenta(boolean venta) {
-        this.venta = venta;
-    }
-
-    public boolean getCompra() {
-        return compra;
-    }
-
-    public void setCompra(boolean compra) {
-        this.compra = compra;
-    }
-
-    public boolean getPagoTotal() {
-        return pagoTotal;
-    }
-
-    public void setPagoTotal(boolean pagoTotal) {
-        this.pagoTotal = pagoTotal;
-    }
-
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.NegocioCondicionesOperacionesDto[ idCondicion=" + this.getId() + " ]";
+        return "ar.com.gtsoftware.model.NegocioCondicionesOperacionesDto[ idCondicion=" + id + " ]";
     }
 
 }

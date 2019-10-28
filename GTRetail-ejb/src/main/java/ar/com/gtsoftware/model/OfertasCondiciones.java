@@ -19,6 +19,8 @@ package ar.com.gtsoftware.model;
 
 import ar.com.gtsoftware.rules.Campo;
 import ar.com.gtsoftware.rules.Operacion;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,8 +29,17 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "ofertas_condiciones")
-@AttributeOverride(name = "id", column = @Column(name = "id_oferta_condicion"))
+@Getter
+@Setter
 public class OfertasCondiciones extends BaseEntity implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ofertas_condiciones_id_oferta_condicion")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ofertas_condiciones_id_oferta_condicion",
+            sequenceName = "ofertas_condiciones_id_oferta_condicion_seq")
+    @Basic(optional = false)
+    @Column(name = "id_oferta_condicion", nullable = false, updatable = false)
+    private Long id;
 
     @JoinColumn(name = "id_oferta", referencedColumnName = "id_oferta")
     @ManyToOne(optional = false)
@@ -49,42 +60,4 @@ public class OfertasCondiciones extends BaseEntity implements Serializable {
     @NotNull
     private String valor;
 
-    public OfertasCondiciones() {
-    }
-
-    @NotNull
-    public Ofertas getIdOferta() {
-        return idOferta;
-    }
-
-    public void setIdOferta(@NotNull Ofertas idOferta) {
-        this.idOferta = idOferta;
-    }
-
-    @NotNull
-    public Operacion getOperacion() {
-        return operacion;
-    }
-
-    public void setOperacion(@NotNull Operacion operacion) {
-        this.operacion = operacion;
-    }
-
-    @NotNull
-    public Campo getCampo() {
-        return campo;
-    }
-
-    public void setCampo(@NotNull Campo campo) {
-        this.campo = campo;
-    }
-
-    @NotNull
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(@NotNull String valor) {
-        this.valor = valor;
-    }
 }

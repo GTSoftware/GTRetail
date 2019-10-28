@@ -71,7 +71,7 @@ public class ComprobantesServiceImpl
         if (venta == null) {
             throw new ServiceException("Comprobante inexistente");
         }
-        if (venta.getAnulada()) {
+        if (venta.isAnulada()) {
             throw new ServiceException("El comprobante ya fue anulado!");
         }
         if (venta.getIdRegistro() != null) {

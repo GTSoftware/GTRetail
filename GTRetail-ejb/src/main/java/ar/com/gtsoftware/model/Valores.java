@@ -15,16 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * Son los documentos que representan cupones o cheques.
@@ -35,10 +31,17 @@ import javax.validation.constraints.NotNull;
 @Table(name = "valores")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo_valor")
-@AttributeOverride(name = "id", column = @Column(name = "id_valor"))
+@Getter
+@Setter
 public class Valores extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "valores_id_valor")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "valores_id_valor",
+            sequenceName = "valores_id_valor_seq")
+    @Basic(optional = false)
+    @Column(name = "id_valor", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @Column(name = "monto")
@@ -46,28 +49,5 @@ public class Valores extends BaseEntity {
 
     @OneToOne(mappedBy = "idValor")
     private RecibosDetalle reciboDetalle;
-
-    public Valores(Long id) {
-        super(id);
-    }
-
-    public Valores() {
-    }
-
-    public BigDecimal getMonto() {
-        return monto;
-    }
-
-    public void setMonto(BigDecimal monto) {
-        this.monto = monto;
-    }
-
-    public RecibosDetalle getReciboDetalle() {
-        return reciboDetalle;
-    }
-
-    public void setReciboDetalle(RecibosDetalle reciboDetalle) {
-        this.reciboDetalle = reciboDetalle;
-    }
 
 }

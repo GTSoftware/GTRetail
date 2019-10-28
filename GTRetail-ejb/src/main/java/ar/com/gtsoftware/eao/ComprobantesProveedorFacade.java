@@ -49,7 +49,7 @@ public class ComprobantesProveedorFacade extends AbstractFacade<ProveedoresCompr
 
         Predicate p = null;
         if (vsf.getIdComprobante() != null) {
-            p = cb.equal(root.get(Comprobantes_.id), vsf.getIdComprobante());
+            p = cb.equal(root.get(ProveedoresComprobantes_.id), vsf.getIdComprobante());
         }
         if (vsf.getFechaComprobanteDesde() != null && vsf.getFechaComprobanteHasta() != null) {
             Predicate p1 = cb.between(root.get(ProveedoresComprobantes_.fechaComprobante), vsf.getFechaComprobanteDesde(), vsf.getFechaComprobanteHasta());

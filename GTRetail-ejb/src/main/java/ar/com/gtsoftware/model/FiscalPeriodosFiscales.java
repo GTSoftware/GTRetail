@@ -15,29 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "fiscal_periodos_fiscales")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_periodo_fiscal", columnDefinition = "serial"))
+@Getter
+@Setter
 public class FiscalPeriodosFiscales extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fiscal_periodos_fiscales_id_periodo_fiscal")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "fiscal_periodos_fiscales_id_periodo_fiscal",
+            sequenceName = "fiscal_periodos_fiscales_id_periodo_fiscal_seq")
+    @Basic(optional = false)
+    @Column(name = "id_periodo_fiscal", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -57,51 +58,5 @@ public class FiscalPeriodosFiscales extends BaseEntity {
     @Basic(optional = false)
     @Column(name = "periodo_cerrado")
     private boolean periodoCerrado;
-
-    public FiscalPeriodosFiscales() {
-    }
-
-    public FiscalPeriodosFiscales(Long idPeriodoFiscal) {
-        super(idPeriodoFiscal);
-    }
-
-    public FiscalPeriodosFiscales(Long idPeriodoFiscal, String nombrePeriodo, Date fechaInicioPeriodo, Date fechaFinPeriodo) {
-        super(idPeriodoFiscal);
-        this.nombrePeriodo = nombrePeriodo;
-        this.fechaInicioPeriodo = fechaInicioPeriodo;
-        this.fechaFinPeriodo = fechaFinPeriodo;
-    }
-
-    public String getNombrePeriodo() {
-        return nombrePeriodo;
-    }
-
-    public void setNombrePeriodo(String nombrePeriodo) {
-        this.nombrePeriodo = nombrePeriodo;
-    }
-
-    public Date getFechaInicioPeriodo() {
-        return fechaInicioPeriodo;
-    }
-
-    public void setFechaInicioPeriodo(Date fechaInicioPeriodo) {
-        this.fechaInicioPeriodo = fechaInicioPeriodo;
-    }
-
-    public Date getFechaFinPeriodo() {
-        return fechaFinPeriodo;
-    }
-
-    public void setFechaFinPeriodo(Date fechaFinPeriodo) {
-        this.fechaFinPeriodo = fechaFinPeriodo;
-    }
-
-    public boolean isPeriodoCerrado() {
-        return periodoCerrado;
-    }
-
-    public void setPeriodoCerrado(boolean periodoCerrado) {
-        this.periodoCerrado = periodoCerrado;
-    }
 
 }

@@ -15,15 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Clase que representa las compras que se realizan
@@ -32,11 +31,17 @@ import java.util.List;
  */
 @Entity
 @Table(name = "proveedores_comprobantes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_comprobante"))
+@Getter
+@Setter
 public class ProveedoresComprobantes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proveedores_comprobantes_id_comprobante")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "proveedores_comprobantes_id_comprobante",
+            sequenceName = "proveedores_comprobantes_id_comprobante_seq")
+    @Basic(optional = false)
+    @Column(name = "id_comprobante", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -77,110 +82,12 @@ public class ProveedoresComprobantes extends BaseEntity {
     @ManyToOne(optional = false)
     private Personas idProveedor;
 
-
     @JoinColumn(name = "id_registro_iva", referencedColumnName = "id_registro")
     @ManyToOne
     private FiscalLibroIvaCompras idRegistro;
 
     @Transient
     private BigDecimal totalConSigno;
-
-
-    public ProveedoresComprobantes() {
-    }
-
-    public ProveedoresComprobantes(Long idCompra) {
-        super(idCompra);
-    }
-
-    public ProveedoresComprobantes(Long idVenta, Date fechaVenta, BigDecimal total, boolean anulada) {
-        super(idVenta);
-        this.fechaComprobante = fechaVenta;
-        this.total = total;
-        this.anulada = anulada;
-    }
-
-    public Date getFechaComprobante() {
-        return fechaComprobante;
-    }
-
-    public void setFechaComprobante(Date fechaComprobante) {
-        this.fechaComprobante = fechaComprobante;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public boolean getAnulada() {
-        return anulada;
-    }
-
-    public void setAnulada(boolean anulada) {
-        this.anulada = anulada;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    @XmlTransient
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    public Personas getIdProveedor() {
-        return idProveedor;
-    }
-
-    public void setIdProveedor(Personas idProveedor) {
-        this.idProveedor = idProveedor;
-    }
-
-    @XmlTransient
-    public FiscalLibroIvaCompras getIdRegistro() {
-        return idRegistro;
-    }
-
-    public void setIdRegistro(FiscalLibroIvaCompras idRegistro) {
-        this.idRegistro = idRegistro;
-    }
-
-    public String getLetra() {
-        return letra;
-    }
-
-    public void setLetra(String letra) {
-        this.letra = letra;
-    }
-
-    public NegocioTiposComprobante getTipoComprobante() {
-        return tipoComprobante;
-    }
-
-    public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
-    }
 
     public BigDecimal getTotalConSigno() {
         if (total != null && tipoComprobante != null) {
@@ -191,11 +98,4 @@ public class ProveedoresComprobantes extends BaseEntity {
         return totalConSigno;
     }
 
-    public String getBusinessString() {
-        if (idRegistro != null) {
-            return String.format("[%d] %s %s %s-%s", getId(), tipoComprobante.getNombreComprobante(), letra,
-                    idRegistro.getPuntoVentaFactura(), idRegistro.getNumeroFactura());
-        }
-        return String.format("[%d] %s", getId(), tipoComprobante.getNombreComprobante());
-    }
 }

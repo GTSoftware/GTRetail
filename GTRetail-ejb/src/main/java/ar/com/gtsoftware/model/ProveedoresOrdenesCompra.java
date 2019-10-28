@@ -15,11 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -29,11 +30,17 @@ import java.util.List;
  */
 @Entity
 @Table(name = "proveedores_ordenes_compra")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProveedoresOrdenesCompra extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proveedores_ordenes_compra_id_orden_compra")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "proveedores_ordenes_compra_id_orden_compra",
+            sequenceName = "proveedores_ordenes_compra_id_orden_compra_seq")
+    @Basic(optional = false)
+    @Column(name = "id_orden_compra", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -82,110 +89,6 @@ public class ProveedoresOrdenesCompra extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOrdenCompra", orphanRemoval = true)
     private List<ProveedoresOrdenesCompraLineas> proveedoresOrdenesCompraLineasList;
-
-    public ProveedoresOrdenesCompra() {
-    }
-
-    public ProveedoresOrdenesCompra(Long idOrdenCompra) {
-        super(idOrdenCompra);
-    }
-
-    public ProveedoresOrdenesCompra(Long idOrdenCompra, Date fechaOrdenCompra, Date fechaEstimadaRecepcion, BigDecimal total, boolean anulada) {
-        super(idOrdenCompra);
-        this.fechaAlta = fechaOrdenCompra;
-        this.fechaEstimadaRecepcion = fechaEstimadaRecepcion;
-        this.total = total;
-
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public Date getFechaEstimadaRecepcion() {
-        return fechaEstimadaRecepcion;
-    }
-
-    public void setFechaEstimadaRecepcion(Date fechaEstimadaRecepcion) {
-        this.fechaEstimadaRecepcion = fechaEstimadaRecepcion;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Personas getIdProveedor() {
-        return idProveedor;
-    }
-
-    public void setIdProveedor(Personas idProveedor) {
-        this.idProveedor = idProveedor;
-    }
-
-    @XmlTransient
-    public List<ProveedoresOrdenesCompraLineas> getProveedoresOrdenesCompraLineasList() {
-        return proveedoresOrdenesCompraLineasList;
-    }
-
-    public void setProveedoresOrdenesCompraLineasList(List<ProveedoresOrdenesCompraLineas> proveedoresOrdenesCompraLineasList) {
-        this.proveedoresOrdenesCompraLineasList = proveedoresOrdenesCompraLineasList;
-    }
-
-    public BigDecimal getTotalIVA() {
-        return totalIVA;
-    }
-
-    public void setTotalIVA(BigDecimal totalIVA) {
-        this.totalIVA = totalIVA;
-    }
-
-    public ProveedoresOrdenesCompraEstados getIdEstadoOrdenCompra() {
-        return idEstadoOrdenCompra;
-    }
-
-    public void setIdEstadoOrdenCompra(ProveedoresOrdenesCompraEstados idEstadoOrdenCompra) {
-        this.idEstadoOrdenCompra = idEstadoOrdenCompra;
-    }
-
-    public Personas getIdTransporte() {
-        return idTransporte;
-    }
-
-    public void setIdTransporte(Personas idTransporte) {
-        this.idTransporte = idTransporte;
-    }
-
-    public Date getFechaModificacion() {
-        return fechaModificacion;
-    }
-
-    public void setFechaModificacion(Date fechaModificacion) {
-        this.fechaModificacion = fechaModificacion;
-    }
 
     @PreUpdate
     private void preUpdate() {

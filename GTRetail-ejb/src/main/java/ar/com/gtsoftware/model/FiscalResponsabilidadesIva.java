@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "fiscal_responsabilidades_iva")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_resoponsabildiad_iva", columnDefinition = "serial"))
+@Getter
+@Setter
 public class FiscalResponsabilidadesIva extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fiscal_responsabilidades_iva_id_resoponsabildiad_iva")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "fiscal_responsabilidades_iva_id_resoponsabildiad_iva",
+            sequenceName = "fiscal_responsabilidades_iva_id_resoponsabildiad_iva_seq")
+    @Basic(optional = false)
+    @Column(name = "id_resoponsabildiad_iva", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -57,79 +57,5 @@ public class FiscalResponsabilidadesIva extends BaseEntity {
     private List<Personas> personasList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsabilidadIva")
     private List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList;
-
-    public FiscalResponsabilidadesIva() {
-    }
-
-    public FiscalResponsabilidadesIva(Long idResoponsabildiadIva) {
-        super(idResoponsabildiadIva);
-    }
-
-    public FiscalResponsabilidadesIva(Long idResoponsabildiadIva, String nombreResponsabildiad) {
-        super(idResoponsabildiadIva);
-        this.nombreResponsabildiad = nombreResponsabildiad;
-    }
-
-    public String getNombreResponsabildiad() {
-        return nombreResponsabildiad;
-    }
-
-    public void setNombreResponsabildiad(String nombreResponsabildiad) {
-        this.nombreResponsabildiad = nombreResponsabildiad;
-    }
-
-    @XmlTransient
-    public List<FiscalLetrasComprobantes> getFiscalLetrasComprobantesList() {
-        return fiscalLetrasComprobantesList;
-    }
-
-    public void setFiscalLetrasComprobantesList(List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList) {
-        this.fiscalLetrasComprobantesList = fiscalLetrasComprobantesList;
-    }
-
-    @XmlTransient
-    public List<FiscalLetrasComprobantes> getFiscalLetrasComprobantesList1() {
-        return fiscalLetrasComprobantesList1;
-    }
-
-    public void setFiscalLetrasComprobantesList1(List<FiscalLetrasComprobantes> fiscalLetrasComprobantesList1) {
-        this.fiscalLetrasComprobantesList1 = fiscalLetrasComprobantesList1;
-    }
-
-    @XmlTransient
-    public List<Personas> getPersonasList() {
-        return personasList;
-    }
-
-    public void setPersonasList(List<Personas> personasList) {
-        this.personasList = personasList;
-    }
-
-    @XmlTransient
-    public List<FiscalLibroIvaVentas> getFiscalLibroIvaVentasList() {
-        return fiscalLibroIvaVentasList;
-    }
-
-    public void setFiscalLibroIvaVentasList(List<FiscalLibroIvaVentas> fiscalLibroIvaVentasList) {
-        this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
-    }
-
-    /**
-     * Devuelve el código de responsabilidad para regímenes informativos
-     *
-     * @return
-     */
-    public Integer getFiscalCodigoResponsable() {
-        return fiscalCodigoResponsable;
-    }
-
-    /**
-     * Establece el código de responsabilidad para regímenes informativos
-     *
-     * @param fiscalCodigoResponsable
-     */
-    public void setFiscalCodigoResponsable(Integer fiscalCodigoResponsable) {
-        this.fiscalCodigoResponsable = fiscalCodigoResponsable;
-    }
 
 }

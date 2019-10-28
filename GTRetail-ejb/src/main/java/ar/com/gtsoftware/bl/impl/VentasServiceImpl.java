@@ -123,7 +123,7 @@ public class VentasServiceImpl implements VentasService {
         for (ComprobantesLineas vl : venta.getComprobantesLineasList()) {
 
             Productos product = vl.getIdProducto();
-            if (product.getIdTipoProveeduria().getControlStock()) {
+            if (product.getIdTipoProveeduria().isControlStock()) {
 
                 //Armo las lineas de remitos
                 RemitoDetalle rd = new RemitoDetalle();

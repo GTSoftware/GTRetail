@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_tipos_comprobantes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_comprobante", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadTiposComprobantes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_tipos_comprobantes_id_tipo_comprobante")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_tipos_comprobantes_id_tipo_comprobante",
+            sequenceName = "contabilidad_tipos_comprobantes_id_tipo_comprobante_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_comprobante", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -50,42 +50,5 @@ public class ContabilidadTiposComprobantes extends BaseEntity {
     private String descripcionTipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoComprobante")
     private List<ContabilidadRegistroContable> contabilidadRegistroContableList;
-
-    public ContabilidadTiposComprobantes() {
-    }
-
-    public ContabilidadTiposComprobantes(Long idTipoComprobante) {
-        super(idTipoComprobante);
-    }
-
-    public ContabilidadTiposComprobantes(Long idTipoComprobante, String nombreTipo) {
-        super(idTipoComprobante);
-        this.nombreTipo = nombreTipo;
-    }
-
-    public String getNombreTipo() {
-        return nombreTipo;
-    }
-
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
-    }
-
-    public String getDescripcionTipo() {
-        return descripcionTipo;
-    }
-
-    public void setDescripcionTipo(String descripcionTipo) {
-        this.descripcionTipo = descripcionTipo;
-    }
-
-    @XmlTransient
-    public List<ContabilidadRegistroContable> getContabilidadRegistroContableList() {
-        return contabilidadRegistroContableList;
-    }
-
-    public void setContabilidadRegistroContableList(List<ContabilidadRegistroContable> contabilidadRegistroContableList) {
-        this.contabilidadRegistroContableList = contabilidadRegistroContableList;
-    }
 
 }

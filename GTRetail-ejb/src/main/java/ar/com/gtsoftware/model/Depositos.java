@@ -15,38 +15,33 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "depositos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_deposito", columnDefinition = "serial"))
+@Getter
+@Setter
 public class Depositos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
     private static final String BUSINESS_STRING = "[%d] %s Suc: %s";
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "depositos_id_deposito")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "depositos_id_deposito",
+            sequenceName = "depositos_id_deposito_seq")
+    @Basic(optional = false)
+    @Column(name = "id_deposito", nullable = false, updatable = false)
+    private Long id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
@@ -78,93 +73,6 @@ public class Depositos extends BaseEntity {
     @JoinColumn(name = "id_sucursal", referencedColumnName = "id_sucursal", columnDefinition = "int4")
     @ManyToOne
     private Sucursales idSucursal;
-
-    public Depositos() {
-    }
-
-    public Depositos(Long idDeposito) {
-        super(idDeposito);
-    }
-
-    public Depositos(Long idDeposito, String nombreDeposito, Date fechaAlta, boolean activo) {
-        super(idDeposito);
-        this.nombreDeposito = nombreDeposito;
-        this.fechaAlta = fechaAlta;
-        this.activo = activo;
-    }
-
-    public String getNombreDeposito() {
-        return nombreDeposito;
-    }
-
-    public void setNombreDeposito(String nombreDeposito) {
-        this.nombreDeposito = nombreDeposito;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    @XmlTransient
-    public List<StockMovimientos> getStockMovimientosList() {
-        return stockMovimientosList;
-    }
-
-    public void setStockMovimientosList(List<StockMovimientos> stockMovimientosList) {
-        this.stockMovimientosList = stockMovimientosList;
-    }
-
-    public UbicacionProvincias getIdProvincia() {
-        return idProvincia;
-    }
-
-    public void setIdProvincia(UbicacionProvincias idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    public UbicacionPaises getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(UbicacionPaises idPais) {
-        this.idPais = idPais;
-    }
-
-    public UbicacionLocalidades getIdLocalidad() {
-        return idLocalidad;
-    }
-
-    public void setIdLocalidad(UbicacionLocalidades idLocalidad) {
-        this.idLocalidad = idLocalidad;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
 
     @PrePersist
     protected void onCreate() {

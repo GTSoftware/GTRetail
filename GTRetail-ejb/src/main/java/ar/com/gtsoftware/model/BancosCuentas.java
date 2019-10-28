@@ -15,35 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "bancos_cuentas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_cuenta_banco", columnDefinition = "serial"))
+@Getter
+@Setter
 public class BancosCuentas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bancos_cuentas_id_cuenta_banco")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "bancos_cuentas_id_cuenta_banco",
+            sequenceName = "bancos_cuentas_id_cuenta_banco_seq")
+    @Basic(optional = false)
+    @Column(name = "id_cuenta_banco", nullable = false, updatable = false)
+    private Long id;
 
     @Size(max = 200)
     @Column(name = "descripcion_cuenta")
@@ -77,99 +73,5 @@ public class BancosCuentas extends BaseEntity {
     private Bancos idBanco;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCuentaBanco")
     private List<BancosCuentaCorriente> bancosCuentaCorrienteList;
-
-    public BancosCuentas() {
-    }
-
-    public BancosCuentas(Long idCuentaBanco) {
-        super(idCuentaBanco);
-    }
-
-    public BancosCuentas(Long idCuentaBanco, String numeroCuenta, boolean activo) {
-        super(idCuentaBanco);
-        this.numeroCuenta = numeroCuenta;
-        this.activo = activo;
-    }
-
-    public String getDescripcionCuenta() {
-        return descripcionCuenta;
-    }
-
-    public void setDescripcionCuenta(String descripcionCuenta) {
-        this.descripcionCuenta = descripcionCuenta;
-    }
-
-    public String getNumeroCuenta() {
-        return numeroCuenta;
-    }
-
-    public void setNumeroCuenta(String numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
-    }
-
-    public String getNumeroSucursal() {
-        return numeroSucursal;
-    }
-
-    public void setNumeroSucursal(String numeroSucursal) {
-        this.numeroSucursal = numeroSucursal;
-    }
-
-    public String getCbu() {
-        return cbu;
-    }
-
-    public void setCbu(String cbu) {
-        this.cbu = cbu;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    public Date getFechaApertura() {
-        return fechaApertura;
-    }
-
-    public void setFechaApertura(Date fechaApertura) {
-        this.fechaApertura = fechaApertura;
-    }
-
-    public ContabilidadMonedas getIdMoneda() {
-        return idMoneda;
-    }
-
-    public void setIdMoneda(ContabilidadMonedas idMoneda) {
-        this.idMoneda = idMoneda;
-    }
-
-    public BancosTiposCuenta getIdTipoCuentaBanco() {
-        return idTipoCuentaBanco;
-    }
-
-    public void setIdTipoCuentaBanco(BancosTiposCuenta idTipoCuentaBanco) {
-        this.idTipoCuentaBanco = idTipoCuentaBanco;
-    }
-
-    public Bancos getIdBanco() {
-        return idBanco;
-    }
-
-    public void setIdBanco(Bancos idBanco) {
-        this.idBanco = idBanco;
-    }
-
-    @XmlTransient
-    public List<BancosCuentaCorriente> getBancosCuentaCorrienteList() {
-        return bancosCuentaCorrienteList;
-    }
-
-    public void setBancosCuentaCorrienteList(List<BancosCuentaCorriente> bancosCuentaCorrienteList) {
-        this.bancosCuentaCorrienteList = bancosCuentaCorrienteList;
-    }
 
 }

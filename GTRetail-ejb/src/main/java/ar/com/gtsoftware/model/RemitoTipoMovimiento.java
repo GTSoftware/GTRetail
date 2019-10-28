@@ -15,32 +15,27 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 
 /**
- *
  * @author fede
  */
 @Entity
 @Table(name = "remitos_movimientos_tipos")
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento", columnDefinition = "serial"))
+@Getter
+@Setter
 public class RemitoTipoMovimiento extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id_tipo_movimiento", nullable = false, updatable = false)
+    private Long id;
+
 
     @Column(name = "nombre_tipo")
     private String nombreTipo;
-
-    //--------Getter and setter--------------------------------------
-    public String getNombreTipo() {
-        return nombreTipo;
-    }
-
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
-    }
 
 }

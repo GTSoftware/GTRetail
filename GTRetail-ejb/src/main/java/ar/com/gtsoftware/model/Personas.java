@@ -15,13 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -30,13 +30,18 @@ import java.util.List;
  */
 @Entity
 @Table(name = "personas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_persona", columnDefinition = "serial"))
-public class Personas extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Getter
+@Setter
+public class Personas extends BaseEntity {
 
     private static final String BUSINESS_STRING = "[%d] %s - %s: %s";
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personas_id_persona")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "personas_id_persona",
+            sequenceName = "personas_id_persona_seq")
+    @Basic(optional = false)
+    @Column(name = "id_persona", nullable = false, updatable = false)
+    private Long id;
 
     @Column(name = "email", length = 100)
     @Pattern(regexp = "^$|^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
@@ -129,252 +134,7 @@ public class Personas extends BaseEntity implements Serializable {
     @ManyToOne(optional = false)
     private Sucursales idSucursal;
 
-    public Personas() {
-    }
-
-    public Personas(Long idPersona) {
-        super(idPersona);
-    }
-
-    public Personas(Long idPersona, String razonSocial, String documento, Date fechaAlta, boolean activo, boolean cliente, boolean proveedor) {
-        super(idPersona);
-        this.razonSocial = razonSocial;
-        this.documento = documento;
-        this.fechaAlta = fechaAlta;
-        this.activo = activo;
-        this.cliente = cliente;
-        this.proveedor = proveedor;
-    }
-
-    public String getRazonSocial() {
-        return razonSocial;
-    }
-
-    public void setRazonSocial(String razonSocial) {
-        this.razonSocial = razonSocial;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getNombreFantasia() {
-        return nombreFantasia;
-    }
-
-    public void setNombreFantasia(String nombreFantasia) {
-        this.nombreFantasia = nombreFantasia;
-    }
-
-    public String getCalle() {
-        return calle;
-    }
-
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public String getAltura() {
-        return altura;
-    }
-
-    public void setAltura(String altura) {
-        this.altura = altura;
-    }
-
-    public String getPiso() {
-        return piso;
-    }
-
-    public void setPiso(String piso) {
-        this.piso = piso;
-    }
-
-    public String getDepto() {
-        return depto;
-    }
-
-    public void setDepto(String depto) {
-        this.depto = depto;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    public boolean getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(boolean cliente) {
-        this.cliente = cliente;
-    }
-
-    public boolean getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(boolean proveedor) {
-        this.proveedor = proveedor;
-    }
-
-    @XmlTransient
-    public List<PersonasImagenes> getPersonasImagenesList() {
-        return personasImagenesList;
-    }
-
-    public void setPersonasImagenesList(List<PersonasImagenes> personasImagenesList) {
-        this.personasImagenesList = personasImagenesList;
-    }
-
-    @XmlTransient
-    public List<ProveedoresOrdenesCompra> getProveedoresOrdenesCompraList() {
-        return proveedoresOrdenesCompraList;
-    }
-
-    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompra> proveedoresOrdenesCompraList) {
-        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-    }
-
-    @XmlTransient
-    public List<Comprobantes> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Comprobantes> ventasList) {
-        this.ventasList = ventasList;
-    }
-
-    public UbicacionProvincias getIdProvincia() {
-        return idProvincia;
-    }
-
-    public void setIdProvincia(UbicacionProvincias idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    public UbicacionPaises getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(UbicacionPaises idPais) {
-        this.idPais = idPais;
-    }
-
-    public UbicacionLocalidades getIdLocalidad() {
-        return idLocalidad;
-    }
-
-    public void setIdLocalidad(UbicacionLocalidades idLocalidad) {
-        this.idLocalidad = idLocalidad;
-    }
-
-    public LegalTiposPersoneria getIdTipoPersoneria() {
-        return idTipoPersoneria;
-    }
-
-    public void setIdTipoPersoneria(LegalTiposPersoneria idTipoPersoneria) {
-        this.idTipoPersoneria = idTipoPersoneria;
-    }
-
-    public LegalTiposDocumento getIdTipoDocumento() {
-        return idTipoDocumento;
-    }
-
-    public void setIdTipoDocumento(LegalTiposDocumento idTipoDocumento) {
-        this.idTipoDocumento = idTipoDocumento;
-    }
-
-    public LegalGeneros getIdGenero() {
-        return idGenero;
-    }
-
-    public void setIdGenero(LegalGeneros idGenero) {
-        this.idGenero = idGenero;
-    }
-
-    public FiscalResponsabilidadesIva getIdResponsabilidadIva() {
-        return idResponsabilidadIva;
-    }
-
-    public void setIdResponsabilidadIva(FiscalResponsabilidadesIva idResponsabilidadIva) {
-        this.idResponsabilidadIva = idResponsabilidadIva;
-    }
-
-    //    @XmlTransient
-//    public List<FiscalLibroIvaVentasDto> getFiscalLibroIvaVentasList() {
-//        return fiscalLibroIvaVentasList;
-//    }
-//
-//    public void setFiscalLibroIvaVentasList(List<FiscalLibroIvaVentasDto> fiscalLibroIvaVentasList) {
-//        this.fiscalLibroIvaVentasList = fiscalLibroIvaVentasList;
-//    }
-    @XmlTransient
-    public List<PersonasTelefonos> getPersonasTelefonosList() {
-        return personasTelefonosList;
-    }
-
-    public void setPersonasTelefonosList(List<PersonasTelefonos> personasTelefonosList) {
-        this.personasTelefonosList = personasTelefonosList;
-    }
-
-    //    @XmlTransient
-//    public List<PersonasCuentaCorrienteDto> getPersonasCuentaCorrienteList() {
-//        return personasCuentaCorrienteList;
-//    }
-//
-//    public void setPersonasCuentaCorrienteList(List<PersonasCuentaCorrienteDto> personasCuentaCorrienteList) {
-//        this.personasCuentaCorrienteList = personasCuentaCorrienteList;
-//    }
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getBusinessString() {
-        return String.format(BUSINESS_STRING, this.getId(), razonSocial, idTipoDocumento.getNombreTipoDocumento(), documento);
+        return String.format(BUSINESS_STRING, id, razonSocial, idTipoDocumento.getNombreTipoDocumento(), documento);
     }
 }

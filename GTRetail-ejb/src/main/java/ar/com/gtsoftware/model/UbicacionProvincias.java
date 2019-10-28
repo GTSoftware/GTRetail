@@ -15,32 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "ubicacion_provincias")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_provincia", columnDefinition = "serial"))
+@Getter
+@Setter
 public class UbicacionProvincias extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ubicacion_provincias_id_provincia")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ubicacion_provincias_id_provincia",
+            sequenceName = "ubicacion_provincias_id_provincia_seq")
+    @Basic(optional = false)
+    @Column(name = "id_provincia", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -54,42 +52,5 @@ public class UbicacionProvincias extends BaseEntity {
     @JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
     @ManyToOne(optional = false)
     private UbicacionPaises idPais;
-
-    public UbicacionProvincias() {
-    }
-
-    public UbicacionProvincias(Long idProvincia) {
-        super(idProvincia);
-    }
-
-    public UbicacionProvincias(Long idProvincia, String nombreProvincia) {
-        super(idProvincia);
-        this.nombreProvincia = nombreProvincia;
-    }
-
-    public String getNombreProvincia() {
-        return nombreProvincia;
-    }
-
-    public void setNombreProvincia(String nombreProvincia) {
-        this.nombreProvincia = nombreProvincia;
-    }
-
-    @XmlTransient
-    public List<UbicacionLocalidades> getUbicacionLocalidadesList() {
-        return ubicacionLocalidadesList;
-    }
-
-    public void setUbicacionLocalidadesList(List<UbicacionLocalidades> ubicacionLocalidadesList) {
-        this.ubicacionLocalidadesList = ubicacionLocalidadesList;
-    }
-
-    public UbicacionPaises getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(UbicacionPaises idPais) {
-        this.idPais = idPais;
-    }
 
 }

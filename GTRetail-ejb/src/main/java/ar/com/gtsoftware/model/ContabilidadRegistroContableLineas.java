@@ -15,32 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_registro_contable_lineas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_registro", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadRegistroContableLineas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_registro_contable_lineas_id_linea_registro")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_registro_contable_lineas_id_linea_registro",
+            sequenceName = "contabilidad_registro_contable_lineas_id_linea_registro_seq")
+    @Basic(optional = false)
+    @Column(name = "id_linea_registro", nullable = false, updatable = false)
+    private Long id;
 
     @Size(max = 1024)
     @Column(name = "descripcion_linea")
@@ -72,84 +71,5 @@ public class ContabilidadRegistroContableLineas extends BaseEntity {
     @JoinColumn(name = "id_cuenta", referencedColumnName = "id_cuenta", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private ContabilidadPlanCuentas idCuenta;
-
-    public ContabilidadRegistroContableLineas() {
-    }
-
-    public ContabilidadRegistroContableLineas(Long idLineaRegistro) {
-        super(idLineaRegistro);
-    }
-
-    public ContabilidadRegistroContableLineas(Long idLineaRegistro, BigDecimal cantidad, Date fechaVencimiento, BigDecimal importeDebe, BigDecimal importeHaber) {
-        super(idLineaRegistro);
-        this.cantidad = cantidad;
-        this.fechaVencimiento = fechaVencimiento;
-        this.importeDebe = importeDebe;
-        this.importeHaber = importeHaber;
-    }
-
-    public String getDescripcionLinea() {
-        return descripcionLinea;
-    }
-
-    public void setDescripcionLinea(String descripcionLinea) {
-        this.descripcionLinea = descripcionLinea;
-    }
-
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public String getUnidadMedida() {
-        return unidadMedida;
-    }
-
-    public void setUnidadMedida(String unidadMedida) {
-        this.unidadMedida = unidadMedida;
-    }
-
-    public Date getFechaVencimiento() {
-        return fechaVencimiento;
-    }
-
-    public void setFechaVencimiento(Date fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
-    }
-
-    public BigDecimal getImporteDebe() {
-        return importeDebe;
-    }
-
-    public void setImporteDebe(BigDecimal importeDebe) {
-        this.importeDebe = importeDebe;
-    }
-
-    public BigDecimal getImporteHaber() {
-        return importeHaber;
-    }
-
-    public void setImporteHaber(BigDecimal importeHaber) {
-        this.importeHaber = importeHaber;
-    }
-
-    public ContabilidadRegistroContable getIdRegistroContable() {
-        return idRegistroContable;
-    }
-
-    public void setIdRegistroContable(ContabilidadRegistroContable idRegistroContable) {
-        this.idRegistroContable = idRegistroContable;
-    }
-
-    public ContabilidadPlanCuentas getIdCuenta() {
-        return idCuenta;
-    }
-
-    public void setIdCuenta(ContabilidadPlanCuentas idCuenta) {
-        this.idCuenta = idCuenta;
-    }
 
 }

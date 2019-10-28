@@ -18,6 +18,8 @@
 package ar.com.gtsoftware.model;
 
 import ar.com.gtsoftware.rules.TipoAccion;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,8 +31,17 @@ import java.util.List;
 
 @Entity
 @Table(name = "ofertas")
-@AttributeOverride(name = "id", column = @Column(name = "id_oferta", columnDefinition = "serial"))
+@Getter
+@Setter
 public class Ofertas extends BaseEntity implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ofertas_id_oferta")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ofertas_id_oferta",
+            sequenceName = "ofertas_id_oferta_seq")
+    @Basic(optional = false)
+    @Column(name = "id_oferta", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @Column(name = "texto_oferta")
@@ -64,67 +75,4 @@ public class Ofertas extends BaseEntity implements Serializable {
     @JoinColumn(name = "id_oferta", referencedColumnName = "id_oferta")
     private List<OfertasCondiciones> condiciones;
 
-    public Ofertas() {
-    }
-
-    @NotNull
-    public String getTextoOferta() {
-        return textoOferta;
-    }
-
-    public void setTextoOferta(@NotNull String textoOferta) {
-        this.textoOferta = textoOferta;
-    }
-
-    @NotNull
-    public TipoAccion getTipoAccion() {
-        return tipoAccion;
-    }
-
-    public void setTipoAccion(@NotNull TipoAccion tipoAccion) {
-        this.tipoAccion = tipoAccion;
-    }
-
-    @NotNull
-    public BigDecimal getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(@NotNull BigDecimal descuento) {
-        this.descuento = descuento;
-    }
-
-    @NotNull
-    public Date getVigenciaDesde() {
-        return vigenciaDesde;
-    }
-
-    public void setVigenciaDesde(@NotNull Date vigenciaDesde) {
-        this.vigenciaDesde = vigenciaDesde;
-    }
-
-    @NotNull
-    public Date getVigenciaHasta() {
-        return vigenciaHasta;
-    }
-
-    public void setVigenciaHasta(@NotNull Date vigenciaHasta) {
-        this.vigenciaHasta = vigenciaHasta;
-    }
-
-    public List<OfertasCondiciones> getCondiciones() {
-        return condiciones;
-    }
-
-    public void setCondiciones(List<OfertasCondiciones> condiciones) {
-        this.condiciones = condiciones;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
 }

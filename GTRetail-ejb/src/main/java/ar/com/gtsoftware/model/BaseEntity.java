@@ -15,48 +15,21 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.*;
-
 /**
  *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
-@MappedSuperclass
 public abstract class BaseEntity extends GTEntity<Long> {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
-
-    public BaseEntity(Long id) {
-        this.id = id;
-    }
-
-    public BaseEntity() {
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public boolean isNew() {
-        return id == null;
+        return getId() == null;
     }
 
     @Override
     public String getStringId() {
-        if (id != null) {
-            return id.toString();
+        if (getId() != null) {
+            return getId().toString();
         }
         return null;
     }

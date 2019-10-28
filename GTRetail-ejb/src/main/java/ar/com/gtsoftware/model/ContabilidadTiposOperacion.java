@@ -15,29 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_tipos_operacion")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_operacion", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadTiposOperacion extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_tipos_operacion_id_tipo_operacion")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_tipos_operacion_id_tipo_operacion",
+            sequenceName = "contabilidad_tipos_operacion_id_tipo_operacion_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_operacion", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -49,42 +50,5 @@ public class ContabilidadTiposOperacion extends BaseEntity {
     private String descripcionTipoOperacion;
     @OneToMany(mappedBy = "idTipoOperacion")
     private List<ContabilidadRegistroContable> contabilidadRegistroContableList;
-
-    public ContabilidadTiposOperacion() {
-    }
-
-    public ContabilidadTiposOperacion(Long idTipoOperacion) {
-        super(idTipoOperacion);
-    }
-
-    public ContabilidadTiposOperacion(Long idTipoOperacion, String nombreTipoOperacion) {
-        super(idTipoOperacion);
-        this.nombreTipoOperacion = nombreTipoOperacion;
-    }
-
-    public String getNombreTipoOperacion() {
-        return nombreTipoOperacion;
-    }
-
-    public void setNombreTipoOperacion(String nombreTipoOperacion) {
-        this.nombreTipoOperacion = nombreTipoOperacion;
-    }
-
-    public String getDescripcionTipoOperacion() {
-        return descripcionTipoOperacion;
-    }
-
-    public void setDescripcionTipoOperacion(String descripcionTipoOperacion) {
-        this.descripcionTipoOperacion = descripcionTipoOperacion;
-    }
-
-    @XmlTransient
-    public List<ContabilidadRegistroContable> getContabilidadRegistroContableList() {
-        return contabilidadRegistroContableList;
-    }
-
-    public void setContabilidadRegistroContableList(List<ContabilidadRegistroContable> contabilidadRegistroContableList) {
-        this.contabilidadRegistroContableList = contabilidadRegistroContableList;
-    }
 
 }

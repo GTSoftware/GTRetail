@@ -15,32 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "cajas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_caja"))
+@Getter
+@Setter
 public class Cajas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cajas_id_caja")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "cajas_id_caja",
+            sequenceName = "cajas_id_caja_seq")
+    @Basic(optional = false)
+    @Column(name = "id_caja", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -70,70 +69,5 @@ public class Cajas extends BaseEntity {
 
     @OneToMany(mappedBy = "idCaja")
     private List<Recibos> recibosList;
-
-    public Cajas(Long id) {
-        super(id);
-    }
-
-    public Cajas() {
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    public Date getFechaApertura() {
-        return fechaApertura;
-    }
-
-    public void setFechaApertura(Date fechaApertura) {
-        this.fechaApertura = fechaApertura;
-    }
-
-    public Date getFechaCierre() {
-        return fechaCierre;
-    }
-
-    public void setFechaCierre(Date fechaCierre) {
-        this.fechaCierre = fechaCierre;
-    }
-
-    public BigDecimal getSaldoInicial() {
-        return saldoInicial;
-    }
-
-    public void setSaldoInicial(BigDecimal saldoInicial) {
-        this.saldoInicial = saldoInicial;
-    }
-
-    @XmlTransient
-    public List<CajasMovimientos> getCajasMovimientoss() {
-        return cajasMovimientoss;
-    }
-
-    public void setCajasMovimientoss(List<CajasMovimientos> cajasMovimientoss) {
-        this.cajasMovimientoss = cajasMovimientoss;
-    }
-
-    @XmlTransient
-    public List<Recibos> getRecibosList() {
-        return recibosList;
-    }
-
-    public void setRecibosList(List<Recibos> recibosList) {
-        this.recibosList = recibosList;
-    }
 
 }

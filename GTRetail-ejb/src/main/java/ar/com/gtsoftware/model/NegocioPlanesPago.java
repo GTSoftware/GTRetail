@@ -15,23 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Los planes de pago para cada tipo de pago
@@ -40,11 +31,17 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "negocio_planes_pago")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_plan"))
+@Getter
+@Setter
 public class NegocioPlanesPago extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "negocio_planes_pago_id_plan")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "negocio_planes_pago_id_plan",
+            sequenceName = "negocio_planes_pago_id_plan_seq")
+    @Basic(optional = false)
+    @Column(name = "id_plan", nullable = false, updatable = false)
+    private Long id;
 
     @JoinColumn(name = "id_forma_pago", referencedColumnName = "id_forma_pago")
     @ManyToOne
@@ -74,62 +71,5 @@ public class NegocioPlanesPago extends BaseEntity {
 
     @OneToMany(mappedBy = "idPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NegocioPlanesPagoDetalle> negocioPlanesPagoDetalles;
-
-    public NegocioPlanesPago() {
-    }
-
-    public NegocioPlanesPago(Long id) {
-        super(id);
-    }
-
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Date getFechaActivoDesde() {
-        return fechaActivoDesde;
-    }
-
-    public void setFechaActivoDesde(Date fechaActivoDesde) {
-        this.fechaActivoDesde = fechaActivoDesde;
-    }
-
-    public Date getFechaActivoHasta() {
-        return fechaActivoHasta;
-    }
-
-    public void setFechaActivoHasta(Date fechaActivoHasta) {
-        this.fechaActivoHasta = fechaActivoHasta;
-    }
-
-    @XmlTransient
-    public List<ProductosListasPrecios> getListasPrecioHabilitadas() {
-        return listasPrecioHabilitadas;
-    }
-
-    public void setListasPrecioHabilitadas(List<ProductosListasPrecios> listasPrecioHabilitadas) {
-        this.listasPrecioHabilitadas = listasPrecioHabilitadas;
-    }
-
-    @XmlTransient
-    public List<NegocioPlanesPagoDetalle> getNegocioPlanesPagoDetalles() {
-        return negocioPlanesPagoDetalles;
-    }
-
-    public void setNegocioPlanesPagoDetalles(List<NegocioPlanesPagoDetalle> negocioPlanesPagoDetalles) {
-        this.negocioPlanesPagoDetalles = negocioPlanesPagoDetalles;
-    }
 
 }
