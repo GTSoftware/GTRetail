@@ -73,10 +73,7 @@ public class FiscalTiposComprobante extends GTEntity<String> {
             return false;
         }
         final FiscalTiposComprobante other = (FiscalTiposComprobante) obj;
-        if (!Objects.equals(this.codigoTipoComprobante, other.codigoTipoComprobante)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.codigoTipoComprobante, other.codigoTipoComprobante);
     }
 
     @Override

@@ -60,10 +60,7 @@ public class FiscalLetrasComprobantes extends GTEntity<FiscalLetrasComprobantesP
             return false;
         }
         FiscalLetrasComprobantes other = (FiscalLetrasComprobantes) object;
-        if ((this.fiscalLetrasComprobantesPK == null && other.fiscalLetrasComprobantesPK != null) || (this.fiscalLetrasComprobantesPK != null && !this.fiscalLetrasComprobantesPK.equals(other.fiscalLetrasComprobantesPK))) {
-            return false;
-        }
-        return true;
+        return (this.fiscalLetrasComprobantesPK != null || other.fiscalLetrasComprobantesPK == null) && (this.fiscalLetrasComprobantesPK == null || this.fiscalLetrasComprobantesPK.equals(other.fiscalLetrasComprobantesPK));
     }
 
     @Override

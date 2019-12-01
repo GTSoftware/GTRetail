@@ -119,10 +119,7 @@ public class AFIPAuthServices extends GTEntity<String> {
             return false;
         }
         final AFIPAuthServices other = (AFIPAuthServices) obj;
-        if (!Objects.equals(this.nombreServicio, other.nombreServicio)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.nombreServicio, other.nombreServicio);
     }
 
 }

@@ -66,10 +66,7 @@ public class FiscalMonedas extends GTEntity<String> {
             return false;
         }
         final FiscalMonedas other = (FiscalMonedas) obj;
-        if (!Objects.equals(this.codigoMoneda, other.codigoMoneda)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.codigoMoneda, other.codigoMoneda);
     }
 
     @Override

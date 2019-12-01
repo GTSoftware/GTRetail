@@ -53,8 +53,8 @@ public class FiscalLetrasComprobantesPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idResoponsabildiadIvaEmisor;
-        hash += (int) idResoponsabildiadIvaReceptor;
+        hash += idResoponsabildiadIvaEmisor;
+        hash += idResoponsabildiadIvaReceptor;
         return hash;
     }
 
@@ -68,10 +68,7 @@ public class FiscalLetrasComprobantesPK implements Serializable {
         if (this.idResoponsabildiadIvaEmisor != other.idResoponsabildiadIvaEmisor) {
             return false;
         }
-        if (this.idResoponsabildiadIvaReceptor != other.idResoponsabildiadIvaReceptor) {
-            return false;
-        }
-        return true;
+        return this.idResoponsabildiadIvaReceptor == other.idResoponsabildiadIvaReceptor;
     }
 
     @Override
