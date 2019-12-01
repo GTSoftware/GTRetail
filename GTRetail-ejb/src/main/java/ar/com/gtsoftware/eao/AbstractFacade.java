@@ -58,22 +58,16 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
     public void create(T entity) {
         constraintViolationsDetected(entity);
         getEntityManager().persist(entity);
-        getEntityManager().flush();
     }
 
     public T edit(T entity) {
         constraintViolationsDetected(entity);
-        T mergedEntity = getEntityManager().merge(entity);
-        getEntityManager().flush();
-        return mergedEntity;
-
+        return getEntityManager().merge(entity);
     }
 
     public void remove(T entity) {
         T toDelete = getEntityManager().find(entityClass, entity.getId());
         getEntityManager().remove(toDelete);
-        getEntityManager().flush();
-
     }
 
     public T find(Object id) {

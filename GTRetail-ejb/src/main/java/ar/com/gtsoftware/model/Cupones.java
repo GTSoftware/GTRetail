@@ -15,14 +15,17 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * CuponesDto de tarjetas de crédito o débito
@@ -31,9 +34,9 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "cupones")
+@Getter
+@Setter
 public class Cupones extends Valores {
-
-    private static final long serialVersionUID = 1L;
 
     @NotNull
     @Column(name = "nro_cupon")
@@ -68,84 +71,5 @@ public class Cupones extends Valores {
 
     @Column(name = "coeficiente")
     private BigDecimal coeficiente;
-
-    public Cupones(Long id) {
-        super(id);
-    }
-
-    public Cupones() {
-    }
-
-    public Integer getNroCupon() {
-        return nroCupon;
-    }
-
-    public void setNroCupon(Integer nroCupon) {
-        this.nroCupon = nroCupon;
-    }
-
-    public Integer getCodigoAutorizacion() {
-        return codigoAutorizacion;
-    }
-
-    public void setCodigoAutorizacion(Integer codigoAutorizacion) {
-        this.codigoAutorizacion = codigoAutorizacion;
-    }
-
-    public Integer getNroLote() {
-        return nroLote;
-    }
-
-    public void setNroLote(Integer nroLote) {
-        this.nroLote = nroLote;
-    }
-
-    public Date getFechaOrigen() {
-        return fechaOrigen;
-    }
-
-    public void setFechaOrigen(Date fechaOrigen) {
-        this.fechaOrigen = fechaOrigen;
-    }
-
-    public Date getFechaPresentacion() {
-        return fechaPresentacion;
-    }
-
-    public void setFechaPresentacion(Date fechaPresentacion) {
-        this.fechaPresentacion = fechaPresentacion;
-    }
-
-    public Date getFechaAcreditacion() {
-        return fechaAcreditacion;
-    }
-
-    public void setFechaAcreditacion(Date fechaAcreditacion) {
-        this.fechaAcreditacion = fechaAcreditacion;
-    }
-
-    public Integer getCantCuotas() {
-        return cantCuotas;
-    }
-
-    public void setCantCuotas(Integer cantCuotas) {
-        this.cantCuotas = cantCuotas;
-    }
-
-    public String getNotas() {
-        return notas;
-    }
-
-    public void setNotas(String notas) {
-        this.notas = notas;
-    }
-
-    public BigDecimal getCoeficiente() {
-        return coeficiente;
-    }
-
-    public void setCoeficiente(BigDecimal coeficiente) {
-        this.coeficiente = coeficiente;
-    }
 
 }

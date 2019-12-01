@@ -15,21 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 /**
  * @author rodrigo
  */
 @Entity
 @Table(name = "proveedores_ordenes_compra_lineas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra_linea", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProveedoresOrdenesCompraLineas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proveedores_ordenes_compra_lineas_id_orden_compra_linea")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "proveedores_ordenes_compra_lineas_id_orden_compra_linea",
+            sequenceName = "proveedores_ordenes_compra_lineas_id_orden_compra_linea_seq")
+    @Basic(optional = false)
+    @Column(name = "id_orden_compra_linea", nullable = false, updatable = false)
+    private Long id;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
@@ -61,96 +69,4 @@ public class ProveedoresOrdenesCompraLineas extends BaseEntity {
     @ManyToOne(optional = false)
     private ProductosTiposUnidades idTipoUnidad;
 
-    @Transient
-    private int nroLinea;
-
-    public ProveedoresOrdenesCompraLineas() {
-    }
-
-    public ProveedoresOrdenesCompraLineas(Long idLinea) {
-        super(idLinea);
-    }
-
-    public ProveedoresOrdenesCompraLineas(Long idLinea, BigDecimal precioCompraUnitario, BigDecimal cantidad, BigDecimal subTotal) {
-        super(idLinea);
-        this.precioCompraUnitario = precioCompraUnitario;
-        this.cantidadPedida = cantidad;
-        this.subTotal = subTotal;
-    }
-
-    public BigDecimal getPrecioCompraUnitario() {
-        return precioCompraUnitario;
-    }
-
-    public void setPrecioCompraUnitario(BigDecimal precioCompraUnitario) {
-        this.precioCompraUnitario = precioCompraUnitario;
-    }
-
-    public BigDecimal getCantidadPedida() {
-        return cantidadPedida;
-    }
-
-    public void setCantidadPedida(BigDecimal cantidadPedida) {
-        this.cantidadPedida = cantidadPedida;
-    }
-
-    public BigDecimal getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(BigDecimal subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public BigDecimal getCantidadRecibida() {
-        return cantidadRecibida;
-    }
-
-    public void setCantidadRecibida(BigDecimal cantidadRecibida) {
-        this.cantidadRecibida = cantidadRecibida;
-    }
-
-    public ProveedoresOrdenesCompra getIdOrdenCompra() {
-        return idOrdenCompra;
-    }
-
-    public void setIdOrdenCompra(ProveedoresOrdenesCompra idOrdenCompra) {
-        this.idOrdenCompra = idOrdenCompra;
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public ProductosTiposUnidades getIdTipoUnidad() {
-        return idTipoUnidad;
-    }
-
-    public void setIdTipoUnidad(ProductosTiposUnidades idTipoUnidad) {
-        this.idTipoUnidad = idTipoUnidad;
-    }
-
-    /**
-     * El número de linea utilizado para ubicar las líneas antes de que se han
-     * guardado en la bd
-     *
-     * @return
-     */
-    public int getNroLinea() {
-        return nroLinea;
-    }
-
-    /**
-     * El número de linea utilizado para ubicar las líneas antes de que se han
-     * guardado en la bd
-     *
-     * @param nroLinea
-     */
-    public void setNroLinea(int nroLinea) {
-        this.nroLinea = nroLinea;
-    }
 }

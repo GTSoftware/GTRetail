@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_tipos_cuenta")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_cuenta", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadTiposCuenta extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_tipos_cuenta_id_tipo_cuenta")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_tipos_cuenta_id_tipo_cuenta",
+            sequenceName = "contabilidad_tipos_cuenta_id_tipo_cuenta_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_cuenta", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -50,42 +50,5 @@ public class ContabilidadTiposCuenta extends BaseEntity {
     private String descripcionTipo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoCuenta")
     private List<ContabilidadPlanCuentas> contabilidadPlanCuentasList;
-
-    public ContabilidadTiposCuenta() {
-    }
-
-    public ContabilidadTiposCuenta(Long idTipoCuenta) {
-        super(idTipoCuenta);
-    }
-
-    public ContabilidadTiposCuenta(Long idTipoCuenta, String nombreTipo) {
-        super(idTipoCuenta);
-        this.nombreTipo = nombreTipo;
-    }
-
-    public String getNombreTipo() {
-        return nombreTipo;
-    }
-
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
-    }
-
-    public String getDescripcionTipo() {
-        return descripcionTipo;
-    }
-
-    public void setDescripcionTipo(String descripcionTipo) {
-        this.descripcionTipo = descripcionTipo;
-    }
-
-    @XmlTransient
-    public List<ContabilidadPlanCuentas> getContabilidadPlanCuentasList() {
-        return contabilidadPlanCuentasList;
-    }
-
-    public void setContabilidadPlanCuentasList(List<ContabilidadPlanCuentas> contabilidadPlanCuentasList) {
-        this.contabilidadPlanCuentasList = contabilidadPlanCuentasList;
-    }
 
 }

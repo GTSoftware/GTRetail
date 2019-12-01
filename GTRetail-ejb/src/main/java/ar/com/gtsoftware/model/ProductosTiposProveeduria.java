@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "productos_tipos_proveeduria")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_proveeduria", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosTiposProveeduria extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_tipos_proveeduria_id_tipo_proveeduria")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_tipos_proveeduria_id_tipo_proveeduria",
+            sequenceName = "productos_tipos_proveeduria_id_tipo_proveeduria_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_proveeduria", nullable = false, updatable = false)
+    private Long id;
 
     @Size(max = 60)
     @Column(name = "nombre_tipo_proveeduria")
@@ -61,69 +61,5 @@ public class ProductosTiposProveeduria extends BaseEntity {
     private boolean cambiarPrecioVenta;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoProveeduria")
     private List<Productos> productosList;
-
-    public ProductosTiposProveeduria() {
-    }
-
-    public ProductosTiposProveeduria(Long idTipoProveeduria) {
-        super(idTipoProveeduria);
-    }
-
-    public ProductosTiposProveeduria(Long idTipoProveeduria, boolean puedeComprarse, boolean puedeVenderse, boolean controlStock, boolean cambiarPrecioVenta) {
-        super(idTipoProveeduria);
-        this.puedeComprarse = puedeComprarse;
-        this.puedeVenderse = puedeVenderse;
-        this.controlStock = controlStock;
-        this.cambiarPrecioVenta = cambiarPrecioVenta;
-    }
-
-    public String getNombreTipoProveeduria() {
-        return nombreTipoProveeduria;
-    }
-
-    public void setNombreTipoProveeduria(String nombreTipoProveeduria) {
-        this.nombreTipoProveeduria = nombreTipoProveeduria;
-    }
-
-    public boolean getPuedeComprarse() {
-        return puedeComprarse;
-    }
-
-    public void setPuedeComprarse(boolean puedeComprarse) {
-        this.puedeComprarse = puedeComprarse;
-    }
-
-    public boolean getPuedeVenderse() {
-        return puedeVenderse;
-    }
-
-    public void setPuedeVenderse(boolean puedeVenderse) {
-        this.puedeVenderse = puedeVenderse;
-    }
-
-    public boolean getControlStock() {
-        return controlStock;
-    }
-
-    public void setControlStock(boolean controlStock) {
-        this.controlStock = controlStock;
-    }
-
-    public boolean getCambiarPrecioVenta() {
-        return cambiarPrecioVenta;
-    }
-
-    public void setCambiarPrecioVenta(boolean cambiarPrecioVenta) {
-        this.cambiarPrecioVenta = cambiarPrecioVenta;
-    }
-
-    @XmlTransient
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
-    }
 
 }

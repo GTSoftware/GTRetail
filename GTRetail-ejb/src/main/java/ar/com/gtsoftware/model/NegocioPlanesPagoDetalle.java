@@ -15,17 +15,14 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 /**
  * Detalle del plan de pago
@@ -34,11 +31,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "negocio_planes_pago_detalle")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_detalle_plan"))
+@Getter
+@Setter
 public class NegocioPlanesPagoDetalle extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "negocio_planes_pago_detalle_id_detalle_plan")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "negocio_planes_pago_detalle_id_detalle_plan",
+            sequenceName = "negocio_planes_pago_detalle_id_detalle_plan_seq")
+    @Basic(optional = false)
+    @Column(name = "id_detalle_plan", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -55,44 +58,5 @@ public class NegocioPlanesPagoDetalle extends BaseEntity {
     @DecimalMax(value = "999999999999999.9999")
     @DecimalMin(value = "0")
     private BigDecimal coeficienteInteres;
-
-    public NegocioPlanesPagoDetalle(Long id) {
-        super(id);
-    }
-
-    public NegocioPlanesPagoDetalle() {
-    }
-
-    public NegocioPlanesPago getIdPlan() {
-        return idPlan;
-    }
-
-    public void setIdPlan(NegocioPlanesPago idPlan) {
-        this.idPlan = idPlan;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    public int getCuotas() {
-        return cuotas;
-    }
-
-    public void setCuotas(int cuotas) {
-        this.cuotas = cuotas;
-    }
-
-    public BigDecimal getCoeficienteInteres() {
-        return coeficienteInteres;
-    }
-
-    public void setCoeficienteInteres(BigDecimal coeficienteInteres) {
-        this.coeficienteInteres = coeficienteInteres;
-    }
 
 }

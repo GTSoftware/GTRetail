@@ -15,34 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "productos_precios", uniqueConstraints = @UniqueConstraint(columnNames = {"id_producto", "id_lista_precio"}))
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "productos_precios_id", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosPrecios extends BaseEntity {
 
-    private static final long serialVersionUID = 3L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_precios_productos_precios_id")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_precios_productos_precios_id",
+            sequenceName = "productos_precios_productos_precios_id_seq")
+    @Basic(optional = false)
+    @Column(name = "productos_precios_id", nullable = false, updatable = false)
+    private Long id;
 
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     @ManyToOne(optional = false)
@@ -70,61 +66,10 @@ public class ProductosPrecios extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaModificacion;
 
-    public ProductosPrecios() {
-    }
-
-    public BigDecimal getUtilidad() {
-        return utilidad;
-    }
-
-    public void setUtilidad(BigDecimal utilidad) {
-        this.utilidad = utilidad;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
-
-    public BigDecimal getNeto() {
-        return neto;
-    }
-
-    public void setNeto(BigDecimal neto) {
-        this.neto = neto;
-    }
-
-    public Date getFechaModificacion() {
-        return fechaModificacion;
-    }
-
-    public void setFechaModificacion(Date fechaModificacion) {
-        this.fechaModificacion = fechaModificacion;
-    }
-
     @PreUpdate
     @PrePersist
     protected void onUpdate() {
         fechaModificacion = new Date();
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public ProductosListasPrecios getIdListaPrecios() {
-        return idListaPrecios;
-    }
-
-    public void setIdListaPrecios(ProductosListasPrecios idListaPrecios) {
-        this.idListaPrecios = idListaPrecios;
     }
 
 }

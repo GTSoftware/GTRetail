@@ -15,43 +15,33 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"codigo_propio"}))
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_producto", columnDefinition = "serial"))
 @NamedEntityGraph(name = "precios", attributeNodes = {
-    @NamedAttributeNode("porcentajes")
-    ,
-    @NamedAttributeNode("precios")})
-
+        @NamedAttributeNode("porcentajes"),
+        @NamedAttributeNode("precios")})
+@Getter
+@Setter
 public class Productos extends BaseEntity {
 
-    private static final long serialVersionUID = 3L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_id_producto")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_id_producto",
+            sequenceName = "productos_id_producto_seq")
+    @Basic(optional = false)
+    @Column(name = "id_producto", nullable = false, updatable = false)
+    private Long id;
 
     @Size(max = 100)
     @Column(name = "codigo_propio")
@@ -150,237 +140,6 @@ public class Productos extends BaseEntity {
     @Column(name = "stock_minimo", scale = 2, precision = 19)
     private BigDecimal stockMinimo;
 
-    public Productos() {
-    }
-
-    public Productos(Long idProducto) {
-        super(idProducto);
-    }
-
-    public Productos(Long idProducto, Date fechaAlta, boolean activo, BigDecimal costoAdquisicionNeto, int annosAmortizacion) {
-        super(idProducto);
-        this.fechaAlta = fechaAlta;
-        this.activo = activo;
-        this.costoAdquisicionNeto = costoAdquisicionNeto;
-
-        this.annosAmortizacion = annosAmortizacion;
-    }
-
-    public String getCodigoPropio() {
-        return codigoPropio;
-    }
-
-    public void setCodigoPropio(String codigoPropio) {
-        this.codigoPropio = codigoPropio;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-    /**
-     * El costo con el cual figura el producto en la lista del proveedor
-     *
-     * @return
-     */
-    public BigDecimal getCostoAdquisicionNeto() {
-        return costoAdquisicionNeto;
-    }
-
-    /**
-     * El costo con el cual figura el producto en la lista del proveedor
-     *
-     * @param costoAdquisicionNeto
-     */
-    public void setCostoAdquisicionNeto(BigDecimal costoAdquisicionNeto) {
-        this.costoAdquisicionNeto = costoAdquisicionNeto;
-    }
-
-    public int getAnnosAmortizacion() {
-        return annosAmortizacion;
-    }
-
-    public void setAnnosAmortizacion(int annosAmortizacion) {
-        this.annosAmortizacion = annosAmortizacion;
-    }
-
-    /**
-     * El coeficiente de cuantas unidades de compra representan a unidades de venta. X unidades de compra son Y unidades
-     * de venta. Lo normal es 1.
-     *
-     * @return
-     */
-    public BigDecimal getUnidadesCompraUnidadesVenta() {
-        return unidadesCompraUnidadesVenta;
-    }
-
-    /**
-     * El coeficiente de cuantas unidades de compra representan a unidades de venta. X unidades de compra son Y unidades
-     * de venta. Lo normal es 1.
-     *
-     * @param unidadesCompraUnidadesVenta
-     */
-    public void setUnidadesCompraUnidadesVenta(BigDecimal unidadesCompraUnidadesVenta) {
-        this.unidadesCompraUnidadesVenta = unidadesCompraUnidadesVenta;
-    }
-
-    public ProductosTiposUnidades getIdTipoUnidadVenta() {
-        return idTipoUnidadVenta;
-    }
-
-    public void setIdTipoUnidadVenta(ProductosTiposUnidades idTipoUnidadVenta) {
-        this.idTipoUnidadVenta = idTipoUnidadVenta;
-    }
-
-    public ProductosTiposUnidades getIdTipoUnidadCompra() {
-        return idTipoUnidadCompra;
-    }
-
-    public void setIdTipoUnidadCompra(ProductosTiposUnidades idTipoUnidadCompra) {
-        this.idTipoUnidadCompra = idTipoUnidadCompra;
-    }
-
-    public ProductosTiposProveeduria getIdTipoProveeduria() {
-        return idTipoProveeduria;
-    }
-
-    public void setIdTipoProveeduria(ProductosTiposProveeduria idTipoProveeduria) {
-        this.idTipoProveeduria = idTipoProveeduria;
-    }
-
-    public ProductosSubRubros getIdSubRubro() {
-        return idSubRubro;
-    }
-
-    public void setIdSubRubro(ProductosSubRubros idSubRubro) {
-        this.idSubRubro = idSubRubro;
-    }
-
-    public ProductosRubros getIdRubro() {
-        return idRubro;
-    }
-
-    public void setIdRubro(ProductosRubros idRubro) {
-        this.idRubro = idRubro;
-    }
-
-    public Personas getIdProveedorHabitual() {
-        return idProveedorHabitual;
-    }
-
-    public void setIdProveedorHabitual(Personas idProveedorHabitual) {
-        this.idProveedorHabitual = idProveedorHabitual;
-    }
-
-    public FiscalAlicuotasIva getIdAlicuotaIva() {
-        return idAlicuotaIva;
-    }
-
-    public void setIdAlicuotaIva(FiscalAlicuotasIva idAlicuotaIva) {
-        this.idAlicuotaIva = idAlicuotaIva;
-    }
-
-    public ProductosMarcas getIdMarca() {
-        return idMarca;
-    }
-
-    public void setIdMarca(ProductosMarcas idMarca) {
-        this.idMarca = idMarca;
-    }
-
-    public Date getFechaUltimaModificacion() {
-        return fechaUltimaModificacion;
-    }
-
-    public void setFechaUltimaModificacion(Date fechaUltimaModificacion) {
-        this.fechaUltimaModificacion = fechaUltimaModificacion;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    /**
-     * El costo luego de haber aplicado todos los descuentos y recargos
-     *
-     * @return
-     */
-    public BigDecimal getCostoFinal() {
-        return costoFinal;
-    }
-
-    /**
-     * El costo luego de haber aplicado todos los descuentos y recargos
-     *
-     * @param costoFinal
-     */
-    public void setCostoFinal(BigDecimal costoFinal) {
-        this.costoFinal = costoFinal;
-    }
-
-    public List<ProductosPrecios> getPrecios() {
-        return precios;
-    }
-
-    public void setPrecios(List<ProductosPrecios> precios) {
-        this.precios = precios;
-    }
-
-    public List<ProductosPorcentajes> getPorcentajes() {
-        return porcentajes;
-    }
-
-    public void setPorcentajes(List<ProductosPorcentajes> porcentajes) {
-        this.porcentajes = porcentajes;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public BigDecimal getStockMinimo() {
-        return stockMinimo;
-    }
-
-    public void setStockMinimo(BigDecimal stockMinimo) {
-        this.stockMinimo = stockMinimo;
-    }
-
-    public String getCodigoFabricante() {
-        return codigoFabricante;
-    }
-
-    public void setCodigoFabricante(String codigoFabricante) {
-        this.codigoFabricante = codigoFabricante;
-    }
 
     @PrePersist
     protected void onCreate() {

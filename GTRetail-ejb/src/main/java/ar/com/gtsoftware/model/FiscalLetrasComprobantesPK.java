@@ -15,17 +15,21 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
- *
  * @author rodrigo
  */
 @Embeddable
+@Getter
+@Setter
 public class FiscalLetrasComprobantesPK implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,27 +50,11 @@ public class FiscalLetrasComprobantesPK implements Serializable {
         this.idResoponsabildiadIvaReceptor = idResoponsabildiadIvaReceptor;
     }
 
-    public int getIdResoponsabildiadIvaEmisor() {
-        return idResoponsabildiadIvaEmisor;
-    }
-
-    public void setIdResoponsabildiadIvaEmisor(int idResoponsabildiadIvaEmisor) {
-        this.idResoponsabildiadIvaEmisor = idResoponsabildiadIvaEmisor;
-    }
-
-    public int getIdResoponsabildiadIvaReceptor() {
-        return idResoponsabildiadIvaReceptor;
-    }
-
-    public void setIdResoponsabildiadIvaReceptor(int idResoponsabildiadIvaReceptor) {
-        this.idResoponsabildiadIvaReceptor = idResoponsabildiadIvaReceptor;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idResoponsabildiadIvaEmisor;
-        hash += (int) idResoponsabildiadIvaReceptor;
+        hash += idResoponsabildiadIvaEmisor;
+        hash += idResoponsabildiadIvaReceptor;
         return hash;
     }
 
@@ -80,10 +68,7 @@ public class FiscalLetrasComprobantesPK implements Serializable {
         if (this.idResoponsabildiadIvaEmisor != other.idResoponsabildiadIvaEmisor) {
             return false;
         }
-        if (this.idResoponsabildiadIvaReceptor != other.idResoponsabildiadIvaReceptor) {
-            return false;
-        }
-        return true;
+        return this.idResoponsabildiadIvaReceptor == other.idResoponsabildiadIvaReceptor;
     }
 
     @Override

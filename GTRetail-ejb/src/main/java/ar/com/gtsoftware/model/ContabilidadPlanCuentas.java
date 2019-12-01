@@ -15,32 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_plan_cuentas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_cuenta", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadPlanCuentas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_plan_cuentas_id_cuenta")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_plan_cuentas_id_cuenta",
+            sequenceName = "contabilidad_plan_cuentas_id_cuenta_seq")
+    @Basic(optional = false)
+    @Column(name = "id_cuenta", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -67,84 +65,5 @@ public class ContabilidadPlanCuentas extends BaseEntity {
     @JoinColumn(name = "id_cuenta_padre", referencedColumnName = "id_cuenta", columnDefinition = "int4")
     @ManyToOne
     private ContabilidadPlanCuentas idCuentaPadre;
-
-    public ContabilidadPlanCuentas() {
-    }
-
-    public ContabilidadPlanCuentas(Long idCuenta) {
-        super(idCuenta);
-    }
-
-    public ContabilidadPlanCuentas(Long idCuenta, String nombreCuenta, boolean cuentaRubro) {
-        super(idCuenta);
-        this.nombreCuenta = nombreCuenta;
-        this.cuentaRubro = cuentaRubro;
-    }
-
-    public String getNombreCuenta() {
-        return nombreCuenta;
-    }
-
-    public void setNombreCuenta(String nombreCuenta) {
-        this.nombreCuenta = nombreCuenta;
-    }
-
-    public String getNumeroCuenta() {
-        return numeroCuenta;
-    }
-
-    public void setNumeroCuenta(String numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
-    }
-
-    public String getDescripcionCuenta() {
-        return descripcionCuenta;
-    }
-
-    public void setDescripcionCuenta(String descripcionCuenta) {
-        this.descripcionCuenta = descripcionCuenta;
-    }
-
-    public boolean getCuentaRubro() {
-        return cuentaRubro;
-    }
-
-    public void setCuentaRubro(boolean cuentaRubro) {
-        this.cuentaRubro = cuentaRubro;
-    }
-
-    @XmlTransient
-    public List<ContabilidadRegistroContableLineas> getContabilidadRegistroContableLineasList() {
-        return contabilidadRegistroContableLineasList;
-    }
-
-    public void setContabilidadRegistroContableLineasList(List<ContabilidadRegistroContableLineas> contabilidadRegistroContableLineasList) {
-        this.contabilidadRegistroContableLineasList = contabilidadRegistroContableLineasList;
-    }
-
-    public ContabilidadTiposCuenta getIdTipoCuenta() {
-        return idTipoCuenta;
-    }
-
-    public void setIdTipoCuenta(ContabilidadTiposCuenta idTipoCuenta) {
-        this.idTipoCuenta = idTipoCuenta;
-    }
-
-    @XmlTransient
-    public List<ContabilidadPlanCuentas> getContabilidadPlanCuentasList() {
-        return contabilidadPlanCuentasList;
-    }
-
-    public void setContabilidadPlanCuentasList(List<ContabilidadPlanCuentas> contabilidadPlanCuentasList) {
-        this.contabilidadPlanCuentasList = contabilidadPlanCuentasList;
-    }
-
-    public ContabilidadPlanCuentas getIdCuentaPadre() {
-        return idCuentaPadre;
-    }
-
-    public void setIdCuentaPadre(ContabilidadPlanCuentas idCuentaPadre) {
-        this.idCuentaPadre = idCuentaPadre;
-    }
 
 }

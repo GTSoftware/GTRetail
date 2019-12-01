@@ -118,7 +118,7 @@ public class FacturacionVentasServiceImpl implements FacturacionVentasService {
         if (venta.getIdRegistro() != null) {
             throw new ServiceException("Venta ya facturada!");
         }
-        if (venta.getAnulada()) {
+        if (venta.isAnulada()) {
             throw new ServiceException("Venta anulada!");
         }
         FiscalTiposComprobanteSearchFilter ftcsf = FiscalTiposComprobanteSearchFilter.builder()
@@ -171,7 +171,7 @@ public class FacturacionVentasServiceImpl implements FacturacionVentasService {
                     .alicuota(alicuotasIvaMapper.entityToDto(alicuota, new CycleAvoidingMappingContext())).build();
             //Importe*(1+alicuota/100)=Neto
 
-            if (alicuota.getGravarIva()) {
+            if (alicuota.isGravarIva()) {
                 //Importe*(1+alicuota/100)=Neto
                 BigDecimal coeficienteIVA = BigDecimal.ONE.add(alicuota.getValorAlicuota().divide(new BigDecimal(100)));
                 subTotal.setNetoGravado(vl.getSubTotal().divide(coeficienteIVA, 2, RoundingMode.HALF_UP));
@@ -290,7 +290,7 @@ public class FacturacionVentasServiceImpl implements FacturacionVentasService {
         if (venta.getIdRegistro().getIdPeriodoFiscal().isPeriodoCerrado()) {
             throw new ServiceException("Venta de un período cerrado: ".concat(venta.toString()));
         }
-        if (venta.getAnulada()) {
+        if (venta.isAnulada()) {
             throw new ServiceException("Venta ya anulada!");
         }
 

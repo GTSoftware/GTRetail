@@ -15,14 +15,11 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Clase que almacena la información de el detalle de la factura para el libro de iva ventas
@@ -31,11 +28,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "fiscal_libro_iva_ventas_lineas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_linea_libro"))
+@Getter
+@Setter
 public class FiscalLibroIvaVentasLineas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fiscal_libro_iva_ventas_lineas_id_linea_libro")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "fiscal_libro_iva_ventas_lineas_id_linea_libro",
+            sequenceName = "fiscal_libro_iva_ventas_lineas_id_linea_libro_seq")
+    @Basic(optional = false)
+    @Column(name = "id_linea_libro", nullable = false, updatable = false)
+    private Long id;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "neto_gravado")
@@ -51,56 +54,9 @@ public class FiscalLibroIvaVentasLineas extends BaseEntity {
     @ManyToOne(optional = false)
     private FiscalAlicuotasIva idAlicuotaIva;
 
-    public FiscalLibroIvaVentasLineas() {
-    }
-
-    public FiscalLibroIvaVentasLineas(Long idLineaLibro) {
-        super(idLineaLibro);
-    }
-
-    public BigDecimal getNetoGravado() {
-        return netoGravado;
-    }
-
-    public void setNetoGravado(BigDecimal netoGravado) {
-        this.netoGravado = netoGravado;
-    }
-
-    public BigDecimal getNoGravado() {
-        return noGravado;
-    }
-
-    public void setNoGravado(BigDecimal noGravado) {
-        this.noGravado = noGravado;
-    }
-
-    public BigDecimal getImporteIva() {
-        return importeIva;
-    }
-
-    public void setImporteIva(BigDecimal importeIva) {
-        this.importeIva = importeIva;
-    }
-
-    public FiscalLibroIvaVentas getIdRegistro() {
-        return idRegistro;
-    }
-
-    public void setIdRegistro(FiscalLibroIvaVentas idRegistro) {
-        this.idRegistro = idRegistro;
-    }
-
-    public FiscalAlicuotasIva getIdAlicuotaIva() {
-        return idAlicuotaIva;
-    }
-
-    public void setIdAlicuotaIva(FiscalAlicuotasIva idAlicuotaIva) {
-        this.idAlicuotaIva = idAlicuotaIva;
-    }
-
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.FiscalLibroIvaVentasLineasDto[ idLineaLibro=" + this.getId() + " ]";
+        return "ar.com.gtsoftware.model.FiscalLibroIvaVentasLineasDto[ idLineaLibro=" + id + " ]";
     }
 
 }

@@ -15,32 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "bancos_cuenta_corriente")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento", columnDefinition = "serial"))
+@Getter
+@Setter
 public class BancosCuentaCorriente extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bancos_cuenta_corriente_id_movimiento")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "bancos_cuenta_corriente_id_movimiento",
+            sequenceName = "bancos_cuenta_corriente_id_movimiento_seq")
+    @Basic(optional = false)
+    @Column(name = "id_movimiento", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -64,60 +63,5 @@ public class BancosCuentaCorriente extends BaseEntity {
     @JoinColumn(name = "id_cuenta_banco", referencedColumnName = "id_cuenta_banco", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private BancosCuentas idCuentaBanco;
-
-    public BancosCuentaCorriente() {
-    }
-
-    public BancosCuentaCorriente(Long idMovimiento) {
-        super(idMovimiento);
-    }
-
-    public BancosCuentaCorriente(Long idMovimiento, Date fechaMovimiento, BigDecimal importeMovimiento, String descripcionMovimiento, int idRegistroContable) {
-        super(idMovimiento);
-        this.fechaMovimiento = fechaMovimiento;
-        this.importeMovimiento = importeMovimiento;
-        this.descripcionMovimiento = descripcionMovimiento;
-        this.idRegistroContable = idRegistroContable;
-    }
-
-    public Date getFechaMovimiento() {
-        return fechaMovimiento;
-    }
-
-    public void setFechaMovimiento(Date fechaMovimiento) {
-        this.fechaMovimiento = fechaMovimiento;
-    }
-
-    public BigDecimal getImporteMovimiento() {
-        return importeMovimiento;
-    }
-
-    public void setImporteMovimiento(BigDecimal importeMovimiento) {
-        this.importeMovimiento = importeMovimiento;
-    }
-
-    public String getDescripcionMovimiento() {
-        return descripcionMovimiento;
-    }
-
-    public void setDescripcionMovimiento(String descripcionMovimiento) {
-        this.descripcionMovimiento = descripcionMovimiento;
-    }
-
-    public int getIdRegistroContable() {
-        return idRegistroContable;
-    }
-
-    public void setIdRegistroContable(int idRegistroContable) {
-        this.idRegistroContable = idRegistroContable;
-    }
-
-    public BancosCuentas getIdCuentaBanco() {
-        return idCuentaBanco;
-    }
-
-    public void setIdCuentaBanco(BancosCuentas idCuentaBanco) {
-        this.idCuentaBanco = idCuentaBanco;
-    }
 
 }

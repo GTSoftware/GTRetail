@@ -15,31 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "personas_imagenes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_imagen", columnDefinition = "serial"))
+@Getter
+@Setter
 public class PersonasImagenes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personas_imagenes_id_imagen")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "personas_imagenes_id_imagen",
+            sequenceName = "personas_imagenes_id_imagen_seq")
+    @Basic(optional = false)
+    @Column(name = "id_imagen", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -55,49 +54,5 @@ public class PersonasImagenes extends BaseEntity {
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Personas idPersona;
-
-    public PersonasImagenes() {
-    }
-
-    public PersonasImagenes(Long idImagen) {
-        super(idImagen);
-    }
-
-    public PersonasImagenes(Long idImagen, Date fechaAlta) {
-        super(idImagen);
-        this.fechaAlta = fechaAlta;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public PersonasTiposImagenes getIdTipoImagen() {
-        return idTipoImagen;
-    }
-
-    public void setIdTipoImagen(PersonasTiposImagenes idTipoImagen) {
-        this.idTipoImagen = idTipoImagen;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
 
 }

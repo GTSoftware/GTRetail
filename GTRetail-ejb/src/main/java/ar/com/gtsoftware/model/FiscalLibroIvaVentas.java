@@ -15,24 +15,15 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Clase que almacena la información de las facturas del libro de iva ventas
@@ -41,11 +32,17 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "fiscal_libro_iva_ventas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_registro"))
+@Getter
+@Setter
 public class FiscalLibroIvaVentas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fiscal_libro_iva_ventas_id_factura")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "fiscal_libro_iva_ventas_id_factura",
+            sequenceName = "fiscal_libro_iva_ventas_id_factura_seq")
+    @Basic(optional = false)
+    @Column(name = "id_registro", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -123,194 +120,9 @@ public class FiscalLibroIvaVentas extends BaseEntity {
     @NotNull
     private BigDecimal importeIva;
 
-    public FiscalLibroIvaVentas() {
-    }
-
-    public FiscalLibroIvaVentas(Long idFactura) {
-        super(idFactura);
-    }
-
-    public FiscalLibroIvaVentas(Long idFactura, Date fechaFactura, String documento, String letraFactura, String puntoVentaFactura, String numeroFactura) {
-        super(idFactura);
-        this.fechaFactura = fechaFactura;
-        this.documento = documento;
-        this.letraFactura = letraFactura;
-        this.puntoVentaFactura = puntoVentaFactura;
-        this.numeroFactura = numeroFactura;
-    }
-
-    public Date getFechaFactura() {
-        return fechaFactura;
-    }
-
-    public void setFechaFactura(Date fechaFactura) {
-        this.fechaFactura = fechaFactura;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(String documento) {
-        this.documento = documento;
-    }
-
-    public String getLetraFactura() {
-        return letraFactura;
-    }
-
-    public void setLetraFactura(String letraFactura) {
-        this.letraFactura = letraFactura;
-    }
-
-    public String getPuntoVentaFactura() {
-        return puntoVentaFactura;
-    }
-
-    public void setPuntoVentaFactura(String puntoVentaFactura) {
-        this.puntoVentaFactura = puntoVentaFactura;
-    }
-
-    public String getNumeroFactura() {
-        return numeroFactura;
-    }
-
-    public void setNumeroFactura(String numeroFactura) {
-        this.numeroFactura = numeroFactura;
-    }
-
-    public BigDecimal getTotalFactura() {
-        return totalFactura;
-    }
-
-    public void setTotalFactura(BigDecimal totalFactura) {
-        this.totalFactura = totalFactura;
-    }
-
-    @XmlTransient
-    public List<Comprobantes> getVentasList() {
-        return ventasList;
-    }
-
-    public void setVentasList(List<Comprobantes> ventasList) {
-        this.ventasList = ventasList;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public FiscalResponsabilidadesIva getIdResponsabilidadIva() {
-        return idResponsabilidadIva;
-    }
-
-    public void setIdResponsabilidadIva(FiscalResponsabilidadesIva idResponsabilidadIva) {
-        this.idResponsabilidadIva = idResponsabilidadIva;
-    }
-
-    public FiscalPeriodosFiscales getIdPeriodoFiscal() {
-        return idPeriodoFiscal;
-    }
-
-    public void setIdPeriodoFiscal(FiscalPeriodosFiscales idPeriodoFiscal) {
-        this.idPeriodoFiscal = idPeriodoFiscal;
-    }
-
-    public ContabilidadRegistroContable getIdRegistroContable() {
-        return idRegistroContable;
-    }
-
-    public void setIdRegistroContable(ContabilidadRegistroContable idRegistroContable) {
-        this.idRegistroContable = idRegistroContable;
-    }
-
-    public boolean getAnulada() {
-        return anulada;
-    }
-
-    public void setAnulada(boolean anulada) {
-        this.anulada = anulada;
-    }
-
-    public FiscalTiposComprobante getCodigoTipoComprobante() {
-        return codigoTipoComprobante;
-    }
-
-    public void setCodigoTipoComprobante(FiscalTiposComprobante codigoTipoComprobante) {
-        this.codigoTipoComprobante = codigoTipoComprobante;
-    }
-
-    public List<FiscalLibroIvaVentasLineas> getFiscalLibroIvaVentasLineasList() {
-        return fiscalLibroIvaVentasLineasList;
-    }
-
-    public void setFiscalLibroIvaVentasLineasList(List<FiscalLibroIvaVentasLineas> fiscalLibroIvaVentasLineasList) {
-        this.fiscalLibroIvaVentasLineasList = fiscalLibroIvaVentasLineasList;
-    }
-
-    public Long getCae() {
-        return cae;
-    }
-
-    public void setCae(Long cae) {
-        this.cae = cae;
-    }
-
-    public Date getFechaVencimientoCae() {
-        return fechaVencimientoCae;
-    }
-
-    public void setFechaVencimientoCae(Date fechaVencimientoCae) {
-        this.fechaVencimientoCae = fechaVencimientoCae;
-    }
-
-    public BigDecimal getImporteNetoNoGravado() {
-        return importeNetoNoGravado;
-    }
-
-    public void setImporteNetoNoGravado(BigDecimal importeNetoNoGravado) {
-        this.importeNetoNoGravado = importeNetoNoGravado;
-    }
-
-    public BigDecimal getImporteExento() {
-        return importeExento;
-    }
-
-    public void setImporteExento(BigDecimal importeExento) {
-        this.importeExento = importeExento;
-    }
-
-    public BigDecimal getImporteNetoGravado() {
-        return importeNetoGravado;
-    }
-
-    public void setImporteNetoGravado(BigDecimal importeNetoGravado) {
-        this.importeNetoGravado = importeNetoGravado;
-    }
-
-    public BigDecimal getImporteTributos() {
-        return importeTributos;
-    }
-
-    public void setImporteTributos(BigDecimal importeTributos) {
-        this.importeTributos = importeTributos;
-    }
-
-    public BigDecimal getImporteIva() {
-        return importeIva;
-    }
-
-    public void setImporteIva(BigDecimal importeIva) {
-        this.importeIva = importeIva;
-    }
-
     @Override
     public String toString() {
-        return "ar.com.gtsoftware.model.FiscalLibroIvaVentasDto[ idFactura=" + this.getId() + " ]";
+        return "ar.com.gtsoftware.model.FiscalLibroIvaVentasDto[ idFactura=" + id + " ]";
     }
 
 }

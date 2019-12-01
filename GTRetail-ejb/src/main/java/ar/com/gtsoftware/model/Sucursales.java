@@ -15,37 +15,32 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "sucursales")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_sucursal", columnDefinition = "serial"))
+@Getter
+@Setter
 @NamedEntityGraph(name = "depositos", attributeNodes = @NamedAttributeNode("depositosList"))
 public class Sucursales extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sucursales_id_sucursal")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "sucursales_id_sucursal",
+            sequenceName = "sucursales_id_sucursal_seq")
+    @Basic(optional = false)
+    @Column(name = "id_sucursal", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -67,7 +62,7 @@ public class Sucursales extends BaseEntity {
     @NotNull
     @Column(name = "activo")
     private boolean activo;
-//
+    //
 //    @OneToMany(mappedBy = "idSucursal")
 //    private List<UsuariosDto> usuariosList;
 //    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSucursal")
@@ -83,113 +78,6 @@ public class Sucursales extends BaseEntity {
     private UbicacionLocalidades idLocalidad;
     @OneToMany(mappedBy = "idSucursal")
     private List<Depositos> depositosList;
-
-    public Sucursales() {
-    }
-
-    public Sucursales(Long idSucursal) {
-        super(idSucursal);
-    }
-
-    public Sucursales(Long idSucursal, String nombreSucursal, Date fechaAlta, boolean activo) {
-        super(idSucursal);
-        this.nombreSucursal = nombreSucursal;
-        this.fechaAlta = fechaAlta;
-        this.activo = activo;
-    }
-
-    public String getNombreSucursal() {
-        return nombreSucursal;
-    }
-
-    public void setNombreSucursal(String nombreSucursal) {
-        this.nombreSucursal = nombreSucursal;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getTelefonoFijo() {
-        return telefonoFijo;
-    }
-
-    public void setTelefonoFijo(String telefonoFijo) {
-        this.telefonoFijo = telefonoFijo;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public boolean getActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-//    @XmlTransient
-//    public List<UsuariosDto> getUsuariosList() {
-//        return usuariosList;
-//    }
-//
-//    public void setUsuariosList(List<UsuariosDto> usuariosList) {
-//        this.usuariosList = usuariosList;
-//    }
-//
-//    @XmlTransient
-//    public List<ProveedoresOrdenesCompraDto> getProveedoresOrdenesCompraList() {
-//        return proveedoresOrdenesCompraList;
-//    }
-//
-//    public void setProveedoresOrdenesCompraList(List<ProveedoresOrdenesCompraDto> proveedoresOrdenesCompraList) {
-//        this.proveedoresOrdenesCompraList = proveedoresOrdenesCompraList;
-//    }
-    @XmlTransient
-    public UbicacionProvincias getIdProvincia() {
-        return idProvincia;
-    }
-
-    public void setIdProvincia(UbicacionProvincias idProvincia) {
-        this.idProvincia = idProvincia;
-    }
-
-    @XmlTransient
-    public UbicacionPaises getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(UbicacionPaises idPais) {
-        this.idPais = idPais;
-    }
-
-    @XmlTransient
-    public UbicacionLocalidades getIdLocalidad() {
-        return idLocalidad;
-    }
-
-    public void setIdLocalidad(UbicacionLocalidades idLocalidad) {
-        this.idLocalidad = idLocalidad;
-    }
-
-    @XmlTransient
-    public List<Depositos> getDepositosList() {
-        return depositosList;
-    }
-
-    public void setDepositosList(List<Depositos> depositosList) {
-        this.depositosList = depositosList;
-    }
 
     public String getBusinessString() {
         return String.format("[%d] %s", getId(), nombreSucursal);

@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "ubicacion_paises")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_pais", columnDefinition = "serial"))
+@Getter
+@Setter
 public class UbicacionPaises extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ubicacion_paises_id_pais")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "ubicacion_paises_id_pais",
+            sequenceName = "ubicacion_paises_id_pais_seq")
+    @Basic(optional = false)
+    @Column(name = "id_pais", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -49,32 +49,4 @@ public class UbicacionPaises extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPais")
     private List<UbicacionProvincias> ubicacionProvinciasList;
 
-    public UbicacionPaises() {
-    }
-
-    public UbicacionPaises(Long idPais) {
-        super(idPais);
-    }
-
-    public UbicacionPaises(Long idPais, String nombrePais) {
-        super(idPais);
-        this.nombrePais = nombrePais;
-    }
-
-    public String getNombrePais() {
-        return nombrePais;
-    }
-
-    public void setNombrePais(String nombrePais) {
-        this.nombrePais = nombrePais;
-    }
-
-    @XmlTransient
-    public List<UbicacionProvincias> getUbicacionProvinciasList() {
-        return ubicacionProvinciasList;
-    }
-
-    public void setUbicacionProvinciasList(List<UbicacionProvincias> ubicacionProvinciasList) {
-        this.ubicacionProvinciasList = ubicacionProvinciasList;
-    }
 }

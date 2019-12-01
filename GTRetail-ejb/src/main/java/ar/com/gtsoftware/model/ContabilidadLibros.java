@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_libros")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_libro", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadLibros extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_libros_id_libro")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_libros_id_libro",
+            sequenceName = "contabilidad_libros_id_libro_seq")
+    @Basic(optional = false)
+    @Column(name = "id_libro", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -50,43 +50,5 @@ public class ContabilidadLibros extends BaseEntity {
     private String descripcionLibro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idLibro")
     private List<ContabilidadRegistroContable> contabilidadRegistroContableList;
-
-    public ContabilidadLibros() {
-    }
-
-    public ContabilidadLibros(Long idLibro) {
-        super(idLibro);
-    }
-
-    public ContabilidadLibros(Long idLibro, String nombreLibro) {
-        super(idLibro);
-
-        this.nombreLibro = nombreLibro;
-    }
-
-    public String getNombreLibro() {
-        return nombreLibro;
-    }
-
-    public void setNombreLibro(String nombreLibro) {
-        this.nombreLibro = nombreLibro;
-    }
-
-    public String getDescripcionLibro() {
-        return descripcionLibro;
-    }
-
-    public void setDescripcionLibro(String descripcionLibro) {
-        this.descripcionLibro = descripcionLibro;
-    }
-
-    @XmlTransient
-    public List<ContabilidadRegistroContable> getContabilidadRegistroContableList() {
-        return contabilidadRegistroContableList;
-    }
-
-    public void setContabilidadRegistroContableList(List<ContabilidadRegistroContable> contabilidadRegistroContableList) {
-        this.contabilidadRegistroContableList = contabilidadRegistroContableList;
-    }
 
 }

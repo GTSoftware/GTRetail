@@ -15,26 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author Rodrigo Tato <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "productos_tipos_porcentajes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_porcentaje", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosTiposPorcentajes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_tipos_porcentajes_id_tipo_porcentaje")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_tipos_porcentajes_id_tipo_porcentaje",
+            sequenceName = "productos_tipos_porcentajes_id_tipo_porcentaje_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_porcentaje", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -45,24 +48,5 @@ public class ProductosTiposPorcentajes extends BaseEntity {
     @NotNull
     @Column(name = "porcentaje")
     private boolean porcentaje;
-
-    public ProductosTiposPorcentajes() {
-    }
-
-    public String getNombreTipo() {
-        return nombreTipo;
-    }
-
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
-    }
-
-    public boolean isPorcentaje() {
-        return porcentaje;
-    }
-
-    public void setIsPorcentaje(boolean porcentaje) {
-        this.porcentaje = porcentaje;
-    }
 
 }

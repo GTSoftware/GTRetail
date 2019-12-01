@@ -15,17 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
 
 /**
  * Clase que mapea a la tabla fiscal_tipos_comprobante para regímenes informativos
@@ -34,10 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "fiscal_tipos_comprobante")
-@XmlRootElement
+@Getter
+@Setter
 public class FiscalTiposComprobante extends GTEntity<String> {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -56,28 +52,9 @@ public class FiscalTiposComprobante extends GTEntity<String> {
     @ManyToOne
     private NegocioTiposComprobante tipoComprobante;
 
-    public FiscalTiposComprobante() {
-    }
-
     @Override
     public boolean isNew() {
         return codigoTipoComprobante == null;
-    }
-
-    public String getCodigoTipoComprobante() {
-        return codigoTipoComprobante;
-    }
-
-    public void setCodigoTipoComprobante(String codigoTipoComprobante) {
-        this.codigoTipoComprobante = codigoTipoComprobante;
-    }
-
-    public String getDenominacionComprobante() {
-        return denominacionComprobante;
-    }
-
-    public void setDenominacionComprobante(String denominacionComprobante) {
-        this.denominacionComprobante = denominacionComprobante;
     }
 
     @Override
@@ -96,10 +73,7 @@ public class FiscalTiposComprobante extends GTEntity<String> {
             return false;
         }
         final FiscalTiposComprobante other = (FiscalTiposComprobante) obj;
-        if (!Objects.equals(this.codigoTipoComprobante, other.codigoTipoComprobante)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.codigoTipoComprobante, other.codigoTipoComprobante);
     }
 
     @Override
@@ -120,22 +94,6 @@ public class FiscalTiposComprobante extends GTEntity<String> {
     @Override
     public String getStringId() {
         return codigoTipoComprobante;
-    }
-
-    public String getLetra() {
-        return letra;
-    }
-
-    public void setLetra(String letra) {
-        this.letra = letra;
-    }
-
-    public NegocioTiposComprobante getTipoComprobante() {
-        return tipoComprobante;
-    }
-
-    public void setTipoComprobante(NegocioTiposComprobante tipoComprobante) {
-        this.tipoComprobante = tipoComprobante;
     }
 
 }

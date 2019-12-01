@@ -15,26 +15,28 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 /**
- *
  * @author fede
  */
 @Entity
 @Table(name = "remitos_detalle")
-@AttributeOverride(name = "id", column = @Column(name = "id_remito_detalle", columnDefinition = "serial"))
+@Getter
+@Setter
 public class RemitoDetalle extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "remitos_detalle_id_remito_detalle")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "remitos_detalle_id_remito_detalle",
+            sequenceName = "remitos_detalle_id_remito_detalle_seq")
+    @Basic(optional = false)
+    @Column(name = "id_remito_detalle", nullable = false, updatable = false)
+    private Long id;
 
     @JoinColumn(name = "id_remito", referencedColumnName = "id_remito")
     @ManyToOne
@@ -49,50 +51,5 @@ public class RemitoDetalle extends BaseEntity {
 
     @Transient
     private int nroLinea;
-
-    // Getter and Setter ----------------------------------------------
-    public Remito getRemitoCabecera() {
-        return remitoCabecera;
-    }
-
-    public void setRemitoCabecera(Remito remitoCabecera) {
-        this.remitoCabecera = remitoCabecera;
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public BigDecimal getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(BigDecimal cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    /**
-     * El número de linea utilizado para ubicar las líneas antes de que se han
-     * guardado en la bd
-     * 
-     * @return
-     */
-    public int getNroLinea() {
-        return nroLinea;
-    }
-
-    /**
-     * El número de linea utilizado para ubicar las líneas antes de que se han
-     * guardado en la bd
-     * 
-     * @param nroLinea
-     */
-    public void setNroLinea(int nroLinea) {
-        this.nroLinea = nroLinea;
-    }
 
 }

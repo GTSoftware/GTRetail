@@ -15,28 +15,26 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
 @Entity
 @Table(name = "productos_listas_precios")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_lista_precio", columnDefinition = "int4"))
+@Getter
+@Setter
 public class ProductosListasPrecios extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id_lista_precio", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @Column(name = "nombre_lista")
@@ -49,37 +47,5 @@ public class ProductosListasPrecios extends BaseEntity {
 
     @ManyToMany(mappedBy = "listasPrecioHabilitadas")
     private List<NegocioPlanesPago> planesPagoAsociados;
-
-    public ProductosListasPrecios() {
-    }
-
-    public ProductosListasPrecios(Long id) {
-        super(id);
-    }
-
-    public String getNombreLista() {
-        return nombreLista;
-    }
-
-    public void setNombreLista(String nombreLista) {
-        this.nombreLista = nombreLista;
-    }
-
-    public boolean getActiva() {
-        return activa;
-    }
-
-    public void setActiva(boolean activa) {
-        this.activa = activa;
-    }
-
-    @XmlTransient
-    public List<NegocioPlanesPago> getPlanesPagoAsociados() {
-        return planesPagoAsociados;
-    }
-
-    public void setPlanesPagoAsociados(List<NegocioPlanesPago> planesPagoAsociados) {
-        this.planesPagoAsociados = planesPagoAsociados;
-    }
 
 }

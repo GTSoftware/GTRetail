@@ -15,28 +15,32 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * Reperesenta a las existencias de stock de un determinado producto en un
  * depósito determinado
- * 
+ *
  * @author fede
  */
 @Entity
 @Table(name = "productos_x_depositos")
-@AttributeOverride(name = "id", column = @Column(name = "id_producto_x_deposito", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductoXDeposito extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_x_depositos_id_producto_x_deposito")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_x_depositos_id_producto_x_deposito",
+            sequenceName = "productos_x_depositos_id_producto_x_deposito_seq")
+    @Basic(optional = false)
+    @Column(name = "id_producto_x_deposito", nullable = false, updatable = false)
+    private Long id;
 
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", insertable = false, updatable = false)
     @NotNull
@@ -51,30 +55,5 @@ public class ProductoXDeposito extends BaseEntity {
     @NotNull
     @Column(name = "stock")
     private BigDecimal stock;
-
-    // -----Getter and Setter--------------------------------------------
-    public Productos getProducto() {
-        return producto;
-    }
-
-    public void setProducto(Productos producto) {
-        this.producto = producto;
-    }
-
-    public Depositos getDeposito() {
-        return deposito;
-    }
-
-    public void setDeposito(Depositos deposito) {
-        this.deposito = deposito;
-    }
-
-    public BigDecimal getStock() {
-        return stock;
-    }
-
-    public void setStock(BigDecimal stock) {
-        this.stock = stock;
-    }
 
 }

@@ -15,34 +15,32 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel mailto:rotatomel@gmail.com
  */
 @Entity
 @Table(name = "recibos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_recibo"))
+@Getter
+@Setter
 public class Recibos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recibos_id_recibo")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "recibos_id_recibo",
+            sequenceName = "recibos_id_recibo_seq")
+    @Basic(optional = false)
+    @Column(name = "id_recibo", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @Column(name = "fecha_recibo")
@@ -74,69 +72,5 @@ public class Recibos extends BaseEntity {
 
     @OneToMany(mappedBy = "idRecibo", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecibosDetalle> recibosDetalles;
-
-    public Recibos(Long id) {
-        super(id);
-    }
-
-    public Recibos() {
-    }
-
-    public Date getFechaRecibo() {
-        return fechaRecibo;
-    }
-
-    public void setFechaRecibo(Date fechaRecibo) {
-        this.fechaRecibo = fechaRecibo;
-    }
-
-    public Personas getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Personas idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public BigDecimal getMontoTotal() {
-        return montoTotal;
-    }
-
-    public void setMontoTotal(BigDecimal montoTotal) {
-        this.montoTotal = montoTotal;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public Cajas getIdCaja() {
-        return idCaja;
-    }
-
-    public void setIdCaja(Cajas idCaja) {
-        this.idCaja = idCaja;
-    }
-
-    @XmlTransient
-    public List<RecibosDetalle> getRecibosDetalles() {
-        return recibosDetalles;
-    }
-
-    public void setRecibosDetalles(List<RecibosDetalle> recibosDetalles) {
-        this.recibosDetalles = recibosDetalles;
-    }
 
 }

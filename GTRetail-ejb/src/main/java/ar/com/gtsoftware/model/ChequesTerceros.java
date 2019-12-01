@@ -15,15 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Cheques de terceros recibidos
@@ -32,9 +30,9 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "cheques_terceros")
+@Getter
+@Setter
 public class ChequesTerceros extends Valores {
-
-    private static final long serialVersionUID = 1L;
 
     @NotNull
     @Column(name = "nro_cheque")
@@ -72,164 +70,5 @@ public class ChequesTerceros extends Valores {
     @Column(name = "notas")
     @Size(max = 255)
     private String notas;
-
-    /**
-     * COnstructor con Id
-     *
-     * @param id
-     */
-    public ChequesTerceros(Long id) {
-        super(id);
-    }
-
-    /**
-     * Constructor por defecto
-     */
-    public ChequesTerceros() {
-    }
-
-    /**
-     * El número impreso en el cheque
-     *
-     * @return
-     */
-    public String getNroCheque() {
-        return nroCheque;
-    }
-
-    /**
-     * El número impreso en el cheque
-     *
-     * @param nroCheque
-     */
-    public void setNroCheque(String nroCheque) {
-        this.nroCheque = nroCheque;
-    }
-
-    /**
-     * El cuit del titular del cheque
-     *
-     * @return
-     */
-    public String getCuitOriginante() {
-        return cuitOriginante;
-    }
-
-    /**
-     * El cuit del titular del cheque
-     *
-     * @param cuitOriginante
-     */
-    public void setCuitOriginante(String cuitOriginante) {
-        this.cuitOriginante = cuitOriginante;
-    }
-
-    /**
-     * La razon social del titular que figura en el cheque
-     *
-     * @return
-     */
-    public String getRazonSocialOriginante() {
-        return razonSocialOriginante;
-    }
-
-    /**
-     * La razon social del titular que figura en el cheque
-     *
-     * @param razonSocialOriginante
-     */
-    public void setRazonSocialOriginante(String razonSocialOriginante) {
-        this.razonSocialOriginante = razonSocialOriginante;
-    }
-
-    /**
-     * La fecha dew confección del cheque
-     *
-     * @return
-     */
-    public Date getFechaOrigen() {
-        return fechaOrigen;
-    }
-
-    /**
-     * La fecha dew confección del cheque
-     *
-     * @param fechaOrigen
-     */
-    public void setFechaOrigen(Date fechaOrigen) {
-        this.fechaOrigen = fechaOrigen;
-    }
-
-    /**
-     * La fecha de vencimiento para el cobro del mismo. Si es de pago diferido tendrá una fecha en el futuro.
-     *
-     * @return
-     */
-    public Date getFechaVencimiento() {
-        return fechaVencimiento;
-    }
-
-    /**
-     * La fecha de vencimiento para el cobro del mismo. Si es de pago diferido tendrá una fecha en el futuro.
-     *
-     * @param fechaVencimiento
-     */
-    public void setFechaVencimiento(Date fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
-    }
-
-    /**
-     * La fecha en que se efectivizó el cobro del cheque.
-     *
-     * @return
-     */
-    public Date getFechaCobro() {
-        return fechaCobro;
-    }
-
-    /**
-     * La fecha en que se efectivizó el cobro del cheque.
-     *
-     * @param fechaCobro
-     */
-    public void setFechaCobro(Date fechaCobro) {
-        this.fechaCobro = fechaCobro;
-    }
-
-    /**
-     * El banco al que pertenece el cheque
-     *
-     * @return
-     */
-    public Bancos getIdBanco() {
-        return idBanco;
-    }
-
-    /**
-     * El banco al que pertenece el cheque
-     *
-     * @param idBanco
-     */
-    public void setIdBanco(Bancos idBanco) {
-        this.idBanco = idBanco;
-    }
-
-    /**
-     * Notas aclaratorias sobre el cheque en cuestión
-     *
-     * @return
-     */
-    public String getNotas() {
-        return notas;
-    }
-
-    /**
-     * Notas aclaratorias sobre el cheque en cuestión
-     *
-     * @param notas
-     */
-    public void setNotas(String notas) {
-        this.notas = notas;
-    }
 
 }

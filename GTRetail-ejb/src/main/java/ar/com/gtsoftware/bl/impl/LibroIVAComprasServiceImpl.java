@@ -176,7 +176,7 @@ public class LibroIVAComprasServiceImpl implements LibroIVAService {
         facDTO.setTipoDocumento(factura.getIdPersona().getIdTipoDocumento().getNombreTipoDocumento());
         facDTO.setTipoComprobante(factura.getCodigoTipoComprobante().getDenominacionComprobante());
         facDTO.setCategoriaIVACliente(factura.getIdPersona().getIdResponsabilidadIva().getNombreResponsabildiad());
-        if (factura.getAnulada()) {
+        if (factura.isAnulada()) {
             facDTO.setRazonSocialCliente("NULA");
         }
         facDTO.setNumeroFactura(String.format(NUMERO_FACTURA_FMT, factura.getLetraFactura(), factura.getPuntoVentaFactura(),

@@ -15,35 +15,33 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- *
  * @author Rodrigo M. Tato Rothamel <rotatomel@gmail.com>
  */
-@AttributeOverride(name = "id", column = @Column(name = "id_marca", columnDefinition = "serial"))
 @Entity
 @Table(name = "productos_marcas")
+@Getter
+@Setter
 public class ProductosMarcas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_marcas_id_marca")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_marcas_id_marca",
+            sequenceName = "productos_marcas_id_marca_seq")
+    @Basic(optional = false)
+    @Column(name = "id_marca", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @Column(name = "nombre_marca", length = 100)
     @Size(min = 1, max = 100)
     private String nombreMarca;
-
-    public String getNombreMarca() {
-        return nombreMarca;
-    }
-
-    public void setNombreMarca(String nombreMarca) {
-        this.nombreMarca = nombreMarca;
-    }
 
 }

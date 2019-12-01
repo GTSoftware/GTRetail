@@ -15,18 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Los planes de pago elegidos para cada comprobante
@@ -35,11 +30,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "comprobantes_pagos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_pago"))
+@Getter
+@Setter
 public class ComprobantesPagos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comprobantes_pagos_id_pago")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "comprobantes_pagos_id_pago",
+            sequenceName = "comprobantes_pagos_id_pago_seq")
+    @Basic(optional = false)
+    @Column(name = "id_pago", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -80,103 +81,6 @@ public class ComprobantesPagos extends BaseEntity {
 
     @Transient
     private int productoRecargoItem;
-
-    public ComprobantesPagos(Long id) {
-        super(id);
-    }
-
-    public ComprobantesPagos() {
-    }
-
-    public Comprobantes getIdComprobante() {
-        return idComprobante;
-    }
-
-    public void setIdComprobante(Comprobantes idComprobante) {
-        this.idComprobante = idComprobante;
-    }
-
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public NegocioPlanesPago getIdPlan() {
-        return idPlan;
-    }
-
-    public void setIdPlan(NegocioPlanesPago idPlan) {
-        this.idPlan = idPlan;
-    }
-
-    public NegocioPlanesPagoDetalle getIdDetallePlan() {
-        return idDetallePlan;
-    }
-
-    public void setIdDetallePlan(NegocioPlanesPagoDetalle idDetallePlan) {
-        this.idDetallePlan = idDetallePlan;
-    }
-
-    public BigDecimal getMontoPago() {
-        return montoPago;
-    }
-
-    public void setMontoPago(BigDecimal montoPago) {
-        this.montoPago = montoPago;
-    }
-
-    public BigDecimal getMontoPagado() {
-        return montoPagado;
-    }
-
-    public void setMontoPagado(BigDecimal montoPagado) {
-        this.montoPagado = montoPagado;
-    }
-
-    public Date getFechaPago() {
-        return fechaPago;
-    }
-
-    public void setFechaPago(Date fechaPago) {
-        this.fechaPago = fechaPago;
-    }
-
-    public Date getFechaUltimoPago() {
-        return fechaUltimoPago;
-    }
-
-    public void setFechaUltimoPago(Date fechaUltimoPago) {
-        this.fechaUltimoPago = fechaUltimoPago;
-    }
-
-    public int getItem() {
-        return item;
-    }
-
-    public void setItem(int item) {
-        this.item = item;
-    }
-
-    /**
-     * Item del producto de recargo por financiación
-     *
-     * @return
-     */
-    public int getProductoRecargoItem() {
-        return productoRecargoItem;
-    }
-
-    /**
-     * Item del producto de recargo por financiación
-     *
-     * @param productoRecargoItem
-     */
-    public void setProductoRecargoItem(int productoRecargoItem) {
-        this.productoRecargoItem = productoRecargoItem;
-    }
 
     /**
      * Retorna el total con signo del pago

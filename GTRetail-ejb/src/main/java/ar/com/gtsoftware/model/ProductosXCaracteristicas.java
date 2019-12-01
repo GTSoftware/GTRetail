@@ -15,28 +15,29 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "productos_x_caracteristicas")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_caracteristica_x_producto", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosXCaracteristicas extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_x_caracteristicas_id_caracteristica_x_producto")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_x_caracteristicas_id_caracteristica_x_producto",
+            sequenceName = "productos_x_caracteristicas_id_caracteristica_x_producto_seq")
+    @Basic(optional = false)
+    @Column(name = "id_caracteristica_x_producto", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -49,41 +50,5 @@ public class ProductosXCaracteristicas extends BaseEntity {
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Productos idProducto;
-
-    public ProductosXCaracteristicas() {
-    }
-
-    public ProductosXCaracteristicas(Long idCaracteristicaXProducto) {
-        super(idCaracteristicaXProducto);
-    }
-
-    public ProductosXCaracteristicas(Long idCaracteristicaXProducto, String valorCaracteristica) {
-        super(idCaracteristicaXProducto);
-        this.valorCaracteristica = valorCaracteristica;
-    }
-
-    public String getValorCaracteristica() {
-        return valorCaracteristica;
-    }
-
-    public void setValorCaracteristica(String valorCaracteristica) {
-        this.valorCaracteristica = valorCaracteristica;
-    }
-
-    public ProductosCaracteristicas getIdCaracteristica() {
-        return idCaracteristica;
-    }
-
-    public void setIdCaracteristica(ProductosCaracteristicas idCaracteristica) {
-        this.idCaracteristica = idCaracteristica;
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
 
 }

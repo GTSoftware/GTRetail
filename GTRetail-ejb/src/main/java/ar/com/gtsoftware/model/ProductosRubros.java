@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "productos_rubros")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_rubro", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosRubros extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_rubros_id_rubro")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_rubros_id_rubro",
+            sequenceName = "productos_rubros_id_rubro_seq")
+    @Basic(optional = false)
+    @Column(name = "id_rubro", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -49,43 +49,5 @@ public class ProductosRubros extends BaseEntity {
     private List<ProductosSubRubros> productosSubRubrosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRubro")
     private List<Productos> productosList;
-
-    public ProductosRubros() {
-    }
-
-    public ProductosRubros(Long idRubro) {
-        super(idRubro);
-    }
-
-    public ProductosRubros(Long idRubro, String nombreRubro) {
-        super(idRubro);
-        this.nombreRubro = nombreRubro;
-    }
-
-    public String getNombreRubro() {
-        return nombreRubro;
-    }
-
-    public void setNombreRubro(String nombreRubro) {
-        this.nombreRubro = nombreRubro;
-    }
-
-    @XmlTransient
-    public List<ProductosSubRubros> getProductosSubRubrosList() {
-        return productosSubRubrosList;
-    }
-
-    public void setProductosSubRubrosList(List<ProductosSubRubros> productosSubRubrosList) {
-        this.productosSubRubrosList = productosSubRubrosList;
-    }
-
-    @XmlTransient
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
-    }
 
 }

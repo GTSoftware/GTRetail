@@ -15,30 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "legal_tipos_personeria")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_personeria", columnDefinition = "serial"))
+@Getter
+@Setter
 public class LegalTiposPersoneria extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "legal_tipos_personeria_id_tipo_personeria")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "legal_tipos_personeria_id_tipo_personeria",
+            sequenceName = "legal_tipos_personeria_id_tipo_personeria_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_personeria", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -51,52 +51,5 @@ public class LegalTiposPersoneria extends BaseEntity {
     private List<LegalGeneros> legalGenerosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoPersoneria")
     private List<Personas> personasList;
-
-    public LegalTiposPersoneria() {
-    }
-
-    public LegalTiposPersoneria(Long idTipoPersoneria) {
-        super(idTipoPersoneria);
-    }
-
-    public LegalTiposPersoneria(Long idTipoPersoneria, String nombreTipo) {
-        super(idTipoPersoneria);
-        this.nombreTipo = nombreTipo;
-    }
-
-    public String getNombreTipo() {
-        return nombreTipo;
-    }
-
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
-    }
-
-    @XmlTransient
-    public List<LegalTiposDocumento> getLegalTiposDocumentoList() {
-        return legalTiposDocumentoList;
-    }
-
-    public void setLegalTiposDocumentoList(List<LegalTiposDocumento> legalTiposDocumentoList) {
-        this.legalTiposDocumentoList = legalTiposDocumentoList;
-    }
-
-    @XmlTransient
-    public List<LegalGeneros> getLegalGenerosList() {
-        return legalGenerosList;
-    }
-
-    public void setLegalGenerosList(List<LegalGeneros> legalGenerosList) {
-        this.legalGenerosList = legalGenerosList;
-    }
-
-    @XmlTransient
-    public List<Personas> getPersonasList() {
-        return personasList;
-    }
-
-    public void setPersonasList(List<Personas> personasList) {
-        this.personasList = personasList;
-    }
 
 }

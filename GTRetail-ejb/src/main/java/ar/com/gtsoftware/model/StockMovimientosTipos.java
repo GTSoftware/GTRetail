@@ -15,51 +15,34 @@
  */
 package ar.com.gtsoftware.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "stock_movimientos_tipos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_tipo_movimiento", columnDefinition = "serial"))
+@Getter
+@Setter
 public class StockMovimientosTipos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_movimientos_tipos_id_tipo_movimiento")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "stock_movimientos_tipos_id_tipo_movimiento",
+            sequenceName = "stock_movimientos_tipos_id_tipo_movimiento_seq")
+    @Basic(optional = false)
+    @Column(name = "id_tipo_movimiento", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 60)
     @Column(name = "nombre_tipo")
     private String nombreTipo;
-
-    public StockMovimientosTipos() {
-    }
-
-    public StockMovimientosTipos(Long idTipoMovimiento) {
-        super(idTipoMovimiento);
-    }
-
-    public StockMovimientosTipos(Long idTipoMovimiento, String nombreTipo) {
-        super(idTipoMovimiento);
-        this.nombreTipo = nombreTipo;
-    }
-
-    public String getNombreTipo() {
-        return nombreTipo;
-    }
-
-    public void setNombreTipo(String nombreTipo) {
-        this.nombreTipo = nombreTipo;
-    }
 
 }

@@ -15,17 +15,13 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 /**
  * Detalle del arqueo.
@@ -34,11 +30,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "caja_arqueos_detalle")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_arqueo_detalle"))
+@Getter
+@Setter
 public class CajasArqueosDetalle extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "caja_arqueos_detalle_id_arqueo_detalle")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "caja_arqueos_detalle_id_arqueo_detalle",
+            sequenceName = "caja_arqueos_detalle_id_arqueo_detalle_seq")
+    @Basic(optional = false)
+    @Column(name = "id_arqueo_detalle", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -63,71 +65,5 @@ public class CajasArqueosDetalle extends BaseEntity {
     @Column(name = "descargo")
     @Size(max = 200)
     private String descargo;
-
-    @Transient
-    private int item;
-
-    public CajasArqueosDetalle(Long id) {
-        super(id);
-    }
-
-    public CajasArqueosDetalle() {
-    }
-
-    public BigDecimal getMontoSistema() {
-        return montoSistema;
-    }
-
-    public void setMontoSistema(BigDecimal montoSistema) {
-        this.montoSistema = montoSistema;
-    }
-
-    public BigDecimal getMontoDeclarado() {
-        return montoDeclarado;
-    }
-
-    public void setMontoDeclarado(BigDecimal montoDeclarado) {
-        this.montoDeclarado = montoDeclarado;
-    }
-
-    public CajasArqueos getIdArqueo() {
-        return idArqueo;
-    }
-
-    public void setIdArqueo(CajasArqueos idArqueo) {
-        this.idArqueo = idArqueo;
-    }
-
-    public NegocioFormasPago getIdFormaPago() {
-        return idFormaPago;
-    }
-
-    public void setIdFormaPago(NegocioFormasPago idFormaPago) {
-        this.idFormaPago = idFormaPago;
-    }
-
-    public BigDecimal getDiferencia() {
-        return diferencia;
-    }
-
-    public void setDiferencia(BigDecimal diferencia) {
-        this.diferencia = diferencia;
-    }
-
-    public String getDescargo() {
-        return descargo;
-    }
-
-    public void setDescargo(String descargo) {
-        this.descargo = descargo;
-    }
-
-    public int getItem() {
-        return item;
-    }
-
-    public void setItem(int item) {
-        this.item = item;
-    }
 
 }

@@ -15,22 +15,15 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Arqueos de caja realizadados por los cajeros. Delimitan un cierre y apertura de caja.
@@ -39,11 +32,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "caja_arqueos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_arqueo"))
+@Getter
+@Setter
 public class CajasArqueos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "caja_arqueos_id_arqueo")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "caja_arqueos_id_arqueo",
+            sequenceName = "caja_arqueos_id_arqueo_seq")
+    @Basic(optional = false)
+    @Column(name = "id_arqueo", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -87,101 +86,4 @@ public class CajasArqueos extends BaseEntity {
     @OneToMany(mappedBy = "idArqueo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CajasArqueosDetalle> detalleArqueo;
 
-    public CajasArqueos(Long id) {
-        super(id);
-    }
-
-    public CajasArqueos() {
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Sucursales getIdSucursal() {
-        return idSucursal;
-    }
-
-    public void setIdSucursal(Sucursales idSucursal) {
-        this.idSucursal = idSucursal;
-    }
-
-    public Date getFechaArqueo() {
-        return fechaArqueo;
-    }
-
-    public void setFechaArqueo(Date fechaArqueo) {
-        this.fechaArqueo = fechaArqueo;
-    }
-
-    public Date getFechaControl() {
-        return fechaControl;
-    }
-
-    public void setFechaControl(Date fechaControl) {
-        this.fechaControl = fechaControl;
-    }
-
-    public BigDecimal getSaldoInicial() {
-        return saldoInicial;
-    }
-
-    public void setSaldoInicial(BigDecimal saldoInicial) {
-        this.saldoInicial = saldoInicial;
-    }
-
-    public Cajas getIdCaja() {
-        return idCaja;
-    }
-
-    public void setIdCaja(Cajas idCaja) {
-        this.idCaja = idCaja;
-    }
-
-    public Usuarios getIdUsuarioControl() {
-        return idUsuarioControl;
-    }
-
-    public void setIdUsuarioControl(Usuarios idUsuarioControl) {
-        this.idUsuarioControl = idUsuarioControl;
-    }
-
-    public BigDecimal getSaldoFinal() {
-        return saldoFinal;
-    }
-
-    public void setSaldoFinal(BigDecimal saldoFinal) {
-        this.saldoFinal = saldoFinal;
-    }
-
-    public String getObvervacionesControl() {
-        return obvervacionesControl;
-    }
-
-    public void setObvervacionesControl(String obvervacionesControl) {
-        this.obvervacionesControl = obvervacionesControl;
-    }
-
-    public List<CajasArqueosDetalle> getDetalleArqueo() {
-        return detalleArqueo;
-    }
-
-    public void setDetalleArqueo(List<CajasArqueosDetalle> detalleArqueo) {
-        this.detalleArqueo = detalleArqueo;
-    }
-
-    public void agregarDetalleArqueo(CajasArqueosDetalle detalle) {
-        if (detalle == null) {
-            throw new IllegalArgumentException("Detalle de arqueo nulo!");
-        }
-        if (detalleArqueo == null) {
-            detalleArqueo = new ArrayList<>();
-        }
-        detalle.setIdArqueo(this);
-        detalleArqueo.add(detalle);
-    }
 }

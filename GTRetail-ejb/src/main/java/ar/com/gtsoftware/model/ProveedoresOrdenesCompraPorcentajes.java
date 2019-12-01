@@ -15,16 +15,12 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 /**
  * Representa a los coeficientes de descuentos o recargos comerciales que aplican al total de la orden de compra
@@ -33,11 +29,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "proveedores_ordenes_compra_porcentajes")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_orden_compra_porcentaje", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProveedoresOrdenesCompraPorcentajes extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proveedores_ordenes_compra_porce_id_orden_compra_porcentaje")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "proveedores_ordenes_compra_porce_id_orden_compra_porcentaje",
+            sequenceName = "proveedores_ordenes_compra_porce_id_orden_compra_porcentaje_seq")
+    @Basic(optional = false)
+    @Column(name = "id_orden_compra_porcentaje", nullable = false, updatable = false)
+    private Long id;
 
     @NotNull
     @JoinColumn(name = "id_orden_compra", referencedColumnName = "id_orden_compra", columnDefinition = "int4")
@@ -53,32 +55,5 @@ public class ProveedoresOrdenesCompraPorcentajes extends BaseEntity {
     @NotNull
     @Column(name = "valor")
     private BigDecimal valor;
-
-    public ProveedoresOrdenesCompraPorcentajes() {
-    }
-
-    public ProveedoresOrdenesCompra getIdOrdenCompra() {
-        return idOrdenCompra;
-    }
-
-    public void setIdOrdenCompra(ProveedoresOrdenesCompra idOrdenCompra) {
-        this.idOrdenCompra = idOrdenCompra;
-    }
-
-    public ProductosTiposPorcentajes getIdTipoPorcentaje() {
-        return idTipoPorcentaje;
-    }
-
-    public void setIdTipoPorcentaje(ProductosTiposPorcentajes idTipoPorcentaje) {
-        this.idTipoPorcentaje = idTipoPorcentaje;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
 
 }

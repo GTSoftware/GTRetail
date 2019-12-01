@@ -15,32 +15,31 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "contabilidad_periodos_contables")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_periodo_contable", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ContabilidadPeriodosContables extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contabilidad_periodos_contables_id_periodo_contable")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "contabilidad_periodos_contables_id_periodo_contable",
+            sequenceName = "contabilidad_periodos_contables_id_periodo_contable_seq")
+    @Basic(optional = false)
+    @Column(name = "id_periodo_contable", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -59,52 +58,5 @@ public class ContabilidadPeriodosContables extends BaseEntity {
     private Date fechaFinPeriodo;
     @OneToMany(mappedBy = "idPeriodoContable")
     private List<ContabilidadRegistroContable> contabilidadRegistroContableList;
-
-    public ContabilidadPeriodosContables() {
-    }
-
-    public ContabilidadPeriodosContables(Long idPeriodoContable) {
-        super(idPeriodoContable);
-    }
-
-    public ContabilidadPeriodosContables(Long idPeriodoContable, String nombrePeriodo, Date fechaInicioPeriodo, Date fechaFinPeriodo) {
-        super(idPeriodoContable);
-        this.nombrePeriodo = nombrePeriodo;
-        this.fechaInicioPeriodo = fechaInicioPeriodo;
-        this.fechaFinPeriodo = fechaFinPeriodo;
-    }
-
-    public String getNombrePeriodo() {
-        return nombrePeriodo;
-    }
-
-    public void setNombrePeriodo(String nombrePeriodo) {
-        this.nombrePeriodo = nombrePeriodo;
-    }
-
-    public Date getFechaInicioPeriodo() {
-        return fechaInicioPeriodo;
-    }
-
-    public void setFechaInicioPeriodo(Date fechaInicioPeriodo) {
-        this.fechaInicioPeriodo = fechaInicioPeriodo;
-    }
-
-    public Date getFechaFinPeriodo() {
-        return fechaFinPeriodo;
-    }
-
-    public void setFechaFinPeriodo(Date fechaFinPeriodo) {
-        this.fechaFinPeriodo = fechaFinPeriodo;
-    }
-
-    @XmlTransient
-    public List<ContabilidadRegistroContable> getContabilidadRegistroContableList() {
-        return contabilidadRegistroContableList;
-    }
-
-    public void setContabilidadRegistroContableList(List<ContabilidadRegistroContable> contabilidadRegistroContableList) {
-        this.contabilidadRegistroContableList = contabilidadRegistroContableList;
-    }
 
 }

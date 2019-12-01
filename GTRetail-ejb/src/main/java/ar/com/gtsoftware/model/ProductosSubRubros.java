@@ -15,32 +15,30 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "productos_sub_rubros")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_sub_rubro", columnDefinition = "serial"))
+@Getter
+@Setter
 public class ProductosSubRubros extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_sub_rubros_id_sub_rubro")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "productos_sub_rubros_id_sub_rubro",
+            sequenceName = "productos_sub_rubros_id_sub_rubro_seq")
+    @Basic(optional = false)
+    @Column(name = "id_sub_rubro", nullable = false, updatable = false)
+    private Long id;
 
     @Basic(optional = false)
     @NotNull
@@ -52,42 +50,5 @@ public class ProductosSubRubros extends BaseEntity {
     private ProductosRubros idRubro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSubRubro")
     private List<Productos> productosList;
-
-    public ProductosSubRubros() {
-    }
-
-    public ProductosSubRubros(Long idSubRubro) {
-        super(idSubRubro);
-    }
-
-    public ProductosSubRubros(Long idSubRubro, String nombreSubRubro) {
-        super(idSubRubro);
-        this.nombreSubRubro = nombreSubRubro;
-    }
-
-    public String getNombreSubRubro() {
-        return nombreSubRubro;
-    }
-
-    public void setNombreSubRubro(String nombreSubRubro) {
-        this.nombreSubRubro = nombreSubRubro;
-    }
-
-    public ProductosRubros getIdRubro() {
-        return idRubro;
-    }
-
-    public void setIdRubro(ProductosRubros idRubro) {
-        this.idRubro = idRubro;
-    }
-
-    @XmlTransient
-    public List<Productos> getProductosList() {
-        return productosList;
-    }
-
-    public void setProductosList(List<Productos> productosList) {
-        this.productosList = productosList;
-    }
 
 }

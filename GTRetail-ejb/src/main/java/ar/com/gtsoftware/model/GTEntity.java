@@ -85,11 +85,8 @@ public abstract class GTEntity<T extends Serializable> implements Serializable {
             return false;
         }
         GTEntity other = (GTEntity) obj;
-        if ((getId() == null && other.getId() != null)
-                || (getId() != null && !this.getId().equals(other.getId()))) {
-            return false;
-        }
-        return true;
+        return (getId() != null || other.getId() == null)
+                && (getId() == null || this.getId().equals(other.getId()));
     }
 
     @Override

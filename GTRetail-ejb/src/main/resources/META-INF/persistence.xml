@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence">
     <persistence-unit name="ar.com.gtsoftware_GTRetail-ejb_ejb_1.0-SNAPSHOTPU" transaction-type="JTA">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>jdbc/retail</jta-data-source>
@@ -90,7 +90,6 @@
         <class>ar.com.gtsoftware.model.RemitoDetalle</class>
         <class>ar.com.gtsoftware.model.RemitoRecepcion</class>
         <class>ar.com.gtsoftware.model.RemitoTipoMovimiento</class>
-        <class>ar.com.gtsoftware.model.VentasCargosFijos</class>
         <class>ar.com.gtsoftware.model.Ofertas</class>
         <class>ar.com.gtsoftware.model.OfertasCondiciones</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
@@ -102,6 +101,7 @@
             <property name="eclipselink.jdbc.cache-statements" value="true"/>
             <property name="eclipselink.target-database" value="PostgreSQL"/>
             <property name="eclipselink.target-server" value="JBoss"/>
+            <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
             <!--<property name="eclipselink.weaving" value="true"/>-->
             <!--DISABLE FOR PRODUCTION-->
             <!--<property name="eclipselink.logging.level.sql" value="FINE"/>-->

@@ -15,32 +15,32 @@
  */
 package ar.com.gtsoftware.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- *
  * @author rodrigo
  */
 @Entity
 @Table(name = "stock_movimientos")
-@XmlRootElement
-@AttributeOverride(name = "id", column = @Column(name = "id_movimiento_stock", columnDefinition = "serial"))
+@Getter
+@Setter
 public class StockMovimientos extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_movimientos_id_movimiento_stock")
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "stock_movimientos_id_movimiento_stock",
+            sequenceName = "stock_movimientos_id_movimiento_stock_seq")
+    @Basic(optional = false)
+    @Column(name = "id_movimiento_stock", nullable = false, updatable = false)
+    private Long id;
+
 
     @Basic(optional = false)
     @NotNull
@@ -80,102 +80,5 @@ public class StockMovimientos extends BaseEntity {
     @JoinColumn(name = "id_deposito_movimiento", referencedColumnName = "id_deposito", columnDefinition = "int4")
     @ManyToOne(optional = false)
     private Depositos idDepositoMovimiento;
-
-    public StockMovimientos() {
-    }
-
-    public StockMovimientos(Long idMovimientoStock) {
-        super(idMovimientoStock);
-    }
-
-    public StockMovimientos(Long idMovimientoStock, Date fechaMovimiento, BigDecimal cantidadAnterior, BigDecimal cantidadMovimiento, BigDecimal cantidadActual, int idTipoMovimiento, BigDecimal costoTotalMovimiento) {
-        super(idMovimientoStock);
-        this.fechaMovimiento = fechaMovimiento;
-        this.cantidadAnterior = cantidadAnterior;
-        this.cantidadMovimiento = cantidadMovimiento;
-        this.cantidadActual = cantidadActual;
-        this.idTipoMovimiento = idTipoMovimiento;
-        this.costoTotalMovimiento = costoTotalMovimiento;
-    }
-
-    public Date getFechaMovimiento() {
-        return fechaMovimiento;
-    }
-
-    public void setFechaMovimiento(Date fechaMovimiento) {
-        this.fechaMovimiento = fechaMovimiento;
-    }
-
-    public BigDecimal getCantidadAnterior() {
-        return cantidadAnterior;
-    }
-
-    public void setCantidadAnterior(BigDecimal cantidadAnterior) {
-        this.cantidadAnterior = cantidadAnterior;
-    }
-
-    public BigDecimal getCantidadMovimiento() {
-        return cantidadMovimiento;
-    }
-
-    public void setCantidadMovimiento(BigDecimal cantidadMovimiento) {
-        this.cantidadMovimiento = cantidadMovimiento;
-    }
-
-    public BigDecimal getCantidadActual() {
-        return cantidadActual;
-    }
-
-    public void setCantidadActual(BigDecimal cantidadActual) {
-        this.cantidadActual = cantidadActual;
-    }
-
-    public int getIdTipoMovimiento() {
-        return idTipoMovimiento;
-    }
-
-    public void setIdTipoMovimiento(int idTipoMovimiento) {
-        this.idTipoMovimiento = idTipoMovimiento;
-    }
-
-    public String getObservacionesMovimiento() {
-        return observacionesMovimiento;
-    }
-
-    public void setObservacionesMovimiento(String observacionesMovimiento) {
-        this.observacionesMovimiento = observacionesMovimiento;
-    }
-
-    public BigDecimal getCostoTotalMovimiento() {
-        return costoTotalMovimiento;
-    }
-
-    public void setCostoTotalMovimiento(BigDecimal costoTotalMovimiento) {
-        this.costoTotalMovimiento = costoTotalMovimiento;
-    }
-
-    public Usuarios getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuarios idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public Productos getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Productos idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public Depositos getIdDepositoMovimiento() {
-        return idDepositoMovimiento;
-    }
-
-    public void setIdDepositoMovimiento(Depositos idDepositoMovimiento) {
-        this.idDepositoMovimiento = idDepositoMovimiento;
-    }
 
 }
