@@ -22,7 +22,6 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.ProveedoresComprobantesDto;
 import ar.com.gtsoftware.eao.ComprobantesProveedorFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaComprasFacade;
-import ar.com.gtsoftware.eao.FiscalLibroIvaComprasLineasFacade;
 import ar.com.gtsoftware.eao.FiscalTiposComprobanteFacade;
 import ar.com.gtsoftware.mappers.ProveedoresComprobantesMapper;
 import ar.com.gtsoftware.mappers.helper.CycleAvoidingMappingContext;
@@ -54,8 +53,6 @@ public class ComprobantesProveedorServiceImpl
     private FiscalTiposComprobanteFacade tiposComprobanteFacade;
     @EJB
     private FiscalLibroIvaComprasFacade ivaComprasFacade;
-    @EJB
-    private FiscalLibroIvaComprasLineasFacade lineasIvaComprasFacade;
 
     @Inject
     private ProveedoresComprobantesMapper mapper;
@@ -108,7 +105,6 @@ public class ComprobantesProveedorServiceImpl
         calcularTotalesLibro(registro, signo);
 
 
-
         registro.setCodigoTipoComprobante(tipoCompFiscal);
         ivaComprasFacade.createOrEdit(registro);
         ProveedoresComprobantes compEditado = facade.createOrEdit(comprobante);
@@ -118,21 +114,17 @@ public class ComprobantesProveedorServiceImpl
 
     @Override
     public void eliminarComprobante(ProveedoresComprobantesDto comprobante) throws ServiceException {
-        boolean borrarFiscal = false;
-        if (comprobante.getIdRegistro() != null) {
-            if (comprobante.getIdRegistro().getIdPeriodoFiscal().isPeriodoCerrado()) {
+        boolean shouldDeleteFiscalRecord = false;
+        ProveedoresComprobantes comprobanteEntity = facade.find(comprobante.getId());
+        if (comprobanteEntity.getIdRegistro() != null) {
+            if (comprobanteEntity.getIdRegistro().getIdPeriodoFiscal().isPeriodoCerrado()) {
                 throw new ServiceException("No se puede eliminar un comprobante de un periodo cerrado");
             }
-            borrarFiscal = true;
+            shouldDeleteFiscalRecord = true;
         }
-        ProveedoresComprobantes entity = mapper.dtoToEntity(comprobante, new CycleAvoidingMappingContext());
-        facade.remove(entity);
-        if (borrarFiscal) {
-            FiscalLibroIvaCompras fiscalLibroIvaCompras = ivaComprasFacade.find(entity.getIdRegistro().getId());
-            for (FiscalLibroIvaComprasLineas linea : fiscalLibroIvaCompras.getFiscalLibroIvaComprasLineasList()) {
-                lineasIvaComprasFacade.remove(linea);
-            }
-            ivaComprasFacade.remove(fiscalLibroIvaCompras);
+        facade.remove(comprobanteEntity);
+        if (shouldDeleteFiscalRecord) {
+            ivaComprasFacade.remove(comprobanteEntity.getIdRegistro());
         }
     }
 

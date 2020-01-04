@@ -132,4 +132,19 @@ public class SearchComprobantesProveedoresBean extends AbstractSearchBean<Provee
             jsfHelper.addErrorMessage(e.getMessage());
         }
     }
+
+    public PersonasDto getIdProveedor() {
+        if (filter.getIdProveedor() == null) {
+            return null;
+        }
+        return personasService.find(filter.getIdProveedor());
+    }
+
+    public void setIdProveedor(PersonasDto proveedor) {
+        if (proveedor != null) {
+            filter.setIdProveedor(proveedor.getId());
+        } else {
+            filter.setIdProveedor(null);
+        }
+    }
 }

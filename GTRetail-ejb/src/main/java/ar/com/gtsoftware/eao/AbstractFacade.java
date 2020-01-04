@@ -68,6 +68,7 @@ public abstract class AbstractFacade<T extends GTEntity<?>, S extends AbstractSe
     public void remove(T entity) {
         T toDelete = getEntityManager().find(entityClass, entity.getId());
         getEntityManager().remove(toDelete);
+        getEntityManager().flush();
     }
 
     public T find(Object id) {
