@@ -21,8 +21,6 @@ import ar.com.gtsoftware.bl.exceptions.ServiceException;
 import ar.com.gtsoftware.dto.model.ProveedoresComprobantesDto;
 import ar.com.gtsoftware.eao.ComprobantesProveedorFacade;
 import ar.com.gtsoftware.eao.FiscalLibroIvaComprasFacade;
-import ar.com.gtsoftware.eao.FiscalTiposComprobanteFacade;
-import ar.com.gtsoftware.mappers.ProveedoresComprobantesMapper;
 import ar.com.gtsoftware.model.FiscalLibroIvaCompras;
 import ar.com.gtsoftware.model.FiscalPeriodosFiscales;
 import ar.com.gtsoftware.model.ProveedoresComprobantes;
@@ -30,8 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import javax.inject.Inject;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -41,12 +37,7 @@ public class ComprobantesProveedorServiceImplTest {
     @Mock
     private ComprobantesProveedorFacade facade;
     @Mock
-    private FiscalTiposComprobanteFacade tiposComprobanteFacade;
-    @Mock
     private FiscalLibroIvaComprasFacade ivaComprasFacade;
-
-    @Inject
-    private ProveedoresComprobantesMapper mapper;
 
     @InjectMocks
     private ComprobantesProveedorServiceImpl service = new ComprobantesProveedorServiceImpl();
