@@ -44,7 +44,7 @@
                             <p:outputLabel value="#{msg.proveedor}:" for="razonSocialField"/>
                             <h:panelGroup>
                                 <p:autoComplete id="razonSocialField"
-                                                value="#{searchComprobantesProveedoresBean.filter.idProveedor}"
+                                                value="#{searchComprobantesProveedoresBean.idProveedor}"
                                                 completeMethod="#{searchComprobantesProveedoresBean.findProveedoresByString}"
                                                 var="cli" itemLabel="#{cli.razonSocial}"
                                                 itemValue="#{cli}"
