@@ -31,10 +31,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ar.com.gtsoftware.enums.NegocioTiposComprobanteEnum.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.Mockito.when;
@@ -46,11 +46,12 @@ public class RelacionComprobanteHelperTest {
     private RelacionComprobanteHelper helper;
     @Mock
     private ComprobantesDto mockComprobanteOriginal;
+    private AtomicInteger itemCounter = new AtomicInteger(1);
 
     @Before
     public void setUp() {
         initMocks(this);
-        helper = new RelacionComprobanteHelper();
+        helper = new RelacionComprobanteHelper(itemCounter);
     }
 
     @Test
@@ -93,6 +94,8 @@ public class RelacionComprobanteHelperTest {
             assertThat(idsReservados.contains(linea.getIdProducto().getId()), is(false));
             assertThat(linea.getId(), nullValue());
             assertThat(linea.getIdComprobante(), nullValue());
+            assertThat(linea.getVersion(), nullValue());
+            assertThat(linea.getItem(), not((99)));
         }
     }
 
@@ -146,6 +149,7 @@ public class RelacionComprobanteHelperTest {
                     .precioUnitario(BigDecimal.valueOf(RandomUtils.nextDouble(0, 1000)))
                     .descripcion("Producto " + i)
                     .idComprobante(ComprobantesDto.builder().id(1L).build())
+                    .item(99)
                     .build();
             result.add(linea);
         }

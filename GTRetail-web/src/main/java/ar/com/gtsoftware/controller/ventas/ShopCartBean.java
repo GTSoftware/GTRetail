@@ -76,7 +76,7 @@ public class ShopCartBean implements Serializable {
     private final List<NegocioPlanesPagoDetalleDto> detallePlan = new ArrayList<>();
     protected ComprobantesPagosDto pagoActual = new ComprobantesPagosDto();
     protected NegocioFormasPagoDto formaPagoDefecto = null;
-    private RelacionComprobanteHelper relacionComprobanteHelper = new RelacionComprobanteHelper();
+    private RelacionComprobanteHelper relacionComprobanteHelper = new RelacionComprobanteHelper(itemCounter);
     @EJB
     private NegocioTiposComprobanteService tiposComprobanteFacade;
     @EJB

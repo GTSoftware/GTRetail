@@ -91,14 +91,12 @@
                         <div class="SeparatorFull"/>
                         <p:dataTable id="productosTable" var="lineaVenta"
                                      value="#{shopCartBean.venta.comprobantesLineasList}"
-
                                      paginator="false"
                                      sortMode="single"
                                      emptyMessage="#{msg.productosNoCargados}"
                                      editable="true"
                                      editMode="cell"
                                      reflow="true"
-
                                      liveResize="true">
 
                             <p:ajax event="cellEdit"
@@ -259,30 +257,31 @@
                     </p:commandButton>
                 </p:panelGrid>
 
-                <h:form id="busquedaProductosForm">
-                    <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
-                              modal="true" dynamic="true">
-                        <gtsoftware:busquedaProductos model="#{shopCartBean}"
-                                                      listaPrecios="#{shopCartBean.lista}"
-                                                      soloConStock="true"
-                        />
-                        <div class="SeparatorFull"/>
 
-                        <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
-                                         oncomplete="PF('dlgBusProd').hide()"
-                                         update=":formContenido"
-                                         immediate="true"
-                                         process="@this"
-                                         actionListener="#{shopCartBean.addToCart()}"/>
-
-                        <p:commandButton value="#{msg.cancelar}"
-                                         immediate="true" icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
-                                         styleClass="RedButton"/>
-
-                    </p:dialog>
-                </h:form>
             </h:form>
 
+            <h:form id="busquedaProductosForm">
+                <p:dialog id="busquedaProductosDialog" header="#{msg.busquedaProductos}" widgetVar="dlgBusProd"
+                          modal="true" dynamic="true">
+                    <gtsoftware:busquedaProductos model="#{shopCartBean}"
+                                                  listaPrecios="#{shopCartBean.lista}"
+                                                  soloConStock="true"
+                    />
+                    <div class="SeparatorFull"/>
+
+                    <p:commandButton value="#{msg.ok}" icon="fa fa-fw fa-check"
+                                     oncomplete="PF('dlgBusProd').hide()"
+                                     update=":formContenido"
+                                     immediate="false"
+
+                                     actionListener="#{shopCartBean.addToCart()}"/>
+
+                    <p:commandButton value="#{msg.cancelar}"
+                                     immediate="true" icon="fa fa-fw fa-ban" onclick="PF('dlgBusProd').hide();"
+                                     styleClass="RedButton"/>
+
+                </p:dialog>
+            </h:form>
         </div>
     </div>
 
