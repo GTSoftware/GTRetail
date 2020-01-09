@@ -9,7 +9,10 @@
         <navigation-case>
             <from-outcome>login?faces-redirect=true</from-outcome>
             <to-view-id>/login.xhtml</to-view-id>
-            <redirect>1</redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>addNewClient</from-outcome>
+            <to-view-id>/protected/clientes/edicion/index.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <factory>
