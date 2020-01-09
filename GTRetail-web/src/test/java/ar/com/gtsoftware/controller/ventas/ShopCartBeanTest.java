@@ -19,6 +19,7 @@ package ar.com.gtsoftware.controller.ventas;
 
 import ar.com.gtsoftware.bl.NegocioTiposComprobanteService;
 import ar.com.gtsoftware.bl.VentasService;
+import ar.com.gtsoftware.controller.ventas.dto.ComprobanteRelacionado;
 import ar.com.gtsoftware.controller.ventas.helpers.RelacionComprobanteHelper;
 import ar.com.gtsoftware.dto.model.*;
 import ar.com.gtsoftware.enums.NegocioTiposComprobanteEnum;
@@ -137,7 +138,8 @@ public class ShopCartBeanTest {
                 .build();
         when(mockVentasService.obtenerComprobante(anyLong())).thenReturn(compOriginal);
         when(mockRelacionComprobanteHelper.generarComprobanteRelacionado(eq(compOriginal), anyList()))
-                .thenCallRealMethod();
+                .thenReturn(new ComprobanteRelacionado(crearLineasComprobante(2),
+                        NegocioTiposComprobanteEnum.NOTA_DE_CREDITO));
 
         shopCartBean.cargarComprobanteRelacionado();
 
