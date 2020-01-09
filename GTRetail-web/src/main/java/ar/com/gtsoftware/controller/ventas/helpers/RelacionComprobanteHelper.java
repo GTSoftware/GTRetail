@@ -26,11 +26,18 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ar.com.gtsoftware.enums.NegocioTiposComprobanteEnum.FACTURA;
 import static ar.com.gtsoftware.enums.NegocioTiposComprobanteEnum.NOTA_DE_CREDITO;
 
 public class RelacionComprobanteHelper {
+
+    private final AtomicInteger itemCounter;
+
+    public RelacionComprobanteHelper(AtomicInteger itemCounter) {
+        this.itemCounter = itemCounter;
+    }
 
     public ComprobanteRelacionado generarComprobanteRelacionado(ComprobantesDto comprobanteOriginal,
                                                                 List<Long> idsProductosReservados) {
@@ -74,6 +81,7 @@ public class RelacionComprobanteHelper {
             linea.setId(null);
             linea.setIdComprobante(null);
             linea.setVersion(null);
+            linea.setItem(itemCounter.getAndIncrement());
         }
     }
 
