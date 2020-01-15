@@ -26,56 +26,63 @@
 				<reportElement mode="Transparent" x="0" y="0" width="553" height="20" uuid="e75f267e-5da2-4678-9e27-a05153ef9c0e"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="10" y="1" width="38" height="20" uuid="d357dad4-06db-4837-a679-87cf09a304df"/>
-				<textElement>
-					<font isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[Cant.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="54" y="1" width="57" height="20" uuid="026f7664-9ea6-4814-82b5-2674fc4d807f"/>
-				<textElement>
-					<font isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[Unidad]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="122" y="1" width="227" height="20" uuid="22e93171-ef26-49af-a377-b57a8ff5a448"/>
-				<textElement>
-					<font isBold="true" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[Descripción]]></text>
-			</staticText>
-			<line>
-				<reportElement x="49" y="0" width="1" height="20" uuid="c7a24da9-9aa2-4845-bf1e-228dd7ddbf78"/>
-			</line>
-			<line>
-				<reportElement x="111" y="0" width="1" height="20" uuid="59a07383-54a1-4ae5-920e-8813028dc818"/>
-			</line>
+                <reportElement x="0" y="0" width="54" height="20" uuid="d357dad4-06db-4837-a679-87cf09a304df"/>
+                <box leftPadding="4">
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement>
+                    <font isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Cant.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="54" y="0" width="57" height="20" uuid="026f7664-9ea6-4814-82b5-2674fc4d807f"/>
+                <box leftPadding="4">
+                    <rightPen lineWidth="1.0"/>
+                </box>
+                <textElement>
+                    <font isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Unidad]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="111" y="0" width="238" height="20" uuid="22e93171-ef26-49af-a377-b57a8ff5a448"/>
+                <box leftPadding="4"/>
+                <textElement>
+                    <font isBold="true" isUnderline="true"/>
+                </textElement>
+                <text><![CDATA[Descripción]]></text>
+            </staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="24" splitType="Stretch">
-			<textField>
-				<reportElement x="11" y="4" width="38" height="20" uuid="685291bc-c0d0-42ca-acf1-fa4c720826cc"/>
-				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="122" y="4" width="431" height="20" uuid="28435475-9b51-4ff1-b6f1-957423fb2291"/>
-				<textFieldExpression>
-					<![CDATA["["+$F{idProducto}.getCodigoPropio()+"] "+ $F{idProducto}.getDescripcion()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="54" y="4" width="57" height="20" uuid="9198d21b-a936-4cf8-a475-355332c68bce"/>
-				<textFieldExpression><![CDATA[$F{idProducto}.getIdTipoUnidadVenta().getNombreUnidad()]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="7" y="23" width="549" height="1" uuid="1fca64aa-fb6d-4d56-9add-9b5fd3a3e5a9"/>
-				<graphicElement>
-					<pen lineStyle="Dashed"/>
-				</graphicElement>
-			</line>
-		</band>
+        <band height="24" splitType="Stretch">
+            <textField isStretchWithOverflow="true">
+                <reportElement x="0" y="0" width="49" height="24" uuid="685291bc-c0d0-42ca-acf1-fa4c720826cc"/>
+                <box leftPadding="2"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="111" y="0" width="442" height="24" uuid="28435475-9b51-4ff1-b6f1-957423fb2291"/>
+                <box leftPadding="4"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression>
+                    <![CDATA["["+$F{idProducto}.getCodigoPropio()+"] "+ $F{idProducto}.getDescripcion()]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="54" y="0" width="57" height="24" uuid="9198d21b-a936-4cf8-a475-355332c68bce"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression>
+                    <![CDATA[$F{idProducto}.getIdTipoUnidadVenta().getNombreUnidad()]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="7" y="23" width="549" height="1" uuid="1fca64aa-fb6d-4d56-9add-9b5fd3a3e5a9"/>
+                <graphicElement>
+                    <pen lineStyle="Dashed"/>
+                </graphicElement>
+            </line>
+        </band>
 	</detail>
 	<columnFooter>
 		<band height="21">

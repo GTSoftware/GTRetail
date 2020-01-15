@@ -46,87 +46,96 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></variableEx
 				<reportElement mode="Transparent" x="0" y="0" width="553" height="20" uuid="e75f267e-5da2-4678-9e27-a05153ef9c0e"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="10" y="1" width="38" height="20" uuid="d357dad4-06db-4837-a679-87cf09a304df"/>
+				<reportElement x="0" y="0" width="49" height="20" uuid="d357dad4-06db-4837-a679-87cf09a304df"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="0">
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement>
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Cant.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="54" y="1" width="57" height="20" uuid="026f7664-9ea6-4814-82b5-2674fc4d807f"/>
+				<reportElement x="49" y="0" width="62" height="20" uuid="026f7664-9ea6-4814-82b5-2674fc4d807f"/>
+				<box leftPadding="5">
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement>
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Unidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="122" y="1" width="227" height="20" uuid="22e93171-ef26-49af-a377-b57a8ff5a448"/>
+				<reportElement x="112" y="0" width="254" height="20" uuid="22e93171-ef26-49af-a377-b57a8ff5a448"/>
+				<box leftPadding="5">
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement>
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="366" y="1" width="49" height="20" uuid="3c4947d0-6acb-4657-be9b-3d3921bf8df2"/>
+				<reportElement x="366" y="0" width="49" height="20" uuid="3c4947d0-6acb-4657-be9b-3d3921bf8df2"/>
+				<box leftPadding="5">
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[IVA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="415" y="1" width="69" height="20" uuid="3c3c2816-5c6e-410e-8ad8-4db6ee7c539d"/>
+				<reportElement x="415" y="0" width="70" height="20" uuid="3c3c2816-5c6e-410e-8ad8-4db6ee7c539d"/>
+				<box leftPadding="5">
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Precio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="485" y="1" width="68" height="20" uuid="c36e2831-9097-46ac-99f3-213b13a9bcba"/>
+				<reportElement x="485" y="0" width="68" height="20" uuid="c36e2831-9097-46ac-99f3-213b13a9bcba"/>
 				<textElement textAlignment="Center">
 					<font isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Sub-Total]]></text>
 			</staticText>
-			<line>
-				<reportElement x="49" y="0" width="1" height="20" uuid="c7a24da9-9aa2-4845-bf1e-228dd7ddbf78"/>
-			</line>
-			<line>
-				<reportElement x="111" y="0" width="1" height="20" uuid="59a07383-54a1-4ae5-920e-8813028dc818"/>
-			</line>
-			<line>
-				<reportElement x="366" y="0" width="1" height="20" uuid="597a7ad1-6b27-4201-875f-fdfc08b5f768"/>
-			</line>
-			<line>
-				<reportElement x="414" y="0" width="1" height="20" uuid="ba9cda86-b2f9-4487-9013-3f3b84046d92"/>
-			</line>
-			<line>
-				<reportElement x="484" y="0" width="1" height="20" uuid="8e82dabf-a90a-4ba4-b2f6-240277bd9000"/>
-			</line>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="24" splitType="Stretch">
-			<textField>
-				<reportElement x="11" y="4" width="38" height="20" uuid="685291bc-c0d0-42ca-acf1-fa4c720826cc"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="45" height="24" uuid="685291bc-c0d0-42ca-acf1-fa4c720826cc"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="122" y="4" width="245" height="20" uuid="28435475-9b51-4ff1-b6f1-957423fb2291"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="112" y="0" width="255" height="24" uuid="28435475-9b51-4ff1-b6f1-957423fb2291"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression>
 					<![CDATA["["+$F{idProducto}.getCodigoPropio()+"] "+$F{descripcion}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="54" y="4" width="57" height="20" uuid="9198d21b-a936-4cf8-a475-355332c68bce"/>
-				<textFieldExpression><![CDATA[$F{idProducto}.getIdTipoUnidadVenta().getNombreUnidad()]]></textFieldExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="50" y="0" width="50" height="24" uuid="9198d21b-a936-4cf8-a475-355332c68bce"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression>
+					<![CDATA[$F{idProducto}.getIdTipoUnidadVenta().getNombreUnidad()]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="416" y="4" width="69" height="20" uuid="e8f13670-d049-4398-943b-644ed58e24a5"/>
-				<textElement textAlignment="Right"/>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="416" y="0" width="69" height="24" uuid="e8f13670-d049-4398-943b-644ed58e24a5"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{precio-neto}]]></textFieldExpression>
 			</textField>
-			<textField pattern="">
-				<reportElement x="367" y="4" width="49" height="20" uuid="f7d41e1f-9fa7-41bd-9a97-762275e9fac1"/>
-				<textFieldExpression><![CDATA[$F{idProducto}.getIdAlicuotaIva().getValorAlicuota()]]></textFieldExpression>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement x="367" y="0" width="49" height="24" uuid="f7d41e1f-9fa7-41bd-9a97-762275e9fac1"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression>
+					<![CDATA[$F{idProducto}.getIdAlicuotaIva().getValorAlicuota()]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="7" y="23" width="549" height="1" uuid="1fca64aa-fb6d-4d56-9add-9b5fd3a3e5a9"/>
@@ -134,9 +143,9 @@ new java.math.BigDecimal(100))),2,java.math.RoundingMode.HALF_UP)]]></variableEx
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="485" y="4" width="70" height="20" uuid="769a6a0b-f7b8-43dc-a565-c5e08b2960e1"/>
-				<textElement textAlignment="Right"/>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<reportElement x="485" y="0" width="70" height="24" uuid="769a6a0b-f7b8-43dc-a565-c5e08b2960e1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{sub-total-neto-linea}]]></textFieldExpression>
 			</textField>
 		</band>
